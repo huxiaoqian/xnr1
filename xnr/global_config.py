@@ -4,11 +4,23 @@ use to save database information
 '''
 import os
 
+#use to mark type:  run or test
+S_TYPE = 'test'   #test/run
+S_DATE = '2016-11-11' #when type=test, now_date=S_DATE
 
 #config es
+#config xnr user info
 ES_CLUSTER_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
                    '219.224.134.215:9205']
 ES_CLUSTER_PORT = '9205'
+#config flow text info
+ES_FLOW_TEXT_HOST = ['219.224.134.216:9201', '219.224.134.217:9201',\
+                          '219.224.134.218:9201']
+ES_FLOW_TEXT_PORT = '9201'
+#config user portrat
+ES_USER_PORTRAIT_HOST = ['219.224.134.216:9201', '219.224.134.217:9201',\
+                     '219.224.134.218:9201']
+ES_USER_PORTRAIT_PORT = '9201'
 
 #es_path
 ES_PATH = '/home/ubuntu8/huxiaoqian/elasticsearch-1.6.0/'

@@ -5,6 +5,8 @@ use to save table info in database
 import redis
 from elasticsearch import Elasticsearch
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
+                          ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
+                          ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
                           REDIS_HOST, REDIS_PORT
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
@@ -13,8 +15,13 @@ es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 xnr_index_name = 'xnr'
 xnr_index_type = 'user'
 #use to save xnr
+es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
+#use to identify the user portrait
+es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT)
+portrait_index_name = 'user_portrait_1222'
+portrait_index_type = 'user'
 #use to save domain info
 
 #use to save role info
