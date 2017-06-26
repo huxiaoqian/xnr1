@@ -1,5 +1,32 @@
 # -*- coding: utf-8 -*-
 '''
-use to save public method
+use to save table info in database
 '''
+import redis
+from elasticsearch import Elasticsearch
+from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
+                          REDIS_HOST, REDIS_PORT
+#module1.1:init es
+es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+#module1.2:config es table---index_name, doc_type
+#use to save xnr info
+xnr_index_name = 'xnr'
+xnr_index_type = 'user'
+#use to save xnr
+flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
+flow_text_index_type = 'text'
+#use to save domain info
+
+#use to save role info
+
+#module2.1: init redis
+def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
+    return redis.StrictRedis(host, port)
+
+r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
+#use to save xnr info
+
+
+
+
 
