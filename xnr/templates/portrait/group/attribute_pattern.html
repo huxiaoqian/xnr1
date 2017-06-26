@@ -1,0 +1,241 @@
+<style type="text/css">
+#attribute_pattern{
+  color:#333;
+}
+#attribute_pattern .col-lg-2{
+	padding: 0 15px;
+}
+#attribute_pattern hr{
+	margin: 10px 10px;
+}
+#pattern_select .col-lg-2{
+	width:65px;
+	margin:0 5px;
+	padding: 0 5px;
+}
+#attribute_pattern #domain .input-group-addon{
+    font-size: 13px;
+    margin-top: -3px;
+}
+#attribute_pattern #topic_string .input-group-addon{
+    font-size: 13px;
+}
+#attribute_pattern .cols{
+    margin-top: 5px;
+    padding: 6px 15px;
+    margin-bottom: 0px;
+}
+
+</style>
+<div id="attribute_pattern" style="height:auto;">
+    <table class='table table-border bootstrap-datatable'>
+        <tr><td>
+            <div class='col-md-12'   id="domain" style="padding-left:28px;">
+              <span style="float:left;line-height: 27px;margin-right:15px;color: #555555;">领域</span>
+              <div class='col-lg-2' style="margin-left:0px;">
+                <input type='checkbox' class='inline-checkbox' value='option1' checked='checked'>
+                <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="">境内机构</span>                             
+              </div>
+              <div class='col-lg-2'>
+                <input type='checkbox' class='inline-checkbox' value='option1'>
+                <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="">境外机构</span>
+              </div>
+              <div class='col-lg-2'>
+                <input type='checkbox' class='inline-checkbox' value='option1'>
+                <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="">民间组织</span>
+              </div>
+              <div class='col-lg-2'>
+                <input type='checkbox' class='inline-checkbox' value='option1'>
+                <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">媒体</span>
+              </div>
+              <div class='col-lg-2'>
+                <input type='checkbox' class='inline-checkbox' value='option1'>
+                <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block;" id="">境外媒体</span>
+              </div>
+                <div class='col-lg-2' style="">
+                    <input type='checkbox' class='inline-checkbox' value='option1'>
+                    <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block;" id="">活跃人士</span>
+                </div>
+                <div class='col-lg-2' >
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">商业人士</span>
+                </div>
+                <div class='col-lg-2' >
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">媒体人士</span>
+                </div>
+                <div class='col-lg-2' >
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">法律机构及人士</span>
+                </div>
+                <div class='col-lg-2' >
+                    <input type='checkbox' class='inline-checkbox' value='option1'>
+                    <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">政府机构及人士</span>
+                </div>
+                <div class='col-lg-2'  style="margin-left:40px;">
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">草根</span>
+                </div>
+                <div class='col-lg-2' >
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">高校</span>
+                </div>
+                <div class='col-lg-2' >
+                  <input type='checkbox' class='inline-checkbox' value='option1'>
+                  <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="">其他</span>
+                </div>
+            </div>
+            <a style='float:right;margin-right:20px;'class='portrait_href'  id='show_advanced'>高级</a>
+        </td></tr>
+    </table>
+    <table style='display:none' id='advanced_condition' class='table table-border bootstrap-datatable'>
+        <tr>
+            <td class='search_name'>选择关联条件</td>
+            <td>
+              <div class='col-md-13' id="basic" style="height:25px;padding-left:0px;margin-bottom:10px;width:820px;">
+                <div class='col-md-4'>
+      						<span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="">注册地</span>
+      						<input id="location" type='text' class="form-control" style='width:63%; margin-left:15px;display:inline-block;height:25px'  placeholder='如：北京'>
+                </div>
+                <div class='col-md-4'>
+      						<span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="">活跃地</span>
+      						<input id="activity_geo" type='text' class="form-control" style='width:63%; margin-left:15px;display:inline-block;height:25px'  placeholder='如：北京'>
+                </div>
+                <div class='col-md-4'>
+                        <span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="">关键词</span>
+                        <input id="keywords_string" type='text' class="form-control" style='width:150px; margin-left:15px;display:inline-block;height:25px'  placeholder='多个词用空格隔开'>
+                    </div>
+                </div>
+                <div class='col-md-13' id="basic"style="padding-left:0px;margin-bottom:10px;width:820px;">
+                    <div class='col-md-4'>
+      						<span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="">微话题</span>
+      						<input id="hashtag" type='text' class="form-control" style='width:63%; margin-left:15px;display:inline-block;height:25px'  placeholder='多个词用空格隔开'>
+                    </div>
+                    <div class='col-md-4'>
+      						<span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="">备注</span>
+      						<input id="remark" type='text' class="form-control" style='width:63%; margin-left:15px;display:inline-block;height:25px'  placeholder='备注'>
+                    </div>
+              </div>
+              <hr style='width:860px;display:inline-block;margin:0px;'>
+                <div class='cols' style="margin-top:-10px;padding-left:28px;" id="topic_string">
+                    <div class='col-md-12' style='padding-left:0px;'>
+                      <span style="float:left;line-height: 27px;margin-right:15px;color: #555555;">话题</span>
+                      <div class='col-lg-2'>
+                        <input type='checkbox' class='inline-checkbox' value='option1' checked='checked'>
+                        <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="technology">科技类</span>
+                      </div>
+                      <div class='col-lg-2'>
+                        <input type='checkbox' class='inline-checkbox' value='option1'>
+                        <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="economics">经济类</span>
+                      </div>
+                      <div class='col-lg-2'>
+                        <input type='checkbox' class='inline-checkbox' value='option1'>
+                        <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="education">教育类</span>
+                      </div>
+                      <div class='col-lg-2'>
+                        <input type='checkbox' class='inline-checkbox' value='option1'>
+                        <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="military">军事类</span>
+                      </div>
+                      <div class='col-lg-2'>
+                        <input type='checkbox' class='inline-checkbox' value='option1'>
+                        <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block;" id="health">民生类_健康</span>
+                      </div>
+                        <div class='col-lg-2'  style="margin-left:40px;">
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="environment">民生类_环保</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="employment">民生类_就业</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="house">民生类_住房</span>
+                        </div>
+                        <div class='col-lg-2'>
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="social_security">民生类_社会保障</span>
+                        </div>
+                        <div class='col-lg-2'>
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block;" id="trafic">民生类_交通</span>
+                        </div>
+                        <div class='col-lg-2' style="margin-left:40px;" >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="law">民生类_法律</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="diplomacy">政治类_外交</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="terrorist">政治类_暴恐</span>
+                        </div>
+                        <div class='col-lg-2'>
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block;" id="peace">政治类_地区和平</span>
+                        </div>
+                        <div class='col-lg-2'>
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="anti_corruption">政治类_反腐</span>
+                        </div>
+                        <div class='col-lg-2' style="margin-left:40px;">
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="religion">政治类_宗教</span>
+                        </div>
+                        <div class='col-lg-2' style="margin-left:0px;">
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white;background-color:white; display:inline-block" id="entertainment">文体类_娱乐</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="sports">文体类_体育</span>
+                        </div>
+                        <div class='col-lg-2' >
+                          <input type='checkbox' class='inline-checkbox' value='option1'>
+                          <span class="input-group-addon" style="border:1px solid white; background-color:white;display:inline-block" id="others">其他类</span>
+                        </div>
+                    </div>
+                  </div>
+                  <hr style='width:860px;display:inline-block;margin:0px;'>
+					<div class="cols" id="tag" style="margin-top: 0px;padding-left: 15px;">
+						<span class="input-group-addon" style="width:50px;border:1px solid white;background-color:white; display:inline-block" id="location">标签</span>
+                        <select name="tag_type" class="form-control" style='width:20%; margin-left:15px;display:inline-block;height:25px;padding:1px 12px;'></select>
+                        <select name="tag_name" class="form-control" style='width:20%; margin-left:15px;display:inline-block;height:25px;padding:1px 12px;'></select>
+                    </div>
+          </td>
+      </tr>
+        <tr>
+            <td class='search_name'>添加过滤条件</td>
+            <td>
+                <div class='controls'>
+                    <div class='col-md-12' style='padding:0px;'>
+                        <div class='col-lg-4' >
+                            <span class="input-group-addon" style="width:65px;border:1px solid white;float:left;background-color:white;display:inline-block">人数</span>
+                            <span style="float: left;"><input style='width:85%;' type='range' id='num-range' min='0' max='200' step='20' value='100' class='inline-checkbox'>
+                                0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;200
+                            </span>
+                            <span id="show_num" style="border-radius: 4px;margin-left: -6px;padding: 5px;border: 1px solid #ccc;">100</span>
+                        </div>
+                        <div class='col-lg-4' style='margin-left:-50px;'>
+                             <span class="input-group-addon" style="width:75px;border:1px solid white;float:left;background-color:white;display:inline-block">影响力</span>
+                             <input id="influ_from" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='50'>&nbsp;-&nbsp;
+                             <input id="influ_to" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='100'>
+                        </div>
+                        <div class='col-lg-4' style='margin-left:-50px;'>
+                             <span class="input-group-addon" style="width:75px;border:1px solid white;float:left;background-color:white;display:inline-block">重要度</span>
+                             <input id="impor_from" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='50'>&nbsp;-&nbsp;
+                             <input id="impor_to" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='100'>
+                        </div>
+                        <span class="input-group-addon" style="font-size:10px;color:grey;border:1px solid white;background-color:white; margin-left:-60px;display:inline-block">影响力和重要度取值0-100</span>                             
+                    </div>
+                </div>
+            </td>
+        </tr>
+  </table>
+</div>
+
+
+<script type="text/javascript" src='/static/js/portrait/group_attribute.js'></script>
+

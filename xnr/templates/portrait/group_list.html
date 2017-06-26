@@ -1,0 +1,96 @@
+{% extends "tbase.html" %}
+    {% block title %}群体分析{% endblock title %}
+    {% block head_title %}群体分析{% endblock head_title %}
+    {% block css %}
+        {{ super() }}
+        <style>
+            .dataTables_length{display:none;}
+            .dataTables_filter{display:none;text-align:right;margin-bottom:5px;}
+            .dataTables_paginate{margin-top:-10px;margin-bottom:-20px;}
+            .wrapper{min-height:330px;margin-top:50px;margin-left:-20px;background: #fff;position: relative;}
+        </style>
+        <link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/>
+    {% endblock css %}
+    {% block head_js %}
+        {{ super() }}
+        <script type="text/javascript" src="/static/js/jquery.datetimepicker.js"></script>
+        <script type="text/javascript" src="/static/js/portrait/identify_table.js"></script>
+    {% endblock head_js %}
+    {% block main %}
+    <div class="box-content">
+        <div id='useremail' hidden>{{ g.user.email }}</div>
+        <div id="content_manage" style="margin-left:40px;width:1000px;margin-top:10px">
+
+        </div>
+    </div>
+    <div class="modal fade" id="group_control" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document" style="width:850px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">提交监控任务</h4>
+          </div>
+          <div class="modal-body">
+            <span>群体名称：</span>
+            <input type='text' style='width:35%;margin-left:10px;display:inline-block;height:25px' placeholder='（必填）仅包含汉字、英文、数字和下划线' name="con_group_name" /></span>
+            <span style="margin-left:10px;">备注：</span>
+            <input type='text' style='width:35%;margin-left:10px;display:inline-block;height:25px; margin-right:40px;' placeholder='（选填）仅包含汉字、英文、数字和下划线' name="con_remark" ></span>
+            <div style="width:100%">
+                <span style="margin-top:10px;display:inline-block">终止时间：</span>
+                <input name="con_end_time" type='text' style='margin-left:10px;width:145px;margin-top:10px;display:inline-block;height:25px'>
+            </div>
+            <!--
+            <span class='control-label' style='padding-top:10px;'>传感词：&nbsp;&nbsp;</span>
+            <input name="con_keywords" type='text' style='margin-left:16px;width:35%;margin-top:10px;  display:inline-block;height:25px' placeholder='（选填，敏感传感词）多个词用空格隔开'>
+            <input name="con_nor_keywords" type='text' style='margin-left:16px;width:35%;margin-top:10px;margin-right:5px;  display:inline-block;height:25px' placeholder='（选填，普通传感词）多个词用空格隔开'>
+              <div style="margin:5px;margin-left:90px;font-weight:bold">敏感传感词<input style="margin-left:50px;margin-right:10px;" name="con_more_all_1" id="con_more_all_1" type="checkbox" value="" onclick="con_more_all_1()" /><span>全选</span></div>
+              <div id="con_sen_content"  style="margin:5px;margin-left:90px;"></div>
+
+              <div style="margin:5px;margin-left:90px;font-weight:bold">一般传感词<input style="margin-left:50px;margin-right:10px;" name="con_more_all_0" id="con_more_all_0" type="checkbox" value="" onclick="con_more_all_0()" /><span>全选</span></div>
+              <div id="con_nor_content"   style="margin:5px;margin-left:90px;width: 83%;"></div>
+              -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="group_control_confirm_button">提交</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="task_search" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document" style="width:850px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">搜索条件</h4>
+          </div>
+          <div class="modal-body">
+            <div style='width:300px;margin: 0px auto;'>
+                <div style="margin-top:5px;">群组名称：<input type="text"  id="groupName0" class="input searchinput" name="task_name0" placeholder="请输入群组名称" style="float: right;width: 175px;"/></div>
+                <div style="margin-top:10px;">备注：<input type="text" id="groupState0" class="input searchinput" name="state0" placeholder="请输入备注"  style="float: right;width: 175px;"/></div>
+                <div style="margin-top:10px;">时间：<input type="text" id="groupState" class="input searchinput" name="submit_date0" placeholder="请输入时间2015-07-15"  style="float: right;width: 175px;"/></div>
+                <div style="margin-top:10px;">计算状态：
+                    <select  name="task_type" class="searchinput" style="width:174px;height:24px;float: right;">
+                        <option value="1" >已完成</option>
+                        <option value="0" selected = "selected">正在计算</option>
+                        </select>
+                </div>
+            </div>  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="task_search_button()">确认</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    {% endblock main %}
+    {% block Own_js %}
+        {{ super() }}
+        <script type="text/javascript" src="/static/js/portrait/group_list.js"></script>
+    {% endblock Own_js %}

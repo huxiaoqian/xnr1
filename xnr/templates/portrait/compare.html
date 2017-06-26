@@ -1,0 +1,50 @@
+{% extends "tbase.html" %}
+{% block title %}对比分析 {% endblock %}
+{% block head_title %}对比分析 {% endblock %}
+{% block main %}
+<script type="text/javascript" src='/static/js/esl.js'></script>
+<style>
+    .cate_title {
+        background: #fafafa;
+        cursor: pointer;
+    }
+    td:hover {
+        background: #f2f9ff;
+    }
+    .center {
+        text-align: center;
+    }
+    table tr th:first-child,table tr th:first-child{
+     width:120px;
+    }
+    .round_shade_box{width:1px; height:1px; font-size:0; display:none; _background:white; _border:1px solid #cccccc;}
+    .round_shade_top{margin:0 12px 0 10px; background:url(/static/img/zxx_round_shade.png) repeat-x -20px -40px; _background:white; zoom:1;}
+    .round_shade_topleft{width:11px; height:10px; background:url(/static/img/zxx_round_shade.png) no-repeat 0 0; _background:none; float:left; margin-left:-11px; position:relative;}
+    .round_shade_topright{width:12px; height:10px; background:url(/static/img/zxx_round_shade.png) no-repeat -29px 0; _background:none; float:right; margin-right:-12px; position:relative;}
+    .round_shade_centerleft{background:url(/static/img/zxx_round_shade.png) no-repeat 0 -1580px; _background:none;}
+    .round_shade_centerright{background:url(/static/img/zxx_round_shade.png) no-repeat right -80px; _background:none;}
+    .round_shade_center{font-size:14px; margin:0 12px 0 10px; padding:10px; background:white; letter-spacing:1px; line-height:1.5;}
+    .round_shade_bottom{margin:0 12px 0 11px; background:url(/static/img/zxx_round_shade.png) repeat-x -20px bottom; _background:white; zoom:1;}
+    .round_shade_bottomleft{width:11px; height:10px; background:url(/static/img/zxx_round_shade.png) no-repeat 0 -30px; _background:none; float:left; margin-left:-11px; position:relative;}
+    .round_shade_bottomright{width:12px; height:10px; background:url(/static/img/zxx_round_shade.png) no-repeat -29px -30px; _background:none; float:right; margin-right:-12px; position:relative;}
+    .round_shade_top:after,.round_shade_bottom:after,.zxx_zoom_box:after{display:block; content:"."; height:0; clear:both; overflow:hidden; visibility:hidden;}
+    .round_box_close{padding:2px 5px; font-size:12px; color:#ffffff; text-decoration:none; border:1px solid #cccccc; -moz-border-radius:4px; -webkit-border-radius:4px; background:#000000; opacity:0.8; filter:alpha(opacity=80); position:absolute; right:-5px; top:-5px;}
+    .round_box_close:hover{opacity:0.95; filter:alpha(opacity=95);}
+</style>
+<div id="com_user" hidden>{{g.user.email}}</div>
+<div class="row" id='compare_loading' style='width:1130px;height:1000px;'>
+    <div class="box col-md-12" style='width:100%'>
+        <div class="box-inner">
+            <div class="box-content">
+                <table class="table table-bordered responsive" id='table_compare' style="table-layout:fixed;">
+                    
+                </table>
+                <div id='picturebig'></div>
+            </div>
+        </div>
+    </div>
+    <!--/span-->
+
+</div><!--/row-->
+<script src='/static/js/portrait/person_compare.js'></script>
+{% endblock %}

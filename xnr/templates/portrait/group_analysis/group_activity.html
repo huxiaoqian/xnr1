@@ -1,0 +1,188 @@
+{% block css %}
+	<style type="text/css">
+		h3{font-size: 16px;margin-top: 0;color:#555555;}	
+	</style>
+
+{% endblock css %}
+
+<h3><b>微博走势</b></h3>
+<hr>
+	<div id="line" style="height:400px;width:650px;float:left;"></div>
+	<div id="line_select_time" style="height:50px;font-weight:bold;/* font-size:12px; */padding:10px;margin-left:30px;float: left;width: 280px;">请选择时间段</div>
+	<div id="line_content" style="padding:10px;margin-left:30px;height:350px;width:280px;background-color:whitesmoke;float:left;overflow-y: auto;">该时段暂无微博</div>
+	<div id="online_time" style = "width:100%;float: left;margin-top: 20px;margin-bottom: 20px;">
+        <!--
+        <h4 style="font-size:16px;color:#555555;margin-bottom:15px;">上网时间分布</h4>
+        -->
+        <div id="online_time_table" ></div>
+		<!--
+        <div style='margin-left:15px;font-size:16px;float:left;margin-bottom:15px;'><img src="/static/img/warning.png">
+            <span id="online_time_conclusion"></span>
+        </div>
+		-->
+	</div>
+
+<h3><b>地理位置</b></h3><hr>
+    <div class="panel panel-default" style='width: 680px;float: left;height:656px;'>
+        <div class="panel-heading" style="background:#77ACF4;">
+            <div class="box_title">用户轨迹</div>
+        </div>
+        <div class="panel-body">
+			<div id='active_geo' style='width:650px;height:585px;float:left;'>
+                <div class='col-md-6' style="margin:0px 0px 10px 15px;width:315px;float:left;">
+                    <span class="input-group-addon" style="margin-right:15px;width:60px;border:1px solid white;float:left;background-color:white;display:inline-block;padding-left:0px;line-height: 8px;">选择用户</span>
+                    <span id="track_weibo_user"></span>
+                	<span id="track_user_commit" class="label label-success" style='margin-top:2px;float:right;cursor:pointer; background-color:rgba(69, 133, 195, 0.89);'>确定</span>
+                </div>
+				<div id="user_geo_map" style='width:100%;height:90%;'></div>
+			</div>
+        </div>
+ 	</div>
+	<div style='float:left;margin-left:15px;width:270px'>
+		<div class="panel panel-default" style='width: 265px;float: left;'>
+		    <div class="panel-heading" style="background:#77ACF4;">
+		        <div class="box_title"><span id="geo_show_more" class="box_title" style="float:right;cursor:pointer" type="button" data-toggle="modal" data-target="#move_location_more"><u>查看更多</u></span>位置转移统计<span id="moving" style="margin-left:10px;cursor:pointer;" data-toggle="modal" data-target="#moving_location">查看迁徙图</span></div>
+		    </div>
+		    <div class="panel-body" style='padding:2px;'>
+				<div id='move_location' style='overflow-x:hidden;width:260px;padding-top:5px;'></div>
+			</div>
+		</div>
+
+		<div class="panel panel-default" style='width: 265px;float: left;margin-top:0px;'>
+		    <div class="panel-heading" style="background:#77ACF4">
+		        <div class="box_title">上网方式排名</div>
+		    </div>
+		    <div class="panel-body" style='padding:5px;'>
+				<div id='top_platform' style='overflow-x:hidden;float:left;min-height:240px;padding-top:5px;'>
+				</div>
+		  	</div>
+		</div>
+	</div>
+	<div class="panel panel-default" style='width: 967px;float: left;margin-top:10px;height:140px;'>
+	    <div class="panel-heading" style="background:#77ACF4;">
+		        <div class="box_title">位置统计</div>
+		    </div>
+		    <div class="panel-body" style='padding:5px;height:100px;'>
+				<div id='top_place' style='overflow-x:hidden;float:left;min-height:280px;padding-top:5px;'></div>
+		  	</div>
+	</div>
+	<br>
+	<div class="panel panel-default" style='width: 967px;float: left;margin-top:10px;'>
+	    <div class="" style="background:#fff">
+	        <div class="box_title" style="line-height:40px;padding-left:20px;">整体用户地理位置分布</div>
+	    </div>
+	    <div class="panel-body">
+			<div id='top_geo' style='overflow-x:hidden;width:960px;float:left;'>
+				<div id="top_active_geo_line" style="height:350px;width:940px;"></div>
+			</div>
+	  	</div>
+	</div><br>
+
+<div style="float: left;">
+<h3 style='margin-top:20px;' class=""><b>活跃度走势</b></h3><hr>
+	<div class="panel panel-default" style='width: 350px;float: left;margin-top:10px;'>
+	    <div class="panel-heading" style="background:#77ACF4">
+	        <div class="box_title">活跃度分布</div>
+	    </div>
+	    <div class="panel-body" style='padding:0px;'>
+			<div id='active_distribution' style='overflow-x:hidden;width:380px;height:242px;float:left;margin-left:5px;margin-top: -20px;'></div>
+	  	</div>
+	</div>
+	<div class="panel panel-default" style='width: 290px;float: left;margin-top:10px;margin-left:14px;'>
+	    <div class="panel-heading" style="background:#77ACF4">
+	        <div class="box_title">主要活跃用户</div>
+	    </div>
+	    <div class="panel-body" style='padding:5px;'>
+			<div id='active_users' style='overflow-x:hidden;width:278px;height:212px;float:left;padding-top:5px;'></div>
+	  	</div>
+	</div>
+	<div class="panel panel-default" style='width: 290px;float: left;margin-top:10px;margin-left:14px;'>
+	    <div class="panel-heading" style="background:#77ACF4">
+	        <div class="box_title">主要非活跃用户</div>
+	    </div>
+	    <div class="panel-body" style='padding:5px;'>
+			<div id='unactive_users' style='overflow-x:hidden;width:278px;height:212px;float:left;padding-top:5px;'></div>
+	  	</div>
+	</div>
+		<div class="panel panel-default" style='width: 960px;float: left;margin-top:10px;'>
+	    <div class="panel-heading" style="background:#77ACF4">
+	        <div class="box_title">群体活跃度</div>
+	    </div>
+	    <div class="panel-body">
+			<div id='group_activity' style='overflow-x:hidden;width:940px;height:300px;float:left;'></div>
+	  	</div>
+	</div>
+</div>
+<!--
+<div style='font-size:16px;float:left;margin-top:15px;'><img src="/static/img/warning.png">
+    <span id="activity_conclusion"></span>
+</div>
+-->
+<div class="modal fade" id="moreStart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">主要出发地</h4>
+      </div>
+      <div class="modal-body" id='start_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="moreEnd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">主要目的地</h4>
+      </div>
+      <div class="modal-body" id='end_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="move_location_more" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">位置转移统计</h4>
+      </div>
+      <div class="modal-body" id='move_location_more_detail'>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="moving_location" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width:652px;">
+      <div class="modal-header" style="width:650px;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px;width:650px;" id="myModalLabel">位置迁徙图</h4>
+      </div>
+      <div class="modal-body" id='moving_location_detail' style="width:650px;height:585px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="detailPlace" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 600px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">详细位置转移</h4>
+      </div>
+      <div class="modal-body" id='detail_Place'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/highstock.js" charset="utf-8"></script>

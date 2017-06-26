@@ -1,0 +1,62 @@
+<div id="pattern">
+    <table class='table table-border bootstrap-datatable'>
+        <tr><td>
+                <span>用户在</span>
+                <input id="weibo_from" type='text' class="form-control" style='width:145px; display:inline-block;height:25px;'>
+                <span>-</span>
+                <input id="weibo_to" type='text' class="form-control" style='width:145px; display:inline-block;height:25px'>
+                <span>在</span>
+                <input id="geo" type='text' class="form-control" style='width:80px;display:inline-block;height:25px'  placeholder='北京'>
+                <span>使用</span>
+                <input id="ip" type='text' class="form-control" style='width:100px;display:inline-block;height:25px'  placeholder='127.0.0.1'>
+                <span>这一IP地址发布了具有</span>
+                <select id="sentiment">
+                    <option value='中性'>中性</option>
+                    <option value='积极'>积极</option>
+                    <option value='生气'>生气</option>
+                    <option value='焦虑'>焦虑</option>
+                    <option value='悲伤'>悲伤</option>
+                    <option value='厌恶'>厌恶</option>
+                    <option value='消极其他'>消极其他</option>
+                </select>
+                <span>情绪的</span>
+                <select id="message_type">
+                    <option value='原创'>原创</option>
+                    <option value='转发'>转发</option>
+                    <option value='评论'>评论</option>
+                </select>
+                <span>微博</span>
+            <a class='portrait_href' style='float:right;margin-right:20px;' id='show_advanced'>高级</a>
+        </td></tr>
+    </table>
+    <table id="advanced_condition" style="display:none;" class='table table-border bootstrap-datatable'>
+        <tr>
+            <td class='search_name'>添加过滤条件</td>
+            <td>
+                <div class='controls'>
+                    <div class='col-md-12' style='padding:0px;'>
+                        <div class='col-lg-4' >
+                            <span class="input-group-addon" style="width:65px;border:1px solid white;float:left;background-color:white;display:inline-block">人数</span>
+                            <span style="float: left;"><input style='width:85%;' type='range' id='num-range' min='0' max='200' step='20' value='100' class='inline-checkbox'>
+                                0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;200
+                            </span>
+                            <span id="show_num" style="border-radius: 4px;margin-left: -6px;padding: 5px;border: 1px solid #ccc;">100</span>
+                        </div>
+                        <div class='col-lg-4' style='margin-left:-50px;'>
+                             <span class="input-group-addon" style="width:75px;border:1px solid white;float:left;background-color:white;display:inline-block">影响力</span>
+                             <input id="influ_from" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='50'>&nbsp;-&nbsp;
+                             <input id="influ_to" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='100'>
+                        </div>
+                        <div class='col-lg-4' style='margin-left:-50px;'>
+                             <span class="input-group-addon" style="width:75px;border:1px solid white;float:left;background-color:white;display:inline-block">重要度</span>
+                             <input id="impor_from" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='50'>&nbsp;-&nbsp;
+                             <input id="impor_to" type='text' class="form-control" style='width:25%; display:inline-block;height:25px'  value='100'>
+                        </div>
+                        <span class="input-group-addon" style="font-size:10px;color:grey;border:1px solid white;background-color:white; margin-left:-60px;display:inline-block">影响力和重要度取值0-100</span>                             
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<script src="/static/js/portrait/group_identify_pattern.js"></script>

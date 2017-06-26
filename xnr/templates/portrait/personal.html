@@ -1,0 +1,1145 @@
+{%extends "tbase.html" %}
+{% block title %}个人基本属性{% endblock title %}
+{% block head_title %}个人基本属性{% endblock head_title %}
+
+{% block css %}
+{{ super() }}
+<link  type="text/css" href="/static/personal/css/style.css" rel="stylesheet"/>
+<link  type="text/css" href="/static/personal/css/basic.css" rel="stylesheet"/>
+<link  type="text/css" href="/static/personal/css/framestyle.css" rel="stylesheet"/>
+{% endblock css %}
+
+{% block main %}
+<div id="p_useremail" hidden>{{g.user.email}}</div>
+<div id = "porphoto" style="width:245px;float:left;">
+    <span class="img-photo" style="margin-left:45px;margin-top:0px;margin-bottom:10px;display:block;float:left;"><img id="portraitImg" src="http://tp2.sinaimg.cn/1878376757/50/0/1" alt="Photo" width="120" height="120"></span>
+    <span class="portrait_href" style="font-size:13px;float:right;margin-top:120px;"> <a id="portrait_detail"  onclick="turn_detail()" style="">查看详细属性</a>
+</div>
+<div class="overall_evaluation" style="float:left;" >
+    <h4 class="title">整体评价</h4>
+    <div class = "row" style="font-size:13px; line-height:30px;" >
+        <span style="color:red;margin-left:20px;font-size:13px;">活跃度</span> <span id="activePower" style="margin-left:20px;"></span>&nbsp(NO.<span id="activeness_rank"></span>/<span id="activeness_total"></span>)&nbsp <span class="gray">最高值</span><span id="Hactiveness"></span>/<span class="gray">最低值</span><span id="Lactiveness"></span>
+        <span style="color:red;margin-left:20px;font-size:13px;">身份敏感度</span> <span id="importantPower" style="margin-left:20px;"></span>&nbsp(NO.<span id="importance_rank"></span>/<span id="importance"></span>)&nbsp <span class="gray">最高值</span><span id="Himportance"></span>/<span class="gray">最低值</span><span id="Limportance"></span>
+    </div>
+    <div class = "row" style="font-size:13px;line-height:30px;margin-top:10px;" >
+        <span style="color:red;margin-left:20px;font-size:14px;">影响力</span> <span id="influencePower" style="margin-left:20px;"></span>&nbsp(NO.<span id="influence_rank"></span>/<span id="influence"></span>)&nbsp <span class="gray">最高值</span><span id="Hinfluence"></span>/<span class="gray">最低值</span><span id="Linfluence"></span>
+        <span style="color:red;margin-left:20px;font-size:14px;">言论敏感度</span> <span id="sensitivePower" style="margin-left:20px;"></span>&nbsp(NO.<span id="sensitive_rank"></span>/<span id="sensitiveness"></span>)&nbsp <span class="gray">最高值</span><span id="Hsensitiveness"></span>/<span class="gray">最低值</span><span id="Lsensitiveness"></span>
+    </div>
+    <div style="border-top:1px solid #ccc;width:100%;float:left;padding-left:20px;line-height:40px;">
+	    <span>注：当前数值是通过计算近7日信息获得，最高、最低值统计范围为近30日。</span>
+	</div>
+</div>
+<div class="" style="float:left;width:245px;">
+	<div class="basicinfo" style="float:left;width:245px;min-height:525px;" >
+		<h4 class="title" style="background:#77ACF4;color:#fff;">注册信息</h4>
+		<ul>
+			<li><span>用户ID：</span><span id="uid"></span></li>
+			<li><span>昵称：</span><span id="uname"></span></li>
+			<li><span>是否认证：</span><span id="verf"></span></li>
+			<li><span>认证类型：</span><span id="verf_type"></span></li>
+			<li><span>粉丝数：</span><span id="fansum"></span></li>
+			<li><span>关注数：</span><span id="attentionsum"></span></li>
+			<li><span>微博数：</span><span id="weibosum"></span></li>
+			<li><span>注册地：</span><span id="location"></span></li>
+			<li><span>个人描述：</span><span id="description"></span></li>
+			<li><span>主页微博：</span></li>
+			<li><a href="" id="homepage" ></a></li>
+		</ul>
+	</div>
+	
+	<div class="taginfo" style="float:left;width:245px;border:1px solid #77ACF4;background:#fff;margin-top:10px;" >
+		<h4 class="title" style="background:#77ACF4;color:#fff;">标签信息</h4>
+		<div >
+			<span style="margin-left:20px;line-height:40px;">个人标签</span>
+		    <ul style="float:left;width:245px;border-top:1px solid #ccc;" id="tag">
+			</ul>
+			<ul style="float:left;width:220px;margin-left:10px;border-top:1px solid #ccc;">
+				<li style="float:left;margin-left:20px;font-size:14px;margin-top:20px;">添加标签</li>
+				<li style="float:left;">
+					<span style= "width:100%;float:left;margin-left:20px;margin-top:10px;">
+						<span >选择类别：</span>
+						<span id="attribute_name_zh" style="margin-left:10px">
+							<select id="select_attribute_name">
+							</select>
+						</span>
+					</span>
+					<span style= "width:100%;float:left;margin-top:10px;margin-left:20px;">
+						<span >选择标签：</span>
+						<span id="attribute_value_zh" style="margin-left:10px">
+							<select id="select_attribute_name">
+							</select>
+						</span>
+					</span>
+				</li>
+				<li class="portrait_button" style="margin-right:0px;float:right;width:50px;height:30px;"><span id="add_tag" style="padding-left:10px;line-height:30px;cursor:pointer;" onclick="add_tag()">添加</span></li>
+			</ul>
+		</div>
+		<ul style="float:left;border-top:1px solid #ccc;width:245px;padding-top:20px;" id="group_tag">
+		</ul>
+		<ul style="float:left;border-top:1px solid #ccc;width:245px;padding-top:20px;">
+			<li style="float:left;margin-left:20px;">用户备注</li>
+            <li style="float:left;margin-left:40px;" id="extraDetail">暂无</li>
+		</ul>
+		<!--
+		<span style="float:right;margin-right:15px;width:50px;height:30px;margin-bottom:10px;" class="portrait_button"><span id="modify_tag" style="padding-left:10px;line-height:30px;cursor:pointer;">修改</span></span>
+	    -->
+	</div>
+</div>
+<div class="" style="float:left;margin-left:22px;">
+    <div class="locationinfo" style="width:330px;float:left;border:1px solid #77ACF4;background:#fff;">
+        <h4 class="title" style="background:#77ACF4;color:#fff;">活动信息</h4>
+        <ul>
+            <li><span style="color:red;">当前位置</span><span id="cur_ip" style="margin-left:20px;"></span>(<span id="cur_loca"></span>)</li>
+			<li><span style="color:red;">异常位置</span><span id="ab_ip" style="margin-left:20px;"></span>(<span id="ab_loca"></span>)</li>
+            <li><span style="color:red;">活跃位置</span><span id="act_ip" style="margin-left:20px;"></span>(<span id="act_loca"></span>)</li>
+			<li><span style="color:red;">家庭位置</span><span id="fam_ip" style="margin-left:20px;"></span>(<span id="fam_loca"></span>)</li>
+			<li><span style="color:red;">工作位置</span><span id="work_ip" style="margin-left:20px;"></span>(<span id="work_loca"></span>)</li>
+        </ul>
+    </div>
+	<div class="" style="width:380px;float:left;margin-left:22px;">
+	    <div class="preinfo" style="width:380px;float:left;border:1px solid #77ACF4;background:#fff;">
+            <h4 class="title" style="background:#77ACF4;color:#fff;">性格特征</h4>
+            <ul>
+                <li><span style="color:red;">身份</span><span id="identify" style="margin-left:20px;"></span></li>
+                <li><span style="color:red;">话题</span><span id="topic_zh" style="margin-left:20px;"></span></li>
+            </ul>
+        </div>
+	
+        <div class="attentioninfo" style="width:380px;float:left;border:1px solid #77ACF4;background:#fff; margin-top:22px;">
+            <h4 class="title" style="background:#77ACF4;color:#fff;">话题偏好</h4>
+            <ul>
+		        <li><span style="color:red;">微话题</span><span id="hashtag" style="margin-left:10px;"></span><a href="#" data-toggle="modal" data-target="#more_hashtag" id="morehashtag" style="margin-left:10px;" >更多</a></li>
+                <li><span style="color:red;">敏感词</span><span id="sensitive_word" style="margin-left:10px;"></span><a href="#" data-toggle="modal" data-target="#more_sensitive" id="moresensitive" style="margin-left:10px;">更多</a></li>
+                <li><span style="color:red;">关键词</span><span id="keywords" style="margin-left:10px;"></span><a href="#" data-toggle="modal" data-target="#more_keywords"  id="morekeywords" style="margin-left:10px;">更多</a></li>
+            </ul>
+        </div>
+	</div>
+	
+</div>
+
+<div class="socialinfo" style="float:left;width:730px;border:1px solid #77ACF4;background:#fff;margin-top:10px;margin-left:22px;" >
+    <h4 class="title" style="background:#77ACF4;color:#fff;">社交关系</h4>
+    <div class = "row" style="font-size:13px;margin-top:20px;margin-bottom:20px;line-height:30px;" >
+        <span style="color:red;margin-left:30px;margin-right:10px;line-height:30px;float:left;">被他转发及评论用户</span>
+		<span id="retweet" style="margin-left:20px;float:left;width:180px;"></span>
+		<a href="#" data-toggle="modal" data-target="#more_retweet" id="moreretweet" style="float:left;line-height:30px;margin-left:5px;">更多</a>
+        <span style="color:red;margin-left:20px;margin-right:10px;float:left;line-height:30px;">转发及评论他的用户</span>
+		<span id="tweeted" style="margin-left:20px;float:left;width:180px;"></span>
+		<a href="#" data-toggle="modal" data-target="#more_tweeted" id="moretweeted" style="float:left;line-height:30px;margin-left:5px;">更多</a>
+    </div>
+    <div class = "row" style="font-size:13px;margin-top:10px;margin-bottom:20px;line-height:30px;" >
+	    <span style="color:red;margin-left:30px;margin-right:10px;float:left;line-height:30px;width:117px;">双向交互的用户</span>
+		<span id="two_way" style="margin-left:20px;float:left;width:180px;"></span>
+		<a href="#" data-toggle="modal" data-target="#more_two_way"  id="moretwo_way" style="float:left;line-height:30px;margin-left:5px;">更多</a>
+		<span style="color:red;margin-left:20px;margin-right:25px;float:left;line-height:30px;width:117px;">他@的相关用户</span>
+		<span id="related" style="margin-left:0px;float:left;width:180px;"></span>
+		<a href="#" data-toggle="modal" data-target="#more_related" id="morerelated" style="float:left;line-height:30px;margin-left:5px;">更多</a>
+    </div>
+	<div style="border-top:1px solid #ccc;width:100%;">
+    <span style="margin-left:20px;margin-top:10px;font-size:16px;font-weight:500;">社团倾向</span>
+	<ul style="font-size:13px;line-height:40px;margin-top:10px;">
+	    <li style="float:left;margin-left:20px;"><span style="color:red;">身份</span><span id="analyse_identify" style="margin-left:20px;margin-right:10px;"></span><a href="#" id="moreanalyse_identify" data-toggle="modal" data-target="#more_analyse_identify">更多</a></li>
+	    <li style="float:left;margin-left:20px;"><span style="color:red;">话题</span><span id="analyse_topic" style="margin-left:20px;margin-right:10px;"></span><a href="#" id="moreanalyse_topic" data-toggle="modal" data-target="#more_analyse_topic">更多</a></li>
+	</ul>
+	</div >
+	<div style="border-top:1px solid #ccc;width:100%;float:left;padding-left:20px;line-height:40px;">
+	    <span>注：分析范围为已入库用户。</span>
+	</div>
+</div>
+
+
+<div class="tweetinfo" style="float:left;width:730px;border:1px solid #77ACF4;background:#fff;margin-top:10px;margin-left:22px;" >
+    <h4 class="title" style="background:#77ACF4;color:#fff;">发帖内容</h4>
+    <div style="width:100%;margin-top:10px;">
+	    <span style= "color:red;margin-left:20px;float:left;">相关微博</span>
+		<ul style="float:left;" id="modechoose">
+			<li>
+		        <input type="radio" name="mode_choose" value="timestamp" checked="checked">
+                <span class="mode" style="">时间</span>
+			</li>
+			<li>
+                <input type="radio" name="mode_choose" value="retweet_count">
+                <span class="mode" style="">转发数</span>
+			</li>
+			<li>
+				<input type="radio" name="mode_choose" value="comment_count" >
+				<span class="mode" style="">评论数</span>
+			</li>
+			<li>
+                <input type="radio" name="mode_choose" value="sensitive">
+                <span class="mode" style="">敏感性</span>
+			</li>
+		</ul>
+	</div>
+	<!--
+    <span style= "color:red;width:100%;margin-left:20px;font-size:16px;float:left;margin-bottom:10px;">相关微博</span>
+	-->
+    <div class="tang-scrollpanel-content" style="margintop:10px;">
+	    <div id='group_influ_weibo' style='overflow-x:hidden;width:730px;float:left;'>
+ 			<div id="group_influ_weibo_result" style="float:left;width:100%;"></div>
+            <div id="pageGro" class="cb" style="display:none;float:left;width:600px;height:60px;margin-left:200px;margin-top:40px;line-height:23px;">
+                <span class="pageUp" style="float:left;">上一页</span>
+                <span class="pageList" style="float:left;">
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                </span>
+                <span class="pageDown" style="margin-left:20px;cursor:pointer;">下一页</span>
+            </div>	       
+        </div>
+	</div>
+<div id="float-wrap" class="hidden"></div>
+
+
+<!-- 模态框 -->
+<div class="modal fade" id="more_hashtag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">微话题排名</h4>
+      </div>
+      <div class="modal-body" id='hashtag_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_sensitive" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">敏感词排名</h4>
+      </div>
+      <div class="modal-body" id='sensitive_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_keywords" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">关键词排名</h4>
+      </div>
+      <div class="modal-body" id='key_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_retweet" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">被他转发及评论用户排名</h4>
+      </div>
+      <div class="modal-body" id='userretweet'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_tweeted" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">转发及评论他的用户排名</h4>
+      </div>
+      <div class="modal-body" id='usertweeted'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_two_way" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">双向交互的用户排名</h4>
+      </div>
+      <div class="modal-body" id='usertwo_way'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_related" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">他@的相关用户排名</h4>
+      </div>
+      <div class="modal-body" id='userrelated'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_analyse_identify" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">身份排名</h4>
+      </div>
+      <div class="modal-body" id='domian_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_analyse_topic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">话题排名</h4>
+      </div>
+      <div class="modal-body" id='topic_WordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+ function Personal(){
+	this.ajax_method = 'GET';
+}
+Personal.prototype = {   //群组搜索
+    call_sync_ajax_request:function(url, method, callback){
+        $.ajax({
+          url: url,
+          type: method,
+          dataType: 'json',
+          async: false,
+          success:callback
+        });
+	},
+	personData:function(data){
+		personalData = data ;
+        var homepage_url = 'http://weibo.com/u/' + uid;
+        document.getElementById('homepage').innerHTML = homepage_url;
+        document.getElementById('homepage').href = homepage_url;
+		var UID = document.getElementById('uid');
+		UID.innerHTML = personalData.uid;
+        var Uname = document.getElementById('uname');
+		if(personalData.nick_name == ''){
+		    Pname = '未知';
+		}else{
+		    Pname = personalData.nick_name;
+		}
+		Uname.innerHTML = Pname;
+        var Verfi = document.getElementById('verf');
+		if( personalData.verified_type==""){
+		    personalData.verified_type = "暂无数据";
+		}
+        var verf = personalData.verified_type;
+        var Verf_type = document.getElementById('verf_type');
+        if(verf != 0 && verf != 1 && verf != 2 && verf != 3 && verf != 4 && verf != 5 && verf != 6 && verf != 7 && verf != 8 && verf != 200 && verf != 220 && verf != 400 ){
+		    Verfi.innerHTML = "否";
+		    if(verf == -1){
+		    	Verf_type.innerHTML = personalData.verified_type_ch;
+		    }else{
+		    	Verf_type.innerHTML = "无";
+		    }
+		}else{
+		    Verfi.innerHTML = "是";
+			Verf_type.innerHTML = personalData.verified_type_ch;
+		}
+        var Fansum = document.getElementById('fansum');
+		if( personalData.fansnum==""){
+		    personalData.fansnum = "暂无数据";
+		}
+        Fansum.innerHTML = personalData.fansnum;
+		var Attentionsum = document.getElementById('attentionsum');
+		if( personalData.friendsnum==""){
+		    personalData.friendsnum = "暂无数据";
+		}
+        Attentionsum.innerHTML = personalData.friendsnum;
+		var Weibosum = document.getElementById('weibosum');
+		if( personalData.statusnum==""){
+		    personalData.statusnum = "暂无数据";
+		}
+        Weibosum.innerHTML = personalData.statusnum;
+		var Loca = document.getElementById('location');
+		if( personalData.user_location==""){
+		    personalData.user_location = "暂无数据";
+		}
+		Loca.innerHTML = personalData.user_location;
+		var Descrip = document.getElementById('description');
+		if( personalData.description==""){
+		    personalData.description = "暂无数据";
+		}
+		Descrip.innerHTML = personalData.description;
+        var img = document.getElementById('portraitImg');
+        if(personalData.photo_url == ""){
+            img.src =  "http://tp2.sinaimg.cn/1878376757/50/0/1";
+        }else{
+            img.src = personalData.photo_url;
+        }
+	},
+    overallData:function(data){
+        //console.log(data);
+		
+		//活跃度
+        var AP = document.getElementById('activePower');
+        if(data.activeness[0] !=""){
+		    AP.innerHTML = data.activeness[0].toFixed(2);
+		}else{
+		    AP.innerHTML = '0';
+		}
+		var AR = document.getElementById('activeness_rank');
+		if(data.activeness[1] !=""){
+		    AR.innerHTML = data.activeness[1];
+		}else{
+		    AR.innerHTML = '0';
+		}
+		var HA = document.getElementById('Hactiveness');
+		if(data.activeness[2] !=""){
+		    HA.innerHTML = data.activeness[2].toFixed(0);
+		}else{
+		    HA.innerHTML = '0';
+		}
+		var LA = document.getElementById('Lactiveness');
+		if(data.activeness[3] !=""){
+		    LA.innerHTML = data.activeness[3].toFixed(0);
+		}else{
+		    LA.innerHTML = '0';
+		}
+		var AT = document.getElementById('activeness_total');
+		if(data.activeness[4] !=""){
+		    AT.innerHTML = data.activeness[4];
+		}else{
+		    AT.innerHTML = '0';
+		}
+		
+		//重要度
+		var IP = document.getElementById('importantPower');
+        if(data.importance[0] !=""){
+		    IP.innerHTML = data.importance[0].toFixed(2);
+		}else{
+		    IP.innerHTML = '0';
+		}
+		var IR = document.getElementById('importance_rank');
+		if(data.importance[1] !=""){
+		    IR.innerHTML = data.importance[1];
+		}else{
+		    IR.innerHTML = '0';
+		}
+		var HI = document.getElementById('Himportance');
+		if(data.importance[2] !=""){
+		    HI.innerHTML = data.importance[2].toFixed(0);
+		}else{
+		    HI.innerHTML = '0';
+		}
+		var LI = document.getElementById('Limportance');
+		if(data.importance[3] !=""){
+		    LI.innerHTML = data.importance[3].toFixed(0);
+		}else{
+		    LI.innerHTML = '0';
+		}
+		var IT = document.getElementById('importance');
+		if(data.importance[4] !=""){
+		    IT.innerHTML = data.importance[4];
+		}else{
+		    IT.innerHTML = '0';
+		}
+		
+		//影响力
+		var FP = document.getElementById('influencePower');
+        if(data.influence[0] !=""){
+		    FP.innerHTML = data.influence[0].toFixed(2);
+		}else{
+		    FP.innerHTML = '0';
+		}
+		var FR = document.getElementById('influence_rank');
+		if(data.influence[1] !=""){
+		    FR.innerHTML = data.influence[1];
+		}else{
+		    FR.innerHTML = '0';
+		}
+		var HF = document.getElementById('Hinfluence');
+		if(data.influence[2] !=""){
+		    HF.innerHTML = data.influence[2].toFixed(0);
+		}else{
+		    HF.innerHTML = '0';
+		}
+		var LF = document.getElementById('Linfluence');
+		if(data.influence[3] !=""){
+		    LF.innerHTML = data.influence[3].toFixed(0);
+		}else{
+		    LF.innerHTML = '0';
+		}
+		var FT = document.getElementById('influence');
+		if(data.influence[4] !=""){
+		    FT.innerHTML = data.influence[4];
+		}else{
+		    FT.innerHTML = '0';
+		}
+		
+		
+		//敏感度 
+		var SP = document.getElementById('sensitivePower');
+        if(data.sensitive[0] !=""){
+		    SP.innerHTML = data.sensitive[0].toFixed(2);
+		}else{
+		    SP.innerHTML = '0';
+		}
+		var SR = document.getElementById('sensitive_rank');
+		if(data.sensitive[1] !=""){
+		    SR.innerHTML = data.sensitive[1];
+		}else{
+		    SR.innerHTML = '0';
+		}
+		var HS = document.getElementById('Hsensitiveness');
+		if(data.sensitive[2] !=""){
+		    HS.innerHTML = data.sensitive[2].toFixed(0);
+		}else{
+		    HS.innerHTML = '0';
+		}
+		var LS = document.getElementById('Lsensitiveness');
+		if(data.sensitive[3] !=""){
+		    LS.innerHTML = data.sensitive[3].toFixed(0);
+		}else{
+		    LS.innerHTML = '0';
+		}
+		var ST = document.getElementById('sensitiveness');
+		if(data.sensitive[4] !=""){
+		    ST.innerHTML = data.sensitive[4];
+		}else{
+		    ST.innerHTML = '0';
+		}
+    },
+
+    locationData:function(data){
+        //console.log(data);
+		//当前位置
+        var CIP = document.getElementById('cur_ip');
+        if(data.now_ip[0]!=""){
+		    CIP.innerHTML = data.now_ip[0];
+		}else{
+		    CIP.innerHTML = "暂无数据";
+		}
+		var CL = document.getElementById('cur_loca');
+        if(data.now_ip[1]!=""){
+		    CL.innerHTML = data.now_ip[1];
+		}else{
+		    CL.innerHTML = "暂无数据";
+		}
+		//异常位置
+		var ABIP = document.getElementById('ab_ip');
+        if(data.abnormal_ip[0]!=""){
+		    ABIP.innerHTML = data.abnormal_ip[0];
+		}else{
+		    ABIP.innerHTML = "暂无数据";
+		}
+		var ABL = document.getElementById('ab_loca');
+        if(data.abnormal_ip[1]!=""){
+		    ABL.innerHTML = data.abnormal_ip[1];
+		}else{
+		    ABL.innerHTML = "暂无数据";
+		}
+		//活跃位置
+		var MIP = document.getElementById('act_ip');
+        if(data.main_ip[0]!=""){
+		    MIP.innerHTML = data.main_ip[0];
+		}else{
+		    MIP.innerHTML = "暂无数据";
+		}
+		var ML = document.getElementById('act_loca');
+        if(data.main_ip[1]!=""){
+		    ML.innerHTML = data.main_ip[1];
+		}else{
+		    ML.innerHTML = "暂无数据";
+		}
+		
+		//家庭位置
+		var HIP = document.getElementById('fam_ip');
+        if(data.home_ip[0]!=""){
+		    HIP.innerHTML = data.home_ip[0];
+		}else{
+		    HIP.innerHTML = "暂无数据";
+		}
+		var HL = document.getElementById('fam_loca');
+        if(data.home_ip[1]!=""){
+		    HL.innerHTML = data.home_ip[1];
+		}else{
+		    HL.innerHTML = "暂无数据";
+		}
+		
+		//工作位置
+		var JIP = document.getElementById('work_ip');
+        if(data.job_ip[0]!=""){
+		    JIP.innerHTML = data.job_ip[0];
+		}else{
+		    JIP.innerHTML = "暂无数据";
+		}
+		var JL = document.getElementById('work_loca');
+        if(data.job_ip[1]!=""){
+		    JL.innerHTML = data.job_ip[1];
+		}else{
+		    JL.innerHTML = "暂无数据";
+		}
+    },
+	attentionData:function(data){
+		var Domain = document.getElementById('identify');
+		if(data.tendency.domain !="undefined"){
+		    Domain.innerHTML = data.tendency.domain;
+		}else{
+		    Domain.innerHTML = "暂无数据";
+		}
+		var Topic = document.getElementById('topic_zh');
+		if(data.tendency.topic !="undefined"){
+		    Topic.innerHTML = data.tendency.topic;
+		}else{
+		    Topic.innerHTML = "暂无数据";
+		}
+		
+		var hashtag = document.getElementById('hashtag');
+		if(data.attention_information.hashtag.length>3){
+		    hashtag.innerHTML = data.attention_information.hashtag[0][0] +'&nbsp&nbsp' +data.attention_information.hashtag[1][0]+'&nbsp&nbsp' +data.attention_information.hashtag[2][0];
+		    DrawMore(data.attention_information.hashtag,'hashtag_WordList');
+		}else if(data.attention_information.hashtag.length>0 && data.attention_information.hashtag.length<4){
+		    var html ='';
+			for(var i=0;i<data.attention_information.hashtag.length;i++){
+			    html = html + data.attention_information.hashtag[i][0] + '&nbsp&nbsp';
+			}
+			hashtag.innerHTML = html ;
+			$('#morehashtag').css('display','none');
+		}else if(data.attention_information.hashtag.length == 0){
+		    hashtag.innerHTML = '暂无数据';
+			$('#morehashtag').css('display','none');
+		}
+		
+		var sensitive = document.getElementById('sensitive_word');
+		if(data.attention_information.sensitive_dict.length>3){
+		    sensitive.innerHTML = data.attention_information.sensitive_dict[0][0] +'&nbsp&nbsp' +data.attention_information.sensitive_dict[1][0]+'&nbsp&nbsp' +data.attention_information.sensitive_dict[2][0];
+		    DrawMore(data.attention_information.sensitive_dict,'sensitive_WordList');
+		}else if(data.attention_information.sensitive_dict.length>0 && data.attention_information.sensitive_dict.length<4){
+		    var html ='';
+			for(var i=0;i<data.attention_information.sensitive_dict.length;i++){
+			    html = html + data.attention_information.sensitive_dict[i][0] + '&nbsp&nbsp';
+			}
+			sensitive.innerHTML = html ;
+			$('#moresensitive').css('display','none');
+		}else if(data.attention_information.sensitive_dict.length == 0){
+		    sensitive.innerHTML = '暂无数据';
+			$('#moresensitive').css('display','none');
+		}
+		
+		var keywords = document.getElementById('keywords');
+		if(data.attention_information.keywords.length>3){
+		    keywords.innerHTML = data.attention_information.keywords[0][0] +'&nbsp&nbsp' +data.attention_information.keywords[1][0]+'&nbsp&nbsp' +data.attention_information.keywords[2][0];
+		    DrawMore(data.attention_information.keywords,'key_WordList');
+		}else if(data.attention_information.keywords.length>0 && data.attention_information.keywords.length<4){
+		    var html ='';
+			for(var i=0;i<data.attention_information.keywords.length;i++){
+			    html = html + data.attention_information.keywords[i][0] + '&nbsp&nbsp';
+			}
+			keywords.innerHTML = html ;
+			$('#morekeywords').css('display','none');
+		}else if(data.attention_information.keywords.length == 0){
+		    keywords.innerHTML = '暂无数据';
+			$('#morekeywords').css('display','none');
+		}
+        $('#tag').empty();
+		html = '';
+		html = html + '<li style="float:left;margin-left:20px;font-size:14px;">已有标签</li>';
+		html = html + '<li style="float:left;">';
+		if(data.tag_remark.tag.length == 0){
+			html = html + '<label style="margin-left:30px;" class="">暂无数据</label>';
+			html = html +'</li>';
+			$('#tag').append(html);
+		}else{
+			for(var i=0;i<data.tag_remark.tag.length;i++){
+			    html = html + '<label class="cols-label"><input name="" class=" fleft chosebox" type="checkbox" value="">'+data.tag_remark.tag[i]+'</label>';
+			}
+		    html = html +'<li class="portrait_button" style="margin-right:15px;float:right;width:50px;height:30px;"><span id="del_tag" style="padding-left:10px;line-height:30px;cursor:pointer;">删除</span></li>';
+			$('#tag').append(html);
+		}
+		
+		
+		
+		
+		
+		$('#group_tag').empty();
+		html = '';
+		html = html + '<li style="float:left;margin-left:20px;">群组标签</li>';
+		if(data.group_tag.length==0){
+		    html = html + '<li style="float:left;margin-left:40px;">暂无数据</li>';
+		}else{
+		    for(var i=0;i<data.group_tag.length;i++){
+				html = html + '<li style="float:left;margin-left:40px;">'+data.group_tag[i]+'</li>';
+			}
+		}
+		$('#group_tag').append(html);
+    },
+    remarkData:function(data){
+        //console.log(data);
+        if (data == ''){
+            $('#extraDetail').html('暂无');
+        }
+        else{
+            $('#extraDetail').html(data);
+        }
+    },
+    historyData:function(data){
+        //console.log(data);
+        histData = data;
+    },
+	socialData:function(data){
+		Draw(data.top_retweet_comment,'retweet');
+        Draw(data.top_be_retweet_comment,'tweeted');
+		Draw(data.top_interaction,'two_way');
+		Draw(data.top_mention,'related');
+		var topics = document.getElementById('analyse_topic');
+		if(data.in_topic.length>3){
+		    topics.innerHTML = data.in_topic[0][0] +'&nbsp&nbsp' +data.in_topic[1][0]+'&nbsp&nbsp' +data.in_topic[2][0];
+			DrawMore(data.in_topic,'topic_WordList')
+		}else if(data.in_topic.length>0 && data.in_topic.length<=3){
+		    var html ='';
+		    for(var i=0;i<data.in_topic.length;i++){
+		    	if(i == 0){
+		    		html = html + data.in_topic[i][0];
+		    	}else{
+		    		html = html +'&nbsp&nbsp'+ data.in_topic[i][0];
+		    	}			    
+			}
+			topics.innerHTML = html;
+			$('#moreanalyse_topic').css('display','none');
+		}else if(data.in_topic.length==0){
+		    topics.innerHTML = '暂无数据';
+                    $('#moreanalyse_topic').css('display','none');
+		}
+		
+		var domains = document.getElementById('analyse_identify');
+		if(data.in_domain.length>=4){
+		    domains.innerHTML = data.in_domain[0][0] +'&nbsp&nbsp' +data.in_domain[1][0]+'&nbsp&nbsp' +data.in_domain[2][0];
+			DrawMore(data.in_domain,'domian_WordList')
+		}else if(data.in_domain.length<=3 &&data.in_domain.length>0){
+		    var html ='';
+		    for(var i=0;i<data.in_domain.length;i++){
+		    	if(i==0){
+		    		html = html + data.in_domain[i][0];
+		    	}else{
+		    		html = html +'&nbsp&nbsp'+ data.in_domain[i][0] ;
+		    	}			    
+			}
+			domains.innerHTML = html;
+			$('#moreanalyse_identify').css('display','none');
+		}else if(data.in_domain.length==0){
+		    domains.innerHTML = '暂无数据';
+                    $('#moreanalyse_identify').css('display','none');
+		}
+		
+    },
+	weiboData:function(data){;
+		DrawWeibo(data,'group_influ_weibo', 'group_influ_weibo_result');
+	}
+	
+}
+
+
+function Draw(data,div){
+        $('#'+div).empty();
+		if(data.length==0){
+		    document.getElementById(div).innerHTML = "暂无数据";
+			$('#more'+div).css('display','none');
+		}else if(data.length>0 && data.length <6){
+			var html = '';
+			for(var i=0;i<data.length;i++){
+			    if(data[i][2]=='unknown'){
+				    data[i][2] = "http://tp2.sinaimg.cn/1878376757/50/0/1";
+				}
+				if(data[i][1]=='unknown'){
+				    data[i][1] = "未知";
+				    data[i][1] = data[i][0];
+                                 }
+			    html = html + '<a target="_blank" href="/index/personal/?uid='+data[i][0]+'" class="img-photo" title="'+data[i][1]+'" style="margin-left:5px;display:block;float:left;"><img id="portraitImg" src="'+ data[i][2] + '"alt="'+data[i][1]+'" width="30" height="30"></a>';
+			}
+			$('#more'+div).css('display','none');
+			$('#'+div).append(html);
+		}else if(data.length>5){
+			var html = '';
+			for(var i=0;i<5;i++){
+			    if(data[i][2]=='unknown'){
+				    data[i][2] = "http://tp2.sinaimg.cn/1878376757/50/0/1";
+				}
+				if(data[i][1]=='unknown'){
+				    data[i][1] = "未知";
+				}
+			    html = html + '<span class="img-photo" style="margin-left:5px;display:block;float:left;"><img id="portraitImg" src="'+ data[i][2]+ '" alt="'+data[i][1]+'" width="30" height="30"></span>';
+			}
+			var more_user = 'user'+div;
+			DrawMoreUser(data,more_user);
+			$('#'+div).append(html);
+		}
+
+}
+
+
+function DrawWeibo(data, div_name, sub_div_name){
+    page_num = 5;
+	//console.log(data);	
+    if (data.length < page_num) {
+        //console.log('data_length', data.length);
+        $('#'+ div_name + ' #pageGro .pageUp').css('display', 'none');
+        $('#'+ div_name + ' #pageGro .pageList').css('display', 'none'); 
+        $('#'+ div_name + ' #pageGro .pageDown').css('display', 'none'); 
+        if (data.length == 0) {
+            $('#' + sub_div_name).empty();
+            $('#' + sub_div_name).append('此条件下没有与此事件相关的微博！');
+        }else{
+            $('#'+ div_name + ' #pageGro').css('display', 'block');
+            page_num = data.length
+            page_group_influ_weibo( 0, page_num, data, sub_div_name);
+        }
+    }else {
+          $('#'+ div_name + ' #pageGro').css('display', 'block');
+          page_group_influ_weibo( 0, page_num, data, sub_div_name);
+          var total_pages = 0;
+          if (data.length % page_num == 0) {
+              total_pages = data.length / page_num;
+          }
+          else {
+              total_pages = Math.round(data.length / page_num) + 1;
+          }
+        }
+    var pageCount = total_pages;
+    
+    if(pageCount>5){
+        page_icon(1,5,0, div_name);
+    }else{
+        page_icon(1,pageCount,0, div_name);
+    }
+    
+    $("#"+div_name+" #pageGro li").live("click", function(){
+        if(pageCount > 5){
+            var pageNum = parseInt($(this).html());
+            pageGroup(pageNum,pageCount);
+        }else{
+            $(this).addClass("on");
+            $(this).siblings("li").removeClass("on");
+        }
+      page = parseInt($("#"+div_name+" #pageGro li.on").html())  
+      //console.log('page', page);         
+      start_row = (page - 1)* page_num;
+      end_row = start_row + page_num;
+      if (end_row > data.length)
+          end_row = data.length;
+        // console.log('start', start_row);
+        // console.log('end', end_row);
+        // console.log('data',data);
+        page_group_influ_weibo(start_row,end_row,data, sub_div_name);
+    });
+
+    $("#"+div_name+" #pageGro .pageUp").off('click').click(function(){
+        if(pageCount > 5){
+            var pageNum = parseInt($("#"+div_name+" #pageGro li.on").html());
+            pageUp(pageNum,pageCount);
+        }else{
+            var index = $("#"+div_name+" #pageGro ul li.on").index();
+            if(index > 0){
+                $("#"+div_name+" #pageGro li").removeClass("on");
+                $("#"+div_name+" #pageGro ul li").eq(index-1).addClass("on");
+            }
+        }
+      page = parseInt($("#"+div_name+" #pageGro li.on").html())  
+      //console.log(page);
+      start_row = (page-1)* page_num;
+      end_row = start_row + page_num;
+      if (end_row > data.length){
+          end_row = data.length;
+      }
+        page_group_influ_weibo(start_row,end_row,data, sub_div_name);
+    });
+	
+	$("#" + div_name + " #pageGro .pageDown").off('click').click(function(){
+        if(pageCount > 5){
+            var pageNum = parseInt($("#"+div_name+" #pageGro li.on").html());
+            pageDown(pageNum,pageCount);
+        }else{
+            var index = $("#"+div_name+" #pageGro ul li.on").index();
+            if(index+1 < pageCount){
+                $("#"+div_name+" #pageGro li").removeClass("on");
+                $("#"+div_name+" #pageGro ul li").eq(index+1).addClass("on");
+            }
+        }
+      page = parseInt($("#"+div_name+" #pageGro li.on").html()) 
+      //console.log(page);
+      start_row = (page-1)* page_num;
+      end_row = start_row + page_num;
+      if (end_row > data.length){
+          end_row = data.length;
+      }
+        page_group_influ_weibo(start_row,end_row,data, sub_div_name);
+    });
+
+}
+
+
+function page_group_influ_weibo(start_row,end_row,data, sub_div_name){
+    weibo_num = end_row - start_row;
+    $('#'+ sub_div_name).empty();
+    var html = "";
+    html += '<div class="group_weibo_font" style="margin-right:5px;">';
+    for (var i = start_row; i < end_row; i += 1){
+        s=i.toString();
+		var mid = data[s][0];
+		var uid = data[s][1];
+        var text = data[s][2];
+		var retweet_count = data[s][7];
+		var comment_count = data[s][8];
+        //var location = data[s][2];
+        var date = data[s][6];
+        var tweet_ulr = data[s][10];
+        //date = new Date(parseInt(timestamp)*1000).format("yyyy-MM-dd hh:mm:ss");
+        if (i%2 ==0){
+            html += '<div style="padding:5px;background:whitesmoke;">';
+            html += '<p style="margin-left:10px;"><a target="_blank" href="/index/personal/?uid=' + uid + '">' + Pname + '</a>&nbsp;&nbsp;发布:<font color=black>' + text + '</font></p>';
+            html += '<p style="margin-top:-5px;margin-left:10px;"><a color:#e0e0e0 target="_blank" style="text-decoration: underline;" href="'+tweet_ulr+'">' + date + '</a>-<a target="_blank" href="/index/personal_detail/?uid=' + uid + '">用户详情</a>-<a>转发树</a>';
+            html += '<span style="margin-left:300px;"><a>转发数（'+ retweet_count +'）</a><a>评论数（'+ comment_count +'）</a></span></p>';
+			html += '</div>'
+    }
+        else{
+            html += '<div style="padding;5px;">';
+            html += '<p style="margin-left:10px;"><a target="_blank" href="/index/personal/?uid=' + uid + '">' + Pname + '</a>&nbsp;&nbsp;发布:<font color=black>' + text + '</font></p>';    
+            html += '<p style="margin-top:-5px;margin-left:10px;"><a color:#e0e0e0 target="_blank" style="text-decoration: underline;" href="'+tweet_ulr+'">' + date + '</a>-<a target="_blank" href="/index/personal_detail/?uid=' + uid + '">用户详情</a>-<a>转发树</a>';
+            html += '<span style="margin-left:300px;"><a>转发数（'+ retweet_count +'）</a><a>评论数（'+ comment_count +'）</a></span></p>';
+			html += '</div>';
+        }
+    }
+    html += '</div>'; 
+    $('#'+sub_div_name).append(html);
+}
+
+function pageGroup(pageNum,pageCount){
+	switch(pageNum){
+		case 1:
+			page_icon(1,5,0);
+		break;
+		case 2:
+			page_icon(1,5,1);
+		break;
+		case pageCount-1:
+			page_icon(pageCount-4,pageCount,3);
+		break;
+		case pageCount:
+			page_icon(pageCount-4,pageCount,4);
+		break;
+		default:
+			page_icon(pageNum-2,pageNum+2,2);
+		break;
+	}
+}
+function page_icon(page,count,eq){
+	var ul_html = "";
+	for(var i=page; i<=count; i++){
+		ul_html += "<li>"+i+"</li>";
+	}
+	$("#pageGro ul").html(ul_html);
+	$("#pageGro ul li").eq(eq).addClass("on");
+}
+
+function pageUp(pageNum,pageCount){
+	switch(pageNum){
+		case 1:
+		break;
+		case 2:
+			page_icon(1,5,0);
+		break;
+		case pageCount-1:
+			page_icon(pageCount-4,pageCount,2);
+		break;
+		case pageCount:
+			page_icon(pageCount-4,pageCount,3);
+		break;
+		default:
+			page_icon(pageNum-2,pageNum+2,1);
+		break;
+	}
+}
+
+//下一页
+function pageDown(pageNum,pageCount){
+	switch(pageNum){
+		case 1:
+			page_icon(1,5,1);
+		break;
+		case 2:
+			page_icon(1,5,2);
+		break;
+		case pageCount-1:
+			page_icon(pageCount-4,pageCount,4);
+		break;
+		case pageCount:
+		break;
+		default:
+			page_icon(pageNum-2,pageNum+2,3);
+		break;
+	}
+}
+//var global_tag_vector = new Array(); //全局标签化向量
+
+
+function DrawMore(data,div){
+	var html = '';
+    $('#'+div).empty();
+	html += '<table class="table table-striped table-bordered" style="width:450px;">';
+    html += '<tr><th style="text-align:center">排名</th><th style="text-align:center">关键词</th><th style="text-align:center">频数</th></tr>';
+    for (var i = 0; i < data.length; i++) {
+        var s = i.toString();
+        var m = i + 1;
+        html += '<tr style=""><th style="text-align:center">' + m + '</th><th style="text-align:center">' + data[i][0] +  '</th><th style="text-align:center">' + data[i][1] + '</th></tr>';
+    };
+    html += '</table>'; 
+    $('#'+ div).append(html);
+}
+
+function DrawMoreUser(data,div){
+	var html = '';
+    $('#'+div).empty();
+	html += '<table class="table table-striped table-bordered" style="width:450px;">';
+    html += '<tr><th style="text-align:center">排名</th><th style="text-align:center">用户ID</th><th style="text-align:center">昵称</th><th style="text-align:center">频数</th></tr>';
+    for (var i = 0; i < data.length; i++) {
+        var s = i.toString();
+        var m = i + 1;
+		if(data[i][1]=="unknown"){
+		    data[i][1] = "未知";
+		}
+        html += '<tr style=""><th style="text-align:center">' + m + '</th><th style="text-align:center">' + data[i][0] +  '</th><th style="text-align:center">' + data[i][1] + '</th><th style="text-align:center">' + data[i][3] + '</th></tr>';
+    };
+    html += '</table>'; 
+    $('#'+ div).append(html);
+}
+
+var user = $('#tag_user').text();
+//user = {{g.user.email}};
+
+var uid = "{{ uid }}";
+var Personal = new Personal();
+var personalData; // global data
+var histData;
+var Pname;
+var url = "/attribute/new_user_profile/?uid=" + uid;
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.personData);
+var url = "/attribute/new_user_evaluate/?uid=" + uid;
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.overallData);
+var url = "/attribute/new_user_location/?uid=" + uid;
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.locationData);
+var url = "/attribute/new_user_portrait/?uid=" + uid;
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.attentionData);
+var url = "/attribute/new_user_social/?uid=" + uid;
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.socialData);
+var sort_type;
+
+function bind_remark_edit(Personal){
+    $('#extraDetail').click(function(){
+        var td = $(this);
+        var txt = td.html();
+        var input = "<input id='editremark' style='width:100px;' type='text' value='" + txt + "'/>";
+        td.html(input);
+        $('#editremark').click(function(){
+            return false;
+        });
+        $('#editremark').trigger('focus');
+        $('#editremark').bind('keyup', function(e){
+            var ev = document.all?window.event:e;
+            if (ev.keyCode == 13){
+                var newtxt = $(this).val();
+                if (newtxt == ''){
+                    td.html('暂无');
+                }
+                else{    
+                    td.html(newtxt);
+                }
+                if (newtxt != txt){
+                    var url = '/attribute/edit_remark/?uid=' + uid + '&remark=' + newtxt;
+                    Personal.call_sync_ajax_request(url, Personal.ajax_method, confirm_edit);
+                    //console.log('diff');
+                }
+            }
+        }).bind('keydown', function(e){
+            var ev = document.all?window.event:e;
+            if (ev.keyCode == 13){
+                return false;
+            }
+        });
+        $('#editremark').blur(function(){
+            var newtxt = $(this).val();
+            if (newtxt == ''){
+                td.html('暂无');
+            }
+            else{    
+                td.html(newtxt);
+            }
+            if (newtxt != txt){
+                var url = '/attribute/edit_remark/?uid=' + uid + '&remark=' + newtxt;
+                Personal.call_sync_ajax_request(url, Personal.ajax_method, confirm_edit);
+                //console.log('diff');
+            }
+        });
+        function confirm_edit(data){
+            //alert(data);
+        }
+    });
+}
+bind_remark_edit(Personal);
+
+
+$(function(){
+	$('#modechoose').click(function(){
+	var box = document.getElementsByName('mode_choose');
+	for(var i=0;i<box.length;i++){
+		if(box[i].checked){
+			sort_type = box[i].value;
+		}
+	}
+	var url = "/attribute/new_user_weibo/?uid="+uid+"&sort_type="+sort_type;
+	//console.log(url);
+        Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.weiboData);
+	});
+});
+$(function(){
+    document.getElementById('portrait_detail').onclick=function(){
+        document.getElementById('portrait_detail').href='/index/personal_detail/?uid='+uid;
+    }
+});
+
+var url = "/attribute/new_user_weibo/?uid="+uid+"&sort_type=timestamp";
+Personal.call_sync_ajax_request(url, Personal.ajax_method, Personal.weiboData);
+$(function(){
+	$('#add_tag').click(function(){
+	    //console.log('sadas');
+	    add_tag_attribute_name = $("#select_attribute_name").val();
+        add_tag_attribute_value = $("#select_attribute_value").val();
+        add_group_tag_url = '/tag/add_tag/?uid=' + uid + "&attribute_name=" + add_tag_attribute_name + "&attribute_value=" + add_tag_attribute_value;
+	})
+})
+
+</script>
+
+<script type="text/javascript" src="/static/js/portrait/show_tag.js"></script> 
+
+
+
+{% endblock main %}
+
+{% block Own_js %}
+{{ super() }}
+
+{% endblock Own_js%}
+

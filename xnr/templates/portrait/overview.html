@@ -1,0 +1,324 @@
+{% extends "tbase.html" %}
+    {% block title %}整体概览{% endblock title%}
+      {% block css %}
+		<link href="/static/css/dashboard.css" rel="stylesheet">		    
+    <link href='/static/bower_components/fullcalendar/css_js/fullcalendar.css' rel='stylesheet'>
+    <link href='/static/bower_components/fullcalendar/css_js/fullcalendar.print.css' rel='stylesheet' media='print'>
+    <link rel="stylesheet" href="/static/css/portrait.css">
+      {{ super() }}    
+    <style type="text/css">
+    body {
+  font-family: '微软雅黑';
+  font-size: 14px;
+	}
+  #showBtn {
+   text-decoration: underline; 
+}
+
+ 	</style>
+ {% endblock css %}
+
+<!--  {% block head_js %}
+  {{ super() }}
+	<script type="text/javascript" src="/static/js/portrait/overview.js"></script>   
+  {% endblock head_js %} -->
+
+
+    {% block main %}
+        <div style="float:right;cursor: pointer" type="button" data-toggle="modal" data-target="#calculation_infor"><u>计算说明</u></div>
+        <h4 class="page-header" style='margin-top:0px'>整体信息</h4>
+        <div id="statistics_infor">     
+        </div>
+        <h4 class="page-header" style='margin-top:0px'>工作信息</h4>
+        <div id="user_num">			
+        </div> 
+        <h4 class="page-header" style='margin-top:0px'>统计信息</h4>
+        <div>
+          <div>
+            <span style='font-size:17px;color:#777'>男女比例</span>
+            <span style="margin-left:300px;font-size:17px;color:#777">hashtag关键词云</span>
+            <span style="margin-left:195px;font-size:17px;color:#777">认证比例</span>
+          </div>
+            <div id='sex' style='float:left;width:300px;height:230px'></div>       
+            <div id='vertify' style='float:right;width:300px;height:230px'></div>
+            <div id='keywordcloud' style='float:left;width:400px;height:230px'></div>
+        </div>
+
+        <div>
+          <div>
+            <span style='font-size:17px;color:#777;margin-left:80px;'>话题占比</span>
+            
+            <span style="margin-left:300px;font-size:17px;color:#777"></span>
+            
+            <span style="margin-left:290px;font-size:17px;color:#777;margin-left:80px;">领域占比</span>
+          </div>
+            <div id='user_topic' style='float:left;width:480px;height:300px;margin-left:0px;'></div>
+            
+            <div id='user_domain' style='float:right;width:520px;height:300px'></div>
+            
+            <div id='user_emotion' style='float:left;width:0px;height:300px'></div>
+        </div>
+
+        <div><h4 class="page-header"style='margin-top:320px'>人物信息</h4></div>
+          <div class="box-content">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active" title="领域"><a href="#domain_vip">领域</a></li>
+                <li title="话题"><a href="#topic_vip">话题</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane active" id="domain_vip" style="margin-top:10px">
+                    <div class="row category margin-bottom-20" id='domain_portrait'>
+                    </div>
+                    <div style="float:left;cursor: pointer" type="button" data-toggle="modal" data-target="#more_domain"><u>查看更多热门人物</u></div>
+                    
+                </div>
+                <div class="tab-pane" id="topic_vip" style="margin-top:10px">
+                    <div class="row category margin-bottom-20" id='topic_portrait'>
+                    </div>
+                    <div style="float:left;cursor: pointer" type="button" data-toggle="modal" data-target="#more_topic"><u>查看更多热门话题</u></div>
+                </div>          
+            </div>
+           </div>
+     <div>
+        <div><h4 class="page-header"style='margin-top:30px'>排名信息</h4></div>	
+        
+         <div>
+		      <span style='font-size:16px;color:#777;'>重要度排名</span>
+			  <span type="button"data-toggle="modal" data-target="#rank_importance" style='font-size:16px;margin-left:175px;cursor: pointer'><u>查看更多</u></span>
+			  <span style="margin-left:10px;font-size:16px;color:#777">活跃度排名</span>
+			  <span type="button"data-toggle="modal" data-target="#rank_activeness" style='font-size:16px;margin-left:175px;cursor: pointer'><u>查看更多</u></span>
+			  <span style='margin-left:10px;font-size:16px;color:#777'>影响力排名</span>
+			  <span type="button"data-toggle="modal" data-target="#influence_rank" style='font-size:16px;margin-left:175px;cursor: pointer'><u>查看更多</u></span>
+		</div>
+         <div class="table-responsive"id='importance' style='overflow-x:hidden;width:320px;height:250px;float:left'></div>
+		 <div class="table-responsive"id='top_activeness' style='overflow-x:hidden;width:320px;height:250px;float:left;margin-left:20px'></div>
+		 <div class="table-responsive"id='top_influence' style='overflow-x:hidden;width:320px;height:250px;float:right'></div>
+         
+         
+        
+		<div>
+		    <span style="margin-left:5px;font-size:16px;color:#777">被转发量排名</span>
+			<span data-toggle="modal" type="button"data-target="#rank_retweeted"  style='font-size:16px;margin-left:150px;cursor: pointer'><u>查看更多</u></span>
+		    <span style="margin-left:20px;font-size:16px;color:#777;">被评论量排名</span>
+			<span type="button"data-toggle="modal" data-target="#rank_comment"  style='font-size:16px;margin-left:152px;cursor: pointer'><u>查看更多</u></span>
+			<span style="margin-left:20px;color:#777;font-size:16px">上网方式排名</span>
+			<span type="button" data-toggle="modal" data-target="#rank_online_pattern" style='font-size:16px;margin-left:150px;cursor: pointer'><u>查看更多</u></span>
+		</div>
+		 <div class="table-responsive"id='retweeted_user' style='overflow-x:hidden;width:320px;height:250px;float:left'></div>
+		  <div class="table-responsive"id='top_comment_user' style='overflow-x:hidden;margin-left:20px;width:320px;height:250px;float:left;'></div>
+         <div class="table-responsive"id='online_pattern' style='overflow-x:hidden;width:320px;height:250px;float:right'></div>
+        <div>
+			<span style="margin-left:5px;color:#777;font-size:16px">hashtag排名</span>
+			<span type="button"data-toggle="modal" data-target="#rank_hashtag" style='color:#777;font-size:16px;margin-left:150px;cursor: pointer'><u>查看更多</u></span>
+			<span style='margin-left:20px;color:#777;font-size:16px'>活跃地排名</span>
+			<span type="button"data-toggle="modal" data-target="#rank_active_geo" style='font-size:16px;margin-left:165px;cursor: pointer'><u>查看更多</u></span>
+		</div>
+		  <div class="table-responsive"id='hashtag' style='overflow-x:hidden;width:320px;height:250px;float:left;'></div>
+          <div class="table-responsive"id='top_geo' style='overflow-x:hidden;width:320px;height:250px;float:left;margin-left:20px;'></div>
+         
+        <!--
+        </div>
+         <div class="table-responsive"id='top_influence_vary' style='overflow-x:hidden;width:320px;height:250px;margin-left:340px'>
+        </div>
+        -->
+      
+
+<div class="modal fade" id="rank_activeness" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">活跃度排名</h4>
+      </div>
+      <div class="modal-body"id="more_top_activeness">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rank_importance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">重要度排名</h4>
+      </div>
+      <div class="modal-body" id="more_importance">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rank_comment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">被评论量排名</h4>
+      </div>
+      <div class="modal-body" id="more_top_comment_user">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rank_retweeted" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">被转发量排名</h4>
+      </div>
+      <div class="modal-body" id="more_retweeted_user">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rank_active_geo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">活跃地排名</h4>
+      </div>
+      <div class="modal-body" id="more_top_geo">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="influence_rank" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">影响力排名</h4>
+      </div>
+      <div class="modal-body" id="more_top_influence">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="rank_online_pattern" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">上网方式排名</h4>
+      </div>
+      <div class="modal-body" id='more_online_pattern'>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rank_hashtag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">hashtag排名</h4>
+      </div>
+      <div class="modal-body"id="more_hashtag">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_domain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:1000px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">领域重点用户</h4>
+      </div>
+      <div id='domain_more_portrait'>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_topic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:1000px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">话题重点用户</h4>
+      </div>
+      <div id="topic_more_portrait">
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="calculation_infor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:1000px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">计算说明</h4>
+      </div>
+      <div class="modal-body">
+        <table style="font-size:16px">
+          <tr><td>本页面中信息更新频率说明如下：</td></tr>
+          <tr><td>1）整体信息：活跃用户、高影响力用户比重（日更新）</td></tr>
+          <tr><td>2）工作信息：推荐入库、出库用户数（日更新）</td></tr>
+          <tr><td>3）话题、领域、心理状态、hashtag（周更新）；性别比重、认证信息（日更新）</tr>
+          <tr><td>4）领域、话题热门用户（日更新）</td></tr>
+          <tr><td>5）影响力、影响力变动、活跃度、重要度、被转发量、被评论量、活跃地区、hashtag排名（日更新）、上网方式排名（周更新）</td></tr>
+        </table>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    {% endblock main %}
+
+    {% block Own_js %}
+    {{ super() }}
+<script> 
+  $(function () { 
+    $('#myTab a:first').tab('show');//初始化显示哪个tab 
+  
+    $('#myTab a').click(function (e) { 
+      e.preventDefault();//阻止a链接的跳转行为 
+      $(this).tab('show');//显示当前选中的链接及关联的content 
+    }) 
+  }) 
+</script>
+{% endblock Own_js %}
+    {% block end_js %}
+    {{ super() }}
+<!--     // <script type="text/javascript" src="/static/js/portrait/overview_table.js"></script> -->
+    {% endblock end_js %}
+

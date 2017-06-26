@@ -1,0 +1,52 @@
+<style type="text/css">
+.group_block{
+	background-color:#FF8C00;width:50px;height: 30px;padding: 5px 8px;color: white;font-weight: bold;border-radius: 0.25em;margin: 5px;display: inline-block;text-align: center;
+}
+</style>
+
+<div id="framecontent" style="width:100%;">
+    <div class ="framepost" style="height:510px;">
+        <h3 class="title">情绪变动曲线</h3>
+        <div style="width:100%;margin-top:10px;">
+          <div style="width:580px;height:470px;float:left;">
+            <div style="width:560px;height:470px;margin;0px;" id="group_emotion"></div>
+          </div>
+          <div id='group_select_time' style="font-weight:bold;margin:0px;margin-left:20px;font-size:12px;"></div>
+          <div style="margin-top:15px;width:260px;height:340px;background-color:whitesmoke;overflow-y:auto;float:left" id="group_content">
+            <div id="group_weibo_text_1" style="padding:0px 10px;">
+          </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<div id="framecontent" style="width:49%;float:left">
+    <div class ="framepost" style="height:340px;">
+        <h3 class="title">性格特征</h3>
+          <div id="group_kind" style="height:320px;width:420px;"></div>
+    </div>
+</div>
+
+<div id="framecontent" style="width:49%;margin-left:17px;float:left">
+    <div class ="framepost" style="height:340px;">
+        <h3 class="title">心理状态</h3>
+          <div id="group_think" style="height:320px;width:420px;"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="psy_more" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" >
+      <div class="modal-header" >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">心理状态</h4>
+      </div>
+      <div class="modal-body" style="float:none;" id="psy0">
+      </div>
+      <div class="modal-footer" >
+        <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+

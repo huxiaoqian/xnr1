@@ -1,0 +1,85 @@
+
+ <style type="text/css">   
+    .border-table {   
+        border-collapse: collapse;   
+        border: none;   
+    }   
+    .border-table td {   
+        border: solid #FFE4B5 1px;   
+    }   
+    .group_block{
+    background-color:#FF8C00;width:50px;height: 30px;padding: 5px 8px;color: white;font-weight: bold;border-radius: 0.25em;margin: 5px;display: inline-block;text-align: center;
+    }
+</style>
+<div class="modal fade" id="thought_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="position: absolute;margin-top: 100px;margin-left: 350px;float :none;width: 670px;">
+      <div class="modal-header" style="float:inherit;margin:initial;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">计算说明</h4>
+      </div>
+      <div class="modal-body" style="float:none;">
+        <table style="font-size:16px">
+          <tr><td>本页面中信息更新频率说明如下：</td></tr>
+          <tr><td>1）情绪变动曲线：当日为实时更新，近7天为日更新。</td></tr>
+          <tr><td>2）性格特征：月更新。</td></tr>
+          <tr><td>3）心理状态：日更新。</tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<h3  style="float:left;">性格特征</h3>-->
+<div style="float:right;cursor: pointer" type="button" data-toggle="modal" data-target="#thought_info"><u>计算说明</u></div>
+
+
+<div id="framecontent" style="width:850px;">
+    <div class ="framepost" style="height:500px">
+        <h3 class="title">情绪变动曲线</h3>
+        <div  class="entry" style="float:left;">
+          <div style="width:480px;height:470px;float:left;">
+              <div style="float: right;">
+                 <input type="radio" name="time-type" value='day' onclick="choose_time()" style="width:15px;height:15px;margin-left:8px;" checked >本日
+                 <input type="radio" name="time-type" value='week' onclick="choose_time()" style="width:15px;height:15px;margin-left:8px;">本周
+              </div>
+              <div style="width:510px;height:450px;margin;0px;" id="emotion"></div>
+          </div>
+          <div id='select_time' style="font-weight:bold;margin:0px;margin-left:20px;font-size:12px;float:left;"></div>
+
+          <div style="width:300px;height:320px;background-color:whitesmoke;margin-left:20px;overflow-y:auto;float:left" id="content">
+              <div id="thought_weibo_text" style="padding:0px 10px;">
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="framecontent" style="width:49%;float:left;">
+    <div class ="framepost" style="height:400px;">
+        <h3 class="title">性格特征</h3>
+        <div  class="entry"  >
+            <div id="character_sent" style='font-size:15px;margin-top:95px;'>
+                <div>根据情绪特征划分为：</div>
+                <span class="group_block">积极</span> <span style="background-color:gray;" class="group_block">中性</span> <span style="background-color:gray;" class="group_block">消极</span>
+            </div>
+            <div id="character_text" style='font-size:15px;'>
+                <div>根据语言特征划分为：</div>
+                <span  class="group_block">积极</span> <span style="background-color:gray;" class="group_block">中性</span>
+            </div>          
+        </div>
+    </div>
+</div>
+
+<div id="framecontent" style="width:49%;float:left;margin-left:15px;">
+    <div class ="framepost" style="height:400px;">
+        <h3 class="title">心理状态</h3>
+        <div  class="entry"  >
+          <div id="pie_emotion" style="height:300px;width:400px;margin-top:25px;"></div>         
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src='/static/js/portrait/thought.js'></script>

@@ -1,0 +1,126 @@
+<!-- <div id='sex' style='float:left;width:300px;height:200px'></div>         -->
+<!-- <div id='verify' style='float:right;width:300px;height:200px'></div> -->
+<div class="col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="border-bottom: 1px solid transparent;border-color: #dddddd;color:#fff;">
+            男女比例
+        </div>
+        <div class="panel-body">
+        	<div id='group_sex' style='float:left;width:300px;height:200px' >
+        	</div>
+    	</div>
+	</div>
+</div>
+<div class="col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="border-bottom: 1px solid transparent;border-color: #dddddd;color:#fff;">
+            认证比例
+        </div>
+        <div class="panel-body">
+        	<div id='group_verify' style='float:left;width:300px;height:200px' >
+        	</div>
+    	</div>
+    </div>
+</div>
+<!-- <div class="col-lg-4" id='totalnumber'></div> -->
+<div class="col-lg-6" >
+    <div class="panel panel-default">
+        <div class="panel-heading" style="border-bottom: 1px solid transparent;border-color: #dddddd;color:#fff;">
+            <div><span class="showmore" id="showmore_domain" style="float:right;cursor:pointer" type="button"data-toggle="modal" data-target="#more_domain" ><u>查看详情</u></span>群组身份分布</div>
+        </div>
+        <div class="panel-body">
+          <div id="domain"  style="width:450px;height:300px;margin-left: -30px;">
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="col-lg-6" >
+    <div class="panel panel-default">
+        <div class="panel-heading" style="border-bottom: 1px solid transparent;border-color: #dddddd;color:#fff;">
+            <div><span class="showmore" id="showmore_topic" style="float:right;cursor:pointer" type="button"data-toggle="modal" data-target="#more_topic" ><u>查看详情</u></span>群组话题分布</div>
+        </div>
+        <div class="panel-body">
+          <div id="topic"  style="width:450px;height:300px;margin-left: -30px;">
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<div class='col-lg-12' style="margin-top:15px;">
+ <div class="panel panel-default">
+    <div class="panel-heading" style="border-bottom: 1px solid transparent;border-color: #dddddd;color:#fff;">
+            用户自定义标签
+        </div>
+    <div class="panel-body">
+       	<div id='group_tag' style='width:900px;height:400px' >
+       	</div>
+   	</div>
+</div>
+</div>
+        <div id="framecontent" style="width:950px;float:left;margin-left:15px;">
+            <div class ="framepost" style="height:600px;border-top-right-radius:3px;border-top-left-radius:3px;">
+                <div class="title" style="">发帖内容</div>
+                <div style="width:100%;margin-top:10px;">
+                    <span style= "color:red;margin-left:20px;margin-right:20px;float:left;">相关微博</span>
+                    <div style="float:left;" id="modechoose">
+                            <input type="radio" name="mode_choose" value="timestamp" checked="checked">
+                            <span class="mode" style="margin-right:20px;">时间</span>
+                            <input type="radio" name="mode_choose" value="retweet_count">
+                            <span class="mode" style="margin-right:20px;">转发数</span>
+                            <input type="radio" name="mode_choose" value="comment_count" >
+                            <span class="mode" style="margin-right:20px;">评论数</span>
+                            <input type="radio" name="mode_choose" value="sensitive">
+                            <span class="mode" style="margin-right:20px;">敏感性</span>
+                    </div>
+							<div class="tang-scrollpanel-content" style="margintop:10px;">
+	    <div id='group_basic_weibo' style='overflow-x:hidden;width:100%;float:left;'>
+ 			<div id="group_basic_weibo_result" style="float:left;width:100%;"></div>
+            <div id="pageGro" class="cb" style="display:none;float:left;width:600px;height:60px;margin-left:300px;margin-top:40px;line-height:23px;">
+                <span class="pageUp" style="float:left;">上一页</span>
+                <span class="pageList" style="float:left;">
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                </span>
+                <span class="pageDown" style="margin-left:20px;cursor:pointer;float:left;">下一页</span>
+            </div>	       
+        </div>
+	</div>
+                </div>
+            </div>
+        </div>
+		
+
+
+
+<div class="modal fade" id="more_domain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width:500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">群组身份分布</h4>
+      </div>
+      <div class="modal-body" id='domainWordList'>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="more_topic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"  style="width: 500px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px" id="myModalLabel">群组话题分布</h4>
+      </div>
+      <div class="modal-body" id='topicWordList'>
+      </div>
+    </div>
+  </div>
+</div>

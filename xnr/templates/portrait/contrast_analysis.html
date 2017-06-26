@@ -1,0 +1,44 @@
+{% extends "tbase.html" %}
+{% block title %}对比分析{% endblock title%}
+{% block css %}
+{{ super() }}
+<style>
+    .dataTables_filter{text-align:right;margin-bottom:5px;}
+    .dataTables_paginate{margin-top:-10px;margin-bottom:-20px;}
+    .mouse {border:#d0d0d0 solid 1px;}
+</style>
+{% endblock css %}
+{% block main %}
+<h4 class="page-header" style='margin-top:0px;'>请选择2-3个用户进行对比：</h4>
+<div class="box-content">
+        <div id="search_result" style="margin-top:0px;"></div>
+        <div style="text-align:right">
+            <button class="btn btn-primary btn-sm" style="width:80px;height:40px;margin-right:5px" name="compare_button" id="compare_button" title="选择2至3个用户对比"  onclick="compare_button();">个体对比</button>
+</div>
+<div class="modal fade" id="compare" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:850px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">个体对比</h4>
+      </div>
+      <div class="modal-body">
+        <div id="compare_comfirm" style="margin-top:20px"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="compare_confirm_button()">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block Own_js %}
+{{ super() }}
+<script type="text/javascript" src="/static/js/portrait/contrast_analysis.js"></script> 
+{% endblock Own_js%}
+{% block end_js %}
+{{ super() }}
+<script src="/static/js/portrait/result_table.js"></script>
+{% endblock end_js %}

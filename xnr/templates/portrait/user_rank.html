@@ -1,0 +1,104 @@
+{% extends "tbase.html" %}
+{% block title %}用户排名{% endblock title%}
+
+{% block css %}
+{{ super() }}
+<link  type="text/css" href="/static/personal/css/style.css" rel="stylesheet"/>
+<link  type="text/css" href="/static/personal/css/basic.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/>
+
+<style>
+	select{height:25px;width:140px;}
+	.shadow {
+		-webkit-box-shadow:5px 6px 3px #ABA8A8;
+		-moz-box-shadow:5px 6px 3px #ABA8A8;
+		box-shadow:5px 6px 3px #ABA8A8;
+	}
+	#rank_table_info{margin-left: 30px;}
+	#rank_table_length {margin-left: 30px;}
+	#rank_table_length select{width: 50px;}
+    #rank_table_filter{text-align:right;margin-bottom:5px;margin-right: 70px;}
+    .dataTables_paginate{margin-top:-10px;margin-bottom:-20px;}
+</style>
+
+{% endblock css %}
+
+{% block head_js %}
+{{ super() }}
+<script type="text/javascript" src='/static/js/esl.js'></script>
+<!-- <script type="text/javascript" src='/static/js/echarts-all.js'></script>
+<script type="text/javascript" src='/static/js/echarts.js'></script> -->
+<script type="text/javascript" src="/static/js/jquery.datetimepicker.js"></script>
+<script type="text/javascript" src="/static/js/portrait/group_table.js"></script>
+{% endblock %}
+
+{% block head_title %}<!--<img src="/static/img/rank.jpg" style="width:32px;"> -->用户排名{% endblock %}
+{% block main %}
+<!-- 	<h3></h3>
+	<hr> -->
+	<span id="username" style='display:none'>{{ g.user }}</span>
+	<div id=''>
+		<h4>排序设置</h4>
+		<table class="shadow" style="margin:30px;width:900px; height:150px;border: 2px solid #cccccc;">
+			<tr style="border-bottom: 1px solid #cccccc;">
+				<th style="width:150px;height:50px;background-color: #E4E4E4;text-align: center;">排序范围</td>
+				<td>
+					<select id="range_choose" class="type_sub" style="float:left;width:140px;height:25px;">
+						<option value='all_nolimit'>全网-不限</option>
+						<option value='all_limit_keyword'>全网-按关键词</option>
+						<option value='in_nolimit'>库内-不限</option>
+						<option value='in_limit_keyword'>库内-按关键词</option>
+						<option value='in_limit_hashtag'>库内-按微话题</option>
+						<option value='in_limit_domain'>库内-按身份</option>
+						<option value='in_limit_topic'>库内-按领域</option>
+						<option value='in_limit_geo'>库内-按地理位置</option>
+						<option value='in_intime'>全网-实时排名</option>
+					</select>
+					<div id="range_choose_detail" style="float: left;margin-left:15px;"></div>
+				</td>
+			</tr>
+			<tr style="border-bottom: 1px solid #cccccc;">
+				<th  style="width:150px;height:50px;background-color: #E4E4E4;text-align: center;">时间范围</th>
+				<td>
+					<span id="time_choose">
+						<input name="time_range" type="radio" value="1" checked='checked'> 过去一天
+						<input name="time_range" type="radio" value="7" style="margin-left:20px;"> 过去七天
+						<input name="time_range" type="radio" value="30" style="margin-left:20px;"> 过去一个月
+					</span>
+				</td>
+			</tr>
+			<tr >
+				<th  style="width:150px;height:50px;background-color: #E4E4E4;text-align: center;">排序指标</th>
+				<td>
+					<span id="sort_select">
+						<select id="sort_select_2">
+							<option value="fans" checked="checked">粉丝数</option>
+							<option value="weibo_num">微博数</option>
+							<option value="bci">身份敏感度</option>
+							<option value="ses">言论敏感度</option>
+							<option value="bci_change">突发影响力变动</option>
+							<option value="ses_change">突发敏感度变动</option>		
+						</select>
+					</span>
+					<span id="rank_submit" onclick="submit_rank()" class="portrait_button" style='float:right;cursor:pointer;margin-right:20px;width: 45px;height: 25px;text-align: center;line-height: 25px;'>提交</span>	
+				</td>
+			</tr>
+		
+		</table>
+		<h4 id="task_zh">任务状态</h4>
+		<div id="task_status"></div>
+		<h4>结果分析</h4>
+		<div id="result_analysis" style="margin-left: 30px;padding:10px;background-color:#E1E6FF;width: 900px;font-size:14px;border:1px solid #B0CEFB"><b>
+			<span>识别范围：<span id="rec_range"></span></span>
+			<span id="rec_type"></span><span id='rec_detail'></span>
+			<span style="margin-left: 20px;">时间范围：<span id="rec_time_range"></span></span>
+			<span   style="margin-left: 20px;">排序指标：<span id="rec_rank_by"></span></span>
+		</b></div>
+		<div id="result_rank_table" style="margin-top:20px;">
+		</div>
+	</div>
+
+
+<script type="text/javascript" src="/static/js/portrait/user_rank.js"></script>
+
+{% endblock %}

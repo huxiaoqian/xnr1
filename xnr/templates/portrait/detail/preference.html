@@ -1,0 +1,101 @@
+<link href="/static/personal/css/language.css" rel="stylesheet" type="text/css" />
+<link href="/static/personal/css/default.css" rel="stylesheet" type="text/css" />
+<link href="/static/personal/css/component.css" rel="stylesheet" type="text/css" />
+<script src="/static/js/modernizr.custom.js"></script>
+<style>
+#more_topic{
+  position: fixed;
+  margin-top: -200px;
+  left: 65%;
+  top: 40%;
+  z-index: 1002;
+  width: 500px;
+  background: #FFF none repeat scroll 0% 0%;
+  border: 1px solid #AA8BE8;
+  height: 600px;
+  margin-left: -460px;
+  font_family: "Microsoft YaHei UI";
+}
+.title{
+  font-size: 20px;
+  color: #3F3F3F;
+  border-bottom: 1px solid #E2E2E6;
+  padding-left: 10px;
+  font_family: "Microsoft YaHei UI";
+}
+#key_WordList{
+height:500px;
+width:97%;
+margin:10px;
+overflow-y:scroll;
+}
+#hashtag_WordList{
+height:500px;
+width:97%;
+margin:10px;
+overflow-y:scroll;
+}
+#topic_WordList{
+height:500px;
+width:97%;
+margin:10px;
+overflow-y:scroll;
+}
+</style>
+    <div class="modal fade" id="preference_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" style="position: absolute;margin-top: 100px;margin-left: 388px;float :none;width: 670px;">
+          <div class="modal-header" style="float:inherit;margin:initial;">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">计算说明</h4>
+          </div>
+          <div class="modal-body" style="float:none;">
+            <table style="font-size:16px">
+              <tr><td>本页面中信息更新频率说明如下：</td></tr>
+              <tr><td>1）用户身份分析：月更新。</tr>
+              <tr><td>2）用户领域分布：周更新。</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--<h3  style="float:left;">身份特征</h3>-->
+<div style="float:right;cursor: pointer" type="button" data-toggle="modal" data-target="#preference_info"><u>计算说明</u></div>
+
+
+
+<div style="width:100%;float:left">
+<div id="framecontent" style="width:100%;float:left">
+    <div class ="framepost" style="height:388px;">
+        <h3 class="title">用户身份分析</h3>
+        <!-- <div  class="entry" style="width: 370px;float:left;"> -->
+        <div  class="entry" style="width:100%;float:left;">
+            <div id="preference_domain" style="width:820px;height:300px;"></div> 
+        </div>
+    </div>
+</div>
+
+<div id="framecontent" style="width:100%;float:left;margin-top:5px;">
+    <div class ="framepost" style="height:388px;">
+        <h3 class="title">用户领域分布</h3>
+        <!-- <div  class="entry" style="width: 410px;float:left;"> -->
+        <div  class="entry" style="width:100%;float:left;">
+            <div class="showmore" id="topic_more" style="float:right; font-size:16px;"><a style="cursor:pointer;color:#555555; "  id="showmore_topic"><u>查看更多</u></a>
+            </div>
+            <div id="user_topic" style="width:820px;height:300px;"></div>
+          <div id="float-wrap" class="hidden"></div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+    <div id="more_topic" class="hidden">
+      <h3 class="title">用户领域分布<a href="javascript:void(0)" class="closeList" id="close"></a></h3>
+      <div id="topic_WordList"></div>
+    </div>
+
+
+<script src="/static/js/portrait/preference.js"></script>
+                    

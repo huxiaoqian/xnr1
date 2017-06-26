@@ -1,0 +1,298 @@
+{% extends "tbase.html" %}
+{% block title %}群体分析{% endblock title %}
+
+{% block css %}
+{{ super() }}
+<link href="/static/bootstrap/css/bootstrap-cerulean.min.css" rel="stylesheet">
+<link href="/static/css/charisma-app.css" rel="stylesheet">
+<link  type="text/css" href="/static/personal/css/style.css" rel="stylesheet"/>
+<link  type="text/css" href="/static/personal/css/basic.css" rel="stylesheet"/>
+<link href="/static/personal/css/activity.css" rel="stylesheet" type="text/css">
+<link href="/static/css/timeline.css" rel="stylesheet" type="text/css">
+<link  type="text/css" href="/static/personal/css/framestyle.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/>
+<style type="text/css">
+.terms{
+    /*height:30px;width:237px;float:left;*/
+    margin-bottom: 5px;
+    margin-left: 2px;
+  
+}
+.t-title{
+    /*height:30px;width:237px;float:left;*/
+    margin-left: 2px;
+  
+}
+body {
+  font-family: '微软雅黑';
+  font-size: 14px;
+    }
+    ul,li{
+      list-style:none;
+    }
+    #accordion > .panel-default{
+        border-bottom: :1px solid #A09D9D;
+        border-color:#A09D9D;
+    }
+    .panel-color{
+        background-color:#BCBCBC!important;
+        border-color:#A09D9D!important;
+    }
+    .panel .panel-default{border: 1px solid #77ACF4;}
+    .panel-heading{background-color:#77ACF4!important;}
+    .box_title{background:#77ACF4;color:#fff;}
+    .panel-body{border: 1px solid #77ACF4;}
+    #accordion h4{
+        color:#555555;
+    }
+    .gs_ul{
+      overflow:hidden;
+      padding:3em;
+    }
+    #stickynote ul li a{
+      text-decoration:none;
+      color:#000;
+      background:#ffc;
+      display:block;
+      padding:1em;
+    }
+    #stickynote ul li a{
+      -webkit-transform: rotate(-6deg);
+      -o-transform: rotate(-6deg);
+      -moz-transform:rotate(-6deg);
+    }
+    #stickynote ul li a:hover, #stickynote ul li a:focus{
+      box-shadow:10px 10px 7px rgba(0,0,0,.7);
+      -moz-box-shadow:10px 10px 7px rgba(0,0,0,.7);
+      -webkit-box-shadow: 10px 10px 7px rgba(0,0,0,.7);
+      -webkit-transform: scale(1.15);
+      -moz-transform: scale(1.15);
+      -o-transform: scale(1.15);
+      position:relative;
+      z-index:5;
+    }
+    .dataTables_filter{text-align:right;margin-bottom:5px;}
+    .dataTables_paginate{margin-top:-50px;margin-bottom:-20px;}
+    ul,li {margin:0;padding:0} 
+    ol,ul {list-style:none}
+    #g_total #pageGro{ width:400px; height:25px; margin:0px auto; padding-top:30px;}
+    #g_total #pageGro div, #g_total #pageGro div ul li{ font-size:12px; color:#999; line-height:23px; float:left; margin-left:5px;}
+    #g_total #pageGro div ul li{ width:22px; text-align:center; border:1px solid #999; cursor:pointer;}
+    #g_total #pageGro div ul li.on{ color:#fff; background:#3c90d9; border:1px solid #3c90d9;}
+    #g_total #pageGro .pageUp{ cursor:pointer;}
+    #g_total #pageGro .pageDown{ width:63px; cursor:pointer;}
+    
+    #group_weibo_font{ 
+    font-family: '微软雅黑';
+    font-size: 14px; }
+</style>
+{% endblock css %}
+
+{% block head_js %}
+{{ super() }}
+    <script type="text/javascript" src="/static/js/highstock.js" charset="utf-8"></script>  
+    <script type="text/javascript" src="/static/js/exporting.js" charset="utf-8"></script>
+    <script type="text/javascript" src='/static/js/esl.js'></script>
+    <script type="text/javascript" src="/static/js/jquery.datetimepicker.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_table.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    /**软件功能切换js**/
+    $(".g_a").click(function(){
+        var x = $(this).attr("title");
+        $(this).css({"background-color":"#3351B7"}).siblings().css({"background-color":"#6699FF"});
+        if(x=='基本特征'){
+           $("#g_bas").css({"display":"block"}).siblings().css({"display":"none"});
+           //$("#qxtz").css({"background-color":"#3351B7"})
+        }else if(x=='活动特征'){
+            $("#g_act").css({"display":"block"}).siblings().css({"display":"none"});
+        }else if(x=='偏好特征'){
+           $("#g_pre").css({"display":"block"}).siblings().css({"display":"none"});
+        }else if(x=='影响力特征'){
+           $("#g_spr").css({"display":"block"}).siblings().css({"display":"none"});
+        }else if(x=='社交特征'){
+           $("#g_soc").css({"display":"block"}).siblings().css({"display":"none"});
+        }else if(x=='性格特征'){
+           $("#g_psy").css({"display":"block"}).siblings().css({"display":"none"});
+        }
+    });
+    
+});
+</script>
+{% endblock head_js %}
+{% block head_title %}
+群体分析
+{% endblock head_title %}
+{% block main %}
+<div id="g_useremail" hidden>{{g.user.email}}</div>
+<div id="basicwrapper" style="width:1100px;">
+    <!-- end #menu -->
+    <div id="basicpage">
+    <div id="basicpage-bgtop">
+    <div id="basicpage-bgbtm">
+        <div id="framesidebar" style="margin-left: 55px;"  >
+            <h3  style="padding:5px;color:white">群组分析</h3>
+            <li>
+                <ul style="padding:0px;height:120px;">
+                    <div style='height:190px;width:100%' id='overview'> </div>
+                </ul>
+            </li>
+        </div>
+        <div id="framecontent" style="width: 687px;float: left;margin-left: 20px;">
+            <div class ="framepost" style="height:158px;">
+                <h3 class="title">群体属性</h3>
+                <div  id="g_tag">
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-left:100px;margin-bottom:11px;float:left;">
+            <button class="portrait_button g_a" type='button' style="margin-right:32px;background-color:#3351B7" title="基本特征" >基本特征</button>
+             <button class="portrait_button g_a" type='button' style="margin-right:32px;" title="活动特征" >活动特征</button>
+            <button class="portrait_button g_a" type='button' style="margin-right:32px;" title="偏好特征" >偏好特征</button>
+            <button class="portrait_button g_a" type='button' style="margin-right:32px;" title="影响力特征" >影响力特征</button>
+            <button class="portrait_button g_a" type='button' style="margin-right:32px;" title="社交特征" >社交特征</button>
+            <button class="portrait_button g_a" type='button' style="margin-right:32px;" title="性格特征" >性格特征</button>
+            <button class="portrait_button g_a" type='button'  title="外部评价" >外部评价</button>
+        </div>
+        <hr>
+        <div id="g_total" style="margin-left:40px;margin-top:20px;float:left;width:980px;">     
+            <div id="g_bas" >
+                {% include "portrait/group_analysis/group_basic.html"%}
+            </div>
+            <div id="g_act" style="display:none" >
+                {% include "portrait/group_analysis/group_activity.html"%}
+            </div>
+            <div id="g_pre" style="display:none">
+                {% include "portrait/group_analysis/group_preference.html"%}
+            </div>
+            <div id="g_spr" style="display:none">
+                {% include "portrait/group_analysis/group_spread.html"%}
+            </div>
+            <div id="g_soc" style="display:none">
+                {% include "portrait/group_analysis/group_social.html"%}
+            </div>
+            <div id="g_psy" style="display:none">
+                {% include "portrait/group_analysis/group_psy.html"%}
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</div>
+<div id="float-wrap" class="hidden"></div>
+
+<div class="modal fade" id="g_myModal_group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:950px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="font-size:18px">群组成员</h4>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:18px;margin-bottom:10px">选择用户添加标签</div>
+        <div>
+            <span>选择类别：</span><span id='attribute_name' style="min-width:75px;margin-left:10px" ></span>
+            <span style='margin-left:20px'>选择标签：</span><span id='attribute_value' style="min-width:75px;margin-left:10px"></span><span style="margin-left:10px"><button class="btn btn-primary btn-sm" style="width:80px;height:30px" id="add_group_tag_button" title="确定选择" onclick="add_group_tag()">添加</button></span>
+        <div id= "g_group_member_user" style="margin-top:14px"></div>
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock main %}
+
+{% block Own_js %}
+{{ super() }}
+<script>
+        var name = "{{ name }}";
+        //console.log('dddd', name);
+        $(document).ready(function(){
+            $("#closeness_tooltip").tooltip();
+            $("#weibo_tooltip").tooltip();
+            $("#join_tooltip").tooltip(); 
+            $("#node_tooltip").tooltip(); 
+            $("#tag_tooltip").tooltip();          
+        });
+//点击跳转页面
+function pageGroup(pageNum,pageCount){
+    switch(pageNum){
+        case 1:
+            page_icon(1,5,0);
+        break;
+        case 2:
+            page_icon(1,5,1);
+        break;
+        case pageCount-1:
+            page_icon(pageCount-4,pageCount,3);
+        break;
+        case pageCount:
+            page_icon(pageCount-4,pageCount,4);
+        break;
+        default:
+            page_icon(pageNum-2,pageNum+2,2);
+        break;
+    }
+}
+//根据当前选中页生成页面点击按钮
+function page_icon(page,count,eq){
+    var ul_html = "";
+    for(var i=page; i<=count; i++){
+        ul_html += "<li>"+i+"</li>";
+    }
+    $("#pageGro ul").html(ul_html);
+    $("#pageGro ul li").eq(eq).addClass("on");
+}
+//上一页
+function pageUp(pageNum,pageCount){
+    switch(pageNum){
+        case 1:
+        break;
+        case 2:
+            page_icon(1,5,0);
+        break;
+        case pageCount-1:
+            page_icon(pageCount-4,pageCount,2);
+        break;
+        case pageCount:
+            page_icon(pageCount-4,pageCount,3);
+        break;
+        default:
+            page_icon(pageNum-2,pageNum+2,1);
+        break;
+    }
+}
+//下一页
+function pageDown(pageNum,pageCount){
+    switch(pageNum){
+        case 1:
+            page_icon(1,5,1);
+        break;
+        case 2:
+            page_icon(1,5,2);
+        break;
+        case pageCount-1:
+            page_icon(pageCount-4,pageCount,4);
+        break;
+        case pageCount:
+        break;
+        default:
+            page_icon(pageNum-2,pageNum+2,3);
+        break;
+    }
+}
+
+
+</script>
+    <script type="text/javascript" src="/static/js/portrait/city_location.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_analysis.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aBrX8X2tEjcqiKwL78DLmanZ"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_basic.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_activity.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_spread.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_social.js"></script>
+    <script type="text/javascript" src="/static/js/portrait/group_psy.js"></script>
+{% endblock Own_js%}

@@ -1,0 +1,591 @@
+/* 
+CSS for indiemaps.com, indiemaps.com/blog and related documents
+by Zachary Forest Johnson
+
+
+this is the main css document for my whole website
+one or two elements do not apply to certain pages
+but as a whole, the document is fairly efficient
+*/
+
+
+/* main body styling */
+
+body {
+    /* background: #bbb;*/
+	font-family:  Georgia, Helvetica, Arial, sans-serif;
+}
+
+/* specific styling */
+h1.title {
+	font-size: 130%;
+	line-height: .2em;
+  	/*color: #09c;*/
+  	float: left;
+  	margin-right: 5px;
+  	color: #333;
+}
+
+h1.title a {
+	color: #09c;
+	text-decoration: none;
+}
+
+h2.subtitle{
+	/*line-height: 1em;*/
+	color: #fff;
+  	/*font-size: 110%;*/
+  	margin-top: 9px;
+  	font-size: 16px;
+}
+
+h3 {
+	font-size: 133%;
+	line-height: .5em;
+  	color: #000080;
+  	float: left;
+  	margin-right: 5px;
+}
+
+#footnote {
+	font-size: medium;
+	color: #333333;
+}
+
+#navigation ul {
+	margin-left: 0;
+	padding-left: 0;
+}
+#navigation ul li {
+	margin-left: 0;
+	margin-bottom: 0;
+	list-style: none;
+}
+#navigation ul li a {
+	text-decoration: none;
+	color: black;
+}
+
+#navigation ul li a:hover, h1.title a:hover, #backLink a:hover {
+	color: #bbb;
+	background-color: #09c;
+}
+
+#navigation ul, #navigation li {
+	display: inline;
+}
+#navigation li:before {
+	color: #333;
+	content: " | ";
+}
+
+h6 {
+	font-weight: normal;
+	font-size: 16px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.blogbody h3 {
+	font-weight: normal;
+}
+#navigation li#firstPage:before {
+	content: "";
+}
+
+#content p, #content ul, #content blockquote {
+	font-size: 13px;
+    line-height: 19px;
+}
+
+#rightBar p {
+	margin-top: 50px;
+	font-size: 13px;
+	line-height: 19px;
+}
+
+#page {
+    background: white;
+    position: relative;
+    width: 100%;
+    /*
+    margin: 0px 0 20px 10%;
+    padding: 18px 18px 18px 18px;
+    */
+}
+
+#page a {
+	color: #000;
+	text-decoration: underline;
+}
+
+#page a:hover {
+	color: #FFF;
+	background-color: #000;
+	text-decoration: none;
+}
+
+#leftBar {
+	position: relative;
+	padding: 10px 0 15px 0;
+	/*width: 20%;*/
+	width: 55%;
+	margin: 0px 0 0px 20%;
+}
+
+#rightBar {
+	position: absolute;
+    top: 0;
+    left: 100%;
+    width: 30%;
+    padding: 0px 0 18px 18px;
+    margin-top: 0;
+
+}
+#rightBar a:hover {
+	color: #bbb;
+	background-color: #09c;
+	text-decoration: none;
+}
+
+
+#rightBar ul{
+	margin-left: 0px;
+	padding-left: 0px;
+	list-style: none;
+}
+
+#rightBar a, #navigation ul li a {
+	text-decoration: none;
+	color: #09c;
+}
+#rightBar li {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	font-size: 13px;
+	margin-left: 20px;
+	text-indent: -10px;
+}
+
+#rightBar li p {
+	text-indent: 0;
+}
+
+#rightBar li:before {
+	display: marker;
+	content: "\00BB \0020";
+}
+
+table.blogCal {
+	font-size: 85%;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 0;
+	border-collapse: collapse;
+}
+
+table.blogCal tr td, table.blogCal tr th{
+  height: 18px;
+  margin: 0;
+  padding: 0 2px;
+  line-height: 20px;
+}
+
+table.biotable tr td{
+  font-family: Georgia, Helvetica, Arial, sans-serif;
+  font-size: 13px; 
+  font-style: normal;
+  font-weight:normal;
+  font-variant: normal;
+}
+
+td.bioyear{
+  text-align: center;
+  width: 25%
+}
+
+td.interestblank{
+  text-align: center;
+  width: 1%
+}
+
+a {
+     color: #000;
+}
+
+.item h5 {
+	font-size: 110%
+}
+
+/* the following allows the .blogdate and resume section titles to sit to
+the left of the blog entries and resume entries
+*/
+
+.blogdate {
+    position: absolute;
+    text-align: right;
+    top: auto;
+    left: -153px;
+    margin: 0;
+    padding: 0;
+    width: 144px;
+}
+
+.blogdate h5 {
+	margin: 0px;
+	font-size: 110%;
+}
+
+h5.year {
+	color: #09c;
+}
+h5.yearmonth {
+	color: #09c;
+}
+h5.yearmonthday{
+	color: #09c;
+}
+h5.time {
+	color: #000;
+}
+
+#page .blogdate a {
+	color: #09c;
+	text-decoration: none;
+}
+
+#page .blogdate a:hover {
+	background-color: #09c;
+	color: #bbb;
+}
+
+.bibliquote {
+	text-align: right;
+	margin-right: auto;
+}
+
+.attribution:before {
+	content: "--";
+}
+
+.attribution {
+	text-indent: 20px;
+	color: #666;
+}
+
+.updateDate {
+	text-align: right;
+	text-indent: 20px;
+	color: #666;
+	font-size: 75%;
+}
+
+#resume ul li:before {
+	content: "\00BB \0020";
+}
+
+#resume ul li {
+	list-style: none;
+}
+
+#bio {
+	font-size: 85%;
+	padding-right: 20px;
+}
+
+.code {
+	font-family: Courier, Courier New, serif;
+	background-color: #DDD;
+	border-width: .5px;
+	border-style: solid;
+	border-color: #BBB;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.code ul, .code ul li {
+	list-style: none;
+	padding-left: 2px;
+	margin-left: 2px;
+	line-height: 120%;
+}
+
+blockquote {
+	border-left : 1px dashed #999;
+	margin-left: 30px;
+	padding-left: 15px;
+}
+
+.delicious-posts { 
+	margin-top: 40px; 
+	border-top: 1px dashed #777; 
+	/*padding-top: 30px;*/
+}
+
+.delicious-banner {
+	/*padding-bottom: 20px;*/
+}
+
+.delicious-posts ul, .delicious-posts li{ margin: 0; padding: 0}
+
+.delicious-post { border-top: 1px solid #eee; padding: 0.25em; font-size: 80% }
+
+.delicious-posts a { display: block; padding: 0.3em }
+
+.delicious-banner a { display: inline; font-size: 80% }
+
+.centeredImage
+{
+text-align:center;
+margin-top:0px;
+margin-bottom:0px;
+padding:0px;
+}
+
+li.pytab
+{
+text-indent: 25px;
+}
+
+.incode
+{
+font-family: Courier, Courier New, serif;
+}
+.pipe 
+{
+color: #09c;
+font-weight: bold;
+}
+
+#buttons {
+	margin-top: 30px; 
+}
+
+#lastcomments li {
+	list-style: none;
+}
+#blogroll { 
+	margin-top: 40px; 
+	/*border-top: 1px dashed #777;*/ 
+}
+/*
+#blogroll ul, #blogroll li{ margin: 0; padding: 0}
+.blogroll-post { border-top: 1px solid #eee; padding: 0.25em; font-size: 80% }
+
+#blogroll a { display: block; padding: 0.3em }
+*/
+
+
+
+#page li.comment {
+	font-size: 12px;
+	line-height: 17px;
+}
+#page li.comment p {
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+#page li.comment p.blogmeta {
+	color: #777;
+	font-size: 12px;
+	margin-top: 0px;
+	margin-bottom: 10px;
+	
+}
+
+ol
+{
+	margin-top: 0px;
+	margin-bottom: 18px;
+	padding-left: 18px;
+}
+
+p.error {
+	color: #f00;
+}
+.portDesc {
+	color: #aaa;
+}
+
+img.portimg {
+	border-width: 1px;
+	border-style: solid;
+	border-color: #ddd;
+}
+
+.item {
+	margin-bottom: 50px;
+}
+
+#portfolio h5 {
+	padding-bottom: 0px;
+	margin-bottom: 5px;
+}
+#content p.portPara {
+	margin-top: 0px;
+	padding-top: 0px;
+	padding-left: 50px;
+	/*font-size: 12px;*/
+	line-height: 15px;
+	color: #222;
+}
+
+#content p.portPara .pipe {
+	font-size: 16px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#mainfooter {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.blogbody ul li:before {
+	content: "\00BB \0020";
+}
+
+.blogbody ul li.blogsec {
+	margin-top: 40px;
+	text-decoration: none;
+	list-style: none;
+}
+
+.blogbody ul li.blogsec:before {
+	content: "";
+}
+li.blogsec h4 {
+	font-size: 110%;
+}
+
+img.rightIMG {
+	float: right;
+	padding-left: 15px;
+}
+
+ol li {
+	font-size: 13px;
+	padding-top: 8px;
+}
+
+.blogbody ul {
+	margin-left: 0px;
+	padding-left: 0px;
+}
+.blogbody ul li {
+	padding-bottom: 8px;
+	list-style: none;
+	padding-left: 15px;
+}
+
+
+
+#content p.cloud {
+	margin:0 auto;
+	width: 400px;
+	text-align: center;
+	line-height: normal;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	
+}
+
+#page p.cloud a {
+	text-decoration: none;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+#content p.blackcloud {
+	margin:0 auto;
+	width: 400px;
+	text-align: center;
+	line-height: normal;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	
+}
+
+#page p.blackcloud a {
+	border: 1px solid white;
+	text-decoration: none;
+	margin-left: 5px;
+	margin-right: 5px;
+	background: black;
+	
+}
+
+#content p.bwcloud {
+	margin:0 auto;
+	width: 400px;
+	text-align: center;
+	line-height: normal;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	
+}
+
+#page p.bwcloud a {
+	border: 1px solid white;
+	text-decoration: none;
+	margin-left: 5px;
+	margin-right: 5px;
+	background: black;
+	color: white;
+	
+}
+
+#page p.bwcloud a:hover {
+	background: white;
+	color: black;
+	text-decoration: underline;
+}
+
+a img {
+	border-width: 1px;
+   border-style: solid;
+}
+
+#leftBar #navigation ul li a:hover {
+	color: #bbb;
+	background-color: #09c;
+}
+
+.greyback {
+	color: white;
+	background: grey;
+}
+
+.blogbody h5 {
+	color: grey;
+}
+
+#backLink {
+	position: fixed;
+	bottom: 5px;
+	right: 10px;
+}
+#backLink a {
+	font-size: 12px;
+	color: #09c;
+	text-decoration: none;
+}
+
+.footnote {
+	width: 120px;
+	position: absolute;
+    top: auto;
+    left: -133px;
+	padding-top: 30px;
+	color: purple;
+}
+
+.footnote strong {
+	color: white;
+}
+
+.blogbody p sup {
+	color: purple;
+	font-weight: bold;
+}

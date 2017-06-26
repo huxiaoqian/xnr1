@@ -1,0 +1,27 @@
+{"name":"bubble", "children": [
+{"name":"Atlas","description":"Atlas of Global Agriculture",
+"children":[
+    {"name": "Geography","address":"http://gli.environment.umn.edu", "note":"Global crop geography, including precipitation, temperature, crop area, etc."},
+    {"name": "Crop Land","address":"http://d3js.org"},
+    {"name": "Crop Yields","address":"http://environment.umn.edu", "note":"Maize, wheat, rice, and soybean yields in 2000"}
+]},
+{"name": "AgLab", "description": "Virtual Lab of Global Agriculture",
+"children":[
+    {"name":"Excess Nutrient","address":"http://d3js.org","note":"Prototype Infographics on Excess Fertilizer Nutrients"},
+    {"name":"Yield Gap","address":"http://d3js.org", "note":"The gap between attainable yields and actual yields, with modeled yields assuming the percentage of gap closed."},
+    {"name":"Fertilizer","address":"http://sunsp.net"}
+]},
+{"name":"Nutshell", "description":"Profiles of Country",
+"children":[
+    {"name":"Efficiency","address":"http://d3js.org"},
+    {"name":"Excess Nutrient","address":"http://d3js.org"},
+    {"name":"Economy","address":"http://d3js.org"},
+    {"name":"Agriculture","address":"http://uis.edu/ens"}
+]},
+{"name":"Data", "description":"Crop Data in 5 minutes grid",
+"children":[
+    {"name":"Geography","address":"http://www.earthstat.org/"},
+    {"name":"Crop Land","address":"http://www.earthstat.org/"},
+    {"name":"Crop Yields","address":"http://www.earthstat.org/"}
+]}
+]}

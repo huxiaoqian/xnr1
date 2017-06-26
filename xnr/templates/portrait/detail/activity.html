@@ -1,0 +1,156 @@
+<link href="/static/personal/css/activity.css" rel="stylesheet" type="text/css" />
+<link  type="text/css" href="/static/personal/css/framestyle.css" rel="stylesheet"/>
+<script type="text/javascript">
+$(function(){
+	
+	//首页大事记
+	$('.course_nr2 li').find('.shiji').slideDown(600);
+	
+});
+</script>
+<style>
+*{margin:0;padding:0;list-style-type:none;}
+a,img{border:0;}
+body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+.font12{ font-weight:normal; font-size:12px;}
+.clearfix:after {content:".";display:block;height:0;clear:both;visibility:hidden;}
+/* 时间轴样式 */
+.course_nr{height:70px; background:url(/static/img/ico9.gif) repeat-x center;}
+.course_nr li{ float:left; padding-top:30px; width:104px; text-align:center; position:relative; margin-left:5px;}
+.shiji{ position:absolute; width:100%; left:0; top:-20px; display:none;}
+.ico{ height:67px; line-height:67px; color:#518dbb; font-weight:bold; background:url(/static/img/ico11.gif) no-repeat center top; margin-bottom:8px;line-height: none}
+.ms{ width:100px;line-height:14px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+#Alocation{height:auto;width:180px;}
+.gray{color:#999;}
+
+</style>
+<div class="modal fade" id="activity_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="position: absolute;margin-top: 100px;margin-left: 350px;float :none;width: 670px;">
+      <div class="modal-header" style="float:inherit;margin:initial;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">计算说明</h4>
+      </div>
+      <div class="modal-body" style="float:none;">
+          <table style="font-size:16px">
+              <tr><td>本页面中信息更新频率说明如下：</td></tr>
+              <tr><td>1）活动时间分析：当日为实时更新，近7天为日更新。</td></tr>
+              <tr><td>2）活动位置分析：当日为实时更新，近7天为日更新，近30天为日更新。</td></tr>
+              <tr><td>3）活跃度走势——日更新，上网方式排名——周更新。</tr>
+          </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<h3  style="float:left;">活动特征</h3>-->
+<div style="float:right;cursor: pointer" type="button" data-toggle="modal" data-target="#activity_info"><u>计算说明</u></div>
+
+<div id="framecontent" style="width:850px;">
+    <div class ="framepost" style="height:450px;">
+        <h3 class="title">活动时间分析</h3>
+        <div  class="entry" style="width:55%;float:left;">
+            <div style="margin-right:40px;">
+                <input type="radio" name="weibotrends" checked value="day"/>当日&nbsp;&nbsp;
+                <input type="radio" name="weibotrends" value="week"/>近7天
+            </div>
+            <div id="Activezh" style="height:349px;width:400px;margin-top:0px;" class="fleft"></div>
+        </div>
+        <div id="" style="font-size:10px;font-weight:bolder;width: 40%;margin-top:10px;float: left;" class="">
+                <div style="margin-left:20px;">
+                    <span >当前选择日期：</span>
+                    <span id="date_zh" style="color:brown;"></span>
+                </div>
+                <br>
+                <div style="margin-right:40px;margin-left:20px;">
+                    <span>当前选择时间段：</span>
+                    <span id="time_zh" style="color:brown;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                </div>
+                <!--
+                <button style="margin-top:8px;margin-left:2px;background-color:blue;color:white;" id="choose_date">确定</button>
+                -->
+        </div>
+        <div id="weibo_content" style="font-size:10px;background-color:whitesmoke;width:40%;height:320px;overflow-y:auto;" class="fleft">
+            <div id="weibo_text" style="padding:0px 10px;">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <div id="framecontent" style="width:850px;">
+        <div class ="framepost" id="active_geo" style="height:900px;">
+            <h3 class="title">活动位置分析</h3>
+            <div style="width:100%;">
+                <div><span style='font-size:16px;color:#777;margin-left:5px;'>分时段IP排名</span></div>
+                 <div class="table-responsive"id='span_ip' style='overflow-x:hidden;margin-left:5px;margin-right:5px;height:190px;'>
+                </div>
+            </div>
+            <div style="width:100%;">
+                <div><span style='font-size:16px;color:#777;margin-left:5px;'>汇总IP排名</span></div>
+                 <div class="table-responsive"id='total_IP_rank' style='overflow-x:hidden;margin-left:5px;margin-right:5px;height:190px;'>
+                </div>
+            </div>
+            <div style="width:100%;">
+                <div><span style='font-size:16px;color:#777;margin-left:5px;'>汇总地理位置排名</span></div>
+                 <div class="table-responsive"id='total_location_rank' style='overflow-x:hidden;margin-left:5px;margin-right:5px;height:200px; '>
+                </div>
+            </div>
+            <div style="width:100%;font-size:16px;color:#777;margin-left:5px;">近7天活动轨迹</div>
+            <div class="clearfix course_nr" style="margin-left:5px;margin-right:5px;margin-top:20px;">
+                <ul class="course_nr2">
+                    <li><div class="shiji" style="text-align:center"><p class="font12 ico" id="d1"></p><p class="ms" id="city1"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d2"></p><p class="ms" id="city2"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d3"></p><p class="ms" id="city3"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d4"></p><p class="ms" id="city4"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d5"></p><p class="ms" id="city5"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d6"></p><p class="ms" id="city6"></p></div></li>
+                    <li><div class="shiji"><p class="font12 ico" id="d7"></p><p class="ms" id="city7"></p></div></li>
+                </ul>
+                <div><a id="more_track" href="javascript:void(0)" style="font-weight:bold;text-decoration:underline;margin-left:20px;font-size:14px;cursor:pointer;">更多</a></div>
+                <div id="more_t_list" style="display:none;float:left;width:820px;height:150px;margin-top:50px;"></div>
+            </div>
+
+            <div style="font-size:16px;color:#777;margin-top:30px;margin-left:5px;">近30天活动轨迹<a id="month_track" href="#map" style="font-weight:bold;text-decoration:underline;margin-left:20px;font-size:14px;cursor:pointer;">查看</a></div>
+            <div id="map" style="display:none;float:left;width:100%;height:850px;margin-top:20px;"></div>
+
+
+        </div>
+    </div>    
+
+<!--<div id="online" style="height:349px;width:680px;margin-top:0px;" class="fleft"></div>
+-->
+    <div id="framecontent" style="width:850px;">
+        <div class ="framepost" style="height:450px">
+            <h3 class="title">活跃度综合走势分析<i style='font-size:15px;' class='glyphicon glyphicon-question-sign' data-placement='right' title='活跃度主要考察用户在线上的活跃情况和线下的活跃情况两个方面。线上活跃情况通过计算最近7天的发布微博时间走势曲线的傅里叶变换第一主频，得到能够反映用户上线周期的指标。线下活跃情况由用户发布微博所处城市数量表示。通过对上述两个指标进行线性加权以及标准化，从而得到最终的或阅读指标。'></i></h3>
+            <hr style="width:850px;">
+            <div id="activeness" style="height:349px;width:500px;margin-top:0px;" class="fleft"></div>
+            <div style="margin-top:20px;margin-left:10px;width:280px;float: left;">
+                <div><span style='margin-left:60px;font-size:16px;color:#777'>上网方式排名</span></div>
+                 <div class="table-responsive"id='online_pattern' style='overflow-x:hidden;width:280px;height:200px;float:left;'>
+                </div>
+            </div>
+<!--             <div class="" style="float:left;width:100%;margin-top:15px;">
+                <div id="" style="height:50px;width:100%;line-height:32px;">
+                    <span class="fleft" style="margin-right:10px;width:32px;height:32px;background-image:url(/static/img/warning.png);margin-top:10px;display:black;"></span>
+                    <h4 id="activeness_desc" style="line-height:32px;"></h4>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+
+
+<script src="/static/js/highstock.js" charset="utf-8"></script>
+<script src="/static/js/exporting.js" charset="utf-8"></script>
+<script src="/static/js/portrait/location.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aBrX8X2tEjcqiKwL78DLmanZ"></script>
+<script src="/static/js/portrait/geo.js"></script>
+<script src="/static/js/portrait/activemap.js"></script>
+
+
+
+
+
+
+

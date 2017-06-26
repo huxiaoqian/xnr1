@@ -1,0 +1,457 @@
+{% extends "mbase.html" %}
+
+
+{% block main %}
+<link href="../../static/css/lanrenzhijia.css" type="text/css" rel="stylesheet" />
+<script src="../../static/js/jquery.min.js" type="text/javascript"></script>
+<script src="../../static/js/lanrenzhijia.js" type="text/javascript"></script>
+<script type="text/javascript" src='../../static/js/esl.js'></script>
+<script type="text/javascript" src='../../static/js/echarts-all.js'></script>
+<script type="text/javascript" src='../../static/js/echarts.js'></script>
+<script>
+	$(function() {
+		$('#tabs').carouFredSel({
+			circular: false,
+			items: 1,
+			width: '100%',
+			auto: false,
+			pagination: {
+				container: '#pager',
+				anchorBuilder: function( nr ) {
+					if($(this).attr('id')== 'txt'){
+						return '<a href="#">列表视图</a>';
+					}
+					else{
+						return '<a href="#">图标视图</a>';
+					}
+					// return '<a href="#">' + $(this).find('h3').text() + '</a>';
+				}
+			}
+		});
+	});
+</script>
+	<div id="wrapper">
+		<h4 class="page-header" style='margin-top:-40px; margin-left:30px'>用户基本信息</h4>
+		<div id='pager'></div>
+		<div id='tabs' style='width:1000px'>
+			<div id='txt'>
+				<div class="main col-sm-9 col-md-10">
+					<div class="col-sm-12">
+						<div class="panel panel-default" style="width:875px;margin-left:35px">
+							<div class="panel-heading text-center" style="width:873px">
+								<img src="{{ user.photo_url }}" alt="" class="img-circle">
+							</div>
+							<table style="margin-left:55px;">
+					    	<ul class="list-group">
+					    		<tr>
+					    		    <td><li class="list-group-item" style="width:240px">UID：{{ user.uid }}</li></td>
+					    		    <td><li class="list-group-item" style="width:240px">昵称：{{ user.nick_name }}</li></td>
+					    		    <td><li class="list-group-item" style="width:240px">性别：{{ gender_text(user.sex) }}</li></td>
+					    		</tr>
+					    		<tr>
+					    			<td><li class="list-group-item" style="width:240px"><a href = {{ 'http://weibo.com/u/' + int2string(user.uid) }}>个人微博主页</a></li></td>
+					    			<td><li class="list-group-item" style="width:240px">邮箱：{{ user_email(user.user_email) }}</li></td>
+					    			<td><li class="list-group-item" style="width:240px">出生年月：{{ user_birth(user.user_birth) }}</li></td>
+					    		</tr>
+					    		<tr>
+					    			<td><li class="list-group-item" style="width:240px">粉丝数：{{ user.fansnum }}</li></td>
+					    			<td><li class="list-group-item" style="width:240px">好友数：{{ user.friendsnum }}</li></td>
+					    			<td><li class="list-group-item" style="width:240px">微博数：{{ user.statusnum }}</li></td>
+					    		</tr>
+					    		<tr>
+					    			<td><li class="list-group-item" style="width:240px">认证：{{ user_vertify(user.isreal) }} </li></td>
+					    			<td><li class="list-group-item" style="width:240px">位置：{{ user_location(user.user_location) }}</li></td>
+					    			<td><li class="list-group-item" style="width:240px">创建时间：{{ tsfmt(user.create_at) }}</li></td>	
+					    		</tr>
+					    		<tr>
+					    			<td><li class="list-group-item" style="width:240px">个人博客主页{{ user.blog_url }}</li></td>
+					    			<td><li class="list-group-item" style="width:240px">SP类型：{{ weibo_source(user.sp_type) }}</li></td>
+					    			{% if  user.favouritesnum %}
+					    			<td><li class="list-group-item" style="width:240px">用户收藏数：{{ user.favouritesnum }}</li></td>
+					    			{% else %}
+					    			<td><li class="list-group-item" style="width:240px">用户收藏数：未知</li></td>
+					    			{% endif %}
+					    		</tr>
+					    		<tr>	    			
+					    			<td colspan="3"><li class="list-group-item" style="width:100%">个人描述：{{ user.description }}</li></td>
+					    		</tr>			  	
+							</ul>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id='photo'>
+				<div class="main col-sm-9 col-md-10">
+					<div class="col-sm-12">
+						<div class="panel panel-default" style="width:875px; height:600px;margin-left:35px;" id='echart'>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+	var description;
+	try{
+		console.log('{{ user.favouritesnum }}');
+		description = '{{ user.description }}';
+	}catch(err){
+		alert('error name'+err.name);
+		description = '';
+	}
+
+	// console.log(description);
+	option = {
+	    title : {
+	        text: '',
+	        x: 'center'
+	    },
+	    color:['#B0E0E6','#FFC0CB'],
+	    tooltip : {
+	        trigger: 'item',
+	        formatter: '{a} {b}'
+	    }, 
+	    legend: {
+	        x: 'left',
+	        data:[
+		        {
+		        	name:'基本信息',
+		        	textStyle:{color:'#B0E0E6'}
+		        },
+		        {
+		        	name:'微博信息',
+		        	textStyle:{color:'#FFC0CB'}
+		        }
+	        ],
+	    },
+	    toolbox: {
+            show : true,
+	        feature : {
+	            restore : {show: true},
+	            magicType: {show: true, type: ['force', 'chord']},
+	            saveAsImage : {show: true}
+	        }
+	    },
+	    series : [
+	        {
+	            type:'force',
+	            name : "",
+	            ribbonType: false,
+	            categories : [
+	                {
+	                    name: '人物',
+	                    symbol:'circle'
+	                },
+	                {
+	                    name: '基本信息',
+	                },
+	                {
+	                    name:'微博信息',
+	                }
+	            ],
+	            itemStyle: {
+	                normal: {
+	                    label: {
+	                        show: true,
+	                        textStyle: {
+	                            color: '#333'
+	                        }
+	                    },            
+	                    nodeStyle : {
+	                        brushType : 'both',
+	                        borderColor : 'rgba(255,215,0,0.4)',
+	                        borderWidth : 1
+	                    }
+	                },
+	                emphasis: {
+	                    label: {
+	                        show: false
+	                        // textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+	                    },
+	                    nodeStyle : {
+	                        //r: 30
+	                    },
+	                    linkStyle : {}
+	                }
+	            },
+	            minRadius : 20,
+	            maxRadius : 20,
+	            gravity: 0.5,
+	            scaling: 1.2,
+	            draggable: false,
+	            linkSymbol: 'arrow',
+	            steps: 10,
+	            coolDown: 0.9,
+	            size:'90%',
+	            //preventOverlap: true,
+	            nodes:[
+	                {
+	                    category:0, name: description, value : 1,
+	                    symbol: 'image://'+'{{ user.photo_url }}',
+	                    label :"\n\n\n\n\n {{ user.nick_name }}",
+	                    symbolSize: [40, 30],
+	                    draggable: false,
+	                    itemStyle: {
+	                        normal: {
+	                            label: {
+	                                textStyle: {
+	                                	fontFamily:'微软雅黑',
+	                                	fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                            }
+	                        }
+	                    }
+	                },
+	                {category:1, name: '邮箱是{{ user_email(user.user_email) }}',value : 7,symbolSize: [60, 30],
+	                itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	textStyle: {
+	                          		fontFamily:'微软雅黑',
+	                          		fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                          }
+	                      	}
+	                    }
+	                },
+	                {category:1, name: '出生于{{ user_birth(user.user_birth) }}',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	    textStyle: {
+	                          	    	fontFamily:'微软雅黑',
+	                          	    	fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                          }
+	                      	}
+	                }},
+	                {category:1, name: '在{{ user_location(user.user_location) }}注册',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	textStyle: {
+	                          		fontFamily:'微软雅黑',
+	                          		fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                          }
+	                      	}
+	                }},
+	                {category:1, name: '{{ gender_text(user.sex) }}士',value : 7,symbolSize: [60, 30],
+	                    itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	textStyle: {
+	                          		fontFamily:'微软雅黑',
+	                          		fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                          }
+	                      	}
+	                }},
+	                {category:1, name: '邮箱是{{ user_email(user.user_email) }}',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	textStyle: {
+	                          		fontFamily:'微软雅黑',
+	                          		fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                          }
+	                      	}
+	                }},
+	                {category:1, name: '于{{ tsfmt(user.create_at) }}注册',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                          color:'#B0E0E6',
+	                          label:{
+	                          	textStyle: {
+	                          		fontFamily:'微软雅黑',
+	                          		fontSize : 10 ,
+	                                color: 'black'
+	                             }
+	                          }
+	                      	}	
+	                }},
+	                {category:2, name: '有{{ user.fansnum }}个粉丝',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                        	color:'#FFC0CB',
+	                            label: {
+	                                textStyle: {
+	                                	fontFamily:'微软雅黑',
+	                                	fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                            }
+	                        }
+	                }},
+	                {category:2, name: '发了{{ user.statusnum }}条微博',value : 7,symbolSize: [60, 30],
+		            itemStyle: {
+		                        normal: {
+		                        	color:'#FFC0CB',
+		                            label: {
+		                                textStyle: {
+		                                	fontFamily:'微软雅黑',
+		                                	fontSize : 10 ,
+		                                    color: 'black'
+		                                }
+		                            }
+		                        }
+	                 }},
+	                {category:2, name: '有{{ user.friendsnum }}个好友',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                        	color:'#FFC0CB',
+	                            label: {
+	                                textStyle: {
+	                                	fontFamily:'微软雅黑',
+	                                	fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                            }
+	                        }
+	                }},
+	                {category:2, name: '信息来源于{{ weibo_source(user.sp_type) }}',value : 7,symbolSize: [60, 30],
+	            	itemStyle: {
+	                        normal: {
+	                        	color:'#FFC0CB',
+	                            label: {
+	                                textStyle: {
+	                                	fontFamily:'微软雅黑',
+	                                	fontSize : 10 ,
+	                                    color: 'black'
+	                                }
+	                            }
+	                        }
+	                }},
+	                {category:2, name: '用户收藏数{{ user.favouritesnum }}',value : 7,symbolSize: [60, 30],
+		            itemStyle: {
+		                        normal: {
+		                        	color:'#FFC0CB',
+		                            label: {
+		                                textStyle: {
+		                                	fontFamily:'微软雅黑',
+		                                	fontSize : 10 ,
+		                                    color: 'black'
+		                                }
+		                            }
+		                        }
+	                }},
+
+	            ],
+	            links : [
+	                {source : '{{ user.description }}', target : '邮箱是{{ user_email(user.user_email) }}',  
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '{{ gender_text(user.sex) }}士', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '出生于{{ user_birth(user.user_birth) }}',
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }
+	                },
+	                {source : '{{ user.description }}', target : '在{{ user_location(user.user_location) }}注册', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '于{{ tsfmt(user.create_at) }}注册', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '有{{ user.fansnum }}个粉丝', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '用户id：{{ user.uid }}',
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '发了{{ user.statusnum }}条微博', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '有{{ user.friendsnum }}个好友', 
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '信息来源于{{ weibo_source(user.sp_type) }}',
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	                {source : '{{ user.description }}', target : '用户收藏数{{ user.favouritesnum }}',
+	                itemStyle: {
+	                    normal: {
+	                        width: 2
+	                    }
+	                }},
+	            ]
+	        }
+	    ]
+	};
+	var myChart = echarts.init(document.getElementById('echart'));
+	myChart.setOption(option);
+	require([
+			'echarts'
+		],
+		function(ec){
+			var ecConfig = require('echarts/config');
+			function focus(param) {
+			    var data = param.data;
+			    var links = option.series[0].links;
+			    var nodes = option.series[0].nodes;
+			    if (
+			        data.source != null
+			        && data.target != null
+			    ) { //点击的是边
+			        var sourceNode = nodes.filter(function (n) {return n.name == data.source})[0];
+			        var targetNode = nodes.filter(function (n) {return n.name == data.target})[0];
+			        // console.log("选中了边 " + sourceNode.name + ' -> ' + targetNode.name + ' (' + data.weight + ')');
+			    } else { // 点击的是点
+			    	if (data.name == '{{ user.description }}'){
+			    		window.open("{{ 'http://weibo.com/u/' + int2string(user.uid) }}");
+			    	} 
+			    }
+			}
+				myChart.on(ecConfig.EVENT.CLICK, focus)
+
+				myChart.on(ecConfig.EVENT.FORCE_LAYOUT_END, function () {
+				    console.log(myChart.chart.force.getPosition());
+				});
+			}
+	)
+</script>
+{% endblock %}

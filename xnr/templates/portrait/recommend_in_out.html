@@ -1,0 +1,90 @@
+{% extends "tbase.html" %}
+{% block title %}出入库推荐{% endblock title%}
+{% block head_title %}出入库推荐{% endblock head_title%}
+{% block css %}
+{{ super() }}
+<style>
+    .dataTables_filter{text-align:right;margin-bottom:5px;}
+    .dataTables_paginate{margin-top:-10px;margin-bottom:-20px;}
+</style>
+{% endblock css %}
+{% block main %}
+<div class="box-content">
+    <ul class="nav nav-tabs" id="myTab">
+        <li class="active" title="入库推荐"><a href="#info">入库推荐</a></li>
+        <li title="入库历史"><a href="#messages">入库历史</a></li> 
+        <li title="出库推荐"><a href="#out">出库推荐</a></li> 
+    </ul>
+
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane active" id="info" style="margin-top:10px">
+            <span>推荐日期：</span><span id="recommend_date" style="margin-left:10px">
+                <select id="recommend_date_select" style="width:110px;height:20px;"></select></span>
+            <span style="margin-left:10px"><button class="btn btn-primary btn-sm" style="width:80px;height:30px" id="recommend_date_button" title="确定日期选择">确定</button></span>
+            <div id="recommend" style="margin-top:10px"><div style="text-align:center;vertical-align:middle;height:40px">数据正在加载中，请稍后...</div></div>
+            <div style="text-align:right">
+                <input type="radio" name="instant" checked value="0" /> 预约计算
+                <input type="radio" name="instant" value="1" style="margin-left:5px" /> 立即计算
+                <button class="btn btn-primary btn-sm" style="width:80px;height:40px;margin-left:10px" name="recommend_in_button" id="recommend_in_button">选择入库</button>
+            </div>
+        </div>
+        <div class="tab-pane" id="messages" style="margin-top:10px">
+            <span>推荐日期：</span><span id="history_date" style="margin-left:10px">
+                <select id="history_date_select" style="width:110px;height:20px;"></select></span>
+            <span style="margin-left:10px"><button class="btn btn-primary btn-sm" style="width:80px;height:30px" id="history_date_button" title="确定日期选择">确定</button></span>
+            <div id="history" style="margin-top:10px"></div>
+        </div>
+        <div class="tab-pane" id="out" style="margin-top:10px">
+            <div id="recommend_out" style="margin-top:10px"></div>
+            <div style="text-align:right">
+                <button class="btn btn-primary btn-sm" style="width:80px;height:40px;margin-right:10px" name="no_recommend_button" id="no_recommend_button">不再推荐</button>
+                <button class="btn btn-primary btn-sm" style="width:80px;height:40px" name="recommend_out_button" id="recommend_out_button">选择出库</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="recommend_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:820px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">推荐详情</h4>
+      </div>
+      <div class="modal-body" style="width:820px;height:200px;">
+        <h4 style="text-align:center">共有<span id="recommend_count"></span>名用户推荐</h4>
+        <span id="user_list" style="margin-top:0px;margin-left:20px;width:340px;float:left"></span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="details_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document" style="width:820px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">用户详情</h4>
+      </div>
+      <div class="modal-body" style="width:820px">
+        <h4 style="text-align:center">微博走势</h4>
+        <div id="line_chart" style="margin-top:0px;height:350px;width:780px"></div>
+        <div id="in_detail">
+            <span id="place" style="margin-top:0px;margin-left:20px;width:340px;float:left"></span>
+            <span id="hashtag" style="margin-top:0px;margin-right:20px;width:340px;float:right"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block Own_js %}
+{{ super() }}
+<script type="text/javascript" src="/static/js/portrait/in_extra.js"></script>
+<script type="text/javascript" src="/static/js/portrait/recommend_in_out.js"></script>
+{% endblock Own_js %}
+{% block end_js %}
+{{ super() }}
+<script src="/static/js/portrait/in_table.js"></script>
+{% endblock end_js %}

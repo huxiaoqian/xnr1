@@ -1,0 +1,103 @@
+<div id="current_user" hidden>{{ g.user.email }}</div>
+<div style='margin-left:190px;' class="cols">
+    <span class="fleft lineh42 mright13">用户ID或昵称</span>
+    <input id='term' name="term" style='width:260px;'class="inputbox fleft ad-search" type="text" value="" placeholder="请输入用户ID或昵称" />
+    <a class='portrait_href' style='line-height:50px;margin-left:135px;' id='show_advanced'>高级搜索</a>
+</div>
+<div id="supersearch" style='display:none;'>
+    <table class='table table-border bootstrap-datatable'>
+        <tr>
+            <td class='search_name'>身份分类</td>
+            <td>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="律师机构及人士" />律师机构及人士</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="境内机构" />境内机构</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="境外机构" />境外机构</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="媒体" />媒体</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="境外媒体" />境外媒体</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="民间组织" />民间组织</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="其他" />其他</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="政府机构及人士" />政府机构及人士</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="媒体人士" />媒体人士</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="活跃人士" />活跃人士</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="草根" />草根</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="高校微博" />高校微博</label>
+                <label class="cols-label"><input name="domain" class=" fleft chosebox" type="checkbox" value="商业人士" />商业人士</label>
+            </td>
+        </tr>
+        <tr>
+            <td class='search_name'>领域分类</td>
+            <td>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="文体类_娱乐" />文体类_娱乐</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="政治类_宗教" />政治类_宗教</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="文体类_体育" />文体类_体育</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="教育类" />教育类</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_环保" />民生类_环保</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="政治类_地区和平" />政治类_地区和平</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="政治类_反腐" />政治类_反腐</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_就业" />民生类_就业</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="政治类_外交" />政治类_外交</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="军事类" />军事类</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_交通" />民生类_交通</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_社会保障" />民生类_社会保障</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="政治类_暴恐" />政治类_暴恐</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_住房" />民生类_住房</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_法律" />民生类_法律</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="科技类" />科技类</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="民生类_健康" />民生类_健康</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="教育类" />教育类</label>
+                <label class="cols-label"><input name="topic" class=" fleft chosebox" type="checkbox" value="其他类" />其他类</label>
+            </td>
+        </tr>
+        <tr>
+            <td class='search_name'>标签信息</td>
+            <td>
+                <span style='margin-left:20px;margin-right:20px;' class="fleft lineh42 mright5 ">标签类别</span>
+                <select name="tag_type"  class="fleft select-box"></select>
+                <span class="fleft lineh42 mright5 ">标签名</span>
+                <select style='margin-left:22px;'name="tag_name" class="fleft select-box"></select>
+            </td>
+        </tr>
+        <tr>
+            <td class='search_name'>其他信息</td>
+            <td>
+                <span style='margin-left:20px;margin-right:12px;' class="fleft lineh42 mright5 ">微话题</span>
+                <input name="hashtag" class="inputbox fleft ad-search" type="text" value="" placeholder="请输入微话题" />
+                <span style='margin-left:10px;' class="fleft lineh42 mright5 ">关键字</span>
+                <input name="keywords_string" class="inputbox fleft ad-search" type="text" value="" placeholder="请输入关键字" />
+                <span style='margin-left:10px;margin-right:20px;' class="fleft lineh42 mright5">活跃地点</span>
+                <input name="activity_geo" style="width:200px;" class="inputbox fleft ad-search form-control" readonly type="text" value="" data-toggle="city-picker">
+            </td>
+        </tr>
+        <!--
+        <tr>
+            <td class='search_name'>性格特征</td>
+            <td>
+                <label class="cols-label"><input name="psycho_status_by_emotion" class=" fleft chosebox" type="checkbox" value="冲动" />冲动</label>
+                <label class="cols-label"><input name="psycho_status_by_emotion" class=" fleft chosebox" type="checkbox" value="抑郁" />抑郁</label>
+                <label class="cols-label"><input name="psycho_status_by_emotion" class=" fleft chosebox" type="checkbox" value="其他" />其他</label>
+            </td>
+        </tr>
+        <tr>
+            <td class='search_name'>语言风格</td>
+            <td>
+                <label class="cols-label"><input name="psycho_status_by_word" class=" fleft chosebox" type="checkbox" value="批判" />批判</label>
+                <label class="cols-label"><input name="psycho_status_by_word" class=" fleft chosebox" type="checkbox" value="其他" />其他</label>
+            </td>
+        </tr>
+        -->
+    </table>
+</div>
+<div>
+    <div class="clearfix lineh42">
+      <input name="submit" type="submit" style='float:right;margin-right:-10px;' class="portrait_button bluebtn" id="commit_search" value="确定" />
+    </div>
+    <span style="float:left;margin-top:0px">已选条件:</span>
+    <div id="conditions" style='float:left;margin-top:0px;'></div>
+    <br>
+    <div id='contrast_block' style="margin-top:10px;display:none;">
+        <span style="float:left;margin-top:0px">已选对比用户:</span>
+        <div id="contrast_chosen" style='float:left;margin-top:0px;'></div>
+    </div>
+    <div id="search_result" style="margin-top:0px;"></div>
+</div>
+<script src= '/static/js/portrait/tbase.js'></script>
