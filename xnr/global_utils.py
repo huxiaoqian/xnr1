@@ -15,11 +15,14 @@ es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 xnr_index_name = 'xnr'
 xnr_index_type = 'user'
 #use to save xnr
-es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT)
+qq_xnr_index_name = 'qq_xnr'
+qq_xnr_index_type = 'user'
+#use to save qq xnr
+es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
 #use to identify the user portrait
-es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT)
+es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
 #use to save domain info
