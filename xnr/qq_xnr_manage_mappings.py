@@ -20,10 +20,6 @@ index_info = {
                     'type': 'string',
                     'index': 'not_analyzed'
                 },
-                'friend_num':{
-                    'type': 'string',
-                    'index': 'not_analyzed'
-                },
                 'active_time':{
                     'type': 'string',
                     'index': 'not_analyzed'
