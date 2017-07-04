@@ -2,7 +2,7 @@
 import json
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
-from global_utils import es_xnr
+from global_utils import es_xnr,qq_xnr_index_name
 
 index_info = {
     'settings':{
@@ -31,11 +31,11 @@ index_info = {
                 'today_speak_num':{             # 今日发言数
                     'type': 'long',
                     'index': 'not_analyzed'
-                }，
+                },
                 'all_speak_num':{               # 历史发言总数
                     'type': 'long',
                     'index': 'not_analyzed'
-                }
+                },
                 'today_remind':{
                     'type': 'string',
                     'index': 'not_analyzed'
@@ -45,6 +45,6 @@ index_info = {
     }
 }
 #create
-es_xnr.indices.create(index='qq_xnr', body=index_info, ignore=400)
+es_xnr.indices.create(index=qq_xnr_index_name, body=index_info, ignore=400)
 #delete
 #es_xnr.indices.delete(index='qq_xnr', timeout=100)
