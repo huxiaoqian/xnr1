@@ -25,9 +25,14 @@ flow_text_index_type = 'text'
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
+
 #use to save domain info
+weibo_domain_index_name = 'weibo_domain'
+weibo_domain_index_type = 'group'
 
 #use to save role info
+weibo_role_index_name = 'weibo_role'
+weibo_role_index_type = 'role'
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
@@ -35,6 +40,9 @@ def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
 
 r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 #use to save xnr info
+
+weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
+weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 
 
 
