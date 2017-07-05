@@ -20,6 +20,10 @@ index_info = {
                     'type': 'string',
                     'index': 'not_analyzed'
                 },
+                'qq_group':{
+                    'type': 'string',
+                    'index': 'not_analyzed'
+                }
                 'active_time':{
                     'type': 'string',
                     'index': 'not_analyzed'
