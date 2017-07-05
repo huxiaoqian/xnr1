@@ -16,14 +16,14 @@ index_info = {
                     'type': 'string',
                     'index': 'not_analyzed'
                 },
-                'nick_name':{
+                'nickname':{
                     'type': 'string',
                     'index': 'not_analyzed'
                 },
-                'qq_group':{
+                'qq_groups':{
                     'type': 'string',
                     'index': 'not_analyzed'
-                }
+                },
                 'active_time':{
                     'type': 'string',
                     'index': 'not_analyzed'
@@ -44,7 +44,9 @@ index_info = {
         }
     }
 }
+exist_indice = es_xnr.indices.exists(index=qq_xnr_index_name)
+if exist_indice:
+    #delete
+    es_xnr.indices.delete(index='qq_xnr', timeout=100)    
 #create
 es_xnr.indices.create(index=qq_xnr_index_name, body=index_info, ignore=400)
-#delete
-#es_xnr.indices.delete(index='qq_xnr', timeout=100)
