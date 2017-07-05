@@ -16,10 +16,11 @@ mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 def ajax_add_qq_xnr():
     qq_number = request.args.get('qq_number','')
     qq_groups = request.args.get('qq_groups','')
-    nick_name = request.args.get('qq_nickname','')
+    nickname = request.args.get('qq_nickname','')
     active_time = request.args.get('qq_active_time')
-    create_qq_xnr()
-    return json.dumps(results)
+    xnr_info = [qq_number,qq_groups,nickname,active_time]
+    result = create_qq_xnr(xnr_info)
+    return json.dumps(result)
 
 
 @mod.route('/delete_qq_xnr/')
