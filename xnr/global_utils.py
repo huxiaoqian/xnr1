@@ -30,6 +30,8 @@ xnr_index_type = 'user'
 qq_xnr_index_name = 'qq_xnr'
 qq_xnr_index_type = 'user'
 #use to save qq xnr
+group_message_index_name = 'group_message_'        #group_message_xnr_qqnumber_2017-06-24
+group_message_index_type = 'record'
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
