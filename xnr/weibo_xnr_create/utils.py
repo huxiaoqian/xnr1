@@ -8,15 +8,10 @@ import json
 import time
 import os
 
-
-import sys
-reload(sys)
-sys.path.append('../')
-
-from global_config import S_TYPE,S_DATE_2
-from global_utils import r,weibo_target_domain_detect_queue_name,weibo_domain_index_name,weibo_domain_index_type
-from global_utils import es_xnr as es
-from parameters import topic_en2ch_dict,domain_ch2en_dict
+from xnr.global_config import S_TYPE,S_DATE
+from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_domain_index_name,weibo_domain_index_type
+from xnr.global_utils import es_xnr as es
+from xnr.parameter import topic_en2ch_dict,domain_ch2en_dict
 
 def get_domain_info(domain_pinyin):
 

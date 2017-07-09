@@ -6,8 +6,8 @@ import os
 
 #use to mark type:  run or test
 S_TYPE = 'test'   #test/run
-S_DATE = '2016-11-11' #when type=test, now_date=S_DATE
-S_DATE_2 = '2016-11-20' #when type=test, now_date=S_DATE_2
+S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
+
 #config es
 #config xnr user info
 ES_CLUSTER_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
@@ -40,9 +40,3 @@ REDIS_PATH = '/home/ubuntu7/huxiaoqian/redis-3.0.5/7392/'
 # use to identify the db number of redis-97
 R_BEGIN_TIME = '2016-03-21'
 
-# time constant
-HOUR = 3600
-DAY = 3600*24
-WEEK = 3600*24*7
-
-DAY_HOURS = 24  # 一天24小时
