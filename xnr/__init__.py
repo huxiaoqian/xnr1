@@ -10,6 +10,7 @@ from xnr.weibo_xnr_create.views import mod as weiboxnrcreateModule
 from xnr.weibo_xnr_manage.views import mod as weiboxnrmanageModule
 from xnr.weibo_xnr_assessment.views import mod as weiboxnrassessmentModule
 from xnr.weibo_xnr_knowledge_base_management.views import mod as weiboxnrknowledgebasemanagementModule
+from xnr.weibo_xnr_monitor.views import mod as weiboxnrmonitorModule
 from xnr.qq_xnr_manage.views import mod as qqxnrmanageModule
 from xnr.qq_xnr_operate.views import mod as qqxnroperateModule
 from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
@@ -30,6 +31,7 @@ def create_app():
     app.register_blueprint(weiboxnrmanageModule)
     app.register_blueprint(weiboxnrassessmentModule)
     app.register_blueprint(weiboxnrknowledgebasemanagementModule)
+    app.register_blueprint(weiboxnrmonitorModule)
     app.register_blueprint(qqxnrmanageModule)
     app.register_blueprint(qqxnroperateModule)
     app.register_blueprint(qqxnrassessmentModule)
