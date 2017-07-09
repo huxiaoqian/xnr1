@@ -7,6 +7,7 @@ from global_utils import es_xnr as es
 from global_utils import weibo_domain_index_name,weibo_domain_index_type,\
 						weibo_role_index_name,weibo_role_index_type
 
+
 def domain_base_mappings():
 	index_info = {
 		'settings':{
@@ -24,7 +25,7 @@ def domain_base_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'create_type':{
+					'create_type':{  # {'by_keywords':[],'by_seed_users':[],'by_all_users':[]}
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -48,13 +49,19 @@ def domain_base_mappings():
 					'remark':{
 						'type':'string'
 					},
-					'compute_status':{   # 0-尚未计算，1-正在计算，2-计算完成
+					'compute_status':{   # 0-尚未计算，1-已存入uid，2-已存入群体描述，3-已存入角色分析
 						'type':'long' 
 					},
-					'topic_preference':{
+					'role_distribute':{  # list
 						'type':'string'
 					},
-					'word_preference':{
+					'top_keywords':{   # list
+						'type':'string'
+					},
+					'political_side':{  #list
+						'type':'string'
+					},
+					'topic_preference':{ #list
 						'type':'string'
 					}
 				}
@@ -90,7 +97,7 @@ def role_base_mappings():
 					'personality':{    # dict
 						'type':'string'
 					},
-					'political_tendency':{   # dict
+					'political_side':{   # dict
 						'type':'string'
 					},
 					'geo':{      # dict

@@ -37,3 +37,14 @@ def ts2HourlyTime(ts, interval):
 def ts2datetime_full(ts):
     return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(ts))
 
+#use to get retweet/be_retweet/comment/be_comment db_number
+#input: timestamp
+#output: db_number
+def get_db_num(timestamp):
+    date = ts2datetime(timestamp)
+    date_ts = datetime2ts(date)
+    db_number = ((date_ts - r_beigin_ts) / (DAY*7)) % 2 + 1
+    #run_type
+    if RUN_TYPE == 0:
+        db_number = 1
+    return db_number

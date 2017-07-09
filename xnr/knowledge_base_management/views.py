@@ -1,35 +1,26 @@
 # -*-coding:utf-8-*-
 import os
+import pinyin
 from flask import Blueprint, url_for, render_template, request, abort, flash, session, redirect
-from utils import 
+from utils import domain_create_task,get_domain_info,get_role_info
 
-'''
-领域知识库
-1.创建
-2.查询展示
-'''
 
-### 创建方式
+mod = Blueprint('knowledge_management',__name__,url_prefix='/knowledge_management')
 
-### 根据种子用户
-#use to get single user portrait attribute
-#input: seed_user_dict
-#output: user_portriat_dict
-def get_single_user_portrait(seed_user_dict):
-    if 'uid' in seed_user_dict:
-        uid = seed_user_dict['uid']
-        try:
-            user_portrait_result = es_user_portrait.get(index=portrait_index_name, doc_type=portrait_index_type, id=uid)['_source']
-        except:
-            user_portrait_result = {}
-    else:
-        uname = seed_user_dict['uname']
-        query = {'term':{'uname': uname}}
-        try:
-            user_portrait_result = es_user_portrait.search(index=portrait_index_name, doc_type=portrait_index_type ,\
-                    body={'query':{'bool':{'must': quuery}}})['_source']
-        except:
-            user_portrait_result = {}
+@mod.route('/create_domain/')
+def ajax_create_domain():
+    domain_name =  request.args.get('domain_name','')
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    domain_info = get_domain_info(domain_pinyin)
+    
+    return json.dumps(domain_info)
 
-    return user_portrait_result
+@mod.route('/show_role_info/')
+def ajax_show_role_info():
+    domain_name = request.args.get('domain_name','')
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    role_name = request.args.get('role_name','')
+    role_info = get_role_info(domain_pinyin,role_name)
+
+    return json.dumps(role_info)
 
