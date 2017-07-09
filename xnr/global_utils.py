@@ -41,6 +41,11 @@ es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
 
+
+#use to save weibo xnr personal information
+weibo_xnr_index_name='weibo_xnr'
+weibo_xnr_index_type='user'
+
 es_retweet = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_comment = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 
@@ -51,6 +56,9 @@ weibo_domain_index_type = 'group'
 #use to save role info
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
+
+
+#use to test lookup weibocontent,can be deleted after test
 
 #use to save feedback info
 weibo_feedback_comment_index_name = 'weibo_feedback_comment'
@@ -70,7 +78,6 @@ weibo_feedback_like_index_type = 'text'
 
 weibo_feedback_follow_index_name = 'weibo_feedback_follow'
 weibo_feedback_follow_index_type = 'text'
-
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
