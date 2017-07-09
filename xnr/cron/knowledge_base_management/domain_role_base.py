@@ -7,7 +7,7 @@ from flask import Blueprint, url_for, render_template, request, abort, flash, se
 from time_utils import ts2datetime,datetime2ts
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
-from parameters import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
+from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
                         TOP_WEIBOS_LIMIT,topic_en2ch_dict
 
 ## 引入各个分类器
@@ -35,7 +35,7 @@ from global_utils import es_retweet, retweet_index_name_pre, retweet_index_type,
                          be_retweet_index_name_pre, be_retweet_index_type
 from global_utils import es_comment, comment_index_name_pre, comment_index_type,\
                          be_comment_index_name_pre, be_comment_index_type
-from global_config import WEEK,DAY,R_BEGIN_TIME,S_TYPE,S_DATE_2,DAY_HOURS,HOUR
+from global_config import WEEK,DAY,R_BEGIN_TIME,S_TYPE,S_DATE,DAY_HOURS,HOUR
 
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
@@ -781,7 +781,7 @@ def compute_domain_base():
             print task_id
             create_time = decect_task_information['create_time']
             if S_TYPE == 'test':
-                create_time = datetime2ts(S_DATE_2)
+                create_time = datetime2ts(S_DATE)
             
             datetime_list = get_flow_text_datetime_list(create_time)
             print 'datetime_list::',datetime_list
