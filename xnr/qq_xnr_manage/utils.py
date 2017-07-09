@@ -4,7 +4,7 @@ use to save function---about deal database
 '''
 import sys
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type
-
+from xnr.parameter import MAX_VALUE
 
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time]
@@ -47,4 +47,20 @@ def change_qq_xnr(xnr_info):
         result = 'Successfully changed'
     except:
         result = 'Changing Failed'
+    return result
+
+def search_qq_xnr(qq_number):
+    query_body = {
+    "query": {
+        "filtered":{
+            "filter":{
+                "term":{"qq_number": qq_number}
+            }
+        }
+    },
+    'size':MAX_VALUE
+}
+
+    result = es_xnr.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, body=query_body)
+    
     return result
