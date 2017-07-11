@@ -30,7 +30,8 @@ def domain_base_mappings():
 						'index':'not_analyzed'
 					},
 					'description':{
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'create_time':{
 						'type':'long'
@@ -40,29 +41,34 @@ def domain_base_mappings():
 					},
 					'member_uids':{     #用户uid_list  ['23123452','342212332',...]
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'submitter':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
 					'remark':{
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'compute_status':{   # 0-尚未计算，1-已存入uid，2-已存入群体描述，3-已存入角色分析
 						'type':'long' 
 					},
 					'role_distribute':{  # list
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'top_keywords':{   # list
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'political_side':{  #list
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'topic_preference':{ #list
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -92,22 +98,28 @@ def role_base_mappings():
 						'index':'not_analyzed'
 					},
 					'domains':{   # dict
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'personality':{    # dict
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'political_side':{   # dict
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'geo':{      # dict
-						'type':'string'
+						'type':'string',
+						'index':'no'
 					},
 					'active_time':{   #  [['开始时间','终止时间'],['13122343','132342523'],['132424352','1359083212'],...] 
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'day_post_num':{  # 最近一周  [['日期','帖子数'],['145099983','9'],['145990333','9'],...]
-						'type':'string'
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
