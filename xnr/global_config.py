@@ -7,6 +7,7 @@ import os
 #use to mark type:  run or test
 S_TYPE = 'test'   #test/run
 S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
+QQ_S_DATE = '2016-07-12'
 
 #config es
 #config xnr user info
@@ -39,4 +40,5 @@ REDIS_PATH = '/home/ubuntu7/huxiaoqian/redis-3.0.5/7392/'
 
 # use to identify the db number of redis-97
 R_BEGIN_TIME = '2016-03-21'
+
 
