@@ -6,7 +6,8 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from xnr.parameter import MAX_VALUE
-from utils import show_group_info,search_by_keyword
+from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
+                  search_by_speaker_number
 from xnr.global_config import QQ_S_DATE
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
@@ -27,15 +28,16 @@ def ajax_search_by_period():
 @mod.route('/search_by_keyword/')
 def ajax_search_by_keyword():
     keyword = request.args.get('keyword','')
-    results = search_by_keyword(keyword)
+    date = QQ_S_DATE
+    results = search_by_keyword(keyword,date)
     return json.dumps(results)
 
 
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
-    xnr_qq_number = request.args.get()
+    xnr_qq_number = request.args.get('xnr_number','')
     date = QQ_S_DATE
-    search_by_xnr_number(xnr_qq_number, date)
+    results = search_by_xnr_number(xnr_qq_number, date)
     return json.dumps(results)
 
 
@@ -47,7 +49,10 @@ def ajax_search_by_xnr_nickname():
 
 @mod.route('/search_by_speaker_number/')
 def ajax_search_by_speaker_number():
-
+    xnr_number = request.args.get('xnr_number','')
+    speaker_number = request.args.get('speaker_number','')
+    date = QQ_S_DATE
+    results = search_by_speaker_number(xnr_number,speaker_number,date)
     return json.dumps(results)
 
 
