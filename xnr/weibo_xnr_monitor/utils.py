@@ -217,6 +217,53 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_
         return flow_text_exist
 ###############################################################
 
+#lookup acitve_user
+#input:classify_id,weiboxnr_id
+#output:active weibo_user info list
+def lookup_active_weibouser(classify_id,weiboxnr_id):
+    #step1: users condition
+    #make sure the users range by classify choice
+    if classify_id==0:
+        userlist=lookup_weibo_users()
+    elif classify_id==1:
+        userlist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    elif classify_id==2:
+        userlist=lookup_weoboxnr_unattendedusers(weiboxnr_id)
+    else:
+        userlist=lookup_weibo_users()
+    user_condition_list=[{'terms':{'uid':userlist}}]
+
+    #step 2:lookup users and ranked by infuluence
+    query_body={
+            '_source':{
+                'include':[
+                    'id',            #用户ID
+                    'nick_name',     #昵称
+                    'user_location', #注册地
+                    'fansum',        #粉丝数
+                    'weibosum',      #微博数，该字段暂未创建
+                    'infulence',     #影响力，该字段需创建然后计算
+                ]
+            }
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'bool':{
+                            'must':iter_condition_list
+                            }
+                        }
+                    }
+                },
+            'size':MAX_VALUE,
+            'sort':{'infuluence':{'order':'desc'}}    #根据影响力排名
+            }
+    try:
+        flow_text_exist=es_flow_text.search(index='weibo_user',doc_type='user',body=query_body)['hits']['hits']
+    except:
+        flow_text_exist=[]
+
+    return flow_text_exist
+
 
 
 

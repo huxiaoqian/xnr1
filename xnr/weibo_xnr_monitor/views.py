@@ -7,7 +7,7 @@ from flask import Blueprint,url_for,render_template,request,\
         abort,flash,session,redirect
 
 from xnr.global_utils import es_flow_text
-from utils import lookup_weibo_keywordstring,lookup_hot_posts,\
+from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_weibouser,\
         lookup_weibo_users,lookup_weibo_info,aggs_test,\
         count_weiboxnr_keyword
 
@@ -32,7 +32,14 @@ def ajax_lookup_hot_posts():
     order_id=request.args.get('order_id','')
     result=lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_id)
     return json.dumps(result)
-    
+
+@mod.route('/lookup_active_weibouser/')
+def ajax_lookup_active_weibouser():
+    weiboxnr_id=request.args.get('weiboxnr_id','')
+    classify_id=request.args.get('classify_id','')
+    result=lookup_active_weibouser(classify_id,weiboxnr_id)
+    return json.dumps(result)
+################################## 
 #test code
 @mod.route('/aggs_test/')
 def ajax_aggs_test():
