@@ -244,7 +244,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id):
                     'weibosum',      #微博数，该字段暂未创建
                     'infulence',     #影响力，该字段需创建然后计算
                 ]
-            }
+            },
             'query':{
                 'filtered':{
                     'filter':{

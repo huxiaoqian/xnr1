@@ -21,8 +21,7 @@ def ajax_add_weibo_xnr():
 
 @mod.route('/delete_weibo_xnr/')
 def ajax_delete_weibo_xnr():
-	user_no=request.args.get('user_no','')
-    results = delete_weibo_xnr(user_no)
+    results=True
     return json.dumps(results)
 
 @mod.route('/show_weibo_xnr/')
