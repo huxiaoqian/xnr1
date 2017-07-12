@@ -44,24 +44,27 @@ def weibo_xnr_mappings():
 						'index':'not_analyzed'
 					},
 					'fan_sum':{					 #粉丝数
-						'type':'long',
-						'index':'not_analyzed'
+						'type':'long'
 					},
 					'all_post_sum':{			 #历史发帖量
-						'type':'long',
-						'index':'not_analyzed'					
+						'type':'long'				
 					},
 					'all_comment_sum':{			 #历史评论数
-						'type':'long',
-						'index':'not_analyzed'					
+						'type':'long'					
 					},
 					'today_post_sum':{			#今日发帖量
-						'type':'long',
-						'index':'not_analyzed'					
+						'type':'long'			
 					},
-					'today_remind':{			#今日提醒
+					'fan_list':{				#粉丝列表
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'focus_list':{				#关注列表
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'xnrcreate_status':{		#虚拟人创建状态
+						'type':'long'           #0表示创建未完成，1表示创建完成
 					}
 				}
 			}
