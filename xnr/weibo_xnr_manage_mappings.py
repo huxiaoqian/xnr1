@@ -77,6 +77,10 @@ def weibo_xnr_mappings():
 					'day_post_sum':{			#日发帖量设置：从不，1-2，3-5……
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'weibo_ID':{				#所绑定的微博账号
+						'type':'string',
+						'index':'not_analyzed'
 					},					
 					'xnrcreate_status':{		#虚拟人创建状态
 						'type':'long'           #0表示创建未完成，1表示创建完成
