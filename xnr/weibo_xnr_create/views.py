@@ -6,29 +6,41 @@ import pinyin
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import domain_create_task,get_domain_info,get_role_info               
+from utils import domain_create_task,get_domain_info,get_role_info,get_role_sort_list,get_role2feature_info             
 
 
 mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
 
-
-@mod.route('/create_weibo_xnr/')
-def ajax_create_weibo_xnr():
-    
-    domain_name =  request.args.get('domain_name','')
-    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    domain_info = get_domain_info(domain_pinyin)
-    
-    return json.dumps(domain_info)
-
-@mod.route('/show_role_info/')
-def ajax_show_role_info():
+# 根据虚拟人推荐角色顺序
+@mod.route('/domain2role/')  
+def ajax_domain2role():
     domain_name = request.args.get('domain_name','')
-    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_name = request.args.get('role_name','')
-    role_info = get_role_info(domain_pinyin,role_name)
+    role_sort_list = get_role_sort_list(domain_name)
 
-    return json.dumps(role_info)
+    return json.dumps(role_sort_list)
+
+#根据选定角色推荐政治倾向和心理状态
+@mod.route('/role2feature_info/')
+def ajax_role2feature_info():
+    domain_name = request.args.get('domain_name','')
+    role_name = request.args.get('role_name','')
+
+    feature_info_dict = get_role2feature_info(domain_name,role_name)
+
+    feature_filter_dict = dict()
+    feature_filter_dict['political_side'] = feature_info_dict['political_side']
+    feature_filter_dict['psy_feature'] = feature_info_dict['psy_feature']
+
+    return json.dumps(feature_filter_dict)
+
+#根据第一步选择推荐第二步信息
+@mod.route('/recommend_step_two/')
+def ajax_recommend_step_two():
+    task_detail = dict()
+    task_detail['domain_name'] = request.args.get('domain_name','')
+    task_detail['role_name'] = request.args.get('role_name','')
+    task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    
 
 @mod.route('/show_register_info/')
 def ajax_show_register_info():

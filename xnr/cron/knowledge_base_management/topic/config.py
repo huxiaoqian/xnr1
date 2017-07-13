@@ -6,8 +6,8 @@ import re
 import csv
 import sys
 from decimal import *
-sys.path.append('../../../')
-from parameters import TOPIC_ABS_PATH as abs_path
+sys.path.append('../../')
+from parameter import TOPIC_ABS_PATH as abs_path
 
 name_list = ['art','computer','economic','education','environment','medicine',\
             'military','politics','sports','traffic','life',\

@@ -6,7 +6,7 @@ import sys
 import re
 import csv
 from decimal import *
-sys.path.append('../../../')
+sys.path.append('../../')
 from parameter import POLICY_ABS_PATH as abs_path
 
 labels = ['left','right','mid']
