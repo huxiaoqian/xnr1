@@ -29,6 +29,7 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type
 	
 
 
+
 #delete_weibo_xnr
 def delete_weibo_xnr(user_no):
 	try:
