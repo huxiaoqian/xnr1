@@ -6,7 +6,8 @@ import pinyin
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import domain_create_task,get_domain_info,get_role_info,get_role_sort_list,get_role2feature_info             
+from utils import domain_create_task,get_domain_info,get_role_info,get_role_sort_list,\
+                get_role2feature_info,get_recommend_step_two,get_recommend_follows
 
 
 mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
@@ -24,13 +25,7 @@ def ajax_domain2role():
 def ajax_role2feature_info():
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
-
-    feature_info_dict = get_role2feature_info(domain_name,role_name)
-
-    feature_filter_dict = dict()
-    feature_filter_dict['political_side'] = feature_info_dict['political_side']
-    feature_filter_dict['psy_feature'] = feature_info_dict['psy_feature']
-
+    feature_filter_dict = get_role2feature_info(domain_name,role_name)
     return json.dumps(feature_filter_dict)
 
 #根据第一步选择推荐第二步信息
@@ -39,8 +34,20 @@ def ajax_recommend_step_two():
     task_detail = dict()
     task_detail['domain_name'] = request.args.get('domain_name','')
     task_detail['role_name'] = request.args.get('role_name','')
+    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    #task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    recommend_results = get_recommend_step_two(task_detail)
+    return json.dumps(recommend_results)
+
+#第三步绑定账户关注用户推荐
+@mod.route('/recommend_follows/')
+def ajax_recommend_followers():
+    task_detail = dict()
+    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
-    
+
+    recommend_results = get_recommend_follows(task_detail)
+    return json.dumps(recommend_results)
 
 @mod.route('/show_register_info/')
 def ajax_show_register_info():

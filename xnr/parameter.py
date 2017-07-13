@@ -28,6 +28,13 @@ MAX_SEARCH_SIZE = 99999999 ## 从数据库中最大检索数量
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 500
 
+ACTIVE_TIME_TOP = 6
+DAILY_INTEREST_TOP_USER = 100
+NICK_NAME_TOP = 10
+USER_LOCATION_TOP = 10
+DESCRIPTION_TOP = 10
+MONITOR_TOP_USER = 100
+
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
 CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
