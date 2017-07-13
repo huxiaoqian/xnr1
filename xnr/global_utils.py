@@ -53,8 +53,8 @@ weibo_xnr_index_name='weibo_xnr'
 weibo_xnr_index_type='user'
 
 #use to save weibo xnr information which should be count
-weibo_xnr_count_index_name='weibo_xnr_count'
-weibo_xnr_count_index_type='user'
+weibo_xnr_fans_followers_index_name='weibo_xnr_fans_followers'
+weibo_xnr_fans_followers_index_type='uids'
 
 es_retweet = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_comment = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
