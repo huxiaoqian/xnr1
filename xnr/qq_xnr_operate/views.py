@@ -7,7 +7,7 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from xnr.parameter import MAX_VALUE
 from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
-                  search_by_speaker_number
+                  search_by_speaker_number,search_by_speaker_nickname
 from xnr.global_config import QQ_S_DATE
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
@@ -58,5 +58,8 @@ def ajax_search_by_speaker_number():
 
 @mod.route('/search_by_speaker_nickname/')
 def ajax_search_by_speaker_nickname():
-
+    xnr_number = request.args.get('xnr_number','')
+    speaker_nickname = request.args.get('speaker_nickname','')
+    date = QQ_S_DATE
+    results = search_by_speaker_nickname(xnr_number,speaker_nickname,date)
     return json.dumps(results)

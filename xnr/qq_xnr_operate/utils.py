@@ -83,3 +83,27 @@ def search_by_speaker_number(xnr_qq_number, speaker_number, date):
     index_name = group_message_index_name_pre + date
     result = es_xnr.search(index=index_name,doc_type=group_message_index_type,body=query_body)
     return result
+
+
+def search_by_speaker_nickname(xnr_qq_number, speaker_nickname, date):
+    query_body = {
+        "query": {
+            "filtered":{
+                "filter":{
+                    "bool":{
+                        "must":[
+                            {"term":{"xnr_qq_number":xnr_qq_number}},
+                            {"term":{"speaker_qq_nickname":speaker_nickname}}
+
+
+                        ]
+                    }
+                }
+            }
+            },
+            "size": MAX_VALUE,
+            "sort":{"timestamp":{"order":"desc"}}
+        }
+    index_name = group_message_index_name_pre + date
+    result = es_xnr.search(index=index_name,doc_type=group_message_index_type,body=query_body)
+    return result
