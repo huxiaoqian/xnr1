@@ -128,6 +128,7 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['active_time'] = json.dumps(list(role_results['active_time']))
         item_exist['day_post_num'] = json.dumps(list(role_results['day_post_num']))  
         item_exist['psy_feature'] = json.dumps(role_results['psy_feature'])
+        item_exist['member_uids'] = json.dumps(role_results['member_uids'])
 
     
         es_xnr.update(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=role_id,body={'doc':item_exist})
@@ -147,6 +148,7 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['active_time'] = json.dumps(list(role_results['active_time']))
         item_exist['day_post_num'] = json.dumps(list(role_results['day_post_num']))
         item_exist['psy_feature'] = json.dumps(role_results['psy_feature'])
+        item_exist['member_uids'] = json.dumps(role_results['member_uids'])
        
         es_xnr.index(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=role_id,body=item_exist)
         
@@ -785,6 +787,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     role_feature_analysis_results['day_post_num'] = day_post_median_all
     role_feature_analysis_results['active_time'] = day_hour_counts_aver_time
     role_feature_analysis_results['psy_feature'] = psy_feature_sort
+    role_feature_analysis_results['member_uids'] = uids_list
 
     return role_feature_analysis_results
 
