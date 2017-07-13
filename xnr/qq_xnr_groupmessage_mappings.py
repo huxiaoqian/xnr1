@@ -4,10 +4,12 @@ import json
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from global_utils import es_xnr as es
-from global_utils import group_message_index_name, group_message_index_type
+from global_utils import group_message_index_name_pre, group_message_index_type
+
+from global_config import QQ_S_DATE
 
 def gourp_message_mappings(qq_number, date):
-    index_name = group_message_index_name + str(qq_number)+'_'+ str(date)
+    index_name = group_message_index_name_pre + str(date)
     index_info = {
         'settings':{
             'number_of_replicas':0,
@@ -50,5 +52,6 @@ def gourp_message_mappings(qq_number, date):
 
 if __name__ == '__main__':
     qq_number = 123456
-    date = '2017-06-24'
+    # date = '2017-06-24'
+    date = QQ_S_DATE
     gourp_message_mappings(qq_number, date)
