@@ -5,8 +5,8 @@ import csv
 import sys
 from elasticsearch import Elasticsearch
 reload(sys)
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr')
-from parameters import CH_ABS_PATH as abs_path,MAX_VALUE
+sys.path.append('../../')
+from parameter import CH_ABS_PATH as abs_path,MAX_VALUE
 from global_utils import es_user_portrait,es_flow_text,portrait_index_name,portrait_index_type,\
                          flow_text_index_name_pre,flow_text_index_type
 

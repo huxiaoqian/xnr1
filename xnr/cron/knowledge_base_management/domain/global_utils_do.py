@@ -7,11 +7,11 @@ import csv
 
 import sys
 reload(sys)
-sys.path.append('../../../')
-from parameters import DOMAIN_ABS_PATH as abs_path
+sys.path.append('../../')
 from time_utils import get_db_num
 from global_utils import es_user_profile,es_retweet,profile_index_name,\
                          profile_index_type,retweet_index_name_pre,retweet_index_type
+from parameter import DOMAIN_ABS_PATH as abs_path
 
 ##加载领域标签
 

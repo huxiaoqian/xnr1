@@ -1,0 +1,5 @@
+训练：test1.bat
+测试：test3.bat
+结果：result1
+
+已有的训练集：tr1;对应的测试集：te1

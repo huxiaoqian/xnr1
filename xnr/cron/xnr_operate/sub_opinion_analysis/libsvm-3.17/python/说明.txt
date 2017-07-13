@@ -1,0 +1,10 @@
+观点挖掘主函数：from opinion_produce import opinion_main
+
+输入数据：
+weibo_data：微博列表，[weibo1,weibo2,...]
+k_cluster：子话题个数
+
+输出数据：
+opinion_name：子话题名称字典，{topic1:name1,topic2:name2,...}
+word_result：子话题关键词对，{topic1:[w1,w2,...],topic2:[w1,w2,...],...}
+text_list：子话题对应的文本，{topic1:[text1,text2,...],topic2:[text1,text2,..],..}

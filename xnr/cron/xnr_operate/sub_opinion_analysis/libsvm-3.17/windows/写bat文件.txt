@@ -1,0 +1,3 @@
+@echo off
+call "D:\procedure.bat">D:\结果.txt
+start notepad D:\结果.txt

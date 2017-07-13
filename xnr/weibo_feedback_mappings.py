@@ -46,7 +46,8 @@ def weibo_feedback_retweet_mappings():
 						'type':'long'
 					},
 					'text':{
-						'type':'long'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'like':{
 						'type':'long'
@@ -101,7 +102,8 @@ def weibo_feedback_comment_mappings():
 						'type':'long'
 					},
 					'text':{
-						'type':'long'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'root_mid':{
 						'type':'string',
@@ -157,7 +159,8 @@ def weibo_feedback_at_mappings():
 						'type':'long'
 					},
 					'text':{
-						'type':'long'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'root_mid':{
 						'type':'string',
@@ -209,7 +212,8 @@ def weibo_feedback_like_mappings():
 						'type':'long'
 					},
 					'text':{             ## 设为空
-						'type':'long'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'root_mid':{
 						'type':'string',
@@ -258,13 +262,21 @@ def weibo_feedback_private_mappings():
 						'type':'long'
 					},
 					'text':{             
-						'type':'long'
+						'type':'string',
+						'index':'not_analyzed'
 					},
 					'root_uid':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
 					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'w_new_count':{  # 0表示均已读 1,2,....表示未读信息个数
+						'type':'long'
+					},
+					'private_type':{ # make 表示发出的私信   receive表示收到的私信
 						'type':'string',
 						'index':'not_analyzed'
 					}
@@ -306,10 +318,6 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'mid':{               
-						'type':'string',
-						'index':'not_analyzed'
-					},
 					'timestamp':{
 						'type':'long'
 					},
@@ -323,6 +331,14 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 						'type':'long'
 					},
 					'root_uid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'fans_source':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'description':{
 						'type':'string',
 						'index':'not_analyzed'
 					}
