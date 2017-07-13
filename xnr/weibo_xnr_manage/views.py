@@ -7,6 +7,8 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from xnr.global_utils import es_flow_text
 
+from utils import delete_weibo_xnr
+
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 
@@ -19,7 +21,7 @@ def ajax_add_weibo_xnr():
 
 @mod.route('/delete_weibo_xnr/')
 def ajax_delete_weibo_xnr():
-    results = True
+    results=True
     return json.dumps(results)
 
 @mod.route('/show_weibo_xnr/')
