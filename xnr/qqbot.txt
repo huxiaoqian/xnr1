@@ -1,0 +1,17 @@
+{"speaker_qq_number": "204084583", "xnr_qq_number": "1663782135", "timestamp": 1499845662, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb91", "speaker_nick": "\u4e00\u6307\u7834\u767e\u5904", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "204084583", "xnr_qq_number": "1663782135", "timestamp": 1499845662, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb92", "speaker_nick": "\u4e00\u6307\u7834\u767e\u5904", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "1337525388", "xnr_qq_number": "1663782135", "timestamp": 1498494806, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb9\u591a\u559d\u70b9\u90ed\u5fb7\u7eb2", "speaker_nick": "\u706b\u9f99\u5c0f\u70b9", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "1663782135", "xnr_qq_number": "1663782135", "timestamp": 1499845801, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb9\u90fd\u597d\u90fd\u597d\u70ed\u4e4e\u4e4e\u7684", "speaker_nick": "\u5fc3\u604b\u5fc3", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "1663782135", "xnr_qq_number": "1663782135", "timestamp": 1499845835, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb9\u521a\u521a\u6253\u9519v\u51e0\u53e5", "speaker_nick": "\u5fc3\u604b\u5fc3", "type": "record", "qq_group_number": "3085891"}
+
+{"speaker_qq_number": "204084583", "xnr_qq_number": "1663782135", "timestamp": 1499845710, "text": "\u6846\u6846\u5c31\u53ef\u4ee5\u4e86\u5417", "speaker_nick": "\u4e00\u6307\u7834\u767e\u5904", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "204084583", "xnr_qq_number": "1663782135", "timestamp": 1499845710, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb9\u4e0a\u8bfe\u7684\u770b\u5230\u4f60\u7684\u90a3\u4f60\u73b0\u91d1", "speaker_nick": "\u4e00\u6307\u7834\u767e\u5904", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "1663782135", "xnr_qq_number": "1663782135", "timestamp": 1499845801, "text": "qqbot QQ\u865a\u62df\u4eba\uff0c\u6d4b\u8bd5\u3002\u5185\u5bb9\u97e9\u56fd\u5403\u996dv\u59d0\u59d0\u770b\u7a7a\u95f4\u53ed\u53ed\u53ed\u86e4\u86e4\u86e4\u53ed\u53ed\u53ed\u5f88\u79ef\u6781", "speaker_nick": "\u5fc3\u604b\u5fc3", "type": "record", "qq_group_number": "130289256"}
+
+{"speaker_qq_number": "1663782135", "xnr_qq_number": "1663782135", "timestamp": 1499845801, "text": "v\u53d1\u53d1\u8d27\u5feb\u54edGVv\u6545\u610f\u77ed\u53d1\u542c\u54c8vVC\u4ed6\u8d35\u5987\u4ebaGV\u5267\u900f\u72d7\u72d7\ud83d\udc36\u72d7", "speaker_nick": "\u5fc3\u604b\u5fc3", "type": "record", "qq_group_number": "130289256"}

@@ -38,6 +38,10 @@ def gourp_message_mappings(qq_number, date):
                         'type':'string',
                         'index':'not_analyzed'
                     },
+                    'xnr_qq_number':{
+                        'type':'string',
+                        'index': 'not_analyzed'
+                    }
                     
                 }
 
