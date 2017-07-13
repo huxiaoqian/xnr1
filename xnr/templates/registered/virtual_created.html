@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>角色生成（创建中）</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/virtual_created.css">
+</head>
+<body>
+<div id="navs"></div>
+<div id="container">
+    <div class="title">
+        <div>
+            <img src="../static/images/created.png" class="peo_icon"/>
+            <b style="font-size: 16px;">第二步：角色生成</b>
+        </div>
+        <div style="margin: 20px 0;position: relative;">
+            <b style="font-size: 18px;">角色定位：</b>
+            <div id="character">
+                <div class="define">
+                    <img src="../static/images/icon.png" alt="">
+                    渗透领域：<span id="character1">习大大</span>
+                </div>
+                <div class="define">
+                    <img src="../static/images/icon.png" alt="">
+                    角色身份：<span id="character2">学生</span>
+                </div>
+                <div class="define">
+                    <img src="../static/images/icon.png" alt="">
+                    心理特征：<span id="character3">愤怒快乐</span>
+                </div>
+                <div class="define">
+                    <img src="../static/images/icon.png" alt="">
+                    政治倾向：<span id="character4">左倾</span>
+                </div>
+                <div class="define">
+                    <img src="../static/images/icon.png" alt="">
+                    业务目标：<span id="character5">渗透</span>
+                </div>
+            </div>
+            <div id="role_example">
+                <p style="text-align: center;padding: 5px;border-bottom: 1px solid rgba(121, 121, 121, 1)">角色示例</p>
+                <ul class="role_example_list" style="padding: 10px 20px;">
+                    <li><a href="###">不想当律师的记者</a></li>
+                    <li><a href="###">10086专员</a></li>
+                    <li><a href="###">艾唐叔叔</a></li>
+                    <li><a href="###">我是大律师</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="account" style="margin: 20px 0;">
+        <b style="font-size: 18px;">账户创建信息：</b>
+        <div class="account-1">
+            <div class="options name">
+                <img src="../static/images/icon.png" alt="">
+                <span>昵称：</span>
+                <input type="text" id="name" placeholder="昵称"/>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+            <div class="options age">
+                <img src="../static/images/icon.png" alt="">
+                <span>年龄：</span>
+                <input type="text" id="age" placeholder="年龄"/>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+            <div class="options gender">
+                <img src="../static/images/icon.png" alt="">
+                <span>性别：</span>
+                <select type="text" id="gender">
+                    <option value="">男</option>
+                    <option value="">女</option>
+                </select>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+            <div class="options place">
+                <img src="../static/images/icon.png" alt="">
+                <span>所在地：</span>
+                <input type="text" id="place" placeholder="北京"/>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+            <div class="options career">
+                <img src="../static/images/icon.png" alt="">
+                <span>职业：</span>
+                <input type="text" id="career" placeholder="学生"/>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+            <div class="options description">
+                <div style="display: inline-block;position: relative;top: -55px;">
+                    <img src="../static/images/icon.png" alt="">
+                    <span>个人描述：</span>
+                </div>
+
+                <textarea id="description" rows="3" style="resize: none;"></textarea>
+                <a class="recommend" href="###">查看推荐</a>
+            </div>
+        </div>
+        <div class="account-2">
+            <p class="account-2-example" style="text-align: center;padding: 5px;border-bottom: 1px solid rgba(121, 121, 121, 1)">
+                <span style="padding: 3px 6px;"></span>
+                <b class="close icon icon-remove" style="float: right;font-size: 16px;"></b>
+            </p>
+            <ul class="account-2-list" style="padding: 10px 20px;">
+                <li><a href="###">习大大</a></li>
+                <li><a href="###">哈喽</a></li>
+                <li><a href="###">艾伦</a></li>
+                <li><a href="###">小宝贝</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="other_basic">
+        <b style="font-size: 18px;">其他基础信息：</b>
+        <div class="other-1">
+            <div class="time others">
+                <img src="../static/images/icon.png">
+                <span class="_in">活跃时间：</span>
+                <div class="task_time" style="display: inline-block;position: relative;top: 10px;left: 14px;">
+                    <div class="task_time_cor" style="width: 460px!important;padding: 0;display: inline-block">
+                        <div style="display: inline-block;width: 200px;">
+                            <div class="form-group" style="margin: 0">
+                                <div class="input-group date" id="datetimepicker1">
+                                    <input type="text" class="start form-control" style="height: 31px;">
+                                    <span class="input-group-addon" style="height: 28px;">
+                                    <span class="icon icon-calendar" style="color:black;"></span>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        <span style="position: relative;top: -9px;left:8px;">到</span>
+                        <div style="display: inline-block;width: 200px;margin-left: 12px">
+                            <div class="form-group" style="margin: 0">
+                                <div class="input-group date" id="datetimepicker2">
+                                    <input type="text" class="end form-control" style="height: 31px;">
+                                    <span class="input-group-addon" style="height: 28px;">
+                                    <span class="icon icon-calendar" style="color:black;"></span>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="other_recommend" href="###" style="display: inline-block;">查看推荐</a>
+            </div>
+        </div>
+        <div class="other-2">
+            <div class="choose others">
+                <img src="../static/images/icon.png" alt="">
+                <span>日发帖量：</span>
+                <div style="display: inline-block;margin-right: 5px;">
+                    <label class="radio-inline">
+                        <input type="radio" name="Posting" id="Posting1" value="option1"> 从不
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="Posting" id="Posting2" value="option2"> 1~2条
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="Posting" id="Posting3" value="option3"> 3~5条
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="Posting" id="Posting4" value="option3"> 5条以上
+                    </label>
+                </div>
+                <a class="other_recommend" href="###">查看推荐</a>
+            </div>
+        </div>
+        <div class="other-3">
+            <p class="other-3-example" style="text-align: center;padding: 5px;border-bottom: 1px solid rgba(121, 121, 121, 1)">
+                <span style="padding: 3px 6px;"></span>
+                <b class="close icon icon-remove" style="float: right;font-size: 16px;"></b>
+            </p>
+
+            <ul class="other-3-list" style="padding: 10px 20px;">
+                <li><a href="###">习大大</a></li>
+                <li><a href="###">哈喽</a></li>
+                <li><a href="###">艾伦</a></li>
+                <li><a href="###">小宝贝</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="page">
+        <button type="button" class="btn btn-primary previous">上一步</button>
+        <button type="button" class="btn btn-primary next" style="margin-left: 50px;">下一步</button>
+        <button type="button" class="btn btn-primary save_return" style="float: right;margin-right: 20px;">保存返回</button>
+    </div>
+</div>
+
+<!--<div class="input-append date form_datetime">-->
+    <!--<input type="text" class="m-warp" id="starttime" data-date-format="yyyy-mm-dd" readonly size="16">-->
+    <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
+<!--</div>-->
+<!--<div class="input-append date form_datetime">-->
+    <!--<input type="text" class="m-warp" id="endtime" data-date-format="yyyy-mm-dd" readonly size="16">-->
+    <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
+<!--</div>-->
+<script src="../static/js/jquery-3.1.1.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/bootstrap-table.min.js"></script>
+<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/js/moment.min.js"></script>
+<script src="../static/echarts/echarts.min.js"></script>
+<script src="../static/echarts/china.js"></script>
+<script src="../static/js/virtual_created-1.js"></script>
+
+<script>
+    $('#navs').load('publicNav.html');
+
+    $('#container .account .account-1 a').on('click',function () {
+        $('.account-2').css({display:'block'});
+        let _classname=$(this).parent().attr('class');
+        if (_classname.includes('name')){
+            $('.account-2-example span').text('昵称推荐');
+        }else if (_classname.includes('age')){
+            $('.account-2-example span').text('年龄推荐');
+        }else if (_classname.includes('gender')){
+            $('.account-2-example span').text('性别推荐');
+        }else if (_classname.includes('place')){
+            $('.account-2-example span').text('所在地推荐');
+        }else if (_classname.includes('career')){
+            $('.account-2-example span').text('职业推荐');
+        }else if (_classname.includes('description')){
+            $('.account-2-example span').text('个人描述推荐');
+        }
+    });
+
+    $('#container .other_basic .others a').on('click',function () {
+        $('.other-3').css({display:'block'});
+        let _classname=$(this).parent().attr('class');
+        if (_classname.includes('time')){
+            $('.other-3-example span').text('活跃时间推荐');
+        }else if (_classname.includes('choose')){
+            $('.other-3-example span').text('发帖量推荐');
+        }
+    });
+
+    $('.close').on('click',function () {
+        $(this).parent().parent().hide();
+    });
+    $('.next').on('click',function () {
+        window.location.href='social_accounts.html';
+    });
+    $('.save_return').on('click',function () {
+        window.open('social_accounts.html');
+    });
+
+    $('#datetimepicker1').datetimepicker({
+        'autoclose': true,
+        //'setEndDate':_date
+    }).on('changeDate',function (ev) {
+        let starttime=$('#datetimepicker1 .start').val();
+        $('#datetimepicker2 .end').datetimepicker({
+            'autoclose': true,
+            'setStartDate':starttime
+        });
+    });
+
+//    $('#starttime').datetimepicker({
+//        format:'yyyy-mm-dd',
+//        showMeridian:true,
+//        autoclose:true,
+//        language:'en',
+//        pickDate:true,
+//        todayBtn:true,
+//    }).on('changeDate',function (ev) {
+//        let a=$('#starttime').val();
+//        $('#endtime').datetimepicker('setStartDate',a);
+//        $('#starttime').datetimepicker('hide');
+//    });
+
+</script>
+</body>
+</html>

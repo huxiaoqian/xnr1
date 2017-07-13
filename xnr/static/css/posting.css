@@ -1,0 +1,187 @@
+/*清除默认样式*/
+html,body,div,img,h1,h2,h3,h4,h5,h6,input,button,span,p,b,strong,em,li,ul,ol,dl,dt,dd,
+th,tr,td,textarea,select,table,form {
+    margin: 0;
+    padding: 0;
+    font-family: '微软雅黑';
+}
+ul,li,ol {
+    list-style: none;
+}
+img {
+    border:none;
+}
+input,select,textarea,button {
+    outline: none;
+    border: none;
+}
+a,a:link,a:hover,a:visited,a:active {
+    text-decoration: none;
+}
+/*内容样式*/
+body.modal-open {
+    overflow-y: auto !important;
+    padding-right: 0 !important;
+}
+#container {
+    width: 1000px;
+    margin: 90px auto 0;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .post_post {
+    position: relative;
+}
+#container .post_post .post-2 {
+    margin: 15px 0 15px 25px;
+    padding: 5px;
+}
+#container .post_post .post-2 #post-2-content {
+    resize: none;
+    border: 1px solid silver;
+    margin: 10px 0 0 0;
+    padding: 5px;
+}
+#container .post_post .post-2 .add_thing {
+    padding:10px 0;
+}
+#container .post_post .post-2 .add_thing div {
+    display:inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+}
+#container .post_post .post-2 .add_thing div img {
+    width: 20px;
+    height: 20px;
+}
+#container .post_post .post-2 .add_thing div span {
+    font-size: 12px;
+    color: #333333;
+}
+#container .post_post .post-2 .add_thing div:hover span {
+    color: #eb7350;
+}
+#container .post_post .post-2 .add_thing #sure_post {
+    float: right;
+    margin-right: 317px;
+}
+#container .post_post #user_recommend {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(121, 121, 121, 1);
+}
+#container .post_post #user_recommend li {
+    list-style-type:disc;
+    list-style-position: inside;
+}
+#container .post_post #user_recommend li a {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/**/
+#container .type_page #content input,
+#container .type_page #content select {
+    display: inline-block;
+    width: 300px;
+    padding: 2px 5px;
+    border: 1px solid silver;
+}
+/*发布内容*/
+#container .type_page #content #everyday #post_center-every {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#container .type_page #content #everyday #post_center-every .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+
+#container .type_page #content #hot #post_center-hot {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#container .type_page #content #hot #post_center-hot .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#container .type_page #content #hot .hot-2 input,
+#container .type_page #content #hot .hot-2 select {
+    width: 200px;
+}
+#container .type_page #content #hot #post_center-hot a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+#container .type_page #content #business #post_center-business {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#container .type_page #content #business #post_center-business .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+
+
+/*推荐微博*/
+#content_recommend #post_center-recommend {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#content_recommend #post_center-recommend .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+
+#content_recommend #recommend-1,
+#content_recommend #search-1-recommend{
+    display: inline-block;
+    font-size: 12px;
+    width: 100px;
+    padding: 2px 5px;
+    border: 1px solid silver;
+}
+#content_recommend #search-1-recommend{width: 200px;}
+#content_recommend #post_center-recommend {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#content_recommend #post_center-recommend .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#content_recommend #post_center-recommend a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 10px;
+}

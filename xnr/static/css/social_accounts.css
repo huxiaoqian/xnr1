@@ -1,0 +1,104 @@
+/*清除默认样式*/
+html,body,div,img,h1,h2,h3,h4,h5,h6,input,button,span,p,b,strong,em,li,ul,ol,dl,dt,dd,
+th,tr,td,textarea,select,table,form {
+    margin: 0;
+    padding: 0;
+    font-family: '微软雅黑';
+}
+ul,li,ol {
+    list-style: none;
+}
+img {
+    border:none;
+}
+input,select,textarea,button {
+    outline: none;
+    border: none;
+}
+a,a:link,a:hover,a:visited,a:active {
+    text-decoration: none;
+}
+/*内容样式*/
+body.modal-open {
+    overflow-y: auto !important;
+    padding-right: 0 !important;
+}
+#container {
+    width: 1000px;
+    margin: 90px auto 0;
+}
+#container .title {
+    width: 100%;
+    position: relative;
+}
+#container .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    color: #003366;
+}
+
+/*基本信息*/
+#container .info_sure {
+    margin: 30px 0 20px;
+}
+#container .info_sure .info_left {
+    width: 300px;
+    float:left;
+    margin-bottom: 50px;
+}
+#container .info_sure .info_list {
+    padding: 15px;
+    border: 1px solid silver;
+    box-shadow: 4px 4px 2px #ccc;
+}
+#container .info_sure .info_left .list-2 p,
+#container .info_sure .info_left .list-4 p {
+    margin: 10px 0 10px 36px;
+}
+#container .info_sure .info_left .list-2 p span,
+#container .info_sure .info_left .list-4 p span{
+    width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#container .info_sure .info_right {
+    float: left;
+}
+#container .info_sure .info_right .bind_info {
+    width: 300px;
+    margin: 35px 0 0 250px;
+    padding: 20px 30px;
+    background: rgba(0, 51, 102, 1);
+    border-radius: 10px;
+}
+#container .info_sure .info_right .bind_info input {
+    width: 100%;
+    padding: 3px 7px;
+    margin: 10px 0;
+}
+#container .info_sure .info_right .bind_info #go_bind {
+    width: 100%;
+    padding: 5px 0;
+    margin-top: 10px;
+    background: rgba(0, 51, 102, 1);
+    color: #FFFF00;
+    border: 1px solid rgba(255, 255, 255, 1);
+    border-radius: 5px;
+}
+#success_fail .user .personlist input {
+    position: relative;
+    top: 3px;
+    margin-right:5px;
+}
+#success_fail .user .personlist div{
+    display: inline-block;
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

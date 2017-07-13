@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发帖操作</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/posting.css">
+</head>
+<body>
+<div id="navs"></div>
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;color: #003366;">
+            <span class="icon icon-edit note_icon"></span>
+            <b style="font-size: 20px;">发帖操作</b>
+        </div>
+    </div>
+    <div class="type_page" style="margin: 20px 0 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist" style="">
+            <li role="presentation" class="active">
+                <a href="#everyday" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;日常发帖</a>
+            </li>
+            <li role="presentation">
+                <a href="#hot" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;热点跟随</a>
+            </li>
+            <li role="presentation">
+                <a href="#business" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;业务发帖</a>
+            </li>
+        </ul>
+        <div class="post_post">
+            <div class="post-1" style="margin-top: 20px;">
+                <img src="../static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #333">我要发帖</span>
+            </div>
+            <div class="post-2">
+                <p>
+                    <a href="###" style="font-family: cursive;">有什么新鲜事告诉大家？</a>
+                </p>
+                <textarea id="post-2-content" cols="90" rows="6"></textarea>
+                <div class="add_thing">
+                    <div><img src="../static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <div><img src="../static/images/post-2.png">&nbsp;<span>图片</span></div>
+                    <div><img src="../static/images/post-3.png">&nbsp;<span>视频</span></div>
+                    <div><img src="../static/images/post-4.png">&nbsp;<span>话题</span></div>
+                    <div><img src="../static/images/post-5.png">&nbsp;<span>头条文章</span></div>
+                    <div style="margin-left: 10px;">
+                        <input type="checkbox" class="timing" style="position: relative;top: 2px;margin-right: 3px;">定时
+                        <input type="text" value="" id="_timing" placeholder="选择时间" style="height: 20px;font-size: 10px;
+                        padding:2px 4px;border: 1px solid silver;">
+                    </div>
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
+                </div>
+            </div>
+            <div id="user_recommend">
+                <p style="text-align: center;padding: 5px;border-bottom: 1px solid rgba(121, 121, 121, 1)">@用户推荐</p>
+                <ul class="user_example_list" style="padding: 10px 20px;">
+                    <li><a href="###">不想当律师的记者</a></li>
+                    <li><a href="###">10086专员</a></li>
+                    <li><a href="###">艾唐叔叔</a></li>
+                    <li><a href="###">我是大律师</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content" id="content">
+            <div role="tabpanel" class="tab-pane active" id="everyday">
+                <div class="everyday-1" style="margin: 20px 0;">
+                    <img src="../static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #333">语料推荐</span>
+                </div>
+                <div class="everyday-2" style="margin-left: 30px;">
+                    <span>按主题：</span>
+                    <select id="theme">
+                        <option value="">旅游</option>
+                        <option value="">美食</option>
+                        <option value="">汽车</option>
+                        <option value="">游戏</option>
+                        <option value="">星座</option>
+                        <option value="">摄影</option>
+                        <option value="">音乐</option>
+                        <option value="">电影</option>
+                        <option value="">运动</option>
+                        <option value="">搞笑</option>
+                        <option value="">数码</option>
+                        <option value="">军事</option>
+                        <option value="">历史</option>
+                        <option value="">萌宠</option>
+                        <option value="">动漫</option>
+                        <option value="">情感</option>
+                        <option value="">时尚</option>
+                    </select>
+                    <div style="float: right;margin-right: 18px">
+                        <input type="text" id="search-1-every" placeholder="输入关键词快速搜索相关微博"/>
+                        <button type="button" class="btn btn-primary btn-xs" id="search-every"
+                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    </div>
+
+                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                        <div id="post_center-every">
+                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###">何仙姑</a>：
+                                <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                                <div class="center_3" style="margin: 10px 0;">
+                                    <span class="time">2017-03-04 12:43:23</span>
+                                    <p style="float: right;">
+                                        <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;
+                                        <span>评论数（<span class="comment">222</span>）</span>&nbsp;
+                                        <span>赞（<span class="praise">222</span>）</span>&nbsp;
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="hot">
+                <div class="hot-1" style="margin: 20px 0;">
+                    <img src="../static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #333">热门事件推荐</span>
+                </div>
+                <div class="hot-2" style="margin-left: 30px;">
+                    <span>按主题：</span>
+                    <select id="theme-2">
+                        <option value="文体类_娱乐">文体类_娱乐</option>
+                        <option value="科技类">科技类</option>
+                        <option value="经济类">经济类</option>
+                        <option value="教育类">教育类</option>
+                        <option value="民生类_环保">民生类_环保</option>
+                        <option value="民生类_健康">民生类_健康</option>
+                        <option value="军事类">军事类</option>
+                        <option value="政治类_外交">政治类_外交</option>
+                        <option value="文体类_体育">文体类_体育</option>
+                        <option value="民生类_交通">民生类_交通</option>
+                        <option value="其他类">其他类</option>
+                        <option value="政治类_反腐">政治类_反腐</option>
+                        <option value="民生类_就业">民生类_就业</option>
+                        <option value="政治类_暴恐">政治类_暴恐</option>
+                        <option value="民生类_住房">民生类_住房</option>
+                        <option value="民生类_法律">民生类_法律</option>
+                        <option value="政治类_地区和平">政治类_地区和平</option>
+                        <option value="政治类_宗教">政治类_宗教</option>
+                        <option value="民生类_社会保障">民生类_社会保障</option>
+                    </select>
+                    <span>排序指标：</span>
+                    <select id="theme-3">
+                        <option selected="" value="按最新">按最新</option>
+                        <option value="按任务完成度">按任务完成度</option>
+                        <option value="按事件权重">按事件权重</option>
+                    </select>
+                    <div style="float: right;margin-right: 18px">
+                        <input type="text" id="search-1-hot" placeholder="输入关键词快速搜索相关微博"/>
+                        <button type="button" class="btn btn-primary btn-xs" id="search-hot"
+                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    </div>
+
+                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                        <div id="post_center-hot">
+                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###">何仙姑</a>：
+                                <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                                <div class="center_3" style="margin: 10px 0;">
+                                    <span class="time">2017-03-04 12:43:23</span>
+                                    <a data-toggle="modal" data-target="#simliar">相似微博</a>
+                                    <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>
+                                    <p style="float: right;">
+                                        <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;
+                                        <span>评论数（<span class="comment">222</span>）</span>&nbsp;
+                                        <span>赞（<span class="praise">222</span>）</span>&nbsp;
+                                    </p>
+                                </div>
+                            </div>
+                            <div style="margin: 10px 0;">
+                                <input type="text" class="point-view-1"/>
+                                <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="business">
+                <div class="business-1" style="margin: 20px 0;">
+                    <img src="../static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #333">微博推荐</span>
+                </div>
+                <div class="business-2" style="margin-left: 30px;">
+                    <span>排序指标：</span>
+                    <select id="theme-4">
+                        <option selected="" value="按时间">按时间</option>
+                        <option value="按信息敏感度">按信息敏感度</option>
+                        <option value="按人物敏感度">按人物敏感度</option>
+                        <option value="按信息影响力">按信息影响力</option>
+                        <option value="按人物影响力">按人物影响力</option>
+                    </select>
+                    <div style="float: right;margin-right: 18px">
+                        <input type="text" id="search-1-business" placeholder="搜索关键词或子观点相关的微博"/>
+                        <button type="button" class="btn btn-primary btn-xs" id="search-business"
+                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    </div>
+
+                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                        <div id="post_center-business">
+                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###">何仙姑</a>：
+                                <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                                <div class="center_3" style="margin: 10px 0;">
+                                    <span class="time">2017-03-04 12:43:23</span>
+                                    <p style="float: right;">
+                                        <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;
+                                        <span>评论数（<span class="comment">222</span>）</span>&nbsp;
+                                        <span>赞（<span class="praise">222</span>）</span>&nbsp;
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
+        <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+    <!--</button>-->
+</div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal-undone" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--相似微博-->
+<div class="modal fade" id="simliar" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">相似微博</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--推荐内容-->
+<div class="modal fade" id="content_recommend" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">内容推荐</h4>
+            </div>
+            <div class="modal-body">
+                <div class="recommend-body" style="margin-left: 30px;">
+                    <span>按主题：</span>
+                    <select id="recommend-1">
+                        <option value="生活类">生活类</option>
+                        <option value="体育类">体育类</option>
+                        <option value="外交类">外交类</option>
+                        <option value="暴恐类">暴恐类</option>
+                        <option value="反腐类">反腐类</option>
+                    </select>
+                    <div style="float: right;margin-right: 18px">
+                        <input type="text" id="search-1-recommend" placeholder="输入关键词快速搜索相关微博"/>
+                        <button type="button" class="btn btn-primary btn-xs" id="search-recommend"
+                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    </div>
+
+                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                        <div id="post_center-recommend">
+                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###">何仙姑</a>：
+                                <span class="center_2">
+                            【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                        </span>
+                                <div class="center_3" style="margin: 10px 0;">
+                                    <input type="checkbox" class="timing_recommend" style="position: relative;top: 2px;margin-right: 3px;">定时
+                                    <input type="text" value="" id="_timing_recommend" placeholder="选择时间" style="line-height:13px;font-size: 10px;
+                    padding:3px 4px;border: 1px solid silver;">
+                                    <button type="button" class="btn btn-info btn-xs" id="sure_not_timing">发布</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="../static/js/jquery-3.1.1.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/bootstrap-table.min.js"></script>
+<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/js/personal_center-1.js"></script>
+<script>
+    $('#navs').load('publicNav.html');
+    $('#navWQ').hide();
+    $('#_timing').datetimepicker('setStartDate',new Date());
+    $("#_timing").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+    });
+    $('#_timing_recommend').datetimepicker('setStartDate',new Date());
+    $("#_timing_recommend").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left",
+    });
+
+
+    $('.continue_already_created').on('click',function () {
+        window.open('social_accounts.html');
+    });
+    $('.first_created').on('click',function () {
+//        window.open('.html');
+    });
+
+</script>
+</body>
+</html>

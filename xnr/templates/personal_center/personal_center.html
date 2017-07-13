@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/personal_center.css">
+</head>
+<body>
+<div id="navs"></div>
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <img src="../static/images/peo_center.png" class="peo_icon"/>
+            <b style="font-size: 16px;">我的虚拟人管理</b>
+        </div>
+        <div style="display: inline-block;margin-left: 50px;">
+            <span>类型：</span>
+            <select id="weibo_QQ">
+                <option value="weibo">微博虚拟人</option>
+                <option value="qq">QQ群虚拟人</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="has_person" style="padding: 10px 30px;">
+        <div style="margin: 20px 0;">
+            <img src="../static/images/icon.png">
+            <b>已有虚拟人</b>
+        </div>
+        <div class="has_list">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-has">
+                <b class="icon icon-plus"></b>&nbsp;添加
+            </button>
+            <div id="haslist"></div>
+        </div>
+    </div>
+
+    <div class="undone_person" style="padding: 10px 30px;">
+        <div style="margin: 20px 0;">
+            <img src="../static/images/icon.png">
+            <b>未完成虚拟人</b>
+        </div>
+        <div class="undone_list">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">
+                <b class="icon icon-plus"></b>&nbsp;添加
+            </button>
+            <div id="undonelist"></div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal-undone" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../static/js/jquery-3.1.1.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script src="../static/js/bootstrap-table.min.js"></script>
+<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="../static/js/personal_center-1.js"></script>
+<script>
+    $('#navs').load('publicNav.html');
+    $('#navWQ').hide();
+    $('.continue_already_created').on('click',function () {
+        window.open('social_accounts.html');
+    });
+    $('.first_created').on('click',function () {
+//        window.open('.html');
+    });
+
+</script>
+</body>
+</html>

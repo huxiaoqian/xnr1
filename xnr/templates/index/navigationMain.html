@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--<meta HTTP-EQUIV="pragma" CONTENT="no-cache">-->
+    <!--<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">-->
+    <!--<meta HTTP-EQUIV="expires" CONTENT="0">-->
+    <title>网络虚拟人系统</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="../static/css/navigationMain.css">
+</head>
+<body>
+
+<div class="section section1">
+
+    <div class="bg"><img src="../static/images/section1.jpg" alt=""></div>
+
+    <div class="bg11"></div>
+
+    <div class="bg12"></div>
+
+    <div class="bg13">
+        <div class="personal" style="top: 100px;left: 260px;">
+            <i class="icon icon-github-alt"></i>
+            <div class="cover" id="personal">
+                <em class="icon icon-plus-sign"></em>
+                <span>个人中心</span>
+            </div>
+        </div>
+        <div class="control" style="top: 370px;left: 160px;">
+            <i class="icon icon-cogs"></i>
+            <div class="cover" id="control">
+                <em class="icon icon-plus-sign"></em>
+                <span>操作控制</span>
+            </div>
+        </div>
+        <div class="info" style="top: 490px;left: 450px;">
+            <i class="icon icon-eye-open"></i>
+            <div class="cover" id="info">
+                <em class="icon icon-plus-sign"></em>
+                <span>信息检测</span>
+            </div>
+        </div>
+        <div class="monitor" style="top: 490px;left: 750px;">
+            <i class="icon icon-warning-sign"></i>
+            <div class="cover" id="monitor">
+                <em class="icon icon-plus-sign"></em>
+                <span>预警监控</span>
+            </div>
+        </div>
+        <div class="reported" style="top:100px;right:260px;">
+            <i class="icon icon-sitemap"></i>
+            <div class="cover">
+                <em class="icon icon-plus-sign"></em>
+                <span>行为评估</span>
+            </div>
+        </div>
+        <div class="knowledge" style="top:370px;right:160px;">
+            <i class="icon icon-user-md"></i>
+            <div class="cover" style="left: 20px;">
+                <em class="icon icon-plus-sign"></em>
+                <span>虚拟人定制</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="hgroup">
+
+        <h1><a href="personal_center.html">个人中心</a></h1>
+
+        <h2>发生，不止所见。</h2>
+
+    </div>
+
+    <p class="p11">
+        社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。
+        通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，
+        及时预警和回应疏导舆论焦点已成为舆情管理的重要内容之一。
+    </p>
+
+</div>
+
+
+<div class="section section5" style="text-align: center">
+
+    <div class="bg"><img src="../static/images/section5.jpg" alt=""></div>
+
+    <!--<strong>[ 功能·监控预警 ]</strong>-->
+
+    <!--<h3>全面监控，为你预警</h3>-->
+
+    <div class="bg51">
+
+        <h4>上报管理</h4>
+
+        <p>
+            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+        </p>
+        <div class="bg51-top">
+            <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>上报管理</span>
+        </div>
+    </div>
+    <div class="bg55" style="margin: 0 150px;">
+
+        <h4>知识库管理</h4>
+
+        <p>
+            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+        </p>
+        <div class="bg55-top">
+            <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>知识库管理</span>
+        </div>
+    </div>
+    <div class="bg54">
+
+        <h4>系统管理</h4>
+
+        <p>及时捕获网络重大突发事件和苗头性敏感信息，及时预警和回应疏导舆论焦点，信息预警延迟不超过5分钟。</p>
+
+        <div class="bg54-top">
+            <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>系统管理</span>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="../static/js/jquery-3.1.1.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<script src="../static/js/jquery.fullPage.min.js"></script>
+<script>
+    $(function(){
+
+        $.fn.fullpage({
+
+            verticalCentered: false,
+
+            anchors: ['page1', 'page2'],
+
+            navigation: true,
+
+            navigationTooltips: ['', '']
+
+        });
+
+    });
+    $('.bg51').hover(function () {
+        $(".bg51-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg51-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg51-top").removeClass("effeckt-show");
+    });
+    $('.bg54').hover(function () {
+        $(".bg54-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg54-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg54-top").removeClass("effeckt-show");
+    });
+    $('.bg55').hover(function () {
+        $(".bg55-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg55-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg55-top").removeClass("effeckt-show");
+    });
+
+    //页面跳转
+    $('#personal').on('click',function () {
+        window.open('personal_center.html');
+    });
+    $('#control').on('click',function () {
+        window.open('operation_control.html');
+    })
+
+
+</script>
+</body>
+</html>
