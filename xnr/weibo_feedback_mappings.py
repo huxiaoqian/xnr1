@@ -222,6 +222,10 @@ def weibo_feedback_like_mappings():
 					'root_uid':{
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -341,6 +345,10 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 					'description':{
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -353,9 +361,9 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 
 
 if __name__ == '__main__':
-	weibo_feedback_retweet_mappings()
-	weibo_feedback_comment_mappings()
-	weibo_feedback_at_mappings()
-	weibo_feedback_like_mappings()
-	weibo_feedback_private_mappings()
+	#weibo_feedback_retweet_mappings()
+	#weibo_feedback_comment_mappings()
+	#weibo_feedback_at_mappings()
+	#weibo_feedback_like_mappings()
+	#weibo_feedback_private_mappings()
 	weibo_feedback_follow_mappings()
