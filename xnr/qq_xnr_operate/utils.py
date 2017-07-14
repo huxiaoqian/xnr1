@@ -6,6 +6,7 @@ import sys
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
                              group_message_index_name_pre, group_message_index_type
 from xnr.parameter import MAX_VALUE
+from xnr.time_utils import get_groupmessage_index_list
 
 def show_group_info():
     # 需求：按时间顺序显示各个历史信息
@@ -107,3 +108,24 @@ def search_by_speaker_nickname(xnr_qq_number, speaker_nickname, date):
     index_name = group_message_index_name_pre + date
     result = es_xnr.search(index=index_name,doc_type=group_message_index_type,body=query_body)
     return result
+
+
+def search_by_period(startdate,enddate):
+    results = []
+    query_body = {
+        "query":{
+            "match_all": {}
+        },
+        "sort":{"timestamp":{"order":"desc"}},
+        "size": MAX_VALUE
+    }
+    # es.search(index=”flow_text_2013-09-02”, doc_type=”text”, body=query_body)
+
+    index_names = get_groupmessage_index_list(startdate,enddate)
+    for index_name in index_names:
+        try:
+            result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
+            results.append(result)
+        except:
+            pass
+    return results
