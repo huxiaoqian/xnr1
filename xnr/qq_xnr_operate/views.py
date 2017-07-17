@@ -33,7 +33,8 @@ def ajax_search_by_period():
 # 这个还没有写
 def ajax_search_by_keyword():
     keyword = request.args.get('keyword','')
-    date = QQ_S_DATE
+    # 暂时指定了日期 测试用
+    date = '2017-07-12'
     results = search_by_keyword(keyword,date)
     return json.dumps(results)
 
