@@ -23,7 +23,7 @@ reload(sys)
 sys.path.append('../../')
 
 from global_utils import es_xnr as es
-from global_utils import weibo_recommend_subopinion_keywords_task_queue_name as keyword_task_queue_name
+from global_utils import es_flow_text,weibo_recommend_subopinion_keywords_task_queue_name as keyword_task_queue_name
 from global_utils import R_RECOMMEND_SUBOPINION_KEYWORD_TASK as r
 from global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_task_index_type,\
                         weibo_recommend_subopinion_keywords_task_queue_name
@@ -52,6 +52,8 @@ def rpop_compute_recommend_subopnion():
 
         if not temp:
             print '当前没有内容推荐和子观点分析的关键词任务'
+            
+            break
 
         task_detail = json.loads(temp)
 
@@ -78,14 +80,16 @@ def compute_recommend_subopnion(task_detail):
         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
 
     if S_TYPE == 'test':
-        now_timestamp = datetime2ts(S_DATE)
+        create_time = datetime2ts(S_DATE)
     else:
-        now_timestamp = datehour2ts(ts2datehour(time.time()-3600))
-    print 'now_timestamp',now_timestamp
-    print 'query::',{'query':{'bool':{'must':nest_query_list}}
-    #get_flow_text_index_list(now_timestamp)
-    index_name_list_list = get_flow_text_index_list(now_timestamp)
-    es_results = es.search(index=index_name_list_list,doc_type='text',\
+        create_time = datehour2ts(ts2datehour(time.time()-3600))
+    print 'create_time',create_time
+    #print 'query::',{'query':{'bool':{'must':nest_query_list}}
+    #get_flow_text_index_list(create_time)
+    print '123'
+    #index_name_list_list = get_flow_text_index_list(now_timestamp)
+    index_name_list = get_flow_text_index_list(create_time)
+    es_results = es_flow_text.search(index=index_name_list,doc_type='text',\
                     body={'query':{'bool':{'must':nest_query_list}},'size':MAX_SEARCH_SIZE})['hits']['hits']
 
     weibo_list = [] ## 内容推荐和子观点分析的输入
@@ -95,7 +99,6 @@ def compute_recommend_subopnion(task_detail):
             item = item['_source']
             weibo = item['text']
             weibo_list.append(weibo)
-
 
     ## 内容推荐
 

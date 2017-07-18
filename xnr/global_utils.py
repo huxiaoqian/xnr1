@@ -67,6 +67,10 @@ weibo_domain_index_type = 'group'
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
 
+# use to publish tweet at future time
+weibo_xnr_timing_list_index_name = 'tweet_timing_list'
+weibo_xnr_timing_list_index_type = 'timing_list'
+
 
 #use to test lookup weibocontent,can be deleted after test
 
@@ -107,6 +111,20 @@ weibo_hot_content_recommend_results_index_type = 'content_recommend'
 
 weibo_hot_subopinion_results_index_name = 'subopinion_results'
 weibo_hot_subopinion_results_index_type = 'subopinion'
+
+weibo_bci_index_name_pre = 'bci_'
+weibo_bci_index_type = 'bci'
+
+# 业务知识库
+weibo_date_remind_index_name = 'weibo_date_remind'
+weibo_date_remind_index_type = 'remind'
+
+weibo_sensitive_words_index_name = 'weibo_sensitive_words'
+weibo_sensitive_words_index_type = 'sensitive_words'
+
+weibo_hidden_expression_index_name = 'weibo_hidden_expression'
+weibo_hidden_expression_index_type = 'hidden_expression'
+
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
