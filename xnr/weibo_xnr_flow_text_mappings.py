@@ -18,10 +18,30 @@ def weibo_xnr_flow_text_mappings(index_name):
             'mappings':{
                 'text':{
                     'properties':{
+                        'task_source':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                        },
+                        'xnr_user_no':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                        },
+                        'uid':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                        },
                         'text':{
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
+                        'picture_url':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                        },
+                        'vedio_url':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                        },
                         'mid':{
                             'type': 'string',
                             'index': 'not_analyzed'
@@ -66,10 +86,6 @@ def weibo_xnr_flow_text_mappings(index_name):
                             },
                         'message_type':{
                             'type': 'long'
-                            },
-                        'uid':{
-                            'type': 'string',
-                            'index': 'not_analyzed'
                             },
                         'root_uid':{
                             'type': 'string',

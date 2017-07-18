@@ -8,6 +8,7 @@ import os
 S_TYPE = 'test'   #test/run
 S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
 QQ_S_DATE = '2016-07-12'
+S_DATE_BCI = '2016-11-27'
 
 #config es
 #config xnr user info
