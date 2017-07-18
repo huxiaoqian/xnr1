@@ -44,6 +44,7 @@ TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/us
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
 MAX_VALUE = 99999999 
+MID_VALUE = 500      #查询活跃用户数量
 
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
