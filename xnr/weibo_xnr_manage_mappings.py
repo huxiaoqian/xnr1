@@ -23,11 +23,11 @@ def weibo_xnr_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'weibo_mail_count':{        #所绑定的微博邮箱账号
+                    'weibo_mail_account':{        #所绑定的微博邮箱账号
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'weibo_phone_count':{        #所绑定的微博手机账号
+                    'weibo_phone_account':{        #所绑定的微博手机账号
                         'type':'string',
                         'index':'not_analyzed'
                     },        

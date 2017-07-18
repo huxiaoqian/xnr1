@@ -9,7 +9,7 @@ Fifteen = 60 * 15
 HALF_HOUR = 1800
 HOUR = 3600
 FOUR_HOUR = 3600*4
-MAX_VALUE = 99999999
+MAX_VALUE = 9999
 WEEK = 7
 WEEK_TIME = 7*24*3600
 MONTH = 30
@@ -23,7 +23,7 @@ DAY_HOURS = 24  # 一天24小时
 MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
-MAX_SEARCH_SIZE = 99999999 ## 从数据库中最大检索数量
+MAX_SEARCH_SIZE = 9999 ## 从数据库中最大检索数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 500
@@ -35,6 +35,17 @@ USER_LOCATION_TOP = 10
 DESCRIPTION_TOP = 10
 MONITOR_TOP_USER = 100
 
+DAILY_AT_RECOMMEND_USER_TOP = 10
+
+HOT_EVENT_TOP_USER = 100
+HOT_AT_RECOMMEND_USER_TOP = 10
+
+SENSITIVE_TOP_USER = 100
+SENSITIVE_AT_RECOMMEND_USER_TOP = 10
+
+BCI_USER_NUMBER = 1000
+USER_POETRAIT_NUMBER = 1000
+
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
 CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
@@ -43,8 +54,10 @@ TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/us
 
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
-MAX_VALUE = 99999999 
+
 MID_VALUE = 500      #查询活跃用户数量
+
+MAX_VALUE = 9999
 
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}

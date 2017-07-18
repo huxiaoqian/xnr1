@@ -2,6 +2,7 @@
 
 import os
 import sys
+import json
 reload(sys)
 sys.path.append('../../')
 from global_utils import es_xnr as es
@@ -92,7 +93,7 @@ def save_subopnion_results(task_id,text_list):
                     id=task_id,body=item_exist)
 
         item_task = dict() 
-        item_task['compute_status'] = 2  ## 保存内容推荐结果
+        item_task['compute_status'] = 2  ## 保存子观点结果
         es.update(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
                     id=task_id,body={'doc':item_task})
 
