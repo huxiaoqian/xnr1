@@ -18,7 +18,7 @@ def weibo_xnr_flow_text_mappings(index_name):
             'mappings':{
                 'text':{
                     'properties':{
-                        'task_source':{
+                        'task_source':{  # 日常发帖，热点跟随，业务发帖
                             'type':'string',
                             'index':'not_analyzed'
                         },
@@ -41,6 +41,15 @@ def weibo_xnr_flow_text_mappings(index_name):
                         'vedio_url':{
                             'type':'string',
                             'index':'not_analyzed'
+                        },
+                        'user_fansnum':{
+                            'type':'long'
+                        },
+                        'user_followersum':{
+                            'type':'long'
+                        },
+                        'weibos_sum':{
+                            'type':'long'
                         },
                         'mid':{
                             'type': 'string',
@@ -117,5 +126,5 @@ def weibo_xnr_flow_text_mappings(index_name):
         es.indices.create(index=index_name, body=index_info, ignore=400)
 
 if __name__=='__main__':
-    index_name = 'xnr_flow_text_2016-03-21'
+    index_name = 'xnr_flow_text_2016-11-20'
     weibo_xnr_flow_text_mappings(index_name)

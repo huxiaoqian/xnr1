@@ -125,6 +125,37 @@ weibo_sensitive_words_index_type = 'sensitive_words'
 weibo_hidden_expression_index_name = 'weibo_hidden_expression'
 weibo_hidden_expression_index_type = 'hidden_expression'
 
+## 预警
+weibo_user_warning_index_name = 'weibo_user_warning'
+weibo_user_warning_index_type = 'text'
+
+weibo_event_warning_index_name = 'weibo_event_warning'
+weibo_event_warning_index_type = 'text'
+
+weibo_speech_warning_index_name = 'weibo_speech_warning'
+weibo_speech_warning_index_type = 'text'
+
+
+# 语料库 -- 主题和日常
+weibo_xnr_corpus_index_name = 'weibo_corpus'
+weibo_xnr_corpus_index_type = 'text'
+
+## 上报管理
+weibo_report_management_index_name = 'weibo_report_management'
+weibo_report_management_index_type = 'report'
+
+## 日志管理
+weibo_log_management_index_name = 'weibo_log'
+weibo_log_management_index_type = 'log'
+
+## 权限管理
+weibo_authority_management_index_name = 'weibo_authority_management'
+weibo_authority_management_index_type = 'authority'
+
+## 账户管理
+weibo_account_management_index_name = 'weibo_account_management'
+weibo_account_management_index_type = 'account'
+
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
