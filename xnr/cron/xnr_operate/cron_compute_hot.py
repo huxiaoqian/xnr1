@@ -9,15 +9,12 @@ from save_utils import save_content_recommendation_results,save_subopnion_result
 
 # 引入内容推荐分类器
 from content_recommend.process_summary import summary_main
-'''
+
 # 引入子观点分析分类器
 import sys
-reload(sys)
-sys.path.append('./sub_opinion_analysis/libsvm-3.17/python/')
-
-#print 'sys::',sys
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/xnr_operate/sub_opinion_analysis/')
 from opinion_produce import opinion_main
-'''
+
 import sys
 reload(sys)
 sys.path.append('../../')
