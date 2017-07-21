@@ -5,7 +5,8 @@ use to save function about database
 import os
 from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                             es_user_profile,profile_index_name,profile_index_type
+                             es_user_profile,profile_index_name,profile_index_type,\
+                             weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type
 from xnr.parameter import MAX_VALUE
 from xnr.data_utils import num2str
 
@@ -153,10 +154,13 @@ def show_uncompleted_weiboxnr():
 #step 4.1：history count
 
 #step 4.2: timing task list
+###########获取定时发送任务列表##############
 def wxnr_timing_tasks(user_id):
 	#获取虚拟人编号
-	user_no_str=user_id[3:7]
-	user_no=int(user_no_str)
+	user_no_str=user_id[4:8]
+	#print user_no_str
+	user_no=long(user_no_str)
+	#print user_no
 	query_body={
 		'query':{
 			'filtered':{
@@ -169,6 +173,46 @@ def wxnr_timing_tasks(user_id):
 		'size':MAX_VALUE,
 		'sort':{'post_time':{'order':'desc'}} 	#按发送时间排序
 	}
+	result=es_xnr.search(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,body=query_body)['hits']['hits']
+	return result
+
+###########针对任务进行操作——查看##############
+def wxnr_timing_tasks_lookup(task_id):
+	result=es_xnr.get(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id)
+	return result
+
+###########针对任务进行操作——修改##############
+def wxnr_timing_tasks_change(task_id,task_change_info):
+	task_source=task_change_info[0]
+	operate_type=task_change_info[1]
+	create_time=task_change_info[2]
+	post_time=task_change_info[3]
+	text=task_change_info[4]
+	remark=task_change_info[5]
+
+	try:
+		es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id,\
+			body={"doc":{'task_source':task_source,'operate_type':operate_type,'create_time':create_time,\
+			'post_time':post_time,'text':text,'remark':remark}})
+		result='change success!'
+	except:
+		result='change failed!'
+	return result
+
+###########针对任务进行操作——撤销##############
+def wxnr_timing_tasks_revoked(task_id):
+	#撤销操作即调整任务状态，将task_status状态设置为-1，只有未发送的任务可以撤销
+	if task_status == 0:
+		task_status=-1
+		try:
+			es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id,\
+				body={"doc":{'task_status':task_status}})
+			result='revoked success!'
+		except:
+			result='revoked failed!'
+	else:
+		result='The task can not be revoked!'
+	return result
 
 #step 4.3: history information
 
