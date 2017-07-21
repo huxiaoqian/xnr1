@@ -68,7 +68,7 @@ weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
 
 # use to publish tweet at future time
-weibo_xnr_timing_list_index_name = 'tweet_timing_list'
+weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
 weibo_xnr_timing_list_index_type = 'timing_list'
 
 

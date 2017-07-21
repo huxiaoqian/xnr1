@@ -45,7 +45,7 @@ def weibo_xnr_timing_list_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'task_status':{ # 0-尚未发送，1-已发送
+					'task_status':{ # 0-尚未发送，1-已发送，-1 -撤销任务
 						'type':'long'
 					}
 

@@ -10,6 +10,7 @@ from xnr.global_utils import es_flow_text
 from utils import create_wxnr_first,create_wxnr_second,create_wxnr_third,\
 				show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,\
 				continue_create_weiboxnr,create_wxnr_fans,delete_wxnr_fans,\
+				wxnr_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				wxnr_list_concerns,wxnr_list_fans
 
 
@@ -85,7 +86,50 @@ def ajax_continue_create_weiboxnr():
 	results=continue_create_weiboxnr(user_id)
 	return json.dumps(results)
 
+
+#step 4.2:timing task list
+#获取定时发送任务列表
+#test:http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks/?user_id=WXNR0004
+@mod.route('/wxnr_timing_tasks/')
+def ajax_wxnr_timing_tasks():
+	user_id=request.args.get('user_id','')
+	results=wxnr_timing_tasks(user_id)
+	return json.dumps(results)
+
+#查看某一具体任务
+#test:http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks_lookup/?task_id=1234567890_1500108142
+@mod.route('/wxnr_timing_tasks_lookup/')
+def ajax_wxnr_timing_tasks_lookup():
+	task_id=request.args.get('task_id','')
+	results=wxnr_timing_tasks_lookup(task_id)
+	return json.dumps(results)
+
+#修改某一具体任务
+#说明：点击修改这一操作时，首先是执行查看某一具体任务这一功能，然后修改页面内容后，提交时调用该修改函数
+#test:http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks_change/?task_id=1234567890_1500108142&task_source='日常发帖'&operate_type='origin'&create_time=1500110468&post_time=1500108142&text='明天有一起参加夜跑的吗？我想参加'&remark='待定'
+@mod.route('/wxnr_timing_tasks_change/')
+def ajax_wxnr_timing_tasks_change():
+	task_id=request.args.get('task_id','')      #指_id这个字段
+	#对任务具体内容进行修改
+	task_source=request.args.get('task_source','')
+	operate_type=request.args.get('operate_type','')
+	create_time=request.args.get('create_time','')
+	post_time=request.args.get('post_time','')
+	text=request.args.get('text','')
+	remark=request.args.get('remark','')
+	task_change_info=[task_source,operate_type,create_time,post_time,text,remark]
+	results=wxnr_timing_tasks_change(task_id,task_change_info)
+	return json.dumps(results)
+
+#撤销未发送的任务
+@mod.route('/wxnr_timing_tasks_revoked/')
+def ajax_wxnr_timing_tasks_revoked():
+	task_id=request.args.get('task_id','') 
+	results=wxnr_timing_tasks_revoked(task_id)
+	return json.dumps(results)
+
 #step 4.4: list of concerns
+@mod.route('/wxnr_list_concerns/')
 def ajax_wxnr_list_concerns(): 
 	user_id=request.args.get('user_id','')
 	order_id=request.args.get('order_id','')
