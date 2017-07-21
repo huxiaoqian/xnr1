@@ -388,7 +388,7 @@ def aggregation_sentiment_related_weibo(ts, origin_mid_list, time_segment, messa
                 key = item['key']
                 count = item['doc_count']
                 results[key] = count
-    print "results: ", results, sum(results.values())
+    #print "results: ", results, sum(results.values())
     return results
 
 # 给定所有原创微博list，搜索在time-time-interval时间内的热门微博root-uid
@@ -440,7 +440,7 @@ def filter_mid(mid_list):
         tmp = mid_list[i*1000:(i+1)*1000]
         if tmp:
             es_results = es_xnr.mget(index="social_sensing_text", doc_type="text", body={"ids":tmp}, _source=False)["docs"]
-            print 'es_results:::',es_results
+            #print 'es_results:::',es_results
             for item in es_results:
 
                 if not item["found"]:
@@ -634,8 +634,10 @@ def social_sensing(task_detail):
                 mid_value = dict()
                 if classify_text_dict:
                     classify_results = topic_classfiy(classify_uid_list, classify_text_dict)
-                    #print "classify_results: ", classify_results
-                    
+                    print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+                    print "classify_results: ", classify_results
+                    print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+
                     for k,v in classify_results.iteritems(): # mid:value
                         mid_value[k] = topic_value_dict[v[0]]
                         #feature_list = organize_feature(k, mid_ts_dict[k])
