@@ -35,7 +35,7 @@ def gourp_message_mappings(qq_number, date):
                         'index':'not_analyzed'
                     },
                     'timestamp':{
-                        'type':'string',
+                        'type':'long',
                         'index':'not_analyzed'
                     },
                     'xnr_qq_number':{
@@ -52,7 +52,8 @@ def gourp_message_mappings(qq_number, date):
     if not es.indices.exists(index=index_name):
         es.indices.create(index=index_name,body=index_info,ignore=400)
     else:
-        es_xnr.indices.delete(index=index_name, timeout=100) 
+        es.indices.delete(index=index_name, timeout=100)
+        es.indices.create(index=index_name,body=index_info,ignore=400) 
 
 if __name__ == '__main__':
     qq_number = 123456
