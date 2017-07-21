@@ -20,10 +20,15 @@ from xnr.global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword
                             es_user_portrait,es_user_profile
 
 from xnr.time_utils import ts2datetime,datetime2ts
-from xnr.weibo_publish_func import publish_tweet_func
+from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
+                                like_tweet_func,follow_tweet_func,unfollow_tweet_func#,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
-						HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER
+                        HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
+
+#from xnr.sina.weibo_operate import execute
+#from xnr.sina.weibo_operate import SinaOperateAPI
+#from xnr.tools.Launcher import SinaLauncher
 
 def push_keywords_task(task_detail):
 
@@ -49,6 +54,12 @@ def get_submit_tweet(task_detail):
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
     password = task_detail['password']
+    p_url = task_detail['p_url']
+    rank = task_detail['rank']
+    rankid = task_detail['rankid']
+
+    print 'P_url::utils::',p_url
+    print 'type::',type(p_url)
     if weibo_mail_account:
         account_name = weibo_mail_account
     elif weibo_phone_account:
@@ -56,12 +67,9 @@ def get_submit_tweet(task_detail):
     else:
         return False
     # 发布微博
-    try:
-        publish_tweet_func(account_name,password,text)
-        mark = True
-    except:
-        print '微博发布过程遇到错误！'
-        mark = False
+
+    mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid)
+    #execute(account_name,password,text.encode('utf-8'))
 
     # 保存微博
     try:
@@ -102,390 +110,489 @@ def save_to_tweet_timing_list(task_detail):
 ## 日常发帖@用户推荐
 
 def get_recommend_at_user(xnr_user_no):
-	#_id  = user_no2_id(user_no)
-	es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-	
-	if es_result:
-		uid = es_result['uid']
-		daily_interests = es_result['daily_interests']
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE)	
-	else:
-		now_ts = int(time.time())
-	datetime = ts2datetime(now_ts-24*3600)
+    #_id  = user_no2_id(user_no)
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    
+    if es_result:
+        uid = es_result['uid']
+        daily_interests = es_result['daily_interests']
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE)    
+    else:
+        now_ts = int(time.time())
+    datetime = ts2datetime(now_ts-24*3600)
 
-	index_name = flow_text_index_name_pre + datetime
-	nest_query_list = []
-	daily_interests_list = daily_interests.split('&')
-	'''
-	## daily_interests 字段为多个值
-	for interest in daily_interests_list:
-		nest_query_list.append({'wildcard':{'daily_interests':'*'+interest+'*'}})
+    index_name = flow_text_index_name_pre + datetime
+    nest_query_list = []
+    daily_interests_list = daily_interests.split('&')
+    '''
+    ## daily_interests 字段为多个值
+    for interest in daily_interests_list:
+        nest_query_list.append({'wildcard':{'daily_interests':'*'+interest+'*'}})
 
 
-	es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-						body={'query':{'bool':{'must':nest_query_list}},'size':DAILY_INTEREST_TOP_USER,\
-						'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-	'''
-	## daily_interests 字段为单个值
-	query_body = {
-		'query':{
-			'filtered':{
-				'filter':{
-					'terms':{'daily_interests':daily_interests_list}
-				}
-			}
-		}
-	}
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                        body={'query':{'bool':{'must':nest_query_list}},'size':DAILY_INTEREST_TOP_USER,\
+                        'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    '''
+    ## daily_interests 字段为单个值
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'daily_interests':daily_interests_list}
+                }
+            }
+        }
+    }
 
-	es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-						body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                        body=query_body)['hits']['hits']
 
-	if not es_results:
-		if S_TYPE != 'test':
-			es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-								body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
-								'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-		else:
-			es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-								body={'query':{'match_all':{}},'size':1000,\
-								'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    if not es_results:
+        if S_TYPE != 'test':
+            es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                                body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+        else:
+            es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                                body={'query':{'match_all':{}},'size':1000,\
+                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
 
-	uid_list = []
-	if es_results:
-		for result in es_results:
-			result = result['_source']
-			uid_list.append(result['uid'])
+    uid_list = []
+    if es_results:
+        for result in es_results:
+            result = result['_source']
+            uid_list.append(result['uid'])
 
-	## 根据uid，从weibo_user中得到 nick_name
-	uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-	es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
-	i = 0
-	for result in es_results:
-		if result['found'] == True:
-			result = result['_source']
-			uid = result['uid']
-			nick_name = result['nick_name']
-			if nick_name:
-				i += 1
-				uid_nick_name_dict[uid] = nick_name
-		if i >= DAILY_AT_RECOMMEND_USER_TOP:
-			break
+    ## 根据uid，从weibo_user中得到 nick_name
+    uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
+    es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
+    i = 0
+    for result in es_results:
+        if result['found'] == True:
+            result = result['_source']
+            uid = result['uid']
+            nick_name = result['nick_name']
+            if nick_name:
+                i += 1
+                uid_nick_name_dict[uid] = nick_name
+        if i >= DAILY_AT_RECOMMEND_USER_TOP:
+            break
 
-	return uid_nick_name_dict
+    return uid_nick_name_dict
 
 def get_daily_recommend_tweets(theme,sort_item):
-	query_body = {
-		'query':{
-			'filtered':{
-				'filter':{
-					'term':{'daily_interests':theme}
-				}
-			}
-		},
-		'sort':{sort_item:{'order':'desc'}},
-		'size':TOP_WEIBOS_LIMIT
-	}
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'daily_interests':theme}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':TOP_WEIBOS_LIMIT
+    }
 
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE)	
-	else:
-		now_ts = int(time.time())
-	datetime = ts2datetime(now_ts-24*3600)
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE)    
+    else:
+        now_ts = int(time.time())
+    datetime = ts2datetime(now_ts-24*3600)
 
-	index_name = flow_text_index_name_pre + datetime
+    index_name = flow_text_index_name_pre + datetime
 
-	es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
 
-	if not es_results:
-		es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-								body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
-								'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
-	return es_results
+    if not es_results:
+        es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+    return es_results
 
 def get_hot_sensitive_recommend_at_user(sort_item):
 
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE)	
-	else:
-		now_ts = int(time.time())
-	datetime = ts2datetime(now_ts-24*3600)
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE)    
+    else:
+        now_ts = int(time.time())
+    datetime = ts2datetime(now_ts-24*3600)
 
-	index_name = flow_text_index_name_pre + datetime
+    index_name = flow_text_index_name_pre + datetime
 
-	query_body = {
-		'query':{
-			'match_all':{}
-		},
-		'sort':{sort_item:{'order':'desc'}},
-		'size':HOT_EVENT_TOP_USER,
-		'_source':['uid','user_fansnum','retweeted']
-	}
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':HOT_EVENT_TOP_USER,
+        '_source':['uid','user_fansnum','retweeted']
+    }
 
-	if sort_item == 'retweeted':
-		sort_item_2 = 'timestamp'
-	else:
-		sort_item_2 = 'retweeted'
+    if sort_item == 'retweeted':
+        sort_item_2 = 'timestamp'
+    else:
+        sort_item_2 = 'retweeted'
 
-	es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-	uid_fansnum_dict = dict()
-	if es_results:
-		for result in es_results:
-			result = result['_source']
-			uid = result['uid']
-			uid_fansnum_dict[uid] = {}
-			uid_fansnum_dict[uid][sort_item_2] = result[sort_item_2]
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    uid_fansnum_dict = dict()
+    if es_results:
+        for result in es_results:
+            result = result['_source']
+            uid = result['uid']
+            uid_fansnum_dict[uid] = {}
+            uid_fansnum_dict[uid][sort_item_2] = result[sort_item_2]
 
-	uid_fansnum_dict_sort_top = sorted(uid_fansnum_dict.items(),key=lambda x:x[1][sort_item_2],reverse=True)
+    uid_fansnum_dict_sort_top = sorted(uid_fansnum_dict.items(),key=lambda x:x[1][sort_item_2],reverse=True)
 
-	uid_set = set()
+    uid_set = set()
 
-	for item in uid_fansnum_dict_sort_top:
-		uid_set.add(item[0])
+    for item in uid_fansnum_dict_sort_top:
+        uid_set.add(item[0])
 
-	uid_list = list(uid_set)
+    uid_list = list(uid_set)
 
 
-	## 根据uid，从weibo_user中得到 nick_name
-	uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-	es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
-	i = 0
-	for result in es_results:
-		if result['found'] == True:
-			result = result['_source']
-			uid = result['uid']
-			nick_name = result['nick_name']
-			if nick_name:
-				i += 1
-				uid_nick_name_dict[uid] = nick_name
-		if i >= HOT_AT_RECOMMEND_USER_TOP:
-			break
+    ## 根据uid，从weibo_user中得到 nick_name
+    uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
+    es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
+    i = 0
+    for result in es_results:
+        if result['found'] == True:
+            result = result['_source']
+            uid = result['uid']
+            nick_name = result['nick_name']
+            if nick_name:
+                i += 1
+                uid_nick_name_dict[uid] = nick_name
+        if i >= HOT_AT_RECOMMEND_USER_TOP:
+            break
 
-	return uid_nick_name_dict
+    return uid_nick_name_dict
 
 def get_hot_recommend_tweets(topic_field,sort_item):
-	query_body = {
-		'query':{
-			'filtered':{
-				'filter':{
-					'term':{'topic_field':topic_field}
-				}
-			}
-		},
-		'sort':{sort_item:{'order':'desc'}},
-		'size':TOP_WEIBOS_LIMIT
-	}
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'topic_field':topic_field}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':TOP_WEIBOS_LIMIT
+    }
 
 
-	es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
-	print 'aaa'
-	if not es_results:
-		print 'bbb'
-		es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
-								body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
-								'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
-	return es_results
+    es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
+    print 'aaa'
+    if not es_results:
+        print 'bbb'
+        es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
+                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+    return es_results
 
 def get_hot_content_recommend(task_id):
 
-	es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+    es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
                     id=task_id)['_source']
-	if es_task:
-		if es_task['compute_status'] != 1:
-			return '正在计算'
-	else:
+    if es_task:
+        if es_task['compute_status'] != 1:
+            return '正在计算'
+    else:
 
-		es_result = es.get(index=weibo_hot_content_recommend_results_index_name,doc_type=weibo_hot_content_recommend_results_index_type,\
-							id=task_id)['_source']
+        es_result = es.get(index=weibo_hot_content_recommend_results_index_name,doc_type=weibo_hot_content_recommend_results_index_type,\
+                            id=task_id)['_source']
 
-		if es_result:
-			contents = json.loads(es_result['content_recommend'])
+        if es_result:
+            contents = json.loads(es_result['content_recommend'])
 
-		return contents
+        return contents
 
 def get_hot_subopinion(task_id):
 
-	es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+    es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
                     id=task_id)['_source']
-	if es_task:
-		if es_task['compute_status'] != 2:
-			return '正在计算'
-	else:
-		es_result = es.get(index=weibo_hot_subopinion_results_index_name,doc_type=weibo_hot_subopinion_results_index_type,\
-							id=task_id)['_source']
+    if es_task:
+        if es_task['compute_status'] != 2:
+            return '正在计算'
+    else:
+        es_result = es.get(index=weibo_hot_subopinion_results_index_name,doc_type=weibo_hot_subopinion_results_index_type,\
+                            id=task_id)['_source']
 
-		if es_result:
-			contents = json.loads(es_result['subopinion_weibo'])
-		if S_TYPE == 'test':
-			return []
-		else:
-			return contents
+        if es_result:
+            contents = json.loads(es_result['subopinion_weibo'])
+        if S_TYPE == 'test':
+            return []
+        else:
+            return contents
 
 def get_tweets_from_flow(sort_item_new):
 
-	query_body = {
-		'query':{
-			'match_all':{}
-		},
-		'sort':{sort_item_new:{'order':'desc'}},
-		'size':TOP_WEIBOS_LIMIT
-	}
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{sort_item_new:{'order':'desc'}},
+        'size':TOP_WEIBOS_LIMIT
+    }
 
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE)	
-	else:
-		now_ts = int(time.time())
-	datetime = ts2datetime(now_ts-24*3600)
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE)    
+    else:
+        now_ts = int(time.time())
+    datetime = ts2datetime(now_ts-24*3600)
 
-	index_name = flow_text_index_name_pre + datetime
+    index_name = flow_text_index_name_pre + datetime
 
-	es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
 
-	if not es_results:
-		es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-								body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
-								'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
-	return es_results
+    if not es_results:
+        es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+    return es_results
 
 def uid_lists2weibo_from_flow_text(uid_list):
 
-	query_body = {
-		'query':{
-			'filtered':{
-				'filter':{
-					'terms':{'uid':uid_list}
-				}
-			}
-		},
-		'size':TOP_WEIBOS_LIMIT
-	}
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'uid':uid_list}
+                }
+            }
+        },
+        'size':TOP_WEIBOS_LIMIT
+    }
 
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE)	
-	else:
-		now_ts = int(time.time())
-	datetime = ts2datetime(now_ts-24*3600)
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE)    
+    else:
+        now_ts = int(time.time())
+    datetime = ts2datetime(now_ts-24*3600)
 
-	index_name_flow = flow_text_index_name_pre + datetime
+    index_name_flow = flow_text_index_name_pre + datetime
 
-	es_results = es_flow_text.search(index=index_name_flow,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name_flow,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
 
-	return es_results
+    return es_results
 
 def get_tweets_from_bci(sort_item_new):
 
-	if S_TYPE == 'test':
-		now_ts = datetime2ts(S_DATE_BCI)	
-	else:
-		now_ts = int(time.time())
+    if S_TYPE == 'test':
+        now_ts = datetime2ts(S_DATE_BCI)    
+    else:
+        now_ts = int(time.time())
 
-	datetime = ts2datetime(now_ts-24*3600)
-	datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    datetime = ts2datetime(now_ts-24*3600)
+    datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
 
-	index_name = weibo_bci_index_name_pre + datetime_new
+    index_name = weibo_bci_index_name_pre + datetime_new
 
-	query_body = {
-		'query':{
-			'match_all':{}
-		},
-		'sort':{sort_item_new:{'order':'desc'}},
-		'size':BCI_USER_NUMBER
-	}
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{sort_item_new:{'order':'desc'}},
+        'size':BCI_USER_NUMBER
+    }
 
-	es_results_bci = es_user_portrait.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+    es_results_bci = es_user_portrait.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
 
-	uid_set = set()
+    uid_set = set()
 
-	if es_results_bci:
-		for result in es_results_bci:
-			uid = result['_id']
-			uid_set.add(uid)
-	uid_list = list(uid_set)
+    if es_results_bci:
+        for result in es_results_bci:
+            uid = result['_id']
+            uid_set.add(uid)
+    uid_list = list(uid_set)
 
-	es_results = uid_lists2weibo_from_flow_text(uid_list)
+    es_results = uid_lists2weibo_from_flow_text(uid_list)
 
-	return es_results
+    return es_results
 
 def get_tweets_from_user_portrait(sort_item_new):
 
-	query_body = {
-		'query':{
-			'match_all':{}
-		},
-		'sort':{sort_item_new:{'order':'desc'}},
-		'size':USER_POETRAIT_NUMBER
-	}
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{sort_item_new:{'order':'desc'}},
+        'size':USER_POETRAIT_NUMBER
+    }
 
-	es_results_portrait = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
+    es_results_portrait = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
 
-	uid_set = set()
+    uid_set = set()
 
-	if es_results_portrait:
-		for result in es_results_portrait:
-			result = result['_source']
-			uid = result['uid']
-			uid_set.add(uid)
-	uid_list = list(uid_set)
+    if es_results_portrait:
+        for result in es_results_portrait:
+            result = result['_source']
+            uid = result['uid']
+            uid_set.add(uid)
+    uid_list = list(uid_set)
 
-	es_results = uid_lists2weibo_from_flow_text(uid_list)
-	
-	return es_results
+    es_results = uid_lists2weibo_from_flow_text(uid_list)
+    
+    return es_results
 
 def get_bussiness_recomment_tweets(sort_item):
-	print 'sort_item::',sort_item
-	#sort_item_new = ''
-	if sort_item == 'retweeted':
-		sort_item_new = 'retweeted'
-		es_results = get_tweets_from_flow(sort_item_new)
-	elif sort_item == 'sensitive_info':
-		sort_item_new = 'sensitive'
-		es_results = get_tweets_from_flow(sort_item_new)
-	elif sort_item == 'sensitive_user':
-		sort_item_new = 'user_index'
-		es_results = get_tweets_from_bci(sort_item_new)
-	elif sort_item == 'influence_info':
-		sort_item_new = 'retweeted'
-		es_results = get_tweets_from_flow(sort_item_new)
-	elif sort_item == 'influence_user':
-		sort_item_new = 'influence'
-		es_results = get_tweets_from_user_portrait(sort_item_new)
+    print 'sort_item::',sort_item
+    #sort_item_new = ''
+    if sort_item == 'retweeted':
+        sort_item_new = 'retweeted'
+        es_results = get_tweets_from_flow(sort_item_new)
+    elif sort_item == 'sensitive_info':
+        sort_item_new = 'sensitive'
+        es_results = get_tweets_from_flow(sort_item_new)
+    elif sort_item == 'sensitive_user':
+        sort_item_new = 'user_index'
+        es_results = get_tweets_from_bci(sort_item_new)
+    elif sort_item == 'influence_info':
+        sort_item_new = 'retweeted'
+        es_results = get_tweets_from_flow(sort_item_new)
+    elif sort_item == 'influence_user':
+        sort_item_new = 'influence'
+        es_results = get_tweets_from_user_portrait(sort_item_new)
 
-	return es_results
+    return es_results
 
 '''
 社交反馈
 '''
 
 def get_show_comment():
-	return []
+    return []
 
-def get_reply_comment():
-	return []
+def get_reply_comment(task_detail):
+
+    text = task_detail['text']
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    password = task_detail['password']
+    r_mid = task_detail['r_mid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+    # 发布微博
+
+    mark = comment_tweet_func(account_name,password,text,r_mid)
+
+    return mark
 
 def get_show_retweet():
-	return[]
+    return[]
 
-def get_reply_retweet():
-	return []
+def get_reply_retweet(task_detail):
+    text = task_detail['text'].encode('utf-8')
+    tweet_type = task_detail['tweet_type']
+    uid = task_detail['uid']
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    password = task_detail['password']
+    r_mid = task_detail['r_mid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+    mark = retweet_tweet_func(account_name,password,text,r_mid)
+
+    return mark
 
 def get_show_private():
-	return []
+    return []
 
-def get_reply_private():
-	return []
+def get_reply_private(task_detail):
+    text = task_detail['text']
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    password = task_detail['password']
+    r_mid = task_detail['uid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+
+    mark = private_tweet_func(account_name,password,text,r_mid)
+
+    return mark
 
 def get_show_at():
-	return []
+    return []
 
 def get_reply_at():
-	return []
+    return []
 
 def get_show_follow():
-	return []
+    return []
 
-def get_reply_follow():
-	return []
+def get_reply_follow(task_detail):
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    password = task_detail['password']
+    uid = task_detail['uid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
 
+    mark = follow_tweet_func(account_name,password,uid)
+
+    return mark
+
+
+def get_reply_unfollow(task_detail):
+
+	weibo_mail_account = task_detail['weibo_mail_account']
+	weibo_phone_account = task_detail['weibo_phone_account']
+	password = task_detail['password']
+	uid = task_detail['uid']
+	
+	if weibo_mail_account:
+	    account_name = weibo_mail_account
+	elif weibo_phone_account:
+	    account_name = weibo_phone_account
+	else:
+	    return False
+
+	mark = unfollow_tweet_func(account_name,password,uid)
+
+	return mark
+
+
+def get_like_operate(task_detail):
+
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    password = task_detail['password']
+    r_mid = task_detail['mid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+
+    mark = like_tweet_func(account_name,password,r_mid)
+
+    return mark
 
 
 
