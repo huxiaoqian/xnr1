@@ -39,7 +39,7 @@ body.modal-open {
     /*text-align: center;*/
     color: black;
     display: inline-block;
-    background: url("../images/ID.png") no-repeat left center;
+    background: url("/static/images/ID.png") no-repeat left center;
     background-size:50px 50px ;
 }
 #nav .nav_top h3 {

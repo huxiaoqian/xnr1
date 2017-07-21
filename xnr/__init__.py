@@ -5,6 +5,9 @@ from elasticsearch import Elasticsearch
 from flask_debugtoolbar import DebugToolbarExtension
 from xnr.extensions import admin
 from xnr.index.views import mod as indexModule
+from xnr.control.views import mod as controlModule
+from xnr.personalCenter.views import mod as personalCenterModule
+from xnr.registered.views import mod as registeredModule
 from xnr.weibo_xnr_operate.views import mod as weiboxnroperateModule
 from xnr.weibo_xnr_create.views import mod as weiboxnrcreateModule
 from xnr.weibo_xnr_manage.views import mod as weiboxnrmanageModule
@@ -26,6 +29,9 @@ def create_app():
 
     # Create modules
     app.register_blueprint(indexModule)
+    app.register_blueprint(controlModule)
+    app.register_blueprint(personalCenterModule)
+    app.register_blueprint(registeredModule)
     app.register_blueprint(weiboxnroperateModule)
     app.register_blueprint(weiboxnrcreateModule)
     app.register_blueprint(weiboxnrmanageModule)

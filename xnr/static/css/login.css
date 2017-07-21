@@ -25,7 +25,7 @@ body {
 }
 #fonts {
     height: 100px;
-    background:url("../images/font.png") center center no-repeat;
+    background:url("/static/images/font.png") center center no-repeat;
 }
 #box_body {
     padding: 100px 0;

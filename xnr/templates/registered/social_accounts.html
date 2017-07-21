@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>绑定社交账户（创建中）</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/css/social_accounts.css">
+{% extends "publicNav.html" %}
+{% block title %}<title>绑定社交账户（创建中）</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/social_accounts.css">
     <style>
         body {
             padding-right: 0!important;
         }
     </style>
-</head>
-<body>
-<div id="navs"></div>
+{% endblock %}
+{% block main %}
 <div id="container">
     <div class="title">
         <div>
@@ -112,19 +105,11 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<script src="../static/js/jquery-3.1.1.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/bootstrap-table.min.js"></script>
-<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
-<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/js/moment.min.js"></script>
-<script src="../static/echarts/echarts.min.js"></script>
-<script src="../static/echarts/china.js"></script>
-<script src="../static/js/social_accounts-1.js"></script>
+{% block my_js %}
+<script src="/static/js/social_accounts-1.js"></script>
 <script>
-    $('#navs').load('publicNav.html');
 
 </script>
-</body>
-</html>
+{% endblock %}

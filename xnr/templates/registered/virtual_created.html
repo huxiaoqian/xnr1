@@ -1,16 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>角色生成（创建中）</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/css/virtual_created.css">
-</head>
-<body>
-<div id="navs"></div>
+{% extends "publicNav.html" %}
+{% block title %}<title>角色生成（创建中）</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/virtual_created.css">
+    <style>
+
+    </style>
+{% endblock %}
+{% block main %}
 <div id="container">
     <div class="title">
         <div>
@@ -188,27 +184,55 @@
     </div>
 </div>
 
-<!--<div class="input-append date form_datetime">-->
-    <!--<input type="text" class="m-warp" id="starttime" data-date-format="yyyy-mm-dd" readonly size="16">-->
-    <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
-<!--</div>-->
-<!--<div class="input-append date form_datetime">-->
-    <!--<input type="text" class="m-warp" id="endtime" data-date-format="yyyy-mm-dd" readonly size="16">-->
-    <!--<span class="add-on"><i class="icon-calendar"></i></span>-->
-<!--</div>-->
-<script src="../static/js/jquery-3.1.1.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/bootstrap-table.min.js"></script>
-<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
-<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/js/moment.min.js"></script>
-<script src="../static/echarts/echarts.min.js"></script>
-<script src="../static/echarts/china.js"></script>
-<script src="../static/js/virtual_created-1.js"></script>
+<!--模态框-->
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity">
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> ZZ0902
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> SADJ93
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> KVF820
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType">
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 隐身
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
 
+{% block my_js %}
+<script src="/static/js/virtual_created-1.js"></script>
 <script>
-    $('#navs').load('publicNav.html');
-
     $('#container .account .account-1 a').on('click',function () {
         $('.account-2').css({display:'block'});
         let _classname=$(this).parent().attr('class');
@@ -272,5 +296,4 @@
 //    });
 
 </script>
-</body>
-</html>
+{% endblock %}

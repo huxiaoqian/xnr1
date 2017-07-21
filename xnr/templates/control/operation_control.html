@@ -1,23 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>操作控制</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/css/operation_control.css">
+{% extends "publicNav.html" %}
+{% block title %}<title>操作控制</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/operation_control.css">
     <style>
 
     </style>
-</head>
-<body>
-<div id="navs"></div>
+{% endblock %}
+{% block main %}
 <div id="container">
 
 </div>
-
 
 <!--模态框-->
 <div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
@@ -63,15 +55,11 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<script src="../static/js/jquery-3.1.1.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script src="../static/js/bootstrap-table.min.js"></script>
-<script src="../static/js/bootstrap-table-zh-CN.min.js"></script>
-<script src="../static/js/bootstrap-datetimepicker.min.js"></script>
-<script src="../static/js/operation_control-1.js"></script>
+{% block my_js %}
+<script src="/static/js/operation_control-1.js"></script>
 <script>
-    $('#navs').load('publicNav.html');
     $('#backHome').after(
         '<li class="main_li">'+
         '    <i class="icon icon-pencil"></i>'+
@@ -91,5 +79,4 @@
 
     };
 </script>
-</body>
-</html>
+{% endblock %}

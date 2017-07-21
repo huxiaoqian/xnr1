@@ -1,6 +1,3 @@
-
-* { margin: 0; padding: 0;}
-
 body { font: 16px/1.8 "Microsoft Yahei",verdana;max-width: 1366px;min-width: 1366px;margin: 0 auto}
 /*----------------*/
 .bg13 .personal,.bg13 .control,.bg13 .info,.bg13 .monitor,
@@ -147,7 +144,7 @@ body { font: 16px/1.8 "Microsoft Yahei",verdana;max-width: 1366px;min-width: 136
 
 #fullPage-nav li { width: 90px; height: 21px; margin: 10px 0 0; vertical-align: middle;}
 
-#fullPage-nav li a { margin:0 auto;width: 10px; height: 10px;border-radius: 50%; background: #8F9DA4; text-decoration: none; text-align: right; /*background: url('../images/images/dot.png') 5px 5px no-repeat;*/}
+#fullPage-nav li a { margin:0 auto;width: 10px; height: 10px;border-radius: 50%; background: #8F9DA4; text-decoration: none; text-align: right; /*background: url('/static/images/images/dot.png') 5px 5px no-repeat;*/}
 
 #fullPage-nav li .active { width: 20px; height: 20px;background:white;}
 
@@ -165,13 +162,13 @@ body { font: 16px/1.8 "Microsoft Yahei",verdana;max-width: 1366px;min-width: 136
 
 
 
-.bg11 { position: absolute; bottom: 0; width: 100%; height: 850px; background: url('../images/bg11.png') 50% 0 no-repeat; transition: all 1s;}
+.bg11 { position: absolute; bottom: 0; width: 100%; height: 850px; background: url('/static/images/bg11.png') 50% 0 no-repeat; transition: all 1s;}
 
-.bg12 { position: absolute; bottom: -392px; width: 100%; height: 392px; background: url('../images/bg12.png') 50% 0 no-repeat; opacity: 0; transition: all 1.7s; bottom: 90px;}
+.bg12 { position: absolute; bottom: -392px; width: 100%; height: 392px; background: url('/static/images/bg12.png') 50% 0 no-repeat; opacity: 0; transition: all 1.7s; bottom: 90px;}
 
-.bg13 { position: relative; bottom: -377px; width: 100%; height: 100%;/* background: url('../images/images/bg13.png') 50% 0 no-repeat;*/ transition: all 1s;}
+.bg13 { position: relative; bottom: -377px; width: 100%; height: 100%;/* background: url('/static/images/images/bg13.png') 50% 0 no-repeat;*/ transition: all 1s;}
 
-.hgroup { position: absolute; width: 554px; height: 176px; left: 50%; top: 8%; margin: 0 0 0 -277px; text-indent: -9999px; background-image: url('../images/slogan.png'); opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
+.hgroup { position: absolute; width: 554px; height: 176px; left: 50%; top: 8%; margin: 0 0 0 -277px; text-indent: -9999px; background-image: url('/static/images/slogan.png'); opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
 
 .p11 { position: absolute; left: 50%; top: 50%; width: 600px; margin: 0 0 0 -280px; font-size: 14px; color: #94a7c6; opacity: 1; transition: all 0.5s;}
 
@@ -186,13 +183,13 @@ body { font: 16px/1.8 "Microsoft Yahei",verdana;max-width: 1366px;min-width: 136
 
 .section5 p { font-size: 14px;text-align: justify;}
 
-.bg51 { background: url('../images/bg51.png') 50% 0 no-repeat; transition: all 1s;}
+.bg51 { background: url('/static/images/bg51.png') 50% 0 no-repeat; transition: all 1s;}
 
-.bg52 { background: url('../images/bg52.png') 50% 0 no-repeat;  transition: all 1s;}
+.bg52 { background: url('/static/images/bg52.png') 50% 0 no-repeat;  transition: all 1s;}
 
-.bg55 {  background: url('../images/bg53.png') 50% 0 no-repeat;  transition: all 1s;}
+.bg55 {  background: url('/static/images/bg53.png') 50% 0 no-repeat;  transition: all 1s;}
 
-.bg54 {  background: url('../images/bg54.png') 50% 0 no-repeat;  transition: all 1s;}
+.bg54 {  background: url('/static/images/bg54.png') 50% 0 no-repeat;  transition: all 1s;}
 
 
 .copyright { position: absolute; left: 0; bottom: 20px; width: 100%; text-align: center; font-size: 0;}

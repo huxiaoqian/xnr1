@@ -1,24 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!--<meta HTTP-EQUIV="pragma" CONTENT="no-cache">-->
-    <!--<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">-->
-    <!--<meta HTTP-EQUIV="expires" CONTENT="0">-->
-    <title>网络虚拟人系统</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-table.min.css">
-    <link rel="stylesheet" href="../static/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/css/jquery.fullPage.css">
-    <link rel="stylesheet" href="../static/css/navigationMain.css">
-</head>
-<body>
-
+{% extends "publicNav.html" %}
+{% block title %}<title>网络虚拟人系统</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="/static/css/navigationMain.css">
+    <style>
+        
+    </style>
+{% endblock %}
+{% block main %}
 <div class="section section1">
 
-    <div class="bg"><img src="../static/images/section1.jpg" alt=""></div>
+    <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
 
     <div class="bg11"></div>
 
@@ -89,7 +81,7 @@
 
 <div class="section section5" style="text-align: center">
 
-    <div class="bg"><img src="../static/images/section5.jpg" alt=""></div>
+    <div class="bg"><img src="/static/images/section5.jpg" alt=""></div>
 
     <!--<strong>[ 功能·监控预警 ]</strong>-->
 
@@ -132,11 +124,11 @@
     </div>
 
 </div>
+{% endblock %}
 
-
-<script src="../static/js/jquery-3.1.1.min.js"></script>
+{% block my_js %}
 <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
-<script src="../static/js/jquery.fullPage.min.js"></script>
+<script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
     $(function(){
 
@@ -180,7 +172,5 @@
         window.open('operation_control.html');
     })
 
-
 </script>
-</body>
-</html>
+{% endblock %}
