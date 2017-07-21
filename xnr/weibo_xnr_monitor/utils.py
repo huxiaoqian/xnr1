@@ -4,34 +4,20 @@
 weibo information monitor function about database task
 '''
 import sys
+import json
 #import time,datetime
 from xnr.time_utils import ts2datetime,datetime2ts
-from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type
-from xnr.parameter import MAX_VALUE,DAY
-
-
-#lookup all weibo users
-def lookup_weibo_users():
-    query_body={
-            'query':{
-                'match_all':{}
-                },
-            }
-    results=es_flow_text.search(index='weibo_user',doc_type='user',body=query_body)['hits']['hits']
-    weibo_users=[]
-    for item in results:
-        weibo_users.append(item['_source']['uid'])
-    return weibo_users
-
-
+from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
+                             es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
+                             profile_index_name,profile_index_type
+from xnr.parameter import MAX_VALUE,DAY,MID_VALUE
 
 #lookup weibo_xnr concerned users
-#def lookup_weiboxnr_concernedusers(weiboxnr_id):
-
-
-
-#lookup weibo_xnr unattended users
-#def lookup_weiboxnr_unattendedusers(weiboxnr_id):
+def lookup_weiboxnr_concernedusers(weiboxnr_id):
+    result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=weiboxnr_id)
+    followers_list=result['_source']['followers_list']
+    return followers_list
+    #return result
 
 #lookup keywords_string limit with xnr concerned users and time ranges
 #input:from_ts,to_ts,weiboxnr_id
@@ -59,81 +45,52 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     #step 2 :select the range of users
     #lookup xnr concerned userslist
-    #userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
-    userslist=lookup_weibo_users()
-
+    userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    #编码：把一个Python对象编码转换成Json字符串   json.dumps()
+    #解码：把Json格式字符串解码转换成Python对象   json.loads()
+    userslist = json.loads(userslist)					
     user_condition_list=[{'terms':{'uid':userslist}}]
 
     #step 3:lookup the content
+    flow_text_index_name_list = []
     for range_item in range_time_list:
         iter_condition_list=[item for item in user_condition_list]
-        #iter_condition_list=user_condition_list
         iter_condition_list.append(range_item)
 
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
         flow_text_index_name=flow_text_index_name_pre+range_from_date
-
-        print flow_text_index_name
-        print iter_condition_list
+        flow_text_index_name_list.append(flow_text_index_name)
+        #print flow_text_index_name
+        #print iter_condition_list
         
-        query_body={
-            'query':{
-                'bool':{
-                    'must':iter_condition_list
-                }
-            },
-            'aggs':{
-                'keywords':{
-                    'terms':{
-                        'field':'keywords_string'
-                    }
-                }
-            }
-        }
-
-        try:
-            flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                body=query_body)['aggregations']['keywords']['buckets']
-        except:
-            flow_text_exist=[]
-    return flow_text_exist
-
-
-###################################################################################
-#测试代码，可删除，暂时保留作为参考
-###################################################################################
-def aggs_test():
-    condition_list=[{'terms':{'uid':[6024035247,6011381738,5064359977]}},{'range':{'timestamp':{'gte':1479569396,'lt':1479569398}}}]
     query_body={
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'bool':{
-                            'must':condition_list
-                        }
-                    }
-                }
-                
-                
-            },
-            'aggs':{
-                'keywords':{
-                    'terms':{
-                        'field':'keywords_string'
-                    }
+        'query':{
+        	'filtered':{
+        		'filter':iter_condition_list
+        	}
+           
+        },
+        'aggs':{
+            'keywords':{
+                'terms':{
+                    'field':'keywords_string'
                 }
             }
         }
+    }
 
-    flow_text_exist=es_flow_text.search(index='flow_text_2016-11-19',doc_type=flow_text_index_type,\
+    try:
+        #print '123'
+        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
             body=query_body)['aggregations']['keywords']['buckets']
+        #print 'flow_text_exist:',flow_text_exist
+        #print '456'
+    except:
+        flow_text_exist=[]
 
-        #scan the flow_text_exist content and change the from to keywords dict
     return flow_text_exist
 
-###################################################################################
-###################################################################################
 
 #lookup hot posts
 #input:from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_id
@@ -142,6 +99,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_
     #step 1 :adjust the time condition for time
     from_date_ts=datetime2ts(ts2datetime(from_ts))
     to_date_ts=datetime2ts(ts2datetime(to_ts))
+    range_time_list=[]
     if from_date_ts != to_date_ts:
         iter_date_ts=from_date_ts
         while iter_date_ts <= to_date_ts:
@@ -159,15 +117,9 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_
 
     #step2: users condition
     #make sure the users range by classify choice
-    if classify_id==0:
-        userlist=lookup_weibo_users()
-    elif classify_id==1:
-        userlist=lookup_weiboxnr_concernedusers(weiboxnr_id)
-    elif classify_id==2:
-        userlist=lookup_weoboxnr_unattendedusers(weiboxnr_id)
-    else:
-        userlist=lookup_weibo_users()
-    user_condition_list=[{'terms':{'uid':userlist}}]
+    userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    userslist = json.loads(userslist)
+    user_condition_list=[{'terms':{'uid':userslist}}]
 
     #step 3:keyword condition
     if search_content:
@@ -176,122 +128,108 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_
         keyword_condition_list=[]
 
     #step 4:sort order condition set
-    #if order_id==1:
-        #sort_condition_list=[{'timestamp':{'order':'desc'}}]
-    #elif order_id==2:
-        #sort_condition_list=[{'hot':{'order':'desc'}}]
-    #elif order_id==3:
-        #sort_condition_list=[{'mingan':{'order':'desc'}}]
-    #else:
-    sort_condition_list=[{'timestamp':{'order':'desc'}}]
+    if order_id==1:         #按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]         
+    elif order_id==2:       #按热度排序
+        sort_condition_list=[{'hot':{'order':'desc'}}]
+    elif order_id==3:       #按敏感度排序
+        sort_condition_list=[{'mingan':{'order':'desc'}}]
+    else:                   #默认设为按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]
 
     #step 5:lookup the content
+    flow_text_index_name_list=[]
     for range_item in range_time_list:
-        iter_condition_list=[item for item in user_condition_list]
-        iter_condition_list.append(keyword_condition_list)
+    	iter_condition_list=[]
+        if classify_id==1:             #当类别选择为所关注用户时
+            iter_condition_list=[item for item in user_condition_list]
+ 		#当类别选择为全部用户时，不设置用户这一限制条件
+        if keyword_condition_list:
+            iter_condition_list.append(keyword_condition_list)
         iter_condition_list.append(range_item)
 
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
         flow_text_index_name=flow_text_index_name_pre+range_from_date
-        
-        query_body={
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'bool':{
-                            'must':iter_condition_list
-                            }
+        flow_text_index_name_list.append(flow_text_index_name)
+        print flow_text_index_name
+        print iter_condition_list,sort_condition_list
+    print flow_text_index_name_list
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':iter_condition_list
                         }
                     }
-                },
-            'size':MAX_VALUE,
-            'sort':sort_condition_list
-            }
-        try:
-            flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                body=query_body)['hits']['hits']
-        except:
-            flow_text_exist=[]
+                }
+            },
+        'size':MAX_VALUE,		
+        'sort':sort_condition_list
+        }
+    try:
+        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+            body=query_body)['hits']['hits']
+        print 'folw_text_exit:',flow_text_exist
+    except:
+        flow_text_exist=[]
         #scan the flow_text_exist content and change the from to hot posts
-        return flow_text_exist
+    return flow_text_exist
 ###############################################################
 
-
-
-
-
-
-######################
-#lookup weibo info based on userlist and time
-######################
-def lookup_weibo_info(ts_first,ts_second,userlist):
-    time1=time.mktime(ts_first.timetuple())
-    time2=time.mktime(ts_second.timetuple())
-    query_body={
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'bool':{
-                            'must':[
-                                {'terms':{'uid':userlist}},
-                                {'range':{
-                                    'timestamp':{
-                                        'gte':time1,
-                                        'lte':time2
-                                        }
-                                    }}
-                                ]
-                            }
-                        }
-                    }
-                },
-           #'size':999999
-            'size':MAX_VALUE
-            }
-
-    datetime_1=ts2datetime(time1)
-    datetime_2=ts2datetime(time2)
-    index_name_1=flow_text_index_name_pre+datetime_1
-    print index_name_1
-    exist_es_1=es_flow_text.indices.exists(index_name_1)
-    index_name_2=flow_text_index_name_pre+datetime_2
-    exist_es_2=es_flow_text.indices.exists(index_name_2)
-
-
-    if datetime_1 == datetime_2 and exist_es_1:
-        search_results=es_flow_text.search(index=index_name_1,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    elif datetime_1 !=datetime_2 and exist_es_2:
-        search_results=es_flow_text.search(index=index_name_2,doc_tyoe=flow_text_index_type,body=query_body)['hits']['hits']
+#lookup acitve_user
+#input:classify_id,weiboxnr_id
+#output:active weibo_user info list
+def lookup_active_weibouser(classify_id,weiboxnr_id):
+    #step1: users condition
+    #make sure the users range by classify choice
+    userlist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    if classify_id==1:		#当选择为所关注用户时的用户条件
+    	condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
+    elif classify_id==2:	#当选择为未关注用户时的用户条件
+    	condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
     else:
-        search_results=[]
-   # search_results=es_flow_text.search(index=index_name_1,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-   # print search_results
-    keyword_list=[]
-    if search_results:
-        for item in search_results:
-            keyword_list.append(item['_source']['keywords_string'])
+    	condition_list=[{'match_all':{}}]
+    print condition_list
 
-   # return search_results
-    return keyword_list
+    #step 2:lookup users and ranked by infuluence
+    for item in condition_list:
+        query_body={
+            '_source':{
+                'include':[
+                    'id',            #用户ID
+                    'nick_name',     #昵称
+                    'user_location', #注册地
+                    'fansum',        #粉丝数
+                    'weibosum',      #微博数，该字段暂未创建
+                    'infulence'     #影响力，该字段需创建然后计算
+                ]
+            },
+            'query':item,
+            'size':MID_VALUE,		#查询影响力排名前500的用户即可
+            'sort':{'infuluence':{'order':'desc'}}    #根据影响力排名
+            }
+        try:
+            flow_text_exist=es_flow_text.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+        except:
+            flow_text_exist=[]
 
-
-#count the keyword 
-def count_weiboxnr_keyword(keyword_list):
-    word_list=[]
-    for item in keyword_list:
-        words=item.split('&')
-        word_list.extend(words)
-    keyword_dict={}
-    for word in word_list:
-        keyword_dict[word]=word_list.count(word)
-    return keyword_dict
-#########################################
-
-#########################################
-
+    return flow_text_exist
 
 
             
 
-
+###############code test###################
+def weibo_user_test():
+    query_body={
+        '_source':{
+            'include':['id']
+        },
+        'query':{
+            'match_all':{}
+        },
+        'size':999
+    }
+    result=es_flow_text.search(index='weibo_user',doc_type='user',body=query_body)['hits']['hits']
+    return result

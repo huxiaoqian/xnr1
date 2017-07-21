@@ -9,7 +9,7 @@ Fifteen = 60 * 15
 HALF_HOUR = 1800
 HOUR = 3600
 FOUR_HOUR = 3600*4
-MAX_VALUE = 99999999
+MAX_VALUE = 9999
 WEEK = 7
 WEEK_TIME = 7*24*3600
 MONTH = 30
@@ -23,17 +23,46 @@ DAY_HOURS = 24  # 一天24小时
 MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
-MAX_SEARCH_SIZE = 99999999 ## 从数据库中最大检索数量
+MAX_SEARCH_SIZE = 9999 ## 从数据库中最大检索数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 500
+
+ACTIVE_TIME_TOP = 6
+DAILY_INTEREST_TOP_USER = 100
+NICK_NAME_TOP = 10
+USER_LOCATION_TOP = 10
+DESCRIPTION_TOP = 10
+MONITOR_TOP_USER = 100
+
+DAILY_AT_RECOMMEND_USER_TOP = 10
+
+HOT_EVENT_TOP_USER = 100
+HOT_AT_RECOMMEND_USER_TOP = 10
+
+SENSITIVE_TOP_USER = 100
+SENSITIVE_AT_RECOMMEND_USER_TOP = 10
+
+BCI_USER_NUMBER = 1000
+USER_POETRAIT_NUMBER = 1000
 
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
 CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
 
-MAX_VALUE = 99999999 
+TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
 
+POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
+
+
+MID_VALUE = 500      #查询活跃用户数量
+
+MAX_VALUE = 9999
+
+SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
+         '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
+
+topic_value_dict = {"art": 1, "computer":2, "economic":7, "education":7.5, "environment":8.7, "medicine":7.8,"military":7.4, "politics":10, "sports":4, "traffic":6.9, "life":1.8, "anti-corruption":9.5, "employment":6, "fear-of-violence":9.3, "house":6.4, "law":8.6, "peace":5.5, "religion":7.6, "social-security":8.6}
 
 
 topic_en2ch_dict = {'art':u'文体类_娱乐','computer':u'科技类','economic':u'经济类', \
@@ -48,3 +77,8 @@ domain_ch2en_dict = {u'高校': 'university', u'境内机构':'homeadmin', u'境
                      u'媒体': 'homemedia', u'境外媒体': 'abroadmedia', u'民间组织': 'folkorg', \
                      u'法律机构及人士': 'lawyer', u'政府机构及人士':'politician', u'媒体人士':'mediaworker',\
                      u'活跃人士': 'activer', u'草根': 'grassroot', u'其他':'other', u'商业人士':'business'}                    
+
+domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroadadmin':u'境外机构', \
+                     'homemedia':u'媒体', 'abroadmedia':u'境外媒体', 'folkorg':u'民间组织',\
+                     'lawyer':u'法律机构及人士', 'politician':u'政府机构及人士', 'mediaworker':u'媒体人士',\
+                     'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}                    
