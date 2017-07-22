@@ -30,7 +30,6 @@ def ajax_search_by_period():
 
 
 @mod.route('/search_by_keyword/')
-# 这个还没有写
 def ajax_search_by_keyword():
     keyword = request.args.get('keyword','')
     # 暂时指定了日期 测试用
