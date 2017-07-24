@@ -22,7 +22,7 @@ def ajax_lookup_weibo_keywordstring():
     result=lookup_weibo_keywordstring(float(from_ts),float(to_ts),weiboxnr_id)
     return json.dumps(result)
 
-#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002&classify_id=1&order_id=1
 @mod.route('/lookup_hot_posts/')
 def ajax_lookup_hot_posts():
     from_ts=request.args.get('from_ts','')

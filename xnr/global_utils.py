@@ -68,9 +68,8 @@ weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
 
 # use to publish tweet at future time
-weibo_xnr_timing_list_index_name = 'tweet_timing_list'
+weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
 weibo_xnr_timing_list_index_type = 'timing_list'
-
 
 #use to test lookup weibocontent,can be deleted after test
 
@@ -165,7 +164,6 @@ r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 
-
 # social sensing redis
 R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 weibo_social_sensing_task_queue_name = 'weibo_social_sensing_task'
@@ -175,12 +173,5 @@ R_RECOMMEND_SUBOPINION_KEYWORD_TASK = _default_redis(host=REDIS_HOST, port=REDIS
 weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywords_task_queue'
 
 #use to save xnr info
-
-
-
-
-
-
-
 
 
