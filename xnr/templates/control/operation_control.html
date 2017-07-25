@@ -8,7 +8,107 @@
 {% endblock %}
 {% block main %}
 <div id="container">
+    <div class="leftWindow">
+        <ul class="navlist">
+            <li class="listname"><a href="###" style="font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>
+            <li class="listname listItem"><a class="options" href="###"><i class="icon icon-inbox"></i>&nbsp;历史统计</a></li>
+            <li class="listname listItem"><a class="options" href="###"><i class="icon icon-time"></i>&nbsp;定时发送任务列表</a></li>
+            <li class="listname listItem"><a class="options" href="###"><i class="icon icon-exclamation-sign"></i>&nbsp;历史消息</a></li>
+            <li class="listname listItem"><a class="options" href="###"><i class="icon icon-pushpin"></i>&nbsp;关注列表</a></li>
+            <li class="listname listItem"><a class="options" href="###"><i class="icon icon-star"></i>&nbsp;粉丝列表</a></li>
+        </ul>
+    </div>
+    <div class="rightWindow">
+        <div class="li-1 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;历史统计</h4>
+            <div class="history">
+                <div id="history"></div>
+            </div>
+        </div>
+        <div class="li-2 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;定时发送任务列表</h4>
+            <div class="time">
+                <div id="time"></div>
+            </div>
+        </div>
+        <div class="li-3 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
+            <div class="news">
+                <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#his_post" role="tab" data-toggle="tab"><b class="icon icon-beaker"></b>&nbsp;历史发帖</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#mine" role="tab" data-toggle="tab"><b class="icon icon-comments"></b>&nbsp;@我的</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;评论</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#thumbs" role="tab" data-toggle="tab"><b class="icon icon-thumbs-up"></b>&nbsp;点赞</a>
+                    </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content" id="content">
+                    <div role="tabpanel" class="tab-pane active" id="his_post">
+                        <div class="hisnews">
+                            <label class="radio-inline">
+                                <input type="radio" name="news" id="hisnews1" value=""> 日常发帖
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="news" id="hisnews2" value=""> 热门发帖
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="news" id="hisnews3" value=""> 业务发帖
+                            </label>
+                        </div>
+                    </div>
+                    <div class="historyCenter">
+                        <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                            <div class="post_center-hot">
+                                <img src="/static/images/post-6.png" alt="" class="center_icon">
+                                <div class="center_rel">
+                                    <a class="center_1" href="###">何仙姑</a>
+                                    <span class="time" style="display:block;color: #607d8b;font-size: 10px;margin: 10px 0;">2017-03-04 12:43:23</span>
+                                    <span class="center_2" style="display:block;color: #b0bdd0;font-size: 10px;">
+                                        【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                                    </span>
+                                    <div class="center_3" style="margin: 10px 0 0 0;">
+                                        <p>
+                                            <span title="转发数"><i class="icon icon-share"></i>&nbsp;&nbsp;<b class="forwarding">222</b></span>&nbsp;
+                                            <span title="评论数" class="line"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;<b class="comment">222</b></span>&nbsp;
+                                            <span title="赞"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;<b class="praise">222</b></span>&nbsp;
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="mine">
 
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="comment">
+
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="thumbs">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="li-4 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;关注列表</h4>
+            <div class="focus">
+                <div id="focus"></div>
+            </div>
+        </div>
+        <div class="li-5 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;粉丝列表</h4>
+            <div class="fans">
+                <div id="fans"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!--模态框-->
@@ -55,6 +155,7 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block my_js %}
@@ -62,21 +163,43 @@
 <script>
     $('#backHome').after(
         '<li class="main_li">'+
+        '    <i class="icon icon-cogs"></i>'+
+        '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
+        '</li>'+
+        '<li class="main_li">'+
         '    <i class="icon icon-pencil"></i>'+
-        '    <a class="li_a" href="###">发帖操作</a>'+
+        '    <a class="li_a" href="/registered/posting/">发帖操作</a>'+
         '</li>'+
         '<li class="main_li">'+
         '    <i class="icon icon-random"></i>'+
         '    <a class="li_a" href="###">社交反馈</a>'+
         '</li>'+
         '<li class="main_li">'+
-        '    <i class="icon icon-export"></i>'+
+        '    <i class="icon icon-headphones"></i>'+
         '    <a class="li_a" href="###">主动社交</a>'+
         '</li>'
     );
 //    $('#firstChoose').modal('show');
-    window.onload=function () {
+    $('li.listItem').on('click',function () {
+        var _eq=$(this).index(),_top;
+        if (_eq==1){
+            _top='0px';
+        }else {
+            _top=$('.li-'+_eq).offset().top-30;
+        }
+        $('html,body').animate({
+            scrollTop: _top
+        }, 800);
+//        $('#container .leftWindow').css({"top":_top+"px"});
+        $('.li-'+_eq).siblings('.oli').find('i').css({color:'#fff'});
+        $('.li-'+_eq+' h4').find('i').css({color:'#70c221'});
 
-    };
+    });
+    $(window).scroll(function(){
+        var top = 20+$(window).scrollTop();
+        $("#container .leftWindow").css("top",top+"px");
+        /*实时获取滚动条的高度，然后不断的变换absolute的top值，从而达到与fixed同等的效果*/
+    });
+
 </script>
 {% endblock %}

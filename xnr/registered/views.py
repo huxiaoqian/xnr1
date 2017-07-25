@@ -18,6 +18,10 @@ def posting():
 def socialAccounts():
     return render_template('registered/social_accounts.html')
 
+@mod.route('/socialFeedback/')
+def socialFeedback():
+    return render_template('registered/social_feedback.html')
+
 @mod.route('/virtualCreated/')
 def virtualCreated():
     return render_template('registered/virtual_created.html')

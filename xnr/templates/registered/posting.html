@@ -3,19 +3,35 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/posting.css">
     <style>
-
+        #container .type_page #myTabs a {
+            color: white;
+        }
+        .btn-group.open .dropdown-toggle {
+            box-shadow: none!important;
+        }
+        .friends button b{
+            position: relative;
+            top: 2px;
+            font-weight: normal;
+            font-size: 12px;
+            display: inline-block;
+            width: 40px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 {% endblock %}
 {% block main %}
 <div id="container">
     <div class="title">
-        <div style="display: inline-block;color: #003366;">
-            <span class="icon icon-edit note_icon"></span>
-            <b style="font-size: 20px;">发帖操作</b>
+        <div style="display: inline-block;">
+            <span class="icon icon-edit note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">发帖操作</b>
         </div>
     </div>
     <div class="type_page" style="margin: 20px 0 30px;">
-        <ul id="myTabs" class="nav nav-tabs" role="tablist" style="">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
                 <a href="#everyday" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;日常发帖</a>
             </li>
@@ -28,30 +44,43 @@
         </ul>
         <div class="post_post">
             <div class="post-1" style="margin-top: 20px;">
-                <img src="../static/images/icon.png" alt="">
-                <span style="font-size: 18px;font-weight: 900;color: #333">我要发帖</span>
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff">我要发帖</span>
             </div>
             <div class="post-2">
                 <p>
-                    <a href="###" style="font-family: cursive;">有什么新鲜事告诉大家？</a>
+                    <a href="###" style="font-family: cursive;color: white;">有什么新鲜事告诉大家？</a>
                 </p>
                 <textarea id="post-2-content" cols="90" rows="6"></textarea>
                 <div class="add_thing">
-                    <div><img src="../static/images/post-1.png">&nbsp;<span>表情</span></div>
-                    <div><img src="../static/images/post-2.png">&nbsp;<span>图片</span></div>
-                    <div><img src="../static/images/post-3.png">&nbsp;<span>视频</span></div>
-                    <div><img src="../static/images/post-4.png">&nbsp;<span>话题</span></div>
-                    <div><img src="../static/images/post-5.png">&nbsp;<span>头条文章</span></div>
-                    <div style="margin-left: 10px;">
+                    <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
+                    <div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>
+                    <div><img src="/static/images/post-4.png">&nbsp;<span>话题</span></div>
+                    <div><img src="/static/images/post-5.png">&nbsp;<span>头条文章</span></div>
+                    <div class="btn-group friends">
+                        <button type="button" class="dropdown-toggle" style="background: transparent;"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <b>公开</b> <span class="caret" style="color: #fff;"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><img src="/static/images/post-7.png"> <span>公开</span></li>
+                            <li><img src="/static/images/post-8.png"> <span>好友圈</span></li>
+                            <li><img src="/static/images/post-9.png"> <span>仅自己可见</span></li>
+                            <li><img src="/static/images/post-10.png"> <span>群可见</span></li>
+                        </ul>
+                    </div>
+                    <div style="margin-left: 15px;">
                         <input type="checkbox" class="timing" style="position: relative;top: 2px;margin-right: 3px;">定时
-                        <input type="text" value="" id="_timing" placeholder="选择时间" style="height: 20px;font-size: 10px;
+                        <input type="text" value="" id="_timing" class="form_datetime" placeholder="选择时间"
+                               style="height: 20px;font-size: 10px;color: black;
                         padding:2px 4px;border: 1px solid silver;">
                     </div>
                     <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
                 </div>
             </div>
             <div id="user_recommend">
-                <p style="text-align: center;padding: 5px;border-bottom: 1px solid rgba(121, 121, 121, 1)">@用户推荐</p>
+                <p style="text-align: center;padding: 5px;border-bottom: 1px solid rgb(255,255,255)">@用户推荐</p>
                 <ul class="user_example_list" style="padding: 10px 20px;">
                     <li><a href="###">不想当律师的记者</a></li>
                     <li><a href="###">10086专员</a></li>
@@ -63,8 +92,8 @@
         <div class="tab-content" id="content">
             <div role="tabpanel" class="tab-pane active" id="everyday">
                 <div class="everyday-1" style="margin: 20px 0;">
-                    <img src="../static/images/icon.png" alt="">
-                    <span style="font-size: 18px;font-weight: 900;color: #333">语料推荐</span>
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
                 </div>
                 <div class="everyday-2" style="margin-left: 30px;">
                     <span>按主题：</span>
@@ -95,7 +124,7 @@
 
                     <div class="post_perfect" style="margin: 20px 0 0 30px;">
                         <div id="post_center-every">
-                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
                             <div class="center_rel">
                                 <a class="center_1" href="###">何仙姑</a>：
                                 <span class="center_2">
@@ -118,8 +147,8 @@
 
             <div role="tabpanel" class="tab-pane" id="hot">
                 <div class="hot-1" style="margin: 20px 0;">
-                    <img src="../static/images/icon.png" alt="">
-                    <span style="font-size: 18px;font-weight: 900;color: #333">热门事件推荐</span>
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">热门事件推荐</span>
                 </div>
                 <div class="hot-2" style="margin-left: 30px;">
                     <span>按主题：</span>
@@ -158,7 +187,7 @@
 
                     <div class="post_perfect" style="margin: 20px 0 0 30px;">
                         <div id="post_center-hot">
-                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
                             <div class="center_rel">
                                 <a class="center_1" href="###">何仙姑</a>：
                                 <span class="center_2">
@@ -187,8 +216,8 @@
 
             <div role="tabpanel" class="tab-pane" id="business">
                 <div class="business-1" style="margin: 20px 0;">
-                    <img src="../static/images/icon.png" alt="">
-                    <span style="font-size: 18px;font-weight: 900;color: #333">微博推荐</span>
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">微博推荐</span>
                 </div>
                 <div class="business-2" style="margin-left: 30px;">
                     <span>排序指标：</span>
@@ -207,7 +236,7 @@
 
                     <div class="post_perfect" style="margin: 20px 0 0 30px;">
                         <div id="post_center-business">
-                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
                             <div class="center_rel">
                                 <a class="center_1" href="###">何仙姑</a>：
                                 <span class="center_2">
@@ -229,10 +258,10 @@
             </div>
         </div>
 
-    <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
+        <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
         <!--<b class="icon icon-plus"></b>&nbsp;添加-->
-    <!--</button>-->
-</div>
+        <!--</button>-->
+    </div>
 </div>
 <!--模态框-->
 <div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
@@ -321,7 +350,7 @@
 
                     <div class="post_perfect" style="margin: 20px 0 0 30px;">
                         <div id="post_center-recommend">
-                            <img src="../static/images/post-6.png" alt="" class="center_icon">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
                             <div class="center_rel">
                                 <a class="center_1" href="###">何仙姑</a>：
                                 <span class="center_2">
@@ -351,6 +380,9 @@
 {% block my_js %}
 <script src="/static/js/personal_center-1.js"></script>
 <script>
+    $('.friends .dropdown-menu li').on('click',function(e) {
+        $('.friends button b').attr('title',e.target.innerHTML).text(e.target.innerHTML);
+    });
     $('#_timing').datetimepicker('setStartDate',new Date());
     $("#_timing").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
@@ -365,10 +397,27 @@
         todayBtn: true,
         pickerPosition: "bottom-left",
     });
-
+    $('#backHome').after(
+        '<li class="main_li">'+
+        '    <i class="icon icon-cogs"></i>'+
+        '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
+        '</li>'+
+        '<li class="main_li">'+
+        '    <i class="icon icon-pencil"></i>'+
+        '    <a class="li_a" href="/registered/posting/">发帖操作</a>'+
+        '</li>'+
+        '<li class="main_li">'+
+        '    <i class="icon icon-random"></i>'+
+        '    <a class="li_a" href="/registered/socialFeedback/">社交反馈</a>'+
+        '</li>'+
+        '<li class="main_li">'+
+        '    <i class="icon icon-headphones"></i>'+
+        '    <a class="li_a" href="###">主动社交</a>'+
+        '</li>'
+    );
 
     $('.continue_already_created').on('click',function () {
-        window.open('social_accounts.html');
+        window.open('/registered/socialAccounts/');
     });
     $('.first_created').on('click',function () {
 //        window.open('.html');

@@ -9,8 +9,8 @@ $('#go_bind').on('click',function () {
     $('#_bind_per').modal('show');
 });
 $('#back').on('click',function () {
-    window.open('personal_center.html');
+    window.open('/personalCenter/individual/');
 });
 $('#release').on('click',function () {
-    window.open('posting.html');
+    window.open('/registered/posting/');
 });
