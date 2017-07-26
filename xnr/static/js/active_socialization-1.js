@@ -4,7 +4,7 @@ var public_ajax= {
             type:ajax_method,
             url:url,
             async:true,
-            timeout:300,
+            //timeout:300,
             //data:{"name":"xm"},//传参数
             dataType:"json",
             success:callback,
@@ -15,8 +15,8 @@ var public_ajax= {
             global:false//是否触发全局请求,需要触发就是true,不需要false
         });
     },
-    has_table:function (has_data) {
-        let person=window.JSON?JSON.parse(has_data):eval("("+has_data+")");
+    influe:function (has_data) {
+        var influence=window.JSON?JSON.parse(has_data):eval("("+has_data+")");
         $.each(data,function (index,item) {
             theme_all.push({
                 'name':item[1],
@@ -26,9 +26,9 @@ var public_ajax= {
                 'label':item[4],
             })
         });
-        $('.has_list #haslist').bootstrapTable('load', person);
-        $('.has_list #haslist').bootstrapTable({
-            data:person,
+        $('#influence').bootstrapTable('load', influence);
+        $('#influence').bootstrapTable({
+            data:influence,
             search: true,//是否搜索
             pagination: true,//是否分页
             pageSize: 10,//单页记录数
@@ -57,7 +57,7 @@ var public_ajax= {
                     // }
                 },
                 {
-                    title: "创建时间",//标题
+                    title: "用户ID",//标题
                     field: "",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
@@ -68,7 +68,7 @@ var public_ajax= {
                     // }
                 },
                 {
-                    title: "渗透领域",//标题
+                    title: "用户昵称",//标题
                     field: "",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
@@ -79,18 +79,7 @@ var public_ajax= {
                     // },
                 },
                 {
-                    title: "角色定位",//标题
-                    field: "",//键名
-                    sortable: true,//是否可排序
-                    order: "desc",//默认排序方式
-                    align: "center",//水平
-                    valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-
-                    },
-                },
-                {
-                    title: "活跃时间",//标题
+                    title: "关注数",//标题
                     field: "",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
@@ -112,50 +101,6 @@ var public_ajax= {
                     },
                 },
                 {
-                    title: "历史发帖量",//标题
-                    field: "",//键名
-                    sortable: true,//是否可排序
-                    order: "desc",//默认排序方式
-                    align: "center",//水平
-                    valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-
-                    },
-                },
-                {
-                    title: "历史评论数",//标题
-                    field: "",//键名
-                    sortable: true,//是否可排序
-                    order: "desc",//默认排序方式
-                    align: "center",//水平
-                    valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-
-                    },
-                },
-                {
-                    title: "今日发帖量",//标题
-                    field: "",//键名
-                    sortable: true,//是否可排序
-                    order: "desc",//默认排序方式
-                    align: "center",//水平
-                    valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-
-                    },
-                },
-                {
-                    title: "今日提醒",//标题
-                    field: "",//键名
-                    sortable: true,//是否可排序
-                    order: "desc",//默认排序方式
-                    align: "center",//水平
-                    valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-                        return '<a style="cursor: pointer;">查看</a>';
-                    },
-                },
-                {
                     title: '操作',//标题
                     field: "",//键名
                     sortable: true,//是否可排序
@@ -163,9 +108,9 @@ var public_ajax= {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        return '<a style="cursor: pointer;" onclick="">进入</a>'+
-                            '<a style="cursor: pointer;" onclick="">修改</a>'+
-                            '<a style="cursor: pointer;" onclick="">删除</a>';
+                        return '<a style="cursor: pointer;" onclick="" data-toggle="modal" data-target="#details">查看详情</a>'+
+                                '<a style="cursor: pointer;" onclick="">直接关注</a>';
+
                     },
                 },
             ],
@@ -178,7 +123,7 @@ var public_ajax= {
             }
         });
     },
-    not_yet:function (no_data) {
+    sensitive:function (no_data) {
         let undone_person=window.JSON?JSON.parse(no_data):eval("("+no_data+")");
         $.each(data,function (index,item) {
             theme_all.push({
@@ -287,11 +232,13 @@ var public_ajax= {
     },
 };
 function auto() {
-    let ajax_method='GET';
-    let url_1 = '';
-    let url_2 = '';
-    public_ajax.call_request(ajax_method,url_1,public_ajax.has_table);
-    public_ajax.call_request(ajax_method,url_2,public_ajax.not_yet);
+    var ajax_method='GET';
+    var url_1 = '';
+    var url_2 = '';
+    var url_3 = '';
+    public_ajax.call_request(ajax_method,url_1,public_ajax.influe);
+    public_ajax.call_request(ajax_method,url_2,public_ajax.sensitive);
+    public_ajax.call_request(ajax_method,url_3,public_ajax.friends);
 }
 // auto();
 

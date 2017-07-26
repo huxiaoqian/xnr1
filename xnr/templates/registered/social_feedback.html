@@ -5,6 +5,10 @@
 <style>
     #container .type_page #myTabs a {
         color: white;
+        background: transparent;
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+        background: rgba(5, 23, 55, 0.45);
     }
     .btn-group.open .dropdown-toggle {
         box-shadow: none!important;
@@ -88,7 +92,7 @@
                     </div>
                 </div>
                 <div class="commentClone">
-                    <input type="text" class="clone-1" placeholder="回复评论">
+                    <input type="text" class="clone-1"/>
                     <div class="clone-2">
                         <img src="/static/images/post-1.png" class="clone-2-1">
                         <img src="/static/images/post-2.png" class="clone-2-2">
@@ -252,24 +256,12 @@
         todayBtn: true,
         pickerPosition: "bottom-left",
     });
-    $('#backHome').after(
-        '<li class="main_li">'+
-        '    <i class="icon icon-cogs"></i>'+
-        '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-pencil"></i>'+
-        '    <a class="li_a" href="/registered/posting/">发帖操作</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-random"></i>'+
-        '    <a class="li_a" href="###">社交反馈</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-headphones"></i>'+
-        '    <a class="li_a" href="###">主动社交</a>'+
-        '</li>'
-    );
+
+    $('#container .type_page #content .commentEvery .com-3 .com-3-reply').on('click',function () {
+        var _name=$(this).parents('.commentAll').find('.com-1').find('.com-1-name').text();
+        $('#container .type_page #content .commentClone .clone-1').attr('placeholder','回复'+_name)
+        $('#container .type_page #content .commentClone').show(200);
+    });
 
     $('.continue_already_created').on('click',function () {
         window.open('/registered/socialAccounts/');

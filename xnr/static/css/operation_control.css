@@ -35,7 +35,7 @@ body {
 }
 #container .leftWindow {
     position: absolute;
-    top:80px;
+    /*top:80px;*/
     left: 10px;
     width: 140px;
 }
@@ -101,12 +101,12 @@ body {
     cursor: pointer;
     margin-top: 10px;
 }
-#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover i {
-    color: #eb7350;
-}
-#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover b {
-    color:#257cde;
-}
+/*#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover i {*/
+    /*color: #eb7350;*/
+/*}*/
+/*#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover b {*/
+    /*color:#257cde;*/
+/*}*/
 #container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span.line {
     border-left: 1px solid #38547b;
     border-right: 1px solid #38547b;

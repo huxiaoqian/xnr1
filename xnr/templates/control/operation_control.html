@@ -161,24 +161,6 @@
 {% block my_js %}
 <script src="/static/js/operation_control-1.js"></script>
 <script>
-    $('#backHome').after(
-        '<li class="main_li">'+
-        '    <i class="icon icon-cogs"></i>'+
-        '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-pencil"></i>'+
-        '    <a class="li_a" href="/registered/posting/">发帖操作</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-random"></i>'+
-        '    <a class="li_a" href="###">社交反馈</a>'+
-        '</li>'+
-        '<li class="main_li">'+
-        '    <i class="icon icon-headphones"></i>'+
-        '    <a class="li_a" href="###">主动社交</a>'+
-        '</li>'
-    );
 //    $('#firstChoose').modal('show');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;

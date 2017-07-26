@@ -40,6 +40,7 @@
                 <i class="icon icon-home"></i>
                 <a class="list_one li_a" href="/index/navigation/">首页</a>
             </li>
+            <div class="behind" style="float: left;"></div>
         </ul>
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:transparent;color: black;">
@@ -68,6 +69,7 @@
 <!-- JS文件 -->
 {% block js %}
 <script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/bootstrap-table.min.js"></script>
 <script src="/static/js/bootstrap-table-zh-CN.min.js"></script>
@@ -76,6 +78,32 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    var TYPE=$.cookie('TYPE');
+    var typeNum=TYPE;
+    var afterEle='';
+    if (typeNum==1){
+        afterEle=
+            '<li class="main_li">'+
+            '    <i class="icon icon-cogs"></i>'+
+            '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-pencil"></i>'+
+            '    <a class="li_a" href="/control/posting/">发帖操作</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-random"></i>'+
+            '    <a class="li_a" href="/control/socialFeedback/">社交反馈</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-headphones"></i>'+
+            '    <a class="li_a" href="/control/activeSocialization/">主动社交</a>'+
+            '</li>';
+    };
+    $('.behind').html(afterEle);
+    setTimeout(function () {
+        $.cookie('TYPE','');
+    },5000);
     function removeAfter() {
         $('#backHome').nextAll().remove();
     }
