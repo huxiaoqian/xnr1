@@ -1,8 +1,4 @@
 /*内容样式*/
-body.modal-open {
-    overflow-y: auto !important;
-    padding-right: 0 !important;
-}
 table.table-condensed {
     color: black;
 }
@@ -11,7 +7,6 @@ body {
     background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
     /*background-size: 100% 100%;*/
     color: #fff;
-    transform: scale(1);
 }
 #container {
     width: 1000px;

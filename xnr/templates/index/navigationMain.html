@@ -173,7 +173,8 @@
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
-        $.cookie('TYPE','1',{path:'/'});
+        //$.cookie('TYPE','1',{path:'/'});
+        localStorage.setItem('TYPE','1');
         window.open('/control/operationControl/');
     })
 
