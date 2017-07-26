@@ -1,0 +1,31 @@
+/*内容样式*/
+body.modal-open {
+    overflow-y: auto !important;
+    padding-right: 0 !important;
+}
+#container {
+    width: 1000px;
+    margin: 10px auto 0;
+}
+#container .title .peo_icon {
+    width: 30px;
+    height: 30px;
+}
+#container .title b,#container .title span {
+    font-size: 14px;
+    color: #003366;
+}
+#container .title #weibo_QQ {
+    padding: 2px 3px;
+    border: 1px solid #424547;
+    border-radius: 5px;
+}
+#container .has_person .has_list,#container .undone_person .undone_list {
+    position: relative;
+}
+#container .has_person .has_list button,#container .undone_person .undone_list button {
+    /*background: #003366;*/
+    border-radius: 5px;
+    color: white;
+    position: absolute;
+}

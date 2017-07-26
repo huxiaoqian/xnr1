@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- head标签开始 -->
+    {% block head_meta %}
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    {% block title %}<title></title>{% endblock %}
+    {% endblock %}
+    <!-- head标签结束 -->
+
+    <!-- css标签 -->
+    {% block css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/public_nav.css">
+    {% endblock %}
+    <!-- css结束 -->
+
+    <!-- 自己的css -->
+    {% block my_css %}
+    {% endblock %}
+</head>
+<body>
+<!-- 导航开始 -->
+
+{% block header %}
+<div id="nav">
+    <div class="nav_top">
+        <h4 style="color:#373737;">网络虚拟人系统</h4>
+    </div>
+    <div class="nav_bottom">
+        <ul class="list">
+            <li class="main_li" id="backHome">
+                <i class="icon icon-home"></i>
+                <a class="list_one li_a" href="/index/navigation/">首页</a>
+            </li>
+            <div class="behind" style="float: left;"></div>
+        </ul>
+        <div class="btn-group loadingUser">
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:transparent;color: black;">
+                <span class="icon icon-user"></span> <a class="nav_name">阿凡提</a>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
+                <li><a href="#"><i class="icon-trash"></i> 删除</a></li>
+                <li><a href="#"><i class="icon-map-marker"></i> 微博虚拟人</a></li>
+                <li class="divider"></li>
+                <li><a href="#"><i class="icon-exchange"></i> QQ群虚拟人</a></li>
+                <li><a href="#"><i class="i"></i> 登出 </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<!-- 导航结束 -->
+
+<!-- 主要内容 -->
+{% block main %}
+
+{% endblock %}
+
+
+<!-- JS文件 -->
+{% block js %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<!--<script src="/static/js/jquery.cookie.js"></script>-->
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-table.min.js"></script>
+<script src="/static/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/static/js/moment.min.js"></script>
+<script src="/static/echarts/echarts.min.js"></script>
+<script src="/static/echarts/china.js"></script>
+<script>
+    var typeNum=localStorage.getItem('TYPE');
+    //删除 localStorage.removeItem(i);
+    var afterEle='';
+    if (typeNum==1){
+        afterEle=
+            '<li class="main_li">'+
+            '    <i class="icon icon-cogs"></i>'+
+            '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-pencil"></i>'+
+            '    <a class="li_a" href="/control/posting/">发帖操作</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-random"></i>'+
+            '    <a class="li_a" href="/control/socialFeedback/">社交反馈</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-headphones"></i>'+
+            '    <a class="li_a" href="/control/activeSocialization/">主动社交</a>'+
+            '</li>';
+    };
+    $('.behind').html(afterEle);
+</script>
+{% endblock %}
+
+
+{% block write_js %}
+<script>
+    
+</script>
+{% endblock %}
+
+<!-- 自己的JS -->
+{% block my_js %}
+
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,163 @@
+/*内容样式*/
+body.modal-open {
+    overflow-y: auto !important;
+    padding-right: 0 !important;
+}
+#container {
+    width: 1000px;
+    margin:10px auto 30px;
+}
+#container .title {
+    width: 100%;
+    position: relative;
+}
+#container .title .peo_icon {
+    width: 30px;
+    height: 30px;
+}
+#container .title b {
+    color: #003366;
+}
+#container .title #character {
+    font-size: 16px;
+    margin-top: 20px;
+    padding: 40px 10px;
+    border: 1px solid silver;
+    box-shadow: 2px 2px 2px #ccc;
+}
+#container .title #character .define {
+    display: inline-block;
+    margin: 5px;
+    width: 24%;
+}
+#container .title #role_example {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(121, 121, 121, 1);
+}
+#container .title #role_example li {
+    list-style-type:disc;
+    list-style-position: inside;
+}
+#container .title #character .define span,
+#container .title #role_example li a {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*账户创建信息*/
+#container .account {
+    position: relative;
+    margin-top: 20px;
+    padding: 30px 10px;
+    border: 1px solid silver;
+    box-shadow: 2px 2px 2px #ccc;
+}
+#container .account .account-1 {
+    font-size: 16px;
+    width: 70%;
+}
+#container .account .account-1 div.options {
+    padding-left:12px;
+    margin-top: 10px;
+}
+#container .account .account-1 div.options span {
+    display: inline-block;
+    width: 100px;
+}
+#container .account .account-1 input {
+    width: 270px;
+    font-size: 14px;
+    padding: 3px 7px;
+    border: 1px solid silver;
+    margin: 0 15px;
+}
+#container .account .account-1 select,
+#container .account .account-1 textarea {
+    width: 270px;
+    border: 1px solid silver;
+    padding: 3px 7px;
+    margin: 0 15px;
+}
+#container .account .account-1 a {
+    font-size: 10px;
+}
+#container .account .account-2 {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right:20px;
+    border-radius: 10px;
+    border: 1px solid rgba(121, 121, 121, 1);
+}
+#container .account .account-2 li {
+    list-style-type:disc;
+    list-style-position: inside;
+}
+#container .account .account-2 li a {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*其他信息*/
+#container .other_basic {
+    position: relative;
+    margin-top: 20px;
+    padding: 30px 10px;
+    border: 1px solid silver;
+    box-shadow: 2px 2px 2px #ccc;
+}
+#container .other_basic .other-1 {
+    font-size: 16px;
+    width: 70%;
+}
+#container .other_basic .other-1 div.others {
+    padding-left:12px;
+    margin-top: 10px;
+}
+#container .other_basic .other-1 div.others span._in {
+    display: inline-block;
+    width: 100px;
+}
+#container .other_basic .other-1 div.others a {
+    font-size: 10px;
+}
+#container .other_basic .other-2 {
+    padding-left:12px;
+    margin-top: 10px;
+}
+#container .other_basic .other-2 div.choose span {
+    display: inline-block;
+    width: 100px;
+}
+#container .other_basic .other-2 div.choose a {
+    font-size: 10px;
+}
+#container .other_basic .other-3 {
+    display: none;
+    position: absolute;
+    right:20px;
+    top:30px;
+    border-radius: 10px;
+    border: 1px solid rgba(121, 121, 121, 1);
+}
+#container .other_basic .other-3 li {
+    list-style-type:disc;
+    list-style-position: inside;
+}
+#container .other_basic .other-3 li a {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/*分页*/
+#container .page {
+    padding: 10px;
+    margin: 30px 0;
+    text-align: center;
+}
