@@ -77,7 +77,7 @@ def show_select_sensitive_words(words_id):
 	result=es.get(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id)
 	return result
 
-#step 3.2: change the selected sensitive word
+#step 4.2: change the selected sensitive word
 def change_sensitive_words(words_id,change_info):
 	rank=change_info[0]
 	sensitive_words=change_info[1]

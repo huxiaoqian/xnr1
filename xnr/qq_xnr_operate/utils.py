@@ -15,9 +15,7 @@ def show_group_info():
     pass
 
 def search_by_keyword(keywords, date):
-    # 需求：能够按关键词查询历史信息
-    # 问题：怎么在各个表之前切换返回适当数量的结果？
-    # 子问题：需要预先知道所有虚拟人的qq号
+# 可以传入多个关键词但关键词之间需要以逗号分隔    
     must_query_list = []
     keyword_nest_body_list = []
     keywords_list = keywords.split(',')
@@ -35,6 +33,22 @@ def search_by_keyword(keywords, date):
             "size": MAX_VALUE,
             "sort":{"timestamp":{"order":"desc"}}
         }
+
+    # query_body = {
+    #     "query":{
+    #         "bool": {
+    #             "must": [
+    #                 {"wildcard": {
+    #                     "text": {
+    #                         "wildcard": "*" + keywords +"*"
+    #                     }
+    #                 }},
+                    
+    #             ]
+    #         }
+    #     },
+    #     "size": MAX_VALUE
+    # }
     index_name = group_message_index_name_pre + date
     result = es_xnr.search(index=index_name,doc_type=group_message_index_type,body=query_body)
     return result
