@@ -14,6 +14,7 @@ from xnr.weibo_xnr_monitor.views import mod as weiboxnrmonitorModule
 from xnr.qq_xnr_manage.views import mod as qqxnrmanageModule
 from xnr.qq_xnr_operate.views import mod as qqxnroperateModule
 from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
+from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(qqxnrmanageModule)
     app.register_blueprint(qqxnroperateModule)
     app.register_blueprint(qqxnrassessmentModule)
+    app.register_blueprint(qqxnrmonitorModule)
     # the debug toolbar is only enabled in debug mode
     app.config['DEBUG'] = True
 
