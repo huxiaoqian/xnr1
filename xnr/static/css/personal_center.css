@@ -3,9 +3,20 @@ body.modal-open {
     overflow-y: auto !important;
     padding-right: 0 !important;
 }
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    /*transform: scale(1);*/
+}
 #container {
     width: 1000px;
-    margin: 10px auto 0;
+    height: 100%;
+    padding: 20px 20px 20px 150px;
+    margin: 0 auto;
+    background: rgba(8,23,44,0.25);
+    position: relative;
+    top: 80px;
 }
 #container .title .peo_icon {
     width: 30px;
@@ -13,19 +24,39 @@ body.modal-open {
 }
 #container .title b,#container .title span {
     font-size: 14px;
-    color: #003366;
+    color: #fff;
 }
 #container .title #weibo_QQ {
+    display: inline-block;
     padding: 2px 3px;
-    border: 1px solid #424547;
-    border-radius: 5px;
+    color:white;
+    /*border: 1px solid #424547;*/
+    /*border-radius: 5px;*/
 }
-#container .has_person .has_list,#container .undone_person .undone_list {
+#container .has_person .has_list,#container .undone_person .undone_list,
+#container .has_person_QQ .has_list_QQ{
     position: relative;
 }
-#container .has_person .has_list button,#container .undone_person .undone_list button {
+#container .has_person .has_list button,#container .undone_person .undone_list button,
+#container .has_person_QQ .has_list_QQ button{
     /*background: #003366;*/
     border-radius: 5px;
     color: white;
     position: absolute;
+}
+#container .has_person .has_list .hasAdd,
+#container .undone_person .undone_list .undoneAdd,
+#container .has_person_QQ .has_list_QQ .hasAddQQ{
+    display: inline-block;
+    padding: 3px 7px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+}
+#container .has_person .has_list .hasAdd:hover,
+#container .undone_person .undone_list .undoneAdd:hover,
+#container .has_person_QQ .has_list_QQ .hasAddQQ:hover {
+    background: rgba(3, 8, 16, 0.61);
 }

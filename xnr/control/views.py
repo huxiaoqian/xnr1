@@ -18,6 +18,10 @@ def operationControl():
 def posting():
     return render_template('control/posting.html')
 
+@mod.route('/postingQQ/')
+def postingQQ():
+    return render_template('control/postingQQ.html')
+
 @mod.route('/socialFeedback/')
 def socialFeedback():
     return render_template('control/social_feedback.html')

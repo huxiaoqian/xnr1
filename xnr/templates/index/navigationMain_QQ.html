@@ -1,0 +1,128 @@
+{% block title %}<title>网络虚拟人系统</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
+    <style>
+        
+    </style>
+{% endblock %}
+{% block main %}
+<div class="section section1">
+
+    <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
+
+    <div class="bg11"></div>
+
+    <div class="bg12"></div>
+
+    <div class="bg13">
+        <div class="personal" style="top: 100px;left: 260px;">
+            <i class="icon icon-github-alt"></i>
+            <div class="cover" id="personal">
+                <em class="icon icon-plus-sign"></em>
+                <span>个人中心</span>
+            </div>
+        </div>
+        <div class="simulated" style="top: 370px;left: 160px;">
+            <i class="icon icon-cloud-upload"></i>
+            <div class="cover" id="simulated">
+                <em class="icon icon-plus-sign"></em>
+                <span>模拟登录</span>
+            </div>
+        </div>
+        <div class="control" style="top: 490px;left: 450px;">
+            <i class="icon icon-cogs"></i>
+            <div class="cover" id="control">
+                <em class="icon icon-plus-sign"></em>
+                <span>操作控制</span>
+            </div>
+        </div>
+        <div class="reported" style="top:100px;right:260px;">
+            <i class="icon icon-sitemap"></i>
+            <div class="cover">
+                <em class="icon icon-plus-sign"></em>
+                <span>行为评估</span>
+            </div>
+        </div>
+        <div class="info" style="top: 490px;left: 750px;">
+            <i class="icon icon-eye-open"></i>
+            <div class="cover" id="info">
+                <em class="icon icon-plus-sign"></em>
+                <span>信息监测</span>
+            </div>
+        </div>
+        <div class="system" style="top: 370px;right:160px;">
+            <i class="icon icon-inbox"></i>
+            <div class="cover" id="system">
+                <em class="icon icon-plus-sign"></em>
+                <span>系统管理</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="hgroup">
+
+        <h1><a href="/personalCenter/individual/">个人中心</a></h1>
+
+        <h2>发生，不止所见。</h2>
+
+    </div>
+
+    <p class="p11">
+        社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。
+        通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，
+        及时预警和回应疏导舆论焦点已成为舆情管理的重要内容之一。
+    </p>
+
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<script src="/static/js/jquery.fullPage.min.js"></script>
+<script>
+    $(function(){
+
+        $.fn.fullpage({
+
+            verticalCentered: false,
+
+            anchors: ['page1', 'page2'],
+
+            navigation: true,
+
+            navigationTooltips: ['', '']
+
+        });
+
+    });
+
+    //页面跳转
+    $('#personal').on('click',function () {
+        localStorage.removeItem('TYPE');
+        window.open('/personalCenter/individual/');
+    });
+    $('#control').on('click',function () {
+        //$.cookie('TYPE','1',{path:'/'});
+        localStorage.setItem('TYPE','1');
+        window.open('/control/operationControl/');
+    });
+    $('#info').on('click',function () {
+        localStorage.removeItem('TYPE');
+        window.open('/inforDetection/inforChecking/');
+    });
+    $('#monitor').on('click',function () {
+        localStorage.setItem('TYPE','2');
+        window.open('/monitor/characterBehavior/');
+    });
+
+</script>
+{% endblock %}

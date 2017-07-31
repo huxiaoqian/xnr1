@@ -19,7 +19,6 @@ def search_by_xnr_number(xnr_qq_number, date):
                         "must":[
                             {"term":{"xnr_qq_number":xnr_qq_number}}
                             # {"term":{"sensitive":}}
-
                         ]
                     }
                 }
