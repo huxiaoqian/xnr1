@@ -44,17 +44,22 @@
         </ul>
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a class="nav_name">阿凡提</a>
+                <span class="icon icon-user"></span> <a class="nav_name">阿凡提</a> 
+                <span class="nav_type">（微博虚拟人）</span>
             </button>
             <ul class="dropdown-menu">
-                <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
-                <li><a href="#"><i class="icon-trash"></i> 删除</a></li>
-                <li><a href="#"><i class="icon-map-marker"></i> 微博虚拟人</a></li>
+                <!-- <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
+                <li><a href="#"><i class="icon-trash"></i> 删除</a></li> -->
+                <li class="current"><a href="#"><i class="icon-map-marker"></i> <span>微博虚拟人</span></a></li>
                 <li class="divider"></li>
-                <li><a href="#"><i class="icon-exchange"></i> QQ群虚拟人</a></li>
+                <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
                 <li><a href="#"><i class="i"></i> 登出 </a></li>
             </ul>
         </div>
+    </div>
+    <div class="coordinate" style="float: right;">
+        <i class="icon icon-screenshot"></i>
+        <b class="coorName"></b>
     </div>
 </div>
 {% endblock %}
@@ -78,6 +83,31 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown)
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
+    $('.old').on('click',function(e) {
+        var txt=$(this).find('span').text();
+        var curtxt=$('.current').find('span').text();
+        $(this).find('span').text(curtxt);
+        $('.current').find('span').text(txt);
+        $('.nav_type').text('（'+txt+'）');
+    });
     var typeNum=localStorage.getItem('TYPE');
     //删除 localStorage.removeItem(i);
     var afterEle='';
@@ -99,7 +129,47 @@
             '    <i class="icon icon-headphones"></i>'+
             '    <a class="li_a" href="/control/activeSocialization/">主动社交</a>'+
             '</li>';
-    };
+    }else if (typeNum==2){
+        afterEle=
+            '<li class="main_li">'+
+            '    <i class="icon icon-warning-sign"></i>'+
+            '    <a class="li_a" href="###">预警监控</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-user-md"></i>'+
+            '    <a class="li_a" href="/monitor/characterBehavior/">人物行为预警</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-comment-alt"></i>'+
+            '    <a class="li_a" href="/monitor/speechContent/">言论内容预警</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-bullhorn"></i>'+
+            '    <a class="li_a" href="/monitor/eventEmerges/">事件涌现预警</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-time"></i>'+
+            '    <a class="li_a" href="/monitor/timeWarning/">时间预警</a>'+
+            '</li>';
+    }else if (typeNum==3){
+        afterEle=
+            '<li class="main_li">'+
+            '    <i class="icon icon-plus-sign"></i>'+
+            '    <a class="li_a" href="###">行为评估</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-lightbulb"></i>'+
+            '    <a class="li_a" href="/behavioGauge/influeAssess/">影响力评估</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-tint"></i>'+
+            '    <a class="li_a" href="/behavioGauge/speechContent/">渗透力评估</a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <i class="icon icon-glass"></i>'+
+            '    <a class="li_a" href="/behavioGauge/eventEmerges/">安全性评估</a>'+
+            '</li>';
+    }
     $('.behind').html(afterEle);
 </script>
 {% endblock %}

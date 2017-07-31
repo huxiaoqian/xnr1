@@ -15,14 +15,14 @@
 }
 /*=====*/
 body.modal-open {
-    overflow-y: auto !important;
+    /*overflow-y: auto !important;*/
     padding-right: 0 !important;
 }
 body {
     /*padding: 30px 0 ;*/
     background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
     /*background-size: 100% 100%;*/
-    transform: scale(1);
+    /*transform: scale(1);*/
 }
 #container {
     width: 1000px;

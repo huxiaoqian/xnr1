@@ -17,3 +17,7 @@ def login():
 @mod.route('/navigation/')
 def navigation():
     return render_template('index/navigationMain.html')
+
+@mod.route('/navigationQQ/')
+def navigationQQ():
+    return render_template('index/navigationMain_QQ.html')

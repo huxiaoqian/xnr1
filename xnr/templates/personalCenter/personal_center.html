@@ -1,10 +1,21 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>个人中心</title>{% endblock %}
 {% block my_css %}
-    <link rel="stylesheet" href="/static/css/personal_center.css">
-    <style>
-
-    </style>
+<link rel="stylesheet" href="/static/css/personal_center.css">
+<style>
+    .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .btn-primary {
+        background-color: transparent;
+        border-color: silver;
+    }
+    .btn-primary:hover {
+        background-color: rgba(3, 8, 16, 0.61);
+    }
+</style>
 {% endblock %}
 {% block main %}
 <div id="container">
@@ -13,38 +24,76 @@
             <img src="/static/images/peo_center.png" class="peo_icon"/>
             <b style="font-size: 16px;">我的虚拟人管理</b>
         </div>
-        <div style="display: inline-block;margin-left: 50px;">
-            <span>类型：</span>
-            <select id="weibo_QQ">
-                <option value="weibo">微博虚拟人</option>
-                <option value="qq">QQ群虚拟人</option>
-            </select>
+        <div style="margin-left:40px;">
+            <span style="color: white;">类型：</span>
+            <!--<select id="weibo_QQ">-->
+                <!--<option value="weibo">微博虚拟人</option>-->
+                <!--<option value="qq">QQ群虚拟人</option>-->
+            <!--</select>-->
+            <div id="weibo_QQ">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="demo-radio" checked>
+                    <span class="demo-radioInput"></span>微博虚拟人
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="demo-radio">
+                    <span class="demo-radioInput"></span>QQ群虚拟人
+                </label>
+            </div>
         </div>
     </div>
 
     <div class="has_person" style="padding: 10px 30px;">
         <div style="margin: 20px 0;">
             <img src="/static/images/icon.png">
-            <b>已有虚拟人</b>
+            <b style="color:white;">已有虚拟人</b>
         </div>
         <div class="has_list">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-has">
+            <span class="hasAdd" data-toggle="modal" data-target="#myModal-has">
                 <b class="icon icon-plus"></b>&nbsp;添加
-            </button>
-            <div id="haslist"></div>
+            </span>
+            <!--<button type="button" class="btn btn-primary"  style="color:white;">-->
+                <!---->
+            <!--</button>-->
+            <div class="haslistbag">
+                <div id="haslist"></div>
+            </div>
         </div>
     </div>
 
     <div class="undone_person" style="padding: 10px 30px;">
         <div style="margin: 20px 0;">
             <img src="/static/images/icon.png">
-            <b>未完成虚拟人</b>
+            <b style="color:white;">未完成虚拟人</b>
         </div>
         <div class="undone_list">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">
+            <span class="undoneAdd" data-toggle="modal" data-target="#myModal-undone">
                 <b class="icon icon-plus"></b>&nbsp;添加
-            </button>
-            <div id="undonelist"></div>
+            </span>
+            <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone" style="color:white;">-->
+                <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+            <!--</button>-->
+            <div class="undonelistbag">
+                <div id="undonelist"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="has_person_QQ" style="padding: 10px 30px;">
+        <div style="margin: 20px 0;">
+            <img src="/static/images/icon.png">
+            <b style="color:white;">已有虚拟人</b>
+        </div>
+        <div class="has_list_QQ">
+            <span class="hasAddQQ" data-toggle="modal" data-target="#myModal-has">
+                <b class="icon icon-plus"></b>&nbsp;添加
+            </span>
+            <!--<button type="button" class="btn btn-primary"  style="color:white;">-->
+            <!---->
+            <!--</button>-->
+            <div class="haslistbagQQ">
+                <div id="haslistQQ"></div>
+            </div>
         </div>
     </div>
 </div>

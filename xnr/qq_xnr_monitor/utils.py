@@ -17,9 +17,8 @@ def search_by_xnr_number(xnr_qq_number, date):
                 "filter":{
                     "bool":{
                         "must":[
-                            {"term":{"xnr_qq_number":xnr_qq_number}}
-                            {"term":{"sensitive":}}
-
+                            {"term":{"xnr_qq_number":xnr_qq_number}},
+                            # {"term":{"sensitive":}}
                         ]
                     }
                 }

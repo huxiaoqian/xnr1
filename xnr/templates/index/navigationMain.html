@@ -36,7 +36,7 @@
             <i class="icon icon-eye-open"></i>
             <div class="cover" id="info">
                 <em class="icon icon-plus-sign"></em>
-                <span>信息检测</span>
+                <span>信息监测</span>
             </div>
         </div>
         <div class="monitor" style="top: 490px;left: 750px;">
@@ -134,6 +134,9 @@
 <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    function getLocalTime(nS) {
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
+    }
     $(function(){
 
         $.fn.fullpage({
@@ -170,13 +173,26 @@
 
     //页面跳转
     $('#personal').on('click',function () {
+        localStorage.removeItem('TYPE');
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
         //$.cookie('TYPE','1',{path:'/'});
         localStorage.setItem('TYPE','1');
         window.open('/control/operationControl/');
-    })
+    });
+    $('#info').on('click',function () {
+        localStorage.removeItem('TYPE');
+        window.open('/inforDetection/inforChecking/');
+    });
+    $('#monitor').on('click',function () {
+        localStorage.setItem('TYPE','2');
+        window.open('/monitor/characterBehavior/');
+    });
+    $('#reported').on('click',function () {
+        localStorage.setItem('TYPE','3');
+        window.open('/behavioGauge/influeAssess/');
+    });
 
 </script>
 {% endblock %}
