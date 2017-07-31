@@ -39,6 +39,9 @@
                 </div>
             </div>
             <div class="post-3">
+                <div class="historyNews">
+                    <dis id="historyNews"></dis>
+                </div>
                 <div class="text_information">
                     <div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>
                     <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
@@ -71,14 +74,6 @@
                             <span class="center_2">
                     【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
                 </span>
-                            <!--<div class="center_3">-->
-                                <!--<span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;2017-11-12 11:23</span>-->
-                                <!--<span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">222</b>）</span>-->
-                                <!--<span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">222</b>）</span>-->
-                                <!--<span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">222</b>）</span>-->
-                                <!--<span class="cen3-5"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>-->
-                                <!--<span class="cen3-6"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;一键上报</span>-->
-                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -151,15 +146,15 @@
 
 
 <!--相似微博-->
-<div class="modal fade" id="simliar" tabindex="-1" role="dialog">
+<div class="modal fade" id="timeChecking" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">相似微博</h4>
+                <h4 class="modal-title">操作提示</h4>
             </div>
             <div class="modal-body">
-
+                请检查您输入的时间（时间不能为空）
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
@@ -223,8 +218,9 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/personal_center-1.js"></script>
+
 <script>
+    var qqNumber='{{QQ_id}}';
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中
@@ -234,7 +230,7 @@
         }
     };
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
+        format: "yyyy-mm-dd",
         minView:2, //控制时分秒
         autoclose: true,
         todayBtn: true,
@@ -247,12 +243,7 @@
         $('.start').datetimepicker('setEndDate',ev.date);
     });
 
-    $('.continue_already_created').on('click',function () {
-        window.open('/registered/socialAccounts/');
-    });
-    $('.first_created').on('click',function () {
-//        window.open('.html');
-    });
 
 </script>
+<script src="/static/js/postingQQ-1.js"></script>
 {% endblock %}

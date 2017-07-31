@@ -15,9 +15,9 @@ def create_qq_xnr(xnr_info):
     try:
         es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number, \
         body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'active_time':active_time})
-        result = 'Insert sucessful'
+        result = 1
     except:
-        result = 'Not sucessful'
+        result = 0
     return result
 
 def show_qq_xnr(MAX_VALUE):
@@ -33,9 +33,9 @@ def show_qq_xnr(MAX_VALUE):
 def delete_qq_xnr(qq_number):
     try:
         es_xnr.delete(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number)
-        result = 'Sucessful deleted'
+        result = 1
     except:
-        result = 'Not successful'
+        result = 0
     return result
 
 def change_qq_xnr(xnr_info):

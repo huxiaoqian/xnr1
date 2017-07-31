@@ -126,7 +126,7 @@ def search_by_speaker_nickname(xnr_qq_number, speaker_nickname, date):
 
 
 def search_by_period(startdate,enddate):
-    results = []
+    results = {}
     query_body = {
         "query":{
             "match_all": {}
@@ -138,9 +138,13 @@ def search_by_period(startdate,enddate):
 
     index_names = get_groupmessage_index_list(startdate,enddate)
     for index_name in index_names:
+        
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
-            results.append(result)
+            if results != {}:
+                results['hits']['hits'].extend(result['hits']['hits'])
+            else:
+                results=result.copy()
         except:
             pass
     return results

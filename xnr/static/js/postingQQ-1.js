@@ -1,17 +1,10 @@
 function personEarly(personEarly_QQ) {
-    let QQperson=window.JSON?JSON.parse(personEarly_QQ):eval("("+personEarly_QQ+")");
-    $.each(data,function (index,item) {
-        theme_all.push({
-            'name':item[1],
-            'include':item[2],
-            'time':item[5],
-            'keywords':item[3],
-            'label':item[4],
-        })
-    });
-    $('#perdealing').bootstrapTable('load', QQperson);
-    $('#perdealing').bootstrapTable({
-        data:QQperson,
+    let QQperson=eval(personEarly_QQ);
+    console.log(QQperson)
+    let sourcePER=QQperson.hits.hits;
+    $('#historyNews').bootstrapTable('load', sourcePER);
+    $('#historyNews').bootstrapTable({
+        data:sourcePER,
         search: true,//是否搜索
         pagination: true,//是否分页
         pageSize: 10,//单页记录数
@@ -29,85 +22,48 @@ function personEarly(personEarly_QQ) {
         sortOrder:"desc",
         columns: [
             {
-                title: "QQ号",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[1];
-                // }
-            },
-            {
-                title: "昵称",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[1];
-                // }
-            },
-            {
-                title: "好友数量",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[2];
-                // }
-            },
-            {
-                title: "敏感发言QQ群",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[5];
-                // },
-            },
-            {
-                title: "最后一次发言时间",//标题
+                title: "",//标题
                 field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-
-                },
-            },
-            {
-                title: "敏感言论消息",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-
-                },
+                    var name;
+                    if (row._source.speaker_nickname==''||row._source.speaker_nickname=='null'||row._source.speaker_nickname=='unknown'){
+                        name=row._source.speaker_qq_number;
+                    }else {
+                        name=row._source.speaker_nickname;
+                    }
+                    var str=
+                        '<div class="everySpeak" style="margin: 20px auto;">'+
+                        '   <div class="speak_center">'+
+                        '       <div class="center_rel">'+
+                        '           <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                        '           <a class="center_1" href="###" style="color:#03a9f4;font-weight: 700;">'+
+                        '           <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.speaker_qq_number+'</b><span>）</span></a>：'+
+                        '           <span class="center_2">'+row._source.text+ '</span>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
             },
         ],
-        onClickCell: function (field, value, row, $element) {
-            if ($element[0].innerText=='查看') {
-                window.open();
-            }else if ($element[0].innerText=='') {
-                window.open();
-            }
-        }
     });
-},
-var
-public_ajax.call_request('get',url_1,has_table);
+};
+var time=Date.parse(new Date());
+var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date='+time;
+public_ajax.call_request('get',QQ_news_url,personEarly);
 
-
-
-
-
+//选择时间搜索
+$('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
+    var start=$('.start').val();
+    var end=$('.end').val();
+    if (start==''||end==''){
+        $('#timeChecking').modal('show');
+    }else {
+        var search_news_url='/qq_xnr_operate/search_by_period/?startdate='+start+'&enddate='+end;
+        public_ajax.call_request('get',search_news_url,personEarly);
+    }
+});
