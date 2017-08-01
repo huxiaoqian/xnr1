@@ -1,0 +1,279 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>虚拟人定制 - 目标定制</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/target_custom.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-right: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <img src="/static/images/target.png" class="icon">
+            <b>第一步：目标定制</b>
+        </div>
+        <div class="tit-2">
+            <div style="margin: 15px 0;">
+                <b>渗透领域：</b>
+                <span class="buildNew">没有想要的？点我创建</span>
+            </div>
+            <div class="field">
+                <label class="demo-label" title="习大大粉丝群">
+                    <input class="demo-radio" type="radio" name="demo1" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 习大大粉丝群
+                </label>
+                <label class="demo-label" title="高校学生">
+                    <input class="demo-radio" type="radio" name="demo1">
+                    <span class="demo-checkbox demo-radioInput"></span> 高校学生
+                </label>
+                <label class="demo-label" title="维权媒体">
+                    <input class="demo-radio" type="radio" name="demo1">
+                    <span class="demo-checkbox demo-radioInput"></span> 维权媒体
+                </label>
+                <label class="demo-label" title="翻墙爱好者">
+                    <input class="demo-radio" type="radio" name="demo1">
+                    <span class="demo-checkbox demo-radioInput"></span> 翻墙爱好者
+                </label>
+                <label class="demo-label" title="草根群体">
+                    <input class="demo-radio" type="radio" name="demo1">
+                    <span class="demo-checkbox demo-radioInput"></span> 草根群体
+                </label>
+                <label class="demo-label" title="金融从业者">
+                    <input class="demo-radio" type="radio" name="demo1">
+                    <span class="demo-checkbox demo-radioInput"></span> 金融从业者
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="buildOption">
+        <div class="build-1">
+            <img src="/static/images/icon.png" alt="">
+            <span>角色身份：</span>
+            <div class="opt-1 opt">
+                <label class="demo-label" title="学生">
+                    <input class="demo-radio" type="radio" name="demo2" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 学生
+                </label>
+                <label class="demo-label" title="记者">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 记者
+                </label>
+                <label class="demo-label" title="律师">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 律师
+                </label>
+                <label class="demo-label" title="演员">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 演员
+                </label>
+                <label class="demo-label" title="歌手">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 歌手
+                </label>
+                <label class="demo-label" title="导演">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 导演
+                </label>
+                <label class="demo-label" title="作家">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 作家
+                </label>
+                <label class="demo-label" title="编剧">
+                    <input class="demo-radio" type="radio" name="demo2">
+                    <span class="demo-checkbox demo-radioInput"></span> 编剧
+                </label>
+            </div>
+        </div>
+        <div class="build-2">
+            <img src="/static/images/icon.png" alt="">
+            <span>政治倾向：</span>
+            <div class="opt-2 opt">
+                <label class="demo-label" title="左倾">
+                    <input class="demo-radio" type="radio" name="demo3" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 左倾
+                </label>
+                <label class="demo-label" title="中立">
+                    <input class="demo-radio" type="radio" name="demo3">
+                    <span class="demo-checkbox demo-radioInput"></span> 中立
+                </label>
+                <label class="demo-label" title="右倾">
+                    <input class="demo-radio" type="radio" name="demo3">
+                    <span class="demo-checkbox demo-radioInput"></span> 右倾
+                </label>
+            </div>
+        </div>
+        <div class="build-3">
+            <img src="/static/images/icon.png" alt="">
+            <span>心理特征：</span>
+            <div class="opt-3 opt">
+                <label class="demo-label" title="中立">
+                    <input class="demo-radio" type="checkbox" name="demo4" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 中立
+                </label>
+                <label class="demo-label" title="积极">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 积极
+                </label>
+                <label class="demo-label" title="悲伤">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 悲伤
+                </label>
+                <label class="demo-label" title="焦虑">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 焦虑
+                </label>
+                <label class="demo-label" title="生气">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 生气
+                </label>
+                <label class="demo-label" title="厌恶">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 厌恶
+                </label>
+                <label class="demo-label" title="消极其他">
+                    <input class="demo-radio" type="checkbox" name="demo4">
+                    <span class="demo-checkbox demo-radioInput"></span> 消极其他
+                </label>
+            </div>
+        </div>
+        <div class="build-4">
+            <img src="/static/images/icon.png" alt="">
+            <span>业务目标：</span>
+            <div class="opt-4 opt">
+                <label class="demo-label" title="扩大影响">
+                    <input class="demo-radio" type="checkbox" name="demo5" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 扩大影响
+                </label>
+                <label class="demo-label" title="渗透">
+                    <input class="demo-radio" type="checkbox" name="demo5">
+                    <span class="demo-checkbox demo-radioInput"></span> 渗透
+                </label>
+            </div>
+        </div>
+        <div class="build-5">
+            <img src="/static/images/icon.png" alt="">
+            <span>日常兴趣：</span>
+            <div class="opt-5 opt">
+                <label class="demo-label" title="旅游">
+                    <input class="demo-radio" type="checkbox" name="demo6" checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 旅游
+                </label>
+                <label class="demo-label" title="摄影">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 摄影
+                </label>
+                <label class="demo-label" title="时尚">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 时尚
+                </label>
+                <label class="demo-label" title="美食">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 美食
+                </label>
+                <label class="demo-label" title="汽车">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 汽车
+                </label>
+                <label class="demo-label" title="游戏">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 游戏
+                </label>
+                <label class="demo-label" title="星座">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 星座
+                </label>
+                <label class="demo-label" title="音乐">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 音乐
+                </label>
+                <label class="demo-label" title="电影">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 电影
+                </label>
+                <label class="demo-label" title="运动">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 运动
+                </label>
+                <label class="demo-label" title="搞笑">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 搞笑
+                </label>
+                <label class="demo-label" title="军事">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 军事
+                </label>
+                <label class="demo-label" title="历史">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 历史
+                </label>
+                <label class="demo-label" title="动漫">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 动漫
+                </label>
+                <label class="demo-label" title="萌宠">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                </label>
+                <label class="demo-label" title="情感">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 情感
+                </label>
+                <label class="demo-label" title="数码">
+                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <span class="demo-checkbox demo-radioInput"></span> 数码
+                </label>
+            </div>
+        </div>
+        <div class="build-6">
+            <img src="/static/images/icon.png" alt="">
+            <span>检测关键词：</span>
+            <div class="opt-6" style="margin:10px 0;">
+                <input type="text" class="keywords" placeholder="请输入关键词"/>
+            </div>
+        </div>
+    </div>
+    <div class="next">
+        <span class="nextButton">下一步</span>
+    </div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('6');
+    $('.nextButton').on('click',function () {
+        window.open('/registered/virtualCreated/');
+    })
+</script>
+<script src="/static/js/safe-1.js"></script>
+{% endblock %}

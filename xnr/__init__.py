@@ -11,6 +11,7 @@ from xnr.registered.views import mod as registeredModule
 from xnr.inforDetection.views import mod as inforDetectionModule
 from xnr.monitor.views import mod as monitorModule
 from xnr.behavioGauge.views import mod as behavioGaugeModule
+from xnr.reportManage.views import mod as reportManageModule
 from xnr.system_manage.views import mod as systemmanageModule
 from xnr.weibo_xnr_operate.views import mod as weiboxnroperateModule
 from xnr.weibo_xnr_create.views import mod as weiboxnrcreateModule
@@ -41,6 +42,7 @@ def create_app():
     app.register_blueprint(inforDetectionModule)
     app.register_blueprint(monitorModule)
     app.register_blueprint(behavioGaugeModule)
+    app.register_blueprint(reportManageModule)
     app.register_blueprint(systemmanageModule)
     app.register_blueprint(weiboxnroperateModule)
     app.register_blueprint(weiboxnrcreateModule)

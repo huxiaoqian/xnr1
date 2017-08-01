@@ -3,26 +3,24 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/social_accounts.css">
     <style>
-        body {
-            padding-right: 0!important;
-        }
+
     </style>
 {% endblock %}
 {% block main %}
 <div id="container">
     <div class="title">
-        <div>
+        <div class="tit-1">
             <span class="icon icon-twitter account_icon"></span>
             <b style="font-size: 16px;">第三步：绑定社交账户</b>
         </div>
     </div>
     <div class="info_sure">
         <div class="info_left">
-            <p style="font-size: 16px;font-weight:900;margin-bottom: 10px;">账户信息</p>
+            <p style="font-size: 16px;font-weight:900;margin-bottom: 10px;color: white;">账户信息</p>
             <div class="info_list">
                 <div class="list-1">
-                    <img src="../static/images/icon.png" alt="">
-                    <span style="font-size: 18px;font-weight: 900;color: #333">基本信息</span>
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">基本信息</span>
                 </div>
                 <div class="list-2">
                     <p class="news">用户ID：<span id="user_id">1110</span></p>
@@ -33,8 +31,8 @@
                     <p class="news">所在地：<span id="location">北京</span></p>
                 </div>
                 <div class="list-3">
-                    <img src="../static/images/icon.png" alt="">
-                    <span style="font-size: 18px;font-weight: 900;color: #333">角色定位</span>
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">角色定位</span>
                 </div>
                 <div class="list-4">
                     <p class="news">渗透领域：<span id="field">习大大粉丝</span></p>
@@ -49,7 +47,7 @@
             <div class="bind_info">
                 <input type="text" id="username" placeholder="Username"/>
                 <input type="password" id="password" placeholder="Password"/>
-                <button id="go_bind">去绑定</button>
+                <span id="go_bind">去绑定</span>
             </div>
         </div>
     </div>
@@ -108,8 +106,8 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/social_accounts-1.js"></script>
 <script>
-
+    judgment('6');
 </script>
+<script src="/static/js/social_accounts-1.js"></script>
 {% endblock %}

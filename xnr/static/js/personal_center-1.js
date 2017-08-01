@@ -279,11 +279,7 @@ var public_ajax= {
                 },
             ],
             onClickCell: function (field, value, row, $element) {
-                if ($element[0].innerText=='查看') {
-                    window.open();
-                }else if ($element[0].innerText=='') {
-                    window.open();
-                }
+
             }
         });
     },
@@ -295,11 +291,11 @@ var public_ajax= {
             data:sourcePER,
             search: true,//是否搜索
             pagination: true,//是否分页
-            pageSize: 10,//单页记录数
+            pageSize:10,//单页记录数
             pageList: [15,20,25],//分页步进值
             sidePagination: "client",//服务端分页
             searchAlign: "left",
-            searchOnEnterKey: false,//回车搜索
+            searchOnEnterKey: true,//回车搜索
             showRefresh: false,//刷新按钮
             showColumns: false,//列选择按钮
             buttonsAlign: "right",//按钮对齐方式

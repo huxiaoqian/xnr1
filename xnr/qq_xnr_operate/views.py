@@ -6,7 +6,6 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from xnr.parameter import MAX_VALUE
-from xnr.time_utils import ts2date
 from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_speaker_number,search_by_speaker_nickname,\
                   search_by_period
@@ -42,9 +41,8 @@ def ajax_search_by_keyword():
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')
-    ts = request.args.get('date','')
-    # date = ts2date(ts)
-    date = '2017-07-14'
+    # date = request.args.get('date','')
+    date = '2017-07-13'
     results = search_by_xnr_number(xnr_qq_number, date)
     return json.dumps(results)
 

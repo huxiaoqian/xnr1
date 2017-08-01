@@ -1,0 +1,170 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>行为评估 - 渗透力评估</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/penetration.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1" style="display: inline-block;">
+            <span class="icon icon-tint note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">渗透力评估</b>
+        </div>
+        <div class="tit-2" style="display: inline-block;position: relative;top:-5px;left: 30px;">
+            <span style="color: #fff;">得分：</span>
+            <b class="score" style="color:#f44336;">98</b>
+        </div>
+    </div>
+    <div class="type_page" style="width: 90%;margin: 20px auto 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#focusGroup" role="tab" data-toggle="tab"><b class="icon icon-group"></b>&nbsp;关注群体敏感度</a>
+            </li>
+            <li role="presentation">
+                <a href="#fansGroup" role="tab" data-toggle="tab"><b class="icon icon-star"></b>&nbsp;粉丝群体敏感度</a>
+            </li>
+            <li role="presentation">
+                <a href="#post" role="tab" data-toggle="tab"><b class="icon icon-bell-alt"></b>&nbsp;发布信息敏感度</a>
+            </li>
+            <li role="presentation">
+                <a href="#social" role="tab" data-toggle="tab"><b class="icon icon-retweet"></b>&nbsp;社交反馈敏感度</a>
+            </li>
+            <li role="presentation">
+                <a href="#warning" role="tab" data-toggle="tab"><b class="icon icon-warning-sign"></b>&nbsp;预警上报敏感度</a>
+            </li>
+        </ul>
+        <div class="penetration">
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="focusGroup">
+                    <div class="focus-1 caption" style="margin-top: 20px;">
+                        <div class="focus-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo1" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo1">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="focus-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="fansGroup">
+                    <div class="fansgroup-1 caption" style="margin-top: 20px;">
+                        <div class="fansgroup-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo2" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo2">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="fansgroup-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="post">
+                    <div class="post-1 caption" style="margin-top: 20px;">
+                        <div class="post-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo3" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo3">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="post-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="social">
+                    <div class="social-1 caption" style="margin-top: 20px;">
+                        <div class="social-1-opt">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo44" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 被@总数
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo44">
+                                <span class="demo-checkbox demo-radioInput"></span> 被评论总数
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo44">
+                                <span class="demo-checkbox demo-radioInput"></span> 被转发总数
+                            </label>
+                        </div>
+                        <div class="social-2-opt">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo4" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo4">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="social-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="warning">
+                    <div class="warning-1 caption" style="margin-top: 20px;">
+                        <div class="warning-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo5" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo5">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="warning-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('5');
+</script>
+<script src="/static/js/penetration-1.js"></script>
+{% endblock %}
