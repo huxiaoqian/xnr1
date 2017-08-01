@@ -16,7 +16,17 @@
     .btn-primary:hover {
         background-color: rgba(3, 8, 16, 0.61);
     }
-
+    /*表格中的样式*/
+    .fixed-table-toolbar .search {width: 80%;}
+    .haslistbagQQ .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
     .fixed-table-container thead th .sortable {
         padding-right: 15px;
     }
@@ -36,6 +46,18 @@
     .bootstrap-table .table>thead>tr>th {
         width:3%;
     }
+    .pagination>li>a {
+        background:rgba(8,23,44,0.35);
+        color: white;
+    }
+    .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover,
+    .pagination>li>a:focus, .pagination>li>a:hover {
+        background:#31708f;
+        border-color: silver;
+    }
+    .pagination>li>a:focus, .pagination>li>a:hover {
+        color: white;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -53,11 +75,11 @@
             <!--</select>-->
             <div id="weibo_QQ">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="demo-radio" checked>
+                    <input class="demo-radio" type="radio" name="demo-radio" weiboqq="W" checked>
                     <span class="demo-radioInput"></span>微博虚拟人
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="demo-radio">
+                    <input class="demo-radio" type="radio" name="demo-radio" weiboqq="Q">
                     <span class="demo-radioInput"></span>QQ群虚拟人
                 </label>
             </div>
@@ -100,7 +122,7 @@
         </div>
     </div>
 
-    <div class="has_person_QQ" style="padding: 10px 30px;">
+    <div class="has_person_QQ" style="padding: 10px 30px;display: none;">
         <div style="margin: 20px 0;">
             <img src="/static/images/icon.png">
             <b style="color:white;">已有虚拟人</b>
@@ -109,9 +131,6 @@
             <span class="hasAddQQ" data-toggle="modal" data-target="#myModal-has">
                 <b class="icon icon-plus"></b>&nbsp;添加
             </span>
-            <!--<button type="button" class="btn btn-primary"  style="color:white;">-->
-            <!---->
-            <!--</button>-->
             <div class="haslistbagQQ">
                 <div id="haslistQQ"></div>
             </div>
@@ -183,14 +202,27 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/personal_center-1.js"></script>
+
 <script>
+    judgment('1');
     $('.continue_already_created').on('click',function () {
         window.open('/registered/socialAccounts/');
     });
     $('.first_created').on('click',function () {
-//        window.open('.html');
-    });
 
+    });
+    $('input[name=demo-radio]').on('click',function () {
+        var Type=$(this).attr('weiboqq');
+        if (Type=='w'){
+            $('.has_person').show();
+            $('.undone_person').show();
+            $('.has_person_QQ').hide();
+        }else {
+            $('.has_person').hide();
+            $('.undone_person').hide();
+            $('.has_person_QQ').show();
+        }
+    });
 </script>
+<script src="/static/js/personal_center-1.js"></script>
 {% endblock %}

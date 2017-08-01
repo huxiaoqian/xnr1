@@ -1,0 +1,105 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>上报管理</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/report_manage.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .type2 .demo-label{width: 90px;}
+    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-upload-alt note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">上报管理</b>
+        </div>
+        <div class="output">导出至Excel文件</div>
+    </div>
+    <div class="type" style="margin: 20px 0;">
+        <span class="type-1">类型：</span>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="demo1" checked>
+            <span class="demo-checkbox demo-radioInput"></span> 微博虚拟人
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="demo1">
+            <span class="demo-checkbox demo-radioInput"></span> QQ群虚拟人
+        </label>
+    </div>
+    <div class="type type2">
+        <span class="type-1">上报类型：</span>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="demo2" checked>
+            <span class="demo-checkbox demo-radioInput"></span> 人物
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="demo2">
+            <span class="demo-checkbox demo-radioInput"></span> 言论
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="demo2">
+            <span class="demo-checkbox demo-radioInput"></span> 事件
+        </label>
+    </div>
+    <div class="person">
+        <div class="post_center-every">
+            <img src="/static/images/post-6.png" alt="" class="center_icon">
+            <div class="center_rel">
+                <a class="center_1" href="###">何仙姑</a>：
+                <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                <div class="center_3">
+                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;<b>2017-11-12 11:23</b></span>
+                    <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">222</b>）</span>
+                    <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">222</b>）</span>
+                    <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">222</b>）</span>
+                </div>
+            </div>
+        </div>
+        <div id="person"></div>
+    </div>
+    <div class="speaking">
+        <div id="speaking"></div>
+    </div>
+    <div class="event">
+        <div id="event"></div>
+    </div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('7');
+</script>
+<script src="/static/js/report_manage-1.js"></script>
+{% endblock %}

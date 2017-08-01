@@ -48,14 +48,14 @@
         </div>
         <div class="reported" style="top:100px;right:260px;">
             <i class="icon icon-sitemap"></i>
-            <div class="cover">
+            <div class="cover" id="reported">
                 <em class="icon icon-plus-sign"></em>
                 <span>行为评估</span>
             </div>
         </div>
         <div class="knowledge" style="top:370px;right:160px;">
             <i class="icon icon-user-md"></i>
-            <div class="cover" style="left: 20px;">
+            <div class="cover" id="knowledge" style="left: 20px;">
                 <em class="icon icon-plus-sign"></em>
                 <span>虚拟人定制</span>
             </div>
@@ -95,7 +95,7 @@
         <p>
             支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
         </p>
-        <div class="bg51-top">
+        <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
             <span>上报管理</span>
         </div>
@@ -107,7 +107,7 @@
         <p>
             支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
         </p>
-        <div class="bg55-top">
+        <div class="bg55-top" id="knowledgebase">
             <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
             <span>知识库管理</span>
         </div>
@@ -118,7 +118,7 @@
 
         <p>及时捕获网络重大突发事件和苗头性敏感信息，及时预警和回应疏导舆论焦点，信息预警延迟不超过5分钟。</p>
 
-        <div class="bg54-top">
+        <div class="bg54-top" id="system">
             <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
             <span>系统管理</span>
         </div>
@@ -129,7 +129,7 @@
 
 {% block my_js %}
 <script src="/static/js/jquery-3.1.1.min.js"></script>
-<script src="/static/js/jquery.cookie.js"></script>
+<!-- <script src="/static/js/jquery.cookie.js"></script> -->
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
@@ -173,25 +173,25 @@
 
     //页面跳转
     $('#personal').on('click',function () {
-        localStorage.removeItem('TYPE');
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
-        //$.cookie('TYPE','1',{path:'/'});
-        localStorage.setItem('TYPE','1');
         window.open('/control/operationControl/');
     });
     $('#info').on('click',function () {
-        localStorage.removeItem('TYPE');
         window.open('/inforDetection/inforChecking/');
     });
     $('#monitor').on('click',function () {
-        localStorage.setItem('TYPE','2');
         window.open('/monitor/characterBehavior/');
     });
     $('#reported').on('click',function () {
-        localStorage.setItem('TYPE','3');
         window.open('/behavioGauge/influeAssess/');
+    });
+    $('#knowledge').on('click',function () {
+        window.open('/registered/targetCustom/');
+    });
+    $('#reportedmange').on('click',function () {
+        window.open('/reportManage/management/');
     });
 
 </script>

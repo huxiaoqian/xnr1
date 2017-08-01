@@ -37,8 +37,7 @@ body {
 #container .has_person_QQ .has_list_QQ{
     position: relative;
 }
-#container .has_person .has_list button,#container .undone_person .undone_list button,
-#container .has_person_QQ .has_list_QQ button{
+#container .has_person .has_list button,#container .undone_person .undone_list button{
     /*background: #003366;*/
     border-radius: 5px;
     color: white;
@@ -54,6 +53,15 @@ body {
     border-radius: 5px;
     background: transparent;
     cursor: pointer;
+}
+#container .has_person .has_list .hasAdd,
+#container .undone_person .undone_list .undoneAdd,
+#container .has_person_QQ .has_list_QQ .hasAddQQ {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    padding: 6px 10px;
+    background:rgba(8,23,44,0.35);
 }
 #container .has_person .has_list .hasAdd:hover,
 #container .undone_person .undone_list .undoneAdd:hover,

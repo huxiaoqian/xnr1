@@ -1,49 +1,57 @@
 /*内容样式*/
-body.modal-open {
-    overflow-y: auto !important;
-    padding-right: 0 !important;
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
 }
 #container {
     width: 1000px;
-    margin:10px auto 30px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.25);
+    position: relative;
+    top: 80px;
 }
 #container .title {
     width: 100%;
     position: relative;
 }
-#container .title .peo_icon {
-    width: 30px;
-    height: 30px;
-}
-#container .title b {
-    color: #003366;
+#container .title .tit-1 b,#container .title .tit-2 b {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
 }
 #container .title #character {
     font-size: 16px;
     margin-top: 20px;
     padding: 40px 10px;
     border: 1px solid silver;
-    box-shadow: 2px 2px 2px #ccc;
 }
 #container .title #character .define {
     display: inline-block;
     margin: 5px;
     width: 24%;
+    color: white;
 }
 #container .title #role_example {
     position: absolute;
     top: 60px;
     right: 20px;
     border-radius: 10px;
-    border: 1px solid rgba(121, 121, 121, 1);
+    border: 1px solid silver;
 }
 #container .title #role_example li {
     list-style-type:disc;
     list-style-position: inside;
+    color: white;
 }
 #container .title #character .define span,
 #container .title #role_example li a {
     width: 100px;
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -51,22 +59,26 @@ body.modal-open {
 /*账户创建信息*/
 #container .account {
     position: relative;
-    margin-top: 20px;
-    padding: 30px 10px;
-    border: 1px solid silver;
-    box-shadow: 2px 2px 2px #ccc;
+    margin: 20px 0;
+}
+#container .account b{
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
 }
 #container .account .account-1 {
     font-size: 16px;
     width: 70%;
 }
 #container .account .account-1 div.options {
-    padding-left:12px;
     margin-top: 10px;
 }
 #container .account .account-1 div.options span {
     display: inline-block;
     width: 100px;
+    color: white;
 }
 #container .account .account-1 input {
     width: 270px;
@@ -74,83 +86,115 @@ body.modal-open {
     padding: 3px 7px;
     border: 1px solid silver;
     margin: 0 15px;
+    background: transparent;
+    text-align: center;
+    color: white;
+    border-radius: 5px;
 }
-#container .account .account-1 select,
+#container .account .account-1 #gender {
+    width: 270px;
+    display: inline-block;
+    margin: 0 15px;
+    font-size: 14px;
+    text-align: center;
+}
 #container .account .account-1 textarea {
     width: 270px;
     border: 1px solid silver;
     padding: 3px 7px;
     margin: 0 15px;
+    background: transparent;
+    color: white;
 }
 #container .account .account-1 a {
     font-size: 10px;
+    color:white;
 }
 #container .account .account-2 {
     display: none;
     position: absolute;
-    top: 50px;
-    right:20px;
+    top:70px;
+    right:50px;
     border-radius: 10px;
-    border: 1px solid rgba(121, 121, 121, 1);
+    border: 1px solid silver;
 }
 #container .account .account-2 li {
     list-style-type:disc;
     list-style-position: inside;
+    color: white;
 }
 #container .account .account-2 li a {
     width: 100px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: white;
 }
 /*其他信息*/
 #container .other_basic {
     position: relative;
-    margin-top: 20px;
-    padding: 30px 10px;
-    border: 1px solid silver;
-    box-shadow: 2px 2px 2px #ccc;
+    margin: 20px 0;
+}
+#container .other_basic b{
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
 }
 #container .other_basic .other-1 {
     font-size: 16px;
-    width: 70%;
+    width: 80%;
 }
 #container .other_basic .other-1 div.others {
-    padding-left:12px;
     margin-top: 10px;
 }
 #container .other_basic .other-1 div.others span._in {
     display: inline-block;
     width: 100px;
+    color: white;
 }
 #container .other_basic .other-1 div.others a {
     font-size: 10px;
+    color: white;
+}
+#container .other_basic .other-1 div.others .task_time input {
+    background: transparent;
+    padding: 3px 8px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+    width: 220px;
+    color: white;
 }
 #container .other_basic .other-2 {
-    padding-left:12px;
     margin-top: 10px;
 }
 #container .other_basic .other-2 div.choose span {
     display: inline-block;
     width: 100px;
+    color: white;
 }
 #container .other_basic .other-2 div.choose a {
     font-size: 10px;
+    color: white;
 }
 #container .other_basic .other-3 {
     display: none;
     position: absolute;
     right:20px;
-    top:30px;
+    top:55px;
     border-radius: 10px;
-    border: 1px solid rgba(121, 121, 121, 1);
+    border: 1px solid silver;
 }
 #container .other_basic .other-3 li {
     list-style-type:disc;
     list-style-position: inside;
+    color: white;
 }
 #container .other_basic .other-3 li a {
     width: 100px;
+    color: white;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -160,4 +204,15 @@ body.modal-open {
     padding: 10px;
     margin: 30px 0;
     text-align: center;
+}
+#container .page span {
+    padding: 5px 10px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background:rgba(117, 97, 97, 0.32);
+    cursor: pointer;
+}
+#container .page span:hover {
+    background: black;
 }

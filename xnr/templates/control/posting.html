@@ -380,6 +380,7 @@
 {% block my_js %}
 <script src="/static/js/personal_center-1.js"></script>
 <script>
+    judgment('2');
     $('.friends .dropdown-menu li').on('click',function(e) {
         $('.friends button b').attr('title',e.target.innerHTML).text(e.target.innerHTML);
     });

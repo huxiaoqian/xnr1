@@ -19,6 +19,13 @@ a,a:link,a:hover,a:visited,a:active {
     text-decoration: none;
 }
 /*内容样式*/
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.modal.in .modal-dialog {
+    margin: 150px auto 0;
+}
 body.modal-open {
     /*overflow-y: auto !important;*/
     padding-right: 0 !important;
@@ -63,7 +70,11 @@ body.modal-open {
     top: 1px;
 }
 #nav .coordinate {
-    float: right;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 20px;
+    color:#1296db;
 }
 #nav .nav_bottom .loadingUser:hover button,
 #nav .nav_bottom .loadingUser:hover button span {

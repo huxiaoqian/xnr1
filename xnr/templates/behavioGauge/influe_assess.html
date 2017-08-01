@@ -1,5 +1,5 @@
 {% extends "publicNav.html" %}
-{% block title %}<title>行为评估</title>{% endblock %}
+{% block title %}<title>行为评估 - 影响力评估</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/influe_assess.css">
 <style>
@@ -17,7 +17,7 @@
 <div id="container">
     <div class="title">
         <div class="tit-1" style="display: inline-block;">
-            <span class="icon icon-magic note_icon" style="color: #fff;"></span>
+            <span class="icon icon-lightbulb note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">影响力评估</b>
         </div>
         <div class="tit-2" style="display: inline-block;position: relative;top:-5px;left: 30px;">
@@ -186,8 +186,8 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/influe_assess-1.js"></script>
 <script>
-
+    judgment('5');
 </script>
+<script src="/static/js/influe_assess-1.js"></script>
 {% endblock %}

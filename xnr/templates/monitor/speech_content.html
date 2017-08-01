@@ -125,8 +125,8 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/speech_content-1.js"></script>
 <script>
+    judgment('4');
     $('.demo-radio').on('click',function () {
         console.log(!!$(this).is(':checked'))
     })
@@ -146,4 +146,5 @@
     });
 
 </script>
+<script src="/static/js/speech_content-1.js"></script>
 {% endblock %}

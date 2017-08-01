@@ -10,10 +10,15 @@ from flask import Blueprint, url_for, render_template, request,\
 
 mod = Blueprint('registered', __name__, url_prefix='/registered')
 
-@mod.route('/socialAccounts/')
-def socialAccounts():
-    return render_template('registered/social_accounts.html')
+@mod.route('/targetCustom/')
+def targetCustom():
+    return render_template('registered/target_custom.html')
 
 @mod.route('/virtualCreated/')
 def virtualCreated():
     return render_template('registered/virtual_created.html')
+    
+@mod.route('/socialAccounts/')
+def socialAccounts():
+    return render_template('registered/social_accounts.html')
+

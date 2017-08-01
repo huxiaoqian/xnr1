@@ -1,6 +1,5 @@
 function personEarly(personEarly_QQ) {
     let QQperson=eval(personEarly_QQ);
-    console.log(QQperson)
     let sourcePER=QQperson.hits.hits;
     $('#historyNews').bootstrapTable('load', sourcePER);
     $('#historyNews').bootstrapTable({
@@ -53,7 +52,7 @@ function personEarly(personEarly_QQ) {
     });
 };
 var time=Date.parse(new Date());
-var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date='+time;
+var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date=2017-7-17'//+time;
 public_ajax.call_request('get',QQ_news_url,personEarly);
 
 //选择时间搜索
