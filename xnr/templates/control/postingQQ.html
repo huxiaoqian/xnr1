@@ -3,6 +3,25 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/postingQQ.css">
     <style>
+        #historyNews .bootstrap-table {
+            margin: 0 auto;
+            height: auto!important;
+        }
+        #historyNews .table-no-bordered,#historyNews .table>tbody>tr>td,#historyNews .fixed-table-container,
+        #historyNews .bootstrap-table .table>thead>tr>th,.historyNews .bootstrap-table .table{
+            border: none;
+        }
+        #historyNews thead {
+            display: none!important;
+        }
+        #historyNews .fixed-table-body {
+            height: auto!important;
+        }
+        .fixed-table-container {top: 15px;}
+        .table-hover>tbody>tr:hover {
+            background-color: inherit!important;
+        }
+        #historyNews thead {display: none;}
         .fixed-table-toolbar .search {width: 100%;}
         .historyNews .form-control {
             text-align: center;
@@ -12,6 +31,10 @@
             border-radius: 5px;
             padding: 4px 7px;
             background: rgba(8,23,44,0.35);
+        }
+        .historyNews .fixed-table-body {
+            overflow-y: hidden;
+            text-align: center;
         }
     </style>
 {% endblock %}
@@ -30,13 +53,13 @@
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">群历史消息</span>
             </div>
             <div class="post-2">
-                <div style="text-align: center;padding: 10px;width: 100%;">
-                    <div style="display: inline-block;width: 94%;">
-                        <input type="text" id="search-1-post" placeholder="请输入关键词或人物昵称或人物qq号码" style="width: 100%;"/>
-                    </div>
+                <!--<div style="text-align: center;padding: 10px;width: 100%;">-->
+                    <!--<div style="display: inline-block;width: 94%;">-->
+                        <!--<input type="text" id="search-1-post" placeholder="请输入关键词或人物昵称或人物qq号码" style="width: 100%;"/>-->
+                    <!--</div>-->
                     <!--<button type="button" class="btn-xs" id="search-post" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
-                    <span id="search-post">搜索</span>
-                </div>
+                    <!--<span id="search-post">搜索</span>-->
+                <!--</div>-->
                 <div class="titTime">
                     <div style="display: inline-block;width: 94%;text-align: right;">
                         <span style="display: inline-block;width: 11%;text-align: left;">时间范围：从</span>
@@ -51,48 +74,48 @@
                 <div class="historyNews">
                     <dis id="historyNews"></dis>
                 </div>
-                <div class="text_information">
-                    <div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>
-                    <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
-                        <table id="input-table" class="In-table" style="width:100%;">
-                            <tbody class="In-table" style="width:100%!important;">
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="fanye" style="width:100%;text-align:center;margin-top: 20px;">
-                    <span style="display:none;">
-                        每页显示
-                        <input type="text" id="PageNo" size="5" value="5" style="text-align:center;border:1px solid #ccc;"/>组
-                    </span>
-                        <div id="div-button" style="display:inline-block;margin-left:5px;">
-                            <input type="button" value="首页" id="F-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                            <input type="button" value="上一页" id="Pre-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                            <input type="button" value="下一页" id="Nex-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                            <input type="button" value="尾页" id="L-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                        </div>
-                        <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
-                        <span style="display:inline-block;">总共<span id="s1"></span>页</span>
-                    </div>
-                </div>
-                <div class="everySpeak" style="margin: 20px auto;">
-                    <div class="speak_center">
-                        <div class="center_rel">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <a class="center_1" href="###" style="color:#03a9f4;font-weight: 700;">
-                                <b class="name">小小小鸟</b> <span>（</span><b class="QQnum"></b><span>）</span></a>：
-                            <span class="center_2">
-                    【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                </span>
-                        </div>
-                    </div>
-                </div>
+                <!--<div class="text_information">-->
+                    <!--<div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>-->
+                    <!--<div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">-->
+                        <!--<table id="input-table" class="In-table" style="width:100%;">-->
+                            <!--<tbody class="In-table" style="width:100%!important;">-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                    <!--<div class="fanye" style="width:100%;text-align:center;margin-top: 20px;">-->
+                    <!--<span style="display:none;">-->
+                        <!--每页显示-->
+                        <!--<input type="text" id="PageNo" size="5" value="5" style="text-align:center;border:1px solid #ccc;"/>组-->
+                    <!--</span>-->
+                        <!--<div id="div-button" style="display:inline-block;margin-left:5px;">-->
+                            <!--<input type="button" value="首页" id="F-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">-->
+                            <!--<input type="button" value="上一页" id="Pre-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">-->
+                            <!--<input type="button" value="下一页" id="Nex-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">-->
+                            <!--<input type="button" value="尾页" id="L-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">-->
+                        <!--</div>-->
+                        <!--<span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>-->
+                        <!--<span style="display:inline-block;">总共<span id="s1"></span>页</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="everySpeak" style="margin: 20px auto;">-->
+                    <!--<div class="speak_center">-->
+                        <!--<div class="center_rel">-->
+                            <!--<img src="/static/images/post-6.png" alt="" class="center_icon">-->
+                            <!--<a class="center_1" href="###" style="color:#03a9f4;font-weight: 700;">-->
+                                <!--<b class="name">小小小鸟</b> <span>（</span><b class="QQnum"></b><span>）</span></a>：-->
+                            <!--<span class="center_2">-->
+                    <!--【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！-->
+                <!--</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
     </div>
 
-    <div class="dialogue" style="width: 90%;margin: 0 auto;position: relative;">
+    <div class="dialogue" style="width:86%;margin: 0 auto;position: relative;">
         <div class="dialogue-1" style="width: 70%;">
-            <textarea id="post-content" cols="" rows="6"></textarea>
+            <textarea id="post-content" class="form-control" cols="" rows="6"></textarea>
             <div class="add_thing">
                 <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
                 <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
@@ -101,7 +124,7 @@
             </div>
         </div>
         <div id="user_recommend">
-            <p style="text-align: center;padding: 5px;border-bottom: 1px solid rgb(255,255,255)">@用户推荐</p>
+            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">@用户推荐</p>
             <ul class="user_example_list" style="padding: 10px 20px;">
                 <li><a href="###">不想当律师的记者</a></li>
                 <li><a href="###">10086专员</a></li>
@@ -238,6 +261,7 @@
             console.log("QQ内容：" + document.activeElement.value);
         }
     };
+
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         minView:2, //控制时分秒
@@ -255,4 +279,7 @@
 
 </script>
 <script src="/static/js/postingQQ-1.js"></script>
+<script>
+
+</script>
 {% endblock %}

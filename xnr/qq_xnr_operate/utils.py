@@ -6,7 +6,7 @@ import sys
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
                              group_message_index_name_pre, group_message_index_type
 from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
-from xnr.time_utils import get_groupmessage_index_list, ts2datetime
+from xnr.time_utils import get_groupmessage_index_list, ts2datetime, datetime2ts
 
 
 
@@ -33,8 +33,8 @@ def search_by_xnr_number(xnr_qq_number, current_date):
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
     for index_name in index_names:
-        if not es_xnr.indices.exsits(index_name):
-            continue
+        # if not es_xnr.indices.exsits(index=index_name):
+        #     continue
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
             if results != {}:

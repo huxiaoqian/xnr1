@@ -393,6 +393,17 @@ var public_ajax= {
                     },
                 },
                 {
+                    title: "登录状态",//标题
+                    field: "",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
+                    formatter: function (value, row, index) {
+                        return '离线';
+                    },
+                },
+                {
                     title: '操作',//标题
                     field: "",//键名
                     sortable: true,//是否可排序
@@ -400,8 +411,9 @@ var public_ajax= {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        return '<a style="cursor: pointer;color:white;display: inline-block;margin-left: 20px;" onclick="enterIn(\''+row._id+'\')" title="进入"><i class="icon icon-link"></i></a>'+
-                            '<a style="cursor: pointer;color:white;margin-left: 20px;" onclick="deletePerson(\''+row._id+'\')" title="删除"><i class="icon icon-trash"></i></a>';
+                        return '<a style="cursor: pointer;color:white;" onclick="loginIN(this)" title="登录"><i class="icon icon-key"></i></a>'+
+                            '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row._id+'\')" title="进入"><i class="icon icon-link"></i></a>'+
+                            '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row._id+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                     },
                 },
             ],
@@ -422,6 +434,16 @@ function auto() {
 }
 auto();
 
+//登陆一个QQ虚拟人
+function loginIN(_this) {
+    // console.log(QQnumber)
+    $(_this).attr('title','在线中').parent().prev().text('在线');
+    var trs=$(_this).parents('tr').siblings('tr');
+    for(var t=0;t<trs.length;t++){
+        $(trs[t]).find('td').eq(6).text('离线');
+        $(trs[t]).find('td').eq(7).find('a').eq(0).attr('title','登录');
+    }
+}
 //删除一个虚拟人
 function deletePerson(QQnumber) {
     var del_url='/qq_xnr_manage/delete_qq_xnr/?qq_number='+QQnumber;
@@ -440,6 +462,7 @@ function success_fail(data) {
 
 //进入虚拟人的具体操作
 function enterIn(QQ_id) {
+    var if_in=encodeURI($(_this).parent().prev().text());
     window.open('/control/postingQQ/?QQ_id='+QQ_id);
 }
 

@@ -82,10 +82,10 @@ body {
 }
 
 #container .post-3 {
-    padding: 20px 10px;
-    border: 1px solid silver;
-    border-radius: 5px;
-    margin-top:10px;
+    padding: 0 20px;
+    /*border: 1px solid silver;*/
+    /*border-radius: 5px;*/
+    /*margin-top:10px;*/
 }
 #container .post-3 .text_information .fanye input {
     background: transparent;
@@ -147,6 +147,7 @@ body {
     background: rgba(8,23,44,0.25);
     color: white;
     resize: none;
+    text-align: left;
     border: 1px solid silver;
     margin: 10px 0 0 0;
     padding: 5px 10px;
@@ -173,20 +174,25 @@ body {
 }
 #container #user_recommend {
     position: absolute;
-    top:10px;
+    top:3px;
     right:0;
-    border-radius: 10px;
+    color: #b0bdd0;
+    /*border-radius: 10px;*/
     /*border: 1px solid rgba(121, 121, 121, 1);*/
-    border: 1px solid white;
+    /*border: 1px solid white;*/
+    background: rgba(8,23,44,0.35);
 }
 #container #user_recommend li {
     list-style-type:disc;
     list-style-position: inside;
 }
 #container #user_recommend li a {
-    width: 100px;
-    color: white;
+    display: inline-block;
+    width: 110px;
+    color: #b0bdd0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+    top: 4px;
 }

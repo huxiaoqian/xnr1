@@ -5,7 +5,19 @@
     <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
     <link rel="stylesheet" href="/static/css/navigationMain.css">
     <style>
-        
+        .weiboQQ {
+            position: absolute;
+            width: 554px;
+            height: 176px;
+            left: 50%;
+            top: 22%;
+            margin: 0 0 0 -277px;
+            text-align: center;
+        }
+        .weiboQQ img {
+            margin:0 30px;
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 {% block main %}
@@ -71,6 +83,10 @@
 
     </div>
 
+    <div class="weiboQQ">
+        <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
+        <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+    </div>
     <p class="p11">
         社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。
         通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，
@@ -131,7 +147,8 @@
 <script src="/static/js/jquery-3.1.1.min.js"></script>
 <!-- <script src="/static/js/jquery.cookie.js"></script> -->
 <script src="/static/js/bootstrap.min.js"></script>
-<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<!-- <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js"></script> -->
+<script src="/static/js/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
     function getLocalTime(nS) {
@@ -170,6 +187,17 @@
     },function () {
         $(".bg55-top").removeClass("effeckt-show");
     });
+    //登录方式
+    $('.weibo').on('click',function () {
+        window.location.href='/index/navigation/';
+    });
+    $('.qq').hover(function () {
+        $(this).attr('src','/static/images/clickQQ.png');
+    },function () {
+        $(this).attr('src','/static/images/QQload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
 
     //页面跳转
     $('#personal').on('click',function () {
@@ -192,6 +220,12 @@
     });
     $('#reportedmange').on('click',function () {
         window.open('/reportManage/management/');
+    });
+    $('#knowledgebase').on('click',function () {
+        window.open('/knowledge/domainLibrary/');
+    });
+    $('#system').on('click',function () {
+        window.open('/systemManage/daily/');
     });
 
 </script>

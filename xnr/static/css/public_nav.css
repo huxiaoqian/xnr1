@@ -19,18 +19,6 @@ a,a:link,a:hover,a:visited,a:active {
     text-decoration: none;
 }
 /*内容样式*/
-.modal-open .modal {
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-.modal.in .modal-dialog {
-    margin: 150px auto 0;
-}
-body.modal-open {
-    /*overflow-y: auto !important;*/
-    padding-right: 0 !important;
-}
-/*body {transform: scale(1);}*/
 #nav {
     position: fixed;
     z-index: 99999999;
@@ -139,3 +127,86 @@ body.modal-open {
     background-color: #176de2;
 }
 
+/*模态框*/
+.modal-open .modal {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.modal.in .modal-dialog {
+    margin: 150px auto 0;
+}
+body.modal-open {
+    /*overflow-y: auto !important;*/
+    padding-right: 0 !important;
+}
+.modal {
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9999999999999999999999999;
+}
+.modal-header {
+    background: #09344e!important;
+    color: white!important;
+}
+.modal-body,.modal-footer {
+    background: #041b29!important;
+    color: white!important;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.modal-header .close {
+    color:white!important;
+    opacity: 1!important;
+}
+.modal-footer .btn {
+    background-color: transparent;
+    border-color: silver;
+    color: white;
+}
+.modal-footer .btn:hover {
+    background-color: rgba(3, 8, 16, 0.61);
+    color: white;
+}
+
+/*表格中的样式*/
+.fixed-table-toolbar .search {width: 80%;}
+.form-control {
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 4px 7px;
+    background: rgba(8,23,44,0.35);
+}
+.fixed-table-container thead th .sortable {
+    padding-right: 15px;
+}
+.table:not(.table-condensed)>tbody>tr>td,
+.fixed-table-container thead th .both,
+.fixed-table-pagination .pagination-info{
+    color: white;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.fixed-table-container thead th .th-inner {
+    overflow: auto;
+    text-overflow: inherit;
+    white-space: normal;
+}
+.bootstrap-table .table>thead>tr>th {
+    width:7%;
+}
+.pagination>li>a {
+    background:rgba(8,23,44,0.35);
+    color: white;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover,
+.pagination>li>a:focus, .pagination>li>a:hover {
+    background:#31708f;
+    border-color: silver;
+}
+.pagination>li>a:focus, .pagination>li>a:hover {
+    color: white;
+}

@@ -10,6 +10,7 @@ from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_speaker_number,search_by_speaker_nickname,\
                   search_by_period
 from xnr.global_config import QQ_S_DATE
+from xnr.time_utils import ts2datetime
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
@@ -41,8 +42,10 @@ def ajax_search_by_keyword():
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')
-    # date = request.args.get('date','')
-    date = '2017-07-13'
+    ts = request.args.get('date','')
+    ts = float(ts)
+    date = ts2datetime(ts)
+    # date = '2017-07-13'
     results = search_by_xnr_number(xnr_qq_number, date)
     return json.dumps(results)
 
