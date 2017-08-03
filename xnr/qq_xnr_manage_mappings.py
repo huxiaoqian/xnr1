@@ -40,6 +40,10 @@ def qq_xnr_mappings():
                     'today_remind':{
                         'type': 'string',
                         'index': 'not_analyzed'
+                    },
+                    'create_ts':{                    # 创建时间
+                        'type':'long',
+                        'index':'not_analyzed'
                     }                
                 }
             }
