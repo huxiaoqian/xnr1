@@ -82,3 +82,7 @@ domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroa
                      'homemedia':u'媒体', 'abroadmedia':u'境外媒体', 'folkorg':u'民间组织',\
                      'lawyer':u'法律机构及人士', 'politician':u'政府机构及人士', 'mediaworker':u'媒体人士',\
                      'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}                    
+
+
+# qq
+group_message_windowsize = 30          # 群历史消息查询范围30天
