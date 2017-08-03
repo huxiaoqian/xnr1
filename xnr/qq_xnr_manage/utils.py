@@ -7,14 +7,15 @@ from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type
 from xnr.parameter import MAX_VALUE
 
 def create_qq_xnr(xnr_info):
-# xnr_info = [qq_number,qq_groups,nickname,active_time]
+# xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
     qq_number = xnr_info[0]
     qq_groups = xnr_info[1]
     nickname = xnr_info[2]
     active_time = xnr_info[3]
+    create_ts = xnr_info[4]
     try:
         es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number, \
-        body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'active_time':active_time})
+        body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'active_time':active_time,'create_ts':create_ts})
         result = 1
     except:
         result = 0

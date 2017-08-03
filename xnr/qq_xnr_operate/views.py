@@ -22,10 +22,10 @@ mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
 @mod.route('/search_by_period/')
 def ajax_search_by_period():
-    # xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份么
+    xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份么
     startdate = request.args.get('startdate','')
     enddate = request.args.get('enddate','')
-    results = search_by_period(startdate,enddate)
+    results = search_by_period(xnr_qq_number,startdate,enddate)
     return json.dumps(results)
 
 

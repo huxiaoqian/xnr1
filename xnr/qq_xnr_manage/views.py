@@ -20,7 +20,8 @@ def ajax_add_qq_xnr():
     qq_groups = request.args.get('qq_groups','')
     nickname = request.args.get('qq_nickname','')
     active_time = request.args.get('qq_active_time')
-    xnr_info = [qq_number,qq_groups,nickname,active_time]
+    create_time = int(time.time())
+    xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
 
