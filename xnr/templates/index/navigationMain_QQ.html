@@ -5,7 +5,19 @@
     <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
     <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
     <style>
-        
+        .weiboQQ {
+            position: absolute;
+            width: 554px;
+            height: 176px;
+            left: 50%;
+            top: 32%;
+            margin: 0 0 0 -277px;
+            text-align: center;
+        }
+        .weiboQQ img {
+            margin:0 30px;
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 {% block main %}
@@ -72,6 +84,11 @@
 
     </div>
 
+    <div class="weiboQQ">
+        <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
+        <img src="/static/images/clickQQ.png" title="正在使用QQ登录中" class="qq">
+    </div>
+
     <p class="p11">
         社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。
         通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，
@@ -105,24 +122,31 @@
 
     });
 
+    //登录方式
+    $('.weibo').hover(function () {
+        $(this).attr('src','/static/images/clickweibo.png');
+    },function () {
+        $(this).attr('src','/static/images/weiboload.png');
+    }).on('click',function () {
+        window..location.href='/index/navigation/';
+    });
+    $('.qq').on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
+
     //页面跳转
     $('#personal').on('click',function () {
-        localStorage.removeItem('TYPE');
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
-        //$.cookie('TYPE','1',{path:'/'});
-        localStorage.setItem('TYPE','1');
         window.open('/control/operationControl/');
     });
-    $('#info').on('click',function () {
-        localStorage.removeItem('TYPE');
-        window.open('/inforDetection/inforChecking/');
-    });
-    $('#monitor').on('click',function () {
-        localStorage.setItem('TYPE','2');
-        window.open('/monitor/characterBehavior/');
-    });
+    // $('#info').on('click',function () {
+    //     window.open('/inforDetection/inforChecking/');
+    // });
+    // $('#monitor').on('click',function () {
+    //     window.open('/monitor/characterBehavior/');
+    // });
 
 </script>
 {% endblock %}

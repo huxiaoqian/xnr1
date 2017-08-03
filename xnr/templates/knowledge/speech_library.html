@@ -1,0 +1,140 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>知识库管理 - 言论知识库</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/speech_library.css">
+<style>
+    .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-comment account_icon"></span>
+            <b>言论知识库</b>
+        </div>
+        <div class="tit-2" style="padding-left: 50px;">
+            <span style="color: white;font-size: 16px;font-weight: 700;">分类：</span>
+            <div style="display: inline-block;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="mine" checked>
+                    <span class="demo-radioInput"></span> 我的虚拟人
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="mine">
+                    <span class="demo-radioInput"></span> 所有虚拟人
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="options">
+        <div class="options-1">
+            <div class="opt-1-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">主题语料</span>
+            </div>
+            <div class="theme" style="margin:20px 0;">
+                <div id="theme"></div>
+            </div>
+        </div>
+        <div class="options-2">
+            <div class="opt-2-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">日常发帖语料</span>
+            </div>
+            <div class="everypost" style="margin:20px 0;">
+                <div id="everypost"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+
+<!--群体详情-->
+<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体详情列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grouplist">
+                    <div id="grouplist"></div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+
+<!--群体描述-->
+<div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体描述</h4>
+            </div>
+            <div class="modal-body">
+                <div class="groupDetails">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体更新-->
+<div class="modal fade" id="update" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体更新</h4>
+            </div>
+            <div class="modal-body">
+                <p style="">是否进行群体的更新计算？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体删除-->
+<div class="modal fade" id="delt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体删除</h4>
+            </div>
+            <div class="modal-body">
+                <p style="">您确定要删除该群体吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('8');
+</script>
+<script src="/static/js/speech_library-1.js"></script>
+{% endblock %}

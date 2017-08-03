@@ -8,56 +8,6 @@
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-    .btn-primary {
-        background-color: transparent;
-        border-color: silver;
-        color: black;
-    }
-    .btn-primary:hover {
-        background-color: rgba(3, 8, 16, 0.61);
-    }
-    /*表格中的样式*/
-    .fixed-table-toolbar .search {width: 80%;}
-    .haslistbagQQ .form-control {
-        text-align: center;
-        font-size: 14px;
-        color: white;
-        border: 1px solid silver;
-        border-radius: 5px;
-        padding: 4px 7px;
-        background: rgba(8,23,44,0.35);
-    }
-    .fixed-table-container thead th .sortable {
-        padding-right: 15px;
-    }
-    .table:not(.table-condensed)>tbody>tr>td,
-    .fixed-table-container thead th .both,
-    .fixed-table-pagination .pagination-info{
-        color: white;
-    }
-    .table-hover>tbody>tr:hover {
-        background-color: #2a556f!important;
-    }
-    .fixed-table-container thead th .th-inner {
-        overflow: auto;
-        text-overflow: inherit;
-        white-space: normal;
-    }
-    .bootstrap-table .table>thead>tr>th {
-        width:3%;
-    }
-    .pagination>li>a {
-        background:rgba(8,23,44,0.35);
-        color: white;
-    }
-    .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover,
-    .pagination>li>a:focus, .pagination>li>a:hover {
-        background:#31708f;
-        border-color: silver;
-    }
-    .pagination>li>a:focus, .pagination>li>a:hover {
-        color: white;
-    }
 </style>
 {% endblock %}
 {% block main %}
@@ -147,13 +97,13 @@
                 <h4 class="modal-title">添加提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
                     创建新的虚拟人还是继续已有的虚拟人？
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+                <button type="button" class="btn first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn continue_already_created" data-dismiss="modal">继续已有创建</button>
             </div>
         </div>
     </div>
@@ -167,13 +117,13 @@
                 <h4 class="modal-title">添加提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
                     创建新的虚拟人？
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">确定</button>
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn first_created" data-dismiss="modal">确定</button>
             </div>
         </div>
     </div>
@@ -188,13 +138,13 @@
                 <h4 class="modal-title">操作提示</h4>
             </div>
             <div class="modal-body">
-                <p id="words" style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                <p id="words" style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
 
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal">确定</button>
             </div>
         </div>
     </div>
@@ -213,7 +163,7 @@
     });
     $('input[name=demo-radio]').on('click',function () {
         var Type=$(this).attr('weiboqq');
-        if (Type=='w'){
+        if (Type=='W'){
             $('.has_person').show();
             $('.undone_person').show();
             $('.has_person_QQ').hide();

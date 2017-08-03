@@ -84,6 +84,7 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {
             $.ajax({
@@ -102,6 +103,7 @@
             });
         },
     };
+
     $('.old').on('click',function(e) {
         var txt=$(this).find('span').text();
         var curtxt=$('.current').find('span').text();
@@ -180,20 +182,20 @@
             $('.coorName').text('知识库管理');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-lightbulb"></i>'+
-                '    <a class="li_a" href="/behavioGauge/influeAssess/">领域知识库</a>'+
+                '    <i class="icon icon-globe"></i>'+
+                '    <a class="li_a" href="/knowledge/domainLibrary/">领域知识库</a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-tint"></i>'+
-                '    <a class="li_a" href="/behavioGauge/penetration/">角色知识库</a>'+
-                '</li>'+
-                '<li class="main_li">'+
-                '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/behavioGauge/safe/">业务知识库</a>'+
+                '    <i class="icon icon-github"></i>'+
+                '    <a class="li_a" href="/knowledge/characterLibrary/">角色知识库</a>'+
                 '</li>'+
                 '<li class="main_li">'+
                 '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/behavioGauge/safe/">言论知识库</a>'+
+                '    <a class="li_a" href="/knowledge/businessLibrary/">业务知识库</a>'+
+                '</li>'+
+                '<li class="main_li">'+
+                '    <i class="icon icon-comment"></i>'+
+                '    <a class="li_a" href="/knowledge/speechLibrary/">言论知识库</a>'+
                 '</li>';
         }else if (typeNum==9){
             $('.coorName').text('系统管理');
@@ -213,7 +215,30 @@
         };
         $('.behind').html(afterEle);
     };
-    
+
+    //网页缩小放大
+//    function detectZoom (){
+//        var ratio = 0, screen = window.screen, ua = navigator.userAgent.toLowerCase();
+//        if (window.devicePixelRatio !== undefined) {
+//            ratio = window.devicePixelRatio;
+//        } else if (~ua.indexOf('msie')) {
+//            if (screen.deviceXDPI && screen.logicalXDPI) {
+//                ratio = screen.deviceXDPI / screen.logicalXDPI;
+//            }
+//        } else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+//            ratio = window.outerWidth / window.innerWidth;
+//        };
+//        if (ratio){
+//            ratio = Math.round(ratio * 100);
+//        };
+//        return ratio;
+//    };
+//    $(window).resize(function() {
+//        var a=window.screen.width;
+//        var zoom=detectZoom();
+//		var b=zoom/100;
+//        $('#container').css({transform:'scale('+b+')'});
+//    });
 </script>
 {% endblock %}
 

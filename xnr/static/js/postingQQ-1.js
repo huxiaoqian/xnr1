@@ -50,10 +50,12 @@ function personEarly(personEarly_QQ) {
             },
         ],
     });
+    $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 };
 var time=Date.parse(new Date());
 var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date=2017-7-17'//+time;
 public_ajax.call_request('get',QQ_news_url,personEarly);
+
 
 //选择时间搜索
 $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {

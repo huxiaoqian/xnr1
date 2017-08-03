@@ -1,0 +1,106 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>系统管理 - 虚拟人管理</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/daily.css">
+<style>
+
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-calendar account_icon"></span>
+            <b>虚拟人管理</b>
+        </div>
+    </div>
+    <div class="virtualtable">
+        <div id="virtualtable"></div>
+    </div>
+</div>
+<!--模态框-->
+
+<!--群体详情-->
+<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体详情列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grouplist">
+                    <div id="grouplist"></div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+
+<!--群体描述-->
+<div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体描述</h4>
+            </div>
+            <div class="modal-body">
+                <div class="groupDetails">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体更新-->
+<div class="modal fade" id="update" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体更新</h4>
+            </div>
+            <div class="modal-body">
+                <p style="">是否进行群体的更新计算？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体删除-->
+<div class="modal fade" id="delt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体删除</h4>
+            </div>
+            <div class="modal-body">
+                <p style="">您确定要删除该群体吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('9');
+</script>
+<script src="/static/js/daily.js"></script>
+{% endblock %}

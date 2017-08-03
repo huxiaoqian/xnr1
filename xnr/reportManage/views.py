@@ -8,7 +8,7 @@ from flask import Blueprint, url_for, render_template, request,\
 
 
 
-mod = Blueprint('report_manage', __name__, url_prefix='/reportManage')
+mod = Blueprint('reportManage', __name__, url_prefix='/reportManage')
 
 @mod.route('/management/')
 def management():
