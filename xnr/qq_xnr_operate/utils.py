@@ -32,6 +32,8 @@ def search_by_xnr_number(xnr_qq_number, current_date):
     enddate = current_date
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
+    print index_names
+    results = {}
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index=index_name):
         #     continue
