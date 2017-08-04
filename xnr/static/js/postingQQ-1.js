@@ -1,6 +1,5 @@
 function personEarly(personEarly_QQ) {
     let QQperson=eval(personEarly_QQ);
-    console.log(QQperson)
     let sourcePER=QQperson.hits.hits;
     $('#historyNews').bootstrapTable('load', sourcePER);
     $('#historyNews').bootstrapTable({
@@ -34,7 +33,7 @@ function personEarly(personEarly_QQ) {
                         name=row._source.speaker_qq_number;
                     }else {
                         name=row._source.speaker_nickname;
-                    }
+                    };
                     var str=
                         '<div class="everySpeak" style="margin: 20px auto;">'+
                         '   <div class="speak_center">'+
@@ -54,7 +53,7 @@ function personEarly(personEarly_QQ) {
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 };
 var time=Date.parse(new Date());
-var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date='+Number(time)/1000;
+var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date=2017-7-17'//+time;
 public_ajax.call_request('get',QQ_news_url,personEarly);
 
 
