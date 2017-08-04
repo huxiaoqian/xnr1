@@ -1,4 +1,4 @@
-var domainName,roleName;
+var domainName='',roleName='';
 $('input[name=demo1]').on('click',function () {
     domainName=$(this).parent().attr('title');
     var nameLEN=$(this).attr('name').toString();
@@ -11,25 +11,27 @@ function creat_1(data) {
 function creat_2(data) {
     addLabel(data,'opt-2&opt-3','demo3&demo4');
 }
-
+var m;
 function addLabel(data,className,name) {
-    var m=Number(name.charAt(name.length-1));
+    m=Number(name.charAt(name.length-1));
     var _string;
     if (m>3){
         var c=className.split('&'),n=name.split('&'),f=0;
-        console.log(data)
         for (var k = 0;k<2;k++){
             var ary=[];
             if (k==0){
                 $.each(data['political_side'],function (index,item) {
+                    if (item[0]=='mid'){item[0]='中立'}else if (item[0]=='left'){item[0]='左倾'}else
+                    if (item[0]=='right'){item[0]='右倾'}
                     ary.push(item[0].toString());
                 });
+                _string=labelSTR(ary,n[k]);
             }else if(k==1){
                 $.each(data['psy_feature'],function (index,item) {
                     ary.push(item[0].toString());
                 });
+                _string=labelSTR(ary,n[k],'checkbox');
             }
-            _string=labelSTR(ary,n[k]);
             $('#container .buildOption .'+c[k]).empty().html(_string);
             f++;
         };
@@ -43,18 +45,54 @@ function addLabel(data,className,name) {
         });
     }
 };
-function labelSTR(data,name) {
+function labelSTR(data,name,radioCheckbox='radio') {
     var str='';
     if (data.length==0){
         str='暂无数据';
     }else {
         for(var i=0;i<data.length;i++){
             str+= '<label class="demo-label" title="'+data[i]+'">'+
-                '   <input class="demo-radio" type="radio" name="'+name+'">'+
+                '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
                 '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
                 '</label>';
         }
-    }
-
+    };
     return str;
+}
+
+//保存结果
+//http://219.224.134.213:9090/weibo_xnr_create/save_step_one/?domain_name=维权群体&role_name=政府机构及人士
+// &psy_feature=积极，中立，悲伤&political_side=中立&business_goal=扩大影响，渗透&monitor_keywords=维权，律师&daily_interests=旅游，美食
+$('.nextButton').on('click',function () {
+    var psyFeature=[],dailyInterests=[],politicalSide='';
+    $(".opt-3 input[type=checkbox]:checkbox:checked").each(function (index,item) {
+        psyFeature.push($(this).val());
+    });
+    $(".opt-2 input[type=radio]:radio:checked").each(function (index,item) {
+        politicalSide=$(this).val().toString();
+    });
+    $(".opt-5 input[type=checkbox]:checkbox:checked").each(function (index,item) {
+        dailyInterests.push($(this).val());
+    });
+    var businessGoal= $('.opt-4 .aims').val().toString().replace(/，/g,',');
+    var monitorKeywords= $('.opt-6 .keywords').val().toString().replace(/，/g,',');
+    if (!(domainName||roleName||psyFeature.length==0||dailyInterests.length==0||politicalSide||businessGoal||monitorKeywords)){
+        $('#prompt p').text('请检查您选择和添加的信息。（不能为空）');
+        $('#prompt').modal('show');
+    }else {
+        var saveFirst_url='/weibo_xnr_create/save_step_one/?domain_name='+domainName+'&role_name='+roleName+
+        '&psy_feature='+psyFeature.join(',')+'&political_side='+politicalSide+'&business_goal='+businessGoal+
+        '&monitor_keywords='+monitorKeywords+'&daily_interests='+dailyInterests.join(',');
+        console.log(saveFirst_url)
+        public_ajax.call_request('get',saveFirst_url,in_second);
+    }
+});
+function in_second(data) {
+    console.log(data)
+    if (data){
+        window.open('/registered/virtualCreated/');
+    }else {
+        $('#prompt p').text('系统有误，请刷新页面重新输入。');
+        $('#prompt').modal('show');
+    }
 }

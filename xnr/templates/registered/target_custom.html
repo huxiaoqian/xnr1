@@ -80,7 +80,7 @@
             <img src="/static/images/icon.png" alt="">
             <span>业务目标：</span>
             <div class="opt-4" style="margin: 10px 0;">
-                <input type="text" class="aims" placeholder="请输入业务目标"/>
+                <input type="text" class="aims" placeholder="请输入业务目标（多个请用逗号分隔）"/>
             </div>
         </div>
         <div class="build-5">
@@ -88,59 +88,59 @@
             <span>日常兴趣：</span>
             <div class="opt-5 opt">
                 <label class="demo-label" title="旅游">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="旅游">
                     <span class="demo-checkbox demo-radioInput"></span> 旅游
                 </label>
                 <label class="demo-label" title="美食">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="美食">
                     <span class="demo-checkbox demo-radioInput"></span> 美食
                 </label>
                 <label class="demo-label" title="汽车">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="汽车">
                     <span class="demo-checkbox demo-radioInput"></span> 汽车
                 </label>
                 <label class="demo-label" title="游戏">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="游戏">
                     <span class="demo-checkbox demo-radioInput"></span> 游戏
                 </label>
                 <label class="demo-label" title="星座">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="星座">
                     <span class="demo-checkbox demo-radioInput"></span> 星座
                 </label>
                 <label class="demo-label" title="音乐">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="音乐">
                     <span class="demo-checkbox demo-radioInput"></span> 音乐
                 </label>
                 <label class="demo-label" title="影视">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="影视">
                     <span class="demo-checkbox demo-radioInput"></span> 影视
                 </label>
                 <label class="demo-label" title="健身">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="健身">
                     <span class="demo-checkbox demo-radioInput"></span> 健身
                 </label>
                 <label class="demo-label" title="养生">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="养生">
                     <span class="demo-checkbox demo-radioInput"></span> 养生
                 </label>
                 <label class="demo-label" title="体育">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="体育">
                     <span class="demo-checkbox demo-radioInput"></span> 体育
                 </label>
                 <label class="demo-label" title="萌宠">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="萌宠">
                     <span class="demo-checkbox demo-radioInput"></span> 萌宠
                 </label>
                 <label class="demo-label" title="动漫">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="动漫">
                     <span class="demo-checkbox demo-radioInput"></span> 动漫
                 </label>
                 <label class="demo-label" title="时尚">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="时尚">
                     <span class="demo-checkbox demo-radioInput"></span> 时尚
                 </label>
                 <label class="demo-label" title="鸡汤">
-                    <input class="demo-radio" type="checkbox" name="demo6">
+                    <input class="demo-radio" type="checkbox" name="demo6" value="鸡汤">
                     <span class="demo-checkbox demo-radioInput"></span> 鸡汤
                 </label>
             </div>
@@ -149,7 +149,7 @@
             <img src="/static/images/icon.png" alt="">
             <span>检测关键词：</span>
             <div class="opt-6" style="margin:10px 0;">
-                <input type="text" class="keywords" placeholder="请输入关键词"/>
+                <input type="text" class="keywords" placeholder="请输入关键词（多个请用逗号分隔）"/>
             </div>
         </div>
     </div>
@@ -178,14 +178,28 @@
     </div>
 </div>
 
+<!--提示-->
+<div class="modal fade" id="prompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
 <script>
     judgment('6');
-    $('.nextButton').on('click',function () {
-        window.open('/registered/virtualCreated/');
-    });
+
 
 </script>
 <script src="/static/js/target_custom-1.js"></script>

@@ -285,6 +285,7 @@ var public_ajax= {
     },
     has_table_QQ:function (has_data_QQ) {
         let QQperson=eval(has_data_QQ);
+        console.log(QQperson)
         let sourcePER=QQperson.hits.hits;
         $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
         $('.has_list_QQ #haslistQQ').bootstrapTable({
@@ -339,12 +340,11 @@ var public_ajax= {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        return '2017-7-12'
-                        // if (row._source.nickname==''||row._source.nickname=='null'||row._source.nickname=='unbknown'){
-                        //     return '未知';
-                        // }else {
-                        //     return row._source.nickname;
-                        // }
+                        if (row._source.create_ts==''||row._source.create_ts=='null'||row._source.create_ts=='unbknown'){
+                            return '未知';
+                        }else {
+                            return row._source.create_ts;
+                        }
                     }
                 },
                 {
@@ -462,7 +462,7 @@ function success_fail(data) {
 
 //进入虚拟人的具体操作
 function enterIn(QQ_id) {
-    var if_in=encodeURI($(_this).parent().prev().text());
+    // var if_in=encodeURI($(_this).parent().prev().text());
     window.open('/control/postingQQ/?QQ_id='+QQ_id);
 }
 
