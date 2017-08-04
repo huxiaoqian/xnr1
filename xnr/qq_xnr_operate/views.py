@@ -10,7 +10,7 @@ from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_speaker_number,search_by_speaker_nickname,\
                   search_by_period
 from xnr.global_config import QQ_S_DATE
-from xnr.time_utils import ts2datetime
+from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
@@ -30,13 +30,7 @@ def ajax_search_by_period():
     return json.dumps(results)
 
 
-@mod.route('/search_by_keyword/')
-def ajax_search_by_keyword():
-    keyword = request.args.get('keyword','')
-    # 暂时指定了日期 测试用
-    date = '2017-07-13'
-    results = search_by_keyword(keyword,date)
-    return json.dumps(results)
+
 
 
 @mod.route('/search_by_xnr_number/')
@@ -45,11 +39,15 @@ def ajax_search_by_xnr_number():
     ts = request.args.get('date','')
     ts = float(ts)
     date = ts2datetime(ts)
-    # date = '2017-07-13'
     results = search_by_xnr_number(xnr_qq_number, date)
     return json.dumps(results)
 
 
+
+
+
+
+# 暂时用不到的函数
 @mod.route('/search_by_xnr_nickname/')
 def ajax_search_by_xnr_nickname():
 
@@ -71,4 +69,12 @@ def ajax_search_by_speaker_nickname():
     speaker_nickname = request.args.get('speaker_nickname','')
     date = QQ_S_DATE
     results = search_by_speaker_nickname(xnr_number,speaker_nickname,date)
+    return json.dumps(results)
+
+@mod.route('/search_by_keyword/')
+def ajax_search_by_keyword():
+    keyword = request.args.get('keyword','')
+    # 暂时指定了日期 测试用
+    date = '2017-07-13'
+    results = search_by_keyword(keyword,date)
     return json.dumps(results)
