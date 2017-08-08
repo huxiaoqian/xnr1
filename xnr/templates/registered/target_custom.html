@@ -199,8 +199,9 @@
 {% block my_js %}
 <script>
     judgment('6');
-
-
+    $('.buildNew').on('click',function () {
+        window.open('/knowledge/domainLibrary/');
+    })
 </script>
 <script src="/static/js/target_custom-1.js"></script>
 {% endblock %}

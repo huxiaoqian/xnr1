@@ -15,7 +15,7 @@
             height: auto!important;
         }
         #historyNews .table-no-bordered,#historyNews .table>tbody>tr>td,#historyNews .fixed-table-container,
-        #historyNews .bootstrap-table .table>thead>tr>th,.historyNews .bootstrap-table .table{
+        #historyNews .bootstrap-table .table>thead>tr>th,.historyNews .bootstrap-table .table,.historyNews .table>tbody>tr>td{
             border: none;
         }
         #historyNews thead {
@@ -28,7 +28,6 @@
         .table-hover>tbody>tr:hover {
             background-color: inherit!important;
         }
-        #historyNews thead {display: none;}
         .fixed-table-toolbar .search {width: 100%;}
         .historyNews .form-control {
             text-align: center;
@@ -41,7 +40,10 @@
         }
         .historyNews .fixed-table-body {
             overflow-y: hidden;
-            text-align: center;
+            padding: 20px 0;
+        }
+        .historyNews .table:not(.table-condensed)>tbody>tr>td {
+            text-align: left!important;
         }
     </style>
 {% endblock %}

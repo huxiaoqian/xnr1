@@ -85,7 +85,7 @@
         <img src="/static/images/icon.png">
         <span style="display:inline-block;font-size: 18px;font-weight: 900;color: #fff">直接搜索</span>
         <div class="actRight">
-            <input type="text" class="active-1-find"/>
+            <input type="text" class="active-1-find" placeholder="请输入你想要关注的用户的id(多个请用逗号隔开)"/>
             <span class="findSure" title="直接搜索"><i class="icon icon-search"></i></span>
             <span class="advanced_search">高级搜索</span>
         </div>
@@ -364,6 +364,21 @@
     </div>
 </div>
 
+<!--提示性模态框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}

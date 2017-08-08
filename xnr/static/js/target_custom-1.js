@@ -63,6 +63,7 @@ function labelSTR(data,name,radioCheckbox='radio') {
 //保存结果
 //http://219.224.134.213:9090/weibo_xnr_create/save_step_one/?domain_name=维权群体&role_name=政府机构及人士
 // &psy_feature=积极，中立，悲伤&political_side=中立&business_goal=扩大影响，渗透&monitor_keywords=维权，律师&daily_interests=旅游，美食
+var daily='';
 $('.nextButton').on('click',function () {
     var psyFeature=[],dailyInterests=[],politicalSide='';
     $(".opt-3 input[type=checkbox]:checkbox:checked").each(function (index,item) {
@@ -80,19 +81,31 @@ $('.nextButton').on('click',function () {
         $('#prompt p').text('请检查您选择和添加的信息。（不能为空）');
         $('#prompt').modal('show');
     }else {
+        daily=dailyInterests.join(',');
         var saveFirst_url='/weibo_xnr_create/save_step_one/?domain_name='+domainName+'&role_name='+roleName+
         '&psy_feature='+psyFeature.join(',')+'&political_side='+politicalSide+'&business_goal='+businessGoal+
-        '&monitor_keywords='+monitorKeywords+'&daily_interests='+dailyInterests.join(',');
-        console.log(saveFirst_url)
-        public_ajax.call_request('get',saveFirst_url,in_second);
+        '&monitor_keywords='+monitorKeywords+'&daily_interests='+daily;
+        // window.open('/registered/virtualCreated/?domainName='+domainName+'&roleName='+roleName+'&daily='+daily+
+        // '&psyFeature='+psyFeature.join(',')+'&politicalSide='+politicalSide+'&businessGoal='+businessGoal+
+        // '&monitorKeywords='+monitorKeywords);
+        window.open('/registered/virtualCreated/');
+        var first={
+            'domainName':domainName,
+            'roleName':roleName,
+            'daily':daily,
+            'psyFeature':psyFeature.join(','),
+            'politicalSide':politicalSide,
+            'businessGoal':businessGoal,
+            'monitorKeywords':monitorKeywords}
+        localStorage.setItem('firstStep',JSON.stringify(first));
+        //public_ajax.call_request('get',saveFirst_url,in_second);
     }
 });
 function in_second(data) {
-    console.log(data)
     if (data){
         window.open('/registered/virtualCreated/');
     }else {
-        $('#prompt p').text('系统有误，请刷新页面重新输入。');
+        $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
     }
 }

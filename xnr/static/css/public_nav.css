@@ -180,7 +180,7 @@ body.modal-open {
     background: rgba(8,23,44,0.35);
 }
 .fixed-table-container thead th .sortable {
-    padding-right: 15px;
+    padding-right: 12px;
 }
 .table:not(.table-condensed)>tbody>tr>td,
 .fixed-table-container thead th .both,
@@ -196,7 +196,7 @@ body.modal-open {
     white-space: normal;
 }
 .bootstrap-table .table>thead>tr>th {
-    width:7%;
+    width:10%;
 }
 .pagination>li>a {
     background:rgba(8,23,44,0.35);

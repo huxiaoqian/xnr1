@@ -3,7 +3,8 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/virtual_created.css">
     <style>
-        .demo-label{display:inline-block;margin-right: 10px;cursor:pointer;width: 100px;color: white;}
+        .datetimepicker thead tr:first-child th {visibility: hidden;}
+        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
         .demo-radio{display:none}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -22,39 +23,45 @@
             <div id="character">
                 <div class="define">
                     <img src="/static/images/icon.png" alt="">
-                    渗透领域：<span id="character1">习大大</span>
+                    渗透领域：<span id="character1"></span>
                 </div>
                 <div class="define">
                     <img src="/static/images/icon.png" alt="">
-                    角色身份：<span id="character2">学生</span>
+                    角色身份：<span id="character2"></span>
                 </div>
                 <div class="define">
                     <img src="/static/images/icon.png" alt="">
-                    心理特征：<span id="character3">愤怒快乐</span>
+                    心理特征：<span id="character3"></span>
                 </div>
                 <div class="define">
                     <img src="/static/images/icon.png" alt="">
-                    政治倾向：<span id="character4">左倾</span>
+                    政治倾向：<span id="character4"></span>
                 </div>
                 <div class="define">
                     <img src="/static/images/icon.png" alt="">
-                    业务目标：<span id="character5">渗透</span>
+                    业务目标：<span id="character5"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    日常兴趣：<span id="character6"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    检测关键词：<span id="character7"></span>
+                </div>
+                <div id="role_example" style="margin-top: 20px;">
+                    <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>
+                    <ul class="role_example_list" style="padding: 10px 20px;">
+
+                    </ul>
                 </div>
             </div>
-            <div id="role_example">
-                <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid silver;">角色示例</p>
-                <ul class="role_example_list" style="padding: 10px 20px;">
-                    <li><a href="###">不想当律师的记者</a></li>
-                    <li><a href="###">10086专员</a></li>
-                    <li><a href="###">艾唐叔叔</a></li>
-                    <li><a href="###">我是大律师</a></li>
-                </ul>
-            </div>
+
         </div>
     </div>
     <div class="account" style="margin: 20px 0;">
         <b style="font-size: 18px;">账户创建信息：</b>
-        <div style="padding: 10px;border: 1px solid silver;margin-top: 20px;">
+        <div style="padding: 10px 15px;border: 1px solid silver;margin-top: 20px;">
             <div class="account-1">
                 <div class="options name">
                     <img src="/static/images/icon.png" alt="">
@@ -73,11 +80,11 @@
                     <span>性别：</span>
                     <div id="gender">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" checked>
+                            <input class="demo-radio" type="radio" name="demo" value="男" checked>
                             <span class="demo-checkbox demo-radioInput"></span> 男
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo">
+                            <input class="demo-radio" type="radio" name="demo" value="女">
                             <span class="demo-checkbox demo-radioInput"></span> 女
                         </label>
                     </div>
@@ -105,71 +112,78 @@
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
             </div>
-            <div class="account-2">
-                <p class="account-2-example" style="text-align: center;padding: 5px;border-bottom: 1px solid silver;">
-                    <span style="padding: 3px 6px;color: white;"></span>
-                    <b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>
-                </p>
-                <ul class="account-2-list" style="padding: 10px 20px;">
-                    <li><a href="###">习大大</a></li>
-                    <li><a href="###">哈喽</a></li>
-                    <li><a href="###">艾伦</a></li>
-                    <li><a href="###">小宝贝</a></li>
-                </ul>
-            </div>
+            <!--<div class="account-2" style="margin: 20px 0;">-->
+                <!--<p class="account-2-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
+                <!--<ul class="account-2-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
         </div>
     </div>
     <div class="other_basic">
         <b style="font-size: 18px;">其他基础信息：</b>
-        <div style="padding: 20px 10px;border: 1px solid silver;margin-top: 20px;">
+        <div style="padding: 20px 15px;border: 1px solid silver;margin-top: 20px;">
             <div class="other-1">
                 <div class="time others">
                     <img src="/static/images/icon.png">
                     <span class="_in">活跃时间：</span>
                     <div class="task_time" style="display: inline-block;">
-                        <input size="16" type="text" value="" readonly="" class="form_datetime start" placeholder="请选择时间">
+                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime start" placeholder="可自主选择时间">-->
+                        <input size="16" type="text" value="" class="form_datetime start" placeholder="自主填写时间（24小时制）如：9:00">
                         <span style="color: white;"> 到 </span>
-                        <input size="16" type="text" value="" readonly="" class="form_datetime end" placeholder="请选择时间">
+                        <input size="16" type="text" value="" class="form_datetime end" placeholder="自主填写时间（24小时制）如18:00">
+                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime end" placeholder="可自主选择时间">-->
                     </div>
-                    <a class="other_recommend" href="###" style="display: inline-block;">查看推荐</a>
+                    <a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>
+                    <div class="hadChoose" style="color: white;display: none;">
+                        <span>选择的活跃时间段：</span>
+                        <div class="timeRange" style="display: inline-block;"></div>
+                    </div>
                 </div>
             </div>
             <div class="other-2">
                 <div class="choose others">
                     <img src="/static/images/icon.png" alt="">
                     <span>日发帖量：</span>
-                    <div style="display: inline-block;margin-right: 5px;">
+                    <div style="display: inline-block;margin-right:37px;width:650px;">
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="Posting" checked>
                             <span class="demo-checkbox demo-radioInput"></span> 从不
                         </label>
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="Posting">
-                            <span class="demo-checkbox demo-radioInput"></span> 1~2条
+                            <span class="demo-checkbox demo-radioInput"></span> 1-2条
                         </label>
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="Posting">
-                            <span class="demo-checkbox demo-radioInput"></span> 3~5条
+                            <span class="demo-checkbox demo-radioInput"></span> 3-5条
                         </label>
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 5条以上
                         </label>
+                        <label class="demo-label customize">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 自定义
+                        </label>
+                        <input type="text" class="postNUM" placeholder="如：6-8" style="display: none;"/>
                     </div>
-                    <a class="other_recommend" href="###">查看推荐</a>
+                    <a class="other_recommend dayPost" href="###">查看推荐</a>
                 </div>
             </div>
-            <div class="other-3">
-                <p class="other-3-example" style="text-align: center;padding: 5px;border-bottom: 1px solid silver;">
-                    <span style="padding: 3px 6px;color: white;"></span>
-                    <b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>
-                </p>
+            <!--<div class="other-3" style="margin: 15px 0;">-->
+                <!--<p class="other-3-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
 
-                <ul class="other-3-list" style="padding: 10px 20px;">
-                    <li><a href="###">习大大</a></li>
-                    <li><a href="###">哈喽</a></li>
-                </ul>
-            </div>
+                <!--<ul class="other-3-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
         </div>
     </div>
 
@@ -227,68 +241,87 @@
         </div>
     </div>
 </div>
+
+<!--提示-->
+<div class="modal fade" id="prompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
 <script>
     judgment('6');
-    $('#container .account .account-1 a').on('click',function () {
-        $('.account-2').css({display:'block'});
-        let _classname=$(this).parent().attr('class');
-        if (_classname.includes('name')){
-            $('.account-2-example span').text('昵称推荐');
-        }else if (_classname.includes('age')){
-            $('.account-2-example span').text('年龄推荐');
-        }else if (_classname.includes('gender')){
-            $('.account-2-example span').text('性别推荐');
-        }else if (_classname.includes('place')){
-            $('.account-2-example span').text('所在地推荐');
-        }else if (_classname.includes('career')){
-            $('.account-2-example span').text('职业推荐');
-        }else if (_classname.includes('description')){
-            $('.account-2-example span').text('个人描述推荐');
-        }
-    });
+    var basicData=JSON.parse(localStorage.getItem('firstStep'));
+//    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
+//        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
+//        monitorKeywords='{{monitorKeywords}}';
+    $('#character1').attr('title',basicData.domainName).text(basicData.domainName);
+    $('#character2').attr('title',basicData.roleName).text(basicData.roleName);
+    $('#character3').attr('title',basicData.psyFeature).text(basicData.psyFeature);
+    $('#character4').attr('title',basicData.politicalSide).text(basicData.politicalSide);
+    $('#character5').attr('title',basicData.businessGoal).text(basicData.businessGoal);
+    $('#character6').attr('title',basicData.daily).text(basicData.daily);
+    $('#character7').attr('title',basicData.monitorKeywords).text(basicData.monitorKeywords);
 
-    $('#container .other_basic .others a').on('click',function () {
-        $('.other-3').css({display:'block'});
-        let _classname=$(this).parent().attr('class');
-        if (_classname.includes('time')){
-            $('.other-3-example span').text('活跃时间推荐');
-        }else if (_classname.includes('choose')){
-            $('.other-3-example span').text('发帖量推荐');
-        }
-    });
 
-    $('.close').on('click',function () {
-        $(this).parent().parent().hide();
-    });
-    $('.previous').on('click',function () {
-        window.location.href='/registered/targetCustom/';
-    });
-    $('.next').on('click',function () {
-        window.location.href='/registered/socialAccounts/';
-    });
-    $('.save_return').on('click',function () {
-        window.open('/personalCenter/individual/');
-    });
 
 
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        //minView:2, //控制时分秒
+        format: "hh:ii",
+        //minView:1, //控制时分秒
         autoclose: true,
-        todayBtn: true,
+        todayBtn: false,
+        startView:'hour',
         pickerPosition: "bottom-left"
     });
     $('.start').on('changeDate', function(ev){
         $('.end').datetimepicker('setStartDate',ev.date);
+        addTIME();
     });
     $('.end').on('changeDate', function(ev){
         $('.start').datetimepicker('setEndDate',ev.date);
+        addTIME();
     });
+    function addTIME() {
+        if ($('.start').val()&&$('.end').val()){
+            if ($('.start').val()<$('.end').val()){
+                $('.hadChoose').css('display','block');
+                var a=$('.start').val();
+                var b=$('.end').val();
+                $('.timeRange').append(
+                    '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
+                    a+' - '+b+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
+                );
+            }else {
+                $('#prompt p').text('请检查时间，开始时间不能大于结束时间。');
+                $('#prompt').modal('show');
+            }
+        }
+    }
+    function del(_this) {
+        var len=$(_this).parent().siblings('span').length;
+        $(_this).parent().remove();
+        if (len==0){
+            $('.hadChoose').css('display','none');
+        }
+    }
 
-
+    $('.customize').on('click',function () {
+        $(this).hide();
+        $('.postNUM').show();
+    });
 
 </script>
 <script src="/static/js/virtual_created-1.js"></script>

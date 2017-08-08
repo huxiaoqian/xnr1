@@ -27,34 +27,46 @@ body {
 #container .title #character {
     font-size: 16px;
     margin-top: 20px;
-    padding: 40px 10px;
+    padding:20px 10px;
     border: 1px solid silver;
 }
 #container .title #character .define {
     display: inline-block;
-    margin: 5px;
-    width: 24%;
+    margin:15px 0 5px 5px;
+    width: 30%;
     color: white;
 }
 #container .title #role_example {
-    position: absolute;
-    top: 60px;
-    right: 20px;
-    border-radius: 10px;
-    border: 1px solid silver;
+    /*position: absolute;*/
+    /*top: 60px;*/
+    /*right: 20px;*/
+    color:#b0bdd0;
+    /*border-radius: 10px;*/
+    /*border: 1px solid silver;*/
+    background: rgba(8,23,44,0.35);
 }
 #container .title #role_example li {
     list-style-type:disc;
     list-style-position: inside;
-    color: white;
+    color:#b0bdd0;
+    display:inline-block;
+    margin-left: 20px;
 }
 #container .title #character .define span,
 #container .title #role_example li a {
-    width: 100px;
-    color: white;
+    display: inline-block;
+    width: 110px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color:#b0bdd0;
+    text-align: center;
+}
+#container .title #character .define span {
+    color: #fff;
+    text-align: left;
+    position: relative;
+    top: 4px;
 }
 /*账户创建信息*/
 #container .account {
@@ -70,7 +82,6 @@ body {
 }
 #container .account .account-1 {
     font-size: 16px;
-    width: 70%;
 }
 #container .account .account-1 div.options {
     margin-top: 10px;
@@ -81,28 +92,29 @@ body {
     color: white;
 }
 #container .account .account-1 input {
-    width: 270px;
+    width: 650px;
     font-size: 14px;
-    padding: 3px 7px;
+    padding: 5px 10px;
     border: 1px solid silver;
-    margin: 0 15px;
+    margin: 0 20px;
     background: transparent;
     text-align: center;
     color: white;
     border-radius: 5px;
 }
 #container .account .account-1 #gender {
-    width: 270px;
+    width: 650px;
     display: inline-block;
-    margin: 0 15px;
+    margin: 0 20px;
     font-size: 14px;
     text-align: center;
 }
 #container .account .account-1 textarea {
-    width: 270px;
+    width: 650px;
     border: 1px solid silver;
-    padding: 3px 7px;
-    margin: 0 15px;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 0 20px;
     background: transparent;
     color: white;
 }
@@ -112,23 +124,29 @@ body {
 }
 #container .account .account-2 {
     display: none;
-    position: absolute;
-    top:70px;
-    right:50px;
-    border-radius: 10px;
-    border: 1px solid silver;
+    /*position: absolute;*/
+    /*top:70px;*/
+    /*right:50px;*/
+    color:#b0bdd0;
+    /*border-radius: 10px;*/
+    /*border: 1px solid silver;*/
+    background: rgba(8,23,44,0.35);
 }
 #container .account .account-2 li {
     list-style-type:disc;
     list-style-position: inside;
-    color: white;
+    color:#b0bdd0;
+    display:inline-block;
+    margin-left: 20px;
 }
 #container .account .account-2 li a {
-    width: 100px;
+    display: inline-block;
+    width: 110px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: white;
+    color:#b0bdd0;
+    text-align: center;
 }
 /*其他信息*/
 #container .other_basic {
@@ -144,7 +162,6 @@ body {
 }
 #container .other_basic .other-1 {
     font-size: 16px;
-    width: 80%;
 }
 #container .other_basic .other-1 div.others {
     margin-top: 10px;
@@ -158,14 +175,20 @@ body {
     font-size: 10px;
     color: white;
 }
-#container .other_basic .other-1 div.others .task_time input {
+#container .other_basic .other-1 div.others .task_time input,
+#container .other_basic .other-2 .postNUM{
     background: transparent;
     padding: 3px 8px;
     border: 1px solid silver;
     border-radius: 5px;
     text-align: center;
-    width: 220px;
+    width: 300px;
+    margin: 10px 15px;
     color: white;
+}
+#container .other_basic .other-2 .postNUM {
+    width: 95px;
+    margin: 0 15px;
 }
 #container .other_basic .other-2 {
     margin-top: 10px;
@@ -181,23 +204,29 @@ body {
 }
 #container .other_basic .other-3 {
     display: none;
-    position: absolute;
-    right:20px;
-    top:55px;
-    border-radius: 10px;
-    border: 1px solid silver;
+    /*position: absolute;*/
+    /*right:20px;*/
+    /*top:55px;*/
+    color:#b0bdd0;
+    /*border-radius: 10px;*/
+    /*border: 1px solid silver;*/
+    background: rgba(8,23,44,0.35);
 }
 #container .other_basic .other-3 li {
     list-style-type:disc;
     list-style-position: inside;
-    color: white;
+    color:#b0bdd0;
+    display:inline-block;
+    margin-left: 20px;
 }
 #container .other_basic .other-3 li a {
-    width: 100px;
-    color: white;
+    display: inline-block;
+    width: 110px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color:#b0bdd0;
+    text-align: center;
 }
 /*分页*/
 #container .page {

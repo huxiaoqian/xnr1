@@ -1,6 +1,8 @@
 function personEarly(personEarly_QQ) {
     let QQperson=eval(personEarly_QQ);
+    console.log(QQperson)
     let sourcePER=QQperson.hits.hits;
+
     $('#historyNews').bootstrapTable('load', sourcePER);
     $('#historyNews').bootstrapTable({
         data:sourcePER,
@@ -35,7 +37,7 @@ function personEarly(personEarly_QQ) {
                         name=row._source.speaker_nickname;
                     };
                     var str=
-                        '<div class="everySpeak" style="margin: 20px auto;">'+
+                        '<div class="everySpeak" style="margin:0;">'+
                         '   <div class="speak_center">'+
                         '       <div class="center_rel">'+
                         '           <img src="/static/images/post-6.png" alt="" class="center_icon">'+
@@ -64,7 +66,7 @@ $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
     if (start==''||end==''){
         $('#timeChecking').modal('show');
     }else {
-        var search_news_url='/qq_xnr_operate/search_by_period/?startdate='+start+'&enddate='+end;
+        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',search_news_url,personEarly);
     }
 });

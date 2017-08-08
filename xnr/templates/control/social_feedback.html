@@ -3,6 +3,12 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/social_feedback.css">
 <style>
+    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}
+    .demo-radio{display:none!important;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     #container .type_page #myTabs a {
         color: white;
     }
@@ -36,32 +42,35 @@
     </div>
     <div class="type_page" style="margin: 20px 0 30px;">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
+            <li role="presentation" class="active" flag="comment">
                 <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;评论回复</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" flag="retweed">
                 <a href="#forwarding" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;转发回复</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" flag="personal">
                 <a href="#private_letter" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;私信回复</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" flag="@back">
                 <a href="#reply" role="tab" data-toggle="tab"><b class="icon  icon-comments"></b>&nbsp;@回复</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" flag="focus">
                 <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;关注回粉</a>
             </li>
         </ul>
         <div class="desc_index">
             <span>排序指标：</span>
-            <label class="radio-inline">
-                <input type="radio" name="desc" value="time" checked> 按时间
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc">
+                <span class="demo-checkbox demo-radioInput"></span> 按时间
             </label>
-            <label class="radio-inline">
-                <input type="radio" name="desc" value="content"> 按内容敏感度
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc">
+                <span class="demo-checkbox demo-radioInput"></span> 按内容敏感度
             </label>
-            <label class="radio-inline">
-                <input type="radio" name="desc" value="sensitive"> 按人物敏感度
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc">
+                <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
             </label>
         </div>
         <div class="tab-content" id="content">
@@ -96,10 +105,11 @@
                     <div class="clone-2">
                         <img src="/static/images/post-1.png" class="clone-2-1">
                         <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="clone-2-3" value="option1"> 同时转发到我的微博
+                        <label class="demo-label">
+                            <input class="demo-radio clone-2-3" type="checkbox" name="desc2">
+                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
                         </label>
-                        <a href="###" class="clone-2-4">评论</a>
+                        <a href="###" class="clone-2-4">回复</a>
                     </div>
                 </div>
             </div>
@@ -135,10 +145,11 @@
                     <div class="clone-2">
                         <img src="/static/images/post-1.png" class="clone-2-1">
                         <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="clone-2-3" value="option1"> 同时转发到我的微博
+                        <label class="demo-label">
+                            <input class="demo-radio clone-2-3" type="checkbox" name="desc3">
+                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
                         </label>
-                        <a href="###" class="clone-2-4">评论</a>
+                        <a href="###" class="clone-2-4">回复</a>
                     </div>
                 </div>
             </div>
@@ -206,8 +217,9 @@
                     <div class="clone-2">
                         <img src="/static/images/post-1.png" class="clone-2-1">
                         <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="checkbox-inline">
-                            <input type="checkbox" class="clone-2-3" value="option1"> 同时转发到我的微博
+                        <label class="demo-label">
+                            <input class="demo-radio clone-2-3" type="checkbox" name="desc4">
+                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
                         </label>
                         <a href="###" class="clone-2-4">回复</a>
                     </div>
@@ -250,22 +262,17 @@
 
     </div>
 </div>
-<!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+<!--提示性模态框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
                 </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
             </div>
         </div>
     </div>
@@ -300,12 +307,6 @@
 //        $('#container .type_page #content .commentClone .clone-1').attr('placeholder','回复'+_name);
 //        $('#container .type_page #content .commentClone').show(80);
 //    });
-    $('.copyFinish').on('click',function () {
-        var _name=$(this).parent().prev().prev().find('b').text();
-        var _dataType=$(this).attr('datatype');
-        $('#container .type_page #content .'+_dataType+' .clone-1').attr('placeholder','回复'+_name);
-        $('#container .type_page #content .'+_dataType).show(40);
-    })
 
     $('.continue_already_created').on('click',function () {
         window.open('/registered/socialAccounts/');
