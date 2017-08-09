@@ -3,12 +3,19 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/postingQQ.css">
     <style>
+        /*下拉按钮*/
+        .demo-label{display:inline-block;margin:15px 0 0 10px;cursor: pointer;}
+        .demo-radio{display:none}
+        .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 5px 0 0;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        /*--------*/
         #historyNews .bootstrap-table {
             margin: 0 auto;
             height: auto!important;
         }
         #historyNews .table-no-bordered,#historyNews .table>tbody>tr>td,#historyNews .fixed-table-container,
-        #historyNews .bootstrap-table .table>thead>tr>th,.historyNews .bootstrap-table .table{
+        #historyNews .bootstrap-table .table>thead>tr>th,.historyNews .bootstrap-table .table,.historyNews .table>tbody>tr>td{
             border: none;
         }
         #historyNews thead {
@@ -21,7 +28,6 @@
         .table-hover>tbody>tr:hover {
             background-color: inherit!important;
         }
-        #historyNews thead {display: none;}
         .fixed-table-toolbar .search {width: 100%;}
         .historyNews .form-control {
             text-align: center;
@@ -34,7 +40,10 @@
         }
         .historyNews .fixed-table-body {
             overflow-y: hidden;
-            text-align: center;
+            padding: 20px 0;
+        }
+        .historyNews .table:not(.table-condensed)>tbody>tr>td {
+            text-align: left!important;
         }
     </style>
 {% endblock %}
@@ -44,6 +53,22 @@
         <div style="display: inline-block;">
             <span class="icon icon-edit note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">发帖操作</b>
+        </div>
+    </div>
+    <div class="QQgroup" style="width: 90%;margin: 10px auto;">
+        <div class="QG-1" style="margin-top: 20px;">
+            <img src="/static/images/icon.png" alt="">
+            <span style="font-size: 18px;font-weight: 900;color: #fff;">此账号所在的群</span>
+        </div>
+        <div>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="demo-radio" checked>
+                <span class="demo-radioInput"></span> 地图
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="demo-radio">
+                <span class="demo-radioInput"></span> 历史
+            </label>
         </div>
     </div>
     <div class="type_page" style="width: 90%;margin: 20px auto 30px;">

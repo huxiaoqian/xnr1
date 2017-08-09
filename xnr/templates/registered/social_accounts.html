@@ -3,7 +3,11 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/social_accounts.css">
     <style>
-
+        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
+        .demo-radio{display:none}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     </style>
 {% endblock %}
 {% block main %}
@@ -23,23 +27,23 @@
                     <span style="font-size: 18px;font-weight: 900;color: #fff;">基本信息</span>
                 </div>
                 <div class="list-2">
-                    <p class="news">用户ID：<span id="user_id">1110</span></p>
-                    <p class="news">昵称：<span id="uname">毛泽东</span></p>
-                    <p class="news">年龄：<span id="age">23</span></p>
-                    <p class="news">性别：<span id="sex">男</span></p>
-                    <p class="news">职业：<span id="career">白领</span></p>
-                    <p class="news">所在地：<span id="location">北京</span></p>
+                    <p class="news">用户ID：<span id="user_id"></span></p>
+                    <p class="news">昵称：<span id="uname"></span></p>
+                    <p class="news">年龄：<span id="age"></span></p>
+                    <p class="news">性别：<span id="sex"></span></p>
+                    <p class="news">职业：<span id="career"></span></p>
+                    <p class="news">所在地：<span id="location"></span></p>
                 </div>
                 <div class="list-3">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff;">角色定位</span>
                 </div>
                 <div class="list-4">
-                    <p class="news">渗透领域：<span id="field">习大大粉丝</span></p>
-                    <p class="news">角色身份：<span id="character">学生</span></p>
-                    <p class="news">心理特征：<span id="mental">悲伤</span></p>
-                    <p class="news">政治倾向：<span id="political">右倾</span></p>
-                    <p class="news">业务目标：<span id="business">扩大影响</span></p>
+                    <p class="news">渗透领域：<span id="field"></span></p>
+                    <p class="news">角色身份：<span id="character"></span></p>
+                    <p class="news">心理特征：<span id="mental"></span></p>
+                    <p class="news">政治倾向：<span id="political"></span></p>
+                    <p class="news">业务目标：<span id="business"></span></p>
                 </div>
             </div>
         </div>
@@ -58,7 +62,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">绑定提示</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
                 <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;" id="information">
@@ -66,8 +70,10 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#success_fail">确定</button>
+                <button type="button" class="btn btn-primary backTWO" style="display: none;">返回修改信息</button>
+                <button type="button" class="btn btn-primary notBind" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary sureBind" data-dismiss="modal" data-toggle="modal"
+                        data-target="#success_fail" onclick="userLIST()">确定</button>
             </div>
         </div>
     </div>
@@ -85,9 +91,7 @@
                 <div class="user">
                     <a href="###">你可能会关注的人（请勾选）：</a>
                     <div class="personlist" style="margin: 10px 0;">
-                        <div>
-                            <input type="checkbox" name="someone" value="蒋介石"/>蒋介石
-                        </div>
+
                         <!--对应的方法
                         let people=[];
                         $("[name=someone]:checkbox:checked").each(function (index,item) {-->
@@ -96,7 +100,21 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="letGo" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关注人物提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;" id="good"></p>
+            </div>
+            <div class="modal-footer lastGO" style="display: none;">
                 <button type="button" id="release" class="btn btn-primary" data-dismiss="modal">去发帖</button>
                 <button type="button" id="back" class="btn btn-primary" data-dismiss="modal">返回管理界面</button>
             </div>
@@ -108,6 +126,19 @@
 {% block my_js %}
 <script>
     judgment('6');
+    var basicData_1=JSON.parse(localStorage.getItem('firstStep'));
+    var basicData_2=JSON.parse(localStorage.getItem('secondStep'));
+    $("#user_id").attr('title',basicData_2.task_id).text(basicData_2.task_id);
+    $("#uname").attr('title',basicData_2.nickName).text(basicData_2.nickName);
+    $("#age").attr('title',basicData_2.age).text(basicData_2.age);
+    $("#sex").attr('title',basicData_2.sex).text(basicData_2.sex);
+    $("#career").attr('title',basicData_2.career).text(basicData_2.career);
+    $("#location").attr('title',basicData_2.location).text(basicData_2.location);
+    $("#field").attr('title',basicData_1.domainName).text(basicData_1.domainName);
+    $("#character").attr('title',basicData_1.roleName).text(basicData_1.roleName);
+    $("#mental").attr('title',basicData_1.psyFeature).text(basicData_1.psyFeature);
+    $("#political").attr('title',basicData_1.politicalSide).text(basicData_1.politicalSide);
+    $("#business").attr('title',basicData_1.businessGoal).text(basicData_1.businessGoal);
 </script>
 <script src="/static/js/social_accounts-1.js"></script>
 {% endblock %}

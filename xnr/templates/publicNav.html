@@ -84,6 +84,10 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    //时间戳转时间
+    function getLocalTime(nS) {
+        return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
+    }
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {

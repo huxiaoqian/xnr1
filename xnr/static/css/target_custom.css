@@ -45,6 +45,7 @@ body {
     border-radius: 5px;
     margin: 10px 0;
 }
+#container .buildOption .opt-4 .aims,
 #container .buildOption .opt-6 .keywords {
     padding: 6px 11px;
     border: 1px solid silver;

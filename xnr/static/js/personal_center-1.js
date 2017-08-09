@@ -285,6 +285,7 @@ var public_ajax= {
     },
     has_table_QQ:function (has_data_QQ) {
         let QQperson=eval(has_data_QQ);
+        console.log(QQperson)
         let sourcePER=QQperson.hits.hits;
         $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
         $('.has_list_QQ #haslistQQ').bootstrapTable({
@@ -339,12 +340,11 @@ var public_ajax= {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        return '2017-7-12'
-                        // if (row._source.nickname==''||row._source.nickname=='null'||row._source.nickname=='unbknown'){
-                        //     return '未知';
-                        // }else {
-                        //     return row._source.nickname;
-                        // }
+                        if (row._source.create_ts==''||row._source.create_ts=='null'||row._source.create_ts=='unbknown'){
+                            return '未知';
+                        }else {
+                            return getLocalTime(row._source.create_ts);
+                        }
                     }
                 },
                 {
@@ -462,8 +462,50 @@ function success_fail(data) {
 
 //进入虚拟人的具体操作
 function enterIn(QQ_id) {
-    var if_in=encodeURI($(_this).parent().prev().text());
+    // var if_in=encodeURI($(_this).parent().prev().text());
     window.open('/control/postingQQ/?QQ_id='+QQ_id);
+}
+
+//添加虚拟人
+var k=1;
+$('.hasAddQQ').on('click',function () {
+    if (k==1){
+        $('.addQQperson').slideDown(30);
+        k=0;
+    }else {
+        $('.addQQperson').slideUp(20);
+        k=1;
+    }
+})
+$('.optClear').on('click',function () {
+    $('.QQoptions .QQnumber').val('');
+    $('.QQoptions .QQgroup').val('');
+    $('.QQoptions .QQname').val('');
+    $('.QQoptions .QQtime').val('');
+});
+$('.optSureadd').on('click',function () {
+    var qnum=$('.QQoptions .QQnumber').val();
+    var qgp=$('.QQoptions .QQgroup').val();
+    var qname=$('.QQoptions .QQname').val();
+    var qtime=$('.QQoptions .QQtime').val();
+    if (!(qnum||qgp||qname||qtime)){
+        $('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
+        $('#succee_fail').modal('show');
+    }else {
+        var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&qq_groups='+qgp+'&qq_nickname='+
+            qname+'&qq_active_time='+qtime;
+        public_ajax.call_request(ajax_method,qqAdd_url,addOR);
+    }
+});
+function addOR(data) {
+    var Iadd='';
+    if (flag==1){
+        Iadd='添加成功。';
+    }else {
+        Iadd='添加失败。';
+    }
+    $('#succee_fail #words').text(Iadd);
+    $('#succee_fail').modal('show');
 }
 
 

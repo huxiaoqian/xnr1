@@ -73,8 +73,8 @@ def search_by_period(xnr_qq_number,startdate,enddate):
 
     index_names = get_groupmessage_index_list(startdate,enddate)
     for index_name in index_names:
-        if not es_xnr.indices.exsits(index_name):
-            continue
+        # if not es_xnr.indices.exsits(index_name):
+        #     continue
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
             if results != {}:
@@ -83,6 +83,8 @@ def search_by_period(xnr_qq_number,startdate,enddate):
                 results=result.copy()
         except:
             pass
+    if results == {}:
+        results={'hits':{'hits':[]}}
     return results
 
 
