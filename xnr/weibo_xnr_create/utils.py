@@ -336,6 +336,7 @@ def get_save_step_three_1(task_detail):
         item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
         item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
         item_exist['password'] = task_detail['password']
+        item_exist['uid'] = task_detail['uid']
         item_exist['create_status'] = 2 # 创建完成
         # 更新 weibo_xnr表
         es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        

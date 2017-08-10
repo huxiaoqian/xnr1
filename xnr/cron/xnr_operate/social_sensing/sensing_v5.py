@@ -442,7 +442,7 @@ def filter_mid(mid_list):
             es_results = es_xnr.mget(index="social_sensing_text", doc_type="text", body={"ids":tmp}, _source=False)["docs"]
             #print 'es_results:::',es_results
             for item in es_results:
-
+                #print 'item::',item
                 if not item["found"]:
                     result.append(item["_id"])
 
@@ -588,7 +588,8 @@ def social_sensing(task_detail):
             duplicate_dict = dict() # 重合字典
             portrait_dict = dict() # 背景信息
             classify_text_dict = dict() # 分类文本
-            classify_uid_list = []
+            #classify_uid_list = []
+            classify_mid_list = []
             duplicate_text_list = []
             sensitive_words_dict = dict()
             mid_ts_dict = dict() # 文本发布时间
@@ -619,7 +620,8 @@ def social_sensing(task_detail):
                         k = k.encode('utf-8', 'ignore')
                         personal_keywords_dict[k] = v
                     classify_text_dict[iter_mid] = personal_keywords_dict
-                    classify_uid_list.append(iter_uid)
+                    #classify_uid_list.append(iter_uid)
+                    classify_mid_list.append(iter_mid)
 
                 # 去重
                 print "start duplicate"
@@ -633,13 +635,15 @@ def social_sensing(task_detail):
                 print "start classify"
                 mid_value = dict()
                 if classify_text_dict:
-                    classify_results = topic_classfiy(classify_uid_list, classify_text_dict)
+                    #classify_results = topic_classfiy(classify_uid_list, classify_text_dict)
+                    classify_results = topic_classfiy(classify_mid_list, classify_text_dict)
                     print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
                     print "classify_results: ", classify_results
                     print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 
                     for k,v in classify_results.iteritems(): # mid:value
-                        mid_value[k] = topic_value_dict[v[0]]
+                        #mid_value[k] = topic_value_dict[v[0]]
+                        mid_value[k]=v[0]
                         #feature_list = organize_feature(k, mid_ts_dict[k])
                         #feature_prediction_list.append(feature_list) # feature list
                         #mid_prediction_list.append(k) # corresponding 
@@ -685,7 +689,8 @@ def social_sensing(task_detail):
 
         #iter_dict["uid_prediction"] = uid_prediction_dict[mid]
         #iter_dict["weibo_prediction"] = weibo_prediction_dict[mid]
-        iter_dict["mid_topic_value"] = mid_value[mid]
+        iter_dict["compute_status"] = 0  # 尚未计算
+        iter_dict["topic_field"] = mid_value[mid]
         iter_dict["detect_ts"] = ts
         iter_dict.update(all_text_dict[mid])
         count += 1

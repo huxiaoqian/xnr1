@@ -6,6 +6,7 @@ import time
 import csv
 import heapq
 import random
+import copy
 from decimal import *
 from config import abs_path,DOMAIN_DICT,DOMAIN_COUNT,LEN_DICT,TOTAL,name_list,TOPIC_DICT
 #from test_data import input_data #测试输入
@@ -32,7 +33,7 @@ def com_p(word_list,domain_dict,domain_count,len_dict,total):
     test_word = set(word_list.keys())
     train_word = set(domain_dict.keys())
     c_set = test_word & train_word
-    p = sum([float(domain_dict[k]*word_list[k])/float(domain_count) for k in c_set])
+    p = sum([float(domain_dict[k]*word_list[k])/float(domain_count) for k in c_set])#sum([word_list[k] for k in c_set])
 
     return p
 
@@ -40,11 +41,13 @@ def load_weibo(uid_weibo):
 
     p_data = dict()
     for k,v in uid_weibo.iteritems():
-        domain_p = TOPIC_DICT
+        domain_p = copy.deepcopy(TOPIC_DICT)
         for d_k in domain_p.keys():
             domain_p[d_k] = com_p(v,DOMAIN_DICT[d_k],DOMAIN_COUNT[d_k],LEN_DICT[d_k],TOTAL)#计算文档属于每一个类的概率
-        p_data[k] = rank_result(domain_p)
+            end_time = time.time()
         
+        p_data[k] = rank_result(domain_p)
+
     return p_data
 
 def rank_dict(has_word):
@@ -77,8 +80,10 @@ def topic_classfiy(uid_list,uid_weibo):#话题分类主函数
     uid_weibo:分词之后的词频字典（{uid1:{'key1':f1,'key2':f2...}...}）
 
     输出数据示例：字典
+    用户18个话题的分布：
+    {uid1:{'art':0.1,'social':0.2...}...}
     用户关注较多的话题（最多有3个）：
-    {uid1:['art']...}
+    {uid1:['art','social','media']...}
     '''
     if not len(uid_weibo) and len(uid_list):
         uid_topic = dict()
@@ -101,14 +106,28 @@ def topic_classfiy(uid_list,uid_weibo):#话题分类主函数
     
     return uid_topic
 
+def count_text():
+
+    result = dict()
+    for i in name_list:
+        reader = csv.reader(file(abs_path + '/topic_dict/%s_tfidf.csv' % i, 'rb'))
+        
+        n = 0
+        for f,w_text in reader:
+            
+            n = n + 1
+        result[i] = n
+    print result
 
 if __name__ == '__main__':
 
-    uid_list,uid_weibo = input_data()
-    uid_weibo = dict()
-    result_data,uid_topic = topic_classfiy(uid_list,uid_weibo)
-    print result_data
-    print uid_topic
+    uid_list,uid_weibo,uid_text = input_data()
+    uid_topic = topic_classfiy(uid_list,uid_weibo)
+    with open('./result/result_cross.csv', 'wb') as f:
+        writer = csv.writer(f)
+        for k,v in uid_topic.iteritems():
+            writer.writerow((k,v[0],uid_text[k]))
+    f.close()
 
 
 

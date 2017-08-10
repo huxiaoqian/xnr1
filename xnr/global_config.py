@@ -46,4 +46,9 @@ REDIS_PATH = '/home/ubuntu7/huxiaoqian/redis-3.0.5/7392/'
 # use to identify the db number of redis-97
 R_BEGIN_TIME = '2016-03-21'
 
+##　 weibo敏感词redis
+REDIS_CLUSTER_HOST_FLOW3 = '219.224.134.214' #'10.128.55.71'
+REDIS_CLUSTER_PORT_FLOW3 = '6379'
 
+REDIS_HOST_SENSITIVE = '219.224.134.212' #'10.128.55.68'
+REDIS_PORT_SENSITIVE = '6381' #'6379'

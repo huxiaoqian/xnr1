@@ -18,17 +18,22 @@ from xnr.global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword
                             weibo_hot_subopinion_results_index_name,weibo_hot_subopinion_results_index_type,\
                             weibo_bci_index_name_pre,weibo_bci_index_type,portrait_index_name,portrait_index_type,\
                             es_user_portrait,es_user_profile
+from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
+                            weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
+                            weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
+                            weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
+                            weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
+                            weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
+                            weibo_feedback_follow_index_name,weibo_feedback_follow_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
-                                like_tweet_func,follow_tweet_func,unfollow_tweet_func#,at_tweet_func
+                                like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func#,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
-                        HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER
+                        HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
+                        MAX_SEARCH_SIZE,domain_ch2en_dict
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 
-#from xnr.sina.weibo_operate import execute
-#from xnr.sina.weibo_operate import SinaOperateAPI
-#from xnr.tools.Launcher import SinaLauncher
 
 def push_keywords_task(task_detail):
 
@@ -50,7 +55,7 @@ def get_submit_tweet(task_detail):
 
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
-    uid = task_detail['uid']
+    xnr_user_no = task_detail['xnr_user_no']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
     password = task_detail['password']
@@ -73,7 +78,7 @@ def get_submit_tweet(task_detail):
 
     # 保存微博
     try:
-        save_mark = save_to_xnr_flow_text(tweet_type,uid,text)
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
     except:
         print '保存微博过程遇到错误！'
         save_mark = False
@@ -272,11 +277,13 @@ def get_hot_sensitive_recommend_at_user(sort_item):
     return uid_nick_name_dict
 
 def get_hot_recommend_tweets(topic_field,sort_item):
+    
+    topic_field_en = domain_ch2en_dict(topic_field)
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'topic_field':topic_field}
+                    'term':{'topic_field':topic_field_en}
                 }
             }
         },
@@ -464,39 +471,104 @@ def get_bussiness_recomment_tweets(sort_item):
 社交反馈
 '''
 
-def get_show_comment():
-    return []
+def get_show_comment(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
 
 def get_reply_comment(task_detail):
 
     text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
-    password = task_detail['password']
+    #password = task_detail['password']
     r_mid = task_detail['r_mid']
-    
+
     if weibo_mail_account:
         account_name = weibo_mail_account
     elif weibo_phone_account:
         account_name = weibo_phone_account
     else:
         return False
+
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
+
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
     # 发布微博
 
     mark = comment_tweet_func(account_name,password,text,r_mid)
 
+    # 保存微博
+    try:
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
+
     return mark
 
-def get_show_retweet():
-    return[]
+def get_show_retweet(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
+
 
 def get_reply_retweet(task_detail):
-    text = task_detail['text'].encode('utf-8')
+    text = task_detail['text']
     tweet_type = task_detail['tweet_type']
-    uid = task_detail['uid']
+    xnr_user_no = task_detail['xnr_user_no']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
-    password = task_detail['password']
+    #password = task_detail['password']
     r_mid = task_detail['r_mid']
     
     if weibo_mail_account:
@@ -505,18 +577,60 @@ def get_reply_retweet(task_detail):
         account_name = weibo_phone_account
     else:
         return False
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
+
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
+
     mark = retweet_tweet_func(account_name,password,text,r_mid)
+
+    # 保存微博
+    try:
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
 
     return mark
 
-def get_show_private():
-    return []
+def get_show_private(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
 
 def get_reply_private(task_detail):
     text = task_detail['text']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
-    password = task_detail['password']
+    #password = task_detail['password']
     r_mid = task_detail['uid']
     
     if weibo_mail_account:
@@ -526,23 +640,102 @@ def get_reply_private(task_detail):
     else:
         return False
 
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
+
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
+
     mark = private_tweet_func(account_name,password,text,r_mid)
 
     return mark
 
-def get_show_at():
-    return []
+def get_show_at(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
 
 def get_reply_at():
     return []
 
-def get_show_follow():
-    return []
+def get_show_fans(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
+
+
+def get_show_follow(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    es_results = es.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,\
+                            body=query_body)['hits']['hits']
+
+    return es_results
 
 def get_reply_follow(task_detail):
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
-    password = task_detail['password']
+    #password = task_detail['password']
     uid = task_detail['uid']
     
     if weibo_mail_account:
@@ -552,6 +745,21 @@ def get_reply_follow(task_detail):
     else:
         return False
 
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
+
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
+
     mark = follow_tweet_func(account_name,password,uid)
 
     return mark
@@ -559,28 +767,43 @@ def get_reply_follow(task_detail):
 
 def get_reply_unfollow(task_detail):
 
-	weibo_mail_account = task_detail['weibo_mail_account']
-	weibo_phone_account = task_detail['weibo_phone_account']
-	password = task_detail['password']
-	uid = task_detail['uid']
-	
-	if weibo_mail_account:
-	    account_name = weibo_mail_account
-	elif weibo_phone_account:
-	    account_name = weibo_phone_account
-	else:
-	    return False
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    #password = task_detail['password']
+    uid = task_detail['uid']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
 
-	mark = unfollow_tweet_func(account_name,password,uid)
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
 
-	return mark
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
+
+    mark = unfollow_tweet_func(account_name,password,uid)
+
+    return mark
 
 
 def get_like_operate(task_detail):
 
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
-    password = task_detail['password']
+    #password = task_detail['password']
     r_mid = task_detail['mid']
     
     if weibo_mail_account:
@@ -590,12 +813,138 @@ def get_like_operate(task_detail):
     else:
         return False
 
+    query_body = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':account_name}},
+                    {'term':{'weibo_phone_account':account_name}}
+                ]
+            }
+        }
+    }
+
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    password = es_result[0]['_source']['password']
+
     mark = like_tweet_func(account_name,password,r_mid)
 
     return mark
 
 
+# 主动社交-直接搜索
+def get_direct_search(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']  
+    uid_list = task_detail['uid_list']
+
+    if sort_item != 'friend':
+        uid_list_new = uid_list
+        
+    else:
+        friends_list = []
+        ## 得到朋友圈uid_list
+        #for uid in uid_list:
+        friends_list_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['_source']
+        for result in friends_list_results:
+            friends_list = friends_list + result['friend_list']
+        friends_set_list = list(set(friends_list))
+
+        uid_list_new = friends_set_list
+
+        sort_item = 'sensitive'
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':uid_list_new
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+    es_results = es.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['docs']
+
+    return es_results
 
 
+## 主动社交- 相关推荐
+def get_related_recommendation(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    recommend_list = es.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']['friend_list']
+    recommend_set_list = list(set(recommend_list))
+
+    if sort_item != 'friend':
+        uid_list = recommend_set_list
+    else:
+        friends_list_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
+        for result in friends_list_results:
+            friends_list = friends_list + result['friend_list']
+        friends_set_list = list(set(friends_list))
+
+        uid_list = friends_set_list
+
+        sort_item = 'sensitive'
 
 
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':uid_list
+                }
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+    es_results = es.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['docs']
+
+    return es_results
+
+
+## 创建群组
+def get_create_group(task_detail):
+
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+    #password = task_detail['password']
+
+    group = task_detail['group']
+    members = task_detail['members']
+    
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+    if S_TYPE == 'test':
+        password = '207361lucky'
+        
+    else:
+        query_body = {
+                'query':{
+                    'bool':{
+                        'should':[
+                            {'term':{'weibo_mail_account':account_name}},
+                            {'term':{'weibo_phone_account':account_name}}
+                        ]
+                    }
+                }
+            }
+
+        es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+        password = es_result[0]['_source']['password']
+
+    mark = create_group_func(account_name,password,group,members)
+
+    return mark

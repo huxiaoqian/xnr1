@@ -81,4 +81,11 @@ domain_ch2en_dict = {u'高校': 'university', u'境内机构':'homeadmin', u'境
 domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroadadmin':u'境外机构', \
                      'homemedia':u'媒体', 'abroadmedia':u'境外媒体', 'folkorg':u'民间组织',\
                      'lawyer':u'法律机构及人士', 'politician':u'政府机构及人士', 'mediaworker':u'媒体人士',\
-                     'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}                    
+                     'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}   
+
+# 敏感词等级评分, string类型
+sensitive_score_dict = {
+    "1": 1,
+    "2": 5,
+    "3": 10
+}                 

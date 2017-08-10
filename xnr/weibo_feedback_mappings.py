@@ -8,8 +8,8 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
 						weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
 						weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
+						weibo_feedback_fans_index_name,weibo_feedback_fans_index_name,\
 						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type
-
 
 def weibo_feedback_retweet_mappings():
 	index_info = {
@@ -63,6 +63,12 @@ def weibo_feedback_retweet_mappings():
 					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
 					}
 				}
 			}
@@ -120,6 +126,12 @@ def weibo_feedback_comment_mappings():
 					'comment_type':{  ## make 发出的评论   receive 收到的评论
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
 					}
 				}
 			}
@@ -173,6 +185,12 @@ def weibo_feedback_at_mappings():
 					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
 					}
 				}
 			}
@@ -226,6 +244,12 @@ def weibo_feedback_like_mappings():
 					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
 					}
 				}
 			}
@@ -283,6 +307,12 @@ def weibo_feedback_private_mappings():
 					'private_type':{ # make 表示发出的私信   receive表示收到的私信
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
 					}
 				}
 			}
@@ -293,7 +323,7 @@ def weibo_feedback_private_mappings():
 		es.indices.create(index=weibo_feedback_private_index_name,body=index_info,ignore=400)
 
 
-def weibo_feedback_follow_mappings():  ## 关注回粉
+def weibo_feedback_fans_mappings():  ## 粉丝提醒及回粉
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -349,6 +379,88 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=weibo_feedback_fans_index_name):
+		es.indices.create(index=weibo_feedback_fans_index_name,body=index_info,ignore=400)
+
+
+def weibo_feedback_follow_mappings():  ## 关注提醒及回粉
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			weibo_feedback_follow_index_type:{
+				'properties':{
+					'uid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'photo_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'sex':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'geo':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'followers':{             
+						'type':'long'
+					},
+					'fans':{             
+						'type':'long'
+					},
+					'weibos':{             
+						'type':'long'
+					},
+					'root_uid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'follow_source':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'description':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'weibo_type':{   ## follow(关注人的)  粉丝  好友  陌生人
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'sensitive_info':{
+						'type':'long'
+					},
+					'sensitive_user':{
+						'type':'long'
+					},
+					'group':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -357,7 +469,6 @@ def weibo_feedback_follow_mappings():  ## 关注回粉
 
 	if not es.indices.exists(index=weibo_feedback_follow_index_name):
 		es.indices.create(index=weibo_feedback_follow_index_name,body=index_info,ignore=400)
-
 
 
 if __name__ == '__main__':

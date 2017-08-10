@@ -7,7 +7,8 @@ from elasticsearch import Elasticsearch
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
-                          REDIS_HOST, REDIS_PORT
+                          REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
+                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 #module1.2:config es table---index_name, doc_type
@@ -88,6 +89,9 @@ weibo_feedback_at_index_type = 'text'
 
 weibo_feedback_like_index_name = 'weibo_feedback_like'
 weibo_feedback_like_index_type = 'text'
+
+weibo_feedback_fans_index_name = 'weibo_feedback_fans'
+weibo_feedback_fans_index_type = 'text'
 
 weibo_feedback_follow_index_name = 'weibo_feedback_follow'
 weibo_feedback_follow_index_type = 'text'
@@ -174,4 +178,6 @@ weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywo
 
 #use to save xnr info
 
-
+# sensitive user
+R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)
+R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)

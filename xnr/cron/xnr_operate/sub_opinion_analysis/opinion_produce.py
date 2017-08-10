@@ -30,7 +30,7 @@ def opinion_main(weibo_data,k_cluster):
     
     weibo_new = []
     for i in range(0,len(weibo_data)):
-        text = weibo_data[i][1]
+        text = weibo_data[i]
         n = str(text).count('@')
         if n >= 5:
             continue

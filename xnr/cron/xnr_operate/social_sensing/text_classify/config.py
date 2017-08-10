@@ -6,8 +6,7 @@ import re
 import csv
 import sys
 from decimal import *
-reload(sys)
-sys.path.append('../../../../')
+sys.path.append('../../../')
 from parameter import TOPIC_ABS_PATH as abs_path
 
 name_list = ['art','computer','economic','education','environment','medicine',\
@@ -19,6 +18,10 @@ zh_data = ['文体类_娱乐','科技类','经济类','教育类','民生类_环
         '军事类','政治类_外交','文体类_体育','民生类_交通','其他类',\
         '政治类_反腐','民生类_就业','政治类_暴恐','民生类_住房','民生类_法律',\
         '政治类_地区和平','政治类_宗教','民生类_社会保障']
+
+number_dict = {'life': 7317, 'law': 20075, 'computer': 4900, 'house': 24381, 'peace': 9666, 'politics': 3817, 'fear-of-violence': 8391, \
+                'sports': 4204, 'environment': 3852, 'religion': 15885, 'economic': 6361, 'traffic': 3425, 'anti-corruption': 19934,\
+                'military': 4364, 'medicine': 3137, 'art': 7163, 'education': 5341, 'employment': 13925, 'social-security': 9793}
 
 ## 加载分词工具
 
@@ -99,10 +102,14 @@ def load_train():#读取生成之后的tfidf文档，对新的用户进行话题
         reader = csv.reader(file(abs_path + '/topic_dict/%s_tfidf.csv' % i, 'rb'))
         word_dict = dict()
         count = 0
+        n = 0
         for f,w_text in reader:
             f = f.strip('\xef\xbb\xbf')
             word_dict[str(w_text)] = Decimal(f)
             count = count + Decimal(f)
+            n = n + 1
+            if n >= int(number_dict[i]*0.5):
+                break
         domain_dict[i] = word_dict
         domain_count[i] = count
 
