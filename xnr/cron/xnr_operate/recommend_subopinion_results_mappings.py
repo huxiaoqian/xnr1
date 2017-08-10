@@ -66,5 +66,5 @@ def subopinion_results_mappings():
 
 if __name__ == '__main__':
 
-	content_recommend_results_mappings()
+	#content_recommend_results_mappings()
 	subopinion_results_mappings()

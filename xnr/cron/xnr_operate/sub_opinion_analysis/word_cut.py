@@ -41,6 +41,7 @@ def process_for_cluto(kEigVec,name):
     '''
 
     #生成cluto输入文件
+    #print 'kEigVec:::',kEigVec
     row = kEigVec.shape[0]#词数
     column = kEigVec.shape[1]#特征列数
     nonzero_count = 0#非0特征数
@@ -113,7 +114,8 @@ def kmeans(feature,k,name):
     return results
 
 def word_net(weibo,k_cluster):#词频词网
-
+    #print 'weibo::',weibo
+    #print '============================================='
     black = load_black_words()
     sw = load_scws()
     n = 0
@@ -144,7 +146,7 @@ def word_net(weibo,k_cluster):#词频词网
     
     keyword_data = keyword.TopK()#取得前100的高频词作为顶点
     ts = time.time()
-
+    #print 'keyword_data:::',keyword_data
     keyword = []
     k_value = dict()
     for i in range(0,len(keyword_data)):
@@ -203,6 +205,7 @@ def word_net(weibo,k_cluster):#词频词网
             n = n1 + n2
             c.append(n)
         feature.append(c)
+    #print 'feature::',feature
     features = np.array(feature)
     result = kmeans(features,k_cluster,'summary')
 

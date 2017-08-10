@@ -92,3 +92,14 @@ def unfollow_tweet_func(account_name,password,uid):
 	mark = user.unfollowed()
 
 	return mark
+
+## 创建群组
+def create_group_func(account_name,password,group,members):
+	xnr = SinaLauncher(account_name,password)
+	xnr.login()
+	user = SinaOperateAPI(xnr.uid)
+	user.group = group
+	user.members = members
+	mark = user.createGroup()
+
+	return mark

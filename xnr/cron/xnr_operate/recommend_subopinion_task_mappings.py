@@ -31,7 +31,7 @@ def recommend_subopinion_keyword_task_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'compute_status':{   # 计算状态  0-尚未计算，1-内容推荐计算完成 2-子观点分析计算完成
+					'compute_status':{   # 计算状态  0-尚未计算，1-内容推荐计算完成 2-子观点分析计算完成  应该改到social_sensing_text这个表中的compute_status
 						'type':'long'
 					}
 				}

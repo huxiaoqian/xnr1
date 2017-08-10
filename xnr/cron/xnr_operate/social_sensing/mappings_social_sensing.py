@@ -249,6 +249,13 @@ def mappings_social_sensing_text():
                     },
                     "type":{
                         "type": "long"
+                    },
+                    'topic_field':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'compute_status':{   # 0- 尚未计算， 1-正在计算，2- 计算王成
+                        'type':'long'
                     }
                 }
             }

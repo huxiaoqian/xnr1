@@ -89,6 +89,7 @@ def ajax_save_step_three_1():
     task_detail['weibo_mail_count'] = request.args.get('weibo_mail_count','') # 邮箱
     task_detail['weibo_phone_count'] = request.args.get('weibo_phone_count','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
+    task_detail['uid'] = request.args.get('uid','') # uid
 
     mark = get_save_step_three_1(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败

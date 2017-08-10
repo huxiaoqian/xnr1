@@ -47,6 +47,7 @@ def rpop_compute_recommend_subopnion():
     while True:
         temp = r.rpop(weibo_recommend_subopinion_keywords_task_queue_name)
 
+        print 'temp:::::',temp
         if not temp:
             print '当前没有内容推荐和子观点分析的关键词任务'
             
@@ -80,17 +81,16 @@ def compute_recommend_subopnion(task_detail):
         create_time = datetime2ts(S_DATE)
     else:
         create_time = datehour2ts(ts2datehour(time.time()-3600))
-    print 'create_time',create_time
-    #print 'query::',{'query':{'bool':{'must':nest_query_list}}
+    
     #get_flow_text_index_list(create_time)
-    print '123'
+    
     #index_name_list_list = get_flow_text_index_list(now_timestamp)
     index_name_list = get_flow_text_index_list(create_time)
     es_results = es_flow_text.search(index=index_name_list,doc_type='text',\
                     body={'query':{'bool':{'must':nest_query_list}},'size':MAX_SEARCH_SIZE})['hits']['hits']
 
     weibo_list = [] ## 内容推荐和子观点分析的输入
-    print es_results
+    
     if es_results:
         for item in es_results:
             item = item['_source']
@@ -108,15 +108,12 @@ def compute_recommend_subopnion(task_detail):
     print '开始保存内容推荐计算结果......'
 
     mark = save_content_recommendation_results(task_id,content_results)
-
-    print '内容推荐计算结果保存完毕......'
-
+    print 'mark_content:::',mark
     if mark == False:
-
         print '内容推荐结果保存过程中遇到错误，把计算任务重新push到队列中'
-
         add_task_2_queue(keyword_task_queue_name,task_detail)
-
+    else:
+        print '内容推荐计算结果保存完毕......'
 
     ## 子观点分析
     '''
@@ -128,22 +125,26 @@ def compute_recommend_subopnion(task_detail):
     word_result：子话题关键词对，{topic1:[w1,w2,...],topic2:[w1,w2,...],...}
     text_list：子话题对应的文本，{topic1:[text1,text2,...],topic2:[text1,text2,..],..}
     '''
-    '''
+    
     print '开始子观点计算......'
-
+    
     opinion_name,word_result,text_list = opinion_main(weibo_list,k_cluster=5)
+    sub_opinion_results = dict()
+    for topic, text in text_list.iteritems():
+        topic_name = opinion_name[topic]
+        sub_opinion_results[topic_name] = text
 
     print '开始保存子观点计算结果......'
-    mark = save_subopnion_results(task_id,text_list)
-    print '子观点计算结果保存完毕......'
-
+    mark = save_subopnion_results(task_id,sub_opinion_results)
+    print 'mark_opinion:::',mark
     if mark == False:
 
         print '子观点计算结果保存过程中遇到错误，把计算任务重新push到队列中'
 
         add_task_2_queue(keyword_task_queue_name,task_detail)
 
-    '''
+    else:
+        print '子观点计算结果保存完毕......'
 
 
 
