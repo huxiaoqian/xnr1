@@ -1,0 +1,293 @@
+/*内容样式*/
+table.table-condensed {
+    color: black;
+}
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.25);
+    position: relative;
+    top: 80px;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .post_post {
+    position: relative;
+}
+#container .post_post .post-2 {
+    margin: 15px 0 15px 25px;
+    padding: 5px;
+}
+#container .post_post .post-2 #post-2-content {
+    background: rgba(8,23,44,0.25);
+    color: white;
+    resize: none;
+    border: 1px solid silver;
+    margin: 10px 0 0 0;
+    padding: 5px;
+}
+#container .post_post .post-2 .add_thing {
+    padding:10px 0;
+}
+#container .post_post .post-2 .add_thing div {
+    display:inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+}
+#container .post_post .post-2 .add_thing div img {
+    width: 20px;
+    height: 20px;
+}
+#container .post_post .post-2 .add_thing div span {
+    font-size: 12px;
+    color: #fff;
+}
+#container .post_post .post-2 .add_thing div:hover span,
+#container .post_post .post-2 .add_thing div.friends:hover button,
+#container .post_post .post-2 .add_thing div.friends .dropdown-menu li:hover span{
+    color: #eb7350;
+}
+#container .post_post .post-2 .add_thing div.friends .dropdown-menu {
+    min-width: 100px!important;
+    padding: 0 5px;
+}
+#container .post_post .post-2 .add_thing div.friends .dropdown-menu li {
+    margin: 5px 0;
+}
+#container .post_post .post-2 .add_thing div.friends .dropdown-menu li:hover {
+    background:#f2f2f5;
+}
+#container .post_post .post-2 .add_thing div.friends span {
+    color: #77a1d5;
+}
+#container .post_post .post-2 .add_thing #sure_post {
+    /*float: right;*/
+    /*margin-right: 317px;*/
+    /*margin-left: 60px;*/
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: rgba(5, 23, 55, 0.45);
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color:rgba(7,26,55,0.2);
+}
+
+#container .post_post #user_recommend {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    color: #b0bdd0;
+    /* border-radius: 10px; */
+    /* border: 1px solid silver; */
+    background: rgba(8,23,44,0.35);
+}
+#container .post_post #user_recommend li {
+    list-style-type:disc;
+    list-style-position: inside;
+    color:#b0bdd0;
+    /*display:inline-block;*/
+    /*margin-left: 20px;*/
+}
+#container .post_post #user_recommend li a {
+    position: relative;
+    top: 4px;
+    display: inline-block;
+    width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color:#b0bdd0;
+}
+/**/
+#container .type_page #content input,
+#container .type_page #content select {
+    color: white;
+    display: inline-block;
+    width: 300px;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+}
+/*发布内容*/
+#container .type_page #content #everyday .post_perfect {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+}
+#container .type_page #content #everyday .post_perfect .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#container #content #everyday .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#container #content #everyday .post_perfect .center_3 span {
+    display: inline-block;
+    width: 30%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container #content #everyday .post_perfect .center_3 span:nth-child(2) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container #content #everyday .post_perfect .center_3 span:hover {
+    color:#eb7350;
+}
+#container #content #everyday .post_perfect .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container #content #everyday .post_perfect .commentDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container #content #everyday .post_perfect .commentDown span{
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container #content #everyday .post_perfect .commentDown span:hover {
+    background: #333333;
+}
+
+
+
+
+
+
+
+#container #content #everyday .everyday-2 .ed-2-1 {
+    width: 200px;
+    height: auto;
+    padding: 15px 5px 5px 30px;
+    background: #0c2542;
+    float: left;
+}
+#container #content #everyday .everyday-2 .ed-2-1 #theme {
+    margin: 10px 0;
+}
+#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#container #content #everyday .everyday-2 .ed-2-2 {
+    width: 700px;
+    height: auto;
+    float: left;
+}
+
+
+
+#container .type_page #content #hot #post_center-hot {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#container .type_page #content #hot #post_center-hot .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#container .type_page #content #hot .hot-2 input,
+#container .type_page #content #hot .hot-2 select {
+    color: black;
+    width: 200px;
+}
+#container .type_page #content #hot #post_center-hot a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 10px;
+}
+
+#container .type_page #content #business #post_center-business {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#container .type_page #content #business #post_center-business .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+
+
+/*推荐微博*/
+#content_recommend #post_center-recommend {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#content_recommend #post_center-recommend .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+
+#content_recommend #recommend-1,
+#content_recommend #search-1-recommend{
+    display: inline-block;
+    font-size: 12px;
+    width: 100px;
+    padding: 2px 5px;
+    border: 1px solid silver;
+}
+#content_recommend #search-1-recommend{width: 200px;}
+#content_recommend #post_center-recommend {
+    position: relative;
+    padding: 10px 50px 10px 30px;
+}
+#content_recommend #post_center-recommend .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#content_recommend #post_center-recommend a {
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 10px;
+}

@@ -89,3 +89,7 @@ sensitive_score_dict = {
     "2": 5,
     "3": 10
 }                 
+                   
+# qq
+group_message_windowsize = 30          # 群历史消息查询范围30天
+

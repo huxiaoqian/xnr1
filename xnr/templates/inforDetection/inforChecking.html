@@ -1,0 +1,214 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>信息监测</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/inforChecking.css">
+<style>
+    .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-rss note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">信息检测</b>
+        </div>
+        <div class="titTime">
+            <span>时间范围：从</span>
+            <input size="16" type="text" value="" readonly class="form_datetime start" placeholder="请选择时间">
+            <span>到</span>
+            <input size="16" type="text" readonly class="form_datetime end" placeholder="请选择时间">
+            <span class="timeSure">确定</span>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content-1" style="margin-top: 20px;">
+            <img src="/static/images/icon.png" alt="">
+            <span style="font-size: 16px;font-weight: 900;color: #fff">关键词云</span>
+            <div id="content-1-word" style="width: 90%;height:300px;margin: 0 auto;"></div>
+        </div>
+        <div class="content-2" style="margin-top: 20px;">
+            <div class="hot-1" style="margin: 20px 0;">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff">热门帖子</span>
+            </div>
+            <div class="hot-2" style="margin-left: 30px;">
+                <div style="text-align: center;">
+                    <input type="text" id="search-1-hot" placeholder="搜索关键词相关的微博" style="width: 94%;"/>
+                    <button type="button" class="btn-xs" id="search-hot" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                </div>
+                <div>
+                    <span style="display: inline-block;width: 70px;">分类：</span>
+                    <div id="theme-2" style="display: inline-block;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo-radio" checked>
+                            <span class="demo-radioInput"></span>全部用户
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo-radio">
+                            <span class="demo-radioInput"></span>已关注用户
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo-radio">
+                            <span class="demo-radioInput"></span>未关注用户
+                        </label>
+                    </div>
+                </div>
+                <!--<select id="theme-2">-->
+                    <!--<option value="全部用户">全部用户</option>-->
+                    <!--<option value="已关注用户">已关注用户</option>-->
+                    <!--<option value="未关注用户">未关注用户</option>-->
+                <!--</select>-->
+                <div>
+                    <span style="display:inline-block;width:70px;">排序指标：</span>
+                    <div id="theme-3" style="display: inline-block;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" checked>
+                            <span class="demo-radioInput"></span>按时间
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo">
+                            <span class="demo-radioInput"></span>按热度
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo">
+                            <span class="demo-radioInput"></span>按敏感度
+                        </label>
+                    </div>
+                    <!--<select id="theme-3">-->
+                        <!--<option selected="" value="按时间">按时间</option>-->
+                        <!--<option value="按热度">按热度</option>-->
+                        <!--<option value="按敏感度">按敏感度</option>-->
+                    <!--</select>-->
+                </div>
+                <div class="Posts">
+                    <div class="post_perfect" style="margin: 20px auto;">
+                        <div class="post_center-hot">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：
+                                <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                                </span>
+                                <div class="center_3">
+                                    <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>
+                                    <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>
+                                    <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>
+                                    <span class="cen3-4"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>
+                                    <span class="cen3-5"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="content-3" style="margin-top: 20px;">
+            <div class="user-1" style="margin: 20px 0;">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff">活跃用户</span>
+            </div>
+            <div class="user-2" style="margin-left: 30px;">
+                <span style="display:inline-block;width:70px;">分类：</span>
+                <div id="user-1" style="display: inline-block;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="deadio" checked>
+                        <span class="demo-radioInput"></span>全部用户
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="deadio">
+                        <span class="demo-radioInput"></span>已关注用户
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="deadio">
+                        <span class="demo-radioInput"></span>未关注用户
+                    </label>
+                </div>
+                <!--<select id="user-1">-->
+                    <!--<option value="全部用户">全部用户</option>-->
+                    <!--<option value="已关注用户">已关注用户</option>-->
+                    <!--<option value="未关注用户">未关注用户</option>-->
+                <!--</select>-->
+                <div class="userList">
+                    <span class="addFocus">添加关注</span>
+                    <div id="userList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity">
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> ZZ0902
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> SADJ93
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> KVF820
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType">
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 隐身
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
+<!--<script src="/static/js/inforChecking-1.js"></script>-->
+<script>
+    judgment('3');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        //minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+</script>
+{% endblock %}

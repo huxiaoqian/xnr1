@@ -1,0 +1,198 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>行为评估 - 安全性评估</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/safe.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1" style="display: inline-block;">
+            <span class="icon icon-glass note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">安全性评估</b>
+        </div>
+        <div class="tit-2" style="display: inline-block;position: relative;top:-5px;left: 30px;">
+            <span style="color: #fff;">得分：</span>
+            <b class="score" style="color:#f44336;">98</b>
+        </div>
+    </div>
+    <div class="type_page" style="width: 90%;margin: 20px auto 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#active" role="tab" data-toggle="tab"><b class="icon icon-lock"></b>&nbsp;活跃安全性</a>
+            </li>
+            <li role="presentation">
+                <a href="#postContent" role="tab" data-toggle="tab"><b class="icon icon-bar-chart"></b>&nbsp;发帖内容分布</a>
+            </li>
+            <li role="presentation">
+                <a href="#focusGroup" role="tab" data-toggle="tab"><b class="icon icon-group"></b>&nbsp;关注人群分布</a>
+            </li>
+        </ul>
+        <div class="safe">
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="active">
+                    <div id="active-1" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="postContent">
+                    <div id="postContent-1" style="text-align: center;margin: 20px 0;">
+                        <div id="pc-1"></div>
+                        <div id="pc-2"></div>
+                    </div>
+                    <div id="pocstContent-2">
+                        <div class="pc-3" style="margin: 20px 0;">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff">相关发帖</span>
+                        </div>
+                        <div class="pc-4" style="margin-left: 30px;">
+                            <span>渗透领域：</span>
+                            <div id="field" style="display: inline-block;">
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo" checked>
+                                    <span class="demo-checkbox demo-radioInput"></span> 体育
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo">
+                                    <span class="demo-checkbox demo-radioInput"></span> 宗教
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo">
+                                    <span class="demo-checkbox demo-radioInput"></span> 教育
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo">
+                                    <span class="demo-checkbox demo-radioInput"></span> 环保
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo">
+                                    <span class="demo-checkbox demo-radioInput"></span> 娱乐
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo">
+                                    <span class="demo-checkbox demo-radioInput"></span> 反腐
+                                </label>
+                            </div>
+                            <div>
+                                <input type="text" id="search" placeholder="输入关键词快速搜索相关微博"/>
+                                <!--<button type="button" class="btn btn-primary btn-xs" id="search-every"-->
+                                        <!--style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
+                            </div>
+                            <div class="post_perfect">
+                                <div class="post_center-every">
+                                    <img src="/static/images/post-6.png" alt="" class="center_icon">
+                                    <div class="center_rel">
+                                        <a class="center_1" href="###">何仙姑</a>：
+                                        <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                                        <div class="center_3">
+                                            <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;<b>2017-11-12 11:23</b></span>
+                                            <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">222</b>）</span>
+                                            <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">222</b>）</span>
+                                            <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">222</b>）</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="focusGroup">
+                    <div id="attention-1" style="text-align: center;margin: 20px 0;">
+                        <div id="atte-1"></div>
+                        <div id="atte-2"></div>
+                    </div>
+                    <div id="attention-2">
+                        <div class="atte-3" style="margin: 20px 0;">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff">相关发帖</span>
+                        </div>
+                        <div class="atte-4" style="margin-left: 30px;">
+                            <span>渗透人群领域：</span>
+                            <div id="userField" style="display: inline-block;">
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo1" checked>
+                                    <span class="demo-checkbox demo-radioInput"></span> 法律机构
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo1">
+                                    <span class="demo-checkbox demo-radioInput"></span> 境外机构
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo1">
+                                    <span class="demo-checkbox demo-radioInput"></span> 媒体
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="demo1">
+                                    <span class="demo-checkbox demo-radioInput"></span> 草根
+                                </label>
+                            </div>
+                            <div>
+                                <input type="text" id="search2" placeholder="输入关键词快速搜索相关微博"/>
+                                <!--<button type="button" class="btn btn-primary btn-xs" id="search-every"-->
+                                <!--style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
+                            </div>
+                            <div class="post_perfect">
+                                <div class="post_center-every">
+                                    <img src="/static/images/post-6.png" alt="" class="center_icon">
+                                    <div class="center_rel">
+                                        <a class="center_1" href="###">何仙姑</a>：
+                                        <span class="center_2">
+                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                            </span>
+                                        <div class="center_3">
+                                            <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;<b>2017-11-12 11:23</b></span>
+                                            <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">222</b>）</span>
+                                            <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">222</b>）</span>
+                                            <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">222</b>）</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('5');
+</script>
+<script src="/static/js/safe-1.js"></script>
+{% endblock %}

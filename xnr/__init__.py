@@ -5,15 +5,27 @@ from elasticsearch import Elasticsearch
 from flask_debugtoolbar import DebugToolbarExtension
 from xnr.extensions import admin
 from xnr.index.views import mod as indexModule
+from xnr.control.views import mod as controlModule
+from xnr.personalCenter.views import mod as personalCenterModule
+from xnr.registered.views import mod as registeredModule
+from xnr.inforDetection.views import mod as inforDetectionModule
+from xnr.monitor.views import mod as monitorModule
+from xnr.behavioGauge.views import mod as behavioGaugeModule
+from xnr.reportManage.views import mod as reportManageModule
+from xnr.knowledge.views import mod as knowledgeModule
+from xnr.systemManage.views import mod as systemManageModule
+from xnr.system_manage.views import mod as systemmanageModule
 from xnr.weibo_xnr_operate.views import mod as weiboxnroperateModule
 from xnr.weibo_xnr_create.views import mod as weiboxnrcreateModule
 from xnr.weibo_xnr_manage.views import mod as weiboxnrmanageModule
 from xnr.weibo_xnr_assessment.views import mod as weiboxnrassessmentModule
 from xnr.weibo_xnr_knowledge_base_management.views import mod as weiboxnrknowledgebasemanagementModule
 from xnr.weibo_xnr_monitor.views import mod as weiboxnrmonitorModule
+from xnr.weibo_xnr_warming.views import mod as weiboxnrwarmingModule
 from xnr.qq_xnr_manage.views import mod as qqxnrmanageModule
 from xnr.qq_xnr_operate.views import mod as qqxnroperateModule
 from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
+from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
@@ -26,15 +38,27 @@ def create_app():
 
     # Create modules
     app.register_blueprint(indexModule)
+    app.register_blueprint(controlModule)
+    app.register_blueprint(personalCenterModule)
+    app.register_blueprint(registeredModule)
+    app.register_blueprint(inforDetectionModule)
+    app.register_blueprint(monitorModule)
+    app.register_blueprint(behavioGaugeModule)
+    app.register_blueprint(reportManageModule)
+    app.register_blueprint(knowledgeModule)
+    app.register_blueprint(systemManageModule)
+    app.register_blueprint(systemmanageModule)
     app.register_blueprint(weiboxnroperateModule)
     app.register_blueprint(weiboxnrcreateModule)
     app.register_blueprint(weiboxnrmanageModule)
     app.register_blueprint(weiboxnrassessmentModule)
     app.register_blueprint(weiboxnrknowledgebasemanagementModule)
     app.register_blueprint(weiboxnrmonitorModule)
+    app.register_blueprint(weiboxnrwarmingModule)
     app.register_blueprint(qqxnrmanageModule)
     app.register_blueprint(qqxnroperateModule)
     app.register_blueprint(qqxnrassessmentModule)
+    app.register_blueprint(qqxnrmonitorModule)
     # the debug toolbar is only enabled in debug mode
     app.config['DEBUG'] = True
 

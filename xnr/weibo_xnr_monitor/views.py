@@ -8,7 +8,7 @@ from flask import Blueprint,url_for,render_template,request,\
 
 from xnr.global_utils import es_flow_text
 from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_weibouser,\
-weibo_user_test,lookup_weiboxnr_concernedusers
+weibo_user_test,lookup_weiboxnr_concernedusers,weibo_user_detail
 
 mod=Blueprint('weibo_xnr_monitor',__name__,url_prefix='/weibo_xnr_monitor')
 
@@ -29,11 +29,12 @@ def ajax_lookup_hot_posts():
     to_ts=request.args.get('to_ts','')
     weiboxnr_id=request.args.get('weiboxnr_id','')
     classify_id=request.args.get('classify_id','')
-    search_content=request.args.get('search_content','')
+    #search_content=request.args.get('search_content','')
     order_id=request.args.get('order_id','')
-    result=lookup_hot_posts(float(from_ts),float(to_ts),weiboxnr_id,classify_id,search_content,order_id)
+    result=lookup_hot_posts(float(from_ts),float(to_ts),weiboxnr_id,classify_id,order_id)
     return json.dumps(result)
 
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0001&classify_id=1
 @mod.route('/lookup_active_weibouser/')
 def ajax_lookup_active_weibouser():
     weiboxnr_id=request.args.get('weiboxnr_id','')
@@ -41,6 +42,12 @@ def ajax_lookup_active_weibouser():
     result=lookup_active_weibouser(classify_id,weiboxnr_id)
     return json.dumps(result)
 
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/weibo_user_detail/?user_id=2502058433
+@mod.route('/weibo_user_detail/')
+def ajax_weibo_user_detail():
+    user_id=request.args.get('user_id','')
+    result=weibo_user_detail(user_id)
+    return json.dumps(result)
 
 @mod.route('/weibo_user_test/')
 def ajax_weibo_user_test():

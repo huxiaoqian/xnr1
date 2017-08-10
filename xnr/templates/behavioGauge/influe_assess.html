@@ -1,0 +1,193 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>行为评估 - 影响力评估</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/influe_assess.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1" style="display: inline-block;">
+            <span class="icon icon-lightbulb note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">影响力评估</b>
+        </div>
+        <div class="tit-2" style="display: inline-block;position: relative;top:-5px;left: 30px;">
+            <span style="color: #fff;">得分：</span>
+            <b class="score" style="color:#f44336;">98</b>
+        </div>
+    </div>
+    <div class="type_page" style="width: 90%;margin: 20px auto 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-github-alt"></b>&nbsp;粉丝数</a>
+            </li>
+            <li role="presentation">
+                <a href="#fansgroup" role="tab" data-toggle="tab"><b class="icon icon-signal"></b>&nbsp;粉丝群的粉丝数</a>
+            </li>
+            <li role="presentation">
+                <a href="#forwarding" role="tab" data-toggle="tab"><b class="icon icon-share"></b>&nbsp;被转发</a>
+            </li>
+            <li role="presentation">
+                <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-comment"></b>&nbsp;被评论</a>
+            </li>
+            <li role="presentation">
+                <a href="#like" role="tab" data-toggle="tab"><b class="icon icon-thumbs-up"></b>&nbsp;被点赞</a>
+            </li>
+            <li role="presentation">
+                <a href="#wasat" role="tab" data-toggle="tab"><b class="icon icon-heart"></b>&nbsp;被@</a>
+            </li>
+            <li role="presentation">
+                <a href="#private" role="tab" data-toggle="tab"><b class="icon icon-envelope-alt"></b>&nbsp;被私信</a>
+            </li>
+        </ul>
+        <div class="influence">
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="fans">
+                    <div class="fans-1 caption" style="margin-top: 20px;">
+                        <div class="fans-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo1" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo1">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="fans-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="fansgroup">
+                    <div class="fansgroup-1 caption" style="margin-top: 20px;">
+                        <div class="fansgroup-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo2" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo2">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="fansgroup-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="forwarding">
+                    <div class="forwarding-1 caption" style="margin-top: 20px;">
+                        <div class="forwarding-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo3" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo3">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="forwarding-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="comment">
+                    <div class="comment-1 caption" style="margin-top: 20px;">
+                        <div class="comment-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo4" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo4">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="comment-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="like">
+                    <div class="like-1 caption" style="margin-top: 20px;">
+                        <div class="like-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo5" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo5">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="like-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="wasat">
+                    <div class="wasat-1 caption" style="margin-top: 20px;">
+                        <div class="like-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo6" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo6">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="wasat-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="private">
+                    <div class="private-1 caption" style="margin-top: 20px;">
+                        <div class="private-1-opt" style="display: inline-block;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo7" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo7">
+                                <span class="demo-checkbox demo-radioInput"></span> 增长率
+                            </label>
+                        </div>
+                    </div>
+                    <div id="private-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('5');
+</script>
+<script src="/static/js/influe_assess-1.js"></script>
+{% endblock %}

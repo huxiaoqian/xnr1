@@ -1,0 +1,328 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>角色生成（创建中）</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/virtual_created.css">
+    <style>
+        .datetimepicker thead tr:first-child th {visibility: hidden;}
+        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
+        .demo-radio{display:none}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    </style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <img src="/static/images/created.png" class="peo_icon"/>
+            <b>第二步：角色生成</b>
+        </div>
+        <div class="tit-2" style="margin: 20px 0;position: relative;">
+            <b>角色定位：</b>
+            <div id="character">
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    渗透领域：<span id="character1"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    角色身份：<span id="character2"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    心理特征：<span id="character3"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    政治倾向：<span id="character4"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    业务目标：<span id="character5"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    日常兴趣：<span id="character6"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    检测关键词：<span id="character7"></span>
+                </div>
+                <div id="role_example" style="margin-top: 20px;">
+                    <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>
+                    <ul class="role_example_list" style="padding: 10px 20px;">
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="account" style="margin: 20px 0;">
+        <b style="font-size: 18px;">账户创建信息：</b>
+        <div style="padding: 10px 15px;border: 1px solid silver;margin-top: 20px;">
+            <div class="account-1">
+                <div class="options name">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>昵称：</span>
+                    <input type="text" id="name" placeholder="昵称"/>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+                <div class="options age">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>年龄：</span>
+                    <input type="text" id="age" placeholder="年龄"/>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+                <div class="options gender">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>性别：</span>
+                    <div id="gender">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="男" checked>
+                            <span class="demo-checkbox demo-radioInput"></span> 男
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="女">
+                            <span class="demo-checkbox demo-radioInput"></span> 女
+                        </label>
+                    </div>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+                <div class="options place">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>所在地：</span>
+                    <input type="text" id="place" placeholder="北京"/>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+                <div class="options career">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>职业：</span>
+                    <input type="text" id="career" placeholder="学生"/>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+                <div class="options description">
+                    <div style="display: inline-block;position: relative;top: -55px;">
+                        <img src="/static/images/icon.png" alt="">
+                        <span>个人描述：</span>
+                    </div>
+
+                    <textarea id="description" rows="3" style="resize: none;"></textarea>
+                    <a class="recommend" href="###">查看推荐</a>
+                </div>
+            </div>
+            <!--<div class="account-2" style="margin: 20px 0;">-->
+                <!--<p class="account-2-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
+                <!--<ul class="account-2-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="other_basic">
+        <b style="font-size: 18px;">其他基础信息：</b>
+        <div style="padding: 20px 15px;border: 1px solid silver;margin-top: 20px;">
+            <div class="other-1">
+                <div class="time others">
+                    <img src="/static/images/icon.png">
+                    <span class="_in">活跃时间：</span>
+                    <div class="task_time" style="display: inline-block;">
+                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime start" placeholder="可自主选择时间">-->
+                        <input size="16" type="text" value="" class="form_datetime start" placeholder="自主填写时间（24小时制）如：9:00">
+                        <span style="color: white;"> 到 </span>
+                        <input size="16" type="text" value="" class="form_datetime end" placeholder="自主填写时间（24小时制）如18:00">
+                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime end" placeholder="可自主选择时间">-->
+                    </div>
+                    <a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>
+                    <div class="hadChoose" style="color: white;display: none;">
+                        <span>选择的活跃时间段：</span>
+                        <div class="timeRange" style="display: inline-block;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="other-2">
+                <div class="choose others">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>日发帖量：</span>
+                    <div style="display: inline-block;margin-right:37px;width:650px;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="Posting" checked>
+                            <span class="demo-checkbox demo-radioInput"></span> 从不
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 1-2条
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 3-5条
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 5条以上
+                        </label>
+                        <label class="demo-label customize">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 自定义
+                        </label>
+                        <input type="text" class="postNUM" placeholder="如：6-8" style="display: none;"/>
+                    </div>
+                    <a class="other_recommend dayPost" href="###">查看推荐</a>
+                </div>
+            </div>
+            <!--<div class="other-3" style="margin: 15px 0;">-->
+                <!--<p class="other-3-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
+
+                <!--<ul class="other-3-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="page">
+        <span class="previous">上一步</span>
+        <span class="next" style="margin-left: 50px;">下一步</span>
+        <span class="save_return" style="float: right;margin-right: 20px;">保存返回</span>
+        <!--<button type="button" class="btn btn-primary previous">上一步</button>-->
+        <!--<button type="button" class="btn btn-primary next" style="margin-left: 50px;">下一步</button>-->
+        <!--<button type="button" class="btn btn-primary save_return" style="float: right;margin-right: 20px;">保存返回</button>-->
+    </div>
+</div>
+
+<!--模态框-->
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity">
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> ZZ0902
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> SADJ93
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> KVF820
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType">
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 隐身
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--提示-->
+<div class="modal fade" id="prompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('6');
+    var basicData=JSON.parse(localStorage.getItem('firstStep'));
+//    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
+//        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
+//        monitorKeywords='{{monitorKeywords}}';
+    $('#character1').attr('title',basicData.domainName).text(basicData.domainName);
+    $('#character2').attr('title',basicData.roleName).text(basicData.roleName);
+    $('#character3').attr('title',basicData.psyFeature).text(basicData.psyFeature);
+    $('#character4').attr('title',basicData.politicalSide).text(basicData.politicalSide);
+    $('#character5').attr('title',basicData.businessGoal).text(basicData.businessGoal);
+    $('#character6').attr('title',basicData.daily).text(basicData.daily);
+    $('#character7').attr('title',basicData.monitorKeywords).text(basicData.monitorKeywords);
+
+
+
+
+    $(".form_datetime").datetimepicker({
+        format: "hh:ii",
+        //minView:1, //控制时分秒
+        autoclose: true,
+        todayBtn: false,
+        startView:'hour',
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+        addTIME();
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+        addTIME();
+    });
+    function addTIME() {
+        if ($('.start').val()&&$('.end').val()){
+            if ($('.start').val()<$('.end').val()){
+                $('.hadChoose').css('display','block');
+                var a=$('.start').val();
+                var b=$('.end').val();
+                $('.timeRange').append(
+                    '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
+                    a+' - '+b+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
+                );
+            }else {
+                $('#prompt p').text('请检查时间，开始时间不能大于结束时间。');
+                $('#prompt').modal('show');
+            }
+        }
+    }
+    function del(_this) {
+        var len=$(_this).parent().siblings('span').length;
+        $(_this).parent().remove();
+        if (len==0){
+            $('.hadChoose').css('display','none');
+        }
+    }
+
+    $('.customize').on('click',function () {
+        $(this).hide();
+        $('.postNUM').show();
+    });
+
+</script>
+<script src="/static/js/virtual_created-1.js"></script>
+{% endblock %}

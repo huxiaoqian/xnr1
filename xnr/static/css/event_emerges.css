@@ -1,0 +1,140 @@
+table.table-condensed {
+    color: black;
+}
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.25);
+    position: relative;
+    top: 80px;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .title .output {
+    display: inline-block;
+    position: relative;
+    top: -7px;
+    left: 40px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: rgb(28, 62, 101);
+}
+#container .title .output:hover,#container .title .eventSearch .sureFind:hover {
+    background:rgba(3, 8, 16, 0.61);
+}
+#container .title .eventSearch {
+    float: right;
+}
+#container .title .eventSearch .search,
+#container .title .eventSearch .sureFind{
+    display: inline-block;
+    padding: 5px 10px;
+    background: rgb(28, 62, 101);
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .weiboContent {
+    margin-top: 30px;
+}
+#container .weiboContent .text_information .fanye input {
+    background: transparent;
+    border: 1px solid silver;
+}
+#container .weiboContent .text_information .fanye input:hover {
+    background: rgba(3, 8, 16, 0.61);
+}
+#container .everyEvent .event_center .center_rel .icons {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-width: 0 15px 30px;
+    border-style: solid;
+    border-color: transparent transparent #fff;
+    top:50%;
+    left: 15px;
+    margin-top: -20px;
+}
+#container .everyEvent .event_center .center_rel .weiboFlag {
+    position: absolute;
+    display: block;
+    font-size: 40px;
+    top:50%;
+    left: -20px;
+    margin-top: -2px;
+    color: red;
+}
+#container .everyEvent .event_center {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background:rgba(8,23,44,0.35);
+}
+#container .everyEvent .event_center .center_icon {
+    width: 20px;
+    height: 20px;
+}
+#container .everyEvent .event_center .center_rel {
+    position: relative;
+    padding:10px 10px 10px 70px ;
+    background: rgba(16, 33, 51, 0.42);
+}
+
+#container .everyEvent .event_center .center_1 {
+    font-size: 16px;
+    display: inline-block;
+}
+#container .everyEvent .event_center .center_1,
+#container .everyEvent .event_center .report{
+    color: #b0bdd0;
+    font-weight:800;
+}
+#container .everyEvent .event_center .center_1:hover,
+#container .everyEvent .event_center .report:hover{
+    color: #257cde;
+}
+#container .everyEvent .event_center .center_3 {
+    margin: 10px 0;
+    text-align:center;
+    border-top: 1px solid slategrey;
+    padding-top:5px;
+}
+#container .everyEvent .event_center .center_3 span {
+    display: inline-block;
+    width: 22%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container .everyEvent .event_center .center_3 span:nth-child(2) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container .everyEvent .event_center .center_3 span:nth-child(4) {
+    border-left:1px solid slategrey;
+}
+#container .everyEvent .event_center .center_3 span:hover {
+    color:#eb7350;
+}

@@ -1,0 +1,98 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 事件涌现预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/time_warning.css">
+<style>
+
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-calendar note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">时间预警</b>
+        </div>
+    </div>
+    <div class="timeRemind">
+        <div style="margin: 15px 0 15px 30px;">
+            <img src="/static/images/icon.png" alt="" class="center_icon">
+            <span class="center_1" href="###">日历提醒</span>
+        </div>
+        <div class="remind">
+            <div id="remind"></div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity">
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> ZZ0902
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> SADJ93
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> KVF820
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType">
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 隐身
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('4');
+    $('.demo-radio').on('click',function () {
+        console.log(!!$(this).is(':checked'))
+    })
+
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        //minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+</script>
+<script src="/static/js/time_warning-1.js"></script>
+{% endblock %}

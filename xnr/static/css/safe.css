@@ -1,0 +1,96 @@
+/*内容样式*/
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: rgba(5, 23, 55, 0.45);
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color:rgba(7,26,55,0.2);
+}
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.25);
+    position: relative;
+    top: 80px;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title .tit-1 b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .title .tit-2 span, #container .title .tit-2 b {
+    font-size: 18px;
+    font-weight: 900;
+}
+#container .type_page .safe #postContent #pc-1,
+#container .type_page .safe #postContent #pc-2 {
+    display: inline-block;
+    width: 400px;
+    height: 300px;
+    margin: 30px 0;
+}
+#container #pocstContent-2 .pc-4 #search,
+#container #attention-2 .atte-4 #search2{
+    text-align: center;
+    width:100%;
+    margin: 20px auto;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 3px 7px;
+    background: rgba(8,23,44,0.35);
+}
+#container .post_center-every {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background:rgba(16, 33, 51, 0.42);
+}
+#container .post_center-every .center_icon {
+    position: absolute;
+    top: 10px;
+    left:8px;
+    width: 20px;
+    height: 20px;
+}
+#container .post_center-every .center_1 {
+    color:#03a9f4;
+}
+#container .post_center-every .center_3 {
+    margin: 10px 0;
+    text-align:center;
+    border-top: 1px solid slategrey;
+    padding-top:5px;
+}
+#container .post_center-every .center_3 span {
+    display: inline-block;
+    width: 22%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container .post_center-every .center_3 span:nth-child(2) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container .post_center-every .center_3 span:nth-child(4) {
+    border-left:1px solid slategrey;
+}
+#container .post_center-every .center_3 span:hover {
+    color:#eb7350;
+}
