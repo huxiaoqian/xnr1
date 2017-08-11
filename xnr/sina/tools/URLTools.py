@@ -166,10 +166,12 @@ def getUrls(s, considerScript, considerIframe, considerArea, thisurl):
             thisurl = base_url
 
     html_re = re.search(p_html_1, html)
-    html = html.replace(html_re.group(), '')
+    if html_re:
+        html = html.replace(html_re.group(), '')
 
     html_re = re.search(p_html_2, html)
-    html = html.replace(html_re.group(), ' <')
+    if html_re:
+        html = html.replace(html_re.group(), ' <')
 
     al = []
     _match = re.search(p_html_script_2, html)

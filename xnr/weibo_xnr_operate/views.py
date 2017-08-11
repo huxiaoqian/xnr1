@@ -28,17 +28,17 @@ def ajax_submit_daily_tweet():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
+    #task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
+    #task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
     #task_detail['password'] = request.args.get('password','')
     task_detail['p_url']  = json.loads(json.dumps(request.args.get('p_url','').encode('utf-8')))  
     task_detail['rank'] = request.args.get('rank','')
     task_detail['rankid'] = request.args.get('rankid','')
 
-    print 'task_detail[p_url]:::',task_detail['p_url']
+    #print 'task_detail[p_url]:::',task_detail['p_url']
 
-    print 'type::',type(task_detail['p_url'])
-    print 'p_url[0]:',task_detail['p_url'][0]
+    #print 'type::',type(task_detail['p_url'])
+    #print 'p_url[0]:',task_detail['p_url'][0]
 
     mark = get_submit_tweet(task_detail)
     return json.dumps(mark)

@@ -16,8 +16,12 @@ def weibo_xnr_mappings():
         'mappings':{
             weibo_xnr_index_type:{
                 'properties':{
-                    'user_no':{                    #虚拟人编号，即用户ID
+                    'user_no':{                    #虚拟人编号数字
                         'type':'long'
+                    },
+                    'xnr_user_no':{               # 虚拟人编号
+                        'type':'string',
+                        'index':'not_analyzed'
                     },
                     'uid':{                     # uid
                         'type':'string',
@@ -153,4 +157,4 @@ def weibo_xnr_fans_followers_mappings():
 if __name__=='__main__':
   
     weibo_xnr_mappings()
-    weibo_xnr_fans_followers_mappings()
+    #weibo_xnr_fans_followers_mappings()
