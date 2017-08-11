@@ -8,8 +8,10 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
 						weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
 						weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
-						weibo_feedback_fans_index_name,weibo_feedback_fans_index_name,\
-						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type
+						weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
+						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
+						weibo_feedback_group_index_name,weibo_feedback_group_index_type
+from time_utils import ts2datetime
 
 def weibo_feedback_retweet_mappings():
 	index_info = {
@@ -69,15 +71,19 @@ def weibo_feedback_retweet_mappings():
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
 
+	#current_time = time.time()
+	#weibo_feedback_retweet_index_name = weibo_feedback_retweet_index_name_pre + ts2datetime(current_time)
 	if not es.indices.exists(index=weibo_feedback_retweet_index_name):
 		es.indices.create(index=weibo_feedback_retweet_index_name,body=index_info,ignore=400)
-
 
 def weibo_feedback_comment_mappings():
 	index_info = {
@@ -132,11 +138,17 @@ def weibo_feedback_comment_mappings():
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
+
+	#current_time = time.time()
+	#weibo_feedback_comment_index_name = weibo_feedback_comment_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=weibo_feedback_comment_index_name):
 		es.indices.create(index=weibo_feedback_comment_index_name,body=index_info,ignore=400)
@@ -191,11 +203,17 @@ def weibo_feedback_at_mappings():
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
+
+	#current_time = time.time()
+	#weibo_feedback_at_index_name = weibo_feedback_at_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=weibo_feedback_at_index_name):
 		es.indices.create(index=weibo_feedback_at_index_name,body=index_info,ignore=400)
@@ -250,16 +268,20 @@ def weibo_feedback_like_mappings():
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
 
+	#current_time = time.time()
+	#weibo_feedback_like_index_name = weibo_feedback_like_index_name_pre + ts2datetime(current_time)
+
 	if not es.indices.exists(index=weibo_feedback_like_index_name):
 		es.indices.create(index=weibo_feedback_like_index_name,body=index_info,ignore=400)
-
-
 
 def weibo_feedback_private_mappings():
 	index_info = {
@@ -313,11 +335,17 @@ def weibo_feedback_private_mappings():
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
+
+	#current_time = time.time()
+	#weibo_feedback_private_index_name = weibo_feedback_private_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=weibo_feedback_private_index_name):
 		es.indices.create(index=weibo_feedback_private_index_name,body=index_info,ignore=400)
@@ -330,7 +358,7 @@ def weibo_feedback_fans_mappings():  ## 粉丝提醒及回粉
 			'number_of_shards':5
 		},
 		'mappings':{
-			weibo_feedback_follow_index_type:{
+			weibo_feedback_fans_index_type:{
 				'properties':{
 					'uid':{
 						'type':'string',
@@ -385,15 +413,20 @@ def weibo_feedback_fans_mappings():  ## 粉丝提醒及回粉
 					},
 					'sensitive_user':{
 						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
 
+	#current_time = time.time()
+	#weibo_feedback_fans_index_name = weibo_feedback_fans_index_name_pre + ts2datetime(current_time)
+
 	if not es.indices.exists(index=weibo_feedback_fans_index_name):
 		es.indices.create(index=weibo_feedback_fans_index_name,body=index_info,ignore=400)
-
 
 def weibo_feedback_follow_mappings():  ## 关注提醒及回粉
 	index_info = {
@@ -461,15 +494,79 @@ def weibo_feedback_follow_mappings():  ## 关注提醒及回粉
 					'group':{
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'update_time':{
+						'type':'long'
 					}
 				}
 			}
 		}
 	}
 
+	#current_time = time.time()
+	#weibo_feedback_follow_index_name = weibo_feedback_follow_index_name_pre + ts2datetime(current_time)
+
 	if not es.indices.exists(index=weibo_feedback_follow_index_name):
 		es.indices.create(index=weibo_feedback_follow_index_name,body=index_info,ignore=400)
 
+#uid、gid,gname,timestamp,members_uid
+
+def weibo_create_group_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			weibo_feedback_group_index_type:{
+				'properties':{
+					'uid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'gid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'gname':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'members':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'g_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'succ_uids':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'error_uids':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'member_count':{
+						'type':'long'
+					},
+					'max_member':{
+						'type':'long'
+					},
+					'update_time':{
+						'type':'long'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=weibo_feedback_group_index_name):
+		es.indices.create(index=weibo_feedback_group_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
 	#weibo_feedback_retweet_mappings()
@@ -477,4 +574,5 @@ if __name__ == '__main__':
 	#weibo_feedback_at_mappings()
 	#weibo_feedback_like_mappings()
 	#weibo_feedback_private_mappings()
-	weibo_feedback_follow_mappings()
+	#weibo_feedback_follow_mappings()
+	weibo_create_group_mappings()

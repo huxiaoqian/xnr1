@@ -31,9 +31,9 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
                                 like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func#,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
-                        MAX_SEARCH_SIZE,domain_ch2en_dict
+                        MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
-
+from xnr.utils import uid2nick_name_photo
 
 def push_keywords_task(task_detail):
 
@@ -56,21 +56,25 @@ def get_submit_tweet(task_detail):
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
     xnr_user_no = task_detail['xnr_user_no']
-    weibo_mail_account = task_detail['weibo_mail_account']
-    weibo_phone_account = task_detail['weibo_phone_account']
+    #weibo_mail_account = task_detail['weibo_mail_account']
+    #weibo_phone_account = task_detail['weibo_phone_account']
     password = task_detail['password']
     p_url = task_detail['p_url']
     rank = task_detail['rank']
     rankid = task_detail['rankid']
 
-    print 'P_url::utils::',p_url
-    print 'type::',type(p_url)
+    es_xnr_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    
+    weibo_mail_account = es_xnr_result['weibo_mail_account']
+    weibo_phone_account = es_xnr_result['weibo_phone_account']
+    
     if weibo_mail_account:
         account_name = weibo_mail_account
     elif weibo_phone_account:
         account_name = weibo_phone_account
     else:
         return False
+
     # 发布微博
 
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid)
@@ -214,7 +218,15 @@ def get_daily_recommend_tweets(theme,sort_item):
         es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
-    return es_results
+    results_all = []
+    for result in es_results:
+        result = result['_source']
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
 
 def get_hot_sensitive_recommend_at_user(sort_item):
 
@@ -278,7 +290,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 
 def get_hot_recommend_tweets(topic_field,sort_item):
     
-    topic_field_en = domain_ch2en_dict(topic_field)
+    topic_field_en = topic_ch2en_dict[topic_field]
     query_body = {
         'query':{
             'filtered':{
@@ -293,13 +305,19 @@ def get_hot_recommend_tweets(topic_field,sort_item):
 
 
     es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
-    print 'aaa'
-    if not es_results:
-        print 'bbb'
+    if not es_results:    
         es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
-    return es_results
+    results_all = []
+    for result in es_results:
+        result = result['_source']
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
 
 def get_hot_content_recommend(task_id):
 

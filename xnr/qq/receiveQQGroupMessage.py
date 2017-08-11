@@ -2,7 +2,10 @@
 
 # 如果不希望加载本插件，可以在配置文件中的 plugins 选项中删除 qqbot_test.plugins.grouplog
 import datetime
+import hashlib
 import json
+import time
+import types
 
 from qqbot import _bot as bot
 from qqbot.utf8logger import INFO
@@ -47,10 +50,21 @@ def onQQMessage(bot, contact, member, content):
             qq_json = json.dumps(qq_item)
             print qq_json
 
+            conMD5 = string_md5(content)
+
             nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
             index_name = 'group_message_' + str(nowDate)
-            index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time)
-            # es.index(index=index_name, doc_type='record', id=index_id, body=qq_item)
+            index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
+            es.index(index=index_name, doc_type='record', id=index_id, body=qq_item)
+
+
+def string_md5(str):
+    md5 = ''
+    if type(str) is types.StringType:
+        _md5 = hashlib.md5()
+        _md5.update(str)
+        md5 = _md5.hexdigest()
+    return md5
 
 
 def execute():

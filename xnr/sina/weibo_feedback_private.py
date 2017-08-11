@@ -8,14 +8,13 @@ from sina.weibo_feedback_follow import FeedbackFollow
 from tools.ElasticsearchJson import executeES
 from tools.TimeChange import getTimeStamp
 
-
 from tools.Launcher import SinaLauncher
 from tools.HtmlExtractor import extractForHTML, commentExtract
 from tools.Pattern import getMatchList, getMatch
 from tools.URLTools import getUrlToPattern
 
 
-class FeedbackPrivate():
+class FeedbackPrivate:
     def __init__(self, uid):
         self.uid = uid
         followType = FeedbackFollow(uid)
@@ -121,7 +120,8 @@ class FeedbackPrivate():
                                 'root_uid': r_uid,
                                 'weibo_type': _type,
                                 'private_type': private_type,
-                                'w_new_count': counts
+                                'w_new_count': counts,
+                                'update_time': int(round(time.time()))
                             }
 
                             wb_json = json.dumps(wb_item)
@@ -137,15 +137,12 @@ class FeedbackPrivate():
                     break
         return json_list
 
-
-def execute():
-    xnr = SinaLauncher('', '')
-    xnr.login()
-    mess = FeedbackPrivate(xnr.uid)
-
-    list = mess.messages()
-    executeES('weibo_feedback_private', 'text', list)
+    def execute(self):
+        list = self.messages()
+        executeES('weibo_feedback_private', 'text', list)
 
 
 if __name__ == '__main__':
-    execute()
+    xnr = SinaLauncher('', '')
+    xnr.login()
+    FeedbackPrivate(xnr.uid).execute()

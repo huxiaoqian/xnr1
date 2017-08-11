@@ -75,27 +75,36 @@ weibo_xnr_timing_list_index_type = 'timing_list'
 #use to test lookup weibocontent,can be deleted after test
 
 #use to save feedback info
+weibo_feedback_comment_index_name_pre = 'weibo_feedback_comment_'
 weibo_feedback_comment_index_name = 'weibo_feedback_comment'
 weibo_feedback_comment_index_type = 'text'
 
+weibo_feedback_retweet_index_name_pre = 'weibo_feedback_retweet_'
 weibo_feedback_retweet_index_name = 'weibo_feedback_retweet'
 weibo_feedback_retweet_index_type = 'text'
 
+weibo_feedback_private_index_name_pre = 'weibo_feedback_private_'
 weibo_feedback_private_index_name = 'weibo_feedback_private'
 weibo_feedback_private_index_type = 'text'
 
+weibo_feedback_at_index_name_pre = 'weibo_feedback_at_'
 weibo_feedback_at_index_name = 'weibo_feedback_at'
 weibo_feedback_at_index_type = 'text'
 
+weibo_feedback_like_index_name_pre = 'weibo_feedback_like_'
 weibo_feedback_like_index_name = 'weibo_feedback_like'
 weibo_feedback_like_index_type = 'text'
 
+weibo_feedback_fans_index_name_pre = 'weibo_feedback_fans_'
 weibo_feedback_fans_index_name = 'weibo_feedback_fans'
 weibo_feedback_fans_index_type = 'text'
 
+weibo_feedback_follow_index_name_pre = 'weibo_feedback_follow_'
 weibo_feedback_follow_index_name = 'weibo_feedback_follow'
 weibo_feedback_follow_index_type = 'text'
 
+weibo_feedback_group_index_name = 'weibo_feedback_group'
+weibo_feedback_group_index_type = 'group'
 
 # social sensing
 index_sensing = "manage_sensing_task"

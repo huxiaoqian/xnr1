@@ -22,15 +22,19 @@ def gourp_message_mappings(qq_number, date):
                         'type':'string',
                         'index':'not_analyzed'
                     },
+                    'qq_group_nickname':{
+                         'type':'string',
+                         'index':'not_analyzed'
+                    },
                     'text':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'speaker_qq_number':{  
+                    'speaker_qq_number':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'speaker_qq_nickname':{  
+                    'speaker_qq_nickname':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -42,11 +46,10 @@ def gourp_message_mappings(qq_number, date):
                         'type':'string',
                         'index': 'not_analyzed'
                     },
-                    'xnr_qq_nickname':{  
+                    'xnr_qq_nickname':{
                         'type':'string',
                         'index':'not_analyzed'
-                    },
-                    
+                    }
                 }
 
             }
