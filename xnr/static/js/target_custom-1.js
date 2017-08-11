@@ -65,7 +65,7 @@ function labelSTR(data,name,radioCheckbox='radio') {
 // &psy_feature=积极，中立，悲伤&political_side=中立&business_goal=扩大影响，渗透&monitor_keywords=维权，律师&daily_interests=旅游，美食
 var daily='';
 $('.nextButton').on('click',function () {
-    var psyFeature=[],dailyInterests=[],politicalSide='';
+    var psyFeature=[],dailyInterests=[],politicalSide='',business=[];
     $(".opt-3 input[type=checkbox]:checkbox:checked").each(function (index,item) {
         psyFeature.push($(this).val());
     });
@@ -75,7 +75,10 @@ $('.nextButton').on('click',function () {
     $(".opt-5 input[type=checkbox]:checkbox:checked").each(function (index,item) {
         dailyInterests.push($(this).val());
     });
-    var businessGoal= $('.opt-4 .aims').val().toString().replace(/，/g,',');
+    $(".opt-4 input[type=checkbox]:checkbox:checked").each(function (index,item) {
+        business.push($(this).val());
+    });
+    var businessGoal= business.join(',');
     var monitorKeywords= $('.opt-6 .keywords').val().toString().replace(/，/g,',');
     if (!(domainName||roleName||psyFeature.length==0||dailyInterests.length==0||politicalSide||businessGoal||monitorKeywords)){
         $('#prompt p').text('请检查您选择和添加的信息。（不能为空）');

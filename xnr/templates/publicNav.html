@@ -88,6 +88,12 @@
     function getLocalTime(nS) {
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
     }
+    //判断字符串中某个字符出现的次数
+    function patch(re,s){ //参数1正则式，参数2字符串
+        re=eval("/"+re+"/ig"); //不区分大小写，如须则去掉i,改为 re=eval_r("/"+re+"/g")
+        var len = s.match(re).length;
+        return len;
+    }
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {
@@ -128,7 +134,7 @@
             afterEle=
                 '<li class="main_li">'+
                 '    <i class="icon icon-cogs"></i>'+
-                '    <a class="li_a" href="/control/operationControl/">操作控制</a>'+
+                '    <a class="li_a" href="/control/operationControl/">操作统计</a>'+
                 '</li>'+
                 '<li class="main_li">'+
                 '    <i class="icon icon-pencil"></i>'+

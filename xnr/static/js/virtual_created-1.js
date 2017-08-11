@@ -61,11 +61,17 @@ function publicRecommend(field,className,tit) {
             for(var a=0;a<recommendData[field].length;a++){
                 var at=recommendData[field][a],time;
                 if (field=='active_time'){
-                    time=at+':00-'+at+':59';
+                    //time=at+':00-'+at+':59';
+                    time='<label class="demo-label">'+
+                    '        <input class="demo-radio" type="checkbox" name="timetampe">'+
+                    '        <span class="demo-checkbox demo-radioInput"></span> '+at+':00-'+at+':59'+
+                    '    </label>';
+                    str+='<li>'+time+'</li>';
                 }else {
                     time=at;
+                    str+='<li><a href="###" title="'+time+'">'+time+'</a></li>';
                 }
-                str+='<li><a href="###" title="'+time+'">'+time+'</a></li>';
+                //str+='<li><a href="###" title="'+time+'">'+time+'</a></li>';
             };
         }
     };
@@ -117,16 +123,34 @@ var task_id='WXNR0001';
 function values() {
     var nickName=$('#name').val();
     var age=$('#age').val();
-    var location=$('#place').val();
-    var career=$('#career').val();
-    var description=$('#description').val();
-    var active_time=$('.timeRange').find('span').find('span').text().toString();
     var sex;
     $(".gender input[type=radio]:radio:checked").each(function (index,item) {
         sex=$(this).val().toString();
     });
-    var day_post_average=$('#description').val();
-    var saveSecond_url='/weibo_xnr_create/save_step_two/?task_id='+task_id='&nick_name='+nickName+'&age='+age+
+    var location=$('#place').val();
+    var career=$('#career').val();
+    var description=$('#description').val();
+
+    var timelist=[];
+    $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
+        timelist.push($(this).val());
+    });
+    var active_time=Array.from(new Set(timelist)).join(',');
+
+    var day_post_average;//"abc 123 def".replace(/\s/g, "")
+    if ($('.postNUM').val()){
+        if(patch('-',$('.postNUM').val().toString())!=1){
+            day_post_average=$('.postNUM').val().toString().replace(/\s/g, "");
+        }else {
+            $('#prompt p').text('您输入的自定义时间有误，请重新输入（格式：6-8）。');
+            $('#prompt').modal('show');
+        }
+    }else {
+        $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
+            day_post_average = $(this).val().toString();
+        });
+    }
+    var saveSecond_url='/weibo_xnr_create/save_step_two/?task_id='+task_id+'&nick_name='+nickName+'&age='+age+
         '&location='+location+'&career='+career+'&description='+description+'&active_time=9,10,11,19,20&day_post_average=9-12';
     public_ajax.call_request('get',saveSecond_url,in_three);
     if (n == 1){
@@ -136,8 +160,8 @@ function values() {
             'location':location,
             'career':career,
             'sex':sex,
-            //'active_time':,
-            //'day_post_average':,
+            'active_time':active_time,
+            'day_post_average':day_post_average,
             'description':description
         }
     };

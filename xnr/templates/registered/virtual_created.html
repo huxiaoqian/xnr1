@@ -9,6 +9,8 @@
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
         .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        .task_time .demo-label {width: 130px;margin: 5px 13px;}
+        .other-3 .demo-label {width:auto;margin: 5px 13px;}
     </style>
 {% endblock %}
 {% block main %}
@@ -128,20 +130,113 @@
         <div style="padding: 20px 15px;border: 1px solid silver;margin-top: 20px;">
             <div class="other-1">
                 <div class="time others">
-                    <img src="/static/images/icon.png">
-                    <span class="_in">活跃时间：</span>
+                    <img src="/static/images/icon.png" style="vertical-align: top;">
+                    <span class="_in" style="vertical-align: top;">活跃时间：</span>
                     <div class="task_time" style="display: inline-block;">
-                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime start" placeholder="可自主选择时间">-->
-                        <input size="16" type="text" value="" class="form_datetime start" placeholder="自主填写时间（24小时制）如：9:00">
-                        <span style="color: white;"> 到 </span>
-                        <input size="16" type="text" value="" class="form_datetime end" placeholder="自主填写时间（24小时制）如18:00">
-                        <!--<input size="16" type="text" value="" readonly="" class="form_datetime end" placeholder="可自主选择时间">-->
+                        <div style="margin-right:34px;width:650px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="0" name="timetampe" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 0:00 - 0:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="1" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 1:00 - 1:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="2" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 2:00 - 2:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="3" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 3:00 - 3:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="4" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 4:00 - 4:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="5" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 5:00 - 5:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="6" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 6:00 - 6:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="7" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 7:00 - 7:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="8" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 8:00 - 8:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="9" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 9:00 - 9:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="10" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 10:00 - 10:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="11" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 11:00 - 11:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="12" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 12:00 - 12:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="13" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 13:00 - 13:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="14" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 14:00 - 14:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="15" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 15:00 - 15:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="16" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 16:00 - 16:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="17" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 17:00 - 17:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="18" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 18:00 - 18:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="19" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 19:00 - 19:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="20" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 20:00 - 20:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="21" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 21:00 - 21:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="22" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 22:00 - 22:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="23" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 23:00 - 23:59
+                            </label>
+                        </div>
                     </div>
                     <a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>
-                    <div class="hadChoose" style="color: white;display: none;">
-                        <span>选择的活跃时间段：</span>
-                        <div class="timeRange" style="display: inline-block;"></div>
-                    </div>
+                    <!--<div class="hadChoose" style="color: white;display: none;">-->
+                        <!--<span>选择的活跃时间段：</span>-->
+                        <!--<div class="timeRange" style="display: inline-block;"></div>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="other-2">
@@ -150,19 +245,19 @@
                     <span>日发帖量：</span>
                     <div style="display: inline-block;margin-right:37px;width:650px;">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="Posting" checked>
+                            <input class="demo-radio" type="radio" value="0-0" name="Posting" checked>
                             <span class="demo-checkbox demo-radioInput"></span> 从不
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="Posting">
+                            <input class="demo-radio" type="radio" value="1-2" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 1-2条
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="Posting">
+                            <input class="demo-radio" type="radio" value="3-5" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 3-5条
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="Posting">
+                            <input class="demo-radio" type="radio" value="5-max" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 5条以上
                         </label>
                         <label class="demo-label customize">
@@ -276,47 +371,10 @@
     $('#character7').attr('title',basicData.monitorKeywords).text(basicData.monitorKeywords);
 
 
-
-
-    $(".form_datetime").datetimepicker({
-        format: "hh:ii",
-        //minView:1, //控制时分秒
-        autoclose: true,
-        todayBtn: false,
-        startView:'hour',
-        pickerPosition: "bottom-left"
-    });
-    $('.start').on('changeDate', function(ev){
-        $('.end').datetimepicker('setStartDate',ev.date);
-        addTIME();
-    });
-    $('.end').on('changeDate', function(ev){
-        $('.start').datetimepicker('setEndDate',ev.date);
-        addTIME();
-    });
-    function addTIME() {
-        if ($('.start').val()&&$('.end').val()){
-            if ($('.start').val()<$('.end').val()){
-                $('.hadChoose').css('display','block');
-                var a=$('.start').val();
-                var b=$('.end').val();
-                $('.timeRange').append(
-                    '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
-                    a+' - '+b+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
-                );
-            }else {
-                $('#prompt p').text('请检查时间，开始时间不能大于结束时间。');
-                $('#prompt').modal('show');
-            }
-        }
-    }
-    function del(_this) {
-        var len=$(_this).parent().siblings('span').length;
-        $(_this).parent().remove();
-        if (len==0){
-            $('.hadChoose').css('display','none');
-        }
-    }
+//    $('.timeRange').append(
+//        '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
+//        txt+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
+//    );
 
     $('.customize').on('click',function () {
         $(this).hide();

@@ -10,6 +10,7 @@
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     .everyday-2 .ed-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
+    .everyday-2 .ed-2-2 .demo-label{width:100px;}
     .everyday-2 .ed-2-1 .demo-radioInput{margin-right:10px;}
     #container .type_page #myTabs a {
         color: white;
@@ -65,7 +66,7 @@
                     <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
                     <div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>
                     <div><img src="/static/images/post-4.png">&nbsp;<span>话题</span></div>
-                    <div><img src="/static/images/post-5.png">&nbsp;<span>头条文章</span></div>
+                    <!--<div><img src="/static/images/post-5.png">&nbsp;<span>头条文章</span></div>-->
                     <div class="btn-group friends">
                         <button type="button" class="dropdown-toggle" style="background: transparent;"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -78,15 +79,20 @@
                             <li><img src="/static/images/post-10.png"> <span>群可见</span></li>
                         </ul>
                     </div>
-                    <div style="margin-left: 15px;">
-                        <label class="demo-label">
+                    <div style="margin: 0;">
+                        <label class="demo-label timingss">
                             <input class="demo-radio timing" type="checkbox" name="demo">
                             <span class="demo-checkbox demo-radioInput"></span> 定时
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
-                        <input type="text" value="" id="_timing" class="form_datetime" placeholder="选择时间"
-                               style="height: 20px;font-size: 10px;color: white;
+                        <div class="ttime">
+                            <input type="text" value="" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" value="" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                        </div>
                     </div>
                     <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
                 </div>
@@ -180,6 +186,16 @@
                     </div>
 
                     <div class="ed-2-2">
+                        <div style="text-align: center;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='timestamp'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按时间
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='retweeted'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按热度
+                            </label>
+                        </div>
                         <div style="float: right;margin-right: 18px">
                             <input type="text" id="search-1-every" placeholder="输入关键词快速搜索相关微博"/>
                             <span id="search-every" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</span>
@@ -326,27 +342,6 @@
     </div>
 </div>
 <!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!--提示弹框-->
 <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -451,11 +446,18 @@
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,
-        todayBtn: false,
+        todayBtn: true,
         pickerPosition: "bottom-left"
     });
-    $('.form_datetime').on('changeDate', function(ev){
-        $('.form_datetime').datetimepicker('setStartDate',new Date());
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+    $('.timingss').on('click',function () {
+
     });
 
     $('.continue_already_created').on('click',function () {
