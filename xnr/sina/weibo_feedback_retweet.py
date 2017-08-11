@@ -3,6 +3,8 @@
 import json
 import urllib2
 
+import time
+
 from sina.weibo_feedback_follow import FeedbackFollow
 from tools.ElasticsearchJson import executeES
 
@@ -126,22 +128,20 @@ class FeedbackRetweet:
                         'like': like,
                         'root_mid': r_mid,
                         'root_uid': r_uid,
-                        'weibo_type': _type
+                        'weibo_type': _type,
+                        'update_time': int(round(time.time()))
                     }
 
                     wb_json = json.dumps(wb_item)
                     json_list.append(wb_json)
         return json_list
 
-
-def execute():
-    xnr = SinaLauncher('', '')
-    xnr.login()
-    mess = FeedbackRetweet(xnr.uid)
-
-    list = mess.atMeMicroBlog()
-    executeES('weibo_feedback_retweet', 'text', list)
+    def execute(self):
+        list = self.atMeMicroBlog()
+        executeES('weibo_feedback_retweet', 'text', list)
 
 
 if __name__ == '__main__':
-    execute()
+    xnr = SinaLauncher('', '')
+    xnr.login()
+    FeedbackRetweet(xnr.uid).execute()

@@ -4,8 +4,7 @@ import time
 import json
 import sys
 from xnr.sina.weibo_operate import SinaOperateAPI
-from xnr.tools.Launcher import SinaLauncher
-
+from xnr.sina.tools.Launcher import SinaLauncher
 
 ## 发布微博
 def publish_tweet_func(account_name,password,text,p_url,rank,rankid):
@@ -101,5 +100,5 @@ def create_group_func(account_name,password,group,members):
 	user.group = group
 	user.members = members
 	mark = user.createGroup()
-
+	print 'mark::',mark
 	return mark

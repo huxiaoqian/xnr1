@@ -3,6 +3,8 @@
 import json
 import urllib2
 
+import time
+
 from sina.weibo_feedback_follow import FeedbackFollow
 from tools.ElasticsearchJson import executeES
 from tools.HtmlExtractor import extractForHTML
@@ -12,7 +14,7 @@ from tools.TimeChange import getTimeStamp
 from tools.URLTools import getUrlToPattern
 
 
-class FeedbackComment():
+class FeedbackComment:
     def __init__(self, uid):
         self.uid = uid
         followType = FeedbackFollow(uid)
@@ -88,7 +90,8 @@ class FeedbackComment():
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type
+                        'comment_type': commet_type,
+                        'update_time': int(round(time.time()))
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -102,7 +105,6 @@ class FeedbackComment():
                 else:
                     break
         return json_list
-
 
     def commentOutbox(self):
         cr_url = 'http://weibo.com/comment/outbox?&page=1&pids=Pl_Content_Postedcomment'
@@ -173,7 +175,8 @@ class FeedbackComment():
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type
+                        'comment_type': commet_type,
+                        'update_time': int(round(time.time()))
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -189,18 +192,15 @@ class FeedbackComment():
                     break
         return json_list
 
+    def execute(self):
+        list = self.commentInbox()
+        executeES('weibo_feedback_comment', 'text', list)
 
-def execute():
-    xnr = SinaLauncher('', '')
-    xnr.login()
-    mess = FeedbackComment(xnr.uid)
-
-    list = mess.commentInbox()
-    executeES('weibo_feedback_comment', 'text', list)
-
-    list = mess.commentOutbox()
-    executeES('weibo_feedback_comment', 'text', list)
+        list = self.commentOutbox()
+        executeES('weibo_feedback_comment', 'text', list)
 
 
 if __name__ == '__main__':
-    execute()
+    xnr = SinaLauncher('', '')
+    xnr.login()
+    FeedbackComment(xnr.uid).execute()

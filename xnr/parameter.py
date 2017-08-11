@@ -72,7 +72,14 @@ topic_en2ch_dict = {'art':u'文体类_娱乐','computer':u'科技类','economic'
                     'employment':u'民生类_就业','fear-of-violence':u'政治类_暴恐',\
                     'house':u'民生类_住房','law':u'民生类_法律','peace':u'政治类_地区和平',\
                     'religion':u'政治类_宗教','social-security':u'民生类_社会保障'}
-
+topic_ch2en_dict = {u'文体类_娱乐': 'art', u'科技类':'computer', u'经济类':'economic', \
+                    u'教育类':'education', u'民生类_环保': 'environment', u'民生类_健康':'medicine',\
+                    u'军事类': 'military', u'政治类_外交':'politics', u'文体类_体育':'sports',\
+                    u'民生类_交通':'traffic', u'其他类':'life', u'政治类_反腐':'anti-corruption',\
+                    u'民生类_就业':'employment', u'政治类_暴恐':'fear-of-violence',\
+                    u'民生类_住房': 'house', u'民生类_法律':'law', u'政治类_地区和平':'peace',\
+                    u'政治类_宗教':'religion', u'民生类_社会保障':'social-security'}
+                    
 domain_ch2en_dict = {u'高校': 'university', u'境内机构':'homeadmin', u'境外机构':'abroadadmin' ,\
                      u'媒体': 'homemedia', u'境外媒体': 'abroadmedia', u'民间组织': 'folkorg', \
                      u'法律机构及人士': 'lawyer', u'政府机构及人士':'politician', u'媒体人士':'mediaworker',\

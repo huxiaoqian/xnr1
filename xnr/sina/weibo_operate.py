@@ -50,13 +50,13 @@ class SinaOperateAPI:
             print content
             succ = json.loads(content)
             if succ['code'] == '100000':
-                print 'publish success...'
-                return True
+                print 'publish success...', succ['msg']
+                return True, '成功'
             else:
-                return False
+                 print 'publish fail...', succ['msg']
+                 return False, succ['msg']
         except:
-            print 'fail!!'
-            return False
+            return False, '失败'
 
     def request_image_url(self, image_path):
         image_url = 'http://picupload.service.weibo.com/interface/pic_upload.php?&mime=image%2Fjpeg' \
@@ -116,7 +116,7 @@ class SinaOperateAPI:
             "text": self.text,
             "tid": ""
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def retweet(self):
         """
@@ -150,7 +150,7 @@ class SinaOperateAPI:
             "r_id": "",
             "style_type": "1"
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def comment(self):
         """
@@ -176,7 +176,7 @@ class SinaOperateAPI:
             "rid": "",
             "uid": self.uid
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def receive(self):
         """
@@ -208,7 +208,7 @@ class SinaOperateAPI:
             "root_comment_id": "0",
             "uid": self.uid
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def privmessage(self):
         """
@@ -231,7 +231,7 @@ class SinaOperateAPI:
             "tovfids": "",
             "uid": self.r_mid
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def like(self):
         """
@@ -251,7 +251,7 @@ class SinaOperateAPI:
             "qid": "heart",
             "version": "mini"
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def followed(self):
         """
@@ -276,7 +276,7 @@ class SinaOperateAPI:
             "uid": self.r_mid,
             "wforce": "1"
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def unfollowed(self):
         """
@@ -295,7 +295,7 @@ class SinaOperateAPI:
             "refer_sort": "",
             "uid": self.r_mid
         }
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
     def createGroup(self):
         """
@@ -314,7 +314,7 @@ class SinaOperateAPI:
         }
         print 'members::',self.members
         print 'name::',self.group
-        self.__getPostURL(w_url, post_data)
+        return self.__getPostURL(w_url, post_data)
 
 
 def execute():
@@ -323,7 +323,7 @@ def execute():
     输入发布内容（和rank）
     :return:
     """
-    xnr = SinaLauncher('13718641914', 'hua198912180')
+    xnr = SinaLauncher('', '')
     xnr.login()
 
     user = SinaOperateAPI(xnr.uid)
