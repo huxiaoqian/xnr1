@@ -93,7 +93,7 @@ body {
 #container .post_post #user_recommend {
     position: absolute;
     top: 60px;
-    right: 20px;
+    right: 0px;
     color: #b0bdd0;
     /* border-radius: 10px; */
     /* border: 1px solid silver; */
@@ -117,20 +117,21 @@ body {
     color:#b0bdd0;
 }
 /**/
-#container .type_page #content input,
-#container .type_page #content select {
-    color: white;
-    display: inline-block;
-    width: 300px;
-    padding: 4px 8px;
-    background: rgba(8,23,44,0.25);
-    border: 1px solid silver;
-}
+/*#container .type_page #content input,*/
+/*#container .type_page #content select {*/
+    /*color: white;*/
+    /*display: inline-block;*/
+    /*width: 300px;*/
+    /*padding: 4px 8px;*/
+    /*background: rgba(8,23,44,0.25);*/
+    /*border: 1px solid silver;*/
+/*}*/
 /*发布内容*/
 #container .type_page #content #everyday .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
     background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
 }
 #container .type_page #content #everyday .post_perfect .center_icon {
     position: absolute;

@@ -29,6 +29,43 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -60,7 +97,7 @@
                 <div>
                     <a href="###" style="font-family: cursive;color: white;">有什么新鲜事告诉大家？</a>
                 </div>
-                <textarea id="post-2-content" cols="90" rows="6"></textarea>
+                <textarea id="post-2-content" cols="101" rows="6"></textarea>
                 <div class="add_thing">
                     <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
                     <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
@@ -86,10 +123,13 @@
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
                         <div class="ttime">
-                            <input type="text" value="" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                            <input type="text" size="16" id="_timing1" class="form_datetime start" placeholder="开始时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" value="" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                            <input type="text" size="16" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" size="16" id="_timing3" class="remarks" placeholder="备注信息"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                         </div>
@@ -115,7 +155,7 @@
                         <span>按主题：</span>
                         <div id="theme" style="">
                             <label class="demo-label" title="旅游">
-                                <input class="demo-radio" type="radio" name="theme" value='旅游'>
+                                <input class="demo-radio" type="radio" name="theme" value='旅游' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 旅游
                             </label>
                             <label class="demo-label" title="美食">
@@ -188,7 +228,7 @@
                     <div class="ed-2-2">
                         <div style="text-align: center;">
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="th" value='timestamp'>
+                                <input class="demo-radio" type="radio" name="th" value='timestamp' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 按时间
                             </label>
                             <label class="demo-label">
@@ -196,30 +236,8 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 按热度
                             </label>
                         </div>
-                        <div style="float: right;margin-right: 18px">
-                            <input type="text" id="search-1-every" placeholder="输入关键词快速搜索相关微博"/>
-                            <span id="search-every" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</span>
-                        </div>
-
-                        <div class="post_perfect" style="margin: 20px auto;">
-                            <div class="post_center-hot">
-                                <img src="/static/images/post-6.png" alt="" class="center_icon">
-                                <div class="center_rel">
-                                    <a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：
-                                    <span class="center_2">
-                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                                    </span>
-                                    <div class="center_3">
-                                        <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>
-                                        <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>
-                                        <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>
-                                    </div>
-                                    <div class="commentDown" style="width: 100%;display: none;">
-                                        <input type="text" class="comtnt" placeholder="评论内容"/>
-                                        <span class="sureCom">评论</span>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="defaultWeibo">
+                            <div id="defaultWeibo"></div>
                         </div>
                     </div>
 
@@ -360,6 +378,28 @@
 </div>
 
 
+<!--设置群可见的时候，展示群-->
+<!--相似微博-->
+<div class="modal fade" id="grouplist" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群组列表</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <!--相似微博-->
 <div class="modal fade" id="simliar" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -442,7 +482,18 @@
             var a=$(this).find('span').text();
             $('.friends button b').attr('title',a).text(a);
         }
+        if (e.target.innerHTML=='群可见'||$(this).find('span').text()=='群可见'){
+            var gl_url='';
+            // public_ajax.call_request('get',gl_url,gpList)
+        }
     });
+    function gpList(data) {
+
+        $('#grouplist').modal('show');
+    }
+
+
+
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,
@@ -454,10 +505,6 @@
     });
     $('.end').on('changeDate', function(ev){
         $('.start').datetimepicker('setEndDate',ev.date);
-    });
-
-    $('.timingss').on('click',function () {
-
     });
 
     $('.continue_already_created').on('click',function () {
