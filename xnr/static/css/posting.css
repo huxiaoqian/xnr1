@@ -132,6 +132,7 @@ body {
     padding: 10px 10px 10px 30px;
     background: rgba(8,23,44,0.35);
     margin-bottom: 10px;
+    width: 700px;
 }
 #container .type_page #content #everyday .post_perfect .center_icon {
     position: absolute;
@@ -193,30 +194,36 @@ body {
 
 
 
-
-
-
-#container #content #everyday .everyday-2 .ed-2-1 {
+#container #content #everyday .everyday-2 .ed-2-1,
+#container #content #hot .hot-2 .hot-2-1 {
     width: 200px;
     height: auto;
     padding: 15px 5px 5px 30px;
     background: #0c2542;
     float: left;
 }
-#container #content #everyday .everyday-2 .ed-2-1 #theme {
+#container #content #everyday .everyday-2 .ed-2-1 #theme,
+#container #content #hot .hot-2 .hot-2-1 #theme-2{
     margin: 10px 0;
 }
-#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label {
+#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label,
+#container #content #hot .hot-2 .hot-2-1 #theme-2 .demo-label {
+    width: 75px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#container #content #everyday .everyday-2 .ed-2-2 {
+#container #content #everyday .everyday-2 .ed-2-2,
+#container #content #hot .hot-2 .hot-2-2 {
     width: 700px;
     height: auto;
     margin-left: 20px;
     float: left;
 }
+.everyday-2 .ed-2-1 .demo-label,.hot-2 .hot-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
+.everyday-2 .ed-2-2 .demo-label,.hot-2 .hot-2-2 .demo-label{width:100px;}
+.everyday-2 .ed-2-1 .demo-radioInput,.hot-2 .hot-2-1 .demo-radioInput{margin-right:10px;}
+
 
 #container .type_page #content #hot #post_center-hot {
     position: relative;

@@ -30,7 +30,6 @@ $('#sure_post').on('click',function () {
     var txt=$('#post-2-content').val();
     var flag=$('.friends button b').text(),rank='';
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
-
     //原创
     var post_url_1='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank+
@@ -39,8 +38,9 @@ $('#sure_post').on('click',function () {
         if ($('.start').val() && $('.end').val()){
             var a=Date.parse(new Date($('.start').val()))/1000;
             var b=Date.parse(new Date($('.end').val()))/1000;
+            var c=$('#_timing3').val();
             //var timeMath=Math.random()*(b-a)+a;
-            post_url_1+='&post_time_sts='+a+'&post_time_ets='+b;
+            post_url_1+='&post_time_sts='+a+'&post_time_ets='+b+'&remark='+c;
         }else {
             $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间。');
             $('#pormpt').modal('show');
@@ -49,12 +49,10 @@ $('#sure_post').on('click',function () {
     if (rank==7){post_url_1+='&rankid=1022:2304914131985239110622'}
     // public_ajax.call_request('get',post_url_1,postYES)
 });
-function postYES(data) {
-    console.log(data)
-}
+
 //语料推荐
 var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
-public_ajax.call_request('get',defalutWeiboUrl,defalutWords)
+public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
 $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     //var d=$('.everyday-2 .ed-2-2 .demo-radio');
     // for(var e=0;e<d.length;e++){if(d[e].checked) {d[e].checked=false;}};
@@ -77,7 +75,7 @@ function defalutWords(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 2,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -99,81 +97,91 @@ function defalutWords(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt;
-                    if (row._source.nickname==''||row._source.speaker_nickname=='null'||row._source.speaker_nickname=='unknown'){
-                        name=row._source.speaker_qq_number;
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
                     }else {
-                        name=row._source.speaker_nickname;
+                        name=row.nick_name;
                     };
-                    if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row._source.text;
+                        txt=row.text;
                     };
                     var str=
                         '<div class="post_perfect">'+
                         '   <div class="post_center-hot">'+
-                        '       <img src="/static/images/post-6.png" class="center_icon">'+
+                        '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                        '           <i class="mid" style="display: none;">'+row._source.mid+'</i>'+
-                        '           <i class="uid" style="display: none;">'+row._source.uid+'</i>'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
-                        '        </div>'+
-                        '        <div class="center_3">'+
-                        '           <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row._source+'）</span>'+
-                        '           <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row._source+'）</span>'+
-                        '           <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（'+row._source+'）</span>'+
-                        '        </div>'+
-                        '        <div class="commentDown" style="width: 100%;display: none;">'+
-                        '           <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '           <span class="sureCom">评论</span>'+
-                        '        </div>'+
-                        '    </div>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
                         '</div>';
                     return str;
-                    //评论
-                    $('.post_perfect .cen3-2').on('click',function () {
-                        $(this).parents('.post_perfect').find('.commentDown').show();
-                    });
                 }
             },
         ],
     });
     $('.defaultWeibo .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-
-
-
-//转发
-$('.post_perfect .cen3-1').on('click',function () {
-    obtain('r');
-    var txt = $(this).parent().prev().text();
-    var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type='+actType+'&operate_type='+operateType+'&uid='+uid+
-        '&text='+txt+'&weibo_mail_account='+weiboMail+'&weibo_phone_account='+weiboPhone+'&mid='+mid;
-    //public_ajax.call_request('get',post_url_2,postYES)
-});
 //评论
-$('.post_perfect .cen3-2').on('click',function () {
-    $(this).parents('.post_perfect').find('.commentDown').show();
-});
-$('.commentDown .sureCom').on('click',function () {
-    var txt = $('.comtnt').val();
+function showInput(_this) {
+    $(_this).parents('.post_perfect').find('.commentDown').show();
+};
+function comMent(_this){
+    var txt = $(_this).prev().val();
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
-        var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&weibo_mail_account='+weiboMail+
-            '&weibo_phone_account='+weiboPhone+'&mid='+mid;
+        var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
         console.log(post_url_3)
         //public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
     }
-});
+}
+
+//转发
+function retweet(_this) {
+    obtain('r');
+    var txt = $(_this).parent().prev().text();
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type='+actType+'&operate_type='+operateType+'&uid='+uid+
+        '&text='+txt+'&mid='+mid;
+    //public_ajax.call_request('get',post_url_2,postYES)
+}
 
 //点赞
-$('.post_perfect .cen3-3').on('click',function () {
-    var post_url_4='/weibo_xnr_operate/like_operate/?weibo_mail_account='+weiboMail+'&weibo_phone_account='+weiboPhone+'&mid='+mid;
+function thumbs(_this) {
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid;
     //public_ajax.call_request('get',post_url_4,postYES)
-});
+};
+
+//操作返回结果
+function postYES(data) {
+    console.log(data)
+}
+
+//=========热点跟随===========
+
 

@@ -9,9 +9,7 @@
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-    .everyday-2 .ed-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
-    .everyday-2 .ed-2-2 .demo-label{width:100px;}
-    .everyday-2 .ed-2-1 .demo-radioInput{margin-right:10px;}
+
     #container .type_page #myTabs a {
         color: white;
     }
@@ -249,39 +247,106 @@
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">热门事件推荐</span>
                 </div>
-                <div class="hot-2" style="margin-left: 30px;">
-                    <span>按主题：</span>
-                    <select id="theme-2">
-                        <option value="文体类_娱乐">文体类_娱乐</option>
-                        <option value="科技类">科技类</option>
-                        <option value="经济类">经济类</option>
-                        <option value="教育类">教育类</option>
-                        <option value="民生类_环保">民生类_环保</option>
-                        <option value="民生类_健康">民生类_健康</option>
-                        <option value="军事类">军事类</option>
-                        <option value="政治类_外交">政治类_外交</option>
-                        <option value="文体类_体育">文体类_体育</option>
-                        <option value="民生类_交通">民生类_交通</option>
-                        <option value="其他类">其他类</option>
-                        <option value="政治类_反腐">政治类_反腐</option>
-                        <option value="民生类_就业">民生类_就业</option>
-                        <option value="政治类_暴恐">政治类_暴恐</option>
-                        <option value="民生类_住房">民生类_住房</option>
-                        <option value="民生类_法律">民生类_法律</option>
-                        <option value="政治类_地区和平">政治类_地区和平</option>
-                        <option value="政治类_宗教">政治类_宗教</option>
-                        <option value="民生类_社会保障">民生类_社会保障</option>
-                    </select>
-                    <span>排序指标：</span>
-                    <select id="theme-3">
-                        <option selected="" value="按最新">按最新</option>
-                        <option value="按任务完成度">按任务完成度</option>
-                        <option value="按事件权重">按事件权重</option>
-                    </select>
-                    <div style="float: right;margin-right: 18px">
-                        <input type="text" id="search-1-hot" placeholder="输入关键词快速搜索相关微博"/>
-                        <button type="button" class="btn btn-primary btn-xs" id="search-hot"
-                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                <div class="hot-2" style="margin-left: 30px;overflow: hidden;">
+                    <div class="hot-2-1">
+                        <span>按主题：</span>
+                        <div id="theme-2">
+                            <label class="demo-label" title="文体类_娱乐">
+                                <input class="demo-radio" type="radio" name="theme2" value='文体类_娱乐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
+                            </label>
+                            <label class="demo-label" title="科技类">
+                                <input class="demo-radio" type="radio" name="theme2" value='科技类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 科技类
+                            </label>
+                            <label class="demo-label" title="经济类">
+                                <input class="demo-radio" type="radio" name="theme2" value='经济类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 经济类
+                            </label>
+                            <label class="demo-label" title="教育类">
+                                <input class="demo-radio" type="radio" name="theme2" value='教育类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 教育类
+                            </label>
+                            <label class="demo-label" title="民生类_环保">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_环保'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
+                            </label>
+                            <label class="demo-label" title="民生类_健康">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_健康'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
+                            </label>
+                            <label class="demo-label" title="军事类">
+                                <input class="demo-radio" type="radio" name="theme2" value='军事类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 军事类
+                            </label>
+                            <label class="demo-label" title="政治类_外交">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_外交'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
+                            </label>
+                            <label class="demo-label" title="文体类_体育">
+                                <input class="demo-radio" type="radio" name="theme2" value='文体类_体育'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
+                            </label>
+                            <label class="demo-label" title="民生类_交通">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_交通'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
+                            </label>
+                            <label class="demo-label" title="其他类">
+                                <input class="demo-radio" type="radio" name="theme2" value='其他类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 其他类
+                            </label>
+                            <label class="demo-label" title="政治类_反腐">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_反腐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
+                            </label>
+                            <label class="demo-label" title="民生类_就业">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_就业'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
+                            </label>
+                            <label class="demo-label" title="政治类_暴恐">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_暴恐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
+                            </label>
+                            <label class="demo-label" title="民生类_住房">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_住房'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
+                            </label>
+                            <label class="demo-label" title="民生类_法律">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_法律'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
+                            </label>
+                            <label class="demo-label" title="政治类_地区和平">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_地区和平'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
+                            </label>
+                            <label class="demo-label" title="政治类_宗教">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_宗教'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
+                            </label>
+                            <label class="demo-label" title="民生类_社会保障">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_社会保障'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
+                            </label>
+                        </div>
+                    </div>
+                    <div class="hot-2-2">
+                        <div id="theme-3" style="text-align: center;">
+                            <label class="demo-label" title="按最新">
+                                <input class="demo-radio" type="radio" name="theme" value='民生类_社会保障' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按最新
+                            </label>
+                            <label class="demo-label" title="按任务完成度">
+                                <input class="demo-radio" type="radio" name="theme" value='民生类_社会保障'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按任务完成度
+                            </label>
+                            <label class="demo-label" title="按事件权重">
+                                <input class="demo-radio" type="radio" name="theme" value='民生类_社会保障'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按事件权重
+                            </label>
+                        </div>
+                        <div class="defaultWeibo2">
+                            <div id="defaultWeibo2"></div>
+                        </div>
                     </div>
 
                     <div class="post_perfect" style="margin: 20px 0 0 30px;">
