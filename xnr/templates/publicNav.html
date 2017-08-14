@@ -114,6 +114,13 @@
         },
     };
 
+    //登录虚拟人后取出ID或者名字
+    var ID_name=localStorage.getItem('user');
+    var nowUser='';
+    if (ID_name){
+        nowUser=decodeURI(ID_name);
+    }
+
     $('.old').on('click',function(e) {
         var txt=$(this).find('span').text();
         var curtxt=$('.current').find('span').text();
@@ -122,7 +129,7 @@
         $('.nav_type').text('（'+txt+'）');
     });
     //存  localStorage.setItem('TYPE','1');
-    //取 var typeNum=localStorage.getItem('TYPE');
+    //取  var typeNum=localStorage.getItem('TYPE');
     //删除 localStorage.removeItem(i);
     function judgment(typeNum){
         typeNum=Number(typeNum);

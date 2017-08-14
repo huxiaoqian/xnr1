@@ -1,6 +1,7 @@
-var xnrUser='WXNR0001',
+var xnrUser=nowUser,
 //weiboMail='13121835733',weiboPhone='13121835733','&weibo_mail_account='+weiboMail+'&weibo_phone_account='+weiboPhone+
-    uid='1234567890',mid='4085480909715263';
+   uid='1234567890',mid='4085480909715263';
+
 //@用户推荐
 var recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
 public_ajax.call_request('get',recommendUrl,recommendlist);
@@ -69,7 +70,6 @@ $('.everyday-2 .ed-2-2 .demo-radio').on('click',function () {
     // public_ajax.call_request('get',TH_url,postYES)
 });
 function defalutWords(data) {
-    console.log(data)
     $('#defaultWeibo').bootstrapTable('load', data);
     $('#defaultWeibo').bootstrapTable({
         data:data,
@@ -140,6 +140,7 @@ function defalutWords(data) {
             },
         ],
     });
+    $('#defaultWeibo p').hide();
     $('.defaultWeibo .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //评论
@@ -183,5 +184,215 @@ function postYES(data) {
 }
 
 //=========热点跟随===========
+var hotWeiboUrl='/weibo_xnr_operate/hot_recommend_tweets/?topic_field=民生类_法律&sort_item=timestamp';
+public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
+function hotWeibo(data) {
+    console.log(data)
+    $('#defaultWeibo2').bootstrapTable('load', data);
+    $('#defaultWeibo2').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 2,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.nick_name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect">'+
+                        '   <div id="post_center-hot">'+
+                        '       <img src="'+img+'" alt="" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                        '               <span class="center_2">'+txt
+                        '               </span>'+
+                        '           <div class="center_3" style="margin: 10px 0;">'+
+                        '               <span class="time">2017-03-04 12:43:23</span>'+
+                        '               <a data-toggle="modal" data-target="#simliar">相似微博</a>'+
+                        '               <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>'+
+                        '               <p style="float: right;">'+
+                        '                   <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;'+
+                        '                   <span>评论数（<span class="comment">222</span>）</span>&nbsp;'+
+                        '                   <span>赞（<span class="praise">222</span>）</span>&nbsp;'+
+                        '               </p>'+
+                        '           </div>'+
+                        '        </div>'+
+                        '        <div style="margin: 10px 0;">'+
+                        '           <input type="text" class="point-view-1"/>'+
+                        '           <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>'+
+                        '        </div>'+
+                        '   </div>'+
+                        '</div>';
+
+
+
+                        '<div class="post_perfect">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <span class="center_2">'+txt+
+                        '           </span>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+    $('#defaultWeibo p').hide();
+    $('.defaultWeibo2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
+}
+
+//======业务发帖=======
+var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?sort_item=timestamp';
+public_ajax.call_request('get',busWeiboUrl,businessWeibo);
+function businessWeibo(data) {
+    console.log(data)
+    $('#defaultWeibo3').bootstrapTable('load', data);
+    $('#defaultWeibo3').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 2,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.nick_name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect">'+
+                        '   <div id="post_center-hot">'+
+                        '       <img src="'+img+'" alt="" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                        '               <span class="center_2">'+txt
+                    '               </span>'+
+                    '           <div class="center_3" style="margin: 10px 0;">'+
+                    '               <span class="time">2017-03-04 12:43:23</span>'+
+                    '               <a data-toggle="modal" data-target="#simliar">相似微博</a>'+
+                    '               <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>'+
+                    '               <p style="float: right;">'+
+                    '                   <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;'+
+                    '                   <span>评论数（<span class="comment">222</span>）</span>&nbsp;'+
+                    '                   <span>赞（<span class="praise">222</span>）</span>&nbsp;'+
+                    '               </p>'+
+                    '           </div>'+
+                    '        </div>'+
+                    '        <div style="margin: 10px 0;">'+
+                    '           <input type="text" class="point-view-1"/>'+
+                    '           <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>'+
+                    '        </div>'+
+                    '   </div>'+
+                    '</div>';
+
+
+
+                    '<div class="post_perfect">'+
+                    '   <div class="post_center-hot">'+
+                    '       <img src="'+img+'" class="center_icon">'+
+                    '       <div class="center_rel">'+
+                    '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                    '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                    '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                    '           <span class="center_2">'+txt+
+                    '           </span>'+
+                    '           <div class="center_3">'+
+                    '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                    '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                    '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                    '           </div>'+
+                    '           <div class="commentDown" style="width: 100%;display: none;">'+
+                    '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                    '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                    '           </div>'+
+                    '       </div>'+
+                    '   </div>'+
+                    '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+    $('#defaultWeibo3 p').hide();
+    $('.defaultWeibo3 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
+}
 
 

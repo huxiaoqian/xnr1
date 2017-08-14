@@ -1,3 +1,19 @@
+//渗透领域
+var field_url='/weibo_xnr_create/show_domain/';
+public_ajax.call_request('get',field_url,field);
+function field(data) {
+    console.log(data)
+    var str='';
+    for (var k in data){
+        str+=
+            '<label class="demo-label" title="'+data[k]+'">'+
+            '   <input class="demo-radio" type="radio" name="demo1" id="'+k+'" value="'+data[k]+'">'+
+            '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+            '</label>';
+    }
+    $('#container .tit-2 .field').html(str);
+}
+
 var domainName='',roleName='';
 $('input[name=demo1]').on('click',function () {
     domainName=$(this).parent().attr('title');

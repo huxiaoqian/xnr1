@@ -183,10 +183,7 @@
                     <div class="option1">
                         <span>一、请先选择要进入的虚拟人身份</span>
                         <div class="identity" style="padding: 10px 25px;">
-                            <label class="demo-label" title="WXNR0001">
-                                <input class="demo-radio" type="radio" name="ID" value='WXNR0001'>
-                                <span class="demo-checkbox demo-radioInput"></span> WXNR0001
-                            </label>
+
                         </div>
                     </div>
                     <div class="option2">
@@ -301,9 +298,38 @@
 
     //选择虚拟人确定进入
     $('.sure_in').on('click',function () {
-        var userID=$('input:radio[name="ID"]:checked').val();
+        var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userName=$('input:radio[name="ID"]:checked').attr('valueName');
         var userType=$('input:radio[name="choose"]:checked').val();
+        var id_or_name='';
+        if (userType=='隐身'){
+            id_or_name=userID;
+        }else {
+            id_or_name=userName;
+        }
+        localStorage.setItem('user',encodeURI(id_or_name));
         window.open('/control/operationControl/');
+    });
+
+
+    //虚拟人列表
+    $.ajax({
+        type: 'GET',
+        url: "/weibo_xnr_create/show_weibo_xnr/",
+        async: true,
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            var str='';
+            for (var k in data){
+                str+=
+                    '<label class="demo-label" title="'+data[k]+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                    '</label>';
+            }
+            $('#choosePerson .identity').html(str);
+        }
     });
 
 </script>

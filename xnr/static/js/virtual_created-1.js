@@ -109,15 +109,37 @@ $('.previous').on('click',function () {
 var n=0;
 $('.next').on('click',function () {
     n=1;
-    values();
-    localStorage.setItem('secondStep',JSON.stringify(second));
-    window.open('/registered/socialAccounts/');
+    nameJudgment();
+    //values();
 });
 $('.save_return').on('click',function () {
     n=0;
-    values();
-    window.open('/personalCenter/individual/');
+    nameJudgment();
+    //values();
 });
+function nameJudgment() {
+    //判断昵称是否重复
+    var nickName=$('#name').val();
+    ajax_public.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
+}
+function repeatNot(data) {
+    if (data){
+        values();
+        save();
+    }else {
+        $('#prompt p').text('您输入的昵称与系统数据重复，请重新输入。');
+        $('#prompt').modal('show');
+    }
+};
+
+function save() {
+    localStorage.setItem('secondStep',JSON.stringify(second));
+    if (n==0){
+        window.open('/personalCenter/individual/');
+    }else {
+        window.open('/registered/socialAccounts/');
+    }
+}
 
 var task_id='WXNR0001';
 function values() {
@@ -153,7 +175,7 @@ function values() {
     var saveSecond_url='/weibo_xnr_create/save_step_two/?task_id='+task_id+'&nick_name='+nickName+'&age='+age+
         '&location='+location+'&career='+career+'&description='+description+'&active_time=9,10,11,19,20&day_post_average=9-12';
     public_ajax.call_request('get',saveSecond_url,in_three);
-    if (n == 1){
+    if (n == 1||n == 0){
         second={
             'nick_name':nickName,
             'age':age,
