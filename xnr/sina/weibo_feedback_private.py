@@ -15,11 +15,12 @@ from tools.URLTools import getUrlToPattern
 
 
 class FeedbackPrivate:
-    def __init__(self, uid):
+    def __init__(self, uid, current_ts, fans, follow):
         self.uid = uid
-        followType = FeedbackFollow(uid)
-        self.follow = followType.follow()
-        self.fans = followType.fans()
+        #followType = FeedbackFollow(uid, current_ts)
+        self.follow = follow
+        self.fans = fans
+        self.update_time = current_ts
 
     def messages(self):
         cr_url = 'http://weibo.com/messages?pids=Pl_Content_MessageList&page=1'
@@ -120,8 +121,9 @@ class FeedbackPrivate:
                                 'root_uid': r_uid,
                                 'weibo_type': _type,
                                 'private_type': private_type,
-                                'w_new_count': counts,
-                                'update_time': int(round(time.time()))
+                                'w_new_count': counts,#,
+                                'update_time':self.update_time#,
+                                #'update_time': int(round(time.time()))
                             }
 
                             wb_json = json.dumps(wb_item)

@@ -13,6 +13,7 @@ S_DATE_BCI = '2016-11-27'
 
 QQ_S_DATE = '2017-07-12'
 
+PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
 
 #config es
 #config xnr user info
