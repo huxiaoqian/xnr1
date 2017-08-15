@@ -3,13 +3,20 @@ import os
 import time
 import json
 import pinyin
+import urllib
+import urllib2
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from utils import domain_create_task,get_domain_info,get_role_info,get_role_sort_list,\
                 get_role2feature_info,get_recommend_step_two,get_recommend_follows,\
                 get_save_step_one,get_save_step_two,get_save_step_three_1,get_save_step_three_2,\
-                get_xnr_info,get_show_domain,get_show_weibo_xnr
+                get_xnr_info,get_show_domain,get_show_weibo_xnr,get_nick_name_unique
+#from weibo_publish_func import getUserShow
+from weibo_publish_func import newest_time_func
+#from utils import get_user_data
+import os
+from xnr.global_config import PATH_ROOT
 
 mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
 
@@ -17,6 +24,34 @@ mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
 @mod.route('/user_portrait/')
 def user_portrait_tianjin():
     return render_template('user_portrai_tianjin.html')
+# 返回数据
+@mod.route('/user_data/')
+def ajax_user_data():
+    #data = get_user_data()
+    with open(os.path.join(APP_ROOT, 'portrait_info_tianjin_0813.txt')) as f:
+        for line in f:
+            line = json.loads(line)
+            print type(line)
+            return json.dumps(line)
+    #return json.dumps(data)
+
+
+## 测试获取uid
+@mod.route('/get_uid/')
+def ajax_get_uid():
+    timestamp = newest_time_func('6340301597')
+    print 'timestamp::',timestamp
+    #data = getUserShow(screen_name='GGJava')
+    #print 'data::',data
+    return json.dumps([])
+
+# 昵称不能重复
+@mod.route('/nick_name_unique/')
+def ajax_nick_name_unique():
+    nick_name = request.args.get('nick_name','')
+    mark = get_nick_name_unique(nick_name)
+
+    return json.dumps(mark)  # True表示 可用，没有重复。False表示 不可用，有冲突。
 
 # 返回渗透领域
 @mod.route('/show_domain/')

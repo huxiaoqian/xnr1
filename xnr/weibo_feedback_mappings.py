@@ -569,10 +569,11 @@ def weibo_create_group_mappings():
 		es.indices.create(index=weibo_feedback_group_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
-	#weibo_feedback_retweet_mappings()
-	#weibo_feedback_comment_mappings()
-	#weibo_feedback_at_mappings()
-	#weibo_feedback_like_mappings()
-	#weibo_feedback_private_mappings()
-	#weibo_feedback_follow_mappings()
+	weibo_feedback_retweet_mappings()
+	weibo_feedback_comment_mappings()
+	weibo_feedback_at_mappings()
+	weibo_feedback_like_mappings()
+	weibo_feedback_private_mappings()
+	weibo_feedback_follow_mappings()
+	weibo_feedback_fans_mappings()
 	weibo_create_group_mappings()

@@ -21,6 +21,9 @@ from xnr.parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
 from xnr.time_utils import get_flow_text_index_list,datetime2ts
 from xnr.utils import nickname2uid,user_no2_id,_id2user_no
+#from xnr.weibo_publish_func import getUserShow
+from xnr.sina.userinfo import SinaOperateAPI
+#from xnr.test_tianjin import get_user_portrait_data
 '''
 import sys
 reload(sys)
@@ -33,6 +36,21 @@ from parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,ACTIV
                         DAILY_INTEREST_TOP_USER
 from time_utils import get_flow_text_index_list
 '''
+
+def get_nick_name_unique(nick_name):
+    query_body = {
+        'query':{
+            'term':{'nick_name':nick_name}
+        }
+    }
+    es_profile_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+    es_xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    if es_profile_results and es_xnr_results:
+        mark = False
+    else:
+        mark = True
+    return mark
 
 def get_show_domain():
     domain_name_dict = {}
@@ -370,22 +388,29 @@ def get_save_step_two(task_detail):
     mark = True
     #except:        
     #    mark = False
-
+    
     return mark
 
 def get_save_step_three_1(task_detail):
     #task_id = task_detail['task_id']
     #try:
     #print 'task_detail:::',task_detail
-    nick_name = task_detail['nick_name']
+    nick_name = task_detail['nick_name'].encode('utf-8')
+    operate = SinaOperateAPI()
+    user_info = operate.getUserShow(screen_name=nick_name)
+    uid = user_info['id']
+    print 'type_user_ifo::',type(user_info)
+    #uid = getUserShow(screen_name=nick_name)['data']['uid']
     query_body = {'query':{'term':{'nick_name':nick_name}}}
     es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
     task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
+    item_exist['uid'] = uid
     item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
     item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
     item_exist['password'] = task_detail['password']
     item_exist['create_status'] = 2 # 创建完成
+
     # 更新 weibo_xnr表
     es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
 

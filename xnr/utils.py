@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 
-from global_utils import es_user_profile,profile_index_name,profile_index_type
+from global_utils import es_user_profile,profile_index_name,profile_index_type,\
+                        es_xnr,weibo_xnr_index_name,weibo_xnr_index_type
 from parameter import MAX_SEARCH_SIZE
 
 def nickname2uid(nickname_list):
@@ -51,3 +52,12 @@ def _id2user_no(task_id):
     user_no = int(user_no_string)
     print 'user_no::',user_no
     return user_no
+
+def xnr_user_no2uid(xnr_user_no):
+    try:
+        result = es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        uid = result['uid']
+    except:
+        uid = ''
+
+    return uid

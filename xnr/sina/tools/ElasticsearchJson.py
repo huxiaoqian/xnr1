@@ -9,7 +9,7 @@ from sensitive.get_sensitive import get_sensitive_info,get_sensitive_user
 es = Elasticsearch("http://219.224.134.213:9205/")
 
 def executeES(indexName, typeName, listData):
-    #current_time = time.time()
+    current_time = int(time.time())
     #indexName += '_' + ts2datetime(current_time)
 
     for list in listData:
@@ -19,6 +19,7 @@ def executeES(indexName, typeName, listData):
             # print key, '====', val
             # print type(val)
             data[key] = val
+            data['update_time'] = current_time
 
         data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
         data['sensitive_user'] = get_sensitive_user(data['uid'])
