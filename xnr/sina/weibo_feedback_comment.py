@@ -15,11 +15,13 @@ from tools.URLTools import getUrlToPattern
 
 
 class FeedbackComment:
-    def __init__(self, uid):
+    def __init__(self, uid, current_ts, fans, follow):
         self.uid = uid
-        followType = FeedbackFollow(uid)
-        self.follow = followType.follow()
-        self.fans = followType.fans()
+        #followType = FeedbackFollow(uid, current_ts)
+        self.follow = follow
+        self.fans = fans
+        self.update_time = current_ts
+
 
     def commentInbox(self):
         cr_url = 'http://weibo.com/comment/inbox?&page=1&pids=Pl_Content_Commentlist'
@@ -90,8 +92,9 @@ class FeedbackComment:
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type,
-                        'update_time': int(round(time.time()))
+                        'comment_type': commet_type,#,
+                        'update_time':self.update_time#,
+                        #'update_time': int(round(time.time()))
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -175,8 +178,9 @@ class FeedbackComment:
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type,
-                        'update_time': int(round(time.time()))
+                        'comment_type': commet_type,#,
+                        'update_time':self.update_time#,
+                        #'update_time': int(round(time.time()))
                     }
 
                     wb_json = json.dumps(wb_item)
