@@ -53,7 +53,7 @@ $('#sure_post').on('click',function () {
 
 //语料推荐
 var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
-public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
+// public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
 $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     //var d=$('.everyday-2 .ed-2-2 .demo-radio');
     // for(var e=0;e<d.length;e++){if(d[e].checked) {d[e].checked=false;}};
@@ -237,17 +237,21 @@ function hotWeibo(data) {
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                        '               <span class="center_2">'+txt
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '               <span class="center_2">'+txt+
                         '               </span>'+
                         '           <div class="center_3" style="margin: 10px 0;">'+
-                        '               <span class="time">2017-03-04 12:43:23</span>'+
-                        '               <a data-toggle="modal" data-target="#simliar">相似微博</a>'+
-                        '               <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>'+
-                        '               <p style="float: right;">'+
-                        '                   <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;'+
-                        '                   <span>评论数（<span class="comment">222</span>）</span>&nbsp;'+
-                        '                   <span>赞（<span class="praise">222</span>）</span>&nbsp;'+
-                        '               </p>'+
+                        '               <span data-toggle="modal" data-target="#simliar"><i class="icon icon-check"></i>&nbsp;&nbsp;相似微博</span>'+
+                        '               <span data-toggle="modal" data-target="#content_recommend"><i class="icon icon-reorder"></i>&nbsp;&nbsp;内容推荐</span>'+
+                        '               <span class="time" title="'+getLocalTime(row.timestamp)+'"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>'+
+                        '               <span><i class="icon icon-share"></i>&nbsp;&nbsp;转发数<b class="forwarding">（'+row.retweeted+'）</b></span>'+
+                        '               <span><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论数<b class="comment">（'+row.comment+'）</b></span>'+
+                        '               <span><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
                         '           </div>'+
                         '        </div>'+
                         '        <div style="margin: 10px 0;">'+
@@ -256,36 +260,12 @@ function hotWeibo(data) {
                         '        </div>'+
                         '   </div>'+
                         '</div>';
-
-
-
-                        '<div class="post_perfect">'+
-                        '   <div class="post_center-hot">'+
-                        '       <img src="'+img+'" class="center_icon">'+
-                        '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        '           <span class="center_2">'+txt+
-                        '           </span>'+
-                        '           <div class="center_3">'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        '           </div>'+
-                        '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                        '           </div>'+
-                        '       </div>'+
-                        '   </div>'+
-                        '</div>';
                     return str;
                 }
             },
         ],
     });
-    $('#defaultWeibo p').hide();
+    $('#defaultWeibo2 p').hide();
     $('.defaultWeibo2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 

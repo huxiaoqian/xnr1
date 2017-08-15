@@ -191,9 +191,6 @@ body {
     background: #333333;
 }
 
-
-
-
 #container #content #everyday .everyday-2 .ed-2-1,
 #container #content #hot .hot-2 .hot-2-1 {
     width: 200px;
@@ -227,7 +224,7 @@ body {
 
 #container .type_page #content #hot #post_center-hot {
     position: relative;
-    padding: 10px 50px 10px 30px;
+    padding: 10px 10px 10px 30px;
 }
 #container .type_page #content #hot #post_center-hot .center_icon {
     position: absolute;
@@ -236,17 +233,15 @@ body {
     width: 20px;
     height:20px;
 }
-#container .type_page #content #hot .hot-2 input,
-#container .type_page #content #hot .hot-2 select {
-    color: black;
-    width: 200px;
-}
+/*#container .type_page #content #hot .hot-2 input,*/
+/*#container .type_page #content #hot .hot-2 select {*/
+    /*color: black;*/
+    /*width: 200px;*/
+/*}*/
 #container .type_page #content #hot #post_center-hot a {
     cursor: pointer;
     display: inline-block;
-    margin: 0 10px;
 }
-
 #container .type_page #content #business #post_center-business {
     position: relative;
     padding: 10px 50px 10px 30px;
@@ -258,7 +253,45 @@ body {
     width: 20px;
     height:20px;
 }
-
+#container #content #hot .post_perfect {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
+}
+#container #content #hot .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#container #content #hot .post_perfect .center_3 span {
+    display: inline-block;
+    /*width: 14%;*/
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container #content #hot .post_perfect .center_3 span:nth-child(2),
+#container #content #hot .post_perfect .center_3 span:nth-child(4) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container #content #hot .post_perfect .center_3 span:nth-child(6){
+    border-left:1px solid slategrey;
+}
+#container #content #hot .post_perfect .center_3 span:hover {
+    color: #eb7350;
+}
+#container #content #hot .point-view-1 {
+    width: 82%;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 3px 6px;
+}
 
 /*推荐微博*/
 #content_recommend #post_center-recommend {
