@@ -203,9 +203,12 @@ body.modal-open {
     color: white;
 }
 .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover,
-.pagination>li>a:focus, .pagination>li>a:hover {
+.pagination>li>a:focus, .pagination>li>a:hover,.fixed-table-pagination li.disabled a {
     background:#31708f;
     border-color: silver;
+}
+.fixed-table-pagination li.disabled a {
+    color: white;
 }
 .pagination>li>a:focus, .pagination>li>a:hover {
     color: white;

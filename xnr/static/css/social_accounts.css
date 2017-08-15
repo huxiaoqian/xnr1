@@ -53,6 +53,8 @@ body {
 #container .info_sure .info_left .list-2 p span,
 #container .info_sure .info_left .list-4 p span{
     width: 150px;
+    position: relative;
+    top: 5px;
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
