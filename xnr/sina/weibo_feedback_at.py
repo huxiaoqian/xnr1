@@ -3,37 +3,40 @@
 import json
 import urllib2
 
-import time
-
-from sina.weibo_feedback_follow import FeedbackFollow
 from tools.ElasticsearchJson import executeES
-
-from tools.Launcher import SinaLauncher
 from tools.HtmlExtractor import extractForHTML
+from tools.Launcher import SinaLauncher
 from tools.Pattern import getMatchList, getMatch
-from tools.URLTools import getUrlToPattern
 from tools.TimeChange import getTimeStamp
+from tools.URLTools import getUrlToPattern
 
 
 class FeedbackAt:
-    def __init__(self, uid, current_ts, fans, follow):
+    def __init__(self, uid, current_ts, fans, follow, groups, lastTime):
         self.uid = uid
-        #print 'current_ts::',current_ts
-        #followType = FeedbackFollow(uid, current_ts)
         self.follow = follow
         self.fans = fans
-
+        self.groups = groups
         self.update_time = current_ts
+        self.lasttime = lastTime
+
+        self._headers = {
+            "Headers": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2;"
+                       " .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0;"
+                       " .NET4.0C; .NET4.0E; InfoPath.3)",
+            "Referer": "http://weibo.com/u/%s/home?topnav=1&wvr=6" % self.uid
+        }
 
     def atMeComments(self):
         cr_url = 'http://weibo.com/at/comment?filter_by_author=&nofilter=1&page=1&pids=Pl_Content_MyAtCommentList'
         json_list = []
+        tags = False
 
         comment_url = cr_url
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -52,6 +55,10 @@ class FeedbackAt:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
+                    print '4444444'
+                    if timestamp <= self.lasttime:
+                        tags = True
+                        break
 
                     text = getMatch(data, '<div class="WB_text">(*)</div>')
                     if text:
@@ -92,9 +99,8 @@ class FeedbackAt:
                         'text': text,
                         'root_mid': r_mid,
                         'root_uid': r_uid,
-                        'weibo_type': _type,#,
-                        'update_time':self.update_time
-                        #'update_time': int(round(time.time()))
+                        'weibo_type': _type,
+                        'update_time': self.update_time
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -105,13 +111,13 @@ class FeedbackAt:
                 # print next_pageUrl
                 if next_pageUrl:
                     comment_url = next_pageUrl[0]
-                else:
+                elif not next_pageUrl or tags:
                     break
         return json_list
 
     def execute(self):
-        list = self.atMeComments()
-        executeES('weibo_feedback_at', 'text', list)
+        comments = self.atMeComments()
+        executeES('weibo_feedback_at', 'text', comments)
 
 
 if __name__ == '__main__':

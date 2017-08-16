@@ -19,7 +19,7 @@ def executeES(indexName, typeName, listData):
             # print key, '====', val
             # print type(val)
             data[key] = val
-            data['update_time'] = current_time
+            # data['update_time'] = current_time
 
         data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
         data['sensitive_user'] = get_sensitive_user(data['uid'])
