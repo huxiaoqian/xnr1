@@ -15,14 +15,38 @@ function recommendlist(data) {
     $('#user_recommend .user_example_list').html(str);
 }
 //------
+$('#container .type_page #myTabs a').on('click',function () {
+    var arrow=$(this).attr('href'),arrowName='';
+    if (arrow == '#everyday'){
+        arrowName='@用户推荐';
+        recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+    }else if (arrow=='#hot'){
+        arrowName='@用户推荐';
+        public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
+        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
+    }else if (arrow== '#business'){
+        arrowName='@敏感用户推荐';
+        public_ajax.call_request('get',busWeiboUrl,businessWeibo);
+        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
+    }
+    $('#user_recommend .tit').text(arrowName);
+    public_ajax.call_request('get',recommendUrl,recommendlist);
+})
+
 var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='origin';
+        recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+        public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t=='r'){
         operateType='retweet';
+        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
+        public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t== 'c'){
         operateType='comment';
+        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
+        public_ajax.call_request('get',recommendUrl,recommendlist);
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
@@ -152,7 +176,6 @@ function comMent(_this){
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
         var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-        console.log(post_url_3)
         //public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
@@ -185,9 +208,8 @@ function postYES(data) {
 
 //=========热点跟随===========
 var hotWeiboUrl='/weibo_xnr_operate/hot_recommend_tweets/?topic_field=民生类_法律&sort_item=timestamp';
-public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
+// public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
 function hotWeibo(data) {
-    console.log(data)
     $('#defaultWeibo2').bootstrapTable('load', data);
     $('#defaultWeibo2').bootstrapTable({
         data:data,
@@ -243,8 +265,8 @@ function hotWeibo(data) {
                         '               </span>'+
                         '           <div class="center_3" style="margin: 10px 0;">'+
                         '               <span data-toggle="modal" data-target="#simliar"><i class="icon icon-check"></i>&nbsp;&nbsp;相似微博</span>'+
-                        '               <span data-toggle="modal" data-target="#content_recommend"><i class="icon icon-reorder"></i>&nbsp;&nbsp;内容推荐</span>'+
-                        '               <span class="time" title="'+getLocalTime(row.timestamp)+'"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>'+
+                        '               <span onclick="contantREM(this)"><i class="icon icon-reorder"></i>&nbsp;&nbsp;内容推荐</span>'+
+                        '               <span class="time"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>'+
                         '               <span><i class="icon icon-share"></i>&nbsp;&nbsp;转发数<b class="forwarding">（'+row.retweeted+'）</b></span>'+
                         '               <span><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论数<b class="comment">（'+row.comment+'）</b></span>'+
                         '               <span><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -255,8 +277,9 @@ function hotWeibo(data) {
                         '           </div>'+
                         '        </div>'+
                         '        <div style="margin: 10px 0;">'+
-                        '           <input type="text" class="point-view-1"/>'+
-                        '           <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>'+
+                        '           <input type="text" class="point-view-1" placeholder="多个关键词请用逗号分开"/>'+
+                        '           <button type="button" onclick="submitViews(this)" class="btn btn-primary btn-xs point-view-2" ' +
+                        'style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>'+
                         '        </div>'+
                         '   </div>'+
                         '</div>';
@@ -268,12 +291,48 @@ function hotWeibo(data) {
     $('#defaultWeibo2 p').hide();
     $('.defaultWeibo2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+//新建内容推荐  和  提交子观点
+function submitViews(_this) {
+    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var vale=$(_this).prev().val();
+    if (vale==''){
+        $('#pormpt p').text('观点不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?'+taskID;
+        public_ajax.call_request('get',conViewsUrl,conViews);
+    }
+}
+function conViews(data) {
+    var x='';
+    if (data){
+        x='提交成功';
+    }else {
+        x='提交失败';
+    }
+    $('#pormpt p').text(x);
+    $('#pormpt').modal('show');
+}
+//内容推荐
+function contantREM(_this) {
+    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var calNot_url='/weibo_xnr_operate/hot_content_recommend/?task_id='+taskID;
+    public_ajax.call_request('get',calNot_url,calNot);
+}
+function calNot(data) {
+    if (data=='正在计算'){
+        $('#pormpt p').text('正在计算...');
+        $('#pormpt').modal('show');
+    }else {
+        console.log(data)
+        //$('#content_recommend').modal('show');
+    }
+}
 
 //======业务发帖=======
 var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?sort_item=timestamp';
-public_ajax.call_request('get',busWeiboUrl,businessWeibo);
+// public_ajax.call_request('get',busWeiboUrl,businessWeibo);
 function businessWeibo(data) {
-    console.log(data)
     $('#defaultWeibo3').bootstrapTable('load', data);
     $('#defaultWeibo3').bootstrapTable({
         data:data,
@@ -319,60 +378,34 @@ function businessWeibo(data) {
                     };
                     var str=
                         '<div class="post_perfect">'+
-                        '   <div id="post_center-hot">'+
-                        '       <img src="'+img+'" alt="" class="center_icon">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                        '               <span class="center_2">'+txt
-                    '               </span>'+
-                    '           <div class="center_3" style="margin: 10px 0;">'+
-                    '               <span class="time">2017-03-04 12:43:23</span>'+
-                    '               <a data-toggle="modal" data-target="#simliar">相似微博</a>'+
-                    '               <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>'+
-                    '               <p style="float: right;">'+
-                    '                   <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;'+
-                    '                   <span>评论数（<span class="comment">222</span>）</span>&nbsp;'+
-                    '                   <span>赞（<span class="praise">222</span>）</span>&nbsp;'+
-                    '               </p>'+
-                    '           </div>'+
-                    '        </div>'+
-                    '        <div style="margin: 10px 0;">'+
-                    '           <input type="text" class="point-view-1"/>'+
-                    '           <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>'+
-                    '        </div>'+
-                    '   </div>'+
-                    '</div>';
-
-
-
-                    '<div class="post_perfect">'+
-                    '   <div class="post_center-hot">'+
-                    '       <img src="'+img+'" class="center_icon">'+
-                    '       <div class="center_rel">'+
-                    '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                    '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                    '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                    '           <span class="center_2">'+txt+
-                    '           </span>'+
-                    '           <div class="center_3">'+
-                    '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                    '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                    '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                    '           </div>'+
-                    '           <div class="commentDown" style="width: 100%;display: none;">'+
-                    '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                    '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                    '           </div>'+
-                    '       </div>'+
-                    '   </div>'+
-                    '</div>';
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <span class="center_2">'+txt+
+                        '           </span>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3"><i class="icon icon-time"></i>'+getLocalTime(row.timestamp)+'</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
                     return str;
                 }
             },
         ],
     });
     $('#defaultWeibo3 p').hide();
-    $('.defaultWeibo3 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
+    $('.defaultWeibo3 .search .form-control').attr('placeholder','搜索关键词或子观点相关的微博（回车搜索）');
 }
 
 
