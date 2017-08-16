@@ -14,27 +14,36 @@ from tools.Pattern import getMatchList, getMatch
 
 
 class FeedbackRetweet:
-    def __init__(self, uid, current_ts, fans, follow):
+    def __init__(self, uid, current_ts, fans, follow, groups, lastTime):
         self.uid = uid
-        #followType = FeedbackFollow(uid, current_ts)
         self.follow = follow
         self.fans = fans
+        self.groups = groups
         self.update_time = current_ts
+        self.lasttime = lastTime
+
+        self._headers = {
+            "Headers": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2;"
+                       " .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0;"
+                       " .NET4.0C; .NET4.0E; InfoPath.3)",
+            "Referer": "http://weibo.com/u/%s/home?topnav=1&wvr=6" % self.uid
+        }
 
     def atMeMicroBlog(self):
         pre_page = 0
         page = 1
         pagebar = 0
-        max_page = 100
+        # max_page = 100
         at_MBurl = 'http://weibo.com/aj/at/mblog/list?ajwvr=6&pre_page=%s&page=%s' \
                    '&filter_by_author=0&filter_by_type=0&is_adv=0&pagebar=%s'
         json_list = []
+        tags = False
 
         while True:
             wbUrl = at_MBurl % (pre_page, page, pagebar)
             print "current url: ", wbUrl
             try:
-                request = urllib2.Request(wbUrl)
+                request = urllib2.Request(wbUrl, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
 
                 mb_content = json.loads(response.read())
@@ -44,10 +53,10 @@ class FeedbackRetweet:
                 html = mb_content["data"]
 
                 # 分页
-                if html.replace('\n', '') == '':
+                if html.replace('\n', '') == '' or tags:
                     break
-                if page > max_page:
-                    break
+                # if page > max_page:
+                #     break
                 elif pre_page < page:
                     pre_page += 1
                 elif pre_page == page and pagebar == 0:
@@ -69,6 +78,11 @@ class FeedbackRetweet:
                         timestamp = long(timestamp)
                     else:
                         timestamp = 0
+                    print '6666666'
+                    if timestamp <= self.lasttime:
+                        tags = True
+                        break
+
                     text = getMatch(data, 'feed_list_content" >(*)</div>').strip()
                     if text:
                         text = extractForHTML(text.strip())
@@ -129,9 +143,8 @@ class FeedbackRetweet:
                         'like': like,
                         'root_mid': r_mid,
                         'root_uid': r_uid,
-                        'weibo_type': _type,#,
-                        'update_time':self.update_time#,
-                        #'update_time': int(round(time.time()))
+                        'weibo_type': _type,
+                        'update_time': self.update_time
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -139,8 +152,8 @@ class FeedbackRetweet:
         return json_list
 
     def execute(self):
-        list = self.atMeMicroBlog()
-        executeES('weibo_feedback_retweet', 'text', list)
+        retweet = self.atMeMicroBlog()
+        executeES('weibo_feedback_retweet', 'text', retweet)
 
 
 if __name__ == '__main__':

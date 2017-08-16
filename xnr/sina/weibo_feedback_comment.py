@@ -15,23 +15,32 @@ from tools.URLTools import getUrlToPattern
 
 
 class FeedbackComment:
-    def __init__(self, uid, current_ts, fans, follow):
+    def __init__(self, uid, current_ts, fans, follow, groups, mLastTime, rLastTime):
         self.uid = uid
-        #followType = FeedbackFollow(uid, current_ts)
         self.follow = follow
         self.fans = fans
+        self.groups = groups
         self.update_time = current_ts
+        self.mlasttime = mLastTime
+        self.rlasttime = rLastTime
 
+        self._headers = {
+            "Headers": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2;"
+                       " .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0;"
+                       " .NET4.0C; .NET4.0E; InfoPath.3)",
+            "Referer": "http://weibo.com/u/%s/home?topnav=1&wvr=6" % self.uid
+        }
 
     def commentInbox(self):
         cr_url = 'http://weibo.com/comment/inbox?&page=1&pids=Pl_Content_Commentlist'
         json_list = []
+        tags = False
 
         comment_url = cr_url
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -50,6 +59,10 @@ class FeedbackComment:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
+                    print '0000000'
+                    if timestamp <= self.mlasttime:
+                        tags = True
+                        break
 
                     text = getMatch(data, '<div class="WB_text">(*)</div>')
                     if text:
@@ -92,9 +105,8 @@ class FeedbackComment:
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type,#,
-                        'update_time':self.update_time#,
-                        #'update_time': int(round(time.time()))
+                        'comment_type': commet_type,
+                        'update_time': self.update_time
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -105,19 +117,20 @@ class FeedbackComment:
                 # print next_pageUrl
                 if next_pageUrl:
                     comment_url = next_pageUrl[0]
-                else:
+                elif not next_pageUrl or tags:
                     break
         return json_list
 
     def commentOutbox(self):
         cr_url = 'http://weibo.com/comment/outbox?&page=1&pids=Pl_Content_Postedcomment'
         json_list = []
+        tags = False
 
         comment_url = cr_url
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=30)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -136,6 +149,10 @@ class FeedbackComment:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
+                    print '111111'
+                    if timestamp <= self.rlasttime:
+                        tags = True
+                        break
 
                     text = getMatch(data, '<div class="WB_text">(*)</div>')
                     if text:
@@ -178,9 +195,8 @@ class FeedbackComment:
                         'root_mid': r_mid,
                         'root_uid': r_uid,
                         'weibo_type': _type,
-                        'comment_type': commet_type,#,
-                        'update_time':self.update_time#,
-                        #'update_time': int(round(time.time()))
+                        'comment_type': commet_type,
+                        'update_time': self.update_time
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -192,16 +208,16 @@ class FeedbackComment:
                 # print next_pageUrl
                 if next_pageUrl:
                     comment_url = next_pageUrl[0]
-                else:
+                elif not next_pageUrl or tags:
                     break
         return json_list
 
     def execute(self):
-        list = self.commentInbox()
-        executeES('weibo_feedback_comment', 'text', list)
+        inbox = self.commentInbox()
+        executeES('weibo_feedback_comment', 'text', inbox)
 
-        list = self.commentOutbox()
-        executeES('weibo_feedback_comment', 'text', list)
+        outbox = self.commentOutbox()
+        executeES('weibo_feedback_comment', 'text', outbox)
 
 
 if __name__ == '__main__':

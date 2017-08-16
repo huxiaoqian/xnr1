@@ -23,7 +23,9 @@ mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
 ## 天津项目人物画像
 @mod.route('/user_portrait/')
 def user_portrait_tianjin():
-    return render_template('user_portrai_tianjin.html')
+    #return render_template('user_portrai_tianjin.html')
+    return render_template('04.html')
+    
 # 返回数据
 @mod.route('/user_data/')
 def ajax_user_data():

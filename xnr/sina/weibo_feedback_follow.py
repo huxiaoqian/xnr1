@@ -3,22 +3,24 @@ import json
 import urllib2
 
 import time
-import json
 
 from tools.ElasticsearchJson import executeES
 from tools.Launcher import SinaLauncher
 from tools.Pattern import getMatchList, getMatch
 from tools.URLTools import getUrlToPattern
-#from xnr.weio_publish_func import getUserShow,getCoutry,getProvince,getCity
 
-#import sys
-#sys.path.append('../')
-from userinfo import SinaOperateAPI
 
 class FeedbackFollow:
     def __init__(self, uid, current_ts):
         self.uid = uid
         self.update_time = current_ts
+
+        self._headers = {
+            "Headers": "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2;"
+                       " .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0;"
+                       " .NET4.0C; .NET4.0E; InfoPath.3)",
+            "Referer": "http://weibo.com/u/%s/home?topnav=1&wvr=6" % self.uid
+        }
 
     def follow(self):
         cr_url = 'http://weibo.com/p/100505%s/myfollow?t=1&pids=Pl_Official_RelationMyfollow__93' \
@@ -30,7 +32,7 @@ class FeedbackFollow:
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -85,15 +87,6 @@ class FeedbackFollow:
                     r_uid = self.uid
                     _type = 'follow'
 
-                    operate = SinaOperateAPI()
-                    user_info = operate.getUserShow(uid=uid)
-                    #print user_info
-                    #location = user_info['location']
-                    #province = operate.getProvince(user_info['province'])
-                    #city = operate.getCity(user_info['province'], user_info['city'])
-                    #print location, '==', province, '--', city
-
-
                     wb_item = {
                         'photo_url': photo_url,
                         'uid': uid,
@@ -106,13 +99,8 @@ class FeedbackFollow:
                         'gid': gid,
                         'gname': gname,
                         'root_uid': r_uid,
-                        'weibo_type': _type,#,
-                        'update_time':self.update_time,
-                        'fans':user_info['followers_count'],
-                        'follower':user_info['friends_count'],
-                        'weibos':user_info['statuses_count'],
-                        'geo': user_info['location']
-                        #'update_time': int(round(time.time()))
+                        'weibo_type': _type,
+                        'update_time': self.update_time
                     }
 
                     wb_json = json.dumps(wb_item)
@@ -131,7 +119,7 @@ class FeedbackFollow:
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -144,7 +132,7 @@ class FeedbackFollow:
 
                 # 分页
                 next_pageUrl = getUrlToPattern(html, comment_url, pattern='page', text_pattern='下一页')
-                print 'next_pageUrl', next_pageUrl
+                # print next_pageUrl
                 if next_pageUrl:
                     comment_url = next_pageUrl[0]
                 else:
@@ -205,9 +193,8 @@ class FeedbackFollow:
                     'description': description,
                     'weibos': weibos,
                     'root_uid': r_uid,
-                    'weibo_type': _type,#,
-                    'update_time':self.update_time#,
-                    #'update_time': int(round(time.time()))
+                    'weibo_type': _type,
+                    'update_time': self.update_time
                 }
 
                 wb_json = json.dumps(wb_item)
@@ -226,7 +213,7 @@ class FeedbackFollow:
         while True:
             print comment_url
             try:
-                request = urllib2.Request(comment_url)
+                request = urllib2.Request(comment_url, headers=self._headers)
                 response = urllib2.urlopen(request, timeout=60)
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
@@ -238,7 +225,6 @@ class FeedbackFollow:
                 list_data.append(datas)
 
                 # 分页
-
                 next_pageUrl = getUrlToPattern(html, comment_url, pattern='page', text_pattern='下一页')
                 # print next_pageUrl
                 if next_pageUrl:
@@ -260,9 +246,8 @@ class FeedbackFollow:
                     'mid': gid,
                     'gid': gid,
                     'gname': gname,
-                    'timestamp': timestamp,#,
-                    'update_time':self.update_time#,
-                    #'update_time': int(round(time.time()))
+                    'timestamp': timestamp,
+                    'update_time': self.update_time
                 }
 
                 wb_json = json.dumps(wb_item)
@@ -272,21 +257,20 @@ class FeedbackFollow:
         return json_list
 
     def execute(self):
-        # fans = self.fans()
-        #executeES('weibo_feedback_follow', 'text', fans)
-        # executeES('weibo_feedback_fans', 'text', fans)
+        fans = self.fans()
+        executeES('weibo_feedback_fans', 'text', fans)
 
         follow = self.follow()
-        #executeES('weibo_feedback_followed', 'text', follow)
         executeES('weibo_feedback_follow', 'text', follow)
 
-        # groups = self.groups()
-        # executeES('weibo_feedback_group', 'text', groups)
+        groups = self.groups()
+        executeES('weibo_feedback_group', 'text', groups)
 
         return fans, follow, groups
 
 
 if __name__ == '__main__':
-    xnr = SinaLauncher('weiboxnr02@126.com','xnr123456')
+    current_ts = int(time.time())
+    xnr = SinaLauncher('13718641914', 'hua198912180')
     xnr.login()
-    FeedbackFollow(xnr.uid, time.time()).execute()
+    FeedbackFollow(xnr.uid, current_ts).execute()

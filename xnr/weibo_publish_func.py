@@ -5,8 +5,9 @@ import json
 import sys
 import urllib
 import urllib2
-from xnr.sina.weibo_operate import SinaOperateAPI
-from xnr.sina.tools.Launcher import SinaLauncher
+
+from sina.weibo_operate import SinaOperateAPI
+from sina.tools.Launcher import SinaLauncher
 from global_utils import es_xnr as es
 from global_utils import weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
 						weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
@@ -25,30 +26,29 @@ def newest_time_func(uid):
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     timestamp_like = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-    timestamp_follow = es.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,\
-                        body=query_body)['hits']['hits'][0]['_source']['timestamp']
-    timestamp_fans = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
-                        body=query_body)['hits']['hits'][0]['_source']['timestamp']
+    #timestamp_follow = es.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,\
+                       # body=query_body)['hits']['hits'][0]['_source']['timestamp']
+    #timestamp_fans = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
+                        #body=query_body)['hits']['hits'][0]['_source']['timestamp']
     timestamp_at = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
 
     
-    query_body_private_receive = {
+    query_body_private = {
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'term':{'private_type':'receive'}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         },
         'sort':{'timestamp':{'order':'desc'}}
     }
 
-    timestamp_private_receive = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+    timestamp_private = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
 
-
+    '''
     query_body_private_make = {
         'query':{
             'bool':{
@@ -63,7 +63,7 @@ def newest_time_func(uid):
 
     timestamp_private_make = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-
+    '''
 
     query_body_comment_receive = {
         'query':{
@@ -96,9 +96,8 @@ def newest_time_func(uid):
     timestamp_comment_make = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
 
-    return timestamp_retweet, timestamp_like, timestamp_follow, timestamp_fans, timestamp_at, \
-        timestamp_private_receive, timestamp_private_make, timestamp_comment_receive, \
-        timestamp_comment_make
+    return timestamp_retweet, timestamp_like, timestamp_at, \
+        timestamp_private, timestamp_comment_receive, timestamp_comment_make
 
 ## 发布微博
 def publish_tweet_func(account_name,password,text,p_url,rank,rankid):

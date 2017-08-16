@@ -1,13 +1,13 @@
 <gexf xmlns:viz="http://www.gexf.net/1.1draft/viz" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.gephi.org/gexf/1.1draft" xmlns:ns0="xsi" version="1.1" ns0:schemaLocation="http://www.gephi.org/gexf/1.1draft http://gephi.org/gexf/1.1draft.xsd">
-  <meta lastmodified="2017-08-15T10:11:23.103873">
+  <meta lastmodified="2017-08-15T10:31:27.718555">
     <creator>Gephi.org</creator>
     <description>A Web network</description>
   </meta>
   <graph defaultedgetype="undirected" label="A Web network" mode="static">
     <attributes class="node" mode="dynamic"/>
     <attributes class="node" mode="static">
-      <attribute id="0" title="modularity_class" type="integer">
-        <default>Modularity Class</default>
+      <attribute id="0" title="Modularity Class" type="integer">
+        <default>modularity_class</default>
       </attribute>
     </attributes>
     <attributes class="edge" mode="dynamic"/>
@@ -974,6 +974,19 @@
         </attvalues>
       </node>
     </nodes>
-    <edges/>
+    <edges>
+      <edge id="159" source="191" target="1">
+        <attvalues/>
+      </edge>
+      <edge id="121" source="129" target="2">
+        <attvalues/>
+      </edge>
+      <edge id="119" source="120" target="6">
+        <attvalues/>
+      </edge>
+      <edge id="14" source="118" target="1">
+        <attvalues/>
+      </edge>
+    </edges>
   </graph>
 </gexf>
