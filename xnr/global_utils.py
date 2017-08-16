@@ -106,6 +106,9 @@ weibo_feedback_follow_index_type = 'text'
 weibo_feedback_group_index_name = 'weibo_feedback_group'
 weibo_feedback_group_index_type = 'group'
 
+# xnr_flow_text
+xnr_flow_text_index_name_pre = 'xnr_flow_text_'
+xnr_flow_text_index_type = 'text'
 # social sensing
 index_sensing = "manage_sensing_task"
 type_sensing = "task"
