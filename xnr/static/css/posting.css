@@ -49,7 +49,7 @@ body {
 }
 #container .post_post .post-2 .add_thing div {
     display:inline-block;
-    margin-right: 10px;
+    margin-right: 3px;
     cursor: pointer;
 }
 #container .post_post .post-2 .add_thing div img {
@@ -93,7 +93,7 @@ body {
 #container .post_post #user_recommend {
     position: absolute;
     top: 60px;
-    right: 20px;
+    right: 0px;
     color: #b0bdd0;
     /* border-radius: 10px; */
     /* border: 1px solid silver; */
@@ -117,20 +117,22 @@ body {
     color:#b0bdd0;
 }
 /**/
-#container .type_page #content input,
-#container .type_page #content select {
-    color: white;
-    display: inline-block;
-    width: 300px;
-    padding: 4px 8px;
-    background: rgba(8,23,44,0.25);
-    border: 1px solid silver;
-}
+/*#container .type_page #content input,*/
+/*#container .type_page #content select {*/
+    /*color: white;*/
+    /*display: inline-block;*/
+    /*width: 300px;*/
+    /*padding: 4px 8px;*/
+    /*background: rgba(8,23,44,0.25);*/
+    /*border: 1px solid silver;*/
+/*}*/
 /*发布内容*/
 #container .type_page #content #everyday .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
     background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
+    width: 700px;
 }
 #container .type_page #content #everyday .post_perfect .center_icon {
     position: absolute;
@@ -189,38 +191,40 @@ body {
     background: #333333;
 }
 
-
-
-
-
-
-
-#container #content #everyday .everyday-2 .ed-2-1 {
+#container #content #everyday .everyday-2 .ed-2-1,
+#container #content #hot .hot-2 .hot-2-1 {
     width: 200px;
     height: auto;
     padding: 15px 5px 5px 30px;
     background: #0c2542;
     float: left;
 }
-#container #content #everyday .everyday-2 .ed-2-1 #theme {
+#container #content #everyday .everyday-2 .ed-2-1 #theme,
+#container #content #hot .hot-2 .hot-2-1 #theme-2{
     margin: 10px 0;
 }
-#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label {
+#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label,
+#container #content #hot .hot-2 .hot-2-1 #theme-2 .demo-label {
+    width: 75px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-#container #content #everyday .everyday-2 .ed-2-2 {
+#container #content #everyday .everyday-2 .ed-2-2,
+#container #content #hot .hot-2 .hot-2-2 {
     width: 700px;
     height: auto;
+    margin-left: 20px;
     float: left;
 }
-
+.everyday-2 .ed-2-1 .demo-label,.hot-2 .hot-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
+.everyday-2 .ed-2-2 .demo-label,.hot-2 .hot-2-2 .demo-label{width:100px;}
+.everyday-2 .ed-2-1 .demo-radioInput,.hot-2 .hot-2-1 .demo-radioInput{margin-right:10px;}
 
 
 #container .type_page #content #hot #post_center-hot {
     position: relative;
-    padding: 10px 50px 10px 30px;
+    padding: 10px 10px 10px 30px;
 }
 #container .type_page #content #hot #post_center-hot .center_icon {
     position: absolute;
@@ -229,17 +233,15 @@ body {
     width: 20px;
     height:20px;
 }
-#container .type_page #content #hot .hot-2 input,
-#container .type_page #content #hot .hot-2 select {
-    color: black;
-    width: 200px;
-}
+/*#container .type_page #content #hot .hot-2 input,*/
+/*#container .type_page #content #hot .hot-2 select {*/
+    /*color: black;*/
+    /*width: 200px;*/
+/*}*/
 #container .type_page #content #hot #post_center-hot a {
     cursor: pointer;
     display: inline-block;
-    margin: 0 10px;
 }
-
 #container .type_page #content #business #post_center-business {
     position: relative;
     padding: 10px 50px 10px 30px;
@@ -251,7 +253,45 @@ body {
     width: 20px;
     height:20px;
 }
-
+#container #content #hot .post_perfect {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
+}
+#container #content #hot .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#container #content #hot .post_perfect .center_3 span {
+    display: inline-block;
+    /*width: 14%;*/
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container #content #hot .post_perfect .center_3 span:nth-child(2),
+#container #content #hot .post_perfect .center_3 span:nth-child(4) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container #content #hot .post_perfect .center_3 span:nth-child(6){
+    border-left:1px solid slategrey;
+}
+#container #content #hot .post_perfect .center_3 span:hover {
+    color: #eb7350;
+}
+#container #content #hot .point-view-1 {
+    width: 82%;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 3px 6px;
+}
 
 /*推荐微博*/
 #content_recommend #post_center-recommend {

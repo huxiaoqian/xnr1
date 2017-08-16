@@ -9,8 +9,7 @@
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
-    .everyday-2 .ed-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
-    .everyday-2 .ed-2-1 .demo-radioInput{margin-right:10px;}
+
     #container .type_page #myTabs a {
         color: white;
     }
@@ -27,6 +26,43 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
     }
 </style>
 {% endblock %}
@@ -59,13 +95,13 @@
                 <div>
                     <a href="###" style="font-family: cursive;color: white;">有什么新鲜事告诉大家？</a>
                 </div>
-                <textarea id="post-2-content" cols="90" rows="6"></textarea>
+                <textarea id="post-2-content" cols="101" rows="6"></textarea>
                 <div class="add_thing">
                     <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
                     <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
                     <div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>
                     <div><img src="/static/images/post-4.png">&nbsp;<span>话题</span></div>
-                    <div><img src="/static/images/post-5.png">&nbsp;<span>头条文章</span></div>
+                    <!--<div><img src="/static/images/post-5.png">&nbsp;<span>头条文章</span></div>-->
                     <div class="btn-group friends">
                         <button type="button" class="dropdown-toggle" style="background: transparent;"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -78,15 +114,23 @@
                             <li><img src="/static/images/post-10.png"> <span>群可见</span></li>
                         </ul>
                     </div>
-                    <div style="margin-left: 15px;">
-                        <label class="demo-label">
+                    <div style="margin: 0;">
+                        <label class="demo-label timingss">
                             <input class="demo-radio timing" type="checkbox" name="demo">
                             <span class="demo-checkbox demo-radioInput"></span> 定时
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
-                        <input type="text" value="" id="_timing" class="form_datetime" placeholder="选择时间"
-                               style="height: 20px;font-size: 10px;color: white;
+                        <div class="ttime">
+                            <input type="text" size="16" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" size="16" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" size="16" id="_timing3" class="remarks" placeholder="备注信息"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                        </div>
                     </div>
                     <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
                 </div>
@@ -109,7 +153,7 @@
                         <span>按主题：</span>
                         <div id="theme" style="">
                             <label class="demo-label" title="旅游">
-                                <input class="demo-radio" type="radio" name="theme" value='旅游'>
+                                <input class="demo-radio" type="radio" name="theme" value='旅游' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 旅游
                             </label>
                             <label class="demo-label" title="美食">
@@ -180,29 +224,19 @@
                     </div>
 
                     <div class="ed-2-2">
-                        <div style="float: right;margin-right: 18px">
-                            <input type="text" id="search-1-every" placeholder="输入关键词快速搜索相关微博"/>
-                            <span id="search-every" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</span>
+                        <div style="text-align: center;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='timestamp' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按时间
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='retweeted'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按热度
+                            </label>
                         </div>
-
-                        <div class="post_perfect" style="margin: 20px auto;">
-                            <div class="post_center-hot">
-                                <img src="/static/images/post-6.png" alt="" class="center_icon">
-                                <div class="center_rel">
-                                    <a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：
-                                    <span class="center_2">
-                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                                    </span>
-                                    <div class="center_3">
-                                        <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>
-                                        <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>
-                                        <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>
-                                    </div>
-                                    <div class="commentDown" style="width: 100%;display: none;">
-                                        <input type="text" class="comtnt" placeholder="评论内容"/>
-                                        <span class="sureCom">评论</span>
-                                    </div>
-                                </div>
+                        <div class="defaultWeibo">
+                            <div id="defaultWeibo">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...Wait a moment</p>
                             </div>
                         </div>
                     </div>
@@ -215,67 +249,109 @@
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">热门事件推荐</span>
                 </div>
-                <div class="hot-2" style="margin-left: 30px;">
-                    <span>按主题：</span>
-                    <select id="theme-2">
-                        <option value="文体类_娱乐">文体类_娱乐</option>
-                        <option value="科技类">科技类</option>
-                        <option value="经济类">经济类</option>
-                        <option value="教育类">教育类</option>
-                        <option value="民生类_环保">民生类_环保</option>
-                        <option value="民生类_健康">民生类_健康</option>
-                        <option value="军事类">军事类</option>
-                        <option value="政治类_外交">政治类_外交</option>
-                        <option value="文体类_体育">文体类_体育</option>
-                        <option value="民生类_交通">民生类_交通</option>
-                        <option value="其他类">其他类</option>
-                        <option value="政治类_反腐">政治类_反腐</option>
-                        <option value="民生类_就业">民生类_就业</option>
-                        <option value="政治类_暴恐">政治类_暴恐</option>
-                        <option value="民生类_住房">民生类_住房</option>
-                        <option value="民生类_法律">民生类_法律</option>
-                        <option value="政治类_地区和平">政治类_地区和平</option>
-                        <option value="政治类_宗教">政治类_宗教</option>
-                        <option value="民生类_社会保障">民生类_社会保障</option>
-                    </select>
-                    <span>排序指标：</span>
-                    <select id="theme-3">
-                        <option selected="" value="按最新">按最新</option>
-                        <option value="按任务完成度">按任务完成度</option>
-                        <option value="按事件权重">按事件权重</option>
-                    </select>
-                    <div style="float: right;margin-right: 18px">
-                        <input type="text" id="search-1-hot" placeholder="输入关键词快速搜索相关微博"/>
-                        <button type="button" class="btn btn-primary btn-xs" id="search-hot"
-                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                <div class="hot-2" style="margin-left: 30px;overflow: hidden;">
+                    <div class="hot-2-1">
+                        <span>按主题：</span>
+                        <div id="theme-2">
+                            <label class="demo-label" title="民生类_法律">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_法律' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
+                            </label>
+                            <label class="demo-label" title="文体类_娱乐">
+                                <input class="demo-radio" type="radio" name="theme2" value='文体类_娱乐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
+                            </label>
+                            <label class="demo-label" title="科技类">
+                                <input class="demo-radio" type="radio" name="theme2" value='科技类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 科技类
+                            </label>
+                            <label class="demo-label" title="经济类">
+                                <input class="demo-radio" type="radio" name="theme2" value='经济类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 经济类
+                            </label>
+                            <label class="demo-label" title="教育类">
+                                <input class="demo-radio" type="radio" name="theme2" value='教育类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 教育类
+                            </label>
+                            <label class="demo-label" title="民生类_环保">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_环保'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
+                            </label>
+                            <label class="demo-label" title="民生类_健康">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_健康'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
+                            </label>
+                            <label class="demo-label" title="军事类">
+                                <input class="demo-radio" type="radio" name="theme2" value='军事类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 军事类
+                            </label>
+                            <label class="demo-label" title="政治类_外交">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_外交'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
+                            </label>
+                            <label class="demo-label" title="文体类_体育">
+                                <input class="demo-radio" type="radio" name="theme2" value='文体类_体育'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
+                            </label>
+                            <label class="demo-label" title="民生类_交通">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_交通'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
+                            </label>
+                            <label class="demo-label" title="其他类">
+                                <input class="demo-radio" type="radio" name="theme2" value='其他类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 其他类
+                            </label>
+                            <label class="demo-label" title="政治类_反腐">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_反腐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
+                            </label>
+                            <label class="demo-label" title="民生类_就业">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_就业'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
+                            </label>
+                            <label class="demo-label" title="政治类_暴恐">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_暴恐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
+                            </label>
+                            <label class="demo-label" title="民生类_住房">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_住房'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
+                            </label>
+                            <label class="demo-label" title="政治类_地区和平">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_地区和平'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
+                            </label>
+                            <label class="demo-label" title="政治类_宗教">
+                                <input class="demo-radio" type="radio" name="theme2" value='政治类_宗教'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
+                            </label>
+                            <label class="demo-label" title="民生类_社会保障">
+                                <input class="demo-radio" type="radio" name="theme2" value='民生类_社会保障'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
+                            </label>
+                        </div>
                     </div>
-
-                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
-                        <div id="post_center-hot">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <div class="center_rel">
-                                <a class="center_1" href="###">何仙姑</a>：
-                                <span class="center_2">
-                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                            </span>
-                                <div class="center_3" style="margin: 10px 0;">
-                                    <span class="time">2017-03-04 12:43:23</span>
-                                    <a data-toggle="modal" data-target="#simliar">相似微博</a>
-                                    <a data-toggle="modal" data-target="#content_recommend">内容推荐</a>
-                                    <p style="float: right;">
-                                        <span>转发数（<span class="forwarding">222</span>）</span>&nbsp;
-                                        <span>评论数（<span class="comment">222</span>）</span>&nbsp;
-                                        <span>赞（<span class="praise">222</span>）</span>&nbsp;
-                                    </p>
-                                </div>
-                            </div>
-                            <div style="margin: 10px 0;">
-                                <input type="text" class="point-view-1"/>
-                                <button type="button" class="btn btn-primary btn-xs point-view-2" style="height: 26px;position: relative;top: -1px;">提交子观点任务</button>
+                    <div class="hot-2-2">
+                        <div id="theme-3" style="text-align: center;">
+                            <label class="demo-label" title="按最新">
+                                <input class="demo-radio" type="radio" name="theme3" value='timestamp' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按最新
+                            </label>
+                            <label class="demo-label" title="按任务完成度">
+                                <input class="demo-radio" type="radio" name="theme3" value='compute_status'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按事件完成度
+                            </label>
+                            <label class="demo-label" title="按事件权重">
+                                <input class="demo-radio" type="radio" name="theme3" value='sensitive'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按事件权重
+                            </label>
+                        </div>
+                        <div class="defaultWeibo2">
+                            <div id="defaultWeibo2">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...Wait a moment</p>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -285,18 +361,38 @@
                     <span style="font-size: 18px;font-weight: 900;color: #fff">微博推荐</span>
                 </div>
                 <div class="business-2" style="margin-left: 30px;">
-                    <span>排序指标：</span>
-                    <select id="theme-4">
-                        <option selected="" value="按时间">按时间</option>
-                        <option value="按信息敏感度">按信息敏感度</option>
-                        <option value="按人物敏感度">按人物敏感度</option>
-                        <option value="按信息影响力">按信息影响力</option>
-                        <option value="按人物影响力">按人物影响力</option>
-                    </select>
-                    <div style="float: right;margin-right: 18px">
-                        <input type="text" id="search-1-business" placeholder="搜索关键词或子观点相关的微博"/>
-                        <button type="button" class="btn btn-primary btn-xs" id="search-business"
-                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    <!--<span>排序指标：</span>-->
+                    <div id="theme-4">
+                        <label class="demo-label" title="按时间">
+                            <input class="demo-radio" type="radio" name="theme2" value='按时间' checked>
+                            <span class="demo-checkbox demo-radioInput"></span> 按时间
+                        </label>
+                        <label class="demo-label" title="按信息敏感度">
+                            <input class="demo-radio" type="radio" name="theme2" value='按信息敏感度'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按信息敏感度
+                        </label>
+                        <label class="demo-label" title="按人物敏感度">
+                            <input class="demo-radio" type="radio" name="theme2" value='按人物敏感度'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
+                        </label>
+                        <label class="demo-label" title="按信息影响力">
+                            <input class="demo-radio" type="radio" name="theme2" value='按信息影响力'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按信息影响力
+                        </label>
+                        <label class="demo-label" title="按人物影响力">
+                            <input class="demo-radio" type="radio" name="theme2" value='按人物影响力'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按人物影响力
+                        </label>
+                    </div>
+                    <!--<div style="float: right;margin-right: 18px">-->
+                        <!--<input type="text" id="search-1-business" placeholder="搜索关键词或子观点相关的微博"/>-->
+                        <!--<button type="button" class="btn btn-primary btn-xs" id="search-business"-->
+                                <!--style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
+                    <!--</div>-->
+                    <div class="defaultWeibo3">
+                        <div id="defaultWeibo3">
+                            <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...Wait a moment</p>
+                        </div>
                     </div>
 
                     <div class="post_perfect" style="margin: 20px auto;">
@@ -326,27 +422,6 @@
     </div>
 </div>
 <!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!--提示弹框-->
 <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -363,6 +438,28 @@
         </div>
     </div>
 </div>
+
+
+<!--设置群可见的时候，展示群-->
+<!--相似微博-->
+<div class="modal fade" id="grouplist" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群组列表</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <!--相似微博-->
@@ -447,15 +544,29 @@
             var a=$(this).find('span').text();
             $('.friends button b').attr('title',a).text(a);
         }
+        if (e.target.innerHTML=='群可见'||$(this).find('span').text()=='群可见'){
+            var gl_url='';
+            // public_ajax.call_request('get',gl_url,gpList)
+        }
     });
+    function gpList(data) {
+
+        $('#grouplist').modal('show');
+    }
+
+
+
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,
-        todayBtn: false,
+        todayBtn: true,
         pickerPosition: "bottom-left"
     });
-    $('.form_datetime').on('changeDate', function(ev){
-        $('.form_datetime').datetimepicker('setStartDate',new Date());
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
     });
 
     $('.continue_already_created').on('click',function () {
