@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import time
-from global_utils import flow_text_index_name_pre,group_message_index_name_pre
+from global_utils import flow_text_index_name_pre,group_message_index_name_pre,xnr_flow_text_index_name_pre,\
+                        xnr_flow_text_index_type
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY
 
@@ -72,6 +73,16 @@ def get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
+def get_xnr_flow_text_index_list(date_range_end_ts):
+    index_name_list = []
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = xnr_flow_text_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+
+    return index_name_list
 
 
 # use to search certain period of group message without the upper bound of days limit
