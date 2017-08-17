@@ -258,7 +258,8 @@ function hotWeibo(data) {
                         '   <div id="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                        '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '               <span class="center_2">'+txt+
@@ -266,7 +267,7 @@ function hotWeibo(data) {
                         '           <div class="center_3" style="margin: 10px 0;">'+
                         '               <span data-toggle="modal" data-target="#simliar"><i class="icon icon-check"></i>&nbsp;&nbsp;相似微博</span>'+
                         '               <span onclick="contantREM(this)"><i class="icon icon-reorder"></i>&nbsp;&nbsp;内容推荐</span>'+
-                        '               <span class="time"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>'+
+                        '               <span onclick="related(this)"><i class="icon icon-stethoscope"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
                         '               <span><i class="icon icon-share"></i>&nbsp;&nbsp;转发数<b class="forwarding">（'+row.retweeted+'）</b></span>'+
                         '               <span><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论数<b class="comment">（'+row.comment+'）</b></span>'+
                         '               <span><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -291,6 +292,12 @@ function hotWeibo(data) {
     $('#defaultWeibo2 p').hide();
     $('.defaultWeibo2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+//子观点判断
+function related(_this) {
+    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var relatedUrl='/weibo_xnr_operate/hot_subopinion/?task_id='+taskID;
+    public_ajax.call_request('get',relatedUrl,conViews);
+}
 //新建内容推荐  和  提交子观点
 function submitViews(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
@@ -299,7 +306,7 @@ function submitViews(_this) {
         $('#pormpt p').text('观点不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?'+taskID;
+        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?task_id='+taskID;
         public_ajax.call_request('get',conViewsUrl,conViews);
     }
 }

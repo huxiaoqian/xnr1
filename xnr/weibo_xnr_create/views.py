@@ -131,6 +131,7 @@ def ajax_save_step_two():
     task_detail['business_goal'] = request.args.get('business_goal','') # 业务目标,以中文逗号 “，”连接
     task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    task_detail['sex'] = request.args.get('sex','')  # 
 
     #task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编号，如：WXNR0001
     task_detail['nick_name'] = request.args.get('nick_name','') # 昵称
@@ -171,7 +172,7 @@ def ajax_save_step_three_1():
 def ajax_save_step_three_2():
     task_detail = dict()
     task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称，如：WXNR0001
-    task_detail['followers_nickname'] = request.args.get('followers_nickname','') # 关注的人，昵称之间以中文逗号分隔“，”
+    task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
     print 'task_detail::',task_detail
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
