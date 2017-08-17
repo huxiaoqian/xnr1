@@ -55,7 +55,7 @@ class FeedbackAt:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
-                    print '4444444'
+                    
                     if timestamp <= self.lasttime:
                         tags = True
                         break
