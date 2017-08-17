@@ -24,6 +24,7 @@ from xnr.utils import nickname2uid,user_no2_id,_id2user_no
 #from xnr.weibo_publish_func import getUserShow
 from xnr.sina.userinfo import SinaOperateAPI
 #from xnr.test_tianjin import get_user_portrait_data
+from xnr.sina.tools.Launcher import SinaLauncher
 '''
 import sys
 reload(sys)
@@ -396,9 +397,15 @@ def get_save_step_three_1(task_detail):
     #try:
     #print 'task_detail:::',task_detail
     nick_name = task_detail['nick_name'].encode('utf-8')
-    operate = SinaOperateAPI()
-    user_info = operate.getUserShow(screen_name=nick_name)
-    uid = user_info['id']
+    #operate = SinaOperateAPI()
+    #user_info = operate.getUserShow(screen_name=nick_name)
+    #uid = user_info['id']
+    try:
+        xnr = SinaLauncher(uname, upasswd)
+        xnr.login()
+        uid = xnr.uid
+    except:
+        return '账户名或密码输入错误，请检查后输入！！'
     print 'type_user_ifo::',type(user_info)
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
     query_body = {'query':{'term':{'nick_name':nick_name}}}
