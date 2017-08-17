@@ -18,6 +18,8 @@ class SinaLauncher():
     def __init__(self, username, password):
         self.password = password
         self.username = username
+        print 'username::',username
+        print 'password::',password
 
     def get_prelogin_args(self):
         """
@@ -117,7 +119,8 @@ class SinaLauncher():
             page = response.read().decode('utf-8')
             # print page
             self.uid = re.findall('uniqueid":"(\d+)"', page)[0]
-            # print self.uid
+
+            #print self.uid
             # login_url = 'http://weibo.com/' + p2.search(page).group(1)
             # login_url = 'http://weibo.com/comment/inbox?spam=0&role=0&pids=Pl_Content_Commentlist&wvr=6'
             # print login_url
