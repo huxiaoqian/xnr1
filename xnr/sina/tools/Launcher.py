@@ -18,9 +18,7 @@ class SinaLauncher():
     def __init__(self, username, password):
         self.password = password
         self.username = username
-        print 'username::',username
-        print 'password::',password
-
+    
     def get_prelogin_args(self):
         """
         该函数用于模拟预登录过程,并获取服务器返回的 nonce , servertime , pub_key 等信息

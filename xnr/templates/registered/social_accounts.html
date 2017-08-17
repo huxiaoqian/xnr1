@@ -3,7 +3,8 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/social_accounts.css">
     <style>
-        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
+        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width:100px;color: white;
+            overflow:hidden;white-space: nowrap;text-overflow: ellipsis;}
         .demo-radio{display:none}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -27,7 +28,7 @@
                     <span style="font-size: 18px;font-weight: 900;color: #fff;">基本信息</span>
                 </div>
                 <div class="list-2">
-                    <p class="news">用户ID：<span id="user_id"></span></p>
+                    <!--<p class="news">用户ID：<span id="user_id"></span></p>-->
                     <p class="news">昵称：<span id="uname"></span></p>
                     <p class="news">年龄：<span id="age"></span></p>
                     <p class="news">性别：<span id="sex"></span></p>
@@ -49,8 +50,9 @@
         </div>
         <div class="info_right">
             <div class="bind_info">
-                <input type="text" id="username" placeholder="Username"/>
-                <input type="password" id="password" placeholder="Password"/>
+                <input type="text" id="username1" placeholder="邮箱地址（邮箱与手机选一或全填）"/>
+                <input type="text" id="username2" placeholder="手机号码（邮箱与手机选一或全填）"/>
+                <input type="password" id="passwords" placeholder="Password"/>
                 <span id="go_bind">去绑定</span>
             </div>
         </div>
@@ -65,7 +67,7 @@
                 <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;" id="information">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;" id="information">
 
                 </p>
             </div>
@@ -87,17 +89,26 @@
                 <h4 class="modal-title">绑定提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;" id="fs"></p>
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;" id="fs"></p>
                 <div class="user">
-                    <a href="###">你可能会关注的人（请勾选）：</a>
-                    <div class="personlist" style="margin: 10px 0;">
+                    <a href="###" style="color: white;">你可能会关注的人（请勾选）：</a>
+                    <div>
+                        <span>日常关注</span>
+                        <div class="personlist1" style="margin: 10px 0;">
 
-                        <!--对应的方法
-                        let people=[];
-                        $("[name=someone]:checkbox:checked").each(function (index,item) {-->
-                        <!--people.push($(this).val());-->
-                        <!--});-->
+                        </div>
                     </div>
+                    <div>
+                        <span>业务关注</span>
+                        <div class="personlist2" style="margin: 10px 0;">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">不关注</button>
+                    <button type="button" id="surefocus" class="btn btn-primary" data-dismiss="modal" onclick="surefocus()">确定关注</button>
                 </div>
             </div>
         </div>
@@ -128,7 +139,7 @@
     judgment('6');
     var basicData_1=JSON.parse(localStorage.getItem('firstStep'));
     var basicData_2=JSON.parse(localStorage.getItem('secondStep'));
-    $("#user_id").attr('title',basicData_2.task_id).text(basicData_2.task_id);
+//    $("#user_id").attr('title',basicData_2.task_id).text(basicData_2.task_id);
     $("#uname").attr('title',basicData_2.nick_name).text(basicData_2.nick_name);
     $("#age").attr('title',basicData_2.age).text(basicData_2.age);
     $("#sex").attr('title',basicData_2.sex).text(basicData_2.sex);

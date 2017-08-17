@@ -60,7 +60,7 @@ def get_show_domain():
     if es_results:
         for result in es_results:
             result = result['_source']
-            domain_name_dict[result['domain_pinyin']] = result['domain_name']
+            domain_name_dict[result['domain_pinyin']] = json.loads(result['domain_name'])
     return domain_name_dict
 
 def get_show_weibo_xnr():
@@ -373,6 +373,7 @@ def get_save_step_two(task_detail):
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
     item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
+    item_exist['sex'] = task_detail['sex']
 
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['age'] = task_detail['age']
@@ -433,30 +434,28 @@ def get_save_step_three_1(task_detail):
 def get_save_step_three_2(task_detail):
     #task_id = task_detail['task_id']
     nick_name = task_detail['nick_name']
-    query_body = {'query':{'term':{'nick_name':nick_name}}}
+    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
     es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
     task_id = es_result[0]['_source']['xnr_user_no']
     #插入 weibo_xnr_fans_followers表
+
     try:
         item_fans_followers = dict()
-        followers_nickname_list = task_detail['followers_nickname'].encode('utf-8').split('，')
-        print 'followers_nickname_list::',followers_nickname_list
+        #followers_nickname_list = task_detail['followers_nickname'].encode('utf-8').split('，')
+        #print 'followers_nickname_list::',followers_nickname_list
 
-        followers_list = nickname2uid(followers_nickname_list)
+        #followers_list = nickname2uid(followers_nickname_list)
         #print 'followers_list::',followers_list
-        item_fans_followers['followers_list'] = json.dumps(followers_list)
+        followers_uids = list(set(task_detail['followers_uids'].split('，')))
+        print 'followers_uids::',followers_uids
+        item_fans_followers['followers_uids'] = followers_uids
         item_fans_followers['xnr_user_no'] = task_id
-
         print 'item_fans_followers::',item_fans_followers
-        print '123'
-
         es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=task_id,body=item_fans_followers)
-        print '4545'
         mark = True
     except:        
         mark = False
 
-  
     return mark
 
 def get_xnr_info(task_detail):
