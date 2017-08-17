@@ -94,6 +94,13 @@
         var len = s.match(re).length;
         return len;
     }
+    //判断空对象
+    function isEmptyObject(e) {
+        var t;
+        for (t in e)
+            return !1;
+        return !0
+    }
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {

@@ -120,7 +120,7 @@ $('.save_return').on('click',function () {
 function nameJudgment() {
     //判断昵称是否重复
     var nickName=$('#name').val();
-    ajax_public.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
+    public_ajax.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
 }
 function repeatNot(data) {
     if (data){
@@ -161,19 +161,23 @@ function values() {
 
     var day_post_average;//"abc 123 def".replace(/\s/g, "")
     if ($('.postNUM').val()){
-        if(patch('-',$('.postNUM').val().toString())!=1){
+        if(patch('-',$('.postNUM').val().toString())==1){
             day_post_average=$('.postNUM').val().toString().replace(/\s/g, "");
         }else {
-            $('#prompt p').text('您输入的自定义时间有误，请重新输入（格式：6-8）。');
+            $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
             $('#prompt').modal('show');
+            return false;
         }
     }else {
         $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
             day_post_average = $(this).val().toString();
         });
     }
-    var saveSecond_url='/weibo_xnr_create/save_step_two/?task_id='+task_id+'&nick_name='+nickName+'&age='+age+
-        '&location='+location+'&career='+career+'&description='+description+'&active_time=9,10,11,19,20&day_post_average=9-12';
+    var saveSecond_url='/weibo_xnr_create/save_step_two/?domain_name='+basicData.domainName+'&role_name='+basicData.roleName+
+        '&psy_feature='+basicData.psyFeature+'&political_side='+basicData.politicalSide+'&business_goal='+basicData.businessGoal+
+        '&monitor_keywords='+basicData.monitorKeywords+'&daily_interests='+basicData.daily+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
+        '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
+    console.log(saveSecond_url)
     public_ajax.call_request('get',saveSecond_url,in_three);
     if (n == 1||n == 0){
         second={
@@ -190,7 +194,7 @@ function values() {
 }
 function in_three(data) {
     if (data){
-        window.open('/registered/socialAccounts/');
+        // window.open('/registered/socialAccounts/');
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');

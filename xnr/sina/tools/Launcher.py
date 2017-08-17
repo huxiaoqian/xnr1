@@ -17,7 +17,7 @@ sys.path.append("..")
 class SinaLauncher():
     def __init__(self, username, password):
         self.password = password
-        self.username = username
+        self.username = username 
 
     def get_prelogin_args(self):
         """

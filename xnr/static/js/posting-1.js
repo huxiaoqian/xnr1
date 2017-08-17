@@ -258,8 +258,8 @@ function hotWeibo(data) {
                         '   <div id="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
-                        '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                        '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '               <span class="center_2">'+txt+
@@ -306,7 +306,7 @@ function submitViews(_this) {
         $('#pormpt p').text('观点不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?'+taskID;
+        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?task_id='+taskID;
         public_ajax.call_request('get',conViewsUrl,conViews);
     }
 }

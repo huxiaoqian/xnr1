@@ -12,15 +12,16 @@ function field(data) {
             '</label>';
     }
     $('#container .tit-2 .field').html(str);
+    $('input[name=demo1]').on('click',function () {
+        domainName=$(this).parent().attr('title');
+        var nameLEN=$(this).attr('name').toString();
+        var creat_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
+        public_ajax.call_request('get',creat_url,creat_1)
+    });
 }
 
 var domainName='',roleName='';
-$('input[name=demo1]').on('click',function () {
-    domainName=$(this).parent().attr('title');
-    var nameLEN=$(this).attr('name').toString();
-    var creat_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
-    public_ajax.call_request('get',creat_url,creat_1)
-});
+
 function creat_1(data) {
     addLabel(data,'opt-1','demo2');
 }
@@ -64,15 +65,19 @@ function addLabel(data,className,name) {
 function labelSTR(data,name,radioCheckbox='radio') {
     var str='';
     if (data.length==0){
-        str='暂无数据';
-    }else {
-        for(var i=0;i<data.length;i++){
-            str+= '<label class="demo-label" title="'+data[i]+'">'+
-                '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
-                '</label>';
+        //str='暂无数据';
+        if (name=='demo3'){
+            data=['左倾','中立','右倾'];
+        }else if (name='demo4'){
+            data=['中立','积极','悲伤','焦虑','生气','厌恶','消极其他'];
         }
-    };
+    }
+    for(var i=0;i<data.length;i++){
+        str+= '<label class="demo-label" title="'+data[i]+'">'+
+            '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
+            '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
+            '</label>';
+    }
     return str;
 }
 
