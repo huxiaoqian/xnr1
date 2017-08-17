@@ -27,16 +27,16 @@ def user_portrait_tianjin():
     return render_template('04.html')
     
 # 返回数据
-@mod.route('/user_data/')
-def ajax_user_data():
+#@mod.route('/user_data/')
+#def ajax_user_data():
     #data = get_user_data()
-    with open(os.path.join(APP_ROOT, 'portrait_info_tianjin_0813.txt')) as f:
-        for line in f:
-            line = json.loads(line)
-            print type(line)
-            return json.dumps(line)
-    #return json.dumps(data)
 
+    # with open(os.path.join(APP_ROOT, 'portrait_info_tianjin_0813.txt')) as f:
+    #     for line in f:
+    #         line = json.loads(line)
+    #         print type(line)
+    #         return json.dumps(line)
+    #return json.dumps(data)
 
 ## 测试获取uid
 @mod.route('/get_uid/')

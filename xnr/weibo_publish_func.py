@@ -196,7 +196,7 @@ def create_group_func(account_name,password,group,members):
     print 'mark::',mark
     return mark
 
-'''
+
 def getUserShow(uid=None, screen_name=None):
     """
     字段说明见userinfo.txt
@@ -214,16 +214,17 @@ def getUserShow(uid=None, screen_name=None):
         response = urllib2.urlopen(request, timeout=60)
         print '343434'
         content = json.loads(response.read())
+        print 'content:',content
         return content
     except Exception, e:
         print "download page error!!! ", e
         return 'error'
-'''
+
 
 
 
 if __name__ == '__main__':
-    #user = getUserShow(screen_name='GGJava')
+    user = getUserShow(screen_name='曲今')
     #print user
-    timestamp = newest_time_func('6340301597')
-    print 'timestamp::',timestamp
+    #timestamp = newest_time_func('6340301597')
+    #print 'timestamp::',timestamp
