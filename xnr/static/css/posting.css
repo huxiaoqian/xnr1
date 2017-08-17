@@ -1,7 +1,4 @@
 /*内容样式*/
-table.table-condensed {
-    color: black;
-}
 body {
     /*padding: 30px 0 ;*/
     background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
@@ -242,17 +239,45 @@ body {
     cursor: pointer;
     display: inline-block;
 }
-#container .type_page #content #business #post_center-business {
+#container .type_page #content #business .post_perfect {
     position: relative;
-    padding: 10px 50px 10px 30px;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
 }
-#container .type_page #content #business #post_center-business .center_icon {
+#container .type_page #content #business .post_center-business .center_icon {
     position: absolute;
     top:10px;
     left:3px;
     width: 20px;
     height:20px;
 }
+#container #content #business .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#container #content #business .post_perfect .center_3 span {
+    display: inline-block;
+    width: 23%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container #content #business .post_perfect .center_3 span:nth-child(2) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}
+#container #content #business .post_perfect .center_3 span:nth-child(4){
+    border-left:1px solid slategrey;
+}
+#container #content #business .post_perfect .center_3 span:hover {
+    color:#eb7350;
+}
+
 #container #content #hot .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
@@ -296,7 +321,9 @@ body {
 /*推荐微博*/
 #content_recommend #post_center-recommend {
     position: relative;
-    padding: 10px 50px 10px 30px;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+    margin-bottom: 10px;
 }
 #content_recommend #post_center-recommend .center_icon {
     position: absolute;
@@ -305,7 +332,6 @@ body {
     width: 20px;
     height:20px;
 }
-
 #content_recommend #recommend-1,
 #content_recommend #search-1-recommend{
     display: inline-block;
@@ -326,6 +352,7 @@ body {
     width: 20px;
     height:20px;
 }
+
 #content_recommend #post_center-recommend a {
     cursor: pointer;
     display: inline-block;
