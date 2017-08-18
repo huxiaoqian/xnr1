@@ -75,7 +75,6 @@ def weibo_authority_management_mappings():
 
 
 # 账户管理
-
 def weibo_account_management_mappings():
 	index_info = {
 		'settings':{

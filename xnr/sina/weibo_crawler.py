@@ -18,7 +18,7 @@ def execute(uname, upasswd):
 
     xnr = SinaLauncher(uname, upasswd)
     xnr.login()
-    print '123111111'
+    print 'uname::',uname
     uid = xnr.uid
     current_ts = int(time.time())
 
