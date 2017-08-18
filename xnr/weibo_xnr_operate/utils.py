@@ -152,33 +152,34 @@ def get_recommend_at_user(xnr_user_no):
                     'terms':{'daily_interests':daily_interests_list}
                 }
             }
-        }
+        },
+        'size':MAX_SEARCH_SIZE
     }
 
     es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                         body=query_body)['hits']['hits']
-
+    print 'es_results_len::',len(es_results)
     if not es_results:
         if S_TYPE != 'test':
-            es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
                                 'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
         else:
-            es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':1000,\
                                 'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
 
     uid_list = []
-    if es_results:
-        for result in es_results:
+    if es_results_daily:
+        for result in es_results_daily:
             result = result['_source']
             uid_list.append(result['uid'])
 
     ## 根据uid，从weibo_user中得到 nick_name
     uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-    es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
+    es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
     i = 0
-    for result in es_results:
+    for result in es_results_user:
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']
@@ -215,11 +216,11 @@ def get_daily_recommend_tweets(theme,sort_item):
     es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
 
     if not es_results:
-        es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+        es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
-    for result in es_results:
+    for result in es_results_recommend:
         result = result['_source']
         uid = result['uid']
         nick_name,photo_url = uid2nick_name_photo(uid)
@@ -273,9 +274,9 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 
     ## 根据uid，从weibo_user中得到 nick_name
     uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-    es_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
+    es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
     i = 0
-    for result in es_results:
+    for result in es_results_user:
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']
