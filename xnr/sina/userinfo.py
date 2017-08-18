@@ -138,5 +138,5 @@ def execute():
 
 if __name__ == '__main__':
     # execute()
-    user = SinaOperateAPI().getUserShow(screen_name='GGJava')
+    user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
     print user

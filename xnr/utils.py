@@ -61,3 +61,17 @@ def xnr_user_no2uid(xnr_user_no):
         uid = ''
 
     return uid
+
+def uid2xnr_user_no(uid):
+    try:
+        query_body = {
+            'query':{
+                'term':{'uid':uid}
+            }
+        }
+        result = es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no = result[0]['xnr_user_no']
+    except:
+        xnr_user_no = ''
+
+    return xnr_user_no

@@ -8,7 +8,7 @@ from tools.ElasticsearchJson import executeES
 from tools.Launcher import SinaLauncher
 from tools.Pattern import getMatchList, getMatch
 from tools.URLTools import getUrlToPattern
-
+from userinfo import SinaOperateAPI
 
 class FeedbackFollow:
     def __init__(self, uid, current_ts):
@@ -55,6 +55,7 @@ class FeedbackFollow:
             for l_datas in r_list_data:
                 r_datas = reversed(l_datas)
                 for data in r_datas:
+                    #print 'data::',data
                     photo_url = getMatch(data, 'profile_image_url=(*)&')
                     uid = getMatch(data, 'usercard="id=(*)"')
                     nickname = getMatch(data, '<img.*?alt="(*)"')
@@ -86,6 +87,9 @@ class FeedbackFollow:
 
                     r_uid = self.uid
                     _type = 'follow'
+
+                    #获得关注人的详细信息
+                    #user = SinaOperateAPI().getUserShow(uid=uid)
 
                     wb_item = {
                         'photo_url': photo_url,
@@ -258,6 +262,7 @@ class FeedbackFollow:
 
     def execute(self):
         fans = self.fans()
+        print 'fans:::',fans
         executeES('weibo_feedback_fans', 'text', fans)
 
         follow = self.follow()

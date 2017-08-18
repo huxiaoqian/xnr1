@@ -241,4 +241,6 @@ if __name__ == '__main__':
     #print user
     #timestamp = newest_time_func('6340301597')
     #print 'timestamp::',timestamp
-    es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
+    #es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
+    result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
+    print result
