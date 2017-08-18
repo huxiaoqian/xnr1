@@ -15,24 +15,33 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
 						weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
 						weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
-						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type
+						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
+                        weibo_xnr_index_name,weibo_xnr_index_type
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
     
     query_body = {'query':{'term':{'root_uid':uid}},'sort':{'timestamp':{'order':'desc'}}}
-
-    timestamp_retweet = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
+    try:
+        timestamp_retweet = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-    timestamp_like = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
+    except:
+        timestamp_retweet = 0
+    
+    try:    
+        timestamp_like = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
+    except:
+        timestamp_like = 0
     #timestamp_follow = es.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,\
                        # body=query_body)['hits']['hits'][0]['_source']['timestamp']
     #timestamp_fans = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
                         #body=query_body)['hits']['hits'][0]['_source']['timestamp']
-    timestamp_at = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+    try:
+        timestamp_at = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-
+    except:
+        timestamp_at = 0
     
     query_body_private = {
         'query':{
@@ -44,10 +53,11 @@ def newest_time_func(uid):
         },
         'sort':{'timestamp':{'order':'desc'}}
     }
-
-    timestamp_private = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+    try:
+        timestamp_private = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-
+    except:
+        timestamp_private = 0
     '''
     query_body_private_make = {
         'query':{
@@ -76,10 +86,11 @@ def newest_time_func(uid):
         },
         'sort':{'timestamp':{'order':'desc'}}
     }
-
-    timestamp_comment_receive = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    try:
+        timestamp_comment_receive = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-
+    except:
+        timestamp_comment_receive = 0
 
     query_body_comment_make = {
         'query':{
@@ -93,9 +104,11 @@ def newest_time_func(uid):
         'sort':{'timestamp':{'order':'desc'}}
     }
 
-    timestamp_comment_make = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    try:
+        timestamp_comment_make = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
-
+    except:
+        timestamp_comment_make = 0
     return timestamp_retweet, timestamp_like, timestamp_at, \
         timestamp_private, timestamp_comment_receive, timestamp_comment_make
 
@@ -224,7 +237,8 @@ def getUserShow(uid=None, screen_name=None):
 
 
 if __name__ == '__main__':
-    user = getUserShow(screen_name='曲今')
+    #user = getUserShow(screen_name='曲今')
     #print user
     #timestamp = newest_time_func('6340301597')
     #print 'timestamp::',timestamp
+    es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')

@@ -18,7 +18,8 @@ def execute(uname, upasswd):
 
     xnr = SinaLauncher(uname, upasswd)
     xnr.login()
-    print xnr.uid
+    print '123111111'
+    uid = xnr.uid
     current_ts = int(time.time())
 
     timestamp_retweet, timestamp_like, timestamp_at, timestamp_private, \
@@ -71,4 +72,8 @@ def execute(uname, upasswd):
     
 
 if __name__ == '__main__':
+
+    execute('weiboxnr01@126.com','xnr123456')
     execute('weiboxnr02@126.com','xnr123456')
+    execute('weiboxnr03@126.com','xnr123456')
+    execute('weiboxnr04@126.com','xnr123456')

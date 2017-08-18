@@ -406,13 +406,11 @@ def get_save_step_three_1(task_detail):
             uname = task_detail['weibo_mail_account']
         else:
             uname = task_detail['weibo_phone_account']
-
         xnr = SinaLauncher(uname, task_detail['password'])
         xnr.login()
         uid = xnr.uid
     except:
         return '账户名或密码输入错误，请检查后输入！！'
-    #print 'type_user_ifo::',type(user_info)
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
     query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
     es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
