@@ -8,7 +8,8 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from utils import get_create_sensitive_words,show_sensitive_words_default,show_sensitive_words_rank,delete_sensitive_words,show_select_sensitive_words,change_sensitive_words,\
                   get_create_date_remind,show_date_remind,show_select_date_remind,change_date_remind,delete_date_remind,\
-                  get_create_hidden_expression,show_hidden_expression,show_select_hidden_expression,change_hidden_expression,delete_hidden_expression
+                  get_create_hidden_expression,show_hidden_expression,show_select_hidden_expression,change_hidden_expression,delete_hidden_expression,\
+                  create_corpus,show_corpus,show_select_corpus,change_select_corpus,delete_corpus
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
@@ -183,4 +184,69 @@ def ajax_change_hidden_expression():
 def ajax_delete_hidden_expression():
     express_id=request.args.get('express_id','')
     results=delete_hidden_expression(express_id)
+    return json.dumps(results)
+
+'''
+言论知识库管理
+'''
+#添加语料
+#注：添加主题语料和日常语料均调用该函数，只是默认的corpus_type取值不同
+@mod.route('/add_corpus/')
+def ajax_add_corpus():
+    corpus_type=request.args.get('corpus_type','')             #corpus_type可取值：主题语料，日常语料
+    theme_daily_name=request.args.get('theme_daily_name','')
+    text=request.args.get('text','')
+    uid=request.args.get('uid','')
+    mid=request.args.get('mid','')
+    timestamp=request.args.get('timestamp','')
+    retweeted=request.args.get('retweeted','')
+    comment=request.args.get('like','')
+    corpus_info=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like]
+    results=create_corpus(corpus_info)
+    return json.dumps(results)
+
+#显示主题语料
+@mod.route('/show_subject_corpus/')
+def ajax_show_subject_corpus():
+    corpus_type='主题语料'
+    results=show_corpus(corpus_type)
+    return json.dumps(results)
+
+#显示日常语料
+@mod.route('/show_daily_corpus/')
+def ajax_show_daily_corpus():
+    corpus_type='日常语料'
+    results=show_corpus(corpus_type)
+    return json.dumps(results)
+
+#修改语料
+#注：主题语料和日常语料都调用该函数模块
+#step 1:显示指定修改的内容
+@mod.route('/show_select_corpus/')
+def ajax_show_select_corpus():
+    corpus_id=request.args.get('corpus_id','')
+    results=show_select_corpus(corpus_id)
+    return json.dumps(results)
+
+#step 2:修改指定语料
+@mod.route('/change_select_corpus/')
+def ajax_change_select_corpus():
+    corpus_id=request.args.get('corpus_id','')
+    corpus_type=request.args.get('corpus_type','')             #corpus_type可取值：主题语料，日常语料
+    theme_daily_name=request.args.get('theme_daily_name','')
+    text=request.args.get('text','')
+    uid=request.args.get('uid','')
+    mid=request.args.get('mid','')
+    timestamp=request.args.get('timestamp','')
+    retweeted=request.args.get('retweeted','')
+    comment=request.args.get('like','')
+    corpus_info=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like]
+    results=change_select_corpus(corpus_id,change_info)
+    return json.dumps(results)
+
+#删除语料
+@mod.route('/delete_corpus/')
+def ajax_delete_corpus(corpus_id):
+    corpus_id=request.args.get('corpus_id','')
+    results=delete_corpus(corpus_id)
     return json.dumps(results)

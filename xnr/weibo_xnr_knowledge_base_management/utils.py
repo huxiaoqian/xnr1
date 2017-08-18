@@ -1,9 +1,11 @@
-# -*-utf-8-*-
+#!/usr/bin/python
+#-*- coding:utf-8 -*-
 
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import weibo_date_remind_index_name,weibo_date_remind_index_type,\
 							weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
-							weibo_hidden_expression_index_name,weibo_hidden_expression_index_type
+							weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
+							weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type
 from xnr.time_utils import ts2datetime
 from xnr.parameter import MAX_VALUE
 
@@ -211,6 +213,93 @@ def change_hidden_expression(express_id,change_info):
 def delete_hidden_expression(express_id):
 	try:
 		es.delete(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id)
+		result='delete success!'
+	except:
+		result='delete failed!'
+	return result
+
+
+
+
+###################################################################
+###################   weibo_corpus Knowledge base    ##################
+###################################################################
+
+#step 1:create corpus
+#corpus_info=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like]
+#subject corpus:corpus_type='主题语料'
+#daily corpus:corpus_type='日常语料'
+def create_corpus(corpus_info):
+	corpus_detail=dict()
+	corpus_detail['corpus_type']=corpus_info[0]
+	corpus_detail['theme_daily_name']=corpus_info[1]
+	corpus_detail['text']=corpus_info[2]
+	corpus_detail['uid']=corpus_info[3]
+	corpus_detail['mid']=corpus_info[4]
+	corpus_detail['timestamp']=corpus_info[5]
+	corpus_detail['retweeted']=corpus_info[6]
+	corpus_detail['comment']=corpus_info[7]
+	corpus_detail['like']=corpus_info[8]
+	corpus_id=corpus_info[4]  #mid
+
+	try:
+		es.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,body=corpus_detail)
+		mark=True
+	except:
+		mark=False
+
+	return mark
+
+
+#step 2: show corpus
+def show_corpus(corpus_type):
+	query_body={
+		'query':{
+			'filtered':{
+				'filter':{
+					'term':{'corpus_type':corpus_type}
+				}
+			}
+
+		},
+		'size':MAX_VALUE
+	}
+	result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
+	return result
+
+#step 3: change the corpus
+#explain:carry out show_select_corpus before change,carry out step 3.1 & 3.2
+#step 3.1: show the selected corpus
+def show_select_corpus(corpus_id):
+	result=es.get(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
+	return result
+
+#step 3.2: change the selected corpus
+def change_select_corpus(corpus_id,change_info):
+	corpus_type=corpus_info[0]
+	theme_daily_name=corpus_info[1]
+	text=corpus_info[2]
+	uid=corpus_info[3]
+	mid=corpus_info[4]
+	timestamp=corpus_info[5]
+	retweeted=corpus_info[6]
+	comment=corpus_info[7]
+	like=corpus_info[8]
+
+	try:
+		es.update(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\
+			body={"doc":{'corpus_type':corpus_type,'theme_daily_name':theme_daily_name,'text':text,\
+			'uid':uid,'mid':mid,'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like}})
+		result='change success'
+	except:
+		result='change failed'
+	return result
+
+
+#step 4: delete the corpus
+def delete_corpus(corpus_id):
+	try:
+		es.delete(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
 		result='delete success!'
 	except:
 		result='delete failed!'
