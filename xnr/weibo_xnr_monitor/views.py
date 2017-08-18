@@ -34,6 +34,47 @@ def ajax_lookup_hot_posts():
     result=lookup_hot_posts(float(from_ts),float(to_ts),weiboxnr_id,classify_id,order_id)
     return json.dumps(result)
 
+#############微博相关操作########
+
+#转发
+@mod.route('/get_weibohistory_retweet/')
+def ajax_get_weibohistory_retweet():
+    task_detail=dict()
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+    task_detail['text']=request.args.get('text','')    #text指转发时发布的内容
+    results=get_weibohistory_retweet(task_detail)
+    return json.dumps(results)
+
+#评论
+@mod.route('/get_weibohistory_comment/')
+def ajax_get_weibohistory_comment():
+    task_detail=dict()
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+    task_detail['text']=request.args.get('text','')    #text指转发时发布的内容
+    results=get_weibohistory_comment(task_detail)
+    return json.dumps(results)
+
+#赞
+@mod.route('/get_weibohistory_like/')
+def ajax_get_weibohistory_like():
+    task_detail=dict()
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+    results=get_weibohistory_like(task_detail)
+    return json.dumps(results)
+
+#直接关注
+@mod.route('/attach_fans_follow/')
+def ajax_attach_fans_follow():
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['uid']=request.args.get('uid','')
+    results=attach_fans_follow(task_detail)
+    return json.dumps(results)
+
+#加入语料库
+
 #test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0001&classify_id=1
 @mod.route('/lookup_active_weibouser/')
 def ajax_lookup_active_weibouser():

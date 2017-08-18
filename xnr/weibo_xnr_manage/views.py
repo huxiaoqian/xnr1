@@ -6,13 +6,14 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from xnr.global_utils import es_flow_text
-
 from utils import create_wxnr_first,create_wxnr_second,create_wxnr_third,\
 				show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,\
 				continue_create_weiboxnr,create_wxnr_fans,delete_wxnr_fans,\
 				wxnr_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
+				show_history_posting,show_at_content,show_comment_content,show_like_content,\
 				wxnr_list_concerns,wxnr_list_fans
-
+from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,show_comment_dialog,\
+					cancel_follow_user,attach_fans_follow,lookup_detail_weibouser
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 
@@ -126,6 +127,119 @@ def ajax_wxnr_timing_tasks_change():
 def ajax_wxnr_timing_tasks_revoked():
 	task_id=request.args.get('task_id','') 
 	results=wxnr_timing_tasks_revoked(task_id)
+	return json.dumps(results)
+
+#step 4.3: history information
+#step 4.3.1:show history posting
+@mod.route('/show_history_posting/')
+def ajax_show_history_posting():
+	require_detail=dict()
+	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	require_detail['task_source']=request.args.get('task_source','')    #日常 or 业务 or 热门
+	results=show_history_posting(require_detail)
+	return json.dumps(results)
+
+#step 4.3.2:show at content
+@mod.route('/show_at_content/')
+def ajax_show_at_content():
+	require_detail=dict()
+	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	#content_type='weibo'表示@我的微博，='at'表示@我的评论
+	require_detail['content_type']=request.args.get('content_type','')
+	results=show_at_content(require_detail)
+	return json.dumps(results)
+
+#step 4.3.3: show comment content
+@mod.route('/show_comment_content/')
+def ajax_show_comment_content():
+	require_detail=dict()
+	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	require_detail['weibo_type']=request.args.get('weibo_type','')    #收到的 or 发出的
+	results=show_comment_content(require_detail)
+	return json.dumps(results)
+
+#step 4.3.4:show like content
+@mod.route('/show_like_content/')
+def ajax_show_like_content():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=show_like_content(xnr_user_no)
+	return json.dumps(results)
+
+'''
+微博相关操作
+'''
+#转发
+@mod.route('/get_weibohistory_retweet/')
+def ajax_get_weibohistory_retweet():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+	task_detail['text']=request.args.get('text','')	   #text指转发时发布的内容
+	results=get_weibohistory_retweet(task_detail)
+	return json.dumps(results)
+
+#评论
+@mod.route('/get_weibohistory_comment/')
+def ajax_get_weibohistory_comment():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+	task_detail['text']=request.args.get('text','')	   #text指转发时发布的内容
+	results=get_weibohistory_comment(task_detail)
+	return json.dumps(results)
+
+#赞
+@mod.route('/get_weibohistory_like/')
+def ajax_get_weibohistory_like():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+	results=get_weibohistory_like(task_detail)
+	return json.dumps(results)
+
+#收藏
+############暂无公共函数可调用#########
+
+#查看对话
+#test:http://219.224.134.213:9209/weibo_xnr_manage/show_comment_dialog/?mid=3427464480701983
+@mod.route('/show_comment_dialog/')
+def ajax_show_comment_dialog():
+	mid=request.args.get('mid','')
+	results=show_comment_dialog(mid)
+	return json.dumps(results)
+
+#回复
+#——与评论操作一致
+@mod.route('/get_weibohistory_comment_reply/')
+def ajax_get_weibohistory_comment_reply():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['r_mid']=request.args.get('r_mid','')  #r_mid指原微博的mid
+	task_detail['text']=request.args.get('text','')	   #text指转发时发布的内容
+	results=get_weibohistory_comment(task_detail)
+	return json.dumps(results)
+
+#取消关注
+@mod.route('/cancel_follow_user/')
+def ajax_cancel_follow_user():
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['uid']=request.args.get('uid','')
+	results=cancel_follow_user(task_detail)
+	return json.dumps(results)
+
+#直接关注
+@mod.route('/attach_fans_follow/')
+def ajax_attach_fans_follow():
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['uid']=request.args.get('uid','')
+	results=attach_fans_follow(task_detail)
+	return json.dumps(results)
+
+#查看详情
+@mod.route('/lookup_detail_weibouser/')
+def ajax_lookup_detail_weibouser():
+	uid=request.args.get('uid','')
+	results=lookup_detail_weibouser(uid)
 	return json.dumps(results)
 
 #step 4.4: list of concerns
