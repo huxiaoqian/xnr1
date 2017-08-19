@@ -242,5 +242,8 @@ if __name__ == '__main__':
     #timestamp = newest_time_func('6340301597')
     #print 'timestamp::',timestamp
     #es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
-    result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
+    #result = es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='"4043450590377035"')
+    #result = es.delete(index='content_recommend_results',doc_type='content_recommend',id='"4043450590377035"')
+    result = es.delete(index='subopinion_results',doc_type='subopinion',id='"4043450590377035"')
+    #result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
     print result
