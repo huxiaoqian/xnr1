@@ -121,10 +121,10 @@ def publish_tweet_func(account_name,password,text,p_url,rank,rankid):
     user.text = text
     user.rank = rank
     new_p_url = user.request_image_url(p_url)
-    print 'new_p_url::',new_p_url
+    #print 'new_p_url::',new_p_url
     user.pic_ids = ' '.join(new_p_url)
     user.rankid = rankid
-    print 'user.pic_ids::',user.pic_ids
+    #print 'user.pic_ids::',user.pic_ids
     mark = user.publish()
 
     return mark

@@ -307,7 +307,8 @@
         }else {
             id_or_name=userName;
         }
-        localStorage.setItem('user',encodeURI(id_or_name));
+        localStorage.setItem('user',encodeURI(userID));
+        localStorage.setItem('userName',encodeURI(id_or_name));
         window.open('/control/operationControl/');
     });
 
