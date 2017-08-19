@@ -7,11 +7,11 @@ import os
 #use to mark type:  run or test
 S_TYPE = 'test'   #test/run
 S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
-
-QQ_S_DATE = '2016-07-12'
+S_UID = '1910774981' #'3986246393'
 S_DATE_BCI = '2016-11-27'
 
-QQ_S_DATE = '2017-07-12'
+QQ_S_DATE = '2016-07-12'
+
 
 PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
 

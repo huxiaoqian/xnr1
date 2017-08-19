@@ -29,6 +29,7 @@ def lpush_recommend_subopinion_keyword_task_list():
 			item = item['_source']
 			task_dict = {}
 			task_dict['task_id'] = item['task_id']
+			print 'task_id::::::::::', item['task_id'] 
 			task_dict['keywords_string'] = item['keywords_string']
 			r.lpush(weibo_recommend_subopinion_keywords_task_queue_name,json.dumps(task_dict))
 			count += 1

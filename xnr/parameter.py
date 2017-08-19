@@ -46,6 +46,14 @@ SENSITIVE_AT_RECOMMEND_USER_TOP = 10
 BCI_USER_NUMBER = 1000
 USER_POETRAIT_NUMBER = 1000
 
+## 影响力评估参数设置
+#MAX_FANS = 100
+#MAX_LIKE = 50000
+#MAX_PRIVATE = 100
+#MAX_AT = 1000
+
+
+
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
 CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'

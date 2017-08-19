@@ -45,6 +45,10 @@ def weibo_xnr_corpus_mappings():
 					},
 					'like':{  # 点赞数
 						'type':'long'
+					},
+					'create_type':{  # all_xnrs - 所有虚拟人  my_xnrs -我管理的虚拟人
+						'type':'string',  
+						'index':'not_analyzed'
 					}
 				}
 			}

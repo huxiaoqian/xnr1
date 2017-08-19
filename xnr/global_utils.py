@@ -36,9 +36,15 @@ qq_xnr_index_type = 'user'
 #use to save xnr group message
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
+
+# use to search flow text and bci 
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
+
+weibo_bci_index_name_pre = 'bci_'
+weibo_bci_index_type = 'bci'
+
 #use to identify the user portrait
 es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
@@ -127,8 +133,6 @@ weibo_hot_content_recommend_results_index_type = 'content_recommend'
 weibo_hot_subopinion_results_index_name = 'subopinion_results'
 weibo_hot_subopinion_results_index_type = 'subopinion'
 
-weibo_bci_index_name_pre = 'bci_'
-weibo_bci_index_type = 'bci'
 
 # 业务知识库
 weibo_date_remind_index_name = 'weibo_date_remind'
