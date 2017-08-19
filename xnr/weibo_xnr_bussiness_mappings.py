@@ -113,6 +113,6 @@ def weibo_hidden_expression_mappings():
 
 if __name__ == '__main__':
 
-	weibo_date_remind_mappings()
-	#weibo_sensitive_words_mappings()
+	#weibo_date_remind_mappings()
+	weibo_sensitive_words_mappings()
 	#weibo_hidden_expression_mappings()

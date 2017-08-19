@@ -34,7 +34,7 @@ def execute(uname, upasswd):
         print 'run weibo_feedback_follow.py done!'
     except:
         print 'Except Abort'
-    
+    '''
     try:
         print 'start run weibo_feedback_at.py ...'
         FeedbackAt(xnr.uid, current_ts, fans, follow, groups, timestamp_at).execute()
@@ -69,11 +69,11 @@ def execute(uname, upasswd):
         print 'run weibo_feedback_retweet.py done!'
     except:
         print 'Except Abort'
-    
+    '''
 
 if __name__ == '__main__':
 
-    execute('weiboxnr01@126.com','xnr123456')
-    execute('weiboxnr02@126.com','xnr123456')
-    execute('weiboxnr03@126.com','xnr123456')
+    #execute('weiboxnr01@126.com','xnr123456')
+    #execute('weiboxnr02@126.com','xnr123456')
+    #execute('weiboxnr03@126.com','xnr123456')
     execute('weiboxnr04@126.com','xnr123456')
