@@ -637,9 +637,8 @@ def social_sensing(task_detail):
                 if classify_text_dict:
                     #classify_results = topic_classfiy(classify_uid_list, classify_text_dict)
                     classify_results = topic_classfiy(classify_mid_list, classify_text_dict)
-                    print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-                    print "classify_results: ", classify_results
-                    print '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+                    
+                    #print "classify_results: ", classify_results
 
                     for k,v in classify_results.iteritems(): # mid:value
                         #mid_value[k] = topic_value_dict[v[0]]

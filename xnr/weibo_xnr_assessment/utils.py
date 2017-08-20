@@ -57,9 +57,9 @@ def get_influ_fans_num(xnr_user_no):
 		current_time_new = datetime2ts(current_date)
 
 		# 以下为保证数据为最新一次抓取的，已经删除过的则不在最新抓取的数据里面
-		#es_update_result = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
-								#body={'query':{'match_all':{}}})['hits']['hits']
-		#update_time = es_update_result[0]['_source']['update_time']
+		es_update_result = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
+								body={'query':{'match_all':{}}})['hits']['hits']
+		update_time = es_update_result[0]['_source']['update_time']
 
 		for i in range(WEEK+1): # WEEK=7
 			start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
@@ -70,6 +70,7 @@ def get_influ_fans_num(xnr_user_no):
 					'bool':{
 						'must':[
 							{'term':{'root_uid':uid}},
+							{'term':{'update_time':update_time}},
 							{'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
 						]
 					}
@@ -81,28 +82,37 @@ def get_influ_fans_num(xnr_user_no):
 					'bool':{
 						'must':[
 							{'term':{'root_uid':uid}},
+							{'term':{'update_time':update_time}},
 							{'range':{'timestamp':{'lt':end_ts}}}
 						]
 					}
 				}
 			}
 
-			es_day_count = es.count(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
+			es_day_count_result = es.count(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
 							body=query_body_day,request_timeout=999999)
-			print 'time:::',start_ts,'====',end_ts
-			print 'es_day_count::',es_day_count
-			es_total_count = es.count(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
+			print 'es_day_count_result::',es_day_count_result
+			if es_day_count_result['_shards']['successful'] != 0:
+				es_day_count = es_day_count_result['count']
+			else:
+				return 'es_day_count_found_error'
+			
+			es_total_count_result = es.count(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
 							body=query_body_total,request_timeout=999999)
-			print 'es_total_count::',es_total_count
 
-			#fans_num_day[start_ts] = es_day_count
-			#fans_num_total[start_ts] = es_total_count
-			#print 'fans_num_day::',fans_num_day
-			#print 'fans_num_total::',fans_num_total
+			if es_total_count_result['_shards']['successful'] != 0:
+				es_total_count = es_total_count_result['count']
+			else:
+				return 'es_total_count_found_error'
 
-		#total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
+			fans_num_day[start_ts] = es_day_count
+			fans_num_total[start_ts] = es_total_count
+			print 'fans_num_day::',fans_num_day
+			print 'fans_num_total::',fans_num_total
 
-		#return total_dict
+		total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
+		print 'total_dict::',total_dict
+		return total_dict
 	else:
 		return ''
 

@@ -20,7 +20,8 @@ reload(sys)
 sys.path.append('../../')
 
 from global_utils import es_xnr as es
-from global_utils import es_flow_text,weibo_recommend_subopinion_keywords_task_queue_name as keyword_task_queue_name
+from global_utils import es_flow_text
+from global_utils import weibo_recommend_subopinion_keywords_task_queue_name as keyword_task_queue_name
 from global_utils import R_RECOMMEND_SUBOPINION_KEYWORD_TASK as r
 from global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_task_index_type,\
                         weibo_recommend_subopinion_keywords_task_queue_name
@@ -44,16 +45,16 @@ def add_task_2_queue(queue_name,task_information):
 ## 从redis队列中pop出任务，进行计算
 
 def rpop_compute_recommend_subopnion():
+
     while True:
-        temp = r.rpop(weibo_recommend_subopinion_keywords_task_queue_name)
+        temp = r.rpop(keyword_task_queue_name)
 
         print 'temp:::::',temp
         if not temp:
-            print '当前没有内容推荐和子观点分析的关键词任务'
-            
+            print '当前没有内容推荐和子观点分析的关键词任务'         
             break
-
         task_detail = json.loads(temp)
+        #print 'task_detail::',task_detail
 
         print '把任务从队列中pop出来......'
 
@@ -67,7 +68,8 @@ def compute_recommend_subopnion(task_detail):
 
     print '开始分析计算......'
 
-    task_id = task_detail['task_id']
+    task_id = task_detail['task_id'].strip('"')
+    
     keywords_string = task_detail['keywords_string']
 
     keywords_list = keywords_string.split('&')  ## 以 & 切分关键词，得到list
@@ -105,9 +107,10 @@ def compute_recommend_subopnion(task_detail):
 
     content_results = summary_main(weibo_list)
 
-    print '开始保存内容推荐计算结果......'
 
-    mark = save_content_recommendation_results(task_id,content_results)
+    print '开始保存内容推荐计算结果......'
+    print 'task_id::',task_id.encode('utf-8')
+    mark = save_content_recommendation_results(task_id.encode('utf-8'),content_results)
     print 'mark_content:::',mark
     if mark == False:
         print '内容推荐结果保存过程中遇到错误，把计算任务重新push到队列中'
