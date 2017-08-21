@@ -42,39 +42,42 @@
     </div>
     <div class="type_page" style="margin: 20px 0 30px;">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active" flag="comment">
+            <li role="presentation" class="active" flag="comment" tp="show_comment">
                 <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;评论回复</a>
             </li>
-            <li role="presentation" flag="retweed">
+            <li role="presentation" flag="retweed" tp="show_retweet">
                 <a href="#forwarding" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;转发回复</a>
             </li>
-            <li role="presentation" flag="personal">
+            <li role="presentation" flag="personal" tp="show_private">
                 <a href="#private_letter" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;私信回复</a>
             </li>
-            <li role="presentation" flag="@back">
+            <li role="presentation" flag="@back" tp="show_at">
                 <a href="#reply" role="tab" data-toggle="tab"><b class="icon  icon-comments"></b>&nbsp;@回复</a>
             </li>
-            <li role="presentation" flag="focus">
+            <li role="presentation" flag="focus" tp="show_fans">
                 <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;关注回粉</a>
             </li>
         </ul>
         <div class="desc_index">
             <span>排序指标：</span>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="timestamp" checked>
                 <span class="demo-checkbox demo-radioInput"></span> 按时间
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_info">
                 <span class="demo-checkbox demo-radioInput"></span> 按内容敏感度
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_user">
                 <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
             </label>
         </div>
         <div class="tab-content" id="content">
             <div role="tabpanel" class="tab-pane active" id="comment">
+                <div class="comment-1">
+                    <div id="comment-1"></div>
+                </div>
                 <div class="commentAll">
                     <div class="commentEvery">
                         <img src="/static/images/unknown.png" alt="" class="com-head">
@@ -98,20 +101,21 @@
                             <span>来自<span class="com-3-source">微博用户 weibo.com</span></span>
                             <a class="com-3-reply copyFinish" datatype="commentClone">回复</a>
                         </div>
+                        <div class="commentClone">
+                            <input type="text" class="clone-1"/>
+                            <div class="clone-2">
+                                <img src="/static/images/post-1.png" class="clone-2-1">
+                                <img src="/static/images/post-2.png" class="clone-2-2">
+                                <label class="demo-label">
+                                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">
+                                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
+                                </label>
+                                <a href="###" class="clone-2-4">回复</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="commentClone">
-                    <input type="text" class="clone-1"/>
-                    <div class="clone-2">
-                        <img src="/static/images/post-1.png" class="clone-2-1">
-                        <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="demo-label">
-                            <input class="demo-radio clone-2-3" type="checkbox" name="desc2">
-                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
-                        </label>
-                        <a href="###" class="clone-2-4">回复</a>
-                    </div>
-                </div>
+
             </div>
 
             <div role="tabpanel" class="tab-pane" id="forwarding">
@@ -284,36 +288,12 @@
 <script src="/static/js/social_feedback-1.js"></script>
 <script>
     judgment('2');
-    $('.friends .dropdown-menu li').on('click',function(e) {
-        $('.friends button b').attr('title',e.target.innerHTML).text(e.target.innerHTML);
-    });
-    $('#_timing').datetimepicker('setStartDate',new Date());
-    $("#_timing").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-    });
-    $('#_timing_recommend').datetimepicker('setStartDate',new Date());
-    $("#_timing_recommend").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-    });
 
 //    $('#container .type_page #content .commentEvery .com-3 .com-3-reply').on('click',function () {
 //        var _name=$(this).parents('.commentAll').find('.com-1').find('b').text();
 //        $('#container .type_page #content .commentClone .clone-1').attr('placeholder','回复'+_name);
 //        $('#container .type_page #content .commentClone').show(80);
 //    });
-
-    $('.continue_already_created').on('click',function () {
-        window.open('/registered/socialAccounts/');
-    });
-    $('.first_created').on('click',function () {
-//        window.open('.html');
-    });
 
 </script>
 {% endblock %}

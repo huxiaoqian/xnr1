@@ -12,7 +12,8 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_hot_subopinion,get_hot_sensitive_recommend_at_user,get_bussiness_recomment_tweets,\
                 get_show_comment,get_reply_comment,get_show_retweet,get_reply_retweet,get_show_private,\
                 get_reply_private,get_show_at,get_reply_at,get_show_follow,get_reply_follow,get_like_operate,\
-                get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group
+                get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
+                get_show_fans
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 
@@ -311,6 +312,17 @@ def ajax_related_recommendation():
     results = get_related_recommendation(task_detail)
 
     return json.dumps(results)
+
+# 显示粉丝
+@mod.route('/create_group_show_fans/')
+def ajax_create_group_show_fans():
+	task_detail = dict()
+	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+
+	results = get_create_group_show_fans(task_detail)
+
+	return json.dumps(results)
+
 
 # 创建群组
 @mod.route('/create_group/')

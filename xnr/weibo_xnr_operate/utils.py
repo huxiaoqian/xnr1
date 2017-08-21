@@ -514,10 +514,11 @@ def get_show_comment(task_detail):
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'term':{'comment_type':'receive'}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -527,7 +528,12 @@ def get_show_comment(task_detail):
     es_results = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 def get_reply_comment(task_detail):
 
@@ -572,7 +578,7 @@ def get_show_retweet(task_detail):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'term':{'root_uid':uid}
                 }
             }
         },
@@ -583,7 +589,12 @@ def get_show_retweet(task_detail):
     es_results = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 
 def get_reply_retweet(task_detail):
@@ -624,10 +635,11 @@ def get_show_private(task_detail):
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'term':{'private_type':'receive'}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -637,7 +649,12 @@ def get_show_private(task_detail):
     es_results = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 def get_reply_private(task_detail):
     text = task_detail['text']
@@ -671,7 +688,7 @@ def get_show_at(task_detail):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'term':{'root_uid':uid}
                 }
             }
         },
@@ -682,7 +699,12 @@ def get_show_at(task_detail):
     es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 def get_reply_at():
     return []
@@ -697,7 +719,7 @@ def get_show_fans(task_detail):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'term':{'root_uid':uid}
                 }
             }
         },
@@ -708,7 +730,12 @@ def get_show_fans(task_detail):
     es_results = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 
 def get_show_follow(task_detail):
@@ -721,7 +748,7 @@ def get_show_follow(task_detail):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'term':{'root_uid':uid}
                 }
             }
         },
@@ -732,7 +759,12 @@ def get_show_follow(task_detail):
     es_results = es.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,\
                             body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 def get_reply_follow(task_detail):
     xnr_user_no = task_detail['xnr_user_no']

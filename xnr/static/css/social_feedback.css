@@ -38,6 +38,7 @@ body {
     position: relative;
     padding:10px 10px 10px 80px;
     background:rgba(8,23,44,0.35);
+    margin-bottom: 10px;
 }
 #container .type_page #content .focusEvery {
     width: 45%;
@@ -175,17 +176,28 @@ body {
 #container .type_page #content .letterClone .let-2,
 #container .type_page #content .replyClone .rep-1,
 #container .type_page #content .replyClone .rep-2{
-    margin: 10px 0;
+    margin: 5px 0;
+    width: 93%;
 }
 #container .type_page #content .commentClone .clone-1,
 #container .type_page #content .forwardClone .clone-1,
 #container .type_page #content .letterClone .clone-1,
 #container .type_page #content .replyClone .clone-1{
-    width: 100%;
+    width: 93%;
     height: 30px;
     padding: 4px 7px;
     color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
     background: rgba(5, 23, 55, 0.45);
+    transition: all linear 0.5s;
+}
+#container .type_page #content .commentClone .clone-1:focus,
+#container .type_page #content .forwardClone .clone-1:focus,
+#container .type_page #content .letterClone .clone-1:focus,
+#container .type_page #content .replyClone .clone-1:focus {
+    background: whitesmoke;
+    color: black;
 }
 #container .type_page #content .letterClone .clone-1 {
     width: 80%;
@@ -217,7 +229,6 @@ body {
     border:1px solid silver;
     border-radius: 5px;
     float: right;
-    margin-right:70px;
     background: transparent;
 }
 #container .type_page #content .letterClone .clone-2 .clone-2-4 {
