@@ -44,6 +44,10 @@ def qq_xnr_mappings():
                     'create_ts':{                    # 创建时间
                         'type':'long',
                         'index':'not_analyzed'
+                    },
+                    'sensitive_value':{
+                        'type':'long',
+                        'index':'not_analyzed'      # 敏感程度
                     }                
                 }
             }

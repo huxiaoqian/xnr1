@@ -9,6 +9,7 @@ from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
 from xnr.time_utils import get_groupmessage_index_list, ts2datetime, datetime2ts
 
 
+from xnr.qq.sendQQGroupMessage import sendfromweb
 
 def search_by_xnr_number(xnr_qq_number, current_date):
     # 用于显示操作页面初始的所有群历史信息
@@ -87,6 +88,12 @@ def search_by_period(xnr_qq_number,startdate,enddate):
         results={'hits':{'hits':[]}}
     return results
 
+
+def send_message(group,content):
+    result = sendfromweb(group,content)
+    # print result
+    return result
+    
 
 
 

@@ -8,7 +8,7 @@ from global_utils import group_message_index_name_pre, group_message_index_type
 
 from global_config import QQ_S_DATE
 
-def gourp_message_mappings(qq_number, date):
+def group_message_mappings(qq_number, date):
     index_name = group_message_index_name_pre + str(date)
     index_info = {
         'settings':{
@@ -47,6 +47,14 @@ def gourp_message_mappings(qq_number, date):
                         'index': 'not_analyzed'
                     },
                     'xnr_qq_nickname':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'sensitive_value':{
+                        'type':'int',
+                        'index':'not_analyzed'
+                    },
+                    'sensitive_words_string':{
                         'type':'string',
                         'index':'not_analyzed'
                     }

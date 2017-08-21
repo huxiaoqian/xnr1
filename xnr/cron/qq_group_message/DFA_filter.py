@@ -16,7 +16,8 @@ wordTree.append(0)
 nodeTree = [wordTree, 0]
 def readInputText():
     txt = ''
-    for line in open('sensitive_words.txt', 'rb'):
+    for line in open('/home/ubuntu8/chenyuzhou/xnr1/xnr/cron/qq_group_message/sensitive_words.txt', 'rb'):
+    # for line in open('sensitive_words.txt', 'rb'):
         txt = txt + line
     return txt
 
@@ -25,10 +26,10 @@ def createWordTree():
     wordTree.append(0)
     nodeTree = [wordTree, 0]
     awords = []
-    for b in open('sensitive_words.txt', 'rb'):
+    for b in open('/home/ubuntu8/chenyuzhou/xnr1/xnr/cron/qq_group_message/sensitive_words.txt', 'rb'):
        awords.append(b.strip())
     # awords = r.hkeys('sensitive_words')    
-    print awords
+    # print awords
     for word in awords:
         temp = wordTree
         for a in range(0,len(word)):
