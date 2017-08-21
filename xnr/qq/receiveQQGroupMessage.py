@@ -46,12 +46,17 @@ def onQQMessage(bot, contact, member, content):
             INFO('您发了一张图片或假消息... %s', content)
         else:
             sen_value,sen_words = sensitive_check(content)      # sen_words包含sensitive_words_string：北京&达赖和sensitive_words_dict
+            if sen_value !=0:
+                sen_flag = 1    #该条信息是敏感信息
+            else:
+                sen_flag = 0
             qq_item = {
                 'xnr_qq_number': bot.session.qq,
                 'xnr_nickname': bot.session.nick,
                 'timestamp': member.last_speak_time,
                 'speaker_qq_number': member.qq,
                 'text': content,
+                'sensitive_flag':sen_flag,
                 'sensitive_value': sen_value,
                 'sensitive_words_string': sen_words['sensitive_words_string'],
                 'speaker_nickname': member.nick,

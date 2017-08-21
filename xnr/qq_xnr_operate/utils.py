@@ -98,6 +98,8 @@ def send_message(group,content):
 
 
 # 暂时用不到的函数
+
+
 def search_by_speaker_number(xnr_qq_number, speaker_number, date):
     query_body = {
         "query": {

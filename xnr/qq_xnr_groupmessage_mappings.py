@@ -57,6 +57,10 @@ def group_message_mappings(qq_number, date):
                     'sensitive_words_string':{
                         'type':'string',
                         'index':'not_analyzed'
+                    },
+                    'sensitive_flag':{
+                        'type':'int',
+                        'index':'not_analyzed'
                     }
                 }
 
