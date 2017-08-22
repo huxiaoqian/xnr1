@@ -71,7 +71,8 @@ class FeedbackComment:
                         text = ''
                     r_mid = getMatch(data, 'mid=(*)&')
                     r_uid = self.uid
-                    commet_type = 'make'
+                    #commet_type = 'make'
+                    commet_type = 'receive'
 
                     _type = 'stranger'
                     type1 = ''
@@ -161,7 +162,8 @@ class FeedbackComment:
                         text = ''
                     r_mid = ''
                     r_uid = self.uid
-                    commet_type = 'receive'
+                    #commet_type = 'receive'
+                    commet_type = 'make'
 
                     _type = 'stranger'
                     type1 = ''
