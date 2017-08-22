@@ -358,10 +358,8 @@ function focus(data) {
                         fol='已关注';
                     }else if (row.weibo_type=='friends'){
                         fol='相互关注';
-                    }else if (row.weibo_type=='stranger'){
+                    }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
                         fol='未关注';
-                    }else if (row.weibo_type=='followed'){
-                        fol='被关注';
                     }
                     // else if (row.weibo_type=='followed'){
                     //     follow='我被关注';
@@ -485,7 +483,7 @@ function addfocus(_this) {
     var uid=$(_this).parents('.focusEvery').find('.uid').text();
     var f=$(_this).find('b').text();
     var post_url_5;
-    if (f=='未关注'||f=='未关注'){
+    if (f=='未关注'){
         post_url_5='/weibo_xnr_operate/follow_operate/?xnr_user_no='+xnrUser+'&uid='+uid;
         $(_this).parents('.focusEvery').find('.uid').text('已关注')
     }else {
