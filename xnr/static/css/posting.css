@@ -160,12 +160,14 @@ body {
 #container #content #everyday .post_perfect .center_3 span:hover {
     color:#eb7350;
 }
-#container #content #everyday .post_perfect .commentDown {
+#container #content #everyday .post_perfect .commentDown,
+#container #content #business .post_perfect .commentDown {
     width: 100%;
     padding: 5px;
     margin: 10px 0;
 }
-#container #content #everyday .post_perfect .commentDown input {
+#container #content #everyday .post_perfect .commentDown input,
+#container #content #business .post_perfect .commentDown input {
     width: 90%;
     color: white;
     display: inline-block;
@@ -175,7 +177,8 @@ body {
     border-radius: 5px;
     text-align: center;
 }
-#container #content #everyday .post_perfect .commentDown span{
+#container #content #everyday .post_perfect .commentDown span,
+#container #content #business .post_perfect .commentDown span {
     color: white;
     display: inline-block;
     padding: 4px 8px;
@@ -184,7 +187,8 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-#container #content #everyday .post_perfect .commentDown span:hover {
+#container #content #everyday .post_perfect .commentDown span:hover,
+#container #content #business .post_perfect .commentDown span:hover {
     background: #333333;
 }
 
@@ -244,6 +248,7 @@ body {
     padding: 10px 10px 10px 30px;
     background: rgba(8,23,44,0.35);
     margin-bottom: 10px;
+    width: 920px;
 }
 #container .type_page #content #business .post_center-business .center_icon {
     position: absolute;
@@ -260,7 +265,7 @@ body {
 }
 #container #content #business .post_perfect .center_3 span {
     display: inline-block;
-    width: 23%;
+    width: 33%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -323,7 +328,6 @@ body {
     position: relative;
     padding: 10px 10px 10px 30px;
     background: rgba(8,23,44,0.35);
-    margin-bottom: 10px;
 }
 #content_recommend #post_center-recommend .center_icon {
     position: absolute;
@@ -332,7 +336,7 @@ body {
     width: 20px;
     height:20px;
 }
-#content_recommend #recommend-1,
+/*#content_recommend #recommend-1,*/
 #content_recommend #search-1-recommend{
     display: inline-block;
     font-size: 12px;
@@ -343,7 +347,7 @@ body {
 #content_recommend #search-1-recommend{width: 200px;}
 #content_recommend #post_center-recommend {
     position: relative;
-    padding: 10px 50px 10px 30px;
+    padding: 10px 10px 10px 30px;
 }
 #content_recommend #post_center-recommend .center_icon {
     position: absolute;
@@ -357,4 +361,48 @@ body {
     cursor: pointer;
     display: inline-block;
     margin: 0 10px;
+}
+
+.modal-open .modal {
+    overflow-y: auto;
+}
+.modal.in .modal-dialog {
+    margin: 80px auto 0;
+}
+#content_recommend .post_perfect {width: 538px;}
+
+#thingsweibo .post_perfect {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background: rgba(8,23,44,0.35);
+}
+#thingsweibo .post_perfect .center_icon {
+    position: absolute;
+    top:10px;
+    left:3px;
+    width: 20px;
+    height:20px;
+}
+#thingsweibo .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#thingsweibo .post_perfect .center_3 span {
+    display: inline-block;
+    width: 30%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#thingsweibo .modal-dialog {
+    width: 1000px;
+}
+#thingsweibo .table>tbody>tr>td {
+    padding-left: 5px!important;
+    padding-right: 5px!important;
+    border: 1px solid #ddd!important;
 }

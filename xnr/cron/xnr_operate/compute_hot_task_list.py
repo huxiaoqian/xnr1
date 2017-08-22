@@ -17,8 +17,9 @@ from global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_tas
 
 def lpush_recommend_subopinion_keyword_task_list():
 
+	compute_status = 0
 	es_results = es.search(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-							body={'query':{'match_all':{}}})['hits']['hits']
+							body={'query':{'term':{'compute_status':compute_status}}})['hits']['hits']
 
 	print 'es_results:::',es_results
 	count = 0
