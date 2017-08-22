@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="/static/css/posting.css">
 <style>
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
-    #theme-4 .demo-label{margin-left: 10px;}
+    #theme-4 .demo-label,#grouplist .demo-label{margin-left: 10px;}
     .demo-radio{display:none!important;}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -37,7 +37,7 @@
     .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    thead,.fixed-table-pagination .page-list {
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
         display: none!important;
     }
     .fixed-table-body {
@@ -64,6 +64,24 @@
     }
     .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
+    }
+    /**/
+    .datetimepicker {color:black;}
+    #user_recommend .user_example_list .more:hover,sureADD:hover {
+        background: rgba(5, 23, 55, 0.45);
+    }
+    #moreThing .moreCon li {
+        display: inline-block;
+        margin: 5px 10px;
+    }
+    #moreThing .moreCon a {
+        display: inline-block;
+        text-align: center;
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white;
     }
 </style>
 {% endblock %}
@@ -395,24 +413,6 @@
                             <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...Wait a moment</p>
                         </div>
                     </div>
-
-                    <div class="post_perfect" style="margin: 20px auto;">
-                        <div class="post_center-business">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <div class="center_rel">
-                                <a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：
-                                <span class="center_2">
-                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                                </span>
-                                <div class="center_3">
-                                    <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>
-                                    <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>
-                                    <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -440,9 +440,22 @@
     </div>
 </div>
 
+<!--多余的东西-->
+<div class="modal fade" id="moreThing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">推荐用户</h4>
+            </div>
+            <div class="modal-body moreCon">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--设置群可见的时候，展示群-->
-<!--相似微博-->
 <div class="modal fade" id="grouplist" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -451,17 +464,32 @@
                 <h4 class="modal-title">群组列表</h4>
             </div>
             <div class="modal-body">
-
+                <div style="margin-bottom: 10px;">
+                    <span class="buildnewgp" style="font-size: 16px;">新建一个群</span>
+                    <div style="padding-left: 10px;margin: 5px 0;">
+                        新建群名称：<input type="text" class="groupNUM" style="background: transparent;padding:0 7px;border: 1px solid silver;"/>
+                    </div>
+                    <div style="padding-left: 10px;margin: 5px 0;">
+                        <span>请勾选你想要添加的群成员</span>
+                        <div class="gpmember"></div>
+                    </div>
+                    <div style="text-align: right;padding: 5px 30px;">
+                        <span class="sureADD" style="cursor:pointer;background: transparent;padding:3px 7px;border: 1px solid silver;border-radius: 5px">
+                            确定添加</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="buildnewgp" style="font-size: 16px;">已有群</span>
+                    <div class="group" style="margin: 5px 0;"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="groupSure()">确定</button>
             </div>
         </div>
     </div>
 </div>
-
-
 
 <!--相似微博-->
 <div class="modal fade" id="simliar" tabindex="-1" role="dialog">
@@ -493,42 +521,50 @@
             <div class="modal-body">
                 <div class="recommend-body" style="margin-left: 30px;">
                     <span>按主题：</span>
-                    <select id="recommend-1">
-                        <option value="生活类">生活类</option>
-                        <option value="体育类">体育类</option>
-                        <option value="外交类">外交类</option>
-                        <option value="暴恐类">暴恐类</option>
-                        <option value="反腐类">反腐类</option>
-                    </select>
-                    <div style="float: right;margin-right: 18px">
-                        <input type="text" id="search-1-recommend" placeholder="输入关键词快速搜索相关微博"/>
-                        <button type="button" class="btn btn-primary btn-xs" id="search-recommend"
-                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    <div id="recommend-1" style="margin-top: 10px;">
+                        <label class="demo-label" title="生活类">
+                            <input class="demo-radio" type="radio" name="hhee" value='生活类'>
+                            <span class="demo-checkbox demo-radioInput"></span> 生活类
+                        </label>
+                        <label class="demo-label" title="体育类">
+                            <input class="demo-radio" type="radio" name="hhee" value='体育类'>
+                            <span class="demo-checkbox demo-radioInput"></span> 体育类
+                        </label>
+                        <label class="demo-label" title="外交类">
+                            <input class="demo-radio" type="radio" name="hhee" value='外交类'>
+                            <span class="demo-checkbox demo-radioInput"></span> 外交类
+                        </label>
+                        <label class="demo-label" title="暴恐类">
+                            <input class="demo-radio" type="radio" name="hhee" value='暴恐类'>
+                            <span class="demo-checkbox demo-radioInput"></span> 暴恐类
+                        </label>
+                        <label class="demo-label" title="反腐类">
+                            <input class="demo-radio" type="radio" name="hhee" value='反腐类'>
+                            <span class="demo-checkbox demo-radioInput"></span> 反腐类
+                        </label>
                     </div>
-
-                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
-                        <div id="post_center-recommend">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <div class="center_rel">
-                                <a class="center_1" href="###">何仙姑</a>：
-                                <span class="center_2">
-                            【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                        </span>
-                                <div class="center_3" style="margin: 10px 0;">
-                                    <input type="checkbox" class="timing_recommend" style="position: relative;top: 2px;margin-right: 3px;">定时
-                                    <input type="text" value="" id="_timing_recommend" placeholder="选择时间" style="line-height:13px;font-size: 10px;
-                    padding:3px 4px;border: 1px solid silver;">
-                                    <button type="button" class="btn btn-info btn-xs" id="sure_not_timing">发布</button>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="recommend-2">
+                        <div id="recommend-2"></div>
                     </div>
 
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+        </div>
+    </div>
+</div>
+
+<!--事件子观点及相关微博-->
+<div class="modal fade" id="thingsweibo" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">事件子观点及相关微博</h4>
+            </div>
+            <div class="modal-body">
+                <div class="thWeibo">
+                    <div id="thWeibo"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -539,23 +575,29 @@
 <script>
     judgment('2');
     $('.friends .dropdown-menu li').on('click',function(e) {
-        if (e.target.innerHTML){
-            $('.friends button b').attr('title',e.target.innerHTML).text(e.target.innerHTML);
-        }else {
+        if (e.target.innerHTML||e.target.innerHTML.toString().substring(1,4)=='img'){
+            $('.friends button b').attr('title',e.target.innerText).text(e.target.innerText);
+        }else if (e.target.innerHTML==''){
             var a=$(this).find('span').text();
             $('.friends button b').attr('title',a).text(a);
         }
         if (e.target.innerHTML=='群可见'||$(this).find('span').text()=='群可见'){
-            var gl_url='';
-            // public_ajax.call_request('get',gl_url,gpList)
+            var gl_url='/weibo_xnr_operate/show_group/?xnr_user_no='+nowUser;
+             public_ajax.call_request('get',gl_url,gpList)
         }
     });
     function gpList(data) {
-
+        var str='';
+        for (var k in data){
+            str+=
+                '<label class="demo-label" title="'+data[k]+'">'+
+                '   <input class="demo-radio" type="checkbox" name="gg" value='+k+'>'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                '</label>';
+        }
+        $('#grouplist .group').html(str);
         $('#grouplist').modal('show');
-    }
-
-
+    };
 
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
@@ -570,12 +612,6 @@
         $('.start').datetimepicker('setEndDate',ev.date);
     });
 
-    $('.continue_already_created').on('click',function () {
-        window.open('/registered/socialAccounts/');
-    });
-    $('.first_created').on('click',function () {
-//        window.open('.html');
-    });
 
 </script>
 <script src="/static/js/posting-1.js"></script>

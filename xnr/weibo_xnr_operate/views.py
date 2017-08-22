@@ -12,7 +12,8 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_hot_subopinion,get_hot_sensitive_recommend_at_user,get_bussiness_recomment_tweets,\
                 get_show_comment,get_reply_comment,get_show_retweet,get_reply_retweet,get_show_private,\
                 get_reply_private,get_show_at,get_reply_at,get_show_follow,get_reply_follow,get_like_operate,\
-                get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group
+                get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
+                get_show_fans
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 
@@ -25,20 +26,13 @@ mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 @mod.route('/submit_tweet/')
 def ajax_submit_daily_tweet():
     task_detail = dict()
-    task_detail['tweet_type'] = request.args.get('tweet_type','')
+    task_detail['tweet_type'] = request.args.get('tweet_type','') # 日常发帖、热点跟随、业务发帖
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    #task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    #task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
+    #task_detail['operate_type'] = request.args.get('operate_type','') # 原创、转发、评论
     task_detail['p_url']  = json.loads(json.dumps(request.args.get('p_url','').encode('utf-8')))  
     task_detail['rank'] = request.args.get('rank','')
     task_detail['rankid'] = request.args.get('rankid','')
-
-    #print 'task_detail[p_url]:::',task_detail['p_url']
-
-    #print 'type::',type(task_detail['p_url'])
-    #print 'p_url[0]:',task_detail['p_url'][0]
 
     mark = get_submit_tweet(task_detail)
     return json.dumps(mark)
@@ -47,10 +41,9 @@ def ajax_submit_daily_tweet():
 @mod.route('/submit_timing_post_task/')
 def ajax_submit_timing_post_task():
     task_detail = dict()
-    task_detail['uid'] = request.args.get('uid','')
-    task_detail['user_no'] = request.args.get('user_no','')
+    #task_detail['uid'] = request.args.get('uid','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['task_source'] = request.args.get('task_source','')
-    task_detail['operate_type'] = request.args.get('operate_type','')
 
     current_ts = int(time.time())
     task_detail['create_time'] = current_ts
@@ -63,7 +56,8 @@ def ajax_submit_timing_post_task():
     task_detail['post_time'] = post_time
 
     task_detail['text'] = request.args.get('text','')
-    task_detail['task_status'] = request.args.get('task_status','')
+    #task_detail['task_status'] = request.args.get('task_status','')
+    task_detail['task_status'] = 0
     task_detail['remark'] = request.args.get('remark','')
 
     mark = save_to_tweet_timing_list(task_detail)
@@ -84,6 +78,14 @@ def ajax_daily_recommend_tweets():
     sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, retweeted-按热度
     tweets = get_daily_recommend_tweets(theme,sort_item)
     return json.dumps(tweets)
+
+## 返回群列表
+@mod.route('/show_group/')
+def ajax_show_group():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_group(xnr_user_no)
+
+    return json.dumps(results)
 
 '''
 热点跟随
@@ -110,10 +112,10 @@ def ajax_hot_recommend_tweets():
 def ajax_submit_hot_keyword_task():
     #mark = True
     task_detail = dict()
-    task_detail['task_id'] = json.dumps(request.args.get('task_id','')) # 当前代表微博的mid 
+    task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid 
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
     task_detail['compute_status'] = 0 # 尚未计算
-    task_detail['submit_time'] = time.time() # 当前时间
+    task_detail['submit_time'] = int(time.time()) # 当前时间
     task_detail['submit_user'] = request.args.get('submit_user','admin@qq.com') 
 
     mark = push_keywords_task(task_detail)
@@ -124,7 +126,6 @@ def ajax_submit_hot_keyword_task():
 @mod.route('/hot_content_recommend/')
 def ajax_hot_content_recommend():
     task_id = request.args.get('task_id','')  # mid
-    task_id = '"'+task_id+'"'
     contents = get_hot_content_recommend(task_id)
     return json.dumps(contents)
 
@@ -132,7 +133,6 @@ def ajax_hot_content_recommend():
 @mod.route('/hot_subopinion/')
 def ajax_hot_hot_subopinion():
     task_id = request.args.get('task_id','')  # mid
-    task_id = '"'+task_id+'"'
     subopnion_results = get_hot_subopinion(task_id)
     return json.dumps(subopnion_results)
 
@@ -168,9 +168,6 @@ def ajax_reply_comment():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
     task_detail['r_mid'] = request.args.get('mid','')
 
     mark = get_reply_comment(task_detail)
@@ -193,9 +190,6 @@ def ajax_reply_retweet():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
     task_detail['r_mid'] = request.args.get('mid','')
 
     mark = get_reply_retweet(task_detail)
@@ -215,10 +209,9 @@ def ajax_show_private():
 @mod.route('/reply_private/')
 def ajax_reply_private():
     task_detail = dict()
+    task_detail['tweet_type'] = request.args.get('tweet_type','') # 日常发帖、热点跟随、业务发帖
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
     task_detail['uid'] = request.args.get('uid','')
 
     mark = get_reply_private(task_detail)
@@ -263,9 +256,7 @@ def ajax_show_follow():
 @mod.route('/follow_operate/')
 def ajax_reply_follow():
     task_detail = dict()
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
     mark = get_reply_follow(task_detail)
 
@@ -274,9 +265,7 @@ def ajax_reply_follow():
 @mod.route('/unfollow_operate/')
 def ajax_unfollow_operate():
     task_detail = dict()
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
     mark = get_reply_unfollow(task_detail)
 
@@ -286,9 +275,7 @@ def ajax_unfollow_operate():
 @mod.route('/like_operate/')
 def ajax_like_operate():
     task_detail = dict()
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
-    #task_detail['password'] = request.args.get('password','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['mid'] = request.args.get('mid','')
 
     mark = get_like_operate(task_detail)
@@ -307,7 +294,7 @@ def ajax_direct_search():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','influence')
-    uids = request.args.get('uids','')
+    uids = request.args.get('uids','').encode('utf-8')
     uid_list = uids.split('，')
     task_detail['uid_list'] = uid_list
 
@@ -326,12 +313,24 @@ def ajax_related_recommendation():
 
     return json.dumps(results)
 
+# 显示粉丝
+@mod.route('/create_group_show_fans/')
+def ajax_create_group_show_fans():
+	task_detail = dict()
+	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+
+	results = get_create_group_show_fans(task_detail)
+
+	return json.dumps(results)
+
+
 # 创建群组
 @mod.route('/create_group/')
 def ajax_create_group():
     task_detail = dict()
-    task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
-    task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
+    #task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','')
+    #task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') 
     task_detail['group'] = request.args.get('group','')  # 群名字
     task_detail['members'] = request.args.get('members','')  # 群成员id，多个用','分开
 
