@@ -28,7 +28,7 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 
-from xnr.time_utils import ts2datetime,datetime2ts
+from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
                                 like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func#,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
@@ -254,7 +254,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
         sort_item_2 = 'retweeted'
 
     es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    print 'es_results:::::',es_results
+    
     uid_fansnum_dict = dict()
     if es_results:
         for result in es_results:
@@ -847,7 +847,8 @@ def get_direct_search(task_detail):
         
     else:
         if S_TYPE == 'test':
-            uid_list_new = FRIEND_LIST   
+            uid_list_new = FRIEND_LIST 
+            sort_item = 'sensitive'  
         else:       
             friends_list = []
             ## 得到朋友圈uid_list
@@ -859,7 +860,7 @@ def get_direct_search(task_detail):
 
             uid_list_new = friends_set_list
 
-            sort_item = 'sensitive'
+            sort_item = 'fansnum'
 
     query_body = {
         'query':{
@@ -879,6 +880,29 @@ def get_direct_search(task_detail):
     results_all = []
     if es_results:
         for item in es_results:
+            uid = item['_source']['uid']
+            if S_TYPE == 'test':
+                current_time = datetime2ts(S_DATE)
+            else:
+                current_time = int(time.time())
+
+            index_name = get_flow_text_index_list(current_time)
+
+            query_body = {
+                'query':{
+                    'term':{'uid':uid}
+                },
+                'sort':{'retweeted':{'order':'desc'}}
+            }
+
+            es_weibo_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+
+            weibo_list = []
+            for weibo in es_weibo_results:
+                weibo = weibo['_source']
+                weibo_list.append(weibo)
+            item['_source']['weibo_list'] = weibo_list
+
             results_all.append(item['_source'])
 
     return results_all
@@ -900,9 +924,11 @@ def get_related_recommendation(task_detail):
 
     if sort_item != 'friend':
         uid_list = recommend_set_list
+
     else:
         if S_TYPE == 'test':
             uid_list = FRIEND_LIST
+            sort_item = 'sensitive'
         else:
             friends_list_results = es_user_portrait.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
             for result in friends_list_results:
@@ -911,7 +937,7 @@ def get_related_recommendation(task_detail):
 
             uid_list = friends_set_list
 
-            sort_item = 'sensitive'
+            sort_item = 'fansnum'
 
     query_body = {
         'query':{
@@ -929,6 +955,28 @@ def get_related_recommendation(task_detail):
     results_all = []
     if es_results:
         for item in es_results:
+            uid = item['_source']['uid']
+            if S_TYPE == 'test':
+                current_time = datetime2ts(S_DATE)
+            else:
+                current_time = int(time.time())
+
+            index_name = get_flow_text_index_list(current_time)
+
+            query_body = {
+                'query':{
+                    'term':{'uid':uid}
+                },
+                'sort':{'retweeted':{'order':'desc'}}
+            }
+
+            es_weibo_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+
+            weibo_list = []
+            for weibo in es_weibo_results:
+                weibo = weibo['_source']
+                weibo_list.append(weibo)
+            item['_source']['weibo_list'] = weibo_list
             results_all.append(item['_source'])
 
     return results_all

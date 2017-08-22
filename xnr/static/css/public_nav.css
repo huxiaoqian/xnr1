@@ -130,10 +130,10 @@ a,a:link,a:hover,a:visited,a:active {
 /*模态框*/
 .modal-open .modal {
     overflow-x: hidden;
-    overflow-y: hidden;
+    /*overflow-y: hidden;*/
 }
 .modal.in .modal-dialog {
-    margin: 150px auto 0;
+    margin: 100px auto 0;
 }
 body.modal-open {
     /*overflow-y: auto !important;*/
