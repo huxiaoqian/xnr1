@@ -9,7 +9,7 @@ from xnr.global_utils import es_flow_text
 from xnr.parameter import MAX_VALUE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 
-from utils import search_by_xnr_number
+from utils import search_by_xnr_number,search_by_period,aggr_sen_users,rank_sen_users
 
 mod = Blueprint('qq_xnr_monitor', __name__, url_prefix='/qq_xnr_monitor')
 
@@ -41,7 +41,9 @@ def ajax_search_by_period():
 @mod.route('/show_sensitive_users/')
 def show_sensitive_users():
     xnr_qq_number = request.args.get('xnr_number','')
-    # 明天好好想想怎么做
+    users = aggr_sen_users(xnr_qq_number)
+    results = rank_sen_users(users)
+    return json.dumps(results)
 
 
 

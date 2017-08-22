@@ -28,10 +28,11 @@ def sendfromweb(group,content):
         bot.Login()
         result = sendMessage(bot,group,content)
     if result:
-        speak_num_update(str(bot.session.qq))        #按照虚拟人qq号更新历史及当日发言信息
+        update_flag = speak_num_update(str(bot.session.qq))        #按照虚拟人qq号更新历史及当日发言信息
         # print bot.session.qq
-        
-    return result
+        if update_flag:
+            return 1    
+    return 0
 
 # 用于更新es中的历史和当日发言数
 def speak_num_update(xnr_qq_number):
@@ -40,7 +41,7 @@ def speak_num_update(xnr_qq_number):
     # 将新数据存入数据库
     time.sleep(5)
     result = dataUpdate(xnr_qq_number,today_num,history_num)
-    print result
+    return result
     
 def dataUpdate(xnr_qq_number,today_num,history_num):
 
