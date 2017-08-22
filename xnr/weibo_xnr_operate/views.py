@@ -294,7 +294,7 @@ def ajax_direct_search():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','influence')
-    uids = request.args.get('uids','')
+    uids = request.args.get('uids','').encode('utf-8')
     uid_list = uids.split('，')
     task_detail['uid_list'] = uid_list
 

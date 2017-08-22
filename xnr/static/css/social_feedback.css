@@ -39,10 +39,11 @@ body {
     padding:10px 10px 10px 80px;
     background:rgba(8,23,44,0.35);
     margin-bottom: 10px;
+    width: 950px;
 }
 #container .type_page #content .focusEvery {
-    width: 45%;
-    height: 170px;
+    /*width: 100%;*/
+    /*height: 170px;*/
     display: inline-block;
 }
 #container .type_page #content .commentEvery .com-head,
@@ -117,11 +118,11 @@ body {
     margin-right: 50px;
 }
 #container .type_page #content .letterEvery .let-2 .let-2-content {
-    display: inline-block;
-    width: 550px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /*display: inline-block;*/
+    /*width: 550px;*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
 }
 #container .type_page #content .commentEvery .com-3 .com-3-reply,
 #container .type_page #content .forwardEvery .for-3 .for-3-reply,

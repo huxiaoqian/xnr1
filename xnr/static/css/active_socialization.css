@@ -42,6 +42,7 @@ body {
 }
 #container .active-1 .actRight .active-1-find {
     width: 700px;
+    text-align: center;
     padding: 5px 10px;
     border: 1px solid silver;
     border-radius: 5px;

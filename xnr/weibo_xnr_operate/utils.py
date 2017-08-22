@@ -25,14 +25,16 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
                             weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
                             weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
-                            weibo_feedback_group_index_name,weibo_feedback_group_index_type
+                            weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
+                            weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
                                 like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func#,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
-                        MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict
+                        MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
+                        FOLLOWERS_LIST
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid
 
@@ -844,32 +846,42 @@ def get_direct_search(task_detail):
         uid_list_new = uid_list
         
     else:
-        friends_list = []
-        ## 得到朋友圈uid_list
-        #for uid in uid_list:
-        friends_list_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['_source']
-        for result in friends_list_results:
-            friends_list = friends_list + result['friend_list']
-        friends_set_list = list(set(friends_list))
+        if S_TYPE == 'test':
+            uid_list_new = FRIEND_LIST   
+        else:       
+            friends_list = []
+            ## 得到朋友圈uid_list
+            #for uid in uid_list:
+            friends_list_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['_source']
+            for result in friends_list_results:
+                friends_list = friends_list + result['friend_list']
+            friends_set_list = list(set(friends_list))
 
-        uid_list_new = friends_set_list
+            uid_list_new = friends_set_list
 
-        sort_item = 'sensitive'
+            sort_item = 'sensitive'
 
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
-                    'terms':uid_list_new
+                    'terms':{'uid':uid_list_new}
                 }
             }
         },
         'sort':{sort_item:{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-    es_results = es.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['docs']
 
-    return es_results
+    print 'uid_list_new::',uid_list_new
+    es_results = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
+
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 
 ## 主动社交- 相关推荐
@@ -879,36 +891,47 @@ def get_related_recommendation(task_detail):
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
-    recommend_list = es.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']['friend_list']
-    recommend_set_list = list(set(recommend_list))
+    if S_TYPE == 'test':
+        recommend_set_list = FOLLOWERS_LIST
+    
+    else:
+        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['followers_uids']
+        recommend_set_list = list(set(recommend_list))
 
     if sort_item != 'friend':
         uid_list = recommend_set_list
     else:
-        friends_list_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
-        for result in friends_list_results:
-            friends_list = friends_list + result['friend_list']
-        friends_set_list = list(set(friends_list))
+        if S_TYPE == 'test':
+            uid_list = FRIEND_LIST
+        else:
+            friends_list_results = es_user_portrait.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
+            for result in friends_list_results:
+                friends_list = friends_list + result['friend_list']
+            friends_set_list = list(set(friends_list))
 
-        uid_list = friends_set_list
+            uid_list = friends_set_list
 
-        sort_item = 'sensitive'
-
+            sort_item = 'sensitive'
 
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
-                    'terms':uid_list
+                    'terms':{'uid':uid_list}
                 }
             }
         },
         'sort':{sort_item:{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-    es_results = es.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['docs']
+    es_results = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
 
-    return es_results
+    results_all = []
+    if es_results:
+        for item in es_results:
+            results_all.append(item['_source'])
+
+    return results_all
 
 
 ## 创建群组

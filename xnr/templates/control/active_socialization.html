@@ -87,166 +87,23 @@
         <div class="actRight">
             <input type="text" class="active-1-find" placeholder="请输入你想要关注的用户的id(多个请用逗号隔开)"/>
             <span class="findSure" title="直接搜索"><i class="icon icon-search"></i></span>
-            <span class="advanced_search">高级搜索</span>
+            <!--<span class="advanced_search">高级搜索</span>-->
         </div>
-        <div class="chooseAdvanced">
-            <div class="choose-1">
-                <div class="choose-1-left">身份分类</div>
-                <div class="choose-1-right">
-                    <label class="checkbox-inline" title="法律机构及人士">
-                        <input type="checkbox" value="法律机构及人士"> 法律机构及人士
-                    </label>
-                    <label class="checkbox-inline" title="境内机构">
-                        <input type="checkbox" value="境内机构"> 境内机构
-                    </label>
-                    <label class="checkbox-inline" title="境外机构">
-                        <input type="checkbox" value="境外机构"> 境外机构
-                    </label>
-                    <label class="checkbox-inline" title="媒体">
-                        <input type="checkbox" value="媒体"> 媒体
-                    </label>
-                    <label class="checkbox-inline" title="境外媒体">
-                        <input type="checkbox" value="境外媒体"> 境外媒体
-                    </label>
-                    <label class="checkbox-inline" title="民间组织">
-                        <input type="checkbox" value="民间组织"> 民间组织
-                    </label>
-                    <label class="checkbox-inline" title="其他">
-                        <input type="checkbox" value="其他"> 其他
-                    </label>
-                    <label class="checkbox-inline" title="政府机构及人士">
-                        <input type="checkbox" value="政府机构及人士"> 政府机构及人士
-                    </label>
-                    <label class="checkbox-inline" title="媒体人士">
-                        <input type="checkbox" value="媒体人士"> 媒体人士
-                    </label>
-                    <label class="checkbox-inline" title="活跃人士">
-                        <input type="checkbox" value="活跃人士"> 活跃人士
-                    </label>
-                    <label class="checkbox-inline" title="草根">
-                        <input type="checkbox" value="草根"> 草根
-                    </label>
-                    <label class="checkbox-inline" title="高校">
-                        <input type="checkbox" value="高校"> 高校
-                    </label>
-                    <label class="checkbox-inline" title="商业人士">
-                        <input type="checkbox" value="商业人士"> 商业人士
-                    </label>
-                </div>
-            </div>
-            <div class="choose-2">
-                <div class="choose-2-left">领域分类</div>
-                <div class="choose-2-right">
-                    <label class="checkbox-inline" title="文体类_娱乐">
-                        <input type="checkbox" value="文体类_娱乐"> 文体类_娱乐
-                    </label>
-                    <label class="checkbox-inline" title="政治类_宗教">
-                        <input type="checkbox" value="政治类_宗教"> 政治类_宗教
-                    </label>
-                    <label class="checkbox-inline" title="文体类_体育">
-                        <input type="checkbox" value="文体类_体育"> 文体类_体育
-                    </label>
-                    <label class="checkbox-inline" title="教育类">
-                        <input type="checkbox" value="教育类"> 教育类
-                    </label>
-                    <label class="checkbox-inline" title="民生类_环保">
-                        <input type="checkbox" value="民生类_环保"> 民生类_环保
-                    </label>
-                    <label class="checkbox-inline" title="政治类_地区和平">
-                        <input type="checkbox" value="政治类_地区和平"> 政治类_地区和平
-                    </label>
-                    <label class="checkbox-inline" title="政治类_反腐">
-                        <input type="checkbox" value="政治类_反腐"> 政治类_反腐
-                    </label>
-                    <label class="checkbox-inline" title="民生类_就业">
-                        <input type="checkbox" value="民生类_就业"> 民生类_就业
-                    </label>
-                    <label class="checkbox-inline" title="政治类_外交">
-                        <input type="checkbox" value="政治类_外交"> 政治类_外交
-                    </label>
-                    <label class="checkbox-inline" title="军事类">
-                        <input type="checkbox" value="军事类"> 军事类
-                    </label>
-                    <label class="checkbox-inline" title="民生类_交通">
-                        <input type="checkbox" value="民生类_交通"> 民生类_交通
-                    </label>
-                    <label class="checkbox-inline" title="民生类_社会保障">
-                        <input type="checkbox" value="民生类_社会保障"> 民生类_社会保障
-                    </label>
-                    <label class="checkbox-inline" title="政治类_暴恐">
-                        <input type="checkbox" value="政治类_暴恐"> 政治类_暴恐
-                    </label>
-                    <label class="checkbox-inline" title="民生类_住房">
-                        <input type="checkbox" value="民生类_住房"> 民生类_住房
-                    </label>
-                    <label class="checkbox-inline" title="民生类_法律">
-                        <input type="checkbox" value="民生类_法律"> 民生类_法律
-                    </label>
-                    <label class="checkbox-inline" title="科技类">
-                        <input type="checkbox" value="科技类"> 科技类
-                    </label>
-                    <label class="checkbox-inline" title="民生类_健康">
-                        <input type="checkbox" value="民生类_健康"> 民生类_健康
-                    </label>
-                    <label class="checkbox-inline" title="其他类">
-                        <input type="checkbox" value="其他类"> 其他类
-                    </label>
-                </div>
-            </div>
-            <div class="choose-3">
-                <div class="choose-3-left">标签信息</div>
-                <div class="choose-3-right">
-                    <div style="display: inline-block;">
-                        <span>标签类别：</span>
-                        <select id="tagType">
-                            <option disabled selected>请选择标签类别</option>
-                        </select>
-                    </div>
-                    <div style="display: inline-block;margin-left: 10px;">
-                        <span>标签名：</span>
-                        <select id="tagName">
-                            <option disabled selected>请选择标签名字</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="choose-4">
-                <div class="choose-4-left">其他信息</div>
-                <div class="choose-4-right">
-                    <div style="display: inline-block;">
-                        <span>微话题：</span>
-                        <input type="text" class="smallName" placeholder="请输入微话题"/>
-                    </div>
-                    <div style="display: inline-block;margin-left: 10px;">
-                        <span>关键字：</span>
-                        <input type="text" class="smallName" placeholder="请输入关键字"/>
-                    </div>
-                    <div style="display: inline-block;margin-left: 10px;">
-                        <span>活跃地点：</span>
-                        <select id="activePlace">
-                            <option disabled selected>请选择省/市</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="chooseAdvanced-2">
-            <span class="advanced-2-right">确定</span>
-        </div>
+        <!---->
     </div>
     <div class="active-2" style="margin-top: 20px;">
         <img src="/static/images/icon.png" alt="">
         <span style="display:inline-block;font-size: 18px;font-weight: 900;color: #fff">相关推荐</span>
         <div class="suggestion" style="margin: 20px 0 30px;">
             <ul id="myTabs" class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
+                <li role="presentation" class="active" tp="influence">
                     <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-info-sign"></b>&nbsp;按影响力</a>
                 </li>
-                <li role="presentation">
-                    <a href="#sensitive" role="tab" data-toggle="tab"><b class="icon icon-dashboard"></b>&nbsp;按敏感度</a>
+                <li role="presentation" tp="sensitive">
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-dashboard"></b>&nbsp;按敏感度</a>
                 </li>
-                <li role="presentation">
-                    <a href="#friends" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;按朋友圈</a>
+                <li role="presentation" tp="friend">
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;按朋友圈</a>
                 </li>
             </ul>
             <div class="tab-content" id="content">
@@ -256,17 +113,17 @@
                     </div>
                 </div>
 
-                <div role="tabpanel" class="tab-pane" id="sensitive">
-                    <div class="Sensitivity">
-                        <div id="Sensitivity"></div>
-                    </div>
-                </div>
+                <!--<div role="tabpanel" class="tab-pane" id="sensitive">-->
+                    <!--<div class="Sensitivity">-->
+                        <!--<div id="Sensitivity"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <div role="tabpanel" class="tab-pane" id="friends">
-                    <div class="friendsCircle">
-                        <div id="friendsCircle"></div>
-                    </div>
-                </div>
+                <!--<div role="tabpanel" class="tab-pane" id="friends">-->
+                    <!--<div class="friendsCircle">-->
+                        <!--<div id="friendsCircle"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
 
         </div>
@@ -385,19 +242,19 @@
 <script src="/static/js/active_socialization-1.js"></script>
 <script>
     judgment('2');
-    var or_advanced=1;
-    $('.advanced_search').on('click',function () {
-        if (or_advanced==1){
-            $('.chooseAdvanced').slideDown(300);
-            $('.chooseAdvanced-2').show();
-            or_advanced=0;
-        }else {
-            $('.chooseAdvanced').slideUp(100);
-            $('.chooseAdvanced-2').hide();
-            or_advanced=1;
-        }
-
-    })
+//    var or_advanced=1;
+//    $('.advanced_search').on('click',function () {
+//        if (or_advanced==1){
+//            $('.chooseAdvanced').slideDown(300);
+//            $('.chooseAdvanced-2').show();
+//            or_advanced=0;
+//        }else {
+//            $('.chooseAdvanced').slideUp(100);
+//            $('.chooseAdvanced-2').hide();
+//            or_advanced=1;
+//        }
+//
+//    })
 
 </script>
 {% endblock %}
