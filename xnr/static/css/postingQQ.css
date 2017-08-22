@@ -196,3 +196,6 @@ body {
     position: relative;
     top: 4px;
 }
+#container .historyNews .fixed-table-body {
+    text-align: center;
+}

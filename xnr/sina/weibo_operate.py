@@ -37,17 +37,17 @@ class SinaOperateAPI:
         }
 
     def __getPostURL(self, url, post_data):
-        print 'post_data:::',post_data
-        print 'url:::',url
+        #print 'post_data:::',post_data
+        #print 'url:::',url
         try:
 
             data = urllib.urlencode(post_data).encode('utf-8')
-            print 'data::::',data
+            #print 'data::::',data
             request = urllib2.Request(url=url, data=data, headers=self._headers)
             response = urllib2.urlopen(request, timeout=90)
 
             content = response.read()
-            print content
+            #print content
             succ = json.loads(content)
             if succ['code'] == '100000':
                 print 'publish success...', succ['msg']
