@@ -10,7 +10,8 @@ from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
-                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type
+                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
+                             weibo_xnr_index_name,weibo_xnr_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
 from xnr.parameter import MAX_VALUE,DAY,MID_VALUE
 
@@ -255,10 +256,47 @@ def attach_fans_follow(task_detail):
     return mark
 
 ###加入语料库
+#task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
+def addto_weibo_corpus(task_detail):
+    corpus_type=task_detail[0]
+    theme_daily_name=task_detail[1]
+    text=task_detail[2]
+    uid=task_detail[3]
+    mid=task_detail[4]
+    timestamp=task_detail[5]
+    retweeted=task_detail[6]
+    comment=task_detail[7]
+    like=task_detail[8]
+    create_type=task_detail[9]
 
+    corpus_id=task_detail[4]    #mid
+
+    try:
+        es_xnr.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\
+            body={'corpus_type':corpus_type,'theme_daily_name':theme_daily_name,'text':text,'uid':uid,'mid':mid,\
+            'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like,'create_type':create_type})
+        result=True
+    except:
+        result=False
+    return result
 
 ###############################################################
+#批量添加关注
+def attach_fans_batch(xnr_user_no_list,fans_id_list):
+    for xnr_user_no in xnr_user_no_list:
+        xnr_es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        account_name=xnr_es_result['weibo_mail_account']
+        password=xnr_es_result['password']
 
+        mark_list=[]
+        #调用关注函数：
+        for uid in fans_id_list:
+            mark=follow_tweet_func(account_name,password,uid)
+            mark_list.append(mark)
+            #if mark:
+            #保存至关注列表
+            #######################
+    return mark_list
 
 
 #lookup acitve_user
@@ -308,6 +346,7 @@ def weibo_user_detail(user_id):
 	result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user_id)
 	return result
             
+
 
 ###############code test###################
 def weibo_user_test():
