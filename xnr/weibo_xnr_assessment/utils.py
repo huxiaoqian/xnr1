@@ -42,14 +42,13 @@ def get_influ_fans_num(xnr_user_no):
 	fans_num_total = {} # 截止到当天总量统计
 
 	uid = xnr_user_no2uid(xnr_user_no)
-	print 'uid:::',uid
+
 	if xnr_user_no:
 		if S_TYPE == 'test':
 			es_results = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
 								body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
 			current_time = es_results[0]['_source']['timestamp']
-
-			print 'current_time:::',current_time
+		
 		else:
 			current_time = time.time()
 	
