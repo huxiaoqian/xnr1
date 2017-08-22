@@ -6,9 +6,11 @@
     #container .suggestion #myTabs a {
         color: white;
     }
-    .influence .fixed-table-toolbar .search {
+    .influence .fixed-table-toolbar .search,.searchResult .fixed-table-toolbar .search {
         width: 100%!important;
     }
+    .searchResult {display: none;}
+    .bootstrap-table .table>thead>tr>th {width: 8%!important;}
     .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover,
     .nav>li>a:focus, .nav>li>a:hover {
         background: rgba(5, 23, 55, 0.45);
@@ -91,6 +93,9 @@
             <input type="text" class="active-1-find" placeholder="请输入你想要关注的用户的id(多个请用逗号隔开)"/>
             <span class="findSure" title="直接搜索"><i class="icon icon-search"></i></span>
             <!--<span class="advanced_search">高级搜索</span>-->
+        </div>
+        <div class="searchResult">
+            <div id="searchResult"></div>
         </div>
         <!---->
     </div>
@@ -206,7 +211,8 @@
                 <h4 class="modal-title">
                     <img src="/static/images/icon.png" alt="">
                     <span class="details-name"></span>
-                    <p class="addFOCUS">
+                    <i class="uid" style="display: none;"></i>
+                    <p class="addFOCUS" onclick="driectFocus('',this)">
                         <span><i class="icon icon-plus" style="color:#03a9f4;"></i>&nbsp;<b></b></span>
                     </p>
                 </h4>

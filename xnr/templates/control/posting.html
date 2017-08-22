@@ -2,6 +2,7 @@
 {% block title %}<title>发帖操作</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/posting.css">
+<link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
 <style>
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
     #theme-4 .demo-label,#grouplist .demo-label{margin-left: 10px;}
@@ -83,6 +84,7 @@
         text-overflow: ellipsis;
         color: white;
     }
+    #sinaEmotion .face {width: inherit;height: inherit;}
 </style>
 {% endblock %}
 {% block main %}
@@ -114,9 +116,9 @@
                 <div>
                     <a href="###" style="font-family: cursive;color: white;">有什么新鲜事告诉大家？</a>
                 </div>
-                <textarea id="post-2-content" cols="101" rows="6"></textarea>
+                <textarea id="post-2-content" class="content" cols="101" rows="6"></textarea>
                 <div class="add_thing">
-                    <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
                     <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
                     <div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>
                     <div><img src="/static/images/post-4.png">&nbsp;<span>话题</span></div>
@@ -520,29 +522,29 @@
             </div>
             <div class="modal-body">
                 <div class="recommend-body" style="margin-left: 30px;">
-                    <span>按主题：</span>
-                    <div id="recommend-1" style="margin-top: 10px;">
-                        <label class="demo-label" title="生活类">
-                            <input class="demo-radio" type="radio" name="hhee" value='生活类'>
-                            <span class="demo-checkbox demo-radioInput"></span> 生活类
-                        </label>
-                        <label class="demo-label" title="体育类">
-                            <input class="demo-radio" type="radio" name="hhee" value='体育类'>
-                            <span class="demo-checkbox demo-radioInput"></span> 体育类
-                        </label>
-                        <label class="demo-label" title="外交类">
-                            <input class="demo-radio" type="radio" name="hhee" value='外交类'>
-                            <span class="demo-checkbox demo-radioInput"></span> 外交类
-                        </label>
-                        <label class="demo-label" title="暴恐类">
-                            <input class="demo-radio" type="radio" name="hhee" value='暴恐类'>
-                            <span class="demo-checkbox demo-radioInput"></span> 暴恐类
-                        </label>
-                        <label class="demo-label" title="反腐类">
-                            <input class="demo-radio" type="radio" name="hhee" value='反腐类'>
-                            <span class="demo-checkbox demo-radioInput"></span> 反腐类
-                        </label>
-                    </div>
+                    <!--<span>按主题：</span>-->
+                    <!--<div id="recommend-1" style="margin-top: 10px;">-->
+                        <!--<label class="demo-label" title="生活类">-->
+                            <!--<input class="demo-radio" type="radio" name="hhee" value='生活类'>-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 生活类-->
+                        <!--</label>-->
+                        <!--<label class="demo-label" title="体育类">-->
+                            <!--<input class="demo-radio" type="radio" name="hhee" value='体育类'>-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 体育类-->
+                        <!--</label>-->
+                        <!--<label class="demo-label" title="外交类">-->
+                            <!--<input class="demo-radio" type="radio" name="hhee" value='外交类'>-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 外交类-->
+                        <!--</label>-->
+                        <!--<label class="demo-label" title="暴恐类">-->
+                            <!--<input class="demo-radio" type="radio" name="hhee" value='暴恐类'>-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 暴恐类-->
+                        <!--</label>-->
+                        <!--<label class="demo-label" title="反腐类">-->
+                            <!--<input class="demo-radio" type="radio" name="hhee" value='反腐类'>-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 反腐类-->
+                        <!--</label>-->
+                    <!--</div>-->
                     <div class="recommend-2">
                         <div id="recommend-2"></div>
                     </div>
@@ -614,5 +616,17 @@
 
 
 </script>
+<script src="/static/js/jquery.sinaEmotion.js"></script>
 <script src="/static/js/posting-1.js"></script>
+<script>
+    //表情
+    $('.emotion').bind({
+        click: function(event){
+            if(! $('#sinaEmotion').is(':visible')){
+                $(this).sinaEmotion();
+                event.stopPropagation();
+            }
+        }
+    });
+</script>
 {% endblock %}

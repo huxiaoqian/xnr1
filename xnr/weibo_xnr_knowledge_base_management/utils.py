@@ -44,7 +44,10 @@ def show_sensitive_words_default():
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 #step 2.2:  show the list of sensitive words according to the condition
 def show_sensitive_words_condition(create_type,rank):

@@ -1,12 +1,13 @@
 var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+nowUser+'&sort_item=influence';
 public_ajax.call_request('get',relatedUrl,related);
+var idNAME='influence';
 function related(data) {
     console.log(data)
     $.each(data,function (index,item) {
         detList[item.uid]=item;
     })
-    $('#influence').bootstrapTable('load', data);
-    $('#influence').bootstrapTable({
+    $('#'+idNAME).bootstrapTable('load', data);
+    $('#'+idNAME).bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
@@ -83,19 +84,20 @@ function related(data) {
                         fol='已关注';
                     }else if (row.weibo_type=='friends'){
                         fol='相互关注';
-                    }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+                    }else {//if (row.weibo_type=='stranger'||row.weibo_type=='followed')
                         fol='未关注';
                     }
                     return '<span style="cursor: pointer;" onclick="lookDetails(\''+row.uid+'\')">查看详情</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\')">'+fol+'</span>';
+                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\',this)">'+fol+'</span>';
                 },
             },
         ],
     });
-    $('.influence .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.'+idNAME+' .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
 
 $('#container .suggestion #myTabs li').on('click',function () {
+    idNAME='influence';
     var ty=$(this).attr('tp');
     var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+nowUser+'&sort_item='+ty;
     public_ajax.call_request('get',relatedUrl,related);
@@ -107,11 +109,12 @@ $('.findSure').on('click',function () {
         $('#pormpt p').text('搜索内容不能为空。');
         $('#pormpt').modal('show');
     }else {
-        ids=ids.replace(/，/g,',');
-        $('#container .suggestion #myTabs li').removeClass('active');
-        $('#container .suggestion #myTabs li').eq(0).addClass('active');
-        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+nowUser+'&sort_item=influence&uids='+ids;
+        ids=ids.replace(/,/g,'，');
+        idNAME='searchResult';
+        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+nowUser+'&sort_item=influence&uids='+
+            '1249868467，5646533711，2702763965'//+ids;
         public_ajax.call_request('get',searchUrl,related);
+        $('.searchResult').slideDown(30);
     }
 });
 //查看详情
@@ -152,6 +155,7 @@ function lookDetails(puid) {
     }else {//if (person.weibo_type=='stranger'||person.weibo_type=='followed')
         weibo_type='未关注';
     }
+    $('#details .uid').text(person.uid);
     $('#details .details-name').text(name);
     $('#details .det11').text(name).attr('title',name);
     $('#details .det22').text(domain).attr('title',domain);
@@ -174,17 +178,27 @@ function lookDetails(puid) {
     $('#details').modal('show');
 }
 //直接关注
-function driectFocus(_this) {
-
+function driectFocus(uid,_this) {
+    var foc_url,mid='';
+    if (!uid){uid=$(_this).prev().text()}
+    var f=$(_this).find('b').text()||$(_this).text();
+    if (f=='未关注'){
+        mid='follow_operate';
+    }else {
+        mid='unfollow_operate';
+    }
+    foc_url='/weibo_xnr_operate/'+mid+'/?xnr_user_no='+nowUser+'&uid='+uid;
+    public_ajax.call_request('get',foc_url,sucFai)
 }
 //提示
 function sucFai(data) {
+    var m='';
     if (data[0]){
-        f='操作成功';
+        m='操作成功';
     }else {
-        f='操作失败';
+        m='操作失败';
     }
-    $('#pormpt p').text(f);
+    $('#pormpt p').text(m);
     $('#pormpt').modal('show');
 }
 
