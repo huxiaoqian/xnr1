@@ -3,6 +3,47 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/social_feedback.css">
 <style>
+    bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    .reply-1 .fixed-table-body {
+        width: 126px!important;
+        margin: 0 auto!important;
+    }
+    /**/
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}
     .demo-radio{display:none!important;}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
@@ -42,220 +83,65 @@
     </div>
     <div class="type_page" style="margin: 20px 0 30px;">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active" flag="comment">
+            <li role="presentation" class="active" flag="comment" tp="show_comment" idbox="comment-1">
                 <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;评论回复</a>
             </li>
-            <li role="presentation" flag="retweed">
+            <li role="presentation" flag="retweed" tp="show_retweet" idbox="forwarding-1">
                 <a href="#forwarding" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;转发回复</a>
             </li>
-            <li role="presentation" flag="personal">
+            <li role="presentation" flag="personal" tp="show_private" idbox="letter-1">
                 <a href="#private_letter" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;私信回复</a>
             </li>
-            <li role="presentation" flag="@back">
+            <li role="presentation" flag="@back" tp="show_at" idbox="reply-1">
                 <a href="#reply" role="tab" data-toggle="tab"><b class="icon  icon-comments"></b>&nbsp;@回复</a>
             </li>
-            <li role="presentation" flag="focus">
+            <li role="presentation" flag="focus" tp="show_fans" idbox="focus-1">
                 <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;关注回粉</a>
             </li>
         </ul>
         <div class="desc_index">
             <span>排序指标：</span>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="timestamp" checked>
                 <span class="demo-checkbox demo-radioInput"></span> 按时间
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_info">
                 <span class="demo-checkbox demo-radioInput"></span> 按内容敏感度
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="desc">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_user">
                 <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
             </label>
         </div>
         <div class="tab-content" id="content">
             <div role="tabpanel" class="tab-pane active" id="comment">
-                <div class="commentAll">
-                    <div class="commentEvery">
-                        <img src="/static/images/unknown.png" alt="" class="com-head">
-                        <div class="com com-1">
-                            <b class="com-1-name">魅蓝手机</b>
-                            <div class="com-level">
-                                <span style="display: inline-block;">敏感度：</span>
-                                <div class="com-img" style="display: inline-block;">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="com com-2">
-                            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">演员的修养</b>的评论：
-                            <span class="com-2-tent">嘿嘿</span>
-                        </div>
-                        <div class="com com-3">
-                            <span class="com-3-time">2017-11-11 11:11</span>
-                            <span>来自<span class="com-3-source">微博用户 weibo.com</span></span>
-                            <a class="com-3-reply copyFinish" datatype="commentClone">回复</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="commentClone">
-                    <input type="text" class="clone-1"/>
-                    <div class="clone-2">
-                        <img src="/static/images/post-1.png" class="clone-2-1">
-                        <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="demo-label">
-                            <input class="demo-radio clone-2-3" type="checkbox" name="desc2">
-                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
-                        </label>
-                        <a href="###" class="clone-2-4">回复</a>
-                    </div>
+                <div class="comment-1">
+                    <div id="comment-1"></div>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="forwarding">
-                <div class="forwardAll">
-                    <div class="forwardEvery">
-                        <img src="/static/images/unknown.png" alt="" class="for-head">
-                        <div class="for for-1">
-                            <b class="for-1-name">小米手机</b>
-                            <div class="for-level">
-                                <span style="display: inline-block;">敏感度：</span>
-                                <div class="for-img" style="display: inline-block;">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="for for-2">
-                            <b class="for-2-name" style="color: #fa7d3c;cursor: pointer;">演员的修养</b>的评论：
-                            <span class="for-2-tent">嘿嘿</span>
-                        </div>
-                        <div class="for for-3">
-                            <span class="for-3-time">2017-11-11 11:11</span>
-                            <span>来自<span class="for-3-source">微博用户 weibo.for</span></span>
-                            <a class="for-3-reply copyFinish" datatype="forwardClone">回复</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="forwardClone">
-                    <input type="text" class="clone-1"/>
-                    <div class="clone-2">
-                        <img src="/static/images/post-1.png" class="clone-2-1">
-                        <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="demo-label">
-                            <input class="demo-radio clone-2-3" type="checkbox" name="desc3">
-                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
-                        </label>
-                        <a href="###" class="clone-2-4">回复</a>
-                    </div>
+                <div class="forwarding-1">
+                    <div id="forwarding-1"></div>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="private_letter">
-                <div class="letterAll">
-                    <div class="letterEvery">
-                        <img src="/static/images/unknown.png" alt="" class="let-head">
-                        <div class="let let-1">
-                            <b class="let-1-name">微博运动</b>
-                            <div class="let-level">
-                                <span style="display: inline-block;">敏感度：</span>
-                                <div class="let-img" style="display: inline-block;">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                </div>
-                            </div>
-                            <span class="let-1-time">2017-11-11 11:11</span>
-                        </div>
-                        <div></div>
-                        <div class="let let-2">
-                            <span class="let-2-content">http://areyouknow?29138=sjdn&ewwd=23s</span>
-                            <a class="let-2-reply copyFinish" datatype="letterClone">回复</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="letterClone">
-                    <input type="text" class="clone-1"/>
-                    <div class="clone-2">
-                        <img src="/static/images/post-1.png" class="clone-2-1">
-                        <img src="/static/images/post-2.png" class="clone-2-2">
-                        <img src="/static/images/post-11.png" class="clone-2-3">
-                        <a href="###" class="clone-2-4">发送</a>
-                    </div>
+                <div class="letter-1">
+                    <div id="letter-1"></div>
                 </div>
             </div>
+
             <div role="tabpanel" class="tab-pane" id="reply">
-                <div class="replyAll">
-                    <div class="replyEvery">
-                        <img src="/static/images/unknown.png" alt="" class="rep-head">
-                        <div class="rep rep-1">
-                            <b class="rep-1-name">一只狗的使命</b>
-                            <div class="rep-level">
-                                <span style="display: inline-block;">敏感度：</span>
-                                <div class="rep-img" style="display: inline-block;">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                </div>
-                            </div>
-                            <div class="rep-1-time">2017-11-11 12:12</div>
-                        </div>
-                        <div class="rep rep-2">
-                            <span class="rep-2-tent">嘿嘿以哇哈打开上课就放假哦if哦啊是否看见了卡接卡撒佛家</span>
-                        </div>
-                        <div class="rep rep-3">
-                            <img src="/static/images/demo.jpg" alt="" class="rep-3-img">
-                            <a class="rep-3-reply copyFinish" datatype="replyClone">回复</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="replyClone">
-                    <input type="text" class="clone-1"/>
-                    <div class="clone-2">
-                        <img src="/static/images/post-1.png" class="clone-2-1">
-                        <img src="/static/images/post-2.png" class="clone-2-2">
-                        <label class="demo-label">
-                            <input class="demo-radio clone-2-3" type="checkbox" name="desc4">
-                            <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博
-                        </label>
-                        <a href="###" class="clone-2-4">回复</a>
-                    </div>
+                <div class="reply-1">
+                    <div id="reply-1"></div>
                 </div>
             </div>
+
             <div role="tabpanel" class="tab-pane" id="focusReply">
-                <div class="focusAll">
-                    <div class="focusEvery">
-                        <img src="/static/images/unknown.png" alt="" class="foc-head">
-                        <div class="foc foc-1">
-                            <b class="foc-1-name">异性：契约</b>
-                            <div class="foc-level">
-                                <span style="display: inline-block;">敏感度：</span>
-                                <div class="foc-img" style="display: inline-block;">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                    <img src="/static/images/level.png" alt="">
-                                </div>
-                            </div>
-                            <div class="foc-fm" style="float: right;">
-                                <span class="foc-join">
-                                    <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;关注</span>
-                                </span>
-                            </div>
-                            <div class="foc-1-option">
-                                <span>关注</span>&nbsp;<b class="foc-opt-1">21</b>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>粉丝</span>&nbsp;<b class="foc-opt-2">241</b>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <span>微博</span>&nbsp;<b class="foc-opt-3">211</b>&nbsp;&nbsp;&nbsp;&nbsp;
-                            </div>
-                        </div>
-                        <div class="foc foc-2">
-                            <p><span>地址</span>&nbsp;&nbsp;&nbsp;&nbsp;<b class="foc-2-1">北京</b></p>
-                            <p><b class="foc-2-2">助理</b></p>
-                            <p>通过<b class="foc-2-3" style="color:#ec7a7a;">微博推荐</b>关注</p>
-                        </div>
-                    </div>
+                <div class="focus-1">
+                    <div id="focus-1"></div>
                 </div>
             </div>
         </div>
@@ -284,36 +170,12 @@
 <script src="/static/js/social_feedback-1.js"></script>
 <script>
     judgment('2');
-    $('.friends .dropdown-menu li').on('click',function(e) {
-        $('.friends button b').attr('title',e.target.innerHTML).text(e.target.innerHTML);
-    });
-    $('#_timing').datetimepicker('setStartDate',new Date());
-    $("#_timing").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-    });
-    $('#_timing_recommend').datetimepicker('setStartDate',new Date());
-    $("#_timing_recommend").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left",
-    });
 
 //    $('#container .type_page #content .commentEvery .com-3 .com-3-reply').on('click',function () {
 //        var _name=$(this).parents('.commentAll').find('.com-1').find('b').text();
 //        $('#container .type_page #content .commentClone .clone-1').attr('placeholder','回复'+_name);
 //        $('#container .type_page #content .commentClone').show(80);
 //    });
-
-    $('.continue_already_created').on('click',function () {
-        window.open('/registered/socialAccounts/');
-    });
-    $('.first_created').on('click',function () {
-//        window.open('.html');
-    });
 
 </script>
 {% endblock %}
