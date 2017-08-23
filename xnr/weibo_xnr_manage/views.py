@@ -260,10 +260,11 @@ def ajax_wxnr_list_fans():
 
 ##########test code ,can be delete##################
 #test:http://219.224.134.213:9209/weibo_xnr_manage/create_wxnr_fans/?user_id=WXNR0002&fans_info=[5537979196,3969238480,3302557313,5717296960]
+#http://219.224.134.213:9209/weibo_xnr_manage/create_wxnr_fans/?user_id=WXNR0003&fans_info=[5537979196,3969238480,3302557313,5717296960,2659684317]
 @mod.route('/create_wxnr_fans/')
 def ajax_create_wxnr_fans():
 	#user_id='WXNR0002'
-	#fans_info=[5537979196,3969238480,3302557313,5717296960]
+	#fans_info=[5537979196,3969238480,3302557313,5717296960,2659684317]
 	user_id=request.args.get('user_id','')
 	fans_info=request.args.get('fans_info','')
 	results=create_wxnr_fans(user_id,fans_info)

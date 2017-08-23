@@ -77,6 +77,7 @@ def ajax_attach_fans_follow():
 
 #加入语料库
 #task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
+#http://219.224.134.213:9209/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type=日常语料&theme_daily_name=旅游&text=【泸州：方山观光索道11月10日-12月10日停运升级改造】方山客运观光索道已运营16个年头，机电设备已陈旧落后，为更好地保障安全营运，保护广大游客的生命财产安全，于2016年11月10至12月10日，客运观光索道电控系统设备进行提档升级更换改造，升级改造期间停止运营。&uid=2503848121&mid=4045475189951089&retweeted=0&comment=0&like=0&create_type=my_xnrs
 @mod.route('/addto_weibo_corpus/')
 def ajax_addto_weibo_corpus():
     corpus_type=request.args.get('corpus_type','')
@@ -84,7 +85,7 @@ def ajax_addto_weibo_corpus():
     text=request.args.get('text','')
     uid=request.args.get('uid','')
     mid=request.args.get('mid','')
-    timestamp=request.args.get('timestamp','')
+    timestamp=int(time.time())
     retweeted=request.args.get('retweeted','')
     comment=request.args.get('comment','')
     like=request.args.get('like','')
