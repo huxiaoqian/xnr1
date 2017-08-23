@@ -38,7 +38,7 @@ def ajax_show_role_info():
 '''
 ## 敏感词管理
 #添加敏感词
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_sensitive_words/?rank=1&sensitive_words='左倾'&create_type=all_xnrs
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_sensitive_words/?rank=1&sensitive_words=左倾&create_type=all_xnrs
 @mod.route('/create_sensitive_words/')
 def ajax_create_sensitive_words():
     rank = request.args.get('rank','')
@@ -48,6 +48,21 @@ def ajax_create_sensitive_words():
     mark = get_create_sensitive_words(rank,sensitive_words,create_type,create_time)
 
     return json.dumps(mark)
+
+#批量添加敏感词
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_sensitive_words_batch/?rank=2&sensitive_words_string=恐怖，暴力，袭击&create_type=my_xnrs
+@mod.route('/create_sensitive_words_batch/')
+def ajax_create_sensitive_words_batch():
+    rank = request.args.get('rank','')
+    sensitive_words_string = request.args.get('sensitive_words_string','')
+    sensitive_words=sensitive_words_string.encode('utf-8').split('，')
+    create_type = request.args.get('create_type','')
+    create_time = int(time.time())
+    mark_result=[]
+    for item in sensitive_words:
+        mark=get_create_sensitive_words(rank,item,create_type,create_time)
+        mark_result.append(mark)
+    return json.dumps(mark_result)
 
 #默认显示敏感词列表
 #http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/show_sensitive_words_default
