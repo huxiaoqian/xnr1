@@ -67,17 +67,12 @@ function keywords(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="del(\''+row.sensitive_words+'\')">删除</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                     '<span style="cursor: pointer;" onclick="modify(this)">修改</span>';
+                    return '<span style="cursor: pointer;" onclick="del(\''+row.sensitive_words.toString().replace(/'/g,"")+'\')">删除</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                     '<span style="cursor: pointer;" onclick="modify(\''+row.sensitive_words.toString().replace(/'/g,"")+'\')">修改</span>';
                 }
             },
         ],
 
-    });
-    $('#keywords').on( 'click', 'td:has(.editable)', function (e) {
-        //e.preventDefault();
-        e.stopPropagation(); // 阻止事件的冒泡行为
-        $(this).find('.editable').editable('show'); // 打开被点击单元格的编辑状态
     });
     $('.keywords .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
@@ -132,20 +127,31 @@ function del(word) {
     public_ajax.call_request('get',delURL,addYES);
 }
 //修改敏感词
-function modify(_this) {
-    creatTYPE();
-    if ($('.newWord')){$('.newWord').remove()};
-    var v=$(_this).parent().siblings('td').eq(0).text();
-    $(_this).parent().siblings('td').eq(0).html('<input class="newWord" type="text"/>');
-    $('.newWord').focus().val(v);
-    var plyURL='/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='+word+
-        '&rank='+r+'&sensitive_words='+newWords+'&create_type='+creat_type;
-    // public_ajax.call_request('get',plyURL,addYES);
+var senW='';
+function modify(word) {
+    $('#words .nowd1').val(word);
+    senW=word;
+    $('#words').modal('show');
+}
+function sureword() {
+    var newWords=$('#words .nowd2').val();
+    if (newWords==''){
+        $('#pormpt p').text('新的敏感词不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        creatTYPE();
+        var rk=$('.rankcon input:radio[name="rank"]:checked').val();
+        var plyURL='/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='+senW+
+            '&rank='+rk+'&sensitive_words='+newWords+'&create_type='+creat_type;
+        public_ajax.call_request('get',plyURL,addYES);
+    }
+
 }
 //操作返回结果
 function addYES(data) {
+    console.log(data)
     var f='';
-    if (data[0]){
+    if (data){
         f='操作成功';
     }else {
         f='操作失败';
