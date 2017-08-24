@@ -12,7 +12,7 @@ from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_period,send_message
 from xnr.global_config import QQ_S_DATE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
-
+from xnr.qq.getgroup import getgroup
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
@@ -49,9 +49,13 @@ def send_qq_group_message():
     # xnr_qq_number = request.args.get('xnr_number','')
     group = request.args.get('group','')
     text = request.args.get('text','')
-    results = send_message(group, text)
+    results = send_message(group, text)     #传入群汉字名称
     # results = False
     return json.dumps(results)
+
+def show_all_groups():
+    groups = getgroup()
+    return json.dumps(groups)
 
 
 
@@ -59,7 +63,7 @@ def send_qq_group_message():
 # 暂时用不到的函数
 @mod.route('/search_by_xnr_nickname/')
 def ajax_search_by_xnr_nickname():
-
+    results = False
     return json.dumps(results)
 
 
