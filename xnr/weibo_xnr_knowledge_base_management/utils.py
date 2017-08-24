@@ -70,6 +70,9 @@ def show_sensitive_words_condition(create_type,rank):
 	#print query_body
 	if create_type or rank:
 		result=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
+		results=[]
+		for item in result:
+			results.append(item['_source'])
 	else:
 		result=show_sensitive_words_default()
 	return result
@@ -78,9 +81,9 @@ def show_sensitive_words_condition(create_type,rank):
 def delete_sensitive_words(words_id):
 	try:
 		es.delete(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id)
-		result='delete success!'
+		result='true'
 	except:
-		result='delete failed!'
+		result='false'
 	return result
 
 #step 4:	change the sensitive word
@@ -181,9 +184,9 @@ def change_date_remind(task_id,change_info):
 def delete_date_remind(task_id):
 	try:
 		es.delete(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-		result='delete success!'
+		result='true'
 	except:
-		result='delete failed!'
+		result='false'
 	return result
 
 ###########		functional module 3: metaphorical expression 	###########
@@ -257,9 +260,9 @@ def change_hidden_expression(express_id,change_info):
 def delete_hidden_expression(express_id):
 	try:
 		es.delete(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id)
-		result='delete success!'
+		result='true'
 	except:
-		result='delete failed!'
+		result='false'
 	return result
 
 
@@ -364,7 +367,7 @@ def change_select_corpus(corpus_id,corpus_info):
 def delete_corpus(corpus_id):
 	try:
 		es.delete(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
-		result='delete success!'
+		result='true'
 	except:
-		result='delete failed!'
+		result='false'
 	return result

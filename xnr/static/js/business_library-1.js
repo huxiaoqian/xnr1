@@ -67,8 +67,8 @@ function keywords(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="del(\''+row.sensitive_words.toString().replace(/'/g,"")+'\')">删除</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                     '<span style="cursor: pointer;" onclick="modify(\''+row.sensitive_words.toString().replace(/'/g,"")+'\')">修改</span>';
+                    return '<span style="cursor: pointer;" onclick="del(\''+row.sensitive_words+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                     '<span style="cursor: pointer;" onclick="modify(\''+row.sensitive_words+'\')"><i title="修改关键词" class="icon icon-edit"></i></span>';
                 }
             },
         ],
@@ -98,7 +98,7 @@ $('.addKey').on('click',function () {
         });
         ad=1;
     }else {
-        var word=$('.keyVal').val().toString().replace(/，/g,',');
+        var word=$('.keyVal').val().toString().replace(/,/g,'，');
         if (word==''){
             $('#pormpt p').text('敏感词不能为空。');
             $('#pormpt').modal('show');
@@ -113,8 +113,8 @@ $('.addKey').on('click',function () {
             ad=0;
         }else {
             creatTYPE();
-            var addUrl='/weibo_xnr_knowledge_base_management/create_sensitive_words/?rank='+rank+
-                '&sensitive_words='+word+'&create_type='+creat_type;
+            var addUrl='/weibo_xnr_knowledge_base_management/create_sensitive_words_batch/?rank='+rank+
+                '&sensitive_words_string='+word+'&create_type='+creat_type;
             public_ajax.call_request('get',addUrl,addYES);
         }
     }
@@ -153,6 +153,9 @@ function addYES(data) {
     var f='';
     if (data){
         f='操作成功';
+        setTimeout(function () {
+            public_ajax.call_request('get',keywords_url,keywords);
+        },1000)
     }else {
         f='操作失败';
     }
