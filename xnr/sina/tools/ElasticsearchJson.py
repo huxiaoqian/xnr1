@@ -7,7 +7,8 @@ from elasticsearch.helpers import bulk, scan
 from sensitive.get_sensitive import get_sensitive_info,get_sensitive_user
 import sys
 sys.path.append('../../')
-from utils import uid2xnr_user_no
+from utils import uid2xnr_user_no,save_to_fans_follow_ES
+from global_utils import es_xnr as es
 
 es = Elasticsearch("http://219.224.134.213:9205/")
 

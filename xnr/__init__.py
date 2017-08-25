@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from flask import Flask
 from elasticsearch import Elasticsearch
 from flask_debugtoolbar import DebugToolbarExtension

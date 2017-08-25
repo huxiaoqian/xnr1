@@ -448,7 +448,7 @@ def get_save_step_three_2(task_detail):
         #print 'followers_list::',followers_list
         followers_uids = list(set(task_detail['followers_uids'].split('，')))
         print 'followers_uids::',followers_uids
-        item_fans_followers['followers_uids'] = followers_uids
+        item_fans_followers['followers_list'] = followers_uids
         item_fans_followers['xnr_user_no'] = task_id
         print 'item_fans_followers::',item_fans_followers
         es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=task_id,body=item_fans_followers)
