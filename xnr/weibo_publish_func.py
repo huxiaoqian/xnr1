@@ -114,7 +114,8 @@ def newest_time_func(uid):
 
 ## 发布微博
 def publish_tweet_func(account_name,password,text,p_url,rank,rankid):
-
+    print 'account_name::',account_name
+    print 'password:::',password
     xnr = SinaLauncher(account_name,password)
     xnr.login()
     user = SinaOperateAPI(xnr.uid)

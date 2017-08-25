@@ -68,6 +68,7 @@ def get_submit_tweet(task_detail):
     
     weibo_mail_account = es_xnr_result['weibo_mail_account']
     weibo_phone_account = es_xnr_result['weibo_phone_account']
+    password = es_xnr_result['password']
     
     if weibo_mail_account:
         account_name = weibo_mail_account

@@ -133,6 +133,6 @@ class SinaLauncher():
 
 
 if __name__ == '__main__':
-    test = SinaLauncher('', '')
+    test = SinaLauncher('weiboxnr04@126.com', 'xnr123456')
     test.login()
     print test.uid

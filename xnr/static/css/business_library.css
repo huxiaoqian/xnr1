@@ -36,3 +36,37 @@ body {
     width: 90%;
     margin: 20px auto;
 }
+#container .options .opt-1-1 .addKey,#words .nowd1,#words .nowd2 {
+    display: inline-block;
+    padding: 4px 7px;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+#container .options .opt-1-1 .addKey:hover {
+    background: rgba(5, 23, 55, 0.45);
+}
+#words .nowd1,#words .nowd2 {
+    text-align: center;
+    width: 300px;
+    margin-top: 20px;
+    transition: all linear 0.3s;
+}
+#words .nowd1:focus,#words .nowd2:focus {
+    background: white;
+    color: black;
+}
+#container .options .opt-1-1 .keyVal{
+    width: 250px;
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 4px 7px;
+    background: rgba(8,23,44,0.35);
+    transition: all linear 0.3s;
+    transform: translate(150%);
+}

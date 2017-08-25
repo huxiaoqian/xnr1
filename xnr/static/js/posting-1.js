@@ -75,8 +75,7 @@ $('#sure_post').on('click',function () {
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
     //原创
     var post_url_1='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+
-        '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank+
-        '&p_url=""';
+        '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank;
         //'&p_url=["/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/images/1.jpg","/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/images/2.jpg"]';
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
@@ -358,18 +357,21 @@ function contantREM(_this) {
 //内容推荐中的微博直接发布还是定时发布
 function sureTiming(_this) {
     var a=$('#recommend-2 input:radio[name="gh"]:checked').val();
+    var t=$(_this).parent().prev().text();
+    var CNpost_url='';
     if (a=='zhi'){
-
+        CNpost_url='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
     }else {
         if ($('#recommend-2 .START').val() && $('#recommend-2 .ENDING').val()){
             var a=Date.parse(new Date($('.START').val()))/1000;
             var b=Date.parse(new Date($('.ENDING').val()))/1000;
-            post_url_1+='&post_time_sts='+a+'&post_time_ets='+b;
+            CNpost_url+='&post_time_sts='+a+'&post_time_ets='+b;
         }else {
             $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间。');
             $('#pormpt').modal('show');
         }
     }
+    public_ajax.call_request('get',CNpost_url,conViews);
 }
 function calNot(data) {
     if (data=='正在计算'){

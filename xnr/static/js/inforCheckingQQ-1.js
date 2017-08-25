@@ -1,171 +1,211 @@
-// public_ajax.call_request('get',infoWeibo_url,infoWeibo);
-// public_ajax.call_request('get',speechWeibo_url,speechWeibo);
-
-//折线图
-var myChart = echarts.init(document.getElementById('influe-2'));
-var myChart = echarts.init(document.getElementById('pen-2'));
-// 指定图表的配置项和数据
-var option = {
-    title: {
-        text: '未来一周气温变化',
-        textStyle: {color: '#fff',},
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        data:['最高气温','最低气温'],
-        textStyle: {color: '#fff',},
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            dataZoom: {
-                yAxisIndex: 'none'
-            },
-            magicType: {type: ['line', 'bar']},
-            restore: {},
-            saveAsImage: {}
-        },
-        iconStyle:{
-            normal:{color:'#fff',borderColor:'#fff'},
-        }
-    },
-    xAxis:  {
-        type: 'category',
-        boundaryGap: false,
-        axisLine:{lineStyle: {color:'#fff'}},
-        data: ['周一','周二','周三','周四','周五','周六','周日']
-    },
-    yAxis: {
-        type: 'value',
-        axisLine:{lineStyle: {color:'#fff'}},
-        axisLabel: {
-            formatter: '{value} °C'
-        }
-    },
-    series: [
-        {
-            name:'最高气温',
-            type:'line',
-            smooth:true,
-            data:[11, 11, 15, 13, 12, 13, 10],
-            itemStyle:{normal:{areaStyle:{type:'default'}}},
-            areaStyle: {normal:{color:'red',opacity:'0.5'}},
-            markPoint: {
-                data: [
-                    {type: 'max', name: '最大值'},
-                    {type: 'min', name: '最小值'}
-                ]
-            },
-            markLine: {
-                data: [
-                    {type: 'average', name: '平均值'}
-                ]
-            }
-        },
-        {
-            name:'最低气温',
-            type:'line',
-            data:[1, -2, 2, 5, 3, 2, 0],
-            markPoint: {
-                data: [
-                    {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
-                ]
-            },
-            markLine: {
-                data: [
-                    {type: 'average', name: '平均值'},
-                    [{
-                        symbol: 'none',
-                        x: '90%',
-                        yAxis: 'max'
-                    }, {
-                        symbol: 'circle',
-                        label: {
-                            normal: {
-                                position: 'start',
-                                formatter: '最大值'
-                            }
-                        },
-                        type: 'max',
-                        name: '最高点'
-                    }]
-                ]
-            }
-        }
-    ]
-};
-// 使用刚指定的配置项和数据显示图表。
-myChart.setOption(option);
-
-
-// 雷达图
-var myChart = echarts.init(document.getElementById('safe-2-pic1'));
-// 指定图表的配置项和数据
-var option = {
-    title: {
-        text: '基础雷达图'
-    },
-    tooltip: {},
-    legend: {
-        data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
-    },
-    radar: {
-        // shape: 'circle',
-        indicator: [
-            { name: '销售（sales）', max: 6500},
-            { name: '管理（Administration）', max: 16000},
-            { name: '信息技术（Information Techology）', max: 30000},
-            { name: '客服（Customer Support）', max: 38000},
-            { name: '研发（Development）', max: 52000},
-            { name: '市场（Marketing）', max: 25000}
-        ]
-    },
-    series: [{
-        name: '预算 vs 开销（Budget vs spending）',
-        type: 'radar',
-        // areaStyle: {normal: {}},
-        data : [
+var qqnumber='365217204';
+//敏感消息
+var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+qqnumber+'&date='+(Number(Date.parse(new Date()))/1000);
+public_ajax.call_request('get',senNews_url,senNews);
+function senNews(data) {
+    var news=data.hits.hits;
+    $('#content-1-word').bootstrapTable('load', news);
+    $('#content-1-word').bootstrapTable({
+        data:news,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 5,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
             {
-                value : [4300, 10000, 28000, 35000, 50000, 19000],
-                name : '预算分配（Allocated Budget）'
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    var str=
+                        '<div class="everySpeak">'+
+                        '   <div class="speak_center">'+
+                        '       <div class="center_rel">'+
+                        '           <img src="/static/images/post-6.png" class="center_icon">'+
+                        '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
+                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
+                        '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
+                        '               <span class="joinWord" onclick="joinWord()">加入语料库</span>'+
+                        '           </a>'+
+                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+'</div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+    $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
+}
+//敏感用户
+var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+qqnumber;
+public_ajax.call_request('get',senUserurl,senUser);
+function senUser(data) {
+    console.log(data)
+    $('#hot-2').bootstrapTable('load', news);
+    $('#hot-2').bootstrapTable({
+        data:news,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 5,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "QQ号",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    return name;
+                }
             },
             {
-                value : [5000, 14000, 28000, 31000, 42000, 21000],
-                name : '实际开销（Actual Spending）'
-            }
-        ]
-    }]
-};
-// 使用刚指定的配置项和数据显示图表。
-myChart.setOption(option);
-
-// 仪表盘图
-var myChart = echarts.init(document.getElementById('safe-2-pic2'));
-// 指定图表的配置项和数据
-var option = {
-    tooltip : {
-        formatter: "{a} <br/>{b} : {c}%"
-    },
-    toolbox: {
-        feature: {
-            restore: {},
-            saveAsImage: {}
-        }
-    },
-    series: [
-        {
-            name: '业务指标',
-            type: 'gauge',
-            detail: {formatter:'{value}%'},
-            data: [{value: 50, name: '完成率'}]
-        }
-    ]
-};
-
-setInterval(function () {
-    option.series[0].data[0].value = (Math.random() * 100).toFixed(2) - 0;
-    myChart.setOption(option, true);
-},2000);
-
+                title: "昵称",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "敏感发言QQ群",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "发言时间",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "敏感言论消息",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
+                        name=row._source.qq_group_number;
+                    }else {
+                        name=row._source.qq_group_nickname;
+                    };
+                    return name;
+                }
+            },
+        ],
+    });
+    $('.hot-2 .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
+}
+//选择时间搜索
+$('#container .titTime .timeSure').on('click',function () {
+    var start=$('.start').val();
+    var end=$('.end').val();
+    if (start==''||end==''){
+        $('#pormpt p').text('请检查时间，不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqnumber+'&startdate='+start+'&enddate='+end;
+        public_ajax.call_request('get',search_news_url,senNews);
+    }
+});
+//加入语料库
+function joinWord(_this) {
+    var str='';
+    str+=
+        '<label class="demo-label">'+
+        '    <input class="demo-radio" type="checkbox" name="lab" value="" checked>'+
+        '    <span class="demo-checkbox demo-radioInput"></span> '+
+        '</label>';
+    $('#wordbox').html(str);
+}
+//确定加入
+function sureInlab() {
+    var wordlablist=[];
+    $("#wordbox input:checkbox:checked").each(function (index,item) {
+        wordlablist.push($(this).val());
+    });
+    var join_lab_url='';
+    public_ajax.call_request('get',join_lab_url,postYES);
+}
+//操作返回结果
+function postYES(data) {
+    var f='';
+    if (data){f='操作成功'}else {f='操作失败'};
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
+}
