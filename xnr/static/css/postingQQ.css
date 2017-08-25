@@ -82,7 +82,7 @@ body {
 }
 
 #container .post-3 {
-    padding: 0 20px;
+    /*padding: 0 20px;*/
     /*border: 1px solid silver;*/
     /*border-radius: 5px;*/
     /*margin-top:10px;*/
@@ -95,9 +95,9 @@ body {
     background: rgba(3, 8, 16, 0.61);
 }
 #container .post-3 .everySpeak .speak_center {
-    position: relative;
+    /*position: relative;*/
     padding: 10px;
-    background:rgba(8,23,44,0.35);
+    /*background:rgba(8,23,44,0.35);*/
 }
 #container .post-3 .everySpeak .speak_center .center_icon {
     position: absolute;

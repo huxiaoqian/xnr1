@@ -442,8 +442,10 @@ function loginIN(_this) {
     for(var t=0;t<trs.length;t++){
         $(trs[t]).find('td').eq(6).text('离线');
         $(trs[t]).find('td').eq(7).find('a').eq(0).attr('title','登录');
-    }
+    };
+
 }
+
 //删除一个虚拟人
 function deletePerson(QQnumber) {
     var del_url='/qq_xnr_manage/delete_qq_xnr/?qq_number='+QQnumber;
