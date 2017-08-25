@@ -14,10 +14,6 @@ from utils import search_by_xnr_number,search_by_period,aggr_sen_users,rank_sen_
 mod = Blueprint('qq_xnr_monitor', __name__, url_prefix='/qq_xnr_monitor')
 
 
-
-
-
-
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')

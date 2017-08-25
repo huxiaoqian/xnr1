@@ -53,6 +53,7 @@ def send_qq_group_message():
     # results = False
     return json.dumps(results)
 
+@mod.route('/show_all_groups/')
 def show_all_groups():
     groups = getgroup()
     return json.dumps(groups)
