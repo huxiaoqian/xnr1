@@ -36,6 +36,7 @@ qq_xnr_index_type = 'user'
 #use to save xnr group message
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
+sent_group_message_index_name_pre = 'sent_group_message_'
 
 # use to search flow text and bci 
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)

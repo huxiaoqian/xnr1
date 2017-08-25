@@ -21,3 +21,7 @@ def penetration():
 @mod.route('/safe/')
 def safe():
     return render_template('behavioGauge/safe.html')
+    
+@mod.route('/behaviorQQ/')
+def behaviorQQ():
+    return render_template('behavioGauge/behaviorQQ.html')

@@ -5,11 +5,15 @@ weibo report management
 '''
 import sys
 import json
+import xlwt
+import time
 from xnr.global_utils import es_xnr,weibo_report_management_index_name,weibo_report_management_index_type,\
 							 weibo_xnr_index_name,weibo_xnr_index_type
 
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func                             
 from xnr.parameter import MAX_SEARCH_SIZE
+from xnr.time_utils import ts2date
+
 #show report content default
 def show_report_content():
 	query_body={
@@ -19,12 +23,12 @@ def show_report_content():
 		'size':MAX_SEARCH_SIZE,
 		'sort':{'report_time':{'order':'desc'}}
 	}
-	result=es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+	result=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
 	return result
 
 #show report content by report_type
 def show_report_typecontent(report_type):
-	query_body={
+    query_body={
 		'query':{
 			'filtered':{
 				'filter':{
@@ -36,8 +40,11 @@ def show_report_typecontent(report_type):
 		'size':MAX_SEARCH_SIZE,
 		'sort':{'report_time':{'order':'desc'}}
 	}
-	result=es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
-	return result
+    if report_type:
+        result=show_report_content()
+    else:
+        result=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+    return result
 
 #pubic function:like ,retweet ,comment
 #################微博操作##########
@@ -92,4 +99,32 @@ def get_weibohistory_like(task_detail):
     return mark
 
 #export into excel
-#def export_report_excel():
+#step 1: get the data ----获取数据，当前页面显示的数据
+#step 2: write to excle file -----将数据按行列写入excel文件
+#step 3: download the file ----下载文件
+def get_data_toExcel(create_type):
+    result=show_report_typecontent(create_type)
+    return result
+
+def export_data_toExcel(create_type):
+    data_result=get_data_toExcel(create_type)
+
+    #实例化一个workbook对象（即excel文件）
+    wbk=xlwt.Workbook()    
+
+    sheet=wbk.add_sheet('Sheet1',cell_overwrite_ok=True)
+    #设置excel名
+    get_time=int(time.time())
+    time_name=ts2date(get_time)
+
+    for i in xrange(len(result)):
+        for j in xrange(len(result[i])):
+            sheet.write(i,j,result[i][j])
+    
+    filename=str(time_name)+'xlsx'
+    mark=wbk.save(filename)
+    return mark 
+
+
+
+

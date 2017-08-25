@@ -44,6 +44,7 @@ def qq_xnr_mappings():
                     'create_ts':{                    # 创建时间
                         'type':'long',
                         'index':'not_analyzed'
+                    }
                     }                
                 }
             }
