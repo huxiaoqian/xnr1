@@ -90,7 +90,9 @@ def search_by_period(xnr_qq_number,startdate,enddate):
 
 
 def send_message(group,content):
-    result = sendfromweb(group,content)
+    group_list = group.split(',')           #发送多个群消息
+    for g in group_list:
+        result = sendfromweb(g,content)
     # print result
     return result
     
