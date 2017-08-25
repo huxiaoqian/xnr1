@@ -115,34 +115,7 @@ body {
     font-size: 16px;
     display: inline-block;
 }
-/*#container .everySpeak .speak_center .center_3 {*/
-    /*margin: 10px 0;*/
-    /*text-align:center;*/
-    /*border-top: 1px solid slategrey;*/
-    /*padding-top:5px;*/
-/*}*/
-/*#container .everySpeak .speak_center .center_3 span {*/
-    /*display: inline-block;*/
-    /*width: 16%;*/
-    /*padding: 3px 7px;*/
-    /*color: white;*/
-    /*cursor: pointer;*/
-    /*text-align: center;*/
-    /*font-size: 12px;*/
-/*}*/
-/*#container .everySpeak .speak_center .center_3 span:nth-child(2),*/
-/*#container .everySpeak .speak_center .center_3 span:nth-child(5) {*/
-    /*border-left:1px solid slategrey;*/
-    /*border-right:1px solid slategrey;*/
-/*}*/
-/*#container .everySpeak .speak_center .center_3 span:nth-child(4) {*/
-    /*border-left:1px solid slategrey;*/
-/*}*/
-/*#container .everySpeak .speak_center .center_3 span:hover {*/
-    /*color:#eb7350;*/
-/*}*/
-
-#container .dialogue .dialogue-1 #post-content {
+#container .dialogue .dialogue-1 #post-2-content {
     width: 100%;
     background: rgba(8,23,44,0.25);
     color: white;

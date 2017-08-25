@@ -307,90 +307,81 @@ var public_ajax= {
             sortOrder:"desc",
             columns: [
                 {
-                    title: "编号",//标题
-                    field: "",//键名
+                    title: "QQ号码",//标题
+                    field: "qq_number",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-                        return index+1;
-                    }
+                },
+                {
+                    title: "QQ群数量",//标题
+                    field: "qq_groups",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
                 },
                 {
                     title: "昵称",//标题
-                    field: "",//键名
+                    field: "nickname",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        if (row._source.nickname==''||row._source.nickname=='null'||row._source.nickname=='unbknown'){
+                        if (row.nickname==''||row.nickname=='null'||row.nickname=='unknown'){
                             return '未知';
                         }else {
-                            return row._source.nickname;
+                            return row.nickname;
                         }
                     }
                 },
                 {
                     title: "创建时间",//标题
-                    field: "",//键名
+                    field: "create_ts",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        if (row._source.create_ts==''||row._source.create_ts=='null'||row._source.create_ts=='unbknown'){
+                        if (row.create_ts==''||row.create_ts=='null'||row.create_ts=='unknown'){
                             return '未知';
                         }else {
-                            return getLocalTime(row._source.create_ts);
+                            return getLocalTime(row.create_ts);
                         }
                     }
                 },
                 {
                     title: "活跃时间",//标题
-                    field: "",//键名
+                    field: "active_time",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        if (row._source.active_time==''||row._source.active_time=='null'||row._source.active_time=='unbknown'){
+                        if (row.active_time==''||row.active_time=='null'||row.active_time=='unknown'){
                             return '未知';
                         }else {
-                            return row._source.active_time;
+                            return row.active_time;
                         }
                     },
                 },
                 {
                     title: "历史发言数",//标题
-                    field: "",//键名
+                    field: "all_speak_num",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-                        // if (row._source.active_time==''||row._source.active_time=='null'||row._source.active_time=='unbknown'){
-                        //     return '未知';
-                        // }else {
-                        //     return row._source.active_time;
-                        // }
-                    },
                 },
                 {
                     title: "今日发言量",//标题
-                    field: "",//键名
+                    field: "today_speak_num",//键名
                     sortable: true,//是否可排序
                     order: "desc",//默认排序方式
                     align: "center",//水平
                     valign: "middle",//垂直
-                    formatter: function (value, row, index) {
-                        // if (row._source.active_time==''||row._source.active_time=='null'||row._source.active_time=='unbknown'){
-                        //     return '未知';
-                        // }else {
-                        //     return row._source.active_time;
-                        // }
-                    },
                 },
                 {
                     title: "登录状态",//标题

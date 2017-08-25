@@ -7,6 +7,7 @@
         margin: 0 auto;
         height: auto!important;
     }
+    #container .content-1-word .fixed-table-body {text-align: center;}
     .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
     .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
@@ -56,6 +57,8 @@
         height:20px;
     }
     .joinWord {
+        position: relative;
+        top: -2px;
         display: inline-block;
         padding: 2px 6px;
         margin-left: 30px;
@@ -94,7 +97,7 @@
                 <div id="content-1-word"></div>
             </div>
         </div>
-        <div class="content-2" style="margin-top: 20px;">
+        <div class="content-2" style="margin-top: 40px;">
             <div class="hot-1" style="margin: 20px 0;">
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff">敏感用户</span>
@@ -107,6 +110,7 @@
 </div>
 
 <!--模态框-->
+<!--提示-->
 <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -135,7 +139,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureInlab()">确定</button>
             </div>
         </div>
     </div>
@@ -148,8 +152,8 @@
 <script>
     judgment('3');
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        //minView:2, //控制时分秒
+        format: "yyyy-mm-dd",
+        minView:2, //控制时分秒
         autoclose: true,
         todayBtn: true,
         pickerPosition: "bottom-left"

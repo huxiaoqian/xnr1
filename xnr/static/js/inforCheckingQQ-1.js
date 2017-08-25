@@ -47,7 +47,7 @@ function senNews(data) {
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
                         '               <span class="joinWord" onclick="joinWord()">加入语料库</span>'+
                         '           </a>'+
-                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:blanchedalmond;font-weight: 700;">摘要内容：</b>'+row._source.text+'</div>'+
+                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+'</div>'+
                         '       </div>'+
                         '   </div>'+
                         '</div>';
@@ -101,23 +101,6 @@ function senUser(data) {
             },
             {
                 title: "昵称",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
-                    }else {
-                        name=row._source.qq_group_nickname;
-                    };
-                    return name;
-                }
-            },
-            {
-                title: "好友数量",//标题
                 field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -202,5 +185,27 @@ $('#container .titTime .timeSure').on('click',function () {
 });
 //加入语料库
 function joinWord(_this) {
-
+    var str='';
+    str+=
+        '<label class="demo-label">'+
+        '    <input class="demo-radio" type="checkbox" name="lab" value="" checked>'+
+        '    <span class="demo-checkbox demo-radioInput"></span> '+
+        '</label>';
+    $('#wordbox').html(str);
+}
+//确定加入
+function sureInlab() {
+    var wordlablist=[];
+    $("#wordbox input:checkbox:checked").each(function (index,item) {
+        wordlablist.push($(this).val());
+    });
+    var join_lab_url='';
+    public_ajax.call_request('get',join_lab_url,postYES);
+}
+//操作返回结果
+function postYES(data) {
+    var f='';
+    if (data){f='操作成功'}else {f='操作失败'};
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
 }

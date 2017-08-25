@@ -1,67 +1,69 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>发帖操作</title>{% endblock %}
 {% block my_css %}
-    <link rel="stylesheet" href="/static/css/postingQQ.css">
-    <style>
-        .bootstrap-table {
-            margin: 0 auto;
-            height: auto!important;
-        }
-        .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
-        .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
-            border: none;
-        }
-        .bootstrap-table thead,.fixed-table-pagination .page-list {
-            display: none!important;
-        }
-        .fixed-table-body {
-            height: auto!important;
-            overflow-y: hidden;
-        }
-        .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-        .table>tbody>tr>td{
-            padding: 0!important;
-        }
-        .fixed-table-container {top: 15px;}
-        .table-hover>tbody>tr:hover {
-            background-color: inherit!important;
-        }
-        .fixed-table-toolbar .search {width: 100%;}
-        .form-control {
-            text-align: center;
-            font-size: 14px;
-            color: white;
-            border: 1px solid silver;
-            border-radius: 5px;
-            padding: 4px 7px;
-            background: rgba(8,23,44,0.35);
-        }
-        .table:not(.table-condensed)>tbody>tr>td {
-            text-align: left!important;
-        }
-        /**/
-        #container .historyNews .everySpeak {
-            width: 950px;
-            margin-bottom: 15px;
-            /*position: relative;*/
-            /*padding: 20px 10px 20px 30px;*/
-            background: rgba(8,23,44,0.35);
-        }
-        #container .historyNews .everySpeak .center_icon {
-            position: absolute;
-            top:19px;
-            left:3px;
-            width: 20px;
-            height:20px;
-        }
-        /*下拉按钮*/
-        .demo-label{display:inline-block;margin:15px 0 0 10px;cursor: pointer;}
-        .demo-radio{display:none}
-        .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 5px 0 0;}
-        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-        /*--------*/
-    </style>
+<link rel="stylesheet" href="/static/css/postingQQ.css">
+<link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
+<style>
+    #sinaEmotion .face {width: inherit;height: inherit;}
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    /**/
+    #container .historyNews .everySpeak {
+        width: 950px;
+        margin-bottom: 15px;
+        /*position: relative;*/
+        /*padding: 20px 10px 20px 30px;*/
+        background: rgba(8,23,44,0.35);
+    }
+    #container .historyNews .everySpeak .center_icon {
+        position: absolute;
+        top:19px;
+        left:3px;
+        width: 20px;
+        height:20px;
+    }
+    /*下拉按钮*/
+    .demo-label{display:inline-block;margin:15px 0 0 10px;cursor: pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 5px 0 0;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /*--------*/
+</style>
 {% endblock %}
 {% block main %}
 <div id="container">
@@ -119,11 +121,11 @@
         </div>
     </div>
 
-    <div class="dialogue" style="width:86%;margin: 0 auto;position: relative;">
+    <div class="dialogue" style="position: relative;margin-top: 30px;">
         <div class="dialogue-1" style="width: 70%;">
-            <textarea id="post-content" class="form-control" cols="" rows="6"></textarea>
+            <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
             <div class="add_thing">
-                <div><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
                 <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
                 <div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>
                 <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
@@ -155,101 +157,8 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="myModal-undone" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人？
-                </p>
-                <img src="" alt="" id="rr">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!--相似微博-->
-<div class="modal fade" id="timeChecking" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">操作提示</h4>
-            </div>
-            <div class="modal-body">
-                请检查您输入的时间（时间不能为空）
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--推荐内容-->
-<div class="modal fade" id="content_recommend" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">内容推荐</h4>
-            </div>
-            <div class="modal-body">
-                <div class="recommend-body" style="margin-left: 30px;">
-                    <span>按主题：</span>
-                    <select id="recommend-1">
-                        <option value="生活类">生活类</option>
-                        <option value="体育类">体育类</option>
-                        <option value="外交类">外交类</option>
-                        <option value="暴恐类">暴恐类</option>
-                        <option value="反腐类">反腐类</option>
-                    </select>
-                    <div style="float: right;margin-right: 18px">
-                        <input type="text" id="search-1-recommend" placeholder="输入关键词快速搜索相关微博"/>
-                        <button type="button" class="btn btn-primary btn-xs" id="search-recommend"
-                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
-                    </div>
-
-                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
-                        <div id="post_center-recommend">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <div class="center_rel">
-                                <a class="center_1" href="###">何仙姑</a>：
-                                <span class="center_2">
-                            【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                        </span>
-                                <div class="center_3" style="margin: 10px 0;">
-                                    <input type="checkbox" class="timing_recommend" style="position: relative;top: 2px;margin-right: 3px;">定时
-                                    <input type="text" value="" id="_timing_recommend" placeholder="选择时间" style="line-height:13px;font-size: 10px;
-                    padding:3px 4px;border: 1px solid silver;">
-                                    <button type="button" class="btn btn-info btn-xs" id="sure_not_timing">发布</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">继续已有创建</button>
             </div>
         </div>
     </div>
@@ -264,7 +173,7 @@
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中
             console.log("获取到内容：" + document.activeElement.value);
-        }else if(ev.keyCode==13&& document.activeElement.id=='post-content'){
+        }else if(ev.keyCode==13&& document.activeElement.id=='post-2-content'){
             console.log("QQ内容：" + document.activeElement.value);
         }
     };
@@ -285,8 +194,17 @@
 
 
 </script>
+<script src="/static/js/jquery.sinaEmotion.js"></script>
 <script src="/static/js/postingQQ-1.js"></script>
 <script>
-
+    //表情
+    $('.emotion').bind({
+        click: function(event){
+            if(! $('#sinaEmotion').is(':visible')){
+                $(this).sinaEmotion();
+                event.stopPropagation();
+            }
+        }
+    });
 </script>
 {% endblock %}

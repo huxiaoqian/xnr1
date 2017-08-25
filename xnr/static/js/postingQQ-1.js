@@ -45,7 +45,7 @@ function personEarly(personEarly_QQ) {
                         '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
                         '           </a>'+
-                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:blanchedalmond;font-weight: 700;">摘要内容：</b>'+row._source.text+ '</div>'+
+                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+ '</div>'+
                         '       </div>'+
                         '   </div>'+
                         '</div>';
