@@ -71,46 +71,6 @@
             </div>
         </div>
     </div>
-
-    <div class="has_person_QQ" style="padding: 10px 30px;display: none;">
-        <div style="margin: 20px 0;">
-            <img src="/static/images/icon.png">
-            <b style="color:white;">已有QQ群虚拟人</b>
-        </div>
-        <div class="has_list_QQ">
-            <span class="hasAddQQ">
-                <b class="icon icon-plus"></b>&nbsp;添加
-            </span>
-            <div class="haslistbagQQ">
-                <div id="haslistQQ"></div>
-            </div>
-        </div>
-        <div class="addQQperson" style="display: none;">
-            <div style="margin: 20px 0;">
-                <img src="/static/images/icon.png">
-                <b style="color:white;">添加QQ群虚拟人</b>
-            </div>
-            <div class="QQoptions" style="text-align: center;">
-                <div class="opt opt-1">
-                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ号码：</span>
-                    <input type="text" class="QQnumber" placeholder="请输入QQ号码"/>
-                </div>
-                <div class="opt opt-2">
-                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群：</span>
-                    <input type="text" class="QQgroup" placeholder="请输入QQ群号码"/>
-                </div>
-                <div class="opt opt-3">
-                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ昵称：</span>
-                    <input type="text" class="QQname" placeholder="请输入QQ昵称"/>
-                </div>
-                <div class="opt opt-4">
-                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ活跃时间：</span>
-                    <input type="text" readonly class="form_datetime QQtime" placeholder="请选择活跃时间"/>
-                </div>
-            </div>
-            <div class="optSure"><span class="optClear">重填</span><span class="optSureadd">确定</span></div>
-        </div>
-    </div>
 </div>
 
 <!--模态框-->
@@ -167,10 +127,6 @@
 
                 </p>
             </div>
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn" data-dismiss="modal">取消</button>-->
-                <!--<button type="button" class="btn" data-dismiss="modal">确定</button>-->
-            <!--</div>-->
         </div>
     </div>
 </div>
@@ -189,18 +145,18 @@
     $('.first_createdQQ').on('click',function () {
         window.open('/registered/virtualCreated/');
     });
-    $('input[name=demo-radio]').on('click',function () {
-        var Type=$(this).attr('weiboqq');
-        if (Type=='W'){
-            $('.has_person').show();
-            $('.undone_person').show();
-            $('.has_person_QQ').hide();
-        }else {
-            $('.has_person').hide();
-            $('.undone_person').hide();
-            $('.has_person_QQ').show();
-        }
-    });
+//    $('input[name=demo-radio]').on('click',function () {
+//        var Type=$(this).attr('weiboqq');
+//        if (Type=='W'){
+//            $('.has_person').show();
+//            $('.undone_person').show();
+//            $('.has_person_QQ').hide();
+//        }else {
+//            $('.has_person').hide();
+//            $('.undone_person').hide();
+//            $('.has_person_QQ').show();
+//        }
+//    });
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         minView:2, //控制时分秒
