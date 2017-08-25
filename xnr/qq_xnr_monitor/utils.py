@@ -38,7 +38,7 @@ def aggr_sen_users(xnr_qq_number):
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
     print index_names
-    results = {}
+    results = []
     for index_name in index_names:    
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)["aggregations"]["sen_users"]["buckets"]
@@ -47,11 +47,63 @@ def aggr_sen_users(xnr_qq_number):
             result = []
         if result != []:
             for item in result:
-                if item['key'] in results.keys():
-                    results[item['key']] += item['doc_count']
+                inner_item = {}
+                inner_item['qq_number'] = item['key']
+                inner_item['count'] = item['doc_count']
+                info = get_speaker_info(item['key'],index_name)
+                if info == {}:
+                    inner_item['qq_nick'] = ''
+                    inner_item['qq_groups']=''
+                    inner_item['last_speak_ts'] = ''
                 else:
-                    results[item['key']] = item['doc_count']
+                    inner_item['qq_nick'] = info['qq_nick']
+                    inner_item['qq_groups']=info['qq_groups']
+                    inner_item['last_speak_ts'] = info['last_speak_ts']
+                flag = 1
+                for aa in results:                              #检验是否已经在结果中
+                    if aa['qq_number'] == inner_item['qq_number']:
+                        aa['count'] += inner_item['count']
+                        aa['last_speak_ts'] = inner_item['last_speak_ts']
+                        
+                        flag = 0
+                        continue
+                if flag:        
+                    results.append(inner_item)
+                
     return results
+
+
+def get_speaker_info(qq_number,index_name):
+    query_body = {
+        "query": {
+            "filtered":{
+                "filter":{
+                    "bool":{
+                        "must":[
+                            {"term":{"speaker_qq_number":qq_number},
+                            # "term":{"sensitive_flag":1}
+                            }
+
+                        ]
+                    }
+                }
+            }
+            },
+            "size": MAX_VALUE,
+            "sort":{"timestamp":{"order":"desc"}}
+        }
+
+    result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)['hits']['hits'][0]['_source']
+    results = {}
+    print result
+    if result != []:
+        results['qq_nick'] = result['speaker_nickname']
+        results['last_speak_ts'] = result['timestamp']
+        results['qq_groups'] = {result['qq_group_number']:result['qq_group_nickname']}
+
+    return results
+
+
 
 def rank_sen_users(users):
     result = sorted(users.items(), lambda x, y: cmp(x[1], y[1]), reverse=True)

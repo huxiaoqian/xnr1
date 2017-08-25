@@ -42,7 +42,8 @@ def ajax_search_by_period():
 def show_sensitive_users():
     xnr_qq_number = request.args.get('xnr_number','')
     users = aggr_sen_users(xnr_qq_number)
-    results = rank_sen_users(users)
+    results = users
+    # results = rank_sen_users(users)
     return json.dumps(results)
 
 
