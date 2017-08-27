@@ -64,7 +64,7 @@ def aggr_sen_users(xnr_qq_number):
                     if aa['qq_number'] == inner_item['qq_number']:
                         aa['count'] += inner_item['count']
                         aa['last_speak_ts'] = inner_item['last_speak_ts']
-                        
+                        aa['qq_groups'].update(inner_item['qq_groups'])     # 多个群发言的更新
                         flag = 0
                         continue
                 if flag:        

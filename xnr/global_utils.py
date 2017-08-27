@@ -52,6 +52,9 @@ es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
 
+#use to identify the qq document task redis list
+qq_document_task_name = 'qq_document'
+
 '''
 以下为微博相关定义
 
