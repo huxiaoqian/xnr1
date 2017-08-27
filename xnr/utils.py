@@ -71,7 +71,8 @@ def uid2xnr_user_no(uid):
             }
         }
         result = es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-        xnr_user_no = result[0]['xnr_user_no']
+        xnr_user_no = result[0]['_source']['xnr_user_no']
+
     except:
         xnr_user_no = ''
 
@@ -82,30 +83,35 @@ def uid2xnr_user_no(uid):
 def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
 
     if save_type == 'followers':
-
+        print '11111'
         try:
             results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no)
 
             results = results["_source"]
 
+            print '222222'
+
             try:
                 followers_uids = results['followers_list']
                 followers_uids.append(uid)
                 results['followers_list'] = followers_uids
-
+                print '333333'
                 es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no,body={'doc':results})
 
             except:
+
                 results = {}
                 results['followers_list'] = [uid]
-                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                            id=xnr_user_no,body={'doc':results})
+                es_xnr.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body=results)
 
         except:
             body_info = {}
             body_info['followers_list'] = [uid]
+            body_info['xnr_use_no'] = xnr_use_no
+
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
         
@@ -140,6 +146,6 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
 
 #if __name__ == '__main__':
 
-    #save_to_fans_follow_ES('WXNR0004','1496814565','followers')
+    save_to_fans_follow_ES('WXNR0004','1496814565','followers')
     #es_xnr.delete(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
     #    id='AV4Zi0NasTFJ_K1Z2dDy')
