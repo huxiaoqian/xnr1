@@ -16,7 +16,8 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
 						weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
 						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
-                        weibo_xnr_index_name,weibo_xnr_index_type
+                        weibo_xnr_index_name,weibo_xnr_index_type,weibo_report_management_index_name,\
+                        weibo_report_management_index_type
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
@@ -245,6 +246,15 @@ if __name__ == '__main__':
     #es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
     #result = es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='"4043450590377035"')
     #result = es.delete(index='content_recommend_results',doc_type='content_recommend',id='"4043450590377035"')
-    result = es.delete(index='subopinion_results',doc_type='subopinion',id='"4043450590377035"')
+    # result = es.delete(index='subopinion_results',doc_type='subopinion',id='"4043450590377035"')
     #result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
-    print result
+    item = {}
+    item['xnr_user_no'] = 'WXNR0004'
+    #current_time = 
+    item['report_type'] = u'人物'
+    item['report_time'] = int(time.time())
+    _id = item['xnr_user_no'] + '_' + str(item['report_time'])
+    result = es.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=_id,\
+            body=item)
+    es.delete(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id='AV4kAEXAJy8W-tFBjSRC')
+    #print result
