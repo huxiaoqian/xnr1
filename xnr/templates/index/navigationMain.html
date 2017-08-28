@@ -322,6 +322,9 @@
         window.open('/control/operationControl/');
     });
 
+    //登录类型
+    localStorage.setItem('loginType',encodeURI('weibo'));
+
 
     //虚拟人列表
     $.ajax({
@@ -333,6 +336,9 @@
             console.log(data);
             var str='';
             for (var k in data){
+                if (data[k]==''||data[k]=='unknown'){
+                    data[k]='无昵称';
+                }
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
                     '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+

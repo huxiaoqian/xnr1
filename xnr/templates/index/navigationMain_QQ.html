@@ -19,7 +19,7 @@
             cursor: pointer;
         }
         @media screen and (min-width:1370px) and (max-width:1920px) {
-            .bg13 .control {
+            .bg13 .info {
                 top: 700px!important;
                 left: 700px!important;
             }
@@ -40,42 +40,42 @@
     <div class="bg12"></div>
 
     <div class="bg13">
-        <div class="personal" style="top: 100px;left: 260px;">
+        <div class="personal" style="top: 240px;left:160px;">
             <i class="icon icon-github-alt"></i>
             <div class="cover" id="personal">
                 <em class="icon icon-plus-sign"></em>
                 <span>个人中心</span>
             </div>
         </div>
-        <div class="simulated" style="top: 370px;left: 160px;">
-            <i class="icon icon-cloud-upload"></i>
-            <div class="cover" id="simulated">
-                <em class="icon icon-plus-sign"></em>
-                <span>模拟登录</span>
-            </div>
-        </div>
-        <div class="control" style="top: 490px;left: 450px;">
-            <i class="icon icon-cogs"></i>
-            <div class="cover" id="control">
-                <em class="icon icon-plus-sign"></em>
-                <span>操作控制</span>
-            </div>
-        </div>
-        <div class="reported" style="top:100px;right:260px;">
+        <!--<div class="simulated" style="top: 370px;left: 160px;">-->
+            <!--<i class="icon icon-cloud-upload"></i>-->
+            <!--<div class="cover" id="simulated">-->
+                <!--<em class="icon icon-plus-sign"></em>-->
+                <!--<span>模拟登录</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="control" style="top: 490px;left: 450px;">-->
+            <!--<i class="icon icon-cogs"></i>-->
+            <!--<div class="cover" id="control">-->
+                <!--<em class="icon icon-plus-sign"></em>-->
+                <!--<span>操作控制</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="reported" style="top: 490px;left: 450px;">
             <i class="icon icon-sitemap"></i>
             <div class="cover">
                 <em class="icon icon-plus-sign"></em>
                 <span>行为评估</span>
             </div>
         </div>
-        <div class="info" style="top: 100px;right:260px;">
+        <div class="info" style="top: 490px;right: 450px;">
             <i class="icon icon-eye-open"></i>
             <div class="cover" id="info">
                 <em class="icon icon-plus-sign"></em>
                 <span>信息监测</span>
             </div>
         </div>
-        <div class="system" style="top: 370px;right:160px;">
+        <div class="system" style="top: 240px;right:160px;">
             <i class="icon icon-inbox"></i>
             <div class="cover" id="system">
                 <em class="icon icon-plus-sign"></em>
@@ -131,6 +131,8 @@
         });
 
     });
+    //登录类型
+    localStorage.setItem('loginType',encodeURI('QQ'));
 
     //登录方式
     $('.weibo').hover(function () {

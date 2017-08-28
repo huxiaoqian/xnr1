@@ -23,11 +23,23 @@ public_ajax.call_request('get',influe_1_url,influe);
 
 
 //总数量
+var time=[],growth=[];
 function influe(data) {
     //total_num、day_num、growth_rate
-    if (!isEmptyObject(data)){
+    console.log(data)
+    if (isEmptyObject(data)){
         $('#fans-2').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
+        var dayData=[],total=[];
+        for (var i in data['day_num']){
+            dayData.push(data['day_num'][i]);
+            time.push(getLocalTime(i));
+        };
+        for (var j in data['total_num']){total.push(data['total_num'][j])};
+        for (var h in data['growth_rate']){growth.push(data['growth_rate'][h])};
+        console.log(dayData)
+        console.log(total)
+        console.log(time)
         var myChart = echarts.init(document.getElementById('fans-2'),'dark');
         var option = {
             backgroundColor:'transparent',
@@ -49,12 +61,12 @@ function influe(data) {
                 }
             },
             legend: {
-                data:['粉丝数','粉丝增加总数','增长率']
+                data:['粉丝数','粉丝增加总数']
             },
             xAxis: [
                 {
                     type: 'category',
-                    data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+                    data: time,
                     axisPointer: {
                         type: 'shadow'
                     }
@@ -63,51 +75,46 @@ function influe(data) {
             yAxis: [
                 {
                     type: 'value',
-                    name: '水量',
+                    name: '总数',
                     min: 0,
                     max: 250,
                     interval: 50,
                     axisLabel: {
-                        formatter: '{value} ml'
+                        formatter: '{value} 人'
                     }
                 },
                 {
                     type: 'value',
-                    name: '温度',
+                    name: '增长数',
                     min: 0,
                     max: 25,
                     interval: 5,
                     axisLabel: {
-                        formatter: '{value} °C'
+                        formatter: '{value} 人'
                     }
                 }
             ],
             series: [
                 {
                     name:'粉丝数',
-                    type:'bar',
-                    data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+                    type:'line',
+                    yAxisIndex: 1,
+                    data:total
                 },
                 {
                     name:'粉丝增加总数',
                     type:'bar',
-                    data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+                    data:dayData
                 },
-                {
-                    name:'增长率',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
-                }
             ]
         };
         myChart.setOption(option);
-        increase(data);
+        increase();
     }
 
 }
 //增长率
-function increase(data) {
+function increase() {
     var myChart = echarts.init(document.getElementById('fans-3'),'dark');
     var option = {
         backgroundColor:'transparent',
@@ -135,12 +142,12 @@ function increase(data) {
         xAxis:  {
             type: 'category',
             boundaryGap: false,
-            data: ['周一','周二','周三','周四','周五','周六','周日']
+            data: time
         },
         yAxis: {
             type: 'value',
             axisLabel: {
-                formatter: '{value} °C'
+                formatter: '{value} %'
             }
         },
         series: [
@@ -148,7 +155,7 @@ function increase(data) {
                 name:'增长率',
                 type:'line',
                 // smooth:true,
-                data:[11, 11, 15, 13, 12, 13, 10],
+                data:growth,
                 // itemStyle:{normal:{areaStyle:{type:'default'}}},
                 markPoint: {
                     data: [

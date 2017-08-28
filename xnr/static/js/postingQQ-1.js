@@ -59,7 +59,7 @@ var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&d
 public_ajax.call_request('get',QQ_news_url,personEarly);
 
 //展示QQ群
-// var QQgroup_url='/qq_xnr_operate/show_all_groups/';
+// var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_number='+qqNumber;
 // public_ajax.call_request('get',QQgroup_url,QQgroup);
 function QQgroup(data) {
     console.log(data)
@@ -123,7 +123,8 @@ $('#sure_post').on('click',function () {
         $('#pormpt p').text('请检查消息内容，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+value+'&group='+start;
+        var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+value+'&group='+group.join(',')+
+            '&xnr_number='+qqNumber;
         public_ajax.call_request('get',post_news_url,postYES);
     }
 })

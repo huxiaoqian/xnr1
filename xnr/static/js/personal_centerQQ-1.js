@@ -1,6 +1,5 @@
 function has_table_QQ(has_data_QQ) {
     let sourcePER=eval(has_data_QQ);
-    console.log(sourcePER)
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -29,8 +28,16 @@ function has_table_QQ(has_data_QQ) {
                 valign: "middle",//垂直
             },
             {
-                title: "QQ群数量",//标题
+                title: "QQ群",//标题
                 field: "qq_groups",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "QQ群数量",//标题
+                field: "qq_groups_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -116,8 +123,8 @@ function has_table_QQ(has_data_QQ) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;color:white;" onclick="loginIN(this)" title="登录"><i class="icon icon-key"></i></a>'+
-                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row._id+'\')" title="进入"><i class="icon icon-link"></i></a>'+
+                    return '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this)" title="登录"><i class="icon icon-key"></i></a>'+
+                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.qq_number+'\')" title="进入"><i class="icon icon-link"></i></a>'+
                         '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row._id+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -129,12 +136,20 @@ public_ajax.call_request('GET',url_QQ,has_table_QQ);
 
 //登陆一个QQ虚拟人
 function loginIN(_this) {
-    $(_this).attr('title','在线中').parent().prev().text('在线');
-    var trs=$(_this).parents('tr').siblings('tr');
-    for(var t=0;t<trs.length;t++){
-        $(trs[t]).find('td').eq(6).text('离线');
-        $(trs[t]).find('td').eq(7).find('a').eq(0).attr('title','登录');
-    };
+    var inout=$(_this).attr('in_out');
+    if (inout=='out'){
+        $(_this).attr('title','在线中').parent().prev().text('在线');
+        $(_this).attr('in_out','in');
+    }else {
+        $(_this).attr('title','登录').parent().prev().text('离线');
+        $(_this).attr('in_out','out');
+    }
+
+    // var trs=$(_this).parents('tr').siblings('tr');
+    // for(var t=0;t<trs.length;t++){
+    //     $(trs[t]).find('td').eq(6).text('离线');
+    //     $(trs[t]).find('td').eq(7).find('a').eq(0).attr('title','登录');
+    // };
 
 }
 
@@ -181,13 +196,12 @@ $('.optSureadd').on('click',function () {
     var qnum=$('.QQoptions .QQnumber').val();
     var qgp=$('.QQoptions .QQgroup').val();
     var qname=$('.QQoptions .QQname').val();
-    var qtime=$('.QQoptions .QQtime').val();
-    if (!(qnum||qgp||qname||qtime)){
+    //var qtime=$('.QQoptions .QQtime').val();
+    if (!(qnum||qgp||qname)){
         $('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
         $('#succee_fail').modal('show');
     }else {
-        var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&qq_groups='+qgp+'&qq_nickname='+
-            qname+'&qq_active_time='+qtime;
+        var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&qq_groups='+qgp+'&qq_nickname='+ qname;
         public_ajax.call_request(ajax_method,qqAdd_url,addOR);
     }
 });
