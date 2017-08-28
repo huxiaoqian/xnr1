@@ -40,7 +40,7 @@ function senNews(data) {
                     var str=
                         '<div class="everySpeak">'+
                         '   <div class="speak_center">'+
-                        '       <div class="center_rel">'+
+                        '       <div class="center_rel" style="text-align: left;">'+
                         '           <img src="/static/images/post-6.png" class="center_icon">'+
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
                         '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
@@ -63,9 +63,9 @@ var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+qqnumber;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
     console.log(data)
-    $('#hot-2').bootstrapTable('load', news);
+    $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
-        data:news,
+        data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
         pageSize: 5,//单页记录数
@@ -83,88 +83,88 @@ function senUser(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "QQ号",//标题
-                field: "",//键名
+                title: "QQ号码",//标题
+                field: "qq_number",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
-                    }else {
-                        name=row._source.qq_group_nickname;
-                    };
-                    return name;
-                }
             },
             {
                 title: "昵称",//标题
-                field: "",//键名
+                field: "qq_nick",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
+                    if (row.qq_nick==''||row.qq_nick=='null'||row.qq_nick=='unknown'){
+                        name='无';
                     }else {
-                        name=row._source.qq_group_nickname;
+                        name=row.qq_nick;
                     };
                     return name;
                 }
             },
             {
-                title: "敏感发言QQ群",//标题
-                field: "",//键名
+                title: "敏感发言数量",//标题
+                field: "count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
-                    }else {
-                        name=row._source.qq_group_nickname;
-                    };
-                    return name;
-                }
             },
             {
                 title: "发言时间",//标题
-                field: "",//键名
+                field: "last_speak_ts",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
+                    var time;
+                    if (row.last_speak_ts==''||row.last_speak_ts=='null'||row.last_speak_ts=='unknown'){
+                        time='未知';
                     }else {
-                        name=row._source.qq_group_nickname;
+                        time=getLocalTime(row.last_speak_ts);
                     };
-                    return name;
+                    return time;
                 }
             },
             {
-                title: "敏感言论消息",//标题
-                field: "",//键名
+                title: "敏感言论群",//标题
+                field: "qq_groups",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
+                    var str='';
+                    if (row.qq_groups==''||row.qq_groups=='null'||row.qq_groups=='unknown'||isEmptyObject(row.qq_groups)==true){
+                        str='无数据';
                     }else {
-                        name=row._source.qq_group_nickname;
+                        for(var k in row.qq_groups){
+                            str +=
+                                '<div class="center_rel">'+
+                                '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
+                                '   <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
+                                '       <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+k+'</b><span>）</span>' +
+                                '   </a>'+
+                                '</div>';
+                                // '<div class="everySpeak" style="width: auto;background: transparent;">'+
+                                // '   <div class="speak_center">'+
+                                // '       <div class="center_rel">'+
+                                // '           <img src="/static/images/post-6.png" class="center_icon">'+
+                                // '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
+                                // '               <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+k+'</b><span>）</span>' +
+                                // '           </a>'+
+                                // '       </div>'+
+                                // '   </div>'+
+                                // '</div>';
+                        }
                     };
-                    return name;
+                    return str;
                 }
             },
         ],

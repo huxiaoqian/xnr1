@@ -58,6 +58,7 @@
     }
     /*下拉按钮*/
     .demo-label{display:inline-block;margin:15px 0 0 10px;cursor: pointer;}
+    .user_example_list .demo-label{width:260px;margin:2px 0 0 5px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 5px 0 0;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -132,33 +133,43 @@
             </div>
         </div>
         <div id="user_recommend">
-            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">@用户推荐</p>
-            <ul class="user_example_list" style="padding: 10px 20px;">
-                <li><a href="###">不想当律师的记者</a></li>
-                <li><a href="###">10086专员</a></li>
-                <li><a href="###">艾唐叔叔</a></li>
-                <li><a href="###">我是大律师</a></li>
-            </ul>
+            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">消息推送QQ群名称</p>
+            <div class="user_example_list" style="padding:5px;">
+
+            </div>
         </div>
     </div>
 
 </div>
 <!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
                 </p>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">继续已有创建</button>
+        </div>
+    </div>
+</div>
+
+
+<!--多余的东西-->
+<div class="modal fade" id="moreThing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">QQ群</h4>
+            </div>
+            <div class="modal-body moreCon">
+                <ul></ul>
             </div>
         </div>
     </div>

@@ -1,7 +1,6 @@
 function has_table_QQ(has_data_QQ) {
-    let QQperson=eval(has_data_QQ);
-    console.log(QQperson)
-    let sourcePER=QQperson.hits.hits;
+    let sourcePER=eval(has_data_QQ);
+    console.log(sourcePER)
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -123,9 +122,6 @@ function has_table_QQ(has_data_QQ) {
                 },
             },
         ],
-        onClickCell: function (field, value, row, $element) {
-
-        }
     });
 }
 var url_QQ = '/qq_xnr_manage/show_qq_xnr/';
