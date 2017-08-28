@@ -53,6 +53,7 @@ def write_to_json(file_name,data):
         #json_file.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')).encode('utf-8', 'ignore'))
         json_file.write(json.dumps(data)+'\n')
 
+
 ## 写成json文件
 data_all = {}
 city_move_data = []
@@ -125,4 +126,21 @@ with open('portrait_info_tianjin_0813.txt','rb') as f:
             write_to_json('data_portrait.json',data_all)
         
 
-    
+
+
+with open('/0823/portrait_info_final0.txt','wb') as f:
+
+    for user, user_hashtag in hashtag_dict.iteritems():
+        if user_hashtag:
+            if user not in name_list:
+                hashtag_user.append({'name':user,'draggable':True,'category':0,'number':count_hashtag,'value':len(user_hashtag.keys()),'showNum':2})
+                name_list.append(user)
+                count_hashtag += 1
+                print 'user::',user
+            for hashtag_label, hashtag_count in user_hashtag.iteritems():
+                if hashtag_label not in name_list:
+                    hashtag_user.append({'name':hashtag_label,'draggable':True,'category':1,'number':count_hashtag,'value':hashtag_count,'showNum':2})
+                    hashtag_links.append({'source':user,'target':hashtag_label})
+                    name_list.append(hashtag_label)
+                    count_hashtag += 1
+                    print 'hashtag_label::',hashtag_label

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-
+import os
 import flask_security
 from flask_login import current_user
 from flask import g, session, flash, redirect, request, render_template
+from flask import Flask, request, redirect, url_for, send_from_directory
+from werkzeug import secure_filename, SharedDataMiddleware
 from flask_security.utils import logout_user
 from optparse import OptionParser
 from xnr import create_app
@@ -16,6 +18,41 @@ optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number'
 
 # Create app
 app = create_app()
+
+# upload weibo images
+
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'xnr/weibo_images/') 
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+@app.route('/upload/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
 
 # Create user role data to test with
 @app.route('/create_user_role_test')

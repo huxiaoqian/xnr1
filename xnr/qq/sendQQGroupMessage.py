@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import os
+import subprocess
+
 import hashlib
 import time
 import json
@@ -21,7 +24,17 @@ from qq_xnr_groupmessage_mappings import group_message_mappings
 # es = Elasticsearch("http://219.224.134.213:9205/")
 
 def sendfromweb(group,content):
-    
+    qq_port = '8188'
+    shell_str = 'qq '+qq_port+' send group '+ group + ' ' + content
+    print 'shell_str:', shell_str
+    p = subprocess.Popen(shell_str, \
+        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    line_list = ''
+    for line in p.stdout.readlines():
+        print 'return line:', line
+        line_list += line
+    return line_list
+    '''
     try:
         result = sendMessage(bot,group,content)
     except:
@@ -33,6 +46,7 @@ def sendfromweb(group,content):
         if update_flag:
             return 1    
     return 0
+    '''
 
 # 用于更新es中的历史和当日发言数
 def speak_num_update(xnr_qq_number):
@@ -170,9 +184,78 @@ def string_md5(str):
         md5 = _md5.hexdigest()
     return md5
 
+def get_qqxnr_port(qq_xnr, group):
+    qq_xnr_info = {}
+    #step0: read qq_xnr es to get qqbot_port/xnr_qq_number/xnr_nickname
+    try:
+        qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                id=qq_xnr,_source=True)['_source']
+    except:
+        print 'qq_xnr is not exist'
+        return qq_xnr_info
+    #qqbot_port = '8189'
+    qq_xnr_info['qqbot_port'] = qq_xnr_es_result['qqbot_port']
+    qq_xnr_info['xnr_qq_number'] = qq_xnr
+    qq_xnr_info['xnr_nickname'] = qq_xnr_es_result['nickname']
+    qq_xnr_info['speaker_qq_number'] = qq_xnr
+    qq_xnr_info['speaker_nickname'] = qq_xnr_es_result['nickname']
+    #step1: get qq_group_number
+    p_str = 'qq '+ qqbot_port + ' list group '+ group
+    p = subprocess.Popen(p_str, \
+       shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    line_count = 0
+    for line in p.stdout.readlines():
+        line_count += 1
+        if line_count == 5:
+            item_line_list = line.split('|')
+            qq_group_number = str(int(item_line_list[2]))
+            #print 'item_line_list:', qq_group_number, len(qq_group_number)
+    qq_xnr_info['qq_group_number'] = qq_group_number
+    qq_xnr_info['qq_group_nickname'] = group
+    return qq_xnr_info
+
+def sendfromweb_v2(qq_xnr, group, content):
+    #step0: get qqbot port for qq_xnr
+    qq_xnr_info = get_qqxnr_port(qq_xnr, group) 
+    '''
+    qq_xnr_info = {
+    qqbot_port/xnr_qq_number/xnr_nickname/
+    speaker_qq_number/speaker_nickname/qq_group_number/qq_group_nickname
+    '''
+    #step1: send message
+    qqbot_port = qq_xnr_info['qqbot_port']
+    shell_str = 'qq '+qqbot_port+' send group '+ group + ' ' + content
+    p = subprocess.Popen(shell_str, \
+             shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    line_list = ''
+    for line in p.stdout.readlines():
+        print 'return line:', line
+        line_list += line
+    if '成功' in line_list:
+        qq_item = {
+                   'xnr_qq_number': qq_xnr_info['xnr_qq_number'],
+                   'xnr_nickname': qq_xnr_info['xnr_nickname'],
+                   'timestamp': int(round(time.time())),
+                   'speaker_qq_number': qq_xnr_info['speaker_qq_number'],
+                   'text': content,
+                   'speaker_nickname': qq_xnr_info['speaker_nickname'],
+                   'qq_group_number': qq_xnr_info['qq_group_number'],
+                   'qq_group_nickname': qq_xnr_info['qq_group_nickname']
+                   }
+        qq_json = json.dumps(qq_item)
+        nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+        index_name = sent_group_message_index_name_pre + str(nowDate)
+        index_id = qq_xnr_info['xnr_qq_number'] + '_' + qq_xnr_info['speaker_qq_number'] + '_' + str(int(round(time.time()))) + '_' + conMD5
+        return 1
+    else:
+        return 0
+    
+    
+
 
 if __name__ == '__main__':
     # bot.Login()
     # sendMessage(bot, 'SPDJ5', 'hi everyone')
-    sendfromweb('16美赛二群', 'o')
+    #sendfromweb('16美赛二群', 'o')
     # speak_num_update('365217204')
+    sendfromweb_v2()

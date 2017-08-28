@@ -1,7 +1,8 @@
 #-*-coding:utf-8-*-
 
 from global_utils import es_user_profile,profile_index_name,profile_index_type,\
-                        es_xnr,weibo_xnr_index_name,weibo_xnr_index_type
+                        es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
+                        weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 from parameter import MAX_SEARCH_SIZE
 
 def nickname2uid(nickname_list):
@@ -70,8 +71,81 @@ def uid2xnr_user_no(uid):
             }
         }
         result = es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-        xnr_user_no = result[0]['xnr_user_no']
+        xnr_user_no = result[0]['_source']['xnr_user_no']
+
     except:
         xnr_user_no = ''
 
     return xnr_user_no
+
+# 保存至粉丝关注表
+
+def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
+
+    if save_type == 'followers':
+        print '11111'
+        try:
+            results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)
+
+            results = results["_source"]
+
+            print '222222'
+
+            try:
+                followers_uids = results['followers_list']
+                followers_uids.append(uid)
+                results['followers_list'] = followers_uids
+                print '333333'
+                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':results})
+
+            except:
+
+                results = {}
+                results['followers_list'] = [uid]
+                es_xnr.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body=results)
+
+        except:
+            body_info = {}
+            body_info['followers_list'] = [uid]
+            body_info['xnr_use_no'] = xnr_use_no
+
+            es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no, body=body_info)
+        
+    elif save_type == 'fans':
+        try:
+            results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)
+
+            results = results["_source"]
+
+            try:
+                followers_uids = results['fans_list']
+                followers_uids.append(uid)
+                results['fans_list'] = followers_uids
+
+                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':results})
+
+            except:
+                results = {}
+                results['fans_list'] = [uid]
+                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':results})
+
+        except:
+            body_info = {}
+            body_info['fans_list'] = [uid]
+            es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no, body=body_info)
+
+    return True
+
+#if __name__ == '__main__':
+
+    save_to_fans_follow_ES('WXNR0004','1496814565','followers')
+    #es_xnr.delete(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    #    id='AV4Zi0NasTFJ_K1Z2dDy')
