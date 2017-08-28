@@ -23,8 +23,9 @@ from global_utils import group_message_index_name_pre, group_message_index_type,
 from qq_xnr_groupmessage_mappings import group_message_mappings
 # es = Elasticsearch("http://219.224.134.213:9205/")
 
-def sendfromweb(group,content):
-    qq_port = '8188'
+def sendfromweb(xnr_qq_number,group,content):
+    # qq_port = '8188'
+    qq_xnr_info = get_qqxnr_port(qq_xnr, group) 
     shell_str = 'qq '+qq_port+' send group '+ group + ' ' + content
     print 'shell_str:', shell_str
     p = subprocess.Popen(shell_str, \
