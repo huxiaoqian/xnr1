@@ -116,4 +116,4 @@ sensitive_score_dict = {
                    
 # qq
 group_message_windowsize = 30          # 群历史消息查询范围30天
-
+LOCALHOST_IP = '127.0.0.1'

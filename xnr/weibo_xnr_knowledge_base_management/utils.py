@@ -51,46 +51,51 @@ def show_sensitive_words_default():
 
 #step 2.2:  show the list of sensitive words according to the condition
 def show_sensitive_words_condition(create_type,rank):
-	show_condition_list=[]
-	if create_type:
-		show_condition_list.append({'term':{'create_type':create_type}})
-	if rank:	
-		show_condition_list.append({'term':{'rank':rank}})
+    show_condition_list=[]
+    if create_type and rank:
+       show_condition_list.append({'term':{'create_type':create_type}})	
+       show_condition_list.append({'term':{'rank':rank}})
+    elif create_type:
+    	show_condition_list.append({'term':{'create_type':create_type}})	
+    elif rank:
+    	show_condition_list.append({'term':{'rank':rank}})
 
-	query_body={
+    query_body={
 		'query':{
 			'filtered':{
-				'filter':show_condition_list
+				'filter':{
+				    'bool':{
+				        'must':show_condition_list
+				        }
+				    }
+				
 			}
 
 		},
 		'size':MAX_SEARCH_SIZE,
 		'sort':{'create_time':{'order':'desc'}}
 	}
-	#print query_body
-	if create_type or rank:
-		result=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
-		results=[]
-		for item in result:
-			results.append(item['_source'])
-	else:
-		result=show_sensitive_words_default()
-	return result
+	#print query_	
+    if create_type or rank:
+        results=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in results:
+            result.append(item['_source'])
+    else:
+        result=show_sensitive_words_default()
+    return result
+
 
 #step 3:	delete the sensitive word
 def delete_sensitive_words(words_id):
 	try:
 		es.delete(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id)
-		result='true'
+		result=True
 	except:
-		result='false'
+		result=False
 	return result
 
 #step 4:	change the sensitive word
-#step 4.1: show the selected sensitive word
-def show_select_sensitive_words(words_id):
-	result=es.get(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id)
-	return result
 
 #step 4.2: change the selected sensitive word
 def change_sensitive_words(words_id,change_info):
@@ -102,9 +107,9 @@ def change_sensitive_words(words_id,change_info):
 	try:
 		es.update(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id,\
 			body={"doc":{'rank':rank,'sensitive_words':sensitive_words,'create_type':create_type,'create_time':create_time}})
-		result='change success'
+		result=True
 	except:
-		result='change failed'
+		result=False
 	return result
 
 
@@ -174,9 +179,9 @@ def change_date_remind(task_id,change_info):
 		es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
 			body={"doc":{'date_time':date_time,'keywords':keywords,'create_type':create_type,\
 			'create_time':create_time,'content_recommend':content_recommend}})
-		result='change success'
+		result=True
 	except:
-		result='change failed'
+		result=False
 	return result
 
 
@@ -184,9 +189,9 @@ def change_date_remind(task_id,change_info):
 def delete_date_remind(task_id):
 	try:
 		es.delete(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-		result='true'
+		result=True
 	except:
-		result='false'
+		result=False
 	return result
 
 ###########		functional module 3: metaphorical expression 	###########
@@ -251,18 +256,18 @@ def change_hidden_expression(express_id,change_info):
 	try:
 		es.update(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id,\
 			body={"doc":{'origin_word':origin_word,'evolution_words_string':evolution_words_string,'create_type':create_type,'create_time':create_time}})
-		result='change success'
+		result=True
 	except:
-		result='change failed'
+		result=False
 	return result
 
 #step 4:	delete the metaphorical expression
 def delete_hidden_expression(express_id):
 	try:
 		es.delete(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id)
-		result='true'
+		result=True
 	except:
-		result='false'
+		result=False
 	return result
 
 
@@ -357,9 +362,9 @@ def change_select_corpus(corpus_id,corpus_info):
 		es.update(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\
 			body={"doc":{'corpus_type':corpus_type,'theme_daily_name':theme_daily_name,'text':text,\
 			'uid':uid,'mid':mid,'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like,'create_type':create_type}})
-		result='change success'
+		result=True
 	except:
-		result='change failed'
+		result=False
 	return result
 
 
@@ -367,7 +372,7 @@ def change_select_corpus(corpus_id,corpus_info):
 def delete_corpus(corpus_id):
 	try:
 		es.delete(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
-		result='true'
+		result=True
 	except:
-		result='false'
+		result=False
 	return result

@@ -55,6 +55,9 @@ portrait_index_type = 'user'
 #use to identify the qq document task redis list
 qq_document_task_name = 'qq_document'
 
+#use to identify the qq login png save file
+QRCODE_PATH = '/root/.qqbot-tmp/'
+
 '''
 以下为微博相关定义
 

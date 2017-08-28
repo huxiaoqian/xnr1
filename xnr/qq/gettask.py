@@ -23,12 +23,15 @@ def main():
 
 
 if __name__=='__main__':
-    main()
+    #main()
     #test
-    '''
-    port_list = ['8191', '8192']
+    
+    port_list = ['8193', '8192']
     for port in port_list:
-        p_str = 'python receiveQQGroupMessage.py -i '+port+' >> login'+port+'.txt'
+        p_str1 = 'mkdir /root/.qqbot-tmp/'+port
+        p = subprocess.Popen(p_str1, \
+            shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        p_str = 'python receiveQQGroupMessage.py -i '+port+ '-b /root/.qqbot-tmp/'+ port + ' >> login'+port+'.txt'
         p = subprocess.Popen(p_str, \
             shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    '''
+    

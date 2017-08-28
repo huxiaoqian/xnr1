@@ -20,7 +20,7 @@ sys.path.append('../cron/qq_group_message/')
 # es = Elasticsearch("http://219.224.134.213:9205/")
 from global_utils import es_xnr as es
 from global_utils import group_message_index_name_pre, \
-        group_message_index_type, qq_document_task_name
+        group_message_index_type, qq_document_task_name, QRCODE_PATH
 
 from qq_xnr_groupmessage_mappings import group_message_mappings
 from sensitive_compute import sensitive_check
@@ -94,7 +94,7 @@ def execute():
 
 
 def execute_v2(qqbot_port):
-    bot.Login(['-p', qqbot_port])
+    bot.Login(['-p', qqbot_port, '-b', QRCODE_PATH+qqbot_port])
     bot.Plug('receiveQQGroupMessage')
     bot.Run()
 
