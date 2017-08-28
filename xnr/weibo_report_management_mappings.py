@@ -26,33 +26,17 @@ def weibo_report_management_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'event_name':{
+					'event_name':{  #事件名称
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'text':{
+					'report_content':{  #上报内容，存微博内容dict()
+						'type':'string',
+						'index':'no'
+					},
+					'uid':{ #人物id
 						'type':'string',
 						'index':'not_analyzed'
-					},
-					'uid':{
-						'type':'string',
-						'index':'not_analyzed'
-					},
-					'mid':{
-						'type':'string',
-						'index':'not_analyzed'
-					},
-					'timestamp':{
-						'type':'long'
-					},
-					'retweeted':{
-						'type':'long'
-					},
-					'comment':{
-						'type':'long'
-					},
-					'like':{  # 点赞数
-						'type':'long'
 					}
 				}
 			}

@@ -18,12 +18,14 @@ mod=Blueprint('weibo_xnr_report_manage',__name__,url_prefix='/weibo_xnr_report_m
 上报管理
 '''
 #默认显示上报内容-不分类
+#http://219.224.134.213:9209/weibo_xnr_report_manage/show_report_content
 @mod.route('/show_report_content/')
 def ajax_show_report_content():
 	results=show_report_content()
 	return json.dumps(results)
 
 #按类别显示上报内容
+#http://219.224.134.213:9209/weibo_xnr_report_manage/show_report_typecontent/?report_type=事件
 @mod.route('/show_report_typecontent/')
 def ajax_show_report_typecontent():
 	report_type=request.args.get('report_type','')
