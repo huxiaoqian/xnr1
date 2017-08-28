@@ -9,10 +9,17 @@ from xnr.global_utils import es_flow_text
 from xnr.parameter import MAX_VALUE
 from utils import show_qq_xnr, create_qq_xnr, delete_qq_xnr, change_qq_xnr,\
                   search_qq_xnr
+from xnr.qq.qrCode import getQRCode
 
 
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
+
+
+@mod.route('/get_qr_code/')
+def ajax_get_qr_code():
+    path = getQRCode()
+    return json.dumps(path)
 
 @mod.route('/add_qq_xnr/')
 def ajax_add_qq_xnr():

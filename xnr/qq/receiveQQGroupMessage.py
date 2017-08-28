@@ -12,9 +12,18 @@ from qqbot.utf8logger import INFO
 
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch("http://219.224.134.213:9205/")
-# from global_utils import es_xnr as es
-# from global_utils import group_message_index_name, group_message_index_type
+import sys, getopt
+reload(sys)
+sys.path.append('../')
+sys.path.append('../cron/qq_group_message/')
+
+# es = Elasticsearch("http://219.224.134.213:9205/")
+from global_utils import es_xnr as es
+from global_utils import group_message_index_name_pre, \
+        group_message_index_type, qq_document_task_name
+
+from qq_xnr_groupmessage_mappings import group_message_mappings
+from sensitive_compute import sensitive_check
 
 
 def onQQMessage(bot, contact, member, content):
@@ -37,26 +46,37 @@ def onQQMessage(bot, contact, member, content):
         if content == '':
             INFO('您发了一张图片或假消息... %s', content)
         else:
+            sen_value,sen_words = sensitive_check(content)      # sen_words包含sensitive_words_string：北京&达赖和sensitive_words_dict
+            if sen_value !=0:
+                sen_flag = 1    #该条信息是敏感信息
+            else:
+                sen_flag = 0
             qq_item = {
                 'xnr_qq_number': bot.session.qq,
                 'xnr_nickname': bot.session.nick,
                 'timestamp': member.last_speak_time,
                 'speaker_qq_number': member.qq,
                 'text': content,
+                'sensitive_flag':sen_flag,
+                'sensitive_value': sen_value,
+                'sensitive_words_string': sen_words['sensitive_words_string'],
                 'speaker_nickname': member.nick,
                 'qq_group_number': contact.qq,
                 'qq_group_nickname': contact.nick
             }
             qq_json = json.dumps(qq_item)
-            print qq_json
+            print 'qq_json:',qq_json
 
             conMD5 = string_md5(content)
-
+            '''
             nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-            index_name = 'group_message_' + str(nowDate)
+            index_name = group_message_index_name_pre+ str(nowDate)
             index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
-            es.index(index=index_name, doc_type='record', id=index_id, body=qq_item)
+            if not es.indices.exists(index=index_name):
+                group_message_mappings(bot.session.qq,nowDate)
 
+            es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
+            '''
 
 def string_md5(str):
     md5 = ''
@@ -73,5 +93,15 @@ def execute():
     bot.Run()
 
 
+def execute_v2(qqbot_port):
+    bot.Login(['-p', qqbot_port])
+    bot.Plug('receiveQQGroupMessage')
+    bot.Run()
+
 if __name__ == '__main__':
-    execute()
+    #execute()
+    opts, args = getopt.getopt(sys.argv[1:], 'hi:o:')
+    for op, value in opts:
+        if op == '-i':
+            qqbot_port = value
+            execute_v2(qqbot_port)

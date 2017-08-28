@@ -44,7 +44,8 @@ def qq_xnr_mappings():
                     'create_ts':{                    # 创建时间
                         'type':'long',
                         'index':'not_analyzed'
-                    }                
+                    }
+                    #}                
                 }
             }
         }
@@ -57,4 +58,7 @@ def qq_xnr_mappings():
     es_xnr.indices.create(index=qq_xnr_index_name, body=index_info, ignore=400)
 
 if __name__ == '__main__':
-    qq_xnr_mappings()
+    #qq_xnr_mappings()
+    es_xnr.indices.put_mapping(index=qq_xnr_index_name, doc_type='user', \
+            body={'properties':{'qqbot_port': {'type': 'string', 'index':'not_analyzed'}}}, ignore=400)
+

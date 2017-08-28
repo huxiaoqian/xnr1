@@ -27,9 +27,13 @@ def show_qq_xnr(MAX_VALUE):
             'match_all':{}
         },
     }
-    result = es_xnr.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, body=query_body)
+    results = []
+    result = es_xnr.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, body=query_body)['hits']['hits']
+    for item in result:
+        temp = item['_source'].copy()
+        results.append(temp)
     
-    return result
+    return results
 
 def delete_qq_xnr(qq_number):
     try:

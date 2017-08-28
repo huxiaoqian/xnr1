@@ -1,0 +1,242 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>信息监测</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/inforCheckingQQ.css">
+<style>
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-edit note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">行为评估</b>
+        </div>
+    </div>
+    <div class="type_page" style="width: 90%;margin: 20px auto 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#influence" role="tab" data-toggle="tab"><b class="icon icon-lightbulb"></b>&nbsp;影响力评估</a>
+            </li>
+            <li role="presentation">
+                <a href="#penetration" role="tab" data-toggle="tab"><b class="icon icon-tint"></b>&nbsp;渗透力评估</a>
+            </li>
+            <li role="presentation">
+                <a href="#safe" role="tab" data-toggle="tab"><b class="icon icon-glass"></b>&nbsp;安全性评估</a>
+            </li>
+        </ul>
+        <div class="behavior">
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="influence">
+                    <div class="influe-1 caption" style="margin-top: 20px;">
+                        <div style="display: inline-block;">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="color: #fff;">得分：</span>
+                            <b class="score" style="color:#f44336;">98</b>
+                        </div>
+                        <div class="influe-1-opt" style="display: inline-block;margin-left:30px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo-checkbox" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo-checkbox">
+                                <span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势
+                            </label>
+                        </div>
+                    </div>
+                    <div id="influe-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="penetration">
+                    <div class="pen-1 caption" style="display: inline-block;margin-top: 20px;">
+                        <div style="display: inline-block;">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="color: #fff;">得分：</span>
+                            <b class="score" style="color:#f44336;">98</b>
+                        </div>
+
+                        <div class="pen-1-opt" style="display: inline-block;margin-left:30px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="demo">
+                                <span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势
+                            </label>
+                        </div>
+                    </div>
+                    <div id="pen-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="safe">
+                    <div class="safe-1 caption" style="display: inline-block;margin-top: 20px;">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="color: #fff;">得分：</span>
+                        <b class="score" style="color:#f44336;">98</b>
+                    </div>
+                    <div class="safe-2">
+                        <div id="safe-2-pic1"></div>
+                        <div id="safe-2-pic2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人还是继续已有的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
+                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal-undone" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
+                    创建新的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--相似微博-->
+<div class="modal fade" id="simliar" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">相似微博</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--推荐内容-->
+<div class="modal fade" id="content_recommend" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">内容推荐</h4>
+            </div>
+            <div class="modal-body">
+                <div class="recommend-body" style="margin-left: 30px;">
+                    <span>按主题：</span>
+                    <select id="recommend-1">
+                        <option value="生活类">生活类</option>
+                        <option value="体育类">体育类</option>
+                        <option value="外交类">外交类</option>
+                        <option value="暴恐类">暴恐类</option>
+                        <option value="反腐类">反腐类</option>
+                    </select>
+                    <div style="float: right;margin-right: 18px">
+                        <input type="text" id="search-1-recommend" placeholder="输入关键词快速搜索相关微博"/>
+                        <button type="button" class="btn btn-primary btn-xs" id="search-recommend"
+                                style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>
+                    </div>
+
+                    <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                        <div id="post_center-recommend">
+                            <img src="/static/images/post-6.png" alt="" class="center_icon">
+                            <div class="center_rel">
+                                <a class="center_1" href="###">何仙姑</a>：
+                                <span class="center_2">
+                            【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
+                        </span>
+                                <div class="center_3" style="margin: 10px 0;">
+                                    <input type="checkbox" class="timing_recommend" style="position: relative;top: 2px;margin-right: 3px;">定时
+                                    <input type="text" value="" id="_timing_recommend" placeholder="选择时间" style="line-height:13px;font-size: 10px;
+                    padding:3px 4px;border: 1px solid silver;">
+                                    <button type="button" class="btn btn-info btn-xs" id="sure_not_timing">发布</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script src="/static/js/inforCheckingQQ-1.js"></script>
+<script>
+    document.onkeydown = function(e) {
+        var ev = (typeof event!= 'undefined') ? window.event : e;
+        if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中
+            console.log("获取到内容：" + document.activeElement.value);
+        }else if(ev.keyCode==13&& document.activeElement.id=='post-content'){
+            console.log("QQ内容：" + document.activeElement.value);
+        }
+    };
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+    $('.continue_already_created').on('click',function () {
+        window.open('/registered/socialAccounts/');
+    });
+    $('.first_created').on('click',function () {
+//        window.open('.html');
+    });
+
+</script>
+{% endblock %}

@@ -36,6 +36,7 @@ qq_xnr_index_type = 'user'
 #use to save xnr group message
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
+sent_group_message_index_name_pre = 'sent_group_message_'
 
 # use to search flow text and bci 
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
@@ -50,6 +51,9 @@ es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
+
+#use to identify the qq document task redis list
+qq_document_task_name = 'qq_document'
 
 '''
 以下为微博相关定义
