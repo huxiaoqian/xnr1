@@ -37,7 +37,7 @@ def getgroup_v2(qq_xnr):
         line_count += 1
         if line_count >= 5 and line_count%2==1:
             item_line_list = line.split('|')
-            qq_group_number = str(int(item_line_list[2])))
+            qq_group_number = str(int(item_line_list[2]))
             qq_group_name = item_line_list[3]
             group_dict[qq_group_number] = qq_group_name
     return group_dict
