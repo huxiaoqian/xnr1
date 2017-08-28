@@ -258,4 +258,4 @@ if __name__ == '__main__':
     # sendMessage(bot, 'SPDJ5', 'hi everyone')
     #sendfromweb('16美赛二群', 'o')
     # speak_num_update('365217204')
-    sendfromweb_v2()
+    sendfromweb_v2(qq_xnr, group, content)

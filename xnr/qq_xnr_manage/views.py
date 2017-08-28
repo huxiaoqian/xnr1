@@ -18,8 +18,13 @@ mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
 @mod.route('/get_qr_code/')
 def ajax_get_qr_code():
-    path = getQRCode()
-    return json.dumps(path)
+    qq_number = request.args.get('qq_number', '')
+    if qq_number:
+        path = getQRCode()
+        #path = getQRCode_v2()
+        return json.dumps(path)
+    else:
+        return False
 
 @mod.route('/add_qq_xnr/')
 def ajax_add_qq_xnr():

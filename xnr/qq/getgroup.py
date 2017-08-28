@@ -43,8 +43,8 @@ def getgroup_v2(qq_xnr):
     return group_dict
 
 if __name__ == '__main__':
-    groups = getgroup(qq_xnr)
-    groups = getgroup_v2()
+    groups = getgroup()
+    groups = getgroup_v2(qq_xnr)
     # for group in groups:
     #     group_name = group.name
     #     group_number = group.qq
