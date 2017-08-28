@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # 用于获取登录用户的群列表
-
+import subprocess
 from qqbot import _bot as bot
 from qqbot.utf8logger import INFO
 
@@ -21,13 +21,17 @@ def getgroup():
 def getgroup_v2(qq_xnr):
     group_dict = {}
     #step0: get qqbot_port
+    
     try:
         qq_xnr_es_result = es.get(index_name=qq_xnr_index_name,\
                 doc_type=qq_xnr_index_type, id=qq_xnr, _source=True)['_source']
     except:
         print 'qq_xnr is not exist'
         return group_dict
+    
     #step1: get group list
+    #test
+    #qqbot_port ='8199'
     qqbot_port = qq_xnr_es_result['qqbot_port']
     p_str = 'qq ' + qqbot_port + ' list group'
     p = subprocess.Popen(p_str, shell=True, \
@@ -43,7 +47,7 @@ def getgroup_v2(qq_xnr):
     return group_dict
 
 if __name__ == '__main__':
-    groups = getgroup()
+    #groups = getgroup()
     groups = getgroup_v2(qq_xnr)
     # for group in groups:
     #     group_name = group.name

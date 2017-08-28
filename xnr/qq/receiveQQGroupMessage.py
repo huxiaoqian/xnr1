@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # 如果不希望加载本插件，可以在配置文件中的 plugins 选项中删除 qqbot_test.plugins.grouplog
+import os
 import datetime
 import hashlib
 import json
@@ -11,11 +12,14 @@ from qqbot import _bot as bot
 from qqbot.utf8logger import INFO
 
 from elasticsearch import Elasticsearch
+from sensitive_compute import sensitive_check
 
 import sys, getopt
+
 reload(sys)
 sys.path.append('../')
-sys.path.append('../cron/qq_group_message/')
+sys.path.append('/home/ubuntu8/huxiaoqian/xnr/xnr1/xnr/')
+#sys.path.append('../cron/qq_group_message/')
 
 # es = Elasticsearch("http://219.224.134.213:9205/")
 from global_utils import es_xnr as es
@@ -23,7 +27,6 @@ from global_utils import group_message_index_name_pre, \
         group_message_index_type, qq_document_task_name, QRCODE_PATH
 
 from qq_xnr_groupmessage_mappings import group_message_mappings
-from sensitive_compute import sensitive_check
 
 
 def onQQMessage(bot, contact, member, content):
@@ -94,6 +97,7 @@ def execute():
 
 
 def execute_v2(qqbot_port):
+    os.system('mkdir ' +  QRCODE_PATH+qqbot_port)
     bot.Login(['-p', qqbot_port, '-b', QRCODE_PATH+qqbot_port])
     bot.Plug('receiveQQGroupMessage')
     bot.Run()

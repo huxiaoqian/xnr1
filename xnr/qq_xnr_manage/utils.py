@@ -3,10 +3,13 @@
 use to save function---about deal database
 '''
 import sys
-from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type
+import subprocess
+from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type, ABS_LOGIN_PATH
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 import socket
 from xnr.qq.getgroup import getgroup_v2
+from xnr.qq.receiveQQGroupMessage import execute_v2
+
 
 def IsOpen(ip,port):
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -64,6 +67,7 @@ def create_qq_xnr(xnr_info):
     qq_number = xnr_info['qq_number']
     qq_groups = xnr_info['qq_groups']
     nickname = xnr_info['nickname']
+    
     # active_time = xnr_info[3]
     create_ts = xnr_info['create_ts']
     exist_port_list = get_all_ports()           #返回list形式int型端口号
@@ -79,6 +83,14 @@ def create_qq_xnr(xnr_info):
         result = 1
     except:
         result = 0
+
+    if result == 1:
+        #qqbot_port = '8199'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' >> login'+qqbot_port+'.txt'
+        print 'p_str1:', p_str1
+        p2 = subprocess.Popen(p_str1, \
+               shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #print 'output:', p2.stdout.readlines()
     return result
 
 def show_qq_xnr(MAX_VALUE):

@@ -12,7 +12,7 @@ from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_period,send_message
 from xnr.global_config import QQ_S_DATE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
-from xnr.qq.getgroup import getgroup
+from xnr.qq.getgroup import getgroup_v2
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
