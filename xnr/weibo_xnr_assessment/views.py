@@ -7,7 +7,10 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_flow_text
 from utils import get_influ_fans_num,get_influ_retweeted_num,\
 				get_influ_commented_num,get_influ_like_num,get_influ_at_num,get_influ_private_num,\
-				compute_influence_num
+				compute_influence_num,get_pene_follow_group_sensitive,get_pene_fans_group_sensitive,\
+				get_pene_infor_sensitive,get_pene_feedback_sensitive,get_pene_warning_report_sensitive,\
+				compute_penetration_num,compute_safe_num,get_safe_active,get_tweets_distribute,\
+				get_follow_group_distribute
 
 mod = Blueprint('weibo_xnr_assessment', __name__, url_prefix='/weibo_xnr_assessment')
 
@@ -82,16 +85,88 @@ def ajax_influ_private_num():
 渗透力评估
 '''
 
+# 渗透力分数计算
+@mod.route('/penetration_mark/')
+def ajax_penetration_mark_compute():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = compute_penetration_num(xnr_user_no)
 
+	return json.dumps(results)
+
+# 关注群体敏感度
+@mod.route('/pene_follow_group_sensitive/')
+def ajax_pene_follow_group_sensitive():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_pene_follow_group_sensitive(xnr_user_no)
+
+	return json.dumps(results)
+
+# 粉丝群体敏感度
+@mod.route('/pene_fans_group_sensitive/')
+def ajax_pene_fans_group_sensitive():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_pene_fans_group_sensitive(xnr_user_no)
+
+	return json.dumps(results)
+
+# 发布信息敏感度
+@mod.route('/pene_infor_sensitive/')
+def ajax_pene_infor_sensitive():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_pene_infor_sensitive(xnr_user_no)
+
+	return json.dumps(results)
+
+# 社交反馈敏感度
+@mod.route('/pene_feedback_sensitive/')
+def ajax_pene_feedback_sensitive():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	sort_item = request.args.get('sort_item','be_at')  # 被at- be_at  被转发-be_retweet  被评论- be_comment
+	results = get_pene_feedback_sensitive(xnr_user_no,sort_item)
+
+	return json.dumps(results)
+
+# 预警上报敏感度
+@mod.route('/pene_warning_report_sensitive/')
+def ajax_pene_warning_report_sensitive():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_pene_warning_report_sensitive(xnr_user_no)
+
+	return json.dumps(results)
 
 
 '''
 安全性评估
 '''
+# 安全性分数计算
+@mod.route('/safe_mark/')
+def ajax_safe_mark_compute():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = compute_safe_num(xnr_user_no)
 
+	return json.dumps(results)
 
+# 活跃安全性
+@mod.route('/safe_active/')
+def ajax_safe_active():
+	xnr_user_no = request.args.get('xnr_user_no','')
 
-@mod.route('/show_safe_feature/')
-def ajax_show_safe_feature():
-    results = True
-    return json.dumps(results)
+	results = get_safe_active(xnr_user_no)
+
+	return json.dumps(results)
+
+# 发帖内容分布
+@mod.route('/tweets_distribute/')
+def ajax_tweets_distribute():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_tweets_distribute(xnr_user_no)
+
+	return json.dumps(results)
+
+# 关注人群分布
+@mod.route('/follow_group_distribute/')
+def ajax_follow_group_distribute():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	results = get_follow_group_distribute(xnr_user_no)
+
+	return json.dumps(results)

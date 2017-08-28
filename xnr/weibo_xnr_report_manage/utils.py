@@ -23,16 +23,24 @@ def show_report_content():
 		'size':MAX_SEARCH_SIZE,
 		'sort':{'report_time':{'order':'desc'}}
 	}
-	result=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+	results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+	result=[]
+	for item in results:
+		result.append(item['_source'])
 	return result
 
 #show report content by report_type
 def show_report_typecontent(report_type):
+    print report_type
     query_body={
 		'query':{
 			'filtered':{
 				'filter':{
-					'term':{'report_type':report_type}
+					'bool':{
+						'must':{
+							'term':{'report_type':report_type}
+						}
+					}					
 				}
 			}
 
@@ -41,9 +49,12 @@ def show_report_typecontent(report_type):
 		'sort':{'report_time':{'order':'desc'}}
 	}
     if report_type:
-        result=show_report_content()
+        results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in results:
+            result.append(item['_source'])
     else:
-        result=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+        result=show_report_content()
     return result
 
 #pubic function:like ,retweet ,comment
