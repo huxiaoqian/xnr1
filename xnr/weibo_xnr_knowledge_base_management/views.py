@@ -146,7 +146,7 @@ def ajax_show_select_date_remind():
     return json.dumps(results)
 
 #修改指定的时间节点预警内容
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&date_time=09-11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&keywords=美国911事件&create_type=all_xnrs
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')

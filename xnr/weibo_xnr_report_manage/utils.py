@@ -18,18 +18,19 @@ from xnr.save_weibooperate_utils import save_xnr_like
 
 #show report content default
 def show_report_content():
-	query_body={
+    query_body={
 		'query':{
 			'match_all':{}
 		},
 		'size':MAX_SEARCH_SIZE,
 		'sort':{'report_time':{'order':'desc'}}
 	}
-	results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
-	result=[]
-	for item in results:
-		result.append(item['_source'])
-	return result
+    results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+    result=[]
+    for item in results:
+        item['_source']['report_content']=json.loads(item['_source']['report_content'])
+        result.append(item['_source'])
+    return result
 
 #show report content by report_type
 def show_report_typecontent(report_type):
@@ -54,6 +55,7 @@ def show_report_typecontent(report_type):
         results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
         result=[]
         for item in results:
+            item['_source']['report_content']=json.loads(item['_source']['report_content'])
             result.append(item['_source'])
     else:
         result=show_report_content()
@@ -128,7 +130,7 @@ def get_weibohistory_like(task_detail):
     timestamp=task_detail['timestamp']
     text=task_detail['text']
     update_time=task_detail['update_time']
-    mid=root_uid+root_mid
+    mid=root_uid+'_'+root_mid
 
     if uid not in followers_list:
         if uid not in fans_list:
