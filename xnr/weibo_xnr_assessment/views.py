@@ -10,7 +10,7 @@ from utils import get_influ_fans_num,get_influ_retweeted_num,\
 				compute_influence_num,get_pene_follow_group_sensitive,get_pene_fans_group_sensitive,\
 				get_pene_infor_sensitive,get_pene_feedback_sensitive,get_pene_warning_report_sensitive,\
 				compute_penetration_num,compute_safe_num,get_safe_active,get_tweets_distribute,\
-				get_follow_group_distribute
+				get_follow_group_distribute,get_safe_tweets,get_follow_group_tweets
 
 mod = Blueprint('weibo_xnr_assessment', __name__, url_prefix='/weibo_xnr_assessment')
 
@@ -163,10 +163,31 @@ def ajax_tweets_distribute():
 
 	return json.dumps(results)
 
+# 发帖内容 --话题
+@mod.route('/safe_tweets_topic/')
+def ajax_safe_tweets_topic():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	topic = request.args.get('topic','')
+	sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
+
+	results = get_safe_tweets(xnr_user_no,topic,sort_item)
+
+	return json.dumps(results)
+
 # 关注人群分布
 @mod.route('/follow_group_distribute/')
 def ajax_follow_group_distribute():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	results = get_follow_group_distribute(xnr_user_no)
+
+	return json.dumps(results)
+
+# 关注人群领域 -- 发帖内容
+@mod.route('/follow_group_tweets/')
+def ajax_follow_group_tweets():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	domain = request.args.get('domain','')
+	sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
+	results = get_follow_group_tweets(xnr_user_no,domain,sort_item)
 
 	return json.dumps(results)

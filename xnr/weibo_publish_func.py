@@ -17,7 +17,8 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
 						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                         weibo_xnr_index_name,weibo_xnr_index_type,weibo_report_management_index_name,\
-                        weibo_report_management_index_type
+                        weibo_report_management_index_type,weibo_xnr_fans_followers_index_name,\
+                        weibo_xnr_fans_followers_index_type
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
@@ -248,13 +249,18 @@ if __name__ == '__main__':
     #result = es.delete(index='content_recommend_results',doc_type='content_recommend',id='"4043450590377035"')
     # result = es.delete(index='subopinion_results',doc_type='subopinion',id='"4043450590377035"')
     #result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
-    item = {}
-    item['xnr_user_no'] = 'WXNR0004'
-    #current_time = 
-    item['report_type'] = u'人物'
-    item['report_time'] = int(time.time())
-    _id = item['xnr_user_no'] + '_' + str(item['report_time'])
-    result = es.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=_id,\
-            body=item)
-    es.delete(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id='AV4kAEXAJy8W-tFBjSRC')
-    #print result
+    # item = {}
+    # item['xnr_user_no'] = 'WXNR0004'
+    # #current_time = 
+    # item['report_type'] = u'人物'
+    # item['report_time'] = int(time.time())
+    # _id = item['xnr_user_no'] + '_' + str(item['report_time'])
+    # result = es.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=_id,\
+    #         body=item)
+    # es.delete(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id='AV4kAEXAJy8W-tFBjSRC')
+    # #print result
+    #es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    #    id='WXNR0003', body={'fans_list':['2919766227','3224201544','5274118599','2945961970','5152598686']})
+	
+	es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+				id='WXNR0004', body={'doc':{'xnr_user_no':'WXNR0004','uid':'6346321407'}})
