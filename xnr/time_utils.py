@@ -12,6 +12,9 @@ def unix2hadoop_date(ts):
 def ts2datetime(ts):
     return time.strftime('%Y-%m-%d', time.localtime(ts))
 
+def ts2yeartime(ts):
+    return time.strftime('%Y', time.localtime(ts))
+
 def ts2date(ts):
     return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts))
 

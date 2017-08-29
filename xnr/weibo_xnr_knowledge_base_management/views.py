@@ -6,7 +6,7 @@ import pinyin
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import get_create_sensitive_words,show_sensitive_words_default,show_sensitive_words_condition,delete_sensitive_words,show_select_sensitive_words,change_sensitive_words,\
+from utils import get_create_sensitive_words,show_sensitive_words_default,show_sensitive_words_condition,delete_sensitive_words,change_sensitive_words,\
                   get_create_date_remind,show_date_remind,show_date_remind_condition,show_select_date_remind,change_date_remind,delete_date_remind,\
                   get_create_hidden_expression,show_hidden_expression,show_hidden_expression_condition,show_select_hidden_expression,change_hidden_expression,delete_hidden_expression,\
                   create_corpus,show_corpus,show_corpus_class,show_select_corpus,change_select_corpus,delete_corpus
@@ -50,7 +50,7 @@ def ajax_create_sensitive_words():
     return json.dumps(mark)
 
 #批量添加敏感词
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_sensitive_words_batch/?rank=2&sensitive_words_string=恐怖，暴力，袭击&create_type=my_xnrs
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_sensitive_words_batch/?rank=2&sensitive_words_string=恐怖，暴力，袭击，暴乱&create_type=my_xnrs
 @mod.route('/create_sensitive_words_batch/')
 def ajax_create_sensitive_words_batch():
     rank = request.args.get('rank','')
@@ -92,14 +92,6 @@ def ajax_delete_sensitive_words():
 
 
 #修改指定敏感词
-#显示指定修改的敏感词信息
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/show_select_sensitive_words/?words_id='左倾'
-@mod.route('/show_select_sensitive_words/')
-def ajax_show_select_sensitive_words():
-    words_id=request.args.get('words_id','')
-    results=show_select_sensitive_words(words_id)
-    return json.dumps(results)
-
 #对指定敏感词进行修改
 #http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='左倾'&rank=2&sensitive_words='左倾*'&create_type=all_xnr
 @mod.route('/change_sensitive_words/')
@@ -116,6 +108,7 @@ def ajax_change_sensitive_words():
 ## 时间节点预警
 #添加时间节点预警
 #http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp=2001-09-11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp=1931-09-18&keywords=918事变&create_type=my_xnrs&content_recommend=九一八事变（又称奉天事变、柳条湖事件）是日本在中国东北蓄意制造并发动的一场侵华战争，是日本帝国主义侵华的开端。
 @mod.route('/create_date_remind/')
 def ajax_create_date_remind():
     timestamp = request.args.get('timestamp','')
@@ -153,22 +146,19 @@ def ajax_show_select_date_remind():
     return json.dumps(results)
 
 #修改指定的时间节点预警内容
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&date_time=9.11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&date_time=09-11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')
-    date_time=request.args.get('date_time','')
     keywords=request.args.get('keywords','')
-    create_type=request.args.get('create_type','')
     create_time=int(time.time())
-    content_recommend = request.args.get('content_recommend','')
-    change_info=[date_time,keywords,create_type,create_time,content_recommend]
-    results=change_date_remind(task_id,change_info)
+    results=change_date_remind(task_id,keywords,create_time)
     return json.dumps(results)
 
 
 #删除指定的时间节点预警内容
 #http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id=1503135316
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id=1503409186
 @mod.route('/delete_date_remind/')
 def ajax_delete_date_remind():
     task_id=request.args.get('task_id','')

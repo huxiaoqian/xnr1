@@ -12,7 +12,7 @@ from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_period,send_message
 from xnr.global_config import QQ_S_DATE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
-from xnr.qq.getgroup import getgroup
+from xnr.qq.getgroup import getgroup_v2
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
@@ -25,7 +25,7 @@ mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
 @mod.route('/search_by_period/')
 def ajax_search_by_period():
-    xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份么
+    xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份
     startdate = request.args.get('startdate','')
     enddate = request.args.get('enddate','')
     results = search_by_period(xnr_qq_number,startdate,enddate)
@@ -46,16 +46,18 @@ def ajax_search_by_xnr_number():
 
 @mod.route('/send_qq_group_message/')
 def send_qq_group_message():
-    # xnr_qq_number = request.args.get('xnr_number','')
+    xnr_qq_number = request.args.get('xnr_number','')
     group = request.args.get('group','')
     text = request.args.get('text','')
-    results = send_message(group, text)     #传入群汉字名称
+    results = send_message(xnr_qq_number,group, text)     #传入群汉字名称
     # results = False
     return json.dumps(results)
 
 @mod.route('/show_all_groups/')
 def show_all_groups():
-    groups = getgroup()
+    xnr_qq_number = request.args.get('xnr_number','')
+    # groups = getgroup(xnr_qq_number)
+    groups = getgroup_v2(xnr_qq_number)
     return json.dumps(groups)
 
 
