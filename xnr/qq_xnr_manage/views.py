@@ -9,7 +9,7 @@ from xnr.global_utils import es_flow_text
 from xnr.parameter import MAX_VALUE
 from utils import show_qq_xnr, create_qq_xnr, delete_qq_xnr, change_qq_xnr,\
                   search_qq_xnr
-from xnr.qq.qrCode import getQRCode
+from xnr.qq.qrCode import getQRCode_v2
 
 
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
@@ -18,17 +18,25 @@ mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
 @mod.route('/get_qr_code/')
 def ajax_get_qr_code():
-    path = getQRCode()
-    return json.dumps(path)
+    qq_number = request.args.get('qq_number', '')
+    if qq_number:
+        path = getQRCode_v2(qq_number)
+        return json.dumps(path)
+    else:
+        return False
 
 @mod.route('/add_qq_xnr/')
 def ajax_add_qq_xnr():
+    xnr_info = {}
     qq_number = request.args.get('qq_number','')
-    qq_groups = request.args.get('qq_groups','')
+    qq_groups = request.args.get('qq_groups','')        #所有群号逗号分隔
     nickname = request.args.get('qq_nickname','')
-    active_time = request.args.get('qq_active_time')
+    # active_time = request.args.get('qq_active_time')
     create_time = int(time.time())
-    xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
+    xnr_info['qq_number'] = qq_number
+    xnr_info['qq_groups'] = qq_groups
+    xnr_info['nickname'] = nickname
+    xnr_info['create_ts'] = create_time
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
 

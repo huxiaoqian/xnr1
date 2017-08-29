@@ -1,11 +1,14 @@
 # -*-coding: utf-8-*-
 import os
+import sys
 import time
+import subprocess
+
+#reload(sys)
+#sys.path.append('../')
+#from global_utils import QRCODE_PATH
 
 QRCODE_PATH = '/root/.qqbot-tmp/'
-
-# QRCODE_PATH = 'C:\Users\herry\.qqbot-tmp/'
-
 
 def getQRCode():
     filenames = os.listdir(QRCODE_PATH)
@@ -32,6 +35,34 @@ def compare(x, y):
     else:
         return 0
 
+def getQRCode_v2(qq_xnr):
+    #read qq_xnr es to get qqbot_port
+    
+    try:
+        qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                    id=qq_xnr,_source=True)['_source']
+        qqbot_port = qq_xnr_es_result['qqbot_port']
+    except:
+        print 'qq_xnr is not exist'
+        qqbot_port = ''
+        return 'qqbot_port is not exist'
+    
+    #test
+    #qqbot_port = '8199'
+    #get login png
+    port_dir = QRCODE_PATH+qqbot_port+'/'
+    print 'port_dir:', port_dir
+    filenames = os.listdir(port_dir)
+    print 'filenames:', filenames
+    fileitem = [[filename, os.stat(port_dir+filename).st_mtime] for filename in filenames]
+    print 'fileitem:', fileitem
+    new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=True)[0]
+    new_filepath = new_fileitem[0]
+    return port_dir + new_filepath
+    
 
 if __name__ == '__main__':
-    getQRCode()
+    #getQRCode()
+    qq_xnr = '841319111'
+    new_filepath = getQRCode_v2(qq_xnr)
+    print 'new_filepath:', new_filepath

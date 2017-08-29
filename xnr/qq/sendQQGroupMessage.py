@@ -23,8 +23,9 @@ from global_utils import group_message_index_name_pre, group_message_index_type,
 from qq_xnr_groupmessage_mappings import group_message_mappings
 # es = Elasticsearch("http://219.224.134.213:9205/")
 
-def sendfromweb(group,content):
-    qq_port = '8188'
+def sendfromweb(xnr_qq_number,group,content):
+    # qq_port = '8188'
+    qq_xnr_info = get_qqxnr_port(qq_xnr, group) 
     shell_str = 'qq '+qq_port+' send group '+ group + ' ' + content
     print 'shell_str:', shell_str
     p = subprocess.Popen(shell_str, \
@@ -224,13 +225,17 @@ def sendfromweb_v2(qq_xnr, group, content):
     '''
     #step1: send message
     qqbot_port = qq_xnr_info['qqbot_port']
+    #test
+    #qqbot_port = '8199'
     shell_str = 'qq '+qqbot_port+' send group '+ group + ' ' + content
     p = subprocess.Popen(shell_str, \
              shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    line_list = ''
-    for line in p.stdout.readlines():
-        print 'return line:', line
-        line_list += line
+    #test
+    #line_list = ''
+    #for line in p.stdout.readlines():
+    #    print 'return line:', line
+    #    line_list += line
+    
     if '成功' in line_list:
         qq_item = {
                    'xnr_qq_number': qq_xnr_info['xnr_qq_number'],
@@ -250,7 +255,6 @@ def sendfromweb_v2(qq_xnr, group, content):
     else:
         return 0
     
-    
 
 
 if __name__ == '__main__':
@@ -258,4 +262,4 @@ if __name__ == '__main__':
     # sendMessage(bot, 'SPDJ5', 'hi everyone')
     #sendfromweb('16美赛二群', 'o')
     # speak_num_update('365217204')
-    sendfromweb_v2()
+    sendfromweb_v2(qq_xnr, group, content)
