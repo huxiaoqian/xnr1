@@ -30,6 +30,7 @@ def ajax_show_uncompleted_weiboxnr():
 	results=show_uncompleted_weiboxnr()
 	return json.dumps(results)
 
+#删除虚拟人
 #test:http://219.224.134.213:9209/weibo_xnr_manage/delete_weibo_xnr/?user_id=WXNR0003
 @mod.route('/delete_weibo_xnr/')
 def ajax_delete_weibo_xnr():
