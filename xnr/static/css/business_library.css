@@ -36,7 +36,11 @@ body {
     width: 90%;
     margin: 20px auto;
 }
-#container .options .opt-1-1 .addKey,#words .nowd1,#words .nowd2 {
+#container .options .opt-1-1 .addKey,
+#container .options .opt-2-1 .addNode,
+#container .options .opt-3-1 .addhid,
+#words .nowd1,#words .nowd2,#time .time1,#time .time2,
+#hide .hide1,#hide .hide2,#hide .hide3,#hide .hide4{
     display: inline-block;
     padding: 4px 7px;
     background: transparent;
@@ -45,20 +49,31 @@ body {
     color: white;
     cursor: pointer;
 }
-#container .options .opt-1-1 .addKey:hover {
+#container .options .opt-1-1 .addKey:hover,
+#container .options .opt-2-1 .addNode:hover,
+#container .options .opt-3-1 .addhid:hover {
     background: rgba(5, 23, 55, 0.45);
 }
-#words .nowd1,#words .nowd2 {
+#words .nowd1,#words .nowd2,
+#time .time1,#time .time2,
+#hide .hide1,#hide .hide2,#hide .hide3,#hide .hide4{
     text-align: center;
     width: 300px;
     margin-top: 20px;
     transition: all linear 0.3s;
 }
-#words .nowd1:focus,#words .nowd2:focus {
+#words .nowd1:focus,#words .nowd2:focus,
+#time .time1:focus,#time .time2:focus,
+#hide .hide1:focus,#hide .hide2:focus,#hide .hide3:focus,
+#hide .hide4:focus {
     background: white;
     color: black;
 }
-#container .options .opt-1-1 .keyVal{
+#container .options .opt-1-1 .keyVal,
+#container .options .opt-3-1 .hidVal1,
+#container .options .opt-3-1 .hidVal2,
+#container .options .opt-2-1 .timeVal1,
+#container .options .opt-2-1 .timeVal2 {
     width: 250px;
     text-align: center;
     font-size: 14px;
@@ -69,4 +84,11 @@ body {
     background: rgba(8,23,44,0.35);
     transition: all linear 0.3s;
     transform: translate(150%);
+}
+#container .options .opt-3-1 .hidVal1,
+#container .options .opt-3-1 .hidVal2,
+#container .options .opt-2-1 .timeVal1,
+#container .options .opt-2-1 .timeVal2 {
+    width: 150px;
+    transform: translate(280%);
 }

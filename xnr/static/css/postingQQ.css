@@ -147,9 +147,11 @@ body {
 }
 #container #user_recommend {
     position: absolute;
-    top:3px;
+    top:0;
     right:0;
     color: #b0bdd0;
+    padding: 5px;
+    width: 200px;
     /*border-radius: 10px;*/
     /*border: 1px solid rgba(121, 121, 121, 1);*/
     /*border: 1px solid white;*/
@@ -168,6 +170,9 @@ body {
     text-overflow: ellipsis;
     position: relative;
     top: 4px;
+}
+#user_recommend .user_example_list .more:hover {
+    background: rgba(5, 23, 55, 0.45);
 }
 #container .historyNews .fixed-table-body {
     text-align: center;
