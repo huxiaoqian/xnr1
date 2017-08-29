@@ -205,6 +205,15 @@ weibo_social_sensing_task_queue_name = 'weibo_social_sensing_task'
 R_RECOMMEND_SUBOPINION_KEYWORD_TASK = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywords_task_queue'
 
+# use to save follower every day
+R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+r_weibo_xnr_fans_pre = 'weibo_xnr_fans_'
+r_weibo_xnr_followers_pre = 'weibo_xnr_followers_'
+
+# use to save action assessment every day
+R_WEIBO_XNR_ASSESSMENT = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+r_weibo_xnr_assessment_pre = 'weibo_xnr_assessment_'
+
 #use to save xnr info
 
 # sensitive user
