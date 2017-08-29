@@ -150,13 +150,9 @@ def ajax_show_select_date_remind():
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')
-    date_time=request.args.get('date_time','')
     keywords=request.args.get('keywords','')
-    create_type=request.args.get('create_type','')
     create_time=int(time.time())
-    content_recommend = request.args.get('content_recommend','')
-    change_info=[date_time,keywords,create_type,create_time,content_recommend]
-    results=change_date_remind(task_id,change_info)
+    results=change_date_remind(task_id,keywords,create_time)
     return json.dumps(results)
 
 

@@ -121,6 +121,10 @@ weibo_feedback_follow_index_type = 'text'
 weibo_feedback_group_index_name = 'weibo_feedback_group'
 weibo_feedback_group_index_type = 'text'
 
+#use to save weibo xnr like operate
+weibo_xnr_save_like_index_name='weibo_xnr_save_like'
+weibo_xnr_save_like_index_type='text'
+
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
