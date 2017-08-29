@@ -1,7 +1,6 @@
 var keywords_url='/weibo_xnr_knowledge_base_management/show_sensitive_words_default/';
 public_ajax.call_request('get',keywords_url,keywords);
 function keywords(data) {
-    console.log(data);
     $('#keywords').bootstrapTable('load', data);
     $('#keywords').bootstrapTable({
         data:data,
@@ -182,7 +181,6 @@ function creatTYPE() {
 var time_url='/weibo_xnr_knowledge_base_management/show_date_remind/';
 public_ajax.call_request('get',time_url,time);
 function time(data) {
-    console.log(data)
     $('#timeWarn').bootstrapTable('load', data);
     $('#timeWarn').bootstrapTable({
         data:data,
@@ -261,7 +259,6 @@ function time(data) {
 //添加时间节点
 var adT=0;
 $('.addNode').on('click',function () {
-    var rank=$('.rankcon input:radio[name="rank"]:checked').val();
     if (adT==0){
         $(this).text('确定');
         $(".timeVal").css({
@@ -429,7 +426,6 @@ function hidden(data) {
 //添加隐喻式词语
 var adH=0;
 $('.addhid').on('click',function () {
-    var rank=$('.rankcon input:radio[name="rank"]:checked').val();
     if (adH==0){
         $(this).text('确定');
         $(".hidVal").css({
@@ -441,7 +437,7 @@ $('.addhid').on('click',function () {
         });
         adH=1;
     }else {
-        var word=$('.timeVal').val().toString().replace(/,/g,'，');
+        var word=$('.hidVal').val().toString().replace(/,/g,'，');
         if (word==''){
             $('#pormpt p').text('敏感词不能为空。');
             $('#pormpt').modal('show');
@@ -458,7 +454,7 @@ $('.addhid').on('click',function () {
             creatTYPE();
             var addUrl='/weibo_xnr_knowledge_base_management/create_hidden_expression/?origin_word='+word+
             '&evolution_words='+word+'&create_type='+creat_type;
-            public_ajax.call_request('get',addUrl,addYES_time);
+            public_ajax.call_request('get',addUrl,addYES_hid);
         }
     }
 
@@ -490,7 +486,7 @@ function sureHide() {
 
         var plyURL='/weibo_xnr_knowledge_base_management/change_hidden_expression/?express_id='+taskID+
         '&origin_word='+hidekeywords+'&evolution_words='+evolution+'&create_type='+hidetype;
-        public_ajax.call_request('get',plyURL,addYES_time);
+        public_ajax.call_request('get',plyURL,addYES_hid);
     }
 }
 //操作返回结果
