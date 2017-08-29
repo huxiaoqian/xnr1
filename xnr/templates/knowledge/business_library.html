@@ -107,7 +107,8 @@
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">时间预警节点管理</span>
                 <div style="float: right;width: 400px;overflow: hidden;text-align: right;">
-                    <input type="text" class="timeVal" placeholder="输入节点敏感词"/>
+                    <input type="text" class="timeVal1 form_datetime" placeholder="输入时间节点"/>
+                    <input type="text" class="timeVal2" placeholder="输入节点敏感词"/>
                     <span class="addNode"><i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加节点</b></span>
                 </div>
             </div>
@@ -120,7 +121,8 @@
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">隐喻式表达</span>
                 <div style="float: right;width: 400px;overflow: hidden;text-align: right;">
-                    <input type="text" class="hidVal" placeholder="输入原词"/>
+                    <input type="text" class="hidVal1" placeholder="输入原词" title="只能输入汉字、英文、数字"/>
+                    <input type="text" class="hidVal2" placeholder="输入变形词" title="多个词用逗号分隔"/>
                     <span class="addhid"><i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加原词</b></span>
                 </div>
             </div>
@@ -162,7 +164,7 @@
                 <h4 class="modal-title">敏感词更改</h4>
             </div>
             <div class="modal-body">
-                <p><span>现敏感词：</span><input type="text" class="nowd1"></p>
+                <p><span>现敏感词：</span><input type="text" class="nowd1" readonly></p>
                 <p><span>新敏感词：</span><input type="text" class="nowd2" placeholder="请输入新的敏感词"></p>
             </div>
             <div class="modal-footer">
@@ -182,7 +184,7 @@
                 <h4 class="modal-title">时间节点更新</h4>
             </div>
             <div class="modal-body">
-                <p><span>现时间节点敏感词：</span><input type="text" class="time1"></p>
+                <p><span>现时间节点敏感词：</span><input type="text" class="time1" readonly></p>
                 <p><span>新时间节点敏感词：</span><input type="text" class="time2" placeholder="请输入新的敏感词"></p>
             </div>
             <div class="modal-footer">
@@ -202,8 +204,10 @@
                 <h4 class="modal-title">隐喻式表达更新</h4>
             </div>
             <div class="modal-body">
-                <p><span>现隐喻式表达词：</span><input type="text" class="hide1"></p>
+                <p><span>现隐喻式表达词：</span><input type="text" class="hide1" readonly></p>
                 <p><span>新隐喻式表达词：</span><input type="text" class="hide2" placeholder="请输入新的敏感词"></p>
+                <p><span>现隐喻式变形词：</span><input type="text" class="hide3" readonly></p>
+                <p><span>新隐喻式变形词：</span><input type="text" class="hide4" placeholder="请输入新的变形词"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
@@ -218,6 +222,13 @@
 {% block my_js %}
 <script>
     judgment('8');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView:"2",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
 </script>
 <script src="/static/js/business_library-1.js"></script>
 {% endblock %}

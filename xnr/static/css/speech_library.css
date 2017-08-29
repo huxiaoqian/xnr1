@@ -49,3 +49,61 @@ body {
 #container .options #opt-4-2,#container .options #opt-4-4 {
     width: 400px;
 }
+#container .options .opt-1-1 .addthe,
+#container .options .opt-2-1 .addDay{
+    display: inline-block;
+    padding: 4px 7px;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+#container .options .opt-1-1 .addthe:hover,
+#container .options .opt-2-1 .addDay:hover {
+    background:rgba(5, 23, 55, 0.45);
+}
+#themetype .the{
+    display: inline-block;
+    padding: 4px 7px;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+#themetype .the{
+    text-align: center;
+    width: 300px;
+    margin-top: 20px;
+    transition: all linear 0.3s;
+}
+#themetype .the:focus {
+    background: white;
+    color: black;
+}
+
+#container .post_perfect {
+    width: 400px;
+    margin: 0 auto;
+    text-align: left;
+}
+#container .post_perfect .center_3 {
+    margin: 10px 0;
+    text-align: center;
+    border-top: 1px solid slategrey;
+    padding-top: 5px;
+}
+#container .post_perfect .center_3 span {
+    display: inline-block;
+    width: 30%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container .post_perfect .center_3 span:nth-child(2) {
+    border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
+}

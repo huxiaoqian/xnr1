@@ -91,7 +91,7 @@ $('#container .options-1 .opt-1-1 .rankcon .demo-label').on('click',function () 
     public_ajax.call_request('get',rankUrl,keywords);
     var time_url='/weibo_xnr_knowledge_base_management/show_date_remind_condition/?create_type='+creat_type;
     public_ajax.call_request('get',time_url,time);
-})
+});
 //添加敏感词
 var ad=0;
 $('.addKey').on('click',function () {
@@ -247,7 +247,7 @@ function time(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     return '<span style="cursor: pointer;" onclick="delTime(\''+row.create_time+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="modifyTime(\''+row.create_time+'\',\''+row.keywords+'\',\''+row.date_time+'\',\''+row.content_recommend+'\',\''+row.create_type+
+                        '<span style="cursor: pointer;" onclick="modifyTime(\''+row.id+'\',\''+row.keywords+'\',\''+row.create_type+
                         '\')"><i title="修改节点" class="icon icon-edit"></i></span>';
                 }
             },
@@ -261,7 +261,14 @@ var adT=0;
 $('.addNode').on('click',function () {
     if (adT==0){
         $(this).text('确定');
-        $(".timeVal").css({
+        $(".timeVal1").css({
+            '-webkit-transform': 'translate(0%)',
+            '-moz-transform': 'translate(0%)',
+            '-ms-transform': 'translate(0%)',
+            '-o-transform': 'translate(0%)',
+            'transform': 'translate(0%)'
+        });
+        $(".timeVal2").css({
             '-webkit-transform': 'translate(0%)',
             '-moz-transform': 'translate(0%)',
             '-ms-transform': 'translate(0%)',
@@ -270,22 +277,30 @@ $('.addNode').on('click',function () {
         });
         adT=1;
     }else {
-        var word=$('.timeVal').val().toString().replace(/,/g,'，');
-        if (word==''){
-            $('#pormpt p').text('敏感词不能为空。');
+        var word=$('.timeVal2').val().toString().replace(/,/g,'，');
+        var time=$('.timeVal1').val();
+        if (word==''||time==''){
+            $('#pormpt p').text('敏感词或事件节点不能为空。');
             $('#pormpt').modal('show');
             $(this).html('<i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加敏感词</b>');
-            $(".timeVal").css({
-                '-webkit-transform': 'translate(150%)',
-                '-moz-transform': 'translate(150%)',
-                '-ms-transform': 'translate(150%)',
-                '-o-transform': 'translate(150%)',
-                'transform': 'translate(150%)'
+            $(".timeVal1").css({
+                '-webkit-transform': 'translate(280%)',
+                '-moz-transform': 'translate(280%)',
+                '-ms-transform': 'translate(280%)',
+                '-o-transform': 'translate(280%)',
+                'transform': 'translate(280%)'
+            });
+            $(".timeVal2").css({
+                '-webkit-transform': 'translate(280%)',
+                '-moz-transform': 'translate(280%)',
+                '-ms-transform': 'translate(280%)',
+                '-o-transform': 'translate(280%)',
+                'transform': 'translate(280%)'
             });
             adT=0;
         }else {
             creatTYPE();
-            var addUrl='/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp='+Number(Date.parse(new Date())/1000)+
+            var addUrl='/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp='+time+
                 '&keywords='+word+'&create_type='+creat_type;
             public_ajax.call_request('get',addUrl,addYES_time);
         }
@@ -296,28 +311,24 @@ $('.addNode').on('click',function () {
 //删除时间节点
 function delTime(time) {
     var delURL='/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id='+time;
-    public_ajax.call_request('get',delURL,addYES);
+    public_ajax.call_request('get',delURL,addYES_time);
 }
-//修改敏感词
-var taskID='',timekeywords='',dateTIME='',timecontent='',timetype='';
-function modifyTime(_id,key,time,content,type) {
+//修改时间节点敏感词
+var taskID='',timetype='';
+function modifyTime(_id,key,type) {
     taskID=_id;
-    timekeywords=key;
-    dateTIME=time;
-    timecontent=content;
     timetype=type;
     $('#time .time1').val(key);
     $('#time').modal('show');
 }
 function sureTime() {
-    var newWords=$('#words .time2').val();
+    var newWords=$('#time .time2').val();
     if (newWords==''){
         $('#pormpt p').text('新的时间节点敏感词不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var rk=$('.rankcon input:radio[name="rank"]:checked').val();
-        var plyURL='/weibo_xnr_knowledge_base_management/change_date_remind/?task_id='+taskID+
-            '&date_time='+dateTIME+'&keywords='+timekeywords+'&content_recommend='+timecontent+'&create_type='+timetype;
+        var plyURL='/weibo_xnr_knowledge_base_management/change_date_remind/?task_id='+taskID+'&keywords='+newWords
+        +'&create_type='+timetype;
         public_ajax.call_request('get',plyURL,addYES_time);
     }
 }
@@ -413,8 +424,8 @@ function hidden(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="delHidden(\''+row.create_time+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="modifyHidden(\''+row.create_time+'\',\''+row.create_type+'\',\''+row.origin_word+'\',\''+row.evolution_words_string+
+                    return '<span style="cursor: pointer;" onclick="delHidden(\''+row.origin_word+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '<span style="cursor: pointer;" onclick="modifyHidden(\''+row.id+'\',\''+row.origin_word+'\',\''+row.evolution_words_string+'\',\''+row.create_type+
                         '\')"><i title="修改关键词" class="icon icon-edit"></i></span>';
                 }
             },
@@ -428,7 +439,14 @@ var adH=0;
 $('.addhid').on('click',function () {
     if (adH==0){
         $(this).text('确定');
-        $(".hidVal").css({
+        $(".hidVal1").css({
+            '-webkit-transform': 'translate(0%)',
+            '-moz-transform': 'translate(0%)',
+            '-ms-transform': 'translate(0%)',
+            '-o-transform': 'translate(0%)',
+            'transform': 'translate(0%)'
+        });
+        $(".hidVal2").css({
             '-webkit-transform': 'translate(0%)',
             '-moz-transform': 'translate(0%)',
             '-ms-transform': 'translate(0%)',
@@ -437,55 +455,65 @@ $('.addhid').on('click',function () {
         });
         adH=1;
     }else {
-        var word=$('.hidVal').val().toString().replace(/,/g,'，');
-        if (word==''){
-            $('#pormpt p').text('敏感词不能为空。');
+        var word1=$('.hidVal1').val().toString();
+        var word2=$('.hidVal2').val().toString().replace(/,/g,'，');
+        if (word1==''||word2==''){
+            $('#pormpt p').text('原词或变形词不能为空。');
             $('#pormpt').modal('show');
-            $(this).html('<i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加敏感词</b>');
-            $(".hidVal").css({
-                '-webkit-transform': 'translate(150%)',
-                '-moz-transform': 'translate(150%)',
-                '-ms-transform': 'translate(150%)',
-                '-o-transform': 'translate(150%)',
-                'transform': 'translate(150%)'
+            $(this).html('<i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加原词</b>');
+            $(".hidVal1").css({
+                '-webkit-transform': 'translate(280%)',
+                '-moz-transform': 'translate(280%)',
+                '-ms-transform': 'translate(280%)',
+                '-o-transform': 'translate(280%)',
+                'transform': 'translate(280%)'
+            });
+            $(".hidVal2").css({
+                '-webkit-transform': 'translate(280%)',
+                '-moz-transform': 'translate(280%)',
+                '-ms-transform': 'translate(280%)',
+                '-o-transform': 'translate(280%)',
+                'transform': 'translate(280%)'
             });
             adH=0;
         }else {
-            creatTYPE();
-            var addUrl='/weibo_xnr_knowledge_base_management/create_hidden_expression/?origin_word='+word+
-            '&evolution_words='+word+'&create_type='+creat_type;
-            public_ajax.call_request('get',addUrl,addYES_hid);
+            var reg=new RegExp("^[A-Za-z0-9\u4e00-\u9fa5]+$");
+            if (reg.test(word1)){
+                creatTYPE();
+                var addUrl='/weibo_xnr_knowledge_base_management/create_hidden_expression/?origin_word='+word1+
+                    '&evolution_words='+word2.replace(/,/g,'，')+'&create_type='+creat_type;
+                public_ajax.call_request('get',addUrl,addYES_hid);
+            }else {
+                $('#pormpt p').text('原词不能含有标点符号及其它特殊符号，只能是汉字、数字、英文。');
+                $('#pormpt').modal('show');
+            }
+
         }
     }
-
-
 })
-//删除时间节点
-function delHidden(time) {
-    var delURL='/weibo_xnr_knowledge_base_management/delete_hidden_expression/?task_id='+time;
+//删除隐喻式节点
+function delHidden(originWord) {
+    var delURL='/weibo_xnr_knowledge_base_management/delete_hidden_expression/?express_id='+originWord;
     public_ajax.call_request('get',delURL,addYES_hid);
 }
-//修改敏感词
-var hideID='',hidekeywords='',evolution='',hidetype='';
-function modifyHidden(_id,type,origin,evolution) {
+//修改隐喻式词语
+var hideID='',hidetype='';
+function modifyHidden(_id,origin,evolution,type) {
     hideID=_id;
     hidetype=type;
-    hidekeywords=origin;
-    evolution=evolution;
-    $('#hide .hide1').val(key);
+    $('#hide .hide1').val(origin);
+    $('#hide .hide3').val(evolution);
     $('#hide').modal('show');
 }
 function sureHide() {
-    var newWords=$('#hide .hide2').val();
-    if (newWords==''){
+    var newWords1=$('#hide .hide2').val();
+    var newWords2=$('#hide .hide4').val();
+    if (newWords1==''||newWords2==''){
         $('#pormpt p').text('新的隐喻式敏感词不能为空。');
         $('#pormpt').modal('show');
     }else {
-    //219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_hidden_expression/
-            // ?express_id=习大大&origin_word=习大大&evolution_words=习主席，习大大，习总书记&create_type=all_xnrs
-
-        var plyURL='/weibo_xnr_knowledge_base_management/change_hidden_expression/?express_id='+taskID+
-        '&origin_word='+hidekeywords+'&evolution_words='+evolution+'&create_type='+hidetype;
+        var plyURL='/weibo_xnr_knowledge_base_management/change_hidden_expression/?express_id='+hideID+
+        '&origin_word='+newWords1+'&evolution_words='+newWords2.replace(/,/g,'，')+'&create_type='+hidetype;
         public_ajax.call_request('get',plyURL,addYES_hid);
     }
 }
