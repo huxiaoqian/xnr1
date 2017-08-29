@@ -9,7 +9,7 @@ from xnr.global_utils import es_flow_text
 from xnr.parameter import MAX_VALUE
 from utils import show_qq_xnr, create_qq_xnr, delete_qq_xnr, change_qq_xnr,\
                   search_qq_xnr
-from xnr.qq.qrCode import getQRCode
+from xnr.qq.qrCode import getQRCode_v2
 
 
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
@@ -20,8 +20,7 @@ mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
     if qq_number:
-        path = getQRCode()
-        #path = getQRCode_v2()
+        path = getQRCode_v2(qq_number)
         return json.dumps(path)
     else:
         return False

@@ -225,13 +225,17 @@ def sendfromweb_v2(qq_xnr, group, content):
     '''
     #step1: send message
     qqbot_port = qq_xnr_info['qqbot_port']
+    #test
+    #qqbot_port = '8199'
     shell_str = 'qq '+qqbot_port+' send group '+ group + ' ' + content
     p = subprocess.Popen(shell_str, \
              shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    line_list = ''
-    for line in p.stdout.readlines():
-        print 'return line:', line
-        line_list += line
+    #test
+    #line_list = ''
+    #for line in p.stdout.readlines():
+    #    print 'return line:', line
+    #    line_list += line
+    
     if '成功' in line_list:
         qq_item = {
                    'xnr_qq_number': qq_xnr_info['xnr_qq_number'],
@@ -250,7 +254,6 @@ def sendfromweb_v2(qq_xnr, group, content):
         return 1
     else:
         return 0
-    
     
 
 

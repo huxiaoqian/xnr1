@@ -175,12 +175,14 @@ def show_select_date_remind(task_id):
 	return result
 
 #step 3.2: change the selected time alert node
-def change_date_remind(task_id,change_info):
-	date_time=change_info[0]
-	keywords=change_info[1]
-	create_type=change_info[2]
-	create_time=change_info[3]
-	content_recommend=change_info[4]
+def change_date_remind(task_id,keywords,create_time):
+	date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
+	content_recommend=date_result['content_recommend']
+	create_type=date_result['create_type']
+	date_time=date_result['date_time']
+	keywords=keywords
+	create_time=create_time
+
 	try:
 		es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
 			body={"doc":{'date_time':date_time,'keywords':keywords,'create_type':create_type,\
