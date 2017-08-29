@@ -36,7 +36,10 @@ body {
     width: 90%;
     margin: 20px auto;
 }
-#container .options .opt-1-1 .addKey,#words .nowd1,#words .nowd2 {
+#container .options .opt-1-1 .addKey,
+#container .options .opt-2-1 .addNode,
+#container .options .opt-3-1 .addhid,
+#words .nowd1,#words .nowd2,#time .time1,#time .time2 {
     display: inline-block;
     padding: 4px 7px;
     background: transparent;
@@ -45,20 +48,26 @@ body {
     color: white;
     cursor: pointer;
 }
-#container .options .opt-1-1 .addKey:hover {
+#container .options .opt-1-1 .addKey:hover,
+#container .options .opt-2-1 .addNode:hover,
+#container .options .opt-3-1 .addhid:hover {
     background: rgba(5, 23, 55, 0.45);
 }
-#words .nowd1,#words .nowd2 {
+#words .nowd1,#words .nowd2,
+#time .time1,#time .time2{
     text-align: center;
     width: 300px;
     margin-top: 20px;
     transition: all linear 0.3s;
 }
-#words .nowd1:focus,#words .nowd2:focus {
+#words .nowd1:focus,#words .nowd2:focus,
+#time .time1:focus,#time .time2:focus{
     background: white;
     color: black;
 }
-#container .options .opt-1-1 .keyVal{
+#container .options .opt-1-1 .keyVal,
+#container .options .opt-3-1 .hidVal,
+#container .options .opt-2-1 .timeVal{
     width: 250px;
     text-align: center;
     font-size: 14px;

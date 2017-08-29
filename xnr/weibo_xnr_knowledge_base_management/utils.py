@@ -144,7 +144,10 @@ def show_date_remind():
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 def show_date_remind_condition(create_type):
 	query_body={
@@ -159,7 +162,10 @@ def show_date_remind_condition(create_type):
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 #step 3:	change the time alert node
 #explain: Carry out show_select_date_remind before change,carry out step 3.1 & 3.2
@@ -222,7 +228,10 @@ def show_hidden_expression():
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 def show_hidden_expression_condition(create_type):
 	query_body={

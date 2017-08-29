@@ -32,12 +32,12 @@
         <div class="tit-2" style="padding-left: 50px;">
             <span style="color: white;font-size: 16px;font-weight: 700;">分类：</span>
             <div style="display: inline-block;">
-                <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="mine" value="all_xnrs" checked>
+                <label class="demo-label allMY" value="all_xnrs">
+                    <input class="demo-radio" type="radio" name="mine" value="all_xnrs">
                     <span class="demo-radioInput"></span> 所有虚拟人
                 </label>
-                <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="mine" value="">
+                <label class="demo-label allMY" value="my_xnrs">
+                    <input class="demo-radio" type="radio" name="mine" value="my_xnrs">
                     <span class="demo-radioInput"></span> 我的虚拟人
                 </label>
             </div>
@@ -67,6 +67,34 @@
                             <input class="demo-radio" type="radio" name="rank" value="3">
                             <span class="demo-radioInput"></span> 3
                         </label>
+                        <label class="demo-label" rank="4">
+                            <input class="demo-radio" type="radio" name="rank" value="4">
+                            <span class="demo-radioInput"></span> 4
+                        </label>
+                        <label class="demo-label" rank="5">
+                            <input class="demo-radio" type="radio" name="rank" value="5">
+                            <span class="demo-radioInput"></span> 5
+                        </label>
+                        <label class="demo-label" rank="6">
+                            <input class="demo-radio" type="radio" name="rank" value="6">
+                            <span class="demo-radioInput"></span> 6
+                        </label>
+                        <label class="demo-label" rank="7">
+                            <input class="demo-radio" type="radio" name="rank" value="7">
+                            <span class="demo-radioInput"></span> 7
+                        </label>
+                        <label class="demo-label" rank="8">
+                            <input class="demo-radio" type="radio" name="rank" value="8">
+                            <span class="demo-radioInput"></span> 8
+                        </label>
+                        <label class="demo-label" rank="9">
+                            <input class="demo-radio" type="radio" name="rank" value="9">
+                            <span class="demo-radioInput"></span> 9
+                        </label>
+                        <label class="demo-label" rank="10">
+                            <input class="demo-radio" type="radio" name="rank" value="10">
+                            <span class="demo-radioInput"></span> 10
+                        </label>
                     </div>
                 </div>
             </div>
@@ -78,6 +106,10 @@
             <div class="opt-2-1">
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">时间预警节点管理</span>
+                <div style="float: right;width: 400px;overflow: hidden;text-align: right;">
+                    <input type="text" class="timeVal" placeholder="输入节点敏感词"/>
+                    <span class="addNode"><i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加节点</b></span>
+                </div>
             </div>
             <div class="timeWarn" style="margin:20px 0;">
                 <div id="timeWarn"></div>
@@ -87,6 +119,10 @@
             <div class="opt-3-1">
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">隐喻式表达</span>
+                <div style="float: right;width: 400px;overflow: hidden;text-align: right;">
+                    <input type="text" class="hidVal" placeholder="输入原词"/>
+                    <span class="addhid"><i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加原词</b></span>
+                </div>
             </div>
             <div class="expression">
                 <div id="expression"></div>
@@ -137,42 +173,43 @@
     </div>
 </div>
 
-<!--群体更新-->
-<div class="modal fade" id="update" tabindex="-1" role="dialog">
+<!--时间节点-->
+<div class="modal fade" id="time" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体更新</h4>
+                <h4 class="modal-title">时间节点更新</h4>
             </div>
             <div class="modal-body">
-                <p style="">是否进行群体的更新计算？</p>
+                <p><span>现时间节点敏感词：</span><input type="text" class="time1"></p>
+                <p><span>新时间节点敏感词：</span><input type="text" class="time2" placeholder="请输入新的敏感词"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureTime()">确定</button>
             </div>
         </div>
     </div>
 </div>
 
-<!--群体删除-->
-<div class="modal fade" id="delt" tabindex="-1" role="dialog">
+<!--隐喻式节点-->
+<div class="modal fade" id="hide" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体删除</h4>
+                <h4 class="modal-title">隐喻式表达更新</h4>
             </div>
             <div class="modal-body">
-                <p style="">您确定要删除该群体吗？</p>
+                <p><span>现隐喻式表达词：</span><input type="text" class="hide1"></p>
+                <p><span>新隐喻式表达词：</span><input type="text" class="hide2" placeholder="请输入新的敏感词"></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureHide()">确定</button>
             </div>
         </div>
-
     </div>
 </div>
 
