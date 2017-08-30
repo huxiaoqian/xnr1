@@ -5,6 +5,7 @@ use to save function about database
 '''
 import os
 import datetime
+import json
 from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
@@ -14,16 +15,16 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
                              weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
                              weibo_feedback_like_index_name,weibo_feedback_like_index_type
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE
+from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
-from xnr.time_utils import get_xnr_feedback_index_listname
+from xnr.time_utils import get_xnr_feedback_index_listname,ts2datetime,datetime2ts
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
-
+from xnr.weibo_xnr_warming.utils import show_date_warming
 ##########################################
 #	step 2：show weibo_xnr 	information  #
 ##########################################
 #step 2.1: show completed weibo_xnr information 
-def show_completed_weiboxnr():
+def show_completed_weiboxnr(now_time):
 	query_body={
 		'query':{
 			'filtered':{
@@ -35,9 +36,124 @@ def show_completed_weiboxnr():
 		},
 		'size':MAX_VALUE
 	}
-	result=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+	results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+	result=[]
+	for item in results:
+		xnr_list=item['_source']
+		xnr_user_no=item['_source']['xnr_user_no']
+		uid=item['_source']['uid']
+		#粉丝数
+		fans_num=count_fans_num(xnr_user_no)
+		#历史发帖量
+		history_post_num=count_history_post_num(xnr_user_no,now_time)
+		#历史评论数
+		history_comment_num=count_history_comment_num(uid)
+		#今日发帖量
+		today_comment_num=count_today_comment_num(xnr_user_no,now_time)
+		xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
+		result.append(xnr_list)
 	return result
 
+
+#计算粉丝数
+def count_fans_num(xnr_user_no):
+    result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    followers_list=result['followers_list']
+    number=len(followers_list)
+    return number
+
+#计算历史发帖量
+def count_history_post_num(xnr_user_no,now_time):
+    #获取检索列表
+    weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    #定义检索规则
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no}
+                }
+            }
+        },
+        'aggs':{
+            'history_post_num':{
+                'terms':{
+                    'field':'xnr_user_no'
+                }
+            }
+        }
+    }
+    try:
+        results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
+            body=query_body)['aggregations']['history_post_num']['buckets']
+        number=result[0]['doc_count']
+    except:
+        number=0
+    return number
+
+#计算今日发帖量
+def count_today_comment_num(xnr_user_no,now_time):
+    #对时间进行处理，确定查询范围
+    date_time=ts2datetime(now_time)
+    weibo_xnr_flow_text_listname=xnr_flow_text_index_name_pre+date_time
+    star_time=datetime2ts(date_time)
+    #定义检索规则
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no},
+                    'range':{
+                        'timestamp':{
+                            'gte':star_time,
+                            'lte':now_time
+                        }
+                    }
+                }
+            }
+        },
+        'aggs':{
+            'today_post_num':{
+                'terms':{
+                    'field':'xnr_user_no'
+                }
+            }
+        }
+    }
+    try:
+        results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
+            body=query_body)['aggregations']['today_post_num']['buckets']
+        number=result[0]['doc_count']
+    except:
+        number=0
+    return number
+
+#计算历史评论数
+def count_history_comment_num(uid):
+    #定义检索规则
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'aggs':{
+            'history_comment_num':{
+                'terms':{
+                    'field':'uid'
+                }
+            }
+        }
+    }
+    try:
+        result=es_xnr.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    		body=query_body)['aggregations']['history_comment_num']['buckets']
+        number=result[0]['doc_count']
+    except:
+    	number=0
+    return number
 
 #step 2.2: show uncompleted weibo_xnr information 
 def show_uncompleted_weiboxnr():
@@ -57,13 +173,55 @@ def show_uncompleted_weiboxnr():
 		},
 		'size':MAX_VALUE
 	}
-	result=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+	results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+	result=[]
+	for item in results:
+		result.append(item['_source'])
 	return result
 
 #######################################
 #	step 3：today remind (今日提醒)   #
 #######################################
+def xnr_today_remind(xnr_user_no,now_time):
+	##发帖提醒
+	#当前发帖量
+    complete_num=count_today_comment_num(xnr_user_no,now_time)
+    xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    day_post_average_list=json.loads(xnr_result['day_post_average'])
+    #最小目标发帖量
+    min_post_num=min(int(day_post_average_list[0].encode('utf-8')),int(day_post_average_list[-1].encode('utf-8')))
+    #目标发帖差额
+    post_dvalue=min_post_num-complete_num
 
+    if post_dvalue>0:
+    	post_remind_content='尚未完成发帖目标，今日请至少再发'+str(post_dvalue)+'条帖子！'
+    	post_remind_flag=1
+    else:
+    	post_remind_content=''
+    	post_remind_flag=0
+    post_remind=[post_remind_flag,post_remind_content]
+
+    ##日历提醒
+    date_remind_flag=0
+    date_remind_content=[]
+    date_result=show_date_warming(now_time)
+    for date_item in date_result:
+        if (date_item[-1]['countdown_days']>0) and (date_item[-1]['countdown_days']<REMIND_DAY):
+            date_remind_flag=date_remind_flag+1
+            date_remind_content_temp=str(date_item[-1]['countdown_days'])+'天后是'+date_item[0]['keywords'].encode('utf-8')+'，请注意！'
+            date_remind_content.append(date_remind_content_temp)
+    date_remind=[date_remind_flag,date_remind_content]
+
+    #设置提醒内容
+    remind_content=dict()
+    #显示消息条数
+    remind_num=post_remind_flag+date_remind_flag
+    remind_content['remind_num']=remind_num
+    #发帖提醒设置
+    remind_content['post_remind_content']=post_remind_content
+    #日期提醒设置：
+    remind_content['date_remind_content']=date_remind_content
+    return remind_content
 
 
 
@@ -417,52 +575,20 @@ def wxnr_list_fans(user_id,order_id):
 
 
 #########################################################
-#	step 5：change                                      #
-# (修改，直接调用创建虚拟人，第二步和第三步的函数即可)  #  
+#	step 5：change    and   continue                    #
 #########################################################
-
+def change_continue_xnrinfo(xnr_user_no):
+	result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+	return result
 
 
 ###############################
 #	step 6：delete_weibo_xnr  #
 ###############################
-def delete_weibo_xnr(user_id):
+def delete_weibo_xnr(xnr_user_no):
 	try:
-		es_xnr.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=user_id)
-		result='sucessful deleted'
+		es_xnr.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)
+		result=True
 	except:
-		result='Not successful'
-	return result
-
-####################################
-#  step 7：未完成虚拟人部分的继续  #
-####################################
-def continue_create_weiboxnr(user_id):
-	result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=user_id)
-	create_status=result['_source']['create_status']
-	user_id=result['_id']	
-	if create_status == 0 :
-		status_result='continue with second step!'
-	elif  create_status == 1 :
-		status_result='continue with third step!'
-	return status_result
-
-
-
-##########test code ,can be delete##################
-def create_wxnr_fans(user_id,fans_info):
-	followers_list=fans_info
-	print user_id,followers_list
-	result=es_xnr.index(index='weibo_xnr_fans_followers',doc_type='uids',id=user_id,body={'followers_list':followers_list})
-	#	result='Yes'
-	#except:
-	#	result='No'
-	return result
-
-def delete_wxnr_fans(user_id):
-	try:
-		es_xnr.delete(index='weibo_xnr_fans_followers',doc_type='uids',id=user_id)
-		result='sucessful deleted'
-	except:
-		result='Not successful'
+		result=False
 	return result

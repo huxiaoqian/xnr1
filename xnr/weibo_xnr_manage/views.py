@@ -6,21 +6,26 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from xnr.global_utils import es_flow_text
-from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,\
-				continue_create_weiboxnr,create_wxnr_fans,delete_wxnr_fans,\
+from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,change_continue_xnrinfo,\
 				wxnr_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				show_history_posting,show_at_content,show_comment_content,show_like_content,\
-				wxnr_list_concerns,wxnr_list_fans
+				wxnr_list_concerns,wxnr_list_fans,xnr_today_remind
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,show_comment_dialog,\
 					cancel_follow_user,attach_fans_follow,lookup_detail_weibouser
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 
+#添加虚拟人
+#首次添加——跳转至虚拟人定制第一步
+#继续创建，传虚拟人id，跳转至虚拟人定制第二步
+
 #已有虚拟人
+#暂未完成测试
 #test:http://219.224.134.213:9209/weibo_xnr_manage/show_completed_weiboxnr/
 @mod.route('/show_completed_weiboxnr/')
 def ajax_show_completed_weiboxnr():
-	results=show_completed_weiboxnr()
+	now_time=int(time.time())
+	results=show_completed_weiboxnr(now_time)
 	return json.dumps(results)
 
 #未完成虚拟人
@@ -31,20 +36,30 @@ def ajax_show_uncompleted_weiboxnr():
 	return json.dumps(results)
 
 #删除虚拟人
-#test:http://219.224.134.213:9209/weibo_xnr_manage/delete_weibo_xnr/?user_id=WXNR0003
+#test:http://219.224.134.213:9209/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no=WXNR0001
 @mod.route('/delete_weibo_xnr/')
 def ajax_delete_weibo_xnr():
-	user_id=request.args.get('user_id','')
-	results=delete_weibo_xnr(user_id)
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=delete_weibo_xnr(xnr_user_no)
 	return json.dumps(results)
 
-#test:http://219.224.134.213:9209/weibo_xnr_manage/continue_create_weiboxnr/?user_id=WXNR0003
-@mod.route('/continue_create_weiboxnr/')
-def ajax_continue_create_weiboxnr():
-	user_id=request.args.get('user_id','')
-	results=continue_create_weiboxnr(user_id)
+#今日提醒
+#http://219.224.134.213:9209/weibo_xnr_manage/xnr_today_remind/?xnr_user_no=WXNR0004
+@mod.route('/xnr_today_remind/')
+def ajax_xnr_today_remind():
+	now_time=int(time.time())
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=xnr_today_remind(xnr_user_no,now_time)
 	return json.dumps(results)
 
+#继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
+#input:xnr_user_no
+#http://219.224.134.213:9209/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no=WXNR0003
+@mod.route('/change_continue_xnrinfo/')
+def ajax_change_continue_xnrinfo():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=change_continue_xnrinfo(xnr_user_no)
+	return json.dumps(results)
 
 #step 4.2:timing task list
 #获取定时发送任务列表
@@ -215,25 +230,3 @@ def ajax_wxnr_list_fans():
 	order_id=request.args.get('order_id','')
 	results=wxnr_list_fans(user_id,order_id)
 	return json.dumps(results)
-
-##########test code ,can be delete##################
-#test:http://219.224.134.213:9209/weibo_xnr_manage/create_wxnr_fans/?user_id=WXNR0002&fans_info=[5537979196,3969238480,3302557313,5717296960]
-#http://219.224.134.213:9209/weibo_xnr_manage/create_wxnr_fans/?user_id=WXNR0003&fans_info=[5537979196,3969238480,3302557313,5717296960,2659684317]
-@mod.route('/create_wxnr_fans/')
-def ajax_create_wxnr_fans():
-	#user_id='WXNR0002'
-	#fans_info=[5537979196,3969238480,3302557313,5717296960,2659684317]
-	user_id=request.args.get('user_id','')
-	fans_info=request.args.get('fans_info','')
-	results=create_wxnr_fans(user_id,fans_info)
-	return json.dumps(results)
-
-#test:http://219.224.134.213:9209/weibo_xnr_manage/delete_wxnr_fans/?user_id=WXNR0002
-@mod.route('/delete_wxnr_fans/')
-def ajax_delete_wxnr_fans():
-	user_id=request.args.get('user_id','')
-	results=delete_wxnr_fans(user_id)
-	return json.dumps(results)
-
-
-
