@@ -3,6 +3,8 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/report_manage.css">
 <style>
+    .fixed-table-toolbar .search {width: 100%;}
+    .bootstrap-table .table>thead>tr>th {width: 8%;}
     #container .type_page #myTabs a {
         color: white;
     }
@@ -21,7 +23,7 @@
             <span class="icon icon-upload-alt note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">上报管理</b>
         </div>
-        <div class="output">导出至Excel文件</div>
+        <a class="output" id="output">导出至Excel文件</a>
     </div>
     <div class="type" style="margin: 20px 0;">
         <span class="type-1">类型：</span>
@@ -36,15 +38,15 @@
     </div>
     <div class="type type2">
         <span class="type-1">上报类型：</span>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="demo2" checked>
+        <label class="demo-label" value="人物">
+            <input class="demo-radio" type="radio" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 人物
         </label>
-        <label class="demo-label">
+        <label class="demo-label" value="言论">
             <input class="demo-radio" type="radio" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 言论
         </label>
-        <label class="demo-label">
+        <label class="demo-label" value="事件">
             <input class="demo-radio" type="radio" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 事件
         </label>
@@ -74,22 +76,18 @@
         <div id="event"></div>
     </div>
 </div>
-<!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+<!--提示信息-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
                 </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
             </div>
         </div>
     </div>

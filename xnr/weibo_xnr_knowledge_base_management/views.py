@@ -146,13 +146,14 @@ def ajax_show_select_date_remind():
     return json.dumps(results)
 
 #修改指定的时间节点预警内容
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&date_time=09-11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&keywords=美国911事件&create_type=all_xnrs
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')
     keywords=request.args.get('keywords','')
+    create_type = request.args.get('create_type','')
     create_time=int(time.time())
-    results=change_date_remind(task_id,keywords,create_time)
+    results=change_date_remind(task_id,keywords,create_type,create_time)
     return json.dumps(results)
 
 
@@ -282,17 +283,9 @@ def ajax_show_select_corpus():
 def ajax_change_select_corpus():
     corpus_id=request.args.get('corpus_id','')
     corpus_type=request.args.get('corpus_type','')             #corpus_type可取值：主题语料，日常语料
-    theme_daily_name=request.args.get('theme_daily_name','')
-    text=request.args.get('text','')
-    uid=request.args.get('uid','')
-    mid=request.args.get('mid','')
-    timestamp=int(time.time())
-    retweeted=request.args.get('retweeted','')
-    comment=request.args.get('comment','')
-    like=request.args.get('like','')
+    theme_daily_name=request.args.get('theme_daily_name','').split(',')
     create_type=request.args.get('create_type','')
-    corpus_info=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
-    results=change_select_corpus(corpus_id,corpus_info)
+    results=change_select_corpus(corpus_id,corpus_type,theme_daily_name,create_type)
     return json.dumps(results)
 
 #删除语料

@@ -14,6 +14,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
                              weibo_xnr_index_name,weibo_xnr_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
 from xnr.parameter import MAX_VALUE,DAY,MID_VALUE
+from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
 
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
@@ -176,17 +177,11 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
             body=query_body)['hits']['hits']
         #print 'folw_text_exit:',flow_text_exist
+        hot_result=flow_text_exist['_source']
     except:
         flow_text_exist=[]
-        #scan the flow_text_exist content and change the from to hot posts
-
-    #organize the result content and use the public function
-    ###############################################################
-    weibo_content=flow_text_exist['_source']['text']
-    for content in weibo_content:
-        print content
-        #use the function 
-    return flow_text_exist
+        hot_result=flow_text_exist 
+    return hot_result
 
 #################微博操作##########
 #转发微博
@@ -225,19 +220,53 @@ def get_weibohistory_comment(task_detail):
 
 #赞
 def get_weibohistory_like(task_detail):
-    r_mid=task_detail['r_mid']
+    root_mid=task_detail['r_mid']
 
     xnr_user_no=task_detail['xnr_user_no']
     xnr_es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     account_name=xnr_es_result['weibo_mail_account']
     password=xnr_es_result['password']
+    root_uid=xnr_es_result['uid']
+
+    xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    if xnr_result['followers_list']:
+        followers_list=xnr_result['followers_list']
+    else:
+        followers_list=[]
+
+    if xnr_result['fans_list']:
+        fans_list=xnr_result['fans_list']
+    else:
+        fans_list=[]
 
     #调用点赞函数
-    mark=like_tweet_func(account_name,password,r_mid)
+    mark=like_tweet_func(account_name,password,root_mid)
 
-    #保存点赞信息至weibo_feedback_like表
-    ###########################################
-    return mark
+    #保存点赞信息至表
+    uid=task_detail['uid']
+    photo_url=task_detail['photo_url']
+    nick_name=task_detail['nick_name']
+    timestamp=task_detail['timestamp']
+    text=task_detail['text']
+    update_time=task_detail['update_time']
+    mid=root_uid+'_'+root_mid
+
+    if uid not in followers_list:
+        if uid not in fans_list:
+            weibo_type='陌生人'
+        else:
+            weibo_type='粉丝'
+    else:
+        if uid not in fans_list:
+            weibo_type='follow'
+        else:
+            weibo_type='好友'
+
+    like_info=[uid,photo_url,nick_name,mid,timestamp,text,root_mid,root_uid,weibo_type,update_time]
+    save_mark=save_xnr_like(like_info)
+
+    return mark,save_mark
+
 
 #直接关注
 def attach_fans_follow(task_detail):
@@ -246,14 +275,17 @@ def attach_fans_follow(task_detail):
     account_name=xnr_es_result['weibo_mail_account']
     password=xnr_es_result['password']
 
-    uid=task_detail['uid','']
+    follower_uid=task_detail['uid']
 
     #调用关注函数
-    mark=follow_tweet_func(account_name,password,uid)
-    #if mark:
-        #保存至关注列表
-    #######################
-    return mark
+    mark=follow_tweet_func(account_name,password,follower_uid)
+    #保存至关注列表
+    if mark:
+        save_mark=save_xnr_followers(xnr_user_no,follower_uid)
+    else:
+        save_mark=False
+
+    return mark,save_mark
 
 ###加入语料库
 #task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
@@ -289,13 +321,17 @@ def attach_fans_batch(xnr_user_no_list,fans_id_list):
         password=xnr_es_result['password']
 
         mark_list=[]
+        save_mark_list=[]
         #调用关注函数：
         for uid in fans_id_list:
             mark=follow_tweet_func(account_name,password,uid)
             mark_list.append(mark)
-            #if mark:
             #保存至关注列表
-            #######################
+            if mark:
+                save_mark=save_xnr_followers(xnr_user_no,uid)
+            else:
+                save_mark=False
+            save_mark_list.append(save_mark)
     return mark_list
 
 
@@ -306,7 +342,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id):
     #step1: users condition
     #make sure the users range by classify choice
     userlist = lookup_weiboxnr_concernedusers(weiboxnr_id)
-    userlist = json.loads(userlist)
+
     if classify_id==1:		#concrenedusers
     	condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
         #print 'aaaa'
@@ -343,21 +379,9 @@ def lookup_active_weibouser(classify_id,weiboxnr_id):
 
 #weibo_user_detail
 def weibo_user_detail(user_id):
-	result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user_id)
+	result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user_id)['_source']
 	return result
             
 
 
-###############code test###################
-def weibo_user_test():
-    query_body={
-        '_source':{
-            'include':['id']
-        },
-        'query':{
-            'match_all':{}
-        },
-        'size':999
-    }
-    result=es_flow_text.search(index='weibo_user',doc_type='user',body=query_body)['hits']['hits']
-    return result
+

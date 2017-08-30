@@ -38,14 +38,14 @@
         <ul class="list">
             <li class="main_li" id="backHome">
                 <i class="icon icon-home"></i>
-                <a class="list_one li_a" href="/index/navigation/">首页</a>
+                <a class="list_one li_a">首页</a>
             </li>
             <div class="behind" style="float: left;"></div>
         </ul>
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a class="nav_name">阿凡提</a> 
-                <span class="nav_type">（微博虚拟人）</span>
+                <span class="icon icon-user"></span> <a class="nav_name"></a>
+                <span class="nav_type"></span>
             </button>
             <ul class="dropdown-menu">
                 <!-- <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
@@ -122,7 +122,8 @@
     };
 
     //登录虚拟人后取出ID或者名字
-    var ID_name=localStorage.getItem('user');
+    var ID_Num=localStorage.getItem('user');
+    var ID_name=localStorage.getItem('userName');
     var nowUser='';
     if (ID_name){
         nowUser=decodeURI(ID_name);
@@ -135,6 +136,19 @@
         $('.current').find('span').text(txt);
         $('.nav_type').text('（'+txt+'）');
     });
+    var loginType=localStorage.getItem('loginType');
+    if (decodeURI(loginType)=='weibo'){
+        InloginName('/index/navigation/','微博虚拟人','QQ群虚拟人','（微博）');
+    }else {
+        InloginName('/index/navigationQQ/','QQ群虚拟人','微博虚拟人','（QQ群）');
+    }
+    function InloginName(one,two,three,four) {
+        $('#backHome .list_one').attr('href',one);
+        $('.current').find('span').text(two);
+        $('.old').find('span').text(three);
+        $('.loadingUser .nav_name').text(nowUser);
+        $('.loadingUser .nav_type').text(four);
+    }
     //存  localStorage.setItem('TYPE','1');
     //取  var typeNum=localStorage.getItem('TYPE');
     //删除 localStorage.removeItem(i);

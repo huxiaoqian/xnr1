@@ -144,7 +144,11 @@ def show_date_remind():
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 def show_date_remind_condition(create_type):
 	query_body={
@@ -159,7 +163,12 @@ def show_date_remind_condition(create_type):
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-	return result
+	print result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 #step 3:	change the time alert node
 #explain: Carry out show_select_date_remind before change,carry out step 3.1 & 3.2
@@ -169,11 +178,11 @@ def show_select_date_remind(task_id):
 	return result
 
 #step 3.2: change the selected time alert node
-def change_date_remind(task_id,keywords,create_time):
+def change_date_remind(task_id,keywords,create_type,create_time):
 	date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
 	content_recommend=date_result['content_recommend']
-	create_type=date_result['create_type']
 	date_time=date_result['date_time']
+	create_type=create_type
 	keywords=keywords
 	create_time=create_time
 
@@ -224,7 +233,11 @@ def show_hidden_expression():
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 def show_hidden_expression_condition(create_type):
 	query_body={
@@ -239,7 +252,11 @@ def show_hidden_expression_condition(create_type):
 		'sort':{'create_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 	
 #step 3:	change the metaphorical expression
@@ -320,7 +337,11 @@ def show_corpus(corpus_type):
 		'size':MAX_VALUE
 	}
 	result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 
 def show_corpus_class(create_type,corpus_type):
@@ -337,7 +358,11 @@ def show_corpus_class(create_type,corpus_type):
 		'size':MAX_VALUE
 	}
 	result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 	
 #step 3: change the corpus
@@ -345,20 +370,26 @@ def show_corpus_class(create_type,corpus_type):
 #step 3.1: show the selected corpus
 def show_select_corpus(corpus_id):
 	result=es.get(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
-	return result
+	results=[]
+	for item in result:
+		item['_source']['id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 #step 3.2: change the selected corpus
-def change_select_corpus(corpus_id,corpus_info):
-	corpus_type=corpus_info[0]
-	theme_daily_name=corpus_info[1]
-	text=corpus_info[2]
-	uid=corpus_info[3]
-	mid=corpus_info[4]
-	timestamp=corpus_info[5]
-	retweeted=corpus_info[6]
-	comment=corpus_info[7]
-	like=corpus_info[8]
-	create_type=corpus_info[9]
+def change_select_corpus(corpus_id,corpus_type,theme_daily_name,create_type):
+	corpus_result=es.get(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)['_source']
+	text=corpus_result['text']
+	uid=corpus_result['uid']
+	mid=corpus_result['mid']
+	timestamp=corpus_result['timestamp']
+	retweeted=corpus_result['retweeted']
+	comment=corpus_result['comment']
+	like=corpus_result['like']
+
+	corpus_type=corpus_type
+	theme_daily_name=theme_daily_name
+	create_type=create_type
 
 	try:
 		es.update(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\

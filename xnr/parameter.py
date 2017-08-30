@@ -19,6 +19,7 @@ DAY_HOURS = 24  # 一天24小时
 FLOW_TEXT_START_DATE = 1502553600 # 2017-08-13
 USER_NUM = 100 #人物行为预警返回用户数量
 USER_CONTENT_NUM=3 #人物行为预警每个用户返回的敏感微博数量
+REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 # weibo
 
 MAX_DETECT_COUNT = 900

@@ -14,3 +14,6 @@ mod = Blueprint('personalCenter', __name__, url_prefix='/personalCenter')
 def personal_center():
     return render_template('personalCenter/personal_center.html')
 
+@mod.route('/individualQQ/')
+def personal_centeQQ():
+    return render_template('personalCenter/personal_centerQQ.html')

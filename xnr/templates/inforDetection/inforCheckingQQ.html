@@ -3,28 +3,28 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/inforChecking.css">
 <style>
-    .bootstrap-table {
+    .content-1-word .bootstrap-table {
         margin: 0 auto;
         height: auto!important;
     }
     #container .content-1-word .fixed-table-body {text-align: center;}
-    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
-    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+    .content-1-word .table-no-bordered,.table>tbody>tr>td,.content-1-word .fixed-table-container,
+    .content-1-word .bootstrap-table .table>thead>tr>th,.content-1-word .bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    .bootstrap-table thead,.fixed-table-pagination .page-list {
+    .content-1-word .fixed-table-pagination .page-list {
         display: none!important;
     }
-    .fixed-table-body {
+    .content-1-word .fixed-table-body {
         height: auto!important;
         overflow-y: hidden;
     }
-    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-    .table>tbody>tr>td{
+    .content-1-word .bootstrap-table .table:not(.table-condensed),.content-1-word .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .content-1-word .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
-    .table-hover>tbody>tr:hover {
+    .content-1-word .fixed-table-container {top: 15px;}
+    .content-1-word .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
     .fixed-table-toolbar .search {width: 100%;}
@@ -37,19 +37,21 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
-    .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
-    }
+    .hot-2 .table>tbody>tr>td{border-left: 1px solid #ddd;}
+    .hot-2 .fixed-table-container tbody td:first-child {border-left:none;}
+    .content-1-word .fixed-table-container thead th .both {background-image: none!important;}
     /*----------------------*/
     #container .title .titTime input {width: 380px;}
-    #container .content-1-word .everySpeak {
+    #container .content-1-word .everySpeak,
+    #container .content-2 .everySpeak {
         width: 950px;
         margin-bottom: 15px;
         position: relative;
         padding: 20px 10px 20px 30px;
         background: rgba(8,23,44,0.35);
     }
-    #container .content-1-word .everySpeak .center_icon {
+    #container .content-1-word .everySpeak .center_icon,
+    #container .content-2 .everySpeak .center_icon {
         position: absolute;
         top:19px;
         left:3px;
