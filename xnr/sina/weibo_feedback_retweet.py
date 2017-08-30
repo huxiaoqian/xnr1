@@ -78,7 +78,7 @@ class FeedbackRetweet:
                         timestamp = long(timestamp)
                     else:
                         timestamp = 0
-                    print '6666666'
+                    
                     if timestamp <= self.lasttime:
                         tags = True
                         break

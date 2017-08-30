@@ -8,7 +8,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from utils import show_personnal_warming,\
 				  show_event_warming,\
 				  show_speech_warming,addto_speech_warming,\
-				  show_date_warming,report_warming_content
+				  show_date_warming,report_warming_content,get_hashtag
 
 
 mod = Blueprint('weibo_xnr_warming', __name__, url_prefix='/weibo_xnr_warming')
