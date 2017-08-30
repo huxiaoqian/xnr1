@@ -107,7 +107,7 @@ class FeedbackPrivate:
                                 last_time = timestamp
                             else:
                                 timestamp = last_time
-                            print '5555555'
+                            
                             if timestamp < self.lasttime:
                                 tags = True
                                 break

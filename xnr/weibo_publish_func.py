@@ -240,27 +240,5 @@ def getUserShow(uid=None, screen_name=None):
 
 
 if __name__ == '__main__':
-    #user = getUserShow(screen_name='曲今')
-    #print user
-    #timestamp = newest_time_func('6340301597')
-    #print 'timestamp::',timestamp
-    #es.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
-    #result = es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='"4043450590377035"')
-    #result = es.delete(index='content_recommend_results',doc_type='content_recommend',id='"4043450590377035"')
-    # result = es.delete(index='subopinion_results',doc_type='subopinion',id='"4043450590377035"')
-    #result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id='WXNR0005')
-    # item = {}
-    # item['xnr_user_no'] = 'WXNR0004'
-    # #current_time = 
-    # item['report_type'] = u'人物'
-    # item['report_time'] = int(time.time())
-    # _id = item['xnr_user_no'] + '_' + str(item['report_time'])
-    # result = es.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=_id,\
-    #         body=item)
-    # es.delete(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id='AV4kAEXAJy8W-tFBjSRC')
-    # #print result
-    #es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-    #    id='WXNR0003', body={'fans_list':['2919766227','3224201544','5274118599','2945961970','5152598686']})
-	
-	es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-				id='WXNR0004', body={'doc':{'xnr_user_no':'WXNR0004','uid':'6346321407'}})
+
+    getUserShow(uid=None, screen_name=None)

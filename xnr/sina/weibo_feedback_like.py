@@ -58,7 +58,7 @@ class FeedbackLike:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
-                    print '333333'
+                    
                     if timestamp <= self.lasttime:
                         tags = True
                         break

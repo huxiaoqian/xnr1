@@ -4,12 +4,13 @@ weibo_xnr warming function
 '''
 import os
 import json
+from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
 from xnr.global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_flow_text,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_report_management_index_name,weibo_report_management_index_type,\
                              weibo_speech_warning_index_name,weibo_speech_warning_index_type
 from xnr.time_utils import get_flow_text_index_list,ts2yeartime,ts2datetime,datetime2ts
-from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY
+from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE
 ###################################################################
 ###################       personal warming       ##################
 ###################################################################
@@ -17,63 +18,63 @@ from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY
 #思路：获取虚拟人的关注列表用户，从流数据中查询计算这些用户的敏感度，返回敏感度前100的用户及该用户敏感度最高的3条微博内容
 #show the personal wariming content
 def show_personnal_warming(xnr_user_no,day_time):
-	#查询关注列表
-	es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-	followers_list=es_xnr_result['followers_list']
-	followers_list=json.loads(followers_list)
+    #查询关注列表
+    es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    followers_list=es_xnr_result['followers_list']
+    followers_list=json.loads(followers_list)
 
-	flow_text_index_list=get_flow_text_index_list(int(day_time))
+    flow_text_index_list=get_flow_text_index_list(int(day_time))
 
     #计算敏感度排名靠前的用户
-	query_body={
-		'query':{
-			'filtered':{
-				'filter':{
-					'terms':{'uid':followers_list}
-				}
-			}
-		},
-		'aggs':{
-			'followers_sensitive_num':{
-				'terms':{'field':'uid'},
-				'aggs':{
-					'sensitive_num':{
-						'sum':{'field':'sensitive'}
-					}
-				}						
-			}
-			},
-		'size':MAX_SEARCH_SIZE
-	}
-	first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
-		body=query_body)['aggregations']['followers_sensitive_num']['buckets']
-	top_userlist=[]
-	if USER_NUM < len(first_sum_result):
-		temp_num=USER_NUM
-	else:
-		temp_num=len(first_sum_result)
-	#print temp_num
-	for i in xrange(0,temp_num):
-		top_userlist.append(first_sum_result[i]['key'])
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'uid':followers_list}
+                }
+            }
+        },
+        'aggs':{
+            'followers_sensitive_num':{
+                'terms':{'field':'uid'},
+                'aggs':{
+                    'sensitive_num':{
+                        'sum':{'field':'sensitive'}
+                    }
+                }                        
+            }
+            },
+        'size':MAX_SEARCH_SIZE
+    }
+    first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
+        body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+    top_userlist=[]
+    if USER_NUM < len(first_sum_result):
+        temp_num=USER_NUM
+    else:
+        temp_num=len(first_sum_result)
+    #print temp_num
+    for i in xrange(0,temp_num):
+        top_userlist.append(first_sum_result[i]['key'])
 
-	#查询敏感用户的最敏感微博内容
-	results=[]
-	for user in top_userlist:
-		#print user
-		query_body={
-			'query':{
-				'filtered':{
-					'filter':{
-						'term':{'uid':user}
-					}
-				}
-			},
-			'size':USER_CONTENT_NUM,
-			'sort':{'sensitive':{'order':'desc'}}
-		}
-		second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-		results.extend([user,second_result])
-	return results
+    #查询敏感用户的最敏感微博内容
+    results=[]
+    for user in top_userlist:
+        #print user
+        query_body={
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'term':{'uid':user}
+                    }
+                }
+            },
+            'size':USER_CONTENT_NUM,
+            'sort':{'sensitive':{'order':'desc'}}
+        }
+        second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        results.extend([user,second_result])
+    return results
 
 
 
@@ -83,29 +84,29 @@ def show_personnal_warming(xnr_user_no,day_time):
 
 #show the speech wariming content
 def show_speech_warming(xnr_user_no,show_type,day_time):
-	flow_text_index_list=get_flow_text_index_list(int(day_time))
-	#关注用户
-	es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-	followers_list=es_xnr_result['followers_list']
-	followers_list=json.loads(followers_list)
+    flow_text_index_list=get_flow_text_index_list(int(day_time))
+    #关注用户
+    es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    followers_list=es_xnr_result['followers_list']
+    followers_list=json.loads(followers_list)
 
-	if show_type == 0:
-		show_condition_list=[{'bool':{'must_not':{'terms':{'uid':followers_list}}}}]
-	else:
-		show_condition_list=[{'bool':{'must':{'terms':{'uid':followers_list}}}}]
+    if show_type == 0:
+        show_condition_list=[{'bool':{'must_not':{'terms':{'uid':followers_list}}}}]
+    else:
+        show_condition_list=[{'bool':{'must':{'terms':{'uid':followers_list}}}}]
 
-	query_body={
-		'query':{
-			'filtered':{
-				'filter':show_condition_list
-			}
-		},
-		'size':MAX_SEARCH_SIZE,
-		'sort':{'sensitive':{'order':'desc'}}
-	}
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':show_condition_list
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':{'sensitive':{'order':'desc'}}
+    }
 
-	results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-	return results
+    results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    return results
 
 
 #加入预警库
@@ -137,47 +138,75 @@ def addto_speech_warming(xnr_user_no,speech_info):
 ###################         event warming        ##################
 ###################################################################
 
+def get_hashtag():
+
+    uid_list = []
+    hashtag_list = {}
+
+    with open(UID_TXT_PATH+'/uid.txt','rb') as f:
+        for line in f:
+            uid = line.strip()
+            uid_list.append(uid)
+
+    for uid in uid_list:
+        hashtag = r_cluster.hget('hashtag_'+'1480176000',uid)
+        if hashtag != None:
+            hashtag = hashtag.encode('utf8')
+            hashtag = json.loads(hashtag)
+
+            for k,v in hashtag.iteritems():
+                try:
+                    hashtag_list[k] += v
+                except:
+                    hashtag_list[k] = v
+        #r_cluster.hget('hashtag_'+str(a))
+
+    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:20]
+
+    return hashtag_list
+
 #show the event wariming content
 def show_event_warming():
-	query_body={
-		'query':{
-			'match_all':{}
-		},
-		'size':MAX_VALUE,
-		'sort':{'timestamp':{'order':'desc'}}
-	}
-	result=True
-	return result
+    
+    hashtag_list = get_hashtag()
 
-
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'timestamp':{'order':'desc'}}
+    }
+    result=True
+    return hashtag_list
 
 ###################################################################
 ###################         date  warming        ##################
 ###################################################################
 def show_date_warming(today_time):
-	query_body={
-		'query':{
-			'match_all':{}
-		},
-		'size':MAX_SEARCH_SIZE,
-		'sort':{'date_time':{'order':'asc'}}
-	}
-	result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-	#取出预警时间进行处理
-	date_warming_result=[]
-	for item in result:
-		countdown_days=dict()
-		date_time=item['_source']['date_time']
-		year=ts2yeartime(today_time)
-		warming_date=year+'-'+date_time
-		today_date=ts2datetime(today_time)
-		countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
-		countdown_days['countdown_days']=countdown_num
-		temp_list=[item['_source'],countdown_days]
-		#date_warming_result.extend([item['_source'],countdown_days])
-		date_warming_result.append(temp_list)
-		
-	return date_warming_result
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':{'date_time':{'order':'asc'}}
+    }
+    result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+    #取出预警时间进行处理
+    date_warming_result=[]
+    for item in result:
+        countdown_days=dict()
+        date_time=item['_source']['date_time']
+        year=ts2yeartime(today_time)
+        warming_date=year+'-'+date_time
+        today_date=ts2datetime(today_time)
+        countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+        countdown_days['countdown_days']=countdown_num
+        temp_list=[item['_source'],countdown_days]
+        #date_warming_result.extend([item['_source'],countdown_days])
+        date_warming_result.append(temp_list)
+        
+    return date_warming_result
 
 ###################################################################
 ###################       微博操作公共函数       ##################
@@ -204,7 +233,7 @@ def report_warming_content(report_info,user_info,weibo_info):
     #对用户信息进行
     user_list=[]
     if user_info:
-    	print 'aaaaaa'
+        print 'aaaaaa'
         user_info_item=user_info.encode('utf-8').split('*')
         for user_item in user_info_item:
             user_detail=user_item.split(',')
