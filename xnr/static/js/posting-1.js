@@ -1,4 +1,4 @@
-var xnrUser=nowUser;
+var xnrUser=ID_Num;
 //@用户推荐
 var recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
 public_ajax.call_request('get',recommendUrl,recommendlist);
@@ -222,7 +222,7 @@ function retweet(_this) {
 //点赞
 function thumbs(_this) {
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid;
+    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+xnrUser;
     public_ajax.call_request('get',post_url_4,postYES)
 };
 
