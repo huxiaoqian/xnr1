@@ -234,7 +234,8 @@ def xnr_today_remind(xnr_user_no,now_time):
 #	step 4：operate count (进入，操作统计)  #
 #############################################
 #step 4.1：history count
-
+def wxnr_history_count():
+	return True
 
 #step 4.2: timing task list
 ###########获取定时发送任务列表##############
