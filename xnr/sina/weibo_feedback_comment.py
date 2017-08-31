@@ -59,7 +59,7 @@ class FeedbackComment:
                         timestamp = long(getTimeStamp(timestamp))
                     else:
                         timestamp = 0
-                    print '0000000'
+                    
                     if timestamp <= self.mlasttime:
                         tags = True
                         break

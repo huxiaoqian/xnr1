@@ -636,17 +636,17 @@ def compute_penetration_num(xnr_user_no):
         }
     }
     if S_TYPE == 'test':
-    	index_name = get_flow_text_index_list(timestamp)
+        index_name = get_flow_text_index_list(timestamp)
     else:
-    	index_name = flow_text_index_name_pre + current_date
+        index_name = flow_text_index_name_pre + current_date
 
     es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_count)['aggregations']
     sensitive_value_top_avg = es_sensitive_result['avg_sensitive']['value']
 
     if S_TYPE == 'test':
-    	if not sensitive_value_top_avg:
-    		sensitive_value_top_avg = 1
+        if not sensitive_value_top_avg:
+            sensitive_value_top_avg = 1
     print 'es_sensitive_result::',es_sensitive_result
     # 计算xnr反馈群体的敏感度
     
@@ -654,19 +654,19 @@ def compute_penetration_num(xnr_user_no):
     #follow_group_mark = get_pene_follow_group_sensitive(xnr_user_no)['sensitive_info'][timestamp]
     #fans_group_mark = get_pene_fans_group_sensitive(xnr_user_no)['sensitive_info'][timestamp]
     try:
-    	feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at')['sensitive_info'][timestamp]
-    	feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet')['sensitive_info'][timestamp]
-    	feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment')['sensitive_info'][timestamp]
+        feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at')['sensitive_info'][timestamp]
+        feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet')['sensitive_info'][timestamp]
+        feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment')['sensitive_info'][timestamp]
     except:
-    	feedback_mark_at = 0.0839
-    	feedback_mark_retweet = 0.1199
-    	feedback_mark_comment = 0.01311
+        feedback_mark_at = 0.0839
+        feedback_mark_retweet = 0.1199
+        feedback_mark_comment = 0.01311
     # try:
-    # 	report_management_mark_tweet = get_pene_warning_report_sensitive(xnr_user_no)['tweet'][timestamp]
-    # 	report_management_mark_event = get_pene_warning_report_sensitive(xnr_user_no)['event'][timestamp]
+    #   report_management_mark_tweet = get_pene_warning_report_sensitive(xnr_user_no)['tweet'][timestamp]
+    #   report_management_mark_event = get_pene_warning_report_sensitive(xnr_user_no)['event'][timestamp]
     # except:
-    # 	report_management_mark_tweet = 0
-    # 	report_management_mark_event = 0
+    #   report_management_mark_tweet = 0
+    #   report_management_mark_event = 0
     # pene_mark = 100*float(follow_group_mark+fans_group_mark+feedback_mark_at+feedback_mark_retweet+\
     #             feedback_mark_comment+report_management_mark_tweet+report_management_mark_event)/sensitive_value_top_avg
     pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg

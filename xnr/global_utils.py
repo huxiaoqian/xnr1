@@ -8,7 +8,7 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
                           REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
-                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE
+                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 #module1.2:config es table---index_name, doc_type
@@ -146,6 +146,9 @@ weibo_hot_content_recommend_results_index_type = 'content_recommend'
 weibo_hot_subopinion_results_index_name = 'subopinion_results'
 weibo_hot_subopinion_results_index_type = 'subopinion'
 
+# 行为评估分值
+weibo_xnr_assessment_index_name= 'weibo_xnr_assessment'
+weibo_xnr_assessment_index_type = 'score'
 
 # 业务知识库
 weibo_date_remind_index_name = 'weibo_date_remind'
@@ -207,14 +210,22 @@ weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywo
 
 # use to save follower every day
 R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
-r_weibo_xnr_fans_pre = 'weibo_xnr_fans_'
-r_weibo_xnr_followers_pre = 'weibo_xnr_followers_'
+r_fans_uid_list_datetime_pre = 'fans_uid_list_'  # fans_uid_list_2017-08-30
+r_fans_count_datetime_xnr_pre = 'fans_count_'    # fans_count_2017-08-30_6337917209
+r_fans_search_xnr_pre = 'fans_search_'    # fans_search_6337917209
+
+r_followers_uid_list_datetime_pre = 'followers_uid_list_'  # followers_uid_list_2017-08-30
+r_followers_count_datetime_xnr_pre = 'followers_count_'    # followers_count_2017-08-30_6337917209
+r_followers_search_xnr_pre = 'followers_search_'    # followers_search_6337917209
 
 # use to save action assessment every day
-R_WEIBO_XNR_ASSESSMENT = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
-r_weibo_xnr_assessment_pre = 'weibo_xnr_assessment_'
+# R_WEIBO_XNR_ASSESSMENT = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+# r_weibo_xnr_assessment_pre = 'weibo_xnr_assessment_'
 
 #use to save xnr info
+
+## hashtag
+R_CLUSTER_FLOW2 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2)
 
 # sensitive user
 R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)

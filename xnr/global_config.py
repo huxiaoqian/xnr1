@@ -41,6 +41,9 @@ ES_PATH = '/home/ubuntu8/huxiaoqian/elasticsearch-1.6.0/'
 REDIS_HOST = '219.224.134.212'
 REDIS_PORT = '7392'
 
+REDIS_CLUSTER_HOST_FLOW2 = '219.224.134.213'
+REDIS_CLUSTER_PORT_FLOW2 = '6666'
+
 #redis_path
 REDIS_PATH = '/home/ubuntu7/huxiaoqian/redis-3.0.5/7392/'
 
