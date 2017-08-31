@@ -10,7 +10,7 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
                   xnr_today_remind,change_continue_xnrinfo,wxnr_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				  show_history_posting,show_at_content,show_comment_content,show_like_content,\
-				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence
+				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,wxnr_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser
 
@@ -52,6 +52,15 @@ def ajax_xnr_today_remind():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=xnr_today_remind(xnr_user_no,now_time)
 	return json.dumps(results)
+
+#历史统计
+#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_history_count/?xnr_user_no=WXNR0004
+@mod.route('/wxnr_history_count/')
+def ajax_wxnr_history_count():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=wxnr_history_count(xnr_user_no)
+	return json.dumps(results)
+
 
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
