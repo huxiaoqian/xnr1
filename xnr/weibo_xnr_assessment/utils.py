@@ -15,14 +15,16 @@ from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                         flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                         flow_text_index_name_pre,weibo_report_management_index_name,weibo_report_management_index_type,\
-                        portrait_index_name,portrait_index_type,xnr_flow_text_index_type,\
-                        r_weibo_xnr_followers_pre
+                        portrait_index_name,portrait_index_type,xnr_flow_text_index_type
+                        
+from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
+                r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
 
-from xnr.utils import xnr_user_no2uid
+from xnr.utils import xnr_user_no2uid,uid2nick_name_photo
 from xnr.global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
-                        TOP_ASSESSMENT_NUM,ACTIVE_UID
+                        TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
 
 def compute_growth_rate_total(day8_dict,total8_dict):
     total_dict = {}
@@ -1210,10 +1212,17 @@ def get_tweets_distribute(xnr_user_no):
         #topic_distribute_dict['topic_xnr'] = topic_xnr_count
 
     # 整理雷达图数据
+    # if topic_xnr_count:
+    #     for topic, value in topic_xnr_count.iteritems():
+    #         try:
+    #             topic_value = float(value)/(topic_list_followers_count[topic])
+    #         except:
+    #             continue
+    #         topic_distribute_dict['radar'][topic] = topic_value
     if topic_xnr_count:
-        for topic, value in topic_xnr_count.iteritems():
+        for topic, value in topic_list_followers_count.iteritems():
             try:
-                topic_value = float(value)/(topic_list_followers_count[topic])
+                topic_value = float(topic_xnr_count[topic])/value
             except:
                 continue
             topic_distribute_dict['radar'][topic] = topic_value
@@ -1245,7 +1254,7 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
             'query':{
                 'match_all':{}
             },
-            'size':MAX_SEARCH_SIZE,
+            'size':TOP_WEIBOS_LIMIT,
             'sort':{sort_item:{'order':'desc'}}
         }
 
@@ -1265,18 +1274,21 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
                     ]
                 }
             },
-            'size':MAX_SEARCH_SIZE,
+            'size':TOP_WEIBOS_LIMIT,
             'sort':{sort_item:{'order':'desc'}}
         }
 
         es_results = es.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
 
-    result_all = []
+    results_all = []
     for result in es_results:
         result = result['_source']
-        result_all.append(result)
-
-    return result_all
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
 
 def get_follow_group_distribute(xnr_user_no):
     
@@ -1295,9 +1307,9 @@ def get_follow_group_distribute(xnr_user_no):
         # 获取今日关注者
         current_time = int(time.time()-DAY)
         current_date = ts2datetime(current_time)
-        r_weibo_xnr_followers = r_weibo_xnr_followers_pre + current_date
-        followers_results = r_fans_followers.hgetall(r_weibo_xnr_followers)
-        followers_list_today = r_weibo_xnr_followers[xnr_user_no]['uid_list']
+        r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
+        followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
+        followers_list_today = json.loads(followers_results)
 
     # 所有关注者领域分布
 
@@ -1337,10 +1349,18 @@ def get_follow_group_distribute(xnr_user_no):
 
 
     # 整理雷达图数据
+    # if domain_list_followers_today_count:
+    #     for domain, value in domain_list_followers_today_count.iteritems():
+    #         try:
+    #             domain_value = float(value)/(domain_list_followers_count[domain])
+    #         except:
+    #             continue
+    #         domain_distribute_dict['radar'][domain] = domain_value
+
     if domain_list_followers_today_count:
         for domain, value in domain_list_followers_today_count.iteritems():
             try:
-                domain_value = float(value)/(domain_list_followers_count[domain])
+                domain_value = float(domain_list_followers_today_count[domain])/value
             except:
                 continue
             domain_distribute_dict['radar'][domain] = domain_value
@@ -1371,7 +1391,7 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
             'query':{
                 'match_all':{}
             },
-            'size':MAX_SEARCH_SIZE,
+            'size':TOP_WEIBOS_LIMIT,
             'sort':{sort_item:{'order':'desc'}}
         }
 
@@ -1414,20 +1434,22 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
                     }
                 }
             },
-            'size':MAX_SEARCH_SIZE,
+            'size':TOP_WEIBOS_LIMIT,
             'sort':{sort_item:{'order':'desc'}}
         }
 
         flow_text_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
                             body=query_body_flow_text)['hits']['hits']
 
-    result_all = []
-    if flow_text_results:
-        for result in flow_text_results:
-            result = result["_source"]
-            result_all.append(result)
-
-    return result_all
+    results_all = []
+    for result in flow_text_results:
+        result = result['_source']
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
 
 
 

@@ -175,8 +175,7 @@ $('.pc-4 input').on('click',function () {
     }else {
         the_url='/weibo_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+theSort;
     }
-    console.log(the_url)
-    // public_ajax.call_request('get',the_url,weiboData)
+    public_ajax.call_request('get',the_url,weiboData)
 });
 function weiboData(data) {
     $('#postRelease').bootstrapTable('load', data);
