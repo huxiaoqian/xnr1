@@ -134,14 +134,14 @@ def get_weibohistory_like(task_detail):
 
     if uid not in followers_list:
         if uid not in fans_list:
-            weibo_type='陌生人'
+            weibo_type='stranger'
         else:
-            weibo_type='粉丝'
+            weibo_type='fans'
     else:
         if uid not in fans_list:
             weibo_type='follow'
         else:
-            weibo_type='好友'
+            weibo_type='friend'
 
     like_info=[uid,photo_url,nick_name,mid,timestamp,text,root_mid,root_uid,weibo_type,update_time]
     save_mark=save_xnr_like(like_info)

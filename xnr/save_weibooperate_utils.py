@@ -48,5 +48,23 @@ def save_xnr_followers(xnr_user_no,follower_uid):
 		mark=False
 	return mark
 
+#取消关注，修改关注列表
+def delete_xnr_followers(xnr_user_no,follower_uid):
+	xnr_es_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+	user_no=int(xnr_user_no[-4:])
+	uid=xnr_es_result['uid']
+	fans_list=xnr_es_result['fans_list']
+
+	origin_followers_list=xnr_es_result['followers_list']
+	origin_followers_list.remove(follower_uid)
+	followers_list=origin_followers_list
+
+	try:
+		mark=es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no,\
+		body={"doc":{'user_no':user_no,'uid':uid,'fans_list':fans_list,'followers_list':followers_list}})
+		mark=True
+	except:
+		mark=False
+	return mark
 
 
