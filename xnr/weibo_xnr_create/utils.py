@@ -493,19 +493,19 @@ def get_role_info(domain_pinyin,role_name):
     return role_info
 
 
-def domain_create_task(domain_name,create_type,create_time,submitter,remark,compute_status=0):
-    domain_task_dict = dict()
-    if S_TYPE == 'test':
-        domain_task_dict['domain_pinyin'] = pinyin.get(domain_name,format='strip',delimiter='_')
-        domain_task_dict['domain_name'] = domain_name
-        domain_task_dict['create_type'] = json.dumps(create_type)
-        domain_task_dict['create_time'] = create_time
-        domain_task_dict['submitter'] = submitter
-        domain_task_dict['remark'] = remark
-        domain_task_dict['compute_status'] = compute_status
-    r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
-    #r.delete(weibo_target_domain_detect_queue_name)
-    print 'success!'
+# def domain_create_task(domain_name,create_type,create_time,submitter,remark,compute_status=0):
+#     domain_task_dict = dict()
+#     if S_TYPE == 'test':
+#         domain_task_dict['domain_pinyin'] = pinyin.get(domain_name,format='strip',delimiter='_')
+#         domain_task_dict['domain_name'] = domain_name
+#         domain_task_dict['create_type'] = json.dumps(create_type)
+#         domain_task_dict['create_time'] = create_time
+#         domain_task_dict['submitter'] = submitter
+#         domain_task_dict['remark'] = remark
+#         domain_task_dict['compute_status'] = compute_status
+#     r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
+#     #r.delete(weibo_target_domain_detect_queue_name)
+#     print 'success!'
 
 if __name__ == '__main__':
     domain_name =  '维权群体'

@@ -23,14 +23,14 @@ def nickname2uid(nickname_list):
 
     es_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
                     body=query_body)['hits']['hits']
-    print 'es_results:::',es_results
+    #print 'es_results:::',es_results
     if es_results:
         for result in es_results:
             result = result['_source']
             uid = result['uid']
             uids_list.add(uid)
     uids_list = list(uids_list)
-    print 'uids_list::',uids_list
+    #print 'uids_list::',uids_list
     return uids_list
 
 def uid2nick_name_photo(uid):
@@ -52,9 +52,9 @@ def user_no2_id(user_no):
 
 def _id2user_no(task_id):
     user_no_string = filter(str.isdigit,task_id)
-    print 'user_no_string::',user_no_string
+    #print 'user_no_string::',user_no_string
     user_no = int(user_no_string)
-    print 'user_no::',user_no
+    #print 'user_no::',user_no
     return user_no
 
 def xnr_user_no2uid(xnr_user_no):
@@ -159,15 +159,13 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
 def judge_sensing_sensor(xnr_user_no,uid):
 
     exist_item = es_xnr.exists(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)
-    print 'exist_item:::',exist_item
     if not exist_item:
         return False 
     else:
         get_result = es_xnr.get(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)['_source']
-        print 'get_result::',get_result
+        
         social_sensors = get_result['social_sensors']
-        print 'social_sensors:::',social_sensors
-        print 'type::',type(social_sensors)
+    
         if uid in social_sensors:
             return True
         else:

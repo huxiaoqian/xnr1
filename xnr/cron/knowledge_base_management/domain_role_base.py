@@ -64,14 +64,18 @@ def save_detect_results(detect_results, decect_task_information):
         es_xnr.update(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
         item_exist = dict()
+        
+        item_exist['xnr_user_no'] = decect_task_information['xnr_user_no']
         item_exist['domain_pinyin'] = json.dumps(decect_task_information['domain_pinyin'])
         item_exist['domain_name'] = json.dumps(decect_task_information['domain_name'])
         item_exist['create_type'] = json.dumps(decect_task_information['create_type'])
         item_exist['create_time'] = decect_task_information['create_time']
         item_exist['submitter'] = json.dumps(decect_task_information['submitter'])
+        item_exist['description'] = json.dumps(decect_task_information['description'])
         item_exist['remark'] = json.dumps(decect_task_information['remark'])
         item_exist['group_size'] = len(detect_results)
         item_exist['member_uids'] = detect_results
+        
         item_exist['compute_status'] = 1  # 存入uid
         es_xnr.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body=item_exist)
     
@@ -95,12 +99,15 @@ def save_group_description_results(group_results,decect_task_information):
         es_xnr.update(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
         item_exist = dict()
-        item_exist['domain_pinyin'] = json.dumps(decect_task_information['domain_pinyin'])
-        item_exist['domain_name'] = json.dumps(decect_task_information['domain_name'])
+
+        item_exist['xnr_user_no'] = decect_task_information['xnr_user_no']
+        item_exist['domain_pinyin'] = decect_task_information['domain_pinyin']
+        item_exist['domain_name'] = decect_task_information['domain_name']
         item_exist['create_type'] = json.dumps(decect_task_information['create_type'])
-        item_exist['create_time'] = json.dumps(decect_task_information['create_time'])
-        item_exist['submitter'] = json.dumps(decect_task_information['submitter'])
-        item_exist['remark'] = json.dumps(decect_task_information['remark'])
+        item_exist['create_time'] = decect_task_information['create_time']
+        item_exist['submitter'] = decect_task_information['submitter']
+        item_exist['description'] = decect_task_information['description']
+        item_exist['remark'] = decect_task_information['remark']
         item_exist['role_distribute'] = json.dumps(group_results['role_distribute'])
         item_exist['top_keywords'] = json.dumps(group_results['top_keywords'])
         item_exist['political_side'] = json.dumps(group_results['political_side'])
