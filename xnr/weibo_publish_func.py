@@ -241,63 +241,44 @@ def getUserShow(uid=None, screen_name=None):
         print "download page error!!! ", e
         return 'error'
 
-
-
-
 if __name__ == '__main__':
 
-    #getUserShow(uid=None, screen_name=None)
+    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
 
-    # task_detail = {}
-    # task_detail['xnr_user_no'] = 'WXNR0004'
-    # task_detail['mid'] = '4043503421741766'
-    # task_detail['compute_status'] = 0
-    # task_detail['submit_time'] = 1503057474
-    # task_detail['submit_user'] = 'admin@qq.com'
-    # #task_detail['task_id'] = '4043503421741766'
-    # task_detail['keywords_string'] = u'朴槿惠&崔顺实'
+    f_domain_data = open('domain.txt','rb')
 
-    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+    for data in f_domain_data:
+        data = json.loads(data)
+        for domain in data:
+            domain = domain['_source']
+            domain_pinyin = json.loads(domain['domain_pinyin'])
+            domain['domain_pinyin'] = domain_pinyin
+            domain['domain_name'] = json.loads(domain['domain_name'])
+            domain['submitter'] = json.loads(domain['submitter'])
+            domain['political_side'] = json.loads(domain['political_side'])
+            domain['top_keywords'] = json.loads(domain['top_keywords'])
+            domain['role_distribute'] = json.loads(domain['role_distribute'])
+            domain['create_type'] = json.loads(domain['create_type'])
+            domain['topic_preference'] = json.loads(domain['topic_preference'])
+            domain['remark'] = json.loads(domain['remark'])
+            domain['create_time'] = int(domain['create_time'])
 
-    # task_detail = {}
-    # task_detail['xnr_user_no'] = 'WXNR0004'
-    # task_detail['mid'] = '4043274014747152'
-    # task_detail['compute_status'] = 0
-    # task_detail['submit_time'] = 1503057589
-    # task_detail['submit_user'] = 'admin@qq.com'
-    # #task_detail['task_id'] = '4043450590377035'
-    # task_detail['keywords_string'] = u'哈里&梅根.马克尔'
-    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+            if domain_pinyin == 'wei_quan_qun_ti':
+                domain['xnr_user_no'] = 'WXNR0001'
+                domain['description'] =  '追踪维权群体'
+            else:
+                domain['xnr_user_no'] = 'WXNR0004'
+                domain['description'] =  '追踪乌镇群体'
+            print 'domain:::',domain
+            es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
 
-    # task_detail = {}
-    # task_detail['xnr_user_no'] = 'WXNR0004'
-    # task_detail['mid'] = '4043433776005723'
-    # task_detail['compute_status'] = 0
-    # task_detail['submit_time'] = 1503057589
-    # task_detail['submit_user'] = 'admin@qq.com'
-    # #task_detail['task_id'] = '4043450590377035'
-    # task_detail['keywords_string'] = u'习近平&厄瓜多尔'
-    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+    # es.delete(index='weibo_domain',doc_type='group',id='wu_zhen')
+    # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
+    # f_domain_data.write(json.dumps(result))
 
-    # es.index(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-    #         id=_id,body=task_detail)
 
-    es.delete(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-             id='WXNR0004_4043503421741766')
 
-    es.delete(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-             id='WXNR0004_4043450590377035')
 
-    # get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-    #     id='WXNR0004')['_source']
 
-    # followers = get_result['followers_list']
-    # print 'followers::',type(followers)
-    # item = {}
-    # item['social_sensors'] = followers
-    # item['task_name'] = '感知热门事件'
-    # item['history_status'] = ''
-    # item['remark'] = '感知热门事件'
-    # item['xnr_user_no'] = 'WXNR0004'
 
-    # es.index(index=index_sensing,doc_type=type_sensing,id='WXNR0004',body=item)
+

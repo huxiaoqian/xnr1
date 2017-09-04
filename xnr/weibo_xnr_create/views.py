@@ -8,7 +8,7 @@ import urllib2
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import domain_create_task,get_domain_info,get_role_info,get_role_sort_list,\
+from utils import get_domain_info,get_role_info,get_role_sort_list,\
                 get_role2feature_info,get_recommend_step_two,get_recommend_follows,\
                 get_save_step_one,get_save_step_two,get_save_step_three_1,get_save_step_three_2,\
                 get_xnr_info,get_show_domain,get_show_weibo_xnr,get_nick_name_unique
@@ -19,33 +19,6 @@ import os
 from xnr.global_config import PATH_ROOT
 
 mod = Blueprint('weibo_xnr_create', __name__, url_prefix='/weibo_xnr_create')
-
-## 天津项目人物画像
-@mod.route('/user_portrait/')
-def user_portrait_tianjin():
-    #return render_template('user_portrai_tianjin.html')
-    return render_template('04.html')
-    
-# 返回数据
-#@mod.route('/user_data/')
-#def ajax_user_data():
-    #data = get_user_data()
-
-    # with open(os.path.join(APP_ROOT, 'portrait_info_tianjin_0813.txt')) as f:
-    #     for line in f:
-    #         line = json.loads(line)
-    #         print type(line)
-    #         return json.dumps(line)
-    #return json.dumps(data)
-
-## 测试获取uid
-@mod.route('/get_uid/')
-def ajax_get_uid():
-    timestamp = newest_time_func('6340301597')
-    print 'timestamp::',timestamp
-    #data = getUserShow(screen_name='GGJava')
-    #print 'data::',data
-    return json.dumps([])
 
 # 昵称不能重复
 @mod.route('/nick_name_unique/')
@@ -58,6 +31,7 @@ def ajax_nick_name_unique():
 # 返回渗透领域
 @mod.route('/show_domain/')
 def ajax_show_domain():
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name_dict = get_show_domain()
     return json.dumps(domain_name_dict)
 
@@ -70,6 +44,7 @@ def ajax_show_weibo_xnr():
 # 根据虚拟人推荐角色顺序
 @mod.route('/domain2role/')  
 def ajax_domain2role():
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_sort_list = get_role_sort_list(domain_name)
 
@@ -78,6 +53,7 @@ def ajax_domain2role():
 #根据选定角色推荐政治倾向和心理状态
 @mod.route('/role2feature_info/')
 def ajax_role2feature_info():
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
     feature_filter_dict = get_role2feature_info(domain_name,role_name)
@@ -87,6 +63,8 @@ def ajax_role2feature_info():
 @mod.route('/recommend_step_two/')
 def ajax_recommend_step_two():
     task_detail = dict()
+
+    #xnr_user_no = request.args.get('xnr_user_no','')
     task_detail['domain_name'] = request.args.get('domain_name','')
     task_detail['role_name'] = request.args.get('role_name','')
     task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”

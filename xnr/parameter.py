@@ -79,7 +79,6 @@ ACTIVE_UID = '2919766227'
 #MAX_AT = 1000
 
 
-
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
 CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
