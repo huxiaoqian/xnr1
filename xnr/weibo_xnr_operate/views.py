@@ -13,7 +13,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_show_comment,get_reply_comment,get_show_retweet,get_reply_retweet,get_show_private,\
                 get_reply_private,get_show_at,get_reply_at,get_show_follow,get_reply_follow,get_like_operate,\
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
-                get_show_fans
+                get_show_fans,get_add_sensor_user,get_delete_sensor_user
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 
@@ -102,9 +102,11 @@ def ajax_hot_sensitive_recommend_at_user():
 # 热点跟随微博推荐
 @mod.route('/hot_recommend_tweets/')
 def ajax_hot_recommend_tweets():
+
+    xnr_user_no = request.args.get('xnr_user_no','') # 当前虚拟人 
     topic_field = request.args.get('topic_field','') # 默认...
     sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, finish_status-按事件完成度，event_weight-按事件权重
-    tweets = get_hot_recommend_tweets(topic_field,sort_item)
+    tweets = get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item)
     return json.dumps(tweets)
 
 ## 热点跟随：内容推荐和子观点分析的提交关键词任务
@@ -112,6 +114,8 @@ def ajax_hot_recommend_tweets():
 def ajax_submit_hot_keyword_task():
     #mark = True
     task_detail = dict()
+
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人 
     task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid 
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
     task_detail['compute_status'] = 0 # 尚未计算
@@ -135,6 +139,27 @@ def ajax_hot_hot_subopinion():
     task_id = request.args.get('task_id','')  # mid
     subopnion_results = get_hot_subopinion(task_id)
     return json.dumps(subopnion_results)
+
+# 添加人物传感器
+@mod.route('/add_sensor_user/')
+def ajax_add_sensor_user():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    sensor_uid_list = request.args.get('sensor_uid_list','')  # 以中文逗号“，”隔开
+    
+    results = get_add_sensor_user(xnr_user_no,sensor_uid_list)   # True  False
+
+    return json.dumps(results)    
+
+
+# 删除人物传感器
+@mod.route('/delete_sensor_user/')
+def ajax_delete_sensor_user():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    sensor_uid_list = request.args.get('sensor_uid_list','')  # 以中文逗号“，”隔开
+    
+    results = get_delete_sensor_user(xnr_user_no,sensor_uid_list)   # True  False
+
+    return json.dumps(results)
 
 '''
 业务发帖

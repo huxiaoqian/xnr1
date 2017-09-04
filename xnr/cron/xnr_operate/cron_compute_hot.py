@@ -24,10 +24,11 @@ from global_utils import es_flow_text
 from global_utils import weibo_recommend_subopinion_keywords_task_queue_name as keyword_task_queue_name
 from global_utils import R_RECOMMEND_SUBOPINION_KEYWORD_TASK as r
 from global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_task_index_type,\
-                        weibo_recommend_subopinion_keywords_task_queue_name
+                        weibo_recommend_subopinion_keywords_task_queue_name,\
+                        weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 from global_config import S_TYPE,S_DATE
 from time_utils import get_flow_text_index_list,datetime2ts
-from parameter import MAX_SEARCH_SIZE
+from parameter import MAX_SEARCH_SIZE,SUB_OPINION_WEIBO_LIMIT
 
 #use to add task to redis queue when the task  detect process fail
 #input: decect_task_information
@@ -74,10 +75,25 @@ def compute_recommend_subopnion(task_detail):
 
     keywords_list = keywords_string.split('&')  ## 以 & 切分关键词，得到list
 
+    xnr_user_no = task_detail['xnr_user_no']
+    mid = task_detail['mid']
+
     query_item = 'keywords_string'
     nest_query_list = []
     for keyword in keywords_list:
         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+    
+    ## 重点关注当前虚拟人的关注用户
+    if S_TYPE == 'test':
+        # followers_list = get_result['followers_list']
+        # nest_query_list.append({'terms':followers_list})
+        print '全部用户'
+    else:
+        get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        id=xnr_user_no)['_source']
+        followers_list = get_result['followers_list']
+        nest_query_list.append({'terms':followers_list})
+
 
     if S_TYPE == 'test':
         create_time = datetime2ts(S_DATE)
@@ -88,6 +104,7 @@ def compute_recommend_subopnion(task_detail):
     
     #index_name_list_list = get_flow_text_index_list(now_timestamp)
     index_name_list = get_flow_text_index_list(create_time)
+    print 'index_name_list::',index_name_list
     es_results = es_flow_text.search(index=index_name_list,doc_type='text',\
                     body={'query':{'bool':{'must':nest_query_list}},'size':MAX_SEARCH_SIZE})['hits']['hits']
 
@@ -98,26 +115,27 @@ def compute_recommend_subopnion(task_detail):
             item = item['_source']
             weibo = item['text']
             weibo_list.append(weibo)
-
+    
     ## 内容推荐
 
     ## 得到推荐句子列表
 
     print '开始内容推荐计算......'
-
-    content_results = summary_main(weibo_list)
-
+    if weibo_list:
+        content_results = summary_main(weibo_list)
+    else:
+        content_results = []
 
     print '开始保存内容推荐计算结果......'
-    print 'task_id::',task_id.encode('utf-8')
-    mark = save_content_recommendation_results(task_id.encode('utf-8'),content_results)
+
+    mark = save_content_recommendation_results(xnr_user_no,mid,task_id.encode('utf-8'),content_results)
     print 'mark_content:::',mark
     if mark == False:
         print '内容推荐结果保存过程中遇到错误，把计算任务重新push到队列中'
         add_task_2_queue(keyword_task_queue_name,task_detail)
     else:
         print '内容推荐计算结果保存完毕......'
-
+    
     ## 子观点分析
     '''
     输入：
@@ -130,15 +148,20 @@ def compute_recommend_subopnion(task_detail):
     '''
     
     print '开始子观点计算......'
-    
-    opinion_name,word_result,text_list = opinion_main(weibo_list,k_cluster=5)
-    sub_opinion_results = dict()
-    for topic, text in text_list.iteritems():
-        topic_name = opinion_name[topic]
-        sub_opinion_results[topic_name] = text
+    if weibo_list:
+        opinion_name,word_result,text_list = opinion_main(weibo_list,k_cluster=5)
+        sub_opinion_results = dict()
+
+        for topic, text in text_list.iteritems():
+            
+            topic_name = opinion_name[topic]
+            sub_opinion_results[topic_name] = text[:SUB_OPINION_WEIBO_LIMIT]
+            
+    else:
+        sub_opinion_results = {}
 
     print '开始保存子观点计算结果......'
-    mark = save_subopnion_results(task_id,sub_opinion_results)
+    mark = save_subopnion_results(xnr_user_no,mid,task_id,sub_opinion_results)
     print 'mark_opinion:::',mark
     if mark == False:
 

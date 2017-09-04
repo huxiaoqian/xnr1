@@ -416,6 +416,10 @@ def weibo_feedback_fans_mappings():  ## 粉丝提醒及回粉
 					},
 					'update_time':{
 						'type':'long'
+					},
+					'sensor_mark':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -497,6 +501,10 @@ def weibo_feedback_follow_mappings():  ## 关注提醒及回粉
 					},
 					'update_time':{
 						'type':'long'
+					},
+					'sensor_mark':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}

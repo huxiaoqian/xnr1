@@ -49,8 +49,12 @@ def create_task_list():
             item = iter_item['_source']
             task = []
             task.append(item['task_name']) # task_name
-            task.append(json.loads(item['social_sensors'])) # social sensors
+            try:
+                task.append(json.loads(item['social_sensors'])) # social sensors
+            except:
+                task.append(item['social_sensors'])  # social sensors
             task.append(now_ts)
+            task.append(item['xnr_user_no'])
             #task.append(given_ts)
             r.lpush("task_name", json.dumps(task))
             count += 1

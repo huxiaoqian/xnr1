@@ -18,7 +18,8 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                         weibo_xnr_index_name,weibo_xnr_index_type,weibo_report_management_index_name,\
                         weibo_report_management_index_type,weibo_xnr_fans_followers_index_name,\
-                        weibo_xnr_fans_followers_index_type
+                        weibo_xnr_fans_followers_index_type,weibo_hot_keyword_task_index_name,\
+                        weibo_hot_keyword_task_index_type,index_sensing,type_sensing
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
@@ -241,4 +242,58 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    getUserShow(uid=None, screen_name=None)
+    #getUserShow(uid=None, screen_name=None)
+
+    # task_detail = {}
+    # task_detail['xnr_user_no'] = 'WXNR0004'
+    # task_detail['mid'] = '4043503421741766'
+    # task_detail['compute_status'] = 0
+    # task_detail['submit_time'] = 1503057474
+    # task_detail['submit_user'] = 'admin@qq.com'
+    # #task_detail['task_id'] = '4043503421741766'
+    # task_detail['keywords_string'] = u'朴槿惠&崔顺实'
+
+    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+
+    # task_detail = {}
+    # task_detail['xnr_user_no'] = 'WXNR0004'
+    # task_detail['mid'] = '4043274014747152'
+    # task_detail['compute_status'] = 0
+    # task_detail['submit_time'] = 1503057589
+    # task_detail['submit_user'] = 'admin@qq.com'
+    # #task_detail['task_id'] = '4043450590377035'
+    # task_detail['keywords_string'] = u'哈里&梅根.马克尔'
+    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+
+    # task_detail = {}
+    # task_detail['xnr_user_no'] = 'WXNR0004'
+    # task_detail['mid'] = '4043433776005723'
+    # task_detail['compute_status'] = 0
+    # task_detail['submit_time'] = 1503057589
+    # task_detail['submit_user'] = 'admin@qq.com'
+    # #task_detail['task_id'] = '4043450590377035'
+    # task_detail['keywords_string'] = u'习近平&厄瓜多尔'
+    # _id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+
+    # es.index(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+    #         id=_id,body=task_detail)
+
+    es.delete(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+             id='WXNR0004_4043503421741766')
+
+    es.delete(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+             id='WXNR0004_4043450590377035')
+
+    # get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    #     id='WXNR0004')['_source']
+
+    # followers = get_result['followers_list']
+    # print 'followers::',type(followers)
+    # item = {}
+    # item['social_sensors'] = followers
+    # item['task_name'] = '感知热门事件'
+    # item['history_status'] = ''
+    # item['remark'] = '感知热门事件'
+    # item['xnr_user_no'] = 'WXNR0004'
+
+    # es.index(index=index_sensing,doc_type=type_sensing,id='WXNR0004',body=item)

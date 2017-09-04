@@ -171,6 +171,10 @@ def manage_sensing_task():
                     "burst_reason":{
                         "type": "string",
                         "index": "not_analyzed"
+                    },
+                    'xnr_user_no':{     # 增加虚拟人
+                        'type':'string',
+                        'index':'not_analyzed'
                     }
                 }
             }
@@ -256,6 +260,10 @@ def mappings_social_sensing_text():
                     },
                     'compute_status':{   # 0- 尚未计算， 1-正在计算，2- 计算王成
                         'type':'long'
+                    },
+                    'xnr_user_no':{    # 增加虚拟人
+                        'type':'string',
+                        'index':'not_analyzed'
                     }
                 }
             }
