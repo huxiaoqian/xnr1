@@ -28,12 +28,12 @@ def execute(uname, upasswd):
     print timestamp_retweet, timestamp_like, timestamp_at, \
        timestamp_private, timestamp_comment_receive, timestamp_comment_make
 
-    try:
-        print 'start run weibo_feedback_follow.py ...'
-        fans, follow, groups = FeedbackFollow(xnr.uid, current_ts).execute()
-        print 'run weibo_feedback_follow.py done!'
-    except:
-        print 'Except Abort'
+    #try:
+    print 'start run weibo_feedback_follow.py ...'
+    fans, follow, groups = FeedbackFollow(xnr.uid, current_ts).execute()
+    print 'run weibo_feedback_follow.py done!'
+    # except:
+    #     print 'Except Abort'
     
     try:
         print 'start run weibo_feedback_at.py ...'

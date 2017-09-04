@@ -2,7 +2,8 @@
 
 from global_utils import es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
-                        weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
+                        weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
+                        index_sensing,type_sensing
 from parameter import MAX_SEARCH_SIZE
 
 def nickname2uid(nickname_list):
@@ -144,7 +145,26 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
 
     return True
 
-#if __name__ == '__main__':
+## 判断是否为敏感人物传感器
+def judge_sensing_sensor(xnr_user_no,uid):
+
+    exist_item = es_xnr.exists(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)
+    print 'exist_item:::',exist_item
+    if not exist_item:
+        return False 
+    else:
+        get_result = es_xnr.get(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)['_source']
+        print 'get_result::',get_result
+        social_sensors = get_result['social_sensors']
+        print 'social_sensors:::',social_sensors
+        print 'type::',type(social_sensors)
+        if uid in social_sensors:
+            return True
+        else:
+            return False
+
+
+if __name__ == '__main__':
 
     save_to_fans_follow_ES('WXNR0004','1496814565','followers')
     #es_xnr.delete(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\

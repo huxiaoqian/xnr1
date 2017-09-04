@@ -464,6 +464,8 @@ def social_sensing(task_detail):
     #ts = int(task_detail[2])
     ts = float(task_detail[2])
 
+    xnr_user_no = task_detail[3]
+
     print ts2date(ts)
     index_list = []
     important_words = []
@@ -691,9 +693,13 @@ def social_sensing(task_detail):
         iter_dict["compute_status"] = 0  # 尚未计算
         iter_dict["topic_field"] = mid_value[mid]
         iter_dict["detect_ts"] = ts
+        iter_dict["xnr_user_no"] = xnr_user_no
+
         iter_dict.update(all_text_dict[mid])
         count += 1
-        bulk_action.extend([{"index":{"_id": mid}}, iter_dict])
+        print 'iter_dict:::',iter_dict
+        _id = xnr_user_no + '_' + mid
+        bulk_action.extend([{"index":{"_id": _id}}, iter_dict])
         if count % 500 == 0:
             es_xnr.bulk(bulk_action, index="social_sensing_text", doc_type="text", timeout=600)
             bulk_action = []
