@@ -115,16 +115,15 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
                             id=xnr_user_no,body={'doc':results})
 
         except:
-            if follow_type == 'follow':
-                body_info = {}
-                body_info['followers_list'] = [uid]
-                body_info['xnr_use_no'] = xnr_use_no
+            #if follow_type == 'follow':
+            body_info = {}
+            body_info['followers_list'] = [uid]
+            body_info['xnr_use_no'] = xnr_use_no
 
-                es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
-                        id=xnr_user_no, body=body_info)
-            elif follow_type == 'unfollow':
+            es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no, body=body_info)
+            #elif follow_type == 'unfollow':
 
-        
     elif save_type == 'fans':
         try:
             results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
@@ -172,6 +171,37 @@ def judge_sensing_sensor(xnr_user_no,uid):
         else:
             return False
 
+## 判断关注类型
+def judge_follow_type(xnr_user_no,uid):
+
+    exist_item = es_xnr.exists(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                id=xnr_user_no)
+
+    if not exist_item:
+        weibo_type = 'stranger'
+    else:
+        es_get = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                id=xnr_user_no)['_source']
+
+        fans_list = es_get['fans_list']
+        followers_list = es_get['followers_list']
+
+        if uid in fans_list:
+            if uid in followers_list:
+                weibo_type = 'friends'
+            else:
+                weibo_type = 'followed'
+        elif uid in followers_list:
+            weibo_type = 'follow'
+        else:
+            weibo_type = 'stranger'
+
+    return weibo_type
+
+## 得到影响力相对值
+def get_influence_relative(uid,influence):
+
+    es_xnr.search(index=bci)
 
 if __name__ == '__main__':
 
