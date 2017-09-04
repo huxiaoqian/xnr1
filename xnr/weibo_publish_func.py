@@ -181,24 +181,31 @@ def like_tweet_func(account_name,password,r_mid):
     return mark
 
 ## 关注
-def follow_tweet_func(account_name,password,uid):
+def follow_tweet_func(xnr_user_no,account_name,password,uid):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
     user = SinaOperateAPI(xnr.uid)
     user.r_mid = uid
     mark = user.followed()
+    save_type = 'followers'
+    follow_type = 'follow'
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
 
     return mark
 
 ## 取消关注
-def unfollow_tweet_func(account_name,password,uid):
+def unfollow_tweet_func(xnr_user_no,account_name,password,uid):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
     user = SinaOperateAPI(xnr.uid)
     user.r_mid = uid
     mark = user.unfollowed()
+
+    save_type = 'followers'
+    follow_type = 'unfollow'
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
 
     return mark
 
@@ -210,7 +217,7 @@ def create_group_func(account_name,password,group,members):
     user.group = group
     user.members = members
     mark = user.createGroup()
-    print 'mark::',mark
+
     return mark
 
 
@@ -226,12 +233,9 @@ def getUserShow(uid=None, screen_name=None):
         u_url += "&screen_name=" + screen_name
 
     try:
-        print 'ooooooo'
         request = urllib2.Request(u_url)
         response = urllib2.urlopen(request, timeout=60)
-        print '343434'
         content = json.loads(response.read())
-        print 'content:',content
         return content
     except Exception, e:
         print "download page error!!! ", e
