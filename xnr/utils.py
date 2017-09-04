@@ -1,10 +1,12 @@
 #-*-coding:utf-8-*-
 
-from global_utils import es_user_profile,profile_index_name,profile_index_type,\
+from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                        index_sensing,type_sensing
-from parameter import MAX_SEARCH_SIZE
+                        index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type
+from parameter import MAX_SEARCH_SIZE,DAY
+from global_config import S_TYPE,S_DATE_BCI
+from time_utils import ts2datetime
 
 def nickname2uid(nickname_list):
     uids_list = set()
@@ -200,8 +202,26 @@ def judge_follow_type(xnr_user_no,uid):
 
 ## 得到影响力相对值
 def get_influence_relative(uid,influence):
+    if S_TYPE == 'test':
+        datetime = S_DATE_BCI
+    else:
+        datetime = ts2datetime(time.time()-DAY)
+    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    weibo_bci_index_name = weibo_bci_index_name_pre + new_datetime
+    
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{'user_index':{'order':'desc'}}
+    }
+    results = es_flow_text.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
 
-    es_xnr.search(index=bci)
+    user_index_max = results[0]['_source']['user_index']
+
+    influence_relative = influence/user_index_max
+
+    return influence_relative
 
 if __name__ == '__main__':
 
