@@ -78,7 +78,7 @@ body {
 }
 #container .post_center-every .center_3 span {
     display: inline-block;
-    width: 33%;
+    width: 32%;
     padding: 3px;
     color: white;
     cursor: pointer;
@@ -94,4 +94,31 @@ body {
 }
 #container .post_center-every .center_3 span:hover {
     color:#eb7350;
+}
+#container .post_center-every .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .post_center-every .commentDown input {
+    width: 80%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .post_center-every .commentDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .post_center-every .commentDown span:hover {
+    background: #333333;
 }
