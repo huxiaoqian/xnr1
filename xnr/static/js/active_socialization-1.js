@@ -1,4 +1,4 @@
-var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+nowUser+'&sort_item=influence';
+var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=influence';
 public_ajax.call_request('get',relatedUrl,related);
 var idNAME='influence';
 function related(data) {
@@ -87,8 +87,8 @@ function related(data) {
                     }else {//if (row.weibo_type=='stranger'||row.weibo_type=='followed')
                         fol='未关注';
                     }
-                    return '<span style="cursor: pointer;" onclick="lookDetails(\''+row.uid+'\')">查看详情</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\',this)">'+fol+'</span>';
+                    return '<span style="cursor: pointer;" onclick="lookDetails(\''+row.uid+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\',this)" title="'+fol+'"><i class="icon icon-star-empty"></i>'+fol+'</span>';
                 },
             },
         ],
@@ -99,7 +99,7 @@ function related(data) {
 $('#container .suggestion #myTabs li').on('click',function () {
     idNAME='influence';
     var ty=$(this).attr('tp');
-    var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+nowUser+'&sort_item='+ty;
+    var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
     public_ajax.call_request('get',relatedUrl,related);
 })
 //直接搜索
@@ -111,7 +111,7 @@ $('.findSure').on('click',function () {
     }else {
         ids=ids.replace(/,/g,'，');
         idNAME='searchResult';
-        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+nowUser+'&sort_item=influence&uids='+
+        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=influence&uids='+
             '1249868467，5646533711，2702763965'//+ids;
         public_ajax.call_request('get',searchUrl,related);
         $('.searchResult').slideDown(30);
@@ -187,7 +187,7 @@ function driectFocus(uid,_this) {
     }else {
         mid='unfollow_operate';
     }
-    foc_url='/weibo_xnr_operate/'+mid+'/?xnr_user_no='+nowUser+'&uid='+uid;
+    foc_url='/weibo_xnr_operate/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',foc_url,sucFai)
 }
 //提示
