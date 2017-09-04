@@ -339,34 +339,33 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         results_all.append(result)
     return results_all
 
-def get_hot_content_recommend(task_id):
-    print 'weibo_hot_keyword_task_index_name::',weibo_hot_keyword_task_index_name
-    print 'weibo_hot_keyword_task_index_type::',weibo_hot_keyword_task_index_type
-    print 'task_id::',task_id
+def get_hot_content_recommend(xnr_user_no,task_id):
+    task_id_new = xnr_user_no+'_'+task_id
     es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-                    id=task_id)['_source']
+                    id=task_id_new)['_source']
     if es_task:
         if es_task['compute_status'] == 0:
             return '尚未计算'
         else:
             es_result = es.get(index=weibo_hot_content_recommend_results_index_name,doc_type=weibo_hot_content_recommend_results_index_type,\
-                            id=task_id)['_source']
+                            id=task_id_new)['_source']
 
             if es_result:
                 contents = json.loads(es_result['content_recommend'])
 
             return contents
 
-def get_hot_subopinion(task_id):
-
+def get_hot_subopinion(xnr_user_no,task_id):
+    
+    task_id_new = xnr_user_no+'_'+task_id
     es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-                    id=task_id)['_source']
+                    id=task_id_new)['_source']
     if es_task:
         if es_task['compute_status'] != 2:
             return '正在计算'
         else:
             es_result = es.get(index=weibo_hot_subopinion_results_index_name,doc_type=weibo_hot_subopinion_results_index_type,\
-                                id=task_id)['_source']
+                                id=task_id_new)['_source']
 
             if es_result:
                 contents = json.loads(es_result['subopinion_weibo'])
