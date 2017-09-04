@@ -1,11 +1,11 @@
-var scoreUrl='/weibo_xnr_assessment/influence_mark/?xnr_user_no='+nowUser;
+var scoreUrl='/weibo_xnr_assessment/influence_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
     $('.title .tit-2 .score').text(data);
 }
 $('#container .type_page #myTabs li').on('click',function () {
     var mid=$(this).attr('midurl');
-    var influe_url='/weibo_xnr_assessment/'+mid+'/?xnr_user_no='+nowUser;
+    var influe_url='/weibo_xnr_assessment/'+mid+'/?xnr_user_no='+ID_Num;
     public_ajax.call_request('get',influe_url,influe);
 });
 $('#container .influence .fans-1 .demo-label input').on('click',function () {
@@ -18,10 +18,8 @@ $('#container .influence .fans-1 .demo-label input').on('click',function () {
         $('#fans-3').show();
     }
 })
-var influe_1_url='/weibo_xnr_assessment/influ_fans_num/?xnr_user_no='+nowUser;
+var influe_1_url='/weibo_xnr_assessment/influ_fans_num/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',influe_1_url,influe);
-
-
 //总数量
 var time=[],growth=[];
 function influe(data) {
@@ -37,9 +35,6 @@ function influe(data) {
         };
         for (var j in data['total_num']){total.push(data['total_num'][j])};
         for (var h in data['growth_rate']){growth.push(data['growth_rate'][h])};
-        console.log(dayData)
-        console.log(total)
-        console.log(time)
         var myChart = echarts.init(document.getElementById('fans-2'),'dark');
         var option = {
             backgroundColor:'transparent',

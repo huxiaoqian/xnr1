@@ -73,7 +73,10 @@ def show_personnal_warming(xnr_user_no,day_time):
             'sort':{'sensitive':{'order':'desc'}}
         }
         second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-        results.extend([user,second_result])
+        s_result=[]
+        for item in second_result:
+        	s_result.append(item['_source'])
+        results.extend([user,s_result])
     return results
 
 
@@ -88,7 +91,6 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
     #关注用户
     es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
     followers_list=es_xnr_result['followers_list']
-    followers_list=json.loads(followers_list)
 
     if show_type == 0:
         show_condition_list=[{'bool':{'must_not':{'terms':{'uid':followers_list}}}}]
@@ -106,7 +108,10 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
     }
 
     results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    return results
+    result=[]
+    for item in results:
+    	result.append(item['_source'])
+    return result
 
 
 #加入预警库

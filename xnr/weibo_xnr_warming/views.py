@@ -69,7 +69,7 @@ def ajax_show_event_warming():
 
 #一键上报、转发、评论、点赞、导出至excel见公共操作模块
 
-#查看详情
+#查看详情——见操作统计的公共模块
 
 
 ###时间预警
@@ -113,6 +113,7 @@ def ajax_report_warming_content():
 	results=report_warming_content(report_info,user_info,weibo_info)
 	return json.dumps(results)
 
+#见操作统计的公共模块
 
 #转发
 

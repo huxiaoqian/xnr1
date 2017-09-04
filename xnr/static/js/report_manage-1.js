@@ -85,7 +85,7 @@ function reportDefaul(data) {
             },
             {
                 title: "人物UID",//标题
-                field: "",//键名
+                field: "uid",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -106,8 +106,39 @@ function reportDefaul(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var repData=JSON.parse(row.report_content);
-                    console.log(repData)
+                    var repData=row.report_content['weibo_list'];
+                    var str='';
+                    $.each(repData,function (index,item) {
+                        var txt;
+                        if (item.text==''||item.text=='null'||item.text=='unknown'){
+                            txt='暂无内容';
+                        }else {
+                            txt=item.text;
+                        };
+                        str+=
+                            '<div class="post_center-every">'+
+                            '    <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                            '    <div class="center_rel">'+
+                            '        <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                            '        <i class="mid" style="display: none;">'+item.mid+'</i>'+
+                            '        <i class="tamp" style="display: none;">'+row.report_time+'</i>'+
+                            '        <i class="name" style="display: none;">'+row.event_name+'</i>'+
+                            '        <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(item.timestamp)+'</span>'+
+                            '        <span class="center_2">'+txt+
+                            '        </span>'+
+                            '        <div class="center_3">'+
+                            '            <span class="cen3-1" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                            '            <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                            '            <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">'+item.like+'</b>）</span>'+
+                            '        </div>'+
+                            '        <div class="commentDown" style="width: 100%;display: none;">'+
+                            '            <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                            '            <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                            '        </div>'+
+                            '    </div>'+
+                            '</div>';
+                    })
+                    return str;
                 },
             },
         ],
@@ -120,7 +151,36 @@ $('.type2 .demo-label').on('click',function () {
     var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
+//转发===评论===点赞
+function retComLike(_this) {
+    var mid=$(_this).parents('.post_center-every').find('.mid').text();
+    var txt=$(_this).parents('.post_center-every').find('.center_2').text();
+    var middle=$(_this).attr('type');
+    if (txt=='暂无内容'){txt=''};
+    var opreat_url;
+    if (middle=='get_weibohistory_like'){
+        var uid=$(_this).parents('.post_center-every').find('.uid').text();
+        var tamp=$(_this).parents('.post_center-every').find('.tamp').text();
+        var nickName=$(_this).parents('.post_center-every').find('.name').text();
+        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+
+        '&uid='+uid+'&nick_name='+nickName+'&text='+txt+'&timestamp='+tamp;
+    }else {
+        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
+    }
+    public_ajax.call_request('get',opreat_url,postYES);
+}
 
+//操作返回结果
+function postYES(data) {
+    var f='';
+    if (data[0]){
+        f='操作成功';
+    }else {
+        f='操作失败';
+    }
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
+}
 //导出文件
 function exportTableToCSV(filename) {
     var str =  '';
