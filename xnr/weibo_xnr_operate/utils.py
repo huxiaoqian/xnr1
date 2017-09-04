@@ -37,7 +37,8 @@ from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TO
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
                         FOLLOWERS_LIST
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
-from xnr.utils import uid2nick_name_photo,xnr_user_no2uid
+from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
+                        get_influence_relative
 
 def push_keywords_task(task_detail):
 
@@ -898,6 +899,17 @@ def get_direct_search(task_detail):
     if es_results:
         for item in es_results:
             uid = item['_source']['uid']
+
+            weibo_type = judge_follow_type(xnr_user_no,uid)
+            sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
+
+            item['_source']['weibo_type'] = weibo_type
+            item['_source']['sensor_mark'] = sensor_mark
+            
+            influence = item['_source']['influence']
+            influence_relative = get_influence_relative(uid,influence)
+            item['_source']['influence'] = influence_relative
+            
             if S_TYPE == 'test':
                 current_time = datetime2ts(S_DATE)
             else:
@@ -973,6 +985,16 @@ def get_related_recommendation(task_detail):
     if es_results:
         for item in es_results:
             uid = item['_source']['uid']
+            weibo_type = judge_follow_type(xnr_user_no,uid)
+            sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
+
+            item['_source']['weibo_type'] = weibo_type
+            item['_source']['sensor_mark'] = sensor_mark
+
+            influence = item['_source']['influence']
+            influence_relative = get_influence_relative(uid,influence)
+            item['_source']['influence'] = influence_relative
+
             if S_TYPE == 'test':
                 current_time = datetime2ts(S_DATE)
             else:

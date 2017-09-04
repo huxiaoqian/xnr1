@@ -336,7 +336,7 @@ def ajax_related_recommendation():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','influence')
-
+    
     results = get_related_recommendation(task_detail)
 
     return json.dumps(results)

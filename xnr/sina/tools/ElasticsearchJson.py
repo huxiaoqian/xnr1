@@ -71,14 +71,17 @@ def executeES(indexName, typeName, listData):
 
         data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
         data['sensitive_user'] = get_sensitive_user(data['uid'])
+
         if indexName == 'weibo_feedback_follow':
             # 修改 _id、保存至fans_followers_es表
             _id = data["root_uid"]+'_'+data["mid"]
             xnr_user_no = uid2xnr_user_no(data["root_uid"])
             
             save_type = 'followers'
+            follow_type = 'follow'
+
             if xnr_user_no:      
-                save_to_fans_follow_ES(xnr_user_no,data["uid"],save_type)
+                save_to_fans_follow_ES(xnr_user_no,data["uid"],save_type,follow_type)
                 save_to_redis_fans_follow(xnr_user_no,data["uid"],save_type)
 
                 sensor_mark = judge_sensing_sensor(xnr_user_no,data['uid'])
@@ -88,9 +91,10 @@ def executeES(indexName, typeName, listData):
             _id = data["root_uid"]+'_'+data["mid"]
             xnr_user_no = uid2xnr_user_no(data["root_uid"])
             save_type = 'fans'
-
+            follow_type = 'follow'
+            
             if xnr_user_no:
-                save_to_fans_follow_ES(xnr_user_no,data["uid"],save_type)
+                save_to_fans_follow_ES(xnr_user_no,data["uid"],save_type,follow_type)
                 save_to_redis_fans_follow(xnr_user_no,data["uid"],save_type)
                 print '!!!!fans!!!'
                 sensor_mark = judge_sensing_sensor(xnr_user_no,data['uid'])
