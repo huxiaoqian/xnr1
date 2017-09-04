@@ -202,7 +202,7 @@ class FeedbackFollow:
                 }
 
                 wb_json = json.dumps(wb_item)
-                # print wb_json
+                print 'wb_json:::',wb_json
                 json_list.append(wb_json)
 
         return json_list
@@ -255,6 +255,7 @@ class FeedbackFollow:
                 }
 
                 wb_json = json.dumps(wb_item)
+                #wb_json = wb_item
                 # print wb_json
                 json_list.append(wb_json)
 

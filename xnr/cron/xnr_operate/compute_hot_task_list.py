@@ -28,9 +28,12 @@ def lpush_recommend_subopinion_keyword_task_list():
 			print 'count::::',count
 			item = item['_source']
 			task_dict = {}
-			task_dict['task_id'] = item['task_id']
-			print 'task_id::::::::::', item['task_id'] 
+			task_dict['xnr_user_no'] = item['xnr_user_no']
+			task_dict['mid'] = item['mid']
+			print 'mid:::',task_dict['mid']
+			task_dict['task_id'] = item['xnr_user_no'] + '_' + item['mid']
 			task_dict['keywords_string'] = item['keywords_string']
+
 			r.lpush(weibo_recommend_subopinion_keywords_task_queue_name,json.dumps(task_dict))
 			count += 1
 			print '开始把任务push到队列中......'

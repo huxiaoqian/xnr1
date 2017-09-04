@@ -16,6 +16,10 @@ def recommend_subopinion_keyword_task_mappings():
 		'mappings':{
 			weibo_hot_keyword_task_index_type:{
 				'properties':{
+					'xnr_user_no':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
 					'task_id':{  ## 当前事件代表微博的mid
 						'type':'string',
 						'index':'not_analyzed'

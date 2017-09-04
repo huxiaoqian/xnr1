@@ -48,6 +48,9 @@ SENSITIVE_AT_RECOMMEND_USER_TOP = 10
 BCI_USER_NUMBER = 1000
 USER_POETRAIT_NUMBER = 1000
 
+# 子观点微博条数限制
+SUB_OPINION_WEIBO_LIMIT = 3
+
 ## 读取hashtag
 UID_TXT_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_warming'
 

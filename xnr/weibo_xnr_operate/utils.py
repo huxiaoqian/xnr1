@@ -26,7 +26,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
                             weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
-                            weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
+                            weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
+                            index_sensing,type_sensing
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -44,10 +45,12 @@ def push_keywords_task(task_detail):
 
     try:
         task_id = task_detail['task_id']
+        xnr_user_no = task_detail['xnr_user_no']
         keywords_string = '&'.join(task_detail['keywords_string'].encode('utf-8').split('，'))
         task_detail['keywords_string'] = keywords_string
+        _id = xnr_user_no+'_'+task_id
         es.index(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-                id=task_id,body=task_detail)
+                id=_id,body=task_detail)
         mark = True
     except:
         mark = False
@@ -291,16 +294,30 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 
     return uid_nick_name_dict
 
-def get_hot_recommend_tweets(topic_field,sort_item):
+def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
     
     topic_field_en = topic_ch2en_dict[topic_field]
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'topic_field':topic_field_en}
-                }
+            'bool':{
+                'must':[
+                    {
+                        'filtered':{
+                            'filter':{
+                                'term':{'topic_field':topic_field_en}
+                            }
+                        }
+                    },
+                     {
+                        'filtered':{
+                            'filter':{
+                                'term':{'xnr_user_no':xnr_user_no}
+                            }
+                        }
+                    }
+                ]
             }
+            
         },
         'sort':{sort_item:{'order':'desc'}},
         'size':TOP_WEIBOS_LIMIT
@@ -1027,5 +1044,67 @@ def get_show_group(xnr_user_no):
             group_dict[gid] = gname
 
     return group_dict
+
+
+def get_add_sensor_user(xnr_user_no,sensor_uid_list):
+
+    mark = False
+    sensor_uid_list_new = sensor_uid_list.split("，")
+
+    exists_result = es.exists(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)
+
+    if exists_result:
+        item_results = es.get(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)['_source']
+        social_sensors = item_results['social_sensors']
+        social_sensors.extend(sensor_uid_list_new)
+        social_sensors = list(set(social_sensors))
+        item_results['social_sensors'] = social_sensors
+
+        es.update(index=index_sensing,doc_type=type_sensing,id=xnr_user_no,body={'doc':item_results})
+
+        mark = True
+
+    else:
+        item = {}
+        item['xnr_user_no'] = xnr_user_no
+        item['social_sensors'] = sensor_uid_list_new
+        item['task_name'] = '感知'+xnr_user_no+'热门事件'
+        item['history_status'] = ''
+        item['remark'] = ''
+        es.index(index=index_sensing,doc_type=type_sensing,id=xnr_user_no,body=item_results)
+
+        mark = True
+
+    return mark
+
+
+def get_delete_sensor_user(xnr_user_no,sensor_uid_list):
+
+    mark = False
+    sensor_uid_list_new = sensor_uid_list.split("，")
+    try:
+        item_results = es.get(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)['_source']
+        social_sensors = item_results['social_sensors']
+
+        social_sensors = list(set(social_sensors).difference(set(sensor_uid_list_new)))
+        item_results['social_sensors'] = social_sensors
+
+        es.update(index=index_sensing,doc_type=type_sensing,id=xnr_user_no,body={'doc':item_results})
+
+        mark = True
+    except:
+        return mark
+
+    return mark
+
+
+
+
+
+
+
+
+
+
 
 

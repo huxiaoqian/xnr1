@@ -21,7 +21,11 @@ def content_recommend_results_mappings():
 		'mappings':{
 			weibo_hot_content_recommend_results_index_type:{
 				'properties':{
-					'task_id':{  ## 代表性微博的mid
+					'mid':{  ## 代表性微博的mid
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'xnr_user_no':{  ## 当前虚拟人
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -47,7 +51,11 @@ def subopinion_results_mappings():
 		'mappings':{
 			weibo_hot_subopinion_results_index_type:{
 				'properties':{
-					'task_id':{  ## 代表性微博的mid
+					'mid':{  ## 代表性微博的mid
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'xnr_user_no':{  ## 当前虚拟人
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -66,5 +74,5 @@ def subopinion_results_mappings():
 
 if __name__ == '__main__':
 
-	#content_recommend_results_mappings()
+	content_recommend_results_mappings()
 	subopinion_results_mappings()
