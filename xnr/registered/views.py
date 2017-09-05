@@ -13,6 +13,7 @@ def targetCustom():
 
 @mod.route('/virtualCreated/')
 def virtualCreated():
+    continueUser = request.args.get('continueUser','')
     domainName = request.args.get('domainName','')
     roleName = request.args.get('roleName','')
     daily = request.args.get('daily', '')
@@ -20,8 +21,8 @@ def virtualCreated():
     politicalSide = request.args.get('politicalSide', '')
     businessGoal = request.args.get('businessGoal', '')
     monitorKeywords = request.args.get('monitorKeywords', '')
-    return render_template('registered/virtual_created.html',domainName=domainName,roleName=roleName,daily=daily,
-    psyFeature=psyFeature,politicalSide=politicalSide,businessGoal=businessGoal,monitorKeywords=monitorKeywords)
+    return render_template('registered/virtual_created.html',continueUser=continueUser,domainName=domainName,roleName=roleName,
+        daily=daily,psyFeature=psyFeature,politicalSide=politicalSide,businessGoal=businessGoal,monitorKeywords=monitorKeywords)
     
 @mod.route('/socialAccounts/')
 def socialAccounts():

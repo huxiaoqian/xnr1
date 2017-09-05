@@ -26,14 +26,16 @@ mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 @mod.route('/show_completed_weiboxnr/')
 def ajax_show_completed_weiboxnr():
 	now_time=int(time.time())
-	results=show_completed_weiboxnr(now_time)
+	account_no=request.args.get('account_no','')
+	results=show_completed_weiboxnr(account_no,now_time)
 	return json.dumps(results)
 
 #未完成虚拟人
 #test:http://219.224.134.213:9209/weibo_xnr_manage/show_uncompleted_weiboxnr/
 @mod.route('/show_uncompleted_weiboxnr/')
 def ajax_show_uncompleted_weiboxnr():
-	results=show_uncompleted_weiboxnr()
+	account_no=request.args.get('account_no','')
+	results=show_uncompleted_weiboxnr(account_no)
 	return json.dumps(results)
 
 #删除虚拟人
