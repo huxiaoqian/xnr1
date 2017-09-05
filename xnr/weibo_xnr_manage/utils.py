@@ -56,7 +56,7 @@ def show_completed_weiboxnr(now_time):
 		history_comment_num=count_history_comment_num(uid)
 		#今日发帖量
 		today_comment_num=count_today_comment_num(xnr_user_no,now_time)
-		xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
+		#xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
 		result.append(xnr_list)
 	return result
 

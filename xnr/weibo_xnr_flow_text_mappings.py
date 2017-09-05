@@ -116,6 +116,19 @@ def weibo_xnr_flow_text_mappings(index_name):
                         'origin_keywords_string':{
                             'type': 'string',
                             'analyzer': 'my_analyzer'
+                            },
+                        'comment':{
+                            'type':'long'
+                            },
+                        'sensitive':{
+                            'type':'long'
+                            },
+                        'sensitive_words_dict':{
+                            'type': 'string',
+                            'analyzer': 'my_analyzer'
+                            },
+                        'retweeted':{
+                            'type':'long'
                             }
                         }
                     }
