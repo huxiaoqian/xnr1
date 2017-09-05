@@ -16,6 +16,10 @@ def weibo_xnr_mappings():
         'mappings':{
             weibo_xnr_index_type:{
                 'properties':{
+                    'submitter':{           # 当前管理用户
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
                     'user_no':{                    #虚拟人编号数字
                         'type':'long'
                     },
@@ -110,11 +114,10 @@ def weibo_xnr_mappings():
         }
     }
     exist_indice=es.indices.exists(index=weibo_xnr_index_name)
-    if exist_indice:
-        #delete
-        es.indices.delete(index=weibo_xnr_index_name,timeout=100)
-    #create
-    es.indices.create(index=weibo_xnr_index_name,body=index_info,ignore=400)
+    if not exist_indice:
+      
+        #create
+        es.indices.create(index=weibo_xnr_index_name,body=index_info,ignore=400)
 
 
 def weibo_xnr_fans_followers_mappings():
@@ -146,11 +149,10 @@ def weibo_xnr_fans_followers_mappings():
         }
     }
     exist_indice=es.indices.exists(index=weibo_xnr_fans_followers_index_name)
-    if exist_indice:
-        #delete
-        es.indices.delete(index=weibo_xnr_fans_followers_index_name,timeout=100)
-    #create
-    es.indices.create(index=weibo_xnr_fans_followers_index_name,body=index_info,ignore=400)
+    if not exist_indice:
+        
+        #create
+        es.indices.create(index=weibo_xnr_fans_followers_index_name,body=index_info,ignore=400)
    
 
 

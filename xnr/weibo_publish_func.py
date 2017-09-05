@@ -243,41 +243,56 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'submitter':'admin@qq.com'}})
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0002',body={'doc':{'submitter':'admin@qq.com'}})
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0003',body={'doc':{'submitter':'admin@qq.com'}})
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0006',body={'doc':{'submitter':'admin@qq.com'}})
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0005',body={'doc':{'submitter':'admin@qq.com'}})
+    es.update(index='weibo_xnr',doc_type='user',id='WXNR0007',body={'doc':{'submitter':'admin@qq.com'}})
     #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
 
-    f_domain_data = open('domain.txt','rb')
+    # f_domain_data = open('domain.txt','rb')
 
-    for data in f_domain_data:
-        data = json.loads(data)
-        for domain in data:
-            domain = domain['_source']
-            domain_pinyin = json.loads(domain['domain_pinyin'])
-            domain['domain_pinyin'] = domain_pinyin
-            domain['domain_name'] = json.loads(domain['domain_name'])
-            domain['submitter'] = json.loads(domain['submitter'])
-            domain['political_side'] = json.loads(domain['political_side'])
-            domain['top_keywords'] = json.loads(domain['top_keywords'])
-            domain['role_distribute'] = json.loads(domain['role_distribute'])
-            domain['create_type'] = json.loads(domain['create_type'])
-            domain['topic_preference'] = json.loads(domain['topic_preference'])
-            domain['remark'] = json.loads(domain['remark'])
-            domain['create_time'] = int(domain['create_time'])
+    # for data in f_domain_data:
+    #     data = json.loads(data)
+    #     for domain in data:
+    #         domain = domain['_source']
+    #         domain_pinyin = json.loads(domain['domain_pinyin'])
+    #         domain['domain_pinyin'] = domain_pinyin
+    #         domain['domain_name'] = json.loads(domain['domain_name'])
+    #         domain['submitter'] = json.loads(domain['submitter'])
+    #         domain['political_side'] = json.loads(domain['political_side'])
+    #         domain['top_keywords'] = json.loads(domain['top_keywords'])
+    #         domain['role_distribute'] = json.loads(domain['role_distribute'])
+    #         domain['create_type'] = json.loads(domain['create_type'])
+    #         domain['topic_preference'] = json.loads(domain['topic_preference'])
+    #         domain['remark'] = json.loads(domain['remark'])
+    #         domain['create_time'] = int(domain['create_time'])
 
-            if domain_pinyin == 'wei_quan_qun_ti':
-                domain['xnr_user_no'] = 'WXNR0001'
-                domain['description'] =  '追踪维权群体'
-            else:
-                domain['xnr_user_no'] = 'WXNR0004'
-                domain['description'] =  '追踪乌镇群体'
-            print 'domain:::',domain
-            es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
+    #         if domain_pinyin == 'wei_quan_qun_ti':
+    #             domain['xnr_user_no'] = 'WXNR0001'
+    #             domain['description'] =  '追踪维权群体'
+    #         else:
+    #             domain['xnr_user_no'] = 'WXNR0004'
+    #             domain['description'] =  '追踪乌镇群体'
+    #         print 'domain:::',domain
+    #         es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
 
     # es.delete(index='weibo_domain',doc_type='group',id='wu_zhen')
     # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
     # f_domain_data.write(json.dumps(result))
 
+    # with open('weibo_xnr.json','wb') as f:
+    #     result = es.search(index='weibo_xnr',doc_type='user',body={'query':{'match_all':{}}})['hits']['hits']
+    #     json.dump(result,f)
 
+    # with open('weibo_xnr.json','rb') as f:
+    #     data = json.load(f)
 
+    #     for item in data:
+    #         item = item['_source']
+    #         xnr_user_no = item['xnr_user_no']
+    #         es.index(index='weibo_xnr',doc_type='user',id=xnr_user_no,body=item)
 
 
 
