@@ -365,6 +365,7 @@ def get_save_step_two(task_detail):
     #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     item_exist = dict()
 
+    item_exist['submitter'] = task_detail['submitter']
     item_exist['user_no'] = task_detail['user_no']
     item_exist['domain_name'] = task_detail['domain_name']
     item_exist['role_name'] = task_detail['role_name']

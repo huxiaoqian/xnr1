@@ -30,7 +30,7 @@ from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
 #	step 2：show weibo_xnr 	information  #
 ##########################################
 #step 2.1: show completed weibo_xnr information 
-def show_completed_weiboxnr(now_time):
+def show_completed_weiboxnr(account_no,now_time):
 	query_body={
 		'query':{
 			'filtered':{
@@ -56,7 +56,17 @@ def show_completed_weiboxnr(now_time):
 		history_comment_num=count_history_comment_num(uid)
 		#今日发帖量
 		today_comment_num=count_today_comment_num(xnr_user_no,now_time)
+
+		xnr_list['fans_num']=fans_num
+		xnr_list['history_post_num']=history_post_num
+		xnr_list['history_comment_num']=history_comment_num
+		xnr_list['today_comment_num']=today_comment_num
 		#xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
+		#今日提醒
+		today_remind=xnr_today_remind(xnr_user_no,now_time)
+		today_remind_num=today_remind['remind_num']
+		xnr_list['today_remind_num']=today_remind_num
+
 		result.append(xnr_list)
 	return result
 
@@ -162,7 +172,7 @@ def count_history_comment_num(uid):
     return number
 
 #step 2.2: show uncompleted weibo_xnr information 
-def show_uncompleted_weiboxnr():
+def show_uncompleted_weiboxnr(account_no):
 	query_body={
 		'query':{
 			'filtered':{

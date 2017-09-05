@@ -333,7 +333,7 @@ function submitViews(_this) {
         $('#pormpt p').text('观点不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var conViewsUrl='/weibo_xnr_operate/hot_subopinion/?task_id=4043450590377035'/*+taskID*/+'&keywords_string='+vale.replace(/，/g,'')+
+        var conViewsUrl='/weibo_xnr_operate/submit_hot_keyword_task/?xnr_user_no='+xnrUser+'&task_id='+taskID+'&keywords_string='+vale.replace(/，/g,'')+
         'submit_user=admin@qq.com';
         public_ajax.call_request('get',conViewsUrl,conViews);
     }
@@ -351,7 +351,7 @@ function conViews(data) {
 //内容推荐
 function contantREM(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
-    var calNot_url='/weibo_xnr_operate/hot_content_recommend/?task_id=4043450590377035'//+taskID;
+    var calNot_url='/weibo_xnr_operate/hot_content_recommend/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
     public_ajax.call_request('get',calNot_url,calNot);
 }
 //内容推荐中的微博直接发布还是定时发布
@@ -469,7 +469,7 @@ function simliar(_this) {
 //事件子观点及相关微博
 function related(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
-    var relatedUrl='/weibo_xnr_operate/hot_subopinion/?task_id=4043450590377035'//+taskID;
+    var relatedUrl='/weibo_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
     $('#thingsweibo').modal('show');
 }
