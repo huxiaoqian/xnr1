@@ -1,10 +1,12 @@
 #-*-coding:utf-8-*-
 
-from global_utils import es_user_profile,profile_index_name,profile_index_type,\
+from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                        index_sensing,type_sensing
-from parameter import MAX_SEARCH_SIZE
+                        index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type
+from parameter import MAX_SEARCH_SIZE,DAY
+from global_config import S_TYPE,S_DATE_BCI
+from time_utils import ts2datetime
 
 def nickname2uid(nickname_list):
     uids_list = set()
@@ -21,14 +23,14 @@ def nickname2uid(nickname_list):
 
     es_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
                     body=query_body)['hits']['hits']
-    print 'es_results:::',es_results
+    #print 'es_results:::',es_results
     if es_results:
         for result in es_results:
             result = result['_source']
             uid = result['uid']
             uids_list.add(uid)
     uids_list = list(uids_list)
-    print 'uids_list::',uids_list
+    #print 'uids_list::',uids_list
     return uids_list
 
 def uid2nick_name_photo(uid):
@@ -50,9 +52,9 @@ def user_no2_id(user_no):
 
 def _id2user_no(task_id):
     user_no_string = filter(str.isdigit,task_id)
-    print 'user_no_string::',user_no_string
+    #print 'user_no_string::',user_no_string
     user_no = int(user_no_string)
-    print 'user_no::',user_no
+    #print 'user_no::',user_no
     return user_no
 
 def xnr_user_no2uid(xnr_user_no):
@@ -81,41 +83,49 @@ def uid2xnr_user_no(uid):
 
 # 保存至粉丝关注表
 
-def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
+def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
 
     if save_type == 'followers':
-        print '11111'
+
         try:
             results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no)
 
             results = results["_source"]
+            if follow_type == 'follow':
+                try:
+                    followers_uids = results['followers_list']
+                    followers_uids.append(uid)
+                    results['followers_list'] = followers_uids
 
-            print '222222'
+                    es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no,body={'doc':results})
 
-            try:
+                except:
+
+                    results = {}
+                    results['followers_list'] = [uid]
+                    es_xnr.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no,body=results)
+
+            elif follow_type == 'unfollow':
                 followers_uids = results['followers_list']
-                followers_uids.append(uid)
+                followers_uids = list(set(followers_uids).difference(set([uid])))
                 results['followers_list'] = followers_uids
-                print '333333'
+
                 es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no,body={'doc':results})
 
-            except:
-
-                results = {}
-                results['followers_list'] = [uid]
-                es_xnr.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                            id=xnr_user_no,body=results)
-
         except:
+            #if follow_type == 'follow':
             body_info = {}
             body_info['followers_list'] = [uid]
             body_info['xnr_use_no'] = xnr_use_no
 
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
-        
+            #elif follow_type == 'unfollow':
+
     elif save_type == 'fans':
         try:
             results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
@@ -149,20 +159,67 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type):
 def judge_sensing_sensor(xnr_user_no,uid):
 
     exist_item = es_xnr.exists(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)
-    print 'exist_item:::',exist_item
     if not exist_item:
         return False 
     else:
         get_result = es_xnr.get(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)['_source']
-        print 'get_result::',get_result
+        
         social_sensors = get_result['social_sensors']
-        print 'social_sensors:::',social_sensors
-        print 'type::',type(social_sensors)
+    
         if uid in social_sensors:
             return True
         else:
             return False
 
+## 判断关注类型
+def judge_follow_type(xnr_user_no,uid):
+
+    exist_item = es_xnr.exists(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                id=xnr_user_no)
+
+    if not exist_item:
+        weibo_type = 'stranger'
+    else:
+        es_get = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                id=xnr_user_no)['_source']
+
+        fans_list = es_get['fans_list']
+        followers_list = es_get['followers_list']
+
+        if uid in fans_list:
+            if uid in followers_list:
+                weibo_type = 'friends'
+            else:
+                weibo_type = 'followed'
+        elif uid in followers_list:
+            weibo_type = 'follow'
+        else:
+            weibo_type = 'stranger'
+
+    return weibo_type
+
+## 得到影响力相对值
+def get_influence_relative(uid,influence):
+    if S_TYPE == 'test':
+        datetime = S_DATE_BCI
+    else:
+        datetime = ts2datetime(time.time()-DAY)
+    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    weibo_bci_index_name = weibo_bci_index_name_pre + new_datetime
+    
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{'user_index':{'order':'desc'}}
+    }
+    results = es_flow_text.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+
+    user_index_max = results[0]['_source']['user_index']
+
+    influence_relative = influence/user_index_max
+
+    return influence_relative
 
 if __name__ == '__main__':
 

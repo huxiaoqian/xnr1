@@ -129,15 +129,18 @@ def ajax_submit_hot_keyword_task():
 # 内容推荐
 @mod.route('/hot_content_recommend/')
 def ajax_hot_content_recommend():
+
+    xnr_user_no = request.args.get('xnr_user_no','')  # 当前虚拟人
     task_id = request.args.get('task_id','')  # mid
-    contents = get_hot_content_recommend(task_id)
+    contents = get_hot_content_recommend(xnr_user_no,task_id)
     return json.dumps(contents)
 
 # 子观点分析
 @mod.route('/hot_subopinion/')
 def ajax_hot_hot_subopinion():
+    xnr_user_no = request.args.get('xnr_user_no','')  # 当前虚拟人
     task_id = request.args.get('task_id','')  # mid
-    subopnion_results = get_hot_subopinion(task_id)
+    subopnion_results = get_hot_subopinion(xnr_user_no,task_id)
     return json.dumps(subopnion_results)
 
 # 添加人物传感器
@@ -333,7 +336,7 @@ def ajax_related_recommendation():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','influence')
-
+    
     results = get_related_recommendation(task_detail)
 
     return json.dumps(results)

@@ -17,6 +17,10 @@ def domain_base_mappings():
 		'mappings':{
 			weibo_domain_index_type:{
 				'properties':{
+					'xnr_user_no':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
 					'domain_pinyin':{
 						'type':'string',
 						'index':'not_analyzed'
@@ -31,7 +35,7 @@ def domain_base_mappings():
 					},
 					'description':{
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'create_time':{
 						'type':'long'
@@ -49,26 +53,26 @@ def domain_base_mappings():
 					},
 					'remark':{
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'compute_status':{   # 0-尚未计算，1-已存入uid，2-已存入群体描述，3-已存入角色分析
 						'type':'long' 
 					},
 					'role_distribute':{  # list
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'top_keywords':{   # list
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'political_side':{  #list
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'topic_preference':{ #list
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					}
 				}
 			}
