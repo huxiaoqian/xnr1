@@ -144,8 +144,8 @@ function reportDefaul(data) {
                             '    </div>'+
                             '</div>';
                     })
-                    //return str;
-                    return '暂无数据';
+                    return str;
+                    // return '暂无数据';
                 },
             },
         ],
@@ -213,9 +213,48 @@ function postYES(data) {
 //导出文件
 function exportTableToCSV(filename) {
     var str =  '';
-    $.each(currentData,function (index,item) {
-        console.log(item)
-    })
+    for (var k in currentData){
+        var name='',time='',type='',user='',uid='',txt='';
+        if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
+            name='暂无';
+        }else {
+            name=currentData[k].event_name;
+        };
+        if (currentData[k].report_time==''||currentData[k].report_time=='unknown'||currentData[k].report_time=='null'){
+            time='暂无';
+        }else {
+            time=getLocalTime(currentData[k].report_time);
+        };
+        if (currentData[k].report_type==''||currentData[k].report_type=='unknown'||currentData[k].report_type=='null'){
+            type='暂无';
+        }else {
+            type=currentData[k].report_type;
+        };
+        if (currentData[k].uid==''||currentData[k].uid=='unknown'||currentData[k].uid=='null'){
+            uid='暂无';
+        }else {
+            uid=currentData[k].uid;
+        };
+        if (currentData[k].xnr_user_no==''||currentData[k].xnr_user_no=='unknown'||currentData[k].xnr_user_no=='null'){
+            user='暂无';
+        }else {
+            user=currentData[k].xnr_user_no;
+        };
+        if (currentData[k].report_content['weibo_list'].length==0){
+            txt='暂无内容';
+        }else {
+            $.each(currentData[k].report_content['weibo_list'],function (index,item) {
+                if (item.text==''||item.text=='null'||item.text=='unknown'){
+                    txt='暂无内容';
+                }else {
+                    txt=item.text;
+                };
+            })
+        };
+        str+='上报名称：'+name+'\n上报时间：'+time+'\n上报类型：'+type+'\n虚拟人：'+user+'\n人物UID：'+uid+
+            '\n'+'上报内容：'+txt+'\n\n\n';
+    };
+
     str =  encodeURIComponent(str);
     csvData = "data:text/csv;charset=utf-8,\ufeff"+str;
     $(this).attr({
@@ -228,9 +267,8 @@ function exportTableToCSV(filename) {
 }
 
 $("a[id='output']").on('click', function (event) {
-    console.log(currentData)
-    // filename="上报数据列表EXCEL.csv";
-    // exportTableToCSV.apply(this, [filename]);
+    filename="上报数据列表EXCEL.csv";
+    exportTableToCSV.apply(this, [filename]);
 });
 
 

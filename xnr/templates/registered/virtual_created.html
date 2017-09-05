@@ -358,10 +358,21 @@
 {% block my_js %}
 <script>
     judgment('6');
-    var basicData=JSON.parse(localStorage.getItem('firstStep'));
-//    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
-//        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
-//        monitorKeywords='{{monitorKeywords}}';
+    var go_on='{{continueUser}}';
+    var basicData;
+    if (go_on==1){
+        var $id=localStorage.getItem('user');
+        var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+$id;
+        public_ajax.call_request('GET',go_url,continueData);
+    }else {
+        basicData=JSON.parse(localStorage.getItem('firstStep'));
+    }
+    function continueData(data) {
+        basicData=data;
+    }
+    //    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
+    //        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
+    //        monitorKeywords='{{monitorKeywords}}';
     $('#character1').attr('title',basicData.domainName).text(basicData.domainName);
     $('#character2').attr('title',basicData.roleName).text(basicData.roleName);
     $('#character3').attr('title',basicData.psyFeature).text(basicData.psyFeature);
@@ -369,6 +380,7 @@
     $('#character5').attr('title',basicData.businessGoal).text(basicData.businessGoal);
     $('#character6').attr('title',basicData.daily).text(basicData.daily);
     $('#character7').attr('title',basicData.monitorKeywords).text(basicData.monitorKeywords);
+
 
 
 //    $('.timeRange').append(

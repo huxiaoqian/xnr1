@@ -278,32 +278,42 @@
     });
 
     //页面跳转
+    var htmlUrl='';
     $('#personal').on('click',function () {
-        window.open('/personalCenter/individual/');
+        htmlUrl='/personalCenter/individual/';
+        $('#choosePerson').modal('show');
     });
     $('#control').on('click',function () {
+        htmlUrl='/control/operationControl/';
         $('#choosePerson').modal('show');
     });
     $('#info').on('click',function () {
-        window.open('/inforDetection/inforChecking/');
+        htmlUrl='/inforDetection/inforChecking/';
+        $('#choosePerson').modal('show');
     });
     $('#monitor').on('click',function () {
-        window.open('/monitor/characterBehavior/');
+        htmlUrl='/monitor/characterBehavior/';
+        $('#choosePerson').modal('show');
     });
     $('#reported').on('click',function () {
-        window.open('/behavioGauge/influeAssess/');
+        htmlUrl='/behavioGauge/influeAssess/';
+        $('#choosePerson').modal('show');
     });
     $('#knowledge').on('click',function () {
-        window.open('/registered/targetCustom/');
+        htmlUrl='/registered/targetCustom/';
+        $('#choosePerson').modal('show');
     });
     $('#reportedmange').on('click',function () {
-        window.open('/reportManage/management/');
+        htmlUrl='/reportManage/management/';
+        $('#choosePerson').modal('show');
     });
     $('#knowledgebase').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
+        htmlUrl='/knowledge/domainLibrary/';
+        $('#choosePerson').modal('show');
     });
     $('#system').on('click',function () {
-        window.open('/systemManage/daily/');
+        htmlUrl='/systemManage/daily/';
+        $('#choosePerson').modal('show');
     });
 
     //选择虚拟人确定进入
@@ -319,12 +329,11 @@
         }
         localStorage.setItem('user',encodeURI(userID));
         localStorage.setItem('userName',encodeURI(id_or_name));
-        window.open('/control/operationControl/');
+        window.open(htmlUrl);
     });
 
     //登录类型
     localStorage.setItem('loginType',encodeURI('weibo'));
-
 
     //虚拟人列表
     $.ajax({
