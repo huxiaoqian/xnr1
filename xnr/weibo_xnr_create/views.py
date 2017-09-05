@@ -102,6 +102,7 @@ def ajax_save_step_one():
 @mod.route('/save_step_two/')
 def ajax_save_step_two():
     task_detail = dict()
+    task_detail['submitter'] = request.args.get('submitter','admin@qq.com') # 提交用户
     task_detail['domain_name'] = request.args.get('domain_name','') # 渗透领域
     task_detail['role_name'] = request.args.get('role_name','') # 角色定位
     task_detail['psy_feature'] = request.args.get('psy_feature','') # 心理特征，以中文逗号 “，”连接
