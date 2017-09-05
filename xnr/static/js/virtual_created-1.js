@@ -1,6 +1,8 @@
-var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
-    '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
-public_ajax.call_request('get',chara_url,character);
+setTimeout(function () {
+    var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
+        '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
+    public_ajax.call_request('get',chara_url,character);
+},500)
 //查看推荐
 var recommendData;
 function character(data) {
@@ -177,7 +179,6 @@ function values() {
         '&psy_feature='+basicData.psyFeature+'&political_side='+basicData.politicalSide+'&business_goal='+basicData.businessGoal+
         '&monitor_keywords='+basicData.monitorKeywords+'&daily_interests='+basicData.daily+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
         '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
-    console.log(saveSecond_url)
     public_ajax.call_request('get',saveSecond_url,in_three);
     if (n == 1||n == 0){
         second={
