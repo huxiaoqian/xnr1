@@ -3,6 +3,7 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/personal_center.css">
 <style>
+    .bootstrap-table .table>thead>tr>th {width: 9%}
     .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
@@ -36,7 +37,7 @@
         </div>
     </div>
 
-    <div class="has_person" style="padding: 10px 30px;">
+    <div class="has_person" style="padding: 10px 0;">
         <div style="margin: 20px 0;">
             <img src="/static/images/icon.png">
             <b style="color:white;">已有微博虚拟人</b>
@@ -54,7 +55,7 @@
         </div>
     </div>
 
-    <div class="undone_person" style="padding: 10px 30px;">
+    <div class="undone_person" style="padding: 10px 0;">
         <div style="margin: 20px 0;">
             <img src="/static/images/icon.png">
             <b style="color:white;">未完成微博虚拟人</b>
@@ -114,6 +115,31 @@
     </div>
 </div>
 
+<!--提醒-->
+<div class="modal fade" id="alarm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提醒</h4>
+            </div>
+            <div class="modal-body" style="font-size: 16px;color: #fff;font-weight: 900;">
+                <div class="ala-1" style="margin: 10px 0;">
+                    <span>发帖提醒：</span>
+                    <p style="padding-left: 50px;"></p>
+                </div>
+                <div class="ala-2">
+                    <span>日历提醒：</span>
+                    <div style="padding-left: 50px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--成功失败-->
 <div class="modal fade" id="succee_fail" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

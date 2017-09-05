@@ -88,7 +88,7 @@ function related(data) {
                         fol='未关注';
                     }
                     return '<span style="cursor: pointer;" onclick="lookDetails(\''+row.uid+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\',this)" title="'+fol+'"><i class="icon icon-star-empty"></i>'+fol+'</span>';
+                        '<span style="cursor: pointer;" onclick="driectFocus(\''+row.uid+'\',this)" title="'+fol+'"><i class="icon icon-star-empty"></i></span>';
                 },
             },
         ],

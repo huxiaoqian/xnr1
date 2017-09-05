@@ -1,5 +1,5 @@
-var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domainName+
-    '&role_name='+basicData.roleName+'&daily_interests='+basicData.daily;
+var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
+    '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
 public_ajax.call_request('get',chara_url,character);
 //查看推荐
 var recommendData;
