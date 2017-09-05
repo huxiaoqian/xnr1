@@ -366,20 +366,26 @@
         public_ajax.call_request('GET',go_url,continueData);
     }else {
         basicData=JSON.parse(localStorage.getItem('firstStep'));
+        filling();
     }
     function continueData(data) {
         basicData=data;
+        filling();
+    }
+    function filling() {
+        console.log(basicData)
+        $('#character1').attr('title',basicData.domain_name).text(basicData.domain_name);
+        $('#character2').attr('title',basicData.role_name).text(basicData.role_name);
+        $('#character3').attr('title',basicData.psy_feature).text(basicData.psy_feature);
+        $('#character4').attr('title',basicData.political_side).text(basicData.political_side);
+        $('#character5').attr('title',basicData.business_goal).text(basicData.business_goal);
+        $('#character6').attr('title',basicData.daily_interests).text(basicData.daily_interests);
+        $('#character7').attr('title',basicData.monitor_keywords.replace(/&/g,',')).text(basicData.monitor_keywords.replace(/&/g,','));
     }
     //    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
     //        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
     //        monitorKeywords='{{monitorKeywords}}';
-    $('#character1').attr('title',basicData.domainName).text(basicData.domainName);
-    $('#character2').attr('title',basicData.roleName).text(basicData.roleName);
-    $('#character3').attr('title',basicData.psyFeature).text(basicData.psyFeature);
-    $('#character4').attr('title',basicData.politicalSide).text(basicData.politicalSide);
-    $('#character5').attr('title',basicData.businessGoal).text(basicData.businessGoal);
-    $('#character6').attr('title',basicData.daily).text(basicData.daily);
-    $('#character7').attr('title',basicData.monitorKeywords).text(basicData.monitorKeywords);
+
 
 
 

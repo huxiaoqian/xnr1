@@ -304,7 +304,7 @@ function go_on(id) {
 //进入操作统计
 function comeIn(id) {
     localStorage.setItem('user',id);
-    window.open('/control/operationControl/);
+    window.open('/control/operationControl/');
 }
 
 function success_fail(data) {
