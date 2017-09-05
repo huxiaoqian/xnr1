@@ -4,13 +4,18 @@ weibo_xnr warming function
 '''
 import os
 import json
+import time
 from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
 from xnr.global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_flow_text,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_report_management_index_name,weibo_report_management_index_type,\
-                             weibo_speech_warning_index_name,weibo_speech_warning_index_type
-from xnr.time_utils import get_flow_text_index_list,ts2yeartime,ts2datetime,datetime2ts
+                             weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
+                             xnr_flow_text_index_type,es_user_profile,profile_index_name,profile_index_type
+from xnr.global_utils import es_flow_text,flow_text_index_type
+from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
+from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE
+
 ###################################################################
 ###################       personal warming       ##################
 ###################################################################
@@ -171,19 +176,128 @@ def get_hashtag():
     return hashtag_list
 
 #show the event wariming content
-def show_event_warming():
+#事件涌现思路：
+#（1）根据get_hashtag获取事件名称
+#（2）在流数据中查询与事件名相关的微博数据，
+#（3）根据虚拟人编号查找粉丝和关注人的uid，统计事件名称相关的微博数据中粉丝、关注人出现的频次，如果既是关注人又是粉丝则频次相加。取频次前三用户
+#（4）计算微博数据的转发数、评论数、敏感等级，得到微博影响力的初始值,
+#计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
+def show_event_warming(xnr_user_no):
     
     hashtag_list = get_hashtag()
 
-    query_body={
-        'query':{
-            'match_all':{}
-        },
-        'size':MAX_VALUE,
-        'sort':{'timestamp':{'order':'desc'}}
-    }
-    result=True
-    return hashtag_list
+    now_time=int(time.time())
+    weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
+    #weibo_xnr_flow_text_listname=['flow_text_2016-11-27','flow_text_2016-11-26']
+
+    #虚拟人的粉丝列表和关注列表
+    try:
+        es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        followers_list=es_xnr_result['followers_list']
+        fans_list=es_xnr_result['fans_list']
+    except:
+        followers_list=[]
+        fans_list=[]
+
+    event_warming_list=[]
+    for event_item in hashtag_list:
+        event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
+        event_warming_content['event_name']=event_item[0]
+        event_influence_sum=0
+        event_time_sum=0       
+        query_body={
+            'query':{
+                'match_phrase':{
+                    'about':event_item[0]
+                }
+            }
+        }
+        try:
+            event_results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            #event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+            weibo_result=[]
+            fans_num_dict=dict()
+            followers_num_dict=dict()
+            alluser_num_dict=dict()
+            for item in event_results:
+                #统计用户信息
+                if alluser_num_dict.has_key(str(item['source']['uid'])):
+                    alluser_num_dict[str(item['source']['uid'])]=alluser_num_dict[str(item['source']['uid'])]+1
+                else:
+                    alluser_num_dict[str(item['source']['uid'])]=1
+                    
+                for fans_uid in fans_list:                    
+                    if fans_uid==item['source']['uid']:
+                        if fans_num_dict.has_key(str(fans_uid)):
+                            fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
+                        else:
+                            fans_num_dict[str(fans_uid)]=1
+                    
+                for followers_uid in followers_list:
+                    if followers_uid==item['source']['uid']:
+                        if followers_num_dict.has_key(str(followers_uid)):
+                            fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
+                        else:
+                            fans_num_dict[str(followers_uid)]=1
+
+                #计算影响力
+                origin_influence_value=(item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
+                fans_value=judge_user_type(item['_source']['uid'],fans_list)
+                followers_value=judge_user_type(item['_source']['uid'],followers_list)
+                item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                weibo_result.append(item['_source'])
+
+                #统计影响力、时间
+                event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
+                event_time_sum=item['_source']['timestamp']            
+
+            #对用户进行排序
+            temp_userid_dict=dict(fans_num_dict,**followers_num_dict)
+            main_userid_dict=dict(temp_userid_dict,**alluser_num_dict)
+            main_userid_dict=sorted(main_userid_dict.iteritems(),key=lambda d:d[1],reverse=True)
+            main_userid_list=main_userid_dict.keys()
+
+            #主要参与用户信息
+            user_query_body={
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'bool':{
+                                'must':{
+                                   'terms':{'uid':main_userid_list[:3]}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            user_es_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=user_query_body)['hits']['hits']
+            main_user_info=[]
+            for item in user_es_result:
+                main_user_info.append(item['_source'])
+            event_warming_content['main_user_info']=main_user_info
+
+            #典型微博信息
+            weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
+            event_warming_content['main_weibo_info']=weibo_result[:3]
+
+            #事件影响力和事件时间
+            number=len(event_results)
+            event_warming_content['event_influence']=event_influence_sum/number
+            event_warming_content['event_time']=event_time_sum/number
+
+            event_warming_list.append(event_warming_content)
+        except:
+            event_warming_list=[]
+    return event_warming_list
+
+#粉丝或关注用户判断
+def judge_user_type(uid,user_list):
+    if uid in user_list:
+        mark=1.2
+    else:
+        mark=0.8
+    return mark
 
 ###################################################################
 ###################         date  warming        ##################
