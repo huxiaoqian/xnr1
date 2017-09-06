@@ -150,30 +150,44 @@ def get_recommend_at_user(xnr_user_no):
                         'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
     '''
     ## daily_interests 字段为单个值
-    query_body = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'daily_interests':daily_interests_list}
-                }
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
-    print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
-    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                        body=query_body)['hits']['hits']
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'daily_interests':daily_interests_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE
+    # }
+    # #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    # es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                     body=query_body)['hits']['hits']
 
-    print 'es_results_len::',len(es_results)
-    if not es_results:
-        if S_TYPE != 'test':
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-        else:
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':1000,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    #print 'es_results_len::',len(es_results)
+    #if not es_results:
+    if S_TYPE != 'test':
+        query_body = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'daily_interests':daily_interests_list}
+                    }
+                }
+            },
+            'size':MAX_SEARCH_SIZE
+        }
+        #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body=query_body)['hits']['hits']
+        # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+        #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+        #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    else:
+        
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body={'query':{'match_all':{}},'size':1000,\
+                            'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
 
     uid_list = []
     if es_results_daily:

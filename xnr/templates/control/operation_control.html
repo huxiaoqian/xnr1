@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/static/css/operation_control.css">
     <style>
         .fixed-table-toolbar .search {width:100%}
-        .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;width:90px;color: white;}
+        .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
         .demo-radio{display:none!important;}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -15,7 +15,7 @@
 <div id="container">
     <div class="leftWindow">
         <ul class="navlist">
-            <li class="listname"><a href="###" style="font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>
+            <!--<li class="listname"><a href="###" style="font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>-->
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-inbox"></i>&nbsp;历史统计</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-time"></i>&nbsp;定时发送任务列表</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-exclamation-sign"></i>&nbsp;历史消息</a></li>
@@ -40,16 +40,16 @@
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
             <div class="news">
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active">
+                    <li role="presentation" class="active" midurl="show_history_posting&daily_post">
                         <a href="#his_post" role="tab" data-toggle="tab"><b class="icon icon-beaker"></b>&nbsp;历史发帖</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" midurl="show_at_content&weibo">
                         <a href="#mine" role="tab" data-toggle="tab"><b class="icon icon-comments"></b>&nbsp;@我的</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" midurl="show_comment_content&make">
                         <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;评论</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" midurl="show_like_content&send">
                         <a href="#thumbs" role="tab" data-toggle="tab"><b class="icon icon-thumbs-up"></b>&nbsp;点赞</a>
                     </li>
                 </ul>
@@ -58,48 +58,81 @@
                     <div role="tabpanel" class="tab-pane active" id="his_post">
                         <div class="hisnews">
                             <label class="demo-label" title="日常发帖">
-                                <input class="demo-radio" type="radio" name="news" value='daily_post'>
+                                <input class="demo-radio" type="checkbox" name="news" value='daily_post' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 日常发帖
                             </label>
                             <label class="demo-label" title="热门发帖">
-                                <input class="demo-radio" type="radio" name="news" value='hot_post'>
+                                <input class="demo-radio" type="checkbox" name="news" value='hot_post'>
                                 <span class="demo-checkbox demo-radioInput"></span> 热门跟随
                             </label>
                             <label class="demo-label" title="业务发帖">
-                                <input class="demo-radio" type="radio" name="news" value='business_post'>
+                                <input class="demo-radio" type="checkbox" name="news" value='business_post'>
                                 <span class="demo-checkbox demo-radioInput"></span> 业务发帖
                             </label>
                         </div>
-                    </div>
-                    <div class="historyCenter">
-                        <div class="post_perfect" style="margin: 20px 0 0 30px;">
-                            <div class="post_center-hot">
-                                <img src="/static/images/post-6.png" alt="" class="center_icon">
-                                <div class="center_rel">
-                                    <a class="center_1" href="###">何仙姑</a>
-                                    <span class="time" style="display:block;color: #607d8b;font-size: 10px;margin: 10px 0;">2017-03-04 12:43:23</span>
-                                    <span class="center_2" style="display:block;color: #b0bdd0;font-size: 10px;">
+                        <div class="historyCenter">
+                            <div class="post_perfect" style="margin: 20px 0 0 30px;">
+                                <div class="post_center-hot">
+                                    <img src="/static/images/post-6.png" alt="" class="center_icon">
+                                    <div class="center_rel">
+                                        <a class="center_1" href="###">何仙姑</a>
+                                        <span class="time" style="display:block;color: #607d8b;font-size: 10px;margin: 10px 0;">2017-03-04 12:43:23</span>
+                                        <span class="center_2" style="display:block;color: #b0bdd0;font-size: 10px;">
                                         【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
                                     </span>
-                                    <div class="center_3" style="margin: 10px 0 0 0;">
-                                        <p>
-                                            <span title="转发数"><i class="icon icon-share"></i>&nbsp;&nbsp;<b class="forwarding">222</b></span>&nbsp;
-                                            <span title="评论数" class="line"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;<b class="comment">222</b></span>&nbsp;
-                                            <span title="赞"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;<b class="praise">222</b></span>&nbsp;
-                                        </p>
+                                        <div class="center_3" style="margin: 10px 0 0 0;">
+                                            <p>
+                                                <span title="转发数"><i class="icon icon-share"></i>&nbsp;&nbsp;<b class="forwarding">222</b></span>&nbsp;
+                                                <span title="评论数" class="line"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;<b class="comment">222</b></span>&nbsp;
+                                                <span title="赞"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;<b class="praise">222</b></span>&nbsp;
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="mine">
-
+                        <div class="mys">
+                            <label class="demo-label" title="我的微博">
+                                <input class="demo-radio" type="checkbox" name="mys" value='weibo'>
+                                <span class="demo-checkbox demo-radioInput"></span> @我的微博
+                            </label>
+                            <label class="demo-label" title="我的评论">
+                                <input class="demo-radio" type="checkbox" name="mys" value='at'>
+                                <span class="demo-checkbox demo-radioInput"></span> @我的评论
+                            </label>
+                        </div>
+                        <div class="myweibo">
+                            <div id="myweibo"></div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="comment">
-
+                        <div class="mycom">
+                            <label class="demo-label" title="收到的评论">
+                                <input class="demo-radio" type="checkbox" name="mycom" value='make'>
+                                <span class="demo-checkbox demo-radioInput"></span> 收到的评论
+                            </label>
+                            <label class="demo-label" title="发出的评论">
+                                <input class="demo-radio" type="checkbox" name="mycom" value='receive'>
+                                <span class="demo-checkbox demo-radioInput"></span> 发出的评论
+                            </label>
+                        </div>
+                        <div class="commentCOT">
+                            <div id="commentCOT"></div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="thumbs">
-
+                        <div class="likes">
+                            <label class="demo-label" title="收到的评论">
+                                <input class="demo-radio" type="checkbox" name="likely" value='send'>
+                                <span class="demo-checkbox demo-radioInput"></span> 收到的评论
+                            </label>
+                            <label class="demo-label" title="发出的评论">
+                                <input class="demo-radio" type="checkbox" name="likely" value='receive'>
+                                <span class="demo-checkbox demo-radioInput"></span> 发出的评论
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

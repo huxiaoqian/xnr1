@@ -471,69 +471,74 @@ function related(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
     var relatedUrl='/weibo_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
-    $('#thingsweibo').modal('show');
 }
 function relatedWEIbo(data) {
-    var dataNew=[];
-    for (var key in data){
-        var ls={};
-        ls['name']=key;
-        ls['weibo']=data[key];
-        dataNew.push(ls);
-    };
-    $('#thWeibo').bootstrapTable('load', dataNew);
-    $('#thWeibo').bootstrapTable({
-        data:dataNew,
-        search: true,//是否搜索
-        pagination: true,//是否分页
-        pageSize: 2,//单页记录数
-        pageList: [15,20,25],//分页步进值
-        sidePagination: "client",//服务端分页
-        searchAlign: "left",
-        searchOnEnterKey: false,//回车搜索
-        showRefresh: false,//刷新按钮
-        showColumns: false,//列选择按钮
-        buttonsAlign: "right",//按钮对齐方式
-        locale: "zh-CN",//中文支持
-        detailView: false,
-        showToggle:false,
-        sortName:'bci',
-        sortOrder:"desc",
-        columns: [
-            {
-                title: "子观点",//标题
-                field: "name",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
-            {
-                title: "子观点代表微博",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var str='';
-                    for (var r=0;r<row.weibo.length;r++){
-                        str+=
-                            '<div class="post_perfect">'+
-                            '   <div class="post_center-hot">'+
-                            '       <img src="/static/images/post-6.png" class="center_icon">'+
-                            '       <div class="center_rel">'+
-                            '           <span class="center_2">'+row.weibo[r]+'</span>'+
-                            '       </div>'+
-                            '   </div>'+
-                            '</div>';
+    if (data=='正在计算'){
+        $('#pormpt p').text('正在计算...');
+        $('#pormpt').modal('show');
+    }else {
+        var dataNew=[];
+        for (var key in data){
+            var ls={};
+            ls['name']=key;
+            ls['weibo']=data[key];
+            dataNew.push(ls);
+        };
+        $('#thWeibo').bootstrapTable('load', dataNew);
+        $('#thWeibo').bootstrapTable({
+            data:dataNew,
+            search: true,//是否搜索
+            pagination: true,//是否分页
+            pageSize: 2,//单页记录数
+            pageList: [15,20,25],//分页步进值
+            sidePagination: "client",//服务端分页
+            searchAlign: "left",
+            searchOnEnterKey: false,//回车搜索
+            showRefresh: false,//刷新按钮
+            showColumns: false,//列选择按钮
+            buttonsAlign: "right",//按钮对齐方式
+            locale: "zh-CN",//中文支持
+            detailView: false,
+            showToggle:false,
+            sortName:'bci',
+            sortOrder:"desc",
+            columns: [
+                {
+                    title: "子观点",//标题
+                    field: "name",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
+                },
+                {
+                    title: "子观点代表微博",//标题
+                    field: "",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
+                    formatter: function (value, row, index) {
+                        var str='';
+                        for (var r=0;r<row.weibo.length;r++){
+                            str+=
+                                '<div class="post_perfect">'+
+                                '   <div class="post_center-hot">'+
+                                '       <img src="/static/images/post-6.png" class="center_icon">'+
+                                '       <div class="center_rel">'+
+                                '           <span class="center_2">'+row.weibo[r]+'</span>'+
+                                '       </div>'+
+                                '   </div>'+
+                                '</div>';
+                        }
+                        return str;
                     }
-                    return str;
-                }
 
-            },
-        ],
-    });
+                },
+            ],
+        });
+        $('#thingsweibo').modal('show');
+    }
 }
 
 //======业务发帖=======

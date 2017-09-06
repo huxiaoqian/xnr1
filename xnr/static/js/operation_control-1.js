@@ -186,10 +186,25 @@ function successfail(data) {
     $('#successfail p').text(t);
     $('#successfail').modal('show');
 }
-
+//-------
+$('#container .rightWindow .news #myTabs li').on('click',function () {
+    var middle=$(this).attr('midurl').split('&');
+    var liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1];
+    public_ajax.call_request('get',liNews_url,historyNews);
+})
 //========历史消息====
-var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post,business_post';
+var htp=[];
+$('#container .rightWindow .oli #content .hisnews input').on('click',function () {
+    htp=[];
+    $(".hisnews input:checkbox:checked").each(function (index,item) {
+        htp.push($(this).val());
+    });
+    var taskSource=htp.join(',');
+    var againHistoryNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source='+taskSource;
+    public_ajax.call_request('get',againHistoryNews_url,historyNews);
+})
+var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post,hot_post';
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-
+    console.log(data)
 }
