@@ -21,7 +21,7 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
-from xnr.time_utils import get_xnr_feedback_index_listname,ts2datetime,datetime2ts,ts2datetimestr
+from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,ts2datetime,datetime2ts,ts2datetimestr
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.weibo_xnr_warming.utils import show_date_warming
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
@@ -35,7 +35,12 @@ def show_completed_weiboxnr(account_no,now_time):
 		'query':{
 			'filtered':{
 				'filter':{
-					'term':{'create_status':2}
+					'bool':{
+						'must':[
+							{'term':{'submitter':account_no}},
+							{'term':{'create_status':2}}
+						]
+					}					
 				}
 			}
 
@@ -180,22 +185,31 @@ def show_uncompleted_weiboxnr(account_no):
 		'query':{
 			'filtered':{
 				'filter':{
-					'range':{
-						'create_status':{
-						'gte':0,
-						'lte':1
-						}
-					}
+					'bool':{
+						'must':[
+							{'term':{'submitter':account_no}},
+							{'range':{
+								'create_status':{
+								'gte':0,
+								'lte':1
+								}
+							}
+							}
+						]
+					}					
 				}
 			}
 
 		},
 		'size':MAX_VALUE
 	}
-	results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-	result=[]
-	for item in results:
-		result.append(item['_source'])
+	try:
+		results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+		result=[]
+		for item in results:
+			result.append(item['_source'])
+	except:
+		result=[]
 	return result
 
 #######################################
@@ -248,10 +262,15 @@ def xnr_today_remind(xnr_user_no,now_time):
 #	step 4：operate count (进入，操作统计)  #
 #############################################
 #step 4.1：history count
-def wxnr_history_count(xnr_user_no):
-	now_time=int(time.time())
-	weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
-	
+def wxnr_history_count(xnr_user_no,startdate,enddate):
+	if startdate=='' and enddate=='':
+		now_time=int(time.time())
+		weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+		print weibo_xnr_flow_text_listname
+	else:
+		weibo_xnr_flow_text_listname=get_timeset_indexset_list(xnr_flow_text_index_name_pre,startdate,enddate)
+		print weibo_xnr_flow_text_listname
+
 	query_body={
 		'query':{
 			'filtered':{
@@ -278,13 +297,13 @@ def wxnr_history_count(xnr_user_no):
 			#今日总粉丝数
 			for item in xnr_result['hits']['hits']:
 				xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
-			#日常发帖、业务发帖、热点跟随
+			# daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
 			for item in xnr_result['aggregations']['all_task_source']['buckets']:
-				if item['key'] == '日常发帖':
+				if item['key'] == 'daily_post':
 					xnr_user_detail['daily_post_num']=item['doc_count']
-				elif item['key'] == '业务发帖':
+				elif item['key'] == 'business_post':
 					xnr_user_detail['business_post_num']=item['doc_count']
-				elif item['key'] == '热点跟随':
+				elif item['key'] == 'hot_post':
 					xnr_user_detail['hot_follower_num']=item['doc_count']
 			#总发帖量
 			xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']
@@ -829,3 +848,13 @@ def delete_weibo_xnr(xnr_user_no):
 	except:
 		result=False
 	return result
+
+
+
+
+#create xnr_flow_text example
+def create_xnr_flow_text(task_detail):
+	result=True
+	return result
+	
+

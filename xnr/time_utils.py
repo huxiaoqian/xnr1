@@ -117,3 +117,17 @@ def get_groupmessage_index_list(startdate,enddate):
         index_name_list.append(index_name)
 
     return index_name_list
+
+
+def get_timeset_indexset_list(index_name_pre,startdate,enddate):
+    
+    index_name_list = []
+    days_num = (datetime2ts(enddate)-datetime2ts(startdate))/DAY
+
+    for i in range(0,(days_num+1)):
+        date_range_start_ts = datetime2ts(startdate) + i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+
+    return index_name_list
