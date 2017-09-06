@@ -126,7 +126,7 @@ def save_to_tweet_timing_list(task_detail):
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-    
+    print 'es_result:::',es_result
     if es_result:
         uid = es_result['uid']
         daily_interests = es_result['daily_interests']
@@ -160,9 +160,10 @@ def get_recommend_at_user(xnr_user_no):
         },
         'size':MAX_SEARCH_SIZE
     }
-
+    print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
     es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                         body=query_body)['hits']['hits']
+
     print 'es_results_len::',len(es_results)
     if not es_results:
         if S_TYPE != 'test':
