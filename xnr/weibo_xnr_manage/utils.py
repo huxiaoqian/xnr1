@@ -71,9 +71,12 @@ def show_completed_weiboxnr(account_no,now_time):
 
 #计算粉丝数
 def count_fans_num(xnr_user_no):
-    result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-    followers_list=result['followers_list']
-    number=len(followers_list)
+    try:
+        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        followers_list=result['followers_list']
+        number=len(followers_list)
+    except:
+        number=0
     return number
 
 #计算历史发帖量

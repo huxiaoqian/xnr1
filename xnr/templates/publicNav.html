@@ -120,7 +120,8 @@
             });
         },
     };
-
+    //登录用户名
+    var admin='admin@qq.com';
     //登录虚拟人后取出ID或者名字
     var ID_Num=localStorage.getItem('user');
     var ID_name=localStorage.getItem('userName');
@@ -128,7 +129,6 @@
     if (ID_name){
         nowUser=decodeURI(ID_name);
     }
-
     $('.old').on('click',function(e) {
         var txt=$(this).find('span').text();
         var curtxt=$('.current').find('span').text();

@@ -3,6 +3,7 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/personal_center.css">
 <style>
+     .undonelistbag .fixed-table-toolbar .search {width: 100%;}
     .bootstrap-table .table>thead>tr>th {width: 9%}
     .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
     .demo-radio{display:none}
@@ -61,9 +62,9 @@
             <b style="color:white;">未完成微博虚拟人</b>
         </div>
         <div class="undone_list">
-            <span class="undoneAdd" data-toggle="modal" data-target="#myModal-undone">
-                <b class="icon icon-plus"></b>&nbsp;添加
-            </span>
+            <!--<span class="undoneAdd" data-toggle="modal" data-target="#myModal-undone">-->
+                <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+            <!--</span>-->
             <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone" style="color:white;">-->
                 <!--<b class="icon icon-plus"></b>&nbsp;添加-->
             <!--</button>-->
@@ -84,36 +85,17 @@
             </div>
             <div class="modal-body">
                 <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn continue_already_created" data-dismiss="modal">继续已有创建</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="myModal-undone" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
                     创建新的虚拟人？
                 </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" data-dismiss="modal">取消</button>
-                <button type="button" class="btn first_createdQQ" data-dismiss="modal">确定</button>
+                <button type="button" class="btn first_created" data-dismiss="modal">首次创建</button>
             </div>
         </div>
     </div>
 </div>
+
 
 <!--提醒-->
 <div class="modal fade" id="alarm" tabindex="-1" role="dialog">
@@ -162,33 +144,8 @@
 
 <script>
     judgment('1');
-    $('.continue_already_created').on('click',function () {
-        window.open('/registered/socialAccounts/');
-    });
     $('.first_created').on('click',function () {
-        window.open('/registered/virtualCreated/');
-    });
-    $('.first_createdQQ').on('click',function () {
-        window.open('/registered/virtualCreated/');
-    });
-//    $('input[name=demo-radio]').on('click',function () {
-//        var Type=$(this).attr('weiboqq');
-//        if (Type=='W'){
-//            $('.has_person').show();
-//            $('.undone_person').show();
-//            $('.has_person_QQ').hide();
-//        }else {
-//            $('.has_person').hide();
-//            $('.undone_person').hide();
-//            $('.has_person_QQ').show();
-//        }
-//    });
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView:2, //控制时分秒
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left"
+        window.open('/registered/targetCustom/');
     });
 </script>
 <script src="/static/js/personal_center-1.js"></script>

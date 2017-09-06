@@ -48,13 +48,12 @@ function character(data) {
         }
         _classname+='&account-2&account-2-example&account-2-list';
         publicRecommend(word,_classname,tit);
-
     });
 }
 
 function publicRecommend(field,className,tit) {
     var str='';
-    if (recommendData[field].length==0||recommendData[field]==''){
+    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0){
         str='<p style="text-align: center;">抱歉，暂无数据。</p>';
     }else {
         if (field=='day_post_num_average'){
@@ -175,9 +174,9 @@ function values() {
             day_post_average = $(this).val().toString();
         });
     }
-    var saveSecond_url='/weibo_xnr_create/save_step_two/?domain_name='+basicData.domainName+'&role_name='+basicData.roleName+
-        '&psy_feature='+basicData.psyFeature+'&political_side='+basicData.politicalSide+'&business_goal='+basicData.businessGoal+
-        '&monitor_keywords='+basicData.monitorKeywords+'&daily_interests='+basicData.daily+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
+    var saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
+        '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
+        '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
         '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
     public_ajax.call_request('get',saveSecond_url,in_three);
     if (n == 1||n == 0){
