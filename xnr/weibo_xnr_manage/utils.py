@@ -56,6 +56,7 @@ def show_completed_weiboxnr(account_no,now_time):
 		history_comment_num=count_history_comment_num(uid)
 		#今日发帖量
 		today_comment_num=count_today_comment_num(xnr_user_no,now_time)
+
 		xnr_list['fans_num']=fans_num
 		xnr_list['history_post_num']=history_post_num
 		xnr_list['history_comment_num']=history_comment_num
@@ -65,6 +66,7 @@ def show_completed_weiboxnr(account_no,now_time):
 		today_remind=xnr_today_remind(xnr_user_no,now_time)
 		today_remind_num=today_remind['remind_num']
 		xnr_list['today_remind_num']=today_remind_num
+
 		result.append(xnr_list)
 	return result
 
