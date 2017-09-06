@@ -262,11 +262,7 @@ def show_event_warming(xnr_user_no):
                 'query':{
                     'filtered':{
                         'filter':{
-                            'bool':{
-                                'must':{
-                                   'terms':{'uid':main_userid_list[:3]}
-                                }
-                            }
+                            'terms':{'uid':main_userid_list[:3]}
                         }
                     }
                 }
