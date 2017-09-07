@@ -50,13 +50,6 @@ body {
 #container .weiboContent {
     margin-top: 30px;
 }
-#container .weiboContent .text_information .fanye input {
-    background: transparent;
-    border: 1px solid silver;
-}
-#container .weiboContent .text_information .fanye input:hover {
-    background: rgba(3, 8, 16, 0.61);
-}
 #container .everyUser {
     padding: 5px 10px;
 }
@@ -102,11 +95,11 @@ body {
 #container .everyUser .user_center .report{
     color: #00bcd4;
     font-weight:800;
+    cursor: pointer;
 }
-/*#container .everyUser .user_center .center_1:hover,*/
-/*#container .everyUser .user_center .report:hover{*/
-    /*color: #257cde;*/
-/*}*/
+#container .everyUser .user_center .report:hover{
+    color: #f98077;
+}
 #container .everyUser .user_center .center_3 {
     margin: 10px 0;
     text-align:center;

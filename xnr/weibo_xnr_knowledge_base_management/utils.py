@@ -10,7 +10,7 @@ from xnr.global_utils import es_user_portrait,portrait_index_name,portrait_index
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type
 from xnr.time_utils import ts2datetime
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict
+from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 '''
@@ -144,11 +144,34 @@ def get_show_domain_description(xnr_user_no,domain_name):
                 id=domain_pinyin)['_source']
     item = {}
 
+    item['group_size'] = es_result['group_size']
     item['description'] = es_result['description']
-    item['topic_preference'] = es_result['topic_preference']
+    topic_preference_list = es_result['topic_preference']
+    topic_preference_list_chinese = []
+    for topic_preference_item in topic_preference_list:
+        topic_preference_item_chinese = topic_en2ch_dict[topic_preference_item[0]]
+        topic_preference_list_chinese.append([topic_preference_item_chinese,topic_preference_item[1]])
+
+    item['topic_preference'] = topic_preference_list_chinese
     item['word_preference'] = es_result['top_keywords']
-    item['role_distribute'] = es_result['role_distribute']
-    item['political_side'] = es_result['political_side']
+    role_distribute_list = es_result['role_distribute']
+    role_distribute_list_chinese = []
+    for role_distribute_item in role_distribute_list:
+        role_distribute_item_chinese = domain_en2ch_dict[role_distribute_item[0]]
+        role_distribute_list_chinese.append([role_distribute_item_chinese,role_distribute_item[1]])
+
+    item['role_distribute'] = role_distribute_list_chinese
+    political_side_list = es_result['political_side']
+    political_side_list_chinese = []
+    for political_side_item in political_side_list:
+        if political_side_item[0] == 'mid':
+            political_side_list_chinese.append([u'中立',political_side_item[1]])
+        elif political_side_item[0] == 'right':
+            political_side_list_chinese.append([u'右倾',political_side_item[1]])
+        else:
+            political_side_list_chinese.append([u'左倾',political_side_item[1]])
+
+    item['political_side'] = political_side_list_chinese
 
     return item
 
@@ -164,6 +187,19 @@ def get_show_domain_role_info(domain_name,role_name):
     es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
 
     return es_result
+
+def get_delete_domain(domain_name):
+
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    try:
+        es.delete(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)
+        mark = True
+    except:
+        mark = False
+
+    return mark
+
+
 
 ###################################################################
 ###################   Business Knowledge base    ##################

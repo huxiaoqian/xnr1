@@ -302,7 +302,7 @@ body {
 #container #content #hot .post_perfect .center_3_top span {
     display: inline-block;
     /*width: 21%;*/
-    max-width: 90px;
+    /*max-width: 90px;*/
     white-space: nowrap;
     overflow: hidden;
     text-overflow:ellipsis ;

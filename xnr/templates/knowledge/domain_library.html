@@ -8,6 +8,7 @@
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-toolbar .search{width: 100%}
 </style>
 {% endblock %}
 {% block main %}
@@ -67,7 +68,7 @@
 
 <!--群体详情-->
 <div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 900px;margin: 60px auto 0;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -85,17 +86,19 @@
         </div>
     </div>
 </div>
-
 <!--群体描述-->
 <div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 1000px;margin: 60px auto 0;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体描述</h4>
+                <h4 class="modal-title">群体描述<span id="gd-1"></span></h4>
             </div>
             <div class="modal-body">
                 <div class="groupDetails">
+                    <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                    <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                    <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
                 </div>
             </div>
         </div>
@@ -147,5 +150,8 @@
 <script>
     judgment('8');
 </script>
+<script src="/static/js/worldcloud.min.js"></script>
+<script src="/static/js/dark.js"></script>
 <script src="/static/js/domain_library-1.js"></script>
+
 {% endblock %}

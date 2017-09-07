@@ -111,7 +111,7 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
                 'filter':show_condition_list
             }
         },
-        'size':MAX_SEARCH_SIZE,
+        'size':50,
         'sort':{'sensitive':{'order':'desc'}}
     }
 

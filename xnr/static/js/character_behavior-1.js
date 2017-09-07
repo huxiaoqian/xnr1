@@ -43,20 +43,26 @@ function weibo(data) {
                         }else {
                             time=getLocalTime(item.timestamp);
                         };
+                        var sye_1='',sye_2='';
+                        // if (){
+                        //     sye1='border-color: transparent transparent #131313';
+                        //     sye2='color: yellow';
+                        // }
                         str+=
-                            '            <div class="center_rel">'+
-                            '                <div class="icons">'+
-                            '                    <i class="icon icon-warning-sign weiboFlag"></i>'+
-                            '                </div>'+
-                            '                <span class="mid" style="display: none;">'+item.mid+'</span>'+
-                            '                <span class="center_2">'+text+
-                            '                </span>'+
-                            '                <div class="center_3">'+
-                            '                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                            '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            '                </div>'+
+                            '<div class="center_rel">'+
+                            '   <div class="icons" style="'+sye_1+'">'+
+                            '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
+                            '   </div>'+
+                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                            '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                            '   <span class="center_2">'+text+'</span>'+
+                            '   <div class="center_3">'+
+                            '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                            '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                            '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                            '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                            '    </div>'+
                             '    <div class="commentDown" style="width: 100%;display: none;">'+
                             '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
                             '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
@@ -68,14 +74,14 @@ function weibo(data) {
                         '<div class="everyUser" style="margin: 0 auto;">'+
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
-                        '                <!--<input type="checkbox" class="amid">-->'+
                         '                <label class="demo-label">'+
                         '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+row.user_name+'</a>'+
-                        '                <a href="###" class="report" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  一键上报</a>'+
+                        '                <a class="mainUID" style="display: none;">'+row.user_name+'</a>'+
+                        '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  一键上报</a>'+
                         '            </div>'+
                         '           <div>'+str+'</div>'+
                         '        </div>'+
@@ -116,11 +122,29 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-
+//一键上报
+function oneUP(_this) {
+    //[mid,text,timestamp,retweeted,like,comment]
+    var len=$(_this).parents('.everyUser').find('.center_rel');
+    var dataStr='';
+    for (var i=0;i<len.length;i++){
+        var alldata=[];
+        var mid = $(len[i]).find('.mid').text();alldata.push(mid);
+        var txt=$(len[i]).find('.center_2').text().toString().replace(/#/g,'%23');alldata.push(txt);
+        var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
+        var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push('');
+        var comment = $(len[i]).find('.comment').text();alldata.push(comment);
+        dataStr+=alldata.join(',').toString()+'*';
+    }
+    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+uid+
+    '&weibo_info='+dataStr;
+    console.log(once_url)
+    public_ajax.call_request('get',once_url,postYES);
+}
 //操作返回结果
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
         f='操作失败';

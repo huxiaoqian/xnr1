@@ -28,7 +28,8 @@ body {
     color: #003366;
     font-weight: 900;
 }
-#container .title .output {
+#container .title .output1,
+#container .title .output2 {
     display: inline-block;
     position: relative;
     top: -7px;
@@ -38,6 +39,9 @@ body {
     border: 1px solid silver;
     border-radius: 5px;
     background: rgb(28, 62, 101);
+}
+#container .title .output2 {
+    left: 60px;
 }
 #container .speakType {
     display: inline-block;
@@ -53,18 +57,19 @@ body {
     /*border-radius: 5px;*/
     /*cursor: pointer;*/
 }
-#container .title .output:hover {
+#container .title .output1:hover,
+#container .title .output2:hover {
     background:rgba(3, 8, 16, 0.61);
 }
 #container .weiboContent .everySpeak .speak_center {
     position: relative;
-    padding: 10px 10px 10px 30px;
+    /*padding: 10px;*/
     /*background:rgba(8,23,44,0.35);*/
 }
 #container .weiboContent .everySpeak .speak_center .center_icon {
-    position: absolute;
-    top: 10px;
-    left: 3px;
+    /*position: absolute;*/
+    /*top: 10px;*/
+    /*left: 3px;*/
     width: 20px;
     height: 20px;
 }
@@ -74,6 +79,7 @@ body {
     background: rgba(16, 33, 51, 0.42);
 }
 #container .everySpeak .speak_center .center_1 {
+    color: #00bcd4;
     font-size: 16px;
     display: inline-block;
 }
@@ -85,7 +91,7 @@ body {
 }
 #container .everySpeak .speak_center .center_3 span {
     display: inline-block;
-    width: 16%;
+    width: 18%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -93,13 +99,13 @@ body {
     font-size: 12px;
 }
 #container .everySpeak .speak_center .center_3 span:nth-child(2),
-#container .everySpeak .speak_center .center_3 span:nth-child(5) {
+#container .everySpeak .speak_center .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container .everySpeak .speak_center .center_3 span:nth-child(4) {
-    border-left:1px solid slategrey;
-}
+/*#container .everySpeak .speak_center .center_3 span:nth-child(4) {*/
+    /*border-left:1px solid slategrey;*/
+/*}*/
 #container .everySpeak .speak_center .center_3 span:hover {
     color:#eb7350;
 }
