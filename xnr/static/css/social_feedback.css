@@ -55,7 +55,8 @@ body {
     top: 20px;
     left: 15px;
 }
-#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join {
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join {
     cursor: pointer;
     display: inline-block;
     padding: 5px 10px;
@@ -143,10 +144,12 @@ body {
 #container .type_page #content .forwardEvery .for-3 .for-3-reply:hover,
 #container .type_page #content .letterEvery .let-2 .let-2-reply:hover,
 #container .type_page #content .replyEvery .rep-3 .rep-3-reply:hover,
-#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover{
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover{
     background:rgba(5, 23, 55, 0.45);
 }
-#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover i {
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover i,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover i {
     color:#f77911;
 }
 #container .type_page #content .replyEvery .rep-3 {

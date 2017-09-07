@@ -184,7 +184,7 @@ def get_recommend_at_user(xnr_user_no):
         #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
         #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
     else:
-        
+
         es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                             body={'query':{'match_all':{}},'size':1000,\
                             'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
@@ -200,6 +200,7 @@ def get_recommend_at_user(xnr_user_no):
     es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
+
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']

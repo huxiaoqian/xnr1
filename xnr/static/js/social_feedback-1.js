@@ -328,7 +328,7 @@ function focus(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,img,fan_source,geo,description,fol='';
+                    var name,img,fan_source,geo,description,fol='',mark='';
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
@@ -361,15 +361,18 @@ function focus(data) {
                     }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
                         fol='未关注';
                     }
-                    // else if (row.weibo_type=='followed'){
-                    //     follow='我被关注';
-                    // }
+                    if (row.sensor_mark){
+                        mark='重点关注用户';
+                    }else {
+                        mark='加入重点用户'
+                    }
                     var str=
                         '<div class="focusAll">'+
                         '    <div class="focusEvery">'+
                         '        <img src="'+img+'" alt="" class="foc-head">'+
                         '        <div class="foc foc-1">'+
                         '            <b class="foc-1-name">'+name+'</b>'+
+                        '            <b class="uid" style="display: none;">'+row.uid+'</b>'+
                         '            <div class="foc-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
                         '                <div class="foc-img" style="display: inline-block;">'+
@@ -378,9 +381,14 @@ function focus(data) {
                         '                    <img src="/static/images/level.png" alt="">'+
                         '                </div>'+
                         '            </div>'+
-                        '            <div class="foc-fm" style="float: right;">'+
+                        '            <div class="foc-fm" style="float: right;margin-left:10px;">'+
                         '              <span class="foc-join" onclick="addfocus(this)">'+
                         '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+fol+'</b></span>'+
+                        '              </span>'+
+                        '            </div>'+
+                        '            <div class="foc-fm-2" style="float: right;">'+
+                        '              <span class="heavy-join" onclick="addheavy(this)">'+
+                        '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+mark+'</b></span>'+
                         '              </span>'+
                         '            </div>'+
                         '            <div class="foc-1-option">'+

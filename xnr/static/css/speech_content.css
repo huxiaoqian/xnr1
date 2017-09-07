@@ -39,38 +39,27 @@ body {
     border-radius: 5px;
     background: rgb(28, 62, 101);
 }
-#container .title .speakType {
-    position: relative;
-    top: -7px;
-    left: 20px;
+#container .speakType {
     display: inline-block;
+    margin: 10px 0 10px 40px;
 }
-#container .title .speakType #typelist {
+#container .speakType #typelist {
     display: inline-block;
-    padding: 5px 10px;
-    background: rgb(28, 62, 101);
+    /*padding: 5px 10px;*/
+    /*background: rgb(28, 62, 101);*/
     color: white;
-    border: 1px solid silver;
-    border-radius: 5px;
-    cursor: pointer;
+    margin: 10px 0;
+    /*border: 1px solid silver;*/
+    /*border-radius: 5px;*/
+    /*cursor: pointer;*/
 }
 #container .title .output:hover {
     background:rgba(3, 8, 16, 0.61);
 }
-#container .weiboContent {
-    margin-top: 30px;
-}
-#container .weiboContent .text_information .fanye input {
-    background: transparent;
-    border: 1px solid silver;
-}
-#container .weiboContent .text_information .fanye input:hover {
-    background: rgba(3, 8, 16, 0.61);
-}
 #container .weiboContent .everySpeak .speak_center {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background:rgba(8,23,44,0.35);
+    /*background:rgba(8,23,44,0.35);*/
 }
 #container .weiboContent .everySpeak .speak_center .center_icon {
     position: absolute;
@@ -113,4 +102,31 @@ body {
 }
 #container .everySpeak .speak_center .center_3 span:hover {
     color:#eb7350;
+}
+#container #weiboContent .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container #weiboContent .commentDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container #weiboContent .commentDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container #weiboContent .commentDown span:hover {
+    background: #333333;
 }

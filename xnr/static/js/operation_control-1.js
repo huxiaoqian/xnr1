@@ -4,7 +4,6 @@ var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
 }
 function timingTask(data) {
-    console.log(data);
     $('#time').bootstrapTable('load', data);
     $('#time').bootstrapTable({
         data:data,

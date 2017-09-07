@@ -28,7 +28,8 @@ body {
     color: #003366;
     font-weight: 900;
 }
-#container .title .output {
+#container .title .output1,
+#container .title .output2 {
     display: inline-block;
     position: relative;
     top: -7px;
@@ -39,7 +40,11 @@ body {
     border-radius: 5px;
     background: rgb(28, 62, 101);
 }
-#container .title .output:hover {
+#container .title .output2 {
+    left: 70px;
+}
+#container .title .output1:hover,
+#container .title .output2:hover {
     background:rgba(3, 8, 16, 0.61);
 }
 #container .weiboContent {
@@ -52,10 +57,13 @@ body {
 #container .weiboContent .text_information .fanye input:hover {
     background: rgba(3, 8, 16, 0.61);
 }
+#container .everyUser {
+    padding: 5px 10px;
+}
 #container .everyUser .user_center {
     position: relative;
-    padding: 10px 10px 10px 30px;
-    background:rgba(8,23,44,0.35);
+    /*padding: 10px 10px 10px 30px;*/
+    /*background:rgba(8,23,44,0.35);*/
 }
 #container .everyUser .user_center .center_icon {
     width: 20px;
@@ -92,13 +100,13 @@ body {
 }
 #container .everyUser .user_center .center_1,
 #container .everyUser .user_center .report{
-    color: #b0bdd0;
+    color: #00bcd4;
     font-weight:800;
 }
-#container .everyUser .user_center .center_1:hover,
-#container .everyUser .user_center .report:hover{
-    color: #257cde;
-}
+/*#container .everyUser .user_center .center_1:hover,*/
+/*#container .everyUser .user_center .report:hover{*/
+    /*color: #257cde;*/
+/*}*/
 #container .everyUser .user_center .center_3 {
     margin: 10px 0;
     text-align:center;
@@ -123,4 +131,31 @@ body {
 }
 #container .everyUser .user_center .center_3 span:hover {
     color:#eb7350;
+}
+#container #weiboContent .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container #weiboContent .commentDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container #weiboContent .commentDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container #weiboContent .commentDown span:hover {
+    background: #333333;
 }

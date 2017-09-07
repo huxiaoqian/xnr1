@@ -146,7 +146,7 @@ body {
 }
 #container #content #everyday .post_perfect .center_3 span {
     display: inline-block;
-    width: 30%;
+    width: 23%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -157,17 +157,18 @@ body {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
+#container #content #everyday .post_perfect .center_3 span:nth-child(4) {
+    border-left:1px solid slategrey;
+}
 #container #content #everyday .post_perfect .center_3 span:hover {
     color:#eb7350;
 }
-#container #content #everyday .post_perfect .commentDown,
-#container #content #business .post_perfect .commentDown {
+#container #content .commentDown {
     width: 100%;
     padding: 5px;
     margin: 10px 0;
 }
-#container #content #everyday .post_perfect .commentDown input,
-#container #content #business .post_perfect .commentDown input {
+#container #content .commentDown input {
     width: 90%;
     color: white;
     display: inline-block;
@@ -177,8 +178,7 @@ body {
     border-radius: 5px;
     text-align: center;
 }
-#container #content #everyday .post_perfect .commentDown span,
-#container #content #business .post_perfect .commentDown span {
+#container #content .commentDown span {
     color: white;
     display: inline-block;
     padding: 4px 8px;
@@ -187,8 +187,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-#container #content #everyday .post_perfect .commentDown span:hover,
-#container #content #business .post_perfect .commentDown span:hover {
+#container #content .commentDown span:hover {
     background: #333333;
 }
 
@@ -265,7 +264,7 @@ body {
 }
 #container #content #business .post_perfect .center_3 span {
     display: inline-block;
-    width: 33%;
+    width: 23%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -289,27 +288,42 @@ body {
     background: rgba(8,23,44,0.35);
     margin-bottom: 10px;
 }
-#container #content #hot .post_perfect .center_3 {
-    margin: 10px 0;
+#container #content #hot .post_perfect .center_3,
+#container #content #hot .post_perfect .center_3_top{
     text-align: center;
     border-top: 1px solid slategrey;
     padding-top: 5px;
+    margin-top: 10px;
 }
-#container #content #hot .post_perfect .center_3 span {
+#container #content #hot .post_perfect .center_3_top {
+    margin-top: 10px;
+}
+#container #content #hot .post_perfect .center_3 span,
+#container #content #hot .post_perfect .center_3_top span {
     display: inline-block;
-    /*width: 14%;*/
+    /*width: 21%;*/
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis ;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
+#container #content #hot .post_perfect .center_3_top span {
+    width: 31%;
+}
 #container #content #hot .post_perfect .center_3 span:nth-child(2),
-#container #content #hot .post_perfect .center_3 span:nth-child(4) {
+#container #content #hot .post_perfect .center_3 span:nth-child(4),
+#container #content #hot .post_perfect .center_3 span:nth-child(6),
+#container #content #hot .post_perfect .center_3_top span:nth-child(2){
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container #content #hot .post_perfect .center_3 span:nth-child(6){
+#container #content #hot .post_perfect .center_3 span:nth-child(4){
+    width: 30%;
     border-left:1px solid slategrey;
 }
 #container #content #hot .post_perfect .center_3 span:hover {
