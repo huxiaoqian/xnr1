@@ -168,8 +168,8 @@ def weibo_speech_warning_mappings():
 		es.indices.create(index=weibo_speech_warning_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
-	weibo_user_warning_mappings()
-	weibo_event_warning_mappings()
+	#weibo_user_warning_mappings()
+	#weibo_event_warning_mappings()
 	weibo_speech_warning_mappings()
 
 

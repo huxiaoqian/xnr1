@@ -15,7 +15,7 @@ mod = Blueprint('weibo_xnr_warming', __name__, url_prefix='/weibo_xnr_warming')
 
 ###人物行为预警
 #显示预警内容
-#http://219.224.134.213:9209/weibo_xnr_warming/show_personnal_warming/?xnr_user_no=WXNR0002&day_time=1480176000
+#http://219.224.134.213:9209/weibo_xnr_warming/show_personnal_warming/?xnr_user_no=WXNR0004&day_time=1480176000
 @mod.route('/show_personnal_warming/')
 def ajax_show_personnal_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -42,11 +42,15 @@ def ajax_show_speech_warming():
 #一键上报、转发、评论、点赞、导出至excel见公共操作模块
 
 #加入预警库
-#http://219.224.134.213:9209/weibo_xnr_warming/addto_speech_warming/?xnr_user_no=WXNR0001&content_type=unfollow&uid=1701350272&text=杨振宁95岁生日恢复中国国籍&mid=4044828436797896&timestamp=1503450000&retweeted=1071&comment=250&like=55&uid_list=1701350272,2659684317
+#http://219.224.134.213:9209/weibo_xnr_warming/addto_speech_warming/?xnr_user_no=WXNR0004&uid=1701350272&text=杨振宁95岁生日恢复中国国籍&mid=4044828436797896&timestamp=1503450000&retweeted=1071&comment=250&like=0
 @mod.route('/addto_speech_warming/')
 def ajax_addto_speech_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
+<<<<<<< HEAD
+	#content_type=request.args.get('content_type','')
+=======
 	# content_type=request.args.get('content_type','')
+>>>>>>> 325e36587d697e543f0f456da1fd10f450b187a9
 	uid=request.args.get('uid','')
 	text=request.args.get('text','')
 	mid=request.args.get('mid','')
@@ -54,8 +58,13 @@ def ajax_addto_speech_warming():
 	retweeted=request.args.get('retweeted','')
 	comment=request.args.get('comment','')
 	like=request.args.get('like','')
+<<<<<<< HEAD
+	uid_list=request.args.get('uid_list','')
+	speech_info=[uid,text,mid,timestamp,retweeted,comment,like,uid_list]
+=======
 	# uid_list=request.args.get('uid_list','')
 	speech_info=[content_type,uid,text,mid,timestamp,retweeted,comment,like,uid_list]
+>>>>>>> 325e36587d697e543f0f456da1fd10f450b187a9
 	results=addto_speech_warming(xnr_user_no,speech_info)
 	return json.dumps(results)
 
@@ -69,6 +78,11 @@ def ajax_show_event_warming():
 	results=show_event_warming(xnr_user_no)
 	return json.dumps(results)
 
+#http://219.224.134.213:9209/weibo_xnr_warming/get_hashtag
+@mod.route('/get_hashtag/')
+def ajax_get_hashtag():
+	results=get_hashtag()
+	return json.dumps(results)
 #一键上报、转发、评论、点赞、导出至excel见公共操作模块
 
 #查看详情——见操作统计的公共模块
