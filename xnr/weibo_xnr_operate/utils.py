@@ -126,7 +126,7 @@ def save_to_tweet_timing_list(task_detail):
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-    
+    print 'es_result:::',es_result
     if es_result:
         uid = es_result['uid']
         daily_interests = es_result['daily_interests']
@@ -150,29 +150,44 @@ def get_recommend_at_user(xnr_user_no):
                         'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
     '''
     ## daily_interests 字段为单个值
-    query_body = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'daily_interests':daily_interests_list}
-                }
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'daily_interests':daily_interests_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE
+    # }
+    # #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    # es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                     body=query_body)['hits']['hits']
 
-    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                        body=query_body)['hits']['hits']
-    print 'es_results_len::',len(es_results)
-    if not es_results:
-        if S_TYPE != 'test':
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-        else:
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':1000,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    #print 'es_results_len::',len(es_results)
+    #if not es_results:
+    if S_TYPE != 'test':
+        query_body = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'daily_interests':daily_interests_list}
+                    }
+                }
+            },
+            'size':MAX_SEARCH_SIZE
+        }
+        #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body=query_body)['hits']['hits']
+        # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+        #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+        #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    else:
+
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body={'query':{'match_all':{}},'size':1000,\
+                            'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
 
     uid_list = []
     if es_results_daily:
@@ -185,6 +200,7 @@ def get_recommend_at_user(xnr_user_no):
     es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
+
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']
@@ -789,7 +805,8 @@ def get_show_follow(task_detail):
 def get_reply_follow(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     uid = task_detail['uid']
-
+    trace_type = task_detail['trace_type']
+    
     es_get_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 
     weibo_mail_account = es_get_result['weibo_mail_account']
@@ -803,7 +820,7 @@ def get_reply_follow(task_detail):
     else:
         return False
 
-    mark = follow_tweet_func(account_name,password,uid)
+    mark = follow_tweet_func(account_name,password,uid,trace_type)
 
     return mark
 

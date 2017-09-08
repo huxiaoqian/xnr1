@@ -1,9 +1,9 @@
 {% extends "publicNav.html" %}
-{% block title %}<title>预警监控 - 事件涌现预警</title>{% endblock %}
+{% block title %}<title>预警监控 - 时间预警</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/time_warning.css">
 <style>
-
+    .fixed-table-toolbar .search{width: 100%}
 </style>
 {% endblock %}
 {% block main %}
@@ -77,20 +77,6 @@
     judgment('4');
     $('.demo-radio').on('click',function () {
         console.log(!!$(this).is(':checked'))
-    })
-
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
-        //minView:2, //控制时分秒
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left"
-    });
-    $('.start').on('changeDate', function(ev){
-        $('.end').datetimepicker('setStartDate',ev.date);
-    });
-    $('.end').on('changeDate', function(ev){
-        $('.start').datetimepicker('setEndDate',ev.date);
     });
 
 </script>

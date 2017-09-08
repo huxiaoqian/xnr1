@@ -46,7 +46,7 @@ def ajax_show_speech_warming():
 @mod.route('/addto_speech_warming/')
 def ajax_addto_speech_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
-	content_type=request.args.get('content_type','')
+	# content_type=request.args.get('content_type','')
 	uid=request.args.get('uid','')
 	text=request.args.get('text','')
 	mid=request.args.get('mid','')
@@ -54,7 +54,7 @@ def ajax_addto_speech_warming():
 	retweeted=request.args.get('retweeted','')
 	comment=request.args.get('comment','')
 	like=request.args.get('like','')
-	uid_list=request.args.get('uid_list','')
+	# uid_list=request.args.get('uid_list','')
 	speech_info=[content_type,uid,text,mid,timestamp,retweeted,comment,like,uid_list]
 	results=addto_speech_warming(xnr_user_no,speech_info)
 	return json.dumps(results)

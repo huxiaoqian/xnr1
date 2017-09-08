@@ -12,7 +12,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.25);
+    background: rgba(8,23,44,0.5);
     position: relative;
     top: 80px;
 }
@@ -32,4 +32,18 @@ body {
     color:#e9f2ff;
     cursor: pointer;
     font-weight: 700;
+}
+#container .remind .post_center {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    background:rgba(16, 33, 51, 0.42);
+    margin-bottom: 5px;
+    text-align: left;
+}
+#container .remind .post_center .center_icon {
+    position: absolute;
+    top: 10px;
+    left:8px;
+    width: 20px;
+    height: 20px;
 }

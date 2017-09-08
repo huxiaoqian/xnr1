@@ -82,7 +82,7 @@
                     <span>性别：</span>
                     <div id="gender">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="男" checked>
+                            <input class="demo-radio" type="radio" name="demo" value="男">
                             <span class="demo-checkbox demo-radioInput"></span> 男
                         </label>
                         <label class="demo-label">
@@ -135,7 +135,7 @@
                     <div class="task_time" style="display: inline-block;">
                         <div style="margin-right:34px;width:650px;">
                             <label class="demo-label">
-                                <input class="demo-radio" type="checkbox" value="0" name="timetampe" checked>
+                                <input class="demo-radio" type="checkbox" value="0" name="timetampe">
                                 <span class="demo-checkbox demo-radioInput"></span> 0:00 - 0:59
                             </label>
                             <label class="demo-label">
@@ -245,7 +245,7 @@
                     <span>日发帖量：</span>
                     <div style="display: inline-block;margin-right:37px;width:650px;">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" value="0-0" name="Posting" checked>
+                            <input class="demo-radio" type="radio" value="0-0" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 从不
                         </label>
                         <label class="demo-label">
@@ -356,11 +356,11 @@
 {% endblock %}
 
 {% block my_js %}
-<script>
+<script id="load_user">
     judgment('6');
     var go_on='{{continueUser}}';
     var basicData;
-    if (go_on==1){
+    if (go_on){
         var $id=localStorage.getItem('user');
         var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+$id;
         public_ajax.call_request('GET',go_url,continueData);
@@ -373,7 +373,6 @@
         filling();
     }
     function filling() {
-        console.log(basicData)
         $('#character1').attr('title',basicData.domain_name).text(basicData.domain_name);
         $('#character2').attr('title',basicData.role_name).text(basicData.role_name);
         $('#character3').attr('title',basicData.psy_feature).text(basicData.psy_feature);
@@ -381,24 +380,36 @@
         $('#character5').attr('title',basicData.business_goal).text(basicData.business_goal);
         $('#character6').attr('title',basicData.daily_interests).text(basicData.daily_interests);
         $('#character7').attr('title',basicData.monitor_keywords.replace(/&/g,',')).text(basicData.monitor_keywords.replace(/&/g,','));
+        if (go_on){
+            $('#name').val(basicData.nick_name);
+            $('#age').val(basicData.age);
+            $(".gender input[type='radio'][value='"+basicData.sex+"']").attr("checked",true);
+            $('#place').val(basicData.location);
+            $('#career').val(basicData.career);
+            $('#description').val(basicData.description);
+            var at=basicData.active_time.split(',');
+            for (var h of at){
+                $(".other_basic input[type='checkbox'][value='"+h+"']").attr("checked",true);
+            }
+            var postNUM=JSON.parse(basicData.day_post_average);
+            console.log(postNUM)
+            var $px=postNUM[0]+'-'+postNUM[1];
+            if (postNUM[0]>5){
+                $('.customize').hide();
+                $('.postNUM').show().val($px);
+            }else {
+                $(".other_basic .other-2 input[type='radio'][value='"+$px+"']").attr("checked",true);
+            }
+        }
     }
-    //    var domainName='{{domainName}}',roleName='{{roleName}}',daily='{{daily}}',
-    //        psyFeature='{{psyFeature}}',politicalSide='{{politicalSide}}',businessGoal='{{businessGoal}}',
-    //        monitorKeywords='{{monitorKeywords}}';
-
-
-
-
 //    $('.timeRange').append(
 //        '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
 //        txt+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
 //    );
-
     $('.customize').on('click',function () {
         $(this).hide();
         $('.postNUM').show();
     });
-
 </script>
 <script src="/static/js/virtual_created-1.js"></script>
 {% endblock %}

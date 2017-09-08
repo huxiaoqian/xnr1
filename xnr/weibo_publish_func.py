@@ -20,6 +20,7 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
                         weibo_report_management_index_type,weibo_xnr_fans_followers_index_name,\
                         weibo_xnr_fans_followers_index_type,weibo_hot_keyword_task_index_name,\
                         weibo_hot_keyword_task_index_type,index_sensing,type_sensing
+from utils import save_to_fans_follow_ES
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
@@ -181,7 +182,7 @@ def like_tweet_func(account_name,password,r_mid):
     return mark
 
 ## 关注
-def follow_tweet_func(xnr_user_no,account_name,password,uid):
+def follow_tweet_func(xnr_user_no,account_name,password,uid,trace_type):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -190,7 +191,7 @@ def follow_tweet_func(xnr_user_no,account_name,password,uid):
     mark = user.followed()
     save_type = 'followers'
     follow_type = 'follow'
-    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type)
 
     return mark
 
@@ -205,7 +206,8 @@ def unfollow_tweet_func(xnr_user_no,account_name,password,uid):
 
     save_type = 'followers'
     follow_type = 'unfollow'
-    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
+    trace_type = 'unfollow'
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type)
 
     return mark
 

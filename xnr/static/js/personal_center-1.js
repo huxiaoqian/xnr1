@@ -8,7 +8,6 @@ auto();
 function has_table(has_data) {
     // var person=window.JSON?JSON.parse(has_data):eval("("+has_data+")");
     var person=eval(has_data)
-    console.log(person)
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
         data:person,
@@ -164,7 +163,6 @@ function has_table(has_data) {
 };
 function not_yet(no_data) {
     var undone_person=eval(no_data);
-    console.log(undone_person)
     $('.undone_list #undonelist').bootstrapTable('load', undone_person);
     $('.undone_list #undonelist').bootstrapTable({
         data:undone_person,
