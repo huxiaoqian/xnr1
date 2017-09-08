@@ -173,6 +173,7 @@ function defalutWords(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -296,13 +297,19 @@ function hotWeibo(data) {
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '               <span class="center_2">'+txt+
                         '               </span>'+
-                        '           <div class="center_3" style="margin: 10px 0;">'+
-                        '               <span onclick="simliar(this)"><i class="icon icon-check"></i>&nbsp;&nbsp;相似微博</span>'+
-                        '               <span onclick="contantREM(this)"><i class="icon icon-reorder"></i>&nbsp;&nbsp;内容推荐</span>'+
-                        '               <span onclick="related(this)"><i class="icon icon-stethoscope"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
-                        '               <span onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发数<b class="forwarding">（'+row.retweeted+'）</b></span>'+
-                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论数<b class="comment">（'+row.comment+'）</b></span>'+
-                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        // '           <div class="center_3_top" >' +
+                        // '               <span onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发数<b class="forwarding">（'+row.retweeted+'）</b></span>'+
+                        // '               <span onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论数<b class="comment">（'+row.comment+'）</b></span>'+
+                        // '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        // '           </div>'+
+                        '           <div class="center_3">'+
+                        '               <span onclick="joinlab(this)"><i class="icon icon-upload-alt" title="加入语料库"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似微博"></i>&nbsp;&nbsp;相似微博</span>'+
+                        '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
+                        '               <span onclick="related(this)"><i class="icon icon-stethoscope" title="事件子观点及相关微博"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
+                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i><b class="forwarding">&nbsp;&nbsp;'+row.retweeted+'</b></span>'+
+                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i><b class="comment">&nbsp;&nbsp;'+row.comment+'</b></span>'+
+                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="赞"></i></span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -347,6 +354,10 @@ function conViews(data) {
     }
     $('#pormpt p').text(x);
     $('#pormpt').modal('show');
+}
+//加入语料库
+function joinlab(_this) {
+
 }
 //内容推荐
 function contantREM(_this) {
@@ -471,69 +482,74 @@ function related(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
     var relatedUrl='/weibo_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
-    $('#thingsweibo').modal('show');
 }
 function relatedWEIbo(data) {
-    var dataNew=[];
-    for (var key in data){
-        var ls={};
-        ls['name']=key;
-        ls['weibo']=data[key];
-        dataNew.push(ls);
-    };
-    $('#thWeibo').bootstrapTable('load', dataNew);
-    $('#thWeibo').bootstrapTable({
-        data:dataNew,
-        search: true,//是否搜索
-        pagination: true,//是否分页
-        pageSize: 2,//单页记录数
-        pageList: [15,20,25],//分页步进值
-        sidePagination: "client",//服务端分页
-        searchAlign: "left",
-        searchOnEnterKey: false,//回车搜索
-        showRefresh: false,//刷新按钮
-        showColumns: false,//列选择按钮
-        buttonsAlign: "right",//按钮对齐方式
-        locale: "zh-CN",//中文支持
-        detailView: false,
-        showToggle:false,
-        sortName:'bci',
-        sortOrder:"desc",
-        columns: [
-            {
-                title: "子观点",//标题
-                field: "name",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
-            {
-                title: "子观点代表微博",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var str='';
-                    for (var r=0;r<row.weibo.length;r++){
-                        str+=
-                            '<div class="post_perfect">'+
-                            '   <div class="post_center-hot">'+
-                            '       <img src="/static/images/post-6.png" class="center_icon">'+
-                            '       <div class="center_rel">'+
-                            '           <span class="center_2">'+row.weibo[r]+'</span>'+
-                            '       </div>'+
-                            '   </div>'+
-                            '</div>';
+    if (data=='正在计算'){
+        $('#pormpt p').text('正在计算...');
+        $('#pormpt').modal('show');
+    }else {
+        var dataNew=[];
+        for (var key in data){
+            var ls={};
+            ls['name']=key;
+            ls['weibo']=data[key];
+            dataNew.push(ls);
+        };
+        $('#thWeibo').bootstrapTable('load', dataNew);
+        $('#thWeibo').bootstrapTable({
+            data:dataNew,
+            search: true,//是否搜索
+            pagination: true,//是否分页
+            pageSize: 2,//单页记录数
+            pageList: [15,20,25],//分页步进值
+            sidePagination: "client",//服务端分页
+            searchAlign: "left",
+            searchOnEnterKey: false,//回车搜索
+            showRefresh: false,//刷新按钮
+            showColumns: false,//列选择按钮
+            buttonsAlign: "right",//按钮对齐方式
+            locale: "zh-CN",//中文支持
+            detailView: false,
+            showToggle:false,
+            sortName:'bci',
+            sortOrder:"desc",
+            columns: [
+                {
+                    title: "子观点",//标题
+                    field: "name",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
+                },
+                {
+                    title: "子观点代表微博",//标题
+                    field: "",//键名
+                    sortable: true,//是否可排序
+                    order: "desc",//默认排序方式
+                    align: "center",//水平
+                    valign: "middle",//垂直
+                    formatter: function (value, row, index) {
+                        var str='';
+                        for (var r=0;r<row.weibo.length;r++){
+                            str+=
+                                '<div class="post_perfect">'+
+                                '   <div class="post_center-hot">'+
+                                '       <img src="/static/images/post-6.png" class="center_icon">'+
+                                '       <div class="center_rel">'+
+                                '           <span class="center_2">'+row.weibo[r]+'</span>'+
+                                '       </div>'+
+                                '   </div>'+
+                                '</div>';
+                        }
+                        return str;
                     }
-                    return str;
-                }
 
-            },
-        ],
-    });
+                },
+            ],
+        });
+        $('#thingsweibo').modal('show');
+    }
 }
 
 //======业务发帖=======
@@ -595,6 +611,7 @@ function businessWeibo(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+

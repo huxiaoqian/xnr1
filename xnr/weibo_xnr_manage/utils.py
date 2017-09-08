@@ -83,7 +83,7 @@ def count_fans_num(xnr_user_no):
         followers_list=result['followers_list']
         number=len(followers_list)
     except:
-    	number=0
+        number=0
     return number
 
 #计算历史发帖量

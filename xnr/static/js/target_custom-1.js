@@ -2,7 +2,6 @@
 var field_url='/weibo_xnr_create/show_domain/';
 public_ajax.call_request('get',field_url,field);
 function field(data) {
-    console.log(data)
     var str='';
     for (var k in data){
         str+=
@@ -114,13 +113,13 @@ $('.nextButton').on('click',function () {
         // '&monitorKeywords='+monitorKeywords);
         window.open('/registered/virtualCreated/');
         var first={
-            'domainName':domainName,
-            'roleName':roleName,
-            'daily':daily,
-            'psyFeature':psyFeature.join(','),
-            'politicalSide':politicalSide,
-            'businessGoal':businessGoal,
-            'monitorKeywords':monitorKeywords}
+            'domain_name':domainName,
+            'role_name':roleName,
+            'daily_interests':daily,
+            'psy_feature':psyFeature.join(','),
+            'political_side':politicalSide,
+            'business_goal':businessGoal,
+            'monitor_keywords':monitorKeywords}
         localStorage.setItem('firstStep',JSON.stringify(first));
         //public_ajax.call_request('get',saveFirst_url,in_second);
     }

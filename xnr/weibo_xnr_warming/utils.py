@@ -26,7 +26,6 @@ def show_personnal_warming(xnr_user_no,day_time):
     #查询关注列表
     es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
     followers_list=es_xnr_result['followers_list']
-    #followers_list=json.loads(followers_list)
 
     flow_text_index_list=get_flow_text_index_list(int(day_time))
 

@@ -12,7 +12,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.25);
+    background: rgba(8,23,44,0.5);
     position: relative;
     top: 80px;
 }
@@ -28,7 +28,8 @@ body {
     color: #003366;
     font-weight: 900;
 }
-#container .title .output {
+#container .title .output1,
+#container .title .output2 {
     display: inline-block;
     position: relative;
     top: -7px;
@@ -39,21 +40,11 @@ body {
     border-radius: 5px;
     background: rgb(28, 62, 101);
 }
-#container .title .output:hover,#container .title .eventSearch .sureFind:hover {
+#container .title .output2 {
+    left: 60px;
+}
+#container .title .output1:hover,#container .title .output2:hover {
     background:rgba(3, 8, 16, 0.61);
-}
-#container .title .eventSearch {
-    float: right;
-}
-#container .title .eventSearch .search,
-#container .title .eventSearch .sureFind{
-    display: inline-block;
-    padding: 5px 10px;
-    background: rgb(28, 62, 101);
-    color: white;
-    border: 1px solid silver;
-    border-radius: 5px;
-    cursor: pointer;
 }
 #container .weiboContent {
     margin-top: 30px;
@@ -64,6 +55,23 @@ body {
 }
 #container .weiboContent .text_information .fanye input:hover {
     background: rgba(3, 8, 16, 0.61);
+}
+#container .everyUser {
+    padding: 5px 10px;
+}
+#container .everyEvent .event_center {
+    position: relative;
+    /*padding: 10px 10px 10px 30px;*/
+    /*background:rgba(8,23,44,0.35);*/
+}
+#container .everyEvent .event_center .center_icon {
+    width: 20px;
+    height: 20px;
+}
+#container .everyEvent .event_center .center_rel {
+    position: relative;
+    padding:10px 10px 10px 70px;
+    background: rgba(16, 33, 51, 0.42);
 }
 #container .everyEvent .event_center .center_rel .icons {
     position: absolute;
@@ -85,33 +93,18 @@ body {
     margin-top: -2px;
     color: red;
 }
-#container .everyEvent .event_center {
-    position: relative;
-    padding: 10px 10px 10px 30px;
-    background:rgba(8,23,44,0.35);
-}
-#container .everyEvent .event_center .center_icon {
-    width: 20px;
-    height: 20px;
-}
-#container .everyEvent .event_center .center_rel {
-    position: relative;
-    padding:10px 10px 10px 70px ;
-    background: rgba(16, 33, 51, 0.42);
-}
-
 #container .everyEvent .event_center .center_1 {
     font-size: 16px;
     display: inline-block;
 }
 #container .everyEvent .event_center .center_1,
 #container .everyEvent .event_center .report{
-    color: #b0bdd0;
+    color: #00bcd4;
     font-weight:800;
+    cursor: pointer;
 }
-#container .everyEvent .event_center .center_1:hover,
 #container .everyEvent .event_center .report:hover{
-    color: #257cde;
+    color: #f98077;
 }
 #container .everyEvent .event_center .center_3 {
     margin: 10px 0;
@@ -137,4 +130,31 @@ body {
 }
 #container .everyEvent .event_center .center_3 span:hover {
     color:#eb7350;
+}
+#container #weiboContent .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container #weiboContent .commentDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container #weiboContent .commentDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container #weiboContent .commentDown span:hover {
+    background: #333333;
 }
