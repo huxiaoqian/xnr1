@@ -23,14 +23,6 @@ def weibo_xnr_count_info_mappings():
                     'uid':{                     # uid
                         'type':'string',
                         'index':'not_analyzed'
-                    },               
-                    'password':{                #密码
-                        'type':'string',
-                        'index':'not_analyzed'
-                    }
-                    'domain_name':{              #渗透领域
-                        'type':'string',
-                        'index':'not_analyzed'
                     }
                 }
             }
