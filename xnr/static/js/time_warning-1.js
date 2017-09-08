@@ -100,12 +100,5 @@ function calendar(data) {
                 },
             },
         ],
-        onClickCell: function (field, value, row, $element) {
-            if ($element[0].innerText=='查看') {
-                window.open();
-            }else if ($element[0].innerText=='') {
-                window.open();
-            }
-        }
     });
 };
