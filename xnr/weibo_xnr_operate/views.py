@@ -286,6 +286,7 @@ def ajax_reply_follow():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
+    task_detail['trace_type'] = request.args.get('trace_type','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
     mark = get_reply_follow(task_detail)
 
     return json.dumps(mark)

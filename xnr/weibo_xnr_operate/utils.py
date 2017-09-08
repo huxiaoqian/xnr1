@@ -805,7 +805,8 @@ def get_show_follow(task_detail):
 def get_reply_follow(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     uid = task_detail['uid']
-
+    trace_type = task_detail['trace_type']
+    
     es_get_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 
     weibo_mail_account = es_get_result['weibo_mail_account']
@@ -819,7 +820,7 @@ def get_reply_follow(task_detail):
     else:
         return False
 
-    mark = follow_tweet_func(account_name,password,uid)
+    mark = follow_tweet_func(account_name,password,uid,trace_type)
 
     return mark
 

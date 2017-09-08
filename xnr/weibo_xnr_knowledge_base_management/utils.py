@@ -3,7 +3,7 @@
 import json
 import pinyin
 from xnr.global_utils import es_xnr as es
-from xnr.global_utils import es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
+from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                             weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
@@ -25,15 +25,15 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
     create_type_new['by_all_users'] = []
 
     if create_type == 'by_keywords':
-        create_type_new['by_keywords'] = keywords_string.split('，')
+        create_type_new['by_keywords'] = keywords_string.encode('utf-8').split('，')
     elif create_type == 'by_seed_users':
-        create_type_new['by_seed_users'] = seed_users.split('，')
+        create_type_new['by_seed_users'] = seed_users.encode('utf-8').split('，')
     else:
-        create_type_new['all_users'] = all_users.split('，')
+        create_type_new['all_users'] = all_users.encode('utf-8').split('，')
 
     return create_type_new
 
-def domain_create_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
+def domain_create_task(xnr_user_no,domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
     
     try:
         domain_task_dict = dict()
@@ -49,6 +49,23 @@ def domain_create_task(domain_name,create_type,create_time,submitter,description
         domain_task_dict['compute_status'] = compute_status
 
         r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
+
+        item_exist = dict()
+        
+        item_exist['xnr_user_no'] = domain_task_dict['xnr_user_no']
+        item_exist['domain_pinyin'] = domain_task_dict['domain_pinyin']
+        item_exist['domain_name'] = domain_task_dict['domain_name']
+        item_exist['create_type'] = domain_task_dict['create_type']
+        item_exist['create_time'] = domain_task_dict['create_time']
+        item_exist['submitter'] = domain_task_dict['submitter']
+        item_exist['description'] = domain_task_dict['description']
+        item_exist['remark'] = domain_task_dict['remark']
+        item_exist['group_size'] = ''
+        
+        item_exist['compute_status'] = 0  # 存入创建信息
+        es_xnr.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
+    
+
         mark = True
     except:
         mark =False
@@ -198,8 +215,6 @@ def get_delete_domain(domain_name):
         mark = False
 
     return mark
-
-
 
 ###################################################################
 ###################   Business Knowledge base    ##################

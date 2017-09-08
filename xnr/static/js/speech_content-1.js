@@ -7,7 +7,6 @@ $('#typelist .demo-radio').on('click',function () {
 var weiboUrl='/weibo_xnr_warming/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type=0&day_time=1480176000'//+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
-    console.log(data)
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
@@ -56,10 +55,10 @@ function weibo(data) {
                         '<div class="everySpeak" style="margin: 0 auto;">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel">'+
-                        '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                        '                </label>'+
+                        // '                <label class="demo-label">'+
+                        // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                        // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        // '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+name+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
@@ -132,7 +131,7 @@ function getInfo(_this) {
 function joinPolice(_this) {
     var info=getInfo(_this);
     var police_url='/weibo_xnr_warming/addto_speech_warming/?xnr_user_no='+ID_Num+'&uid='+info[0]+'&text='+info[2]+
-        '&mid='+info[1]+'&timestamp='+info[3]+'&retweeted='+info[4]+'&comment='+info[5]+'&like=';
+        '&mid='+info[1]+'&timestamp='+info[3]+'&retweeted='+info[4]+'&comment='+info[5]+'&like=0';
     public_ajax.call_request('get',police_url,postYES)
 }
 //一键上报
@@ -141,7 +140,7 @@ function oneUP(_this) {
     var allMent=[];
     allMent.push(info[1]);
     var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);
-    allMent.push(info[3]);allMent.push(info[4]);allMent.push('');allMent.push(info[5]);
+    allMent.push(info[3]);allMent.push(info[4]);allMent.push(0);allMent.push(info[5]);
 //[mid,text,timestamp,retweeted,like,comment
     var once_url='/weibo_xnr_warming/report_warming_content/?report_type=言论&xnr_user_no='+ID_Num+
     '&uid='+info[0]+'&weibo_info='+allMent.join(',');

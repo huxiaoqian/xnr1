@@ -83,7 +83,7 @@ def uid2xnr_user_no(uid):
 
 # 保存至粉丝关注表
 
-def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
+def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type):
 
     if save_type == 'followers':
 
@@ -93,28 +93,49 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
 
             results = results["_source"]
             if follow_type == 'follow':
-                try:
-                    followers_uids = results['followers_list']
-                    followers_uids.append(uid)
+                if trace_type == 'trace_follow':
+                    # 添加追随关注
+                    try:
+                        trace_follow_uids = results['trace_follow_list']
+                        trace_follow_uids.append(uid)
+                    except:
+                        trace_follow_uids = [uid]
+
+                    # 添加普通关注
+                    try:
+                        followers_uids = results['followers_list']
+                        followers_uids.append(uid)
+                    except:
+                        followers_uids = [uid]
+                    
+                    results['followers_list'] = followers_uids
+                    results['trace_follow_list'] = trace_follow_uids
+                    es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no,body={'doc':results})
+
+                else:
+
+                    try:
+                        followers_uids = results['followers_list']
+                        followers_uids.append(uid)
+                    except:
+                        followers_uids = [uid]
+
                     results['followers_list'] = followers_uids
 
                     es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                                 id=xnr_user_no,body={'doc':results})
 
-                except:
-
-                    results = {}
-                    results['followers_list'] = [uid]
-                    es_xnr.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                                id=xnr_user_no,body=results)
-
             elif follow_type == 'unfollow':
-                followers_uids = results['followers_list']
-                followers_uids = list(set(followers_uids).difference(set([uid])))
-                results['followers_list'] = followers_uids
+                try:
+                    followers_uids = results['followers_list']
+                    followers_uids = list(set(followers_uids).difference(set([uid])))
+                    results['followers_list'] = followers_uids
 
-                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                            id=xnr_user_no,body={'doc':results})
+                    es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no,body={'doc':results})
+                except:
+                    return False
 
         except:
             #if follow_type == 'follow':
@@ -133,19 +154,16 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type):
 
             results = results["_source"]
 
+            
             try:
-                followers_uids = results['fans_list']
-                followers_uids.append(uid)
-                results['fans_list'] = followers_uids
-
-                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                            id=xnr_user_no,body={'doc':results})
-
+                fans_uids = results['fans_list']
+                fans_uids.append(uid)
+                results['fans_list'] = fans_uids
             except:
-                results = {}
                 results['fans_list'] = [uid]
-                es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                            id=xnr_user_no,body={'doc':results})
+
+            es_xnr.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                        id=xnr_user_no,body={'doc':results})
 
         except:
             body_info = {}

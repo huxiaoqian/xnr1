@@ -2,7 +2,6 @@
 var field_url='/weibo_xnr_create/show_domain/';
 public_ajax.call_request('get',field_url,field);
 function field(data) {
-    console.log(data)
     var str='';
     for (var k in data){
         str+=

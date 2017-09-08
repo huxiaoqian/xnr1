@@ -71,7 +71,7 @@ body {
 #container .building .b-1-2 .b-opt .addBuild {
     width: 500px;
     padding: 4px 8px;
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     border: 1px solid silver;
     color: white;
     border-radius: 5px;
