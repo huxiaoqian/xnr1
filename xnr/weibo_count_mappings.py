@@ -27,17 +27,10 @@ def weibo_xnr_count_info_mappings():
                     'password':{                #密码
                         'type':'string',
                         'index':'not_analyzed'
-                    },
-                    'create_time':{              #创建时间
-                        'type':'string',
-                        'index':'not_analyzed'
-                    },
+                    }
                     'domain_name':{              #渗透领域
                         'type':'string',
                         'index':'not_analyzed'
-                    },
-                    'create_status':{        #虚拟人创建状态
-                        'type':'long'           #0表示第一步完成，1表示第二步完成 2表示第三步完成，即最终完成创建。
                     }
                 }
             }
