@@ -266,8 +266,10 @@ def ajax_wxnr_list_fans():
 	results=wxnr_list_fans(user_id,order_type)
 	return json.dumps(results)
 
-
-@mod.route('create_xnr_flow_text/')
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=daily_post&xnr_user_no=WXNR0004&uid=6346321407&text=下雨了，吼吼\(^o^)/~&user_fansnum=9&weibos_sum=47&mid=4143645403880308&timestamp=1503405480&comment=5&sensitive=1&retweeted=2
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=business_post&xnr_user_no=WXNR0004&uid=6346321407&text=国足加油~给力！&user_fansnum=9&weibos_sum=47&mid=4143645403880309&timestamp=1504615080&comment=115&sensitive=3&retweeted=255
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=孕妇跳楼案广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880319&timestamp=1504625080&comment=185&sensitive=5&retweeted=255
+@mod.route('/create_xnr_flow_text/')
 def ajax_create_xnr_flow_text():
 	task_detail=dict()
 	task_detail['task_source']=request.args.get('task_source','')

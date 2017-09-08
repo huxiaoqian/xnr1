@@ -266,10 +266,10 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 	if startdate=='' and enddate=='':
 		now_time=int(time.time())
 		weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
-		print weibo_xnr_flow_text_listname
+		#print weibo_xnr_flow_text_listname
 	else:
 		weibo_xnr_flow_text_listname=get_timeset_indexset_list(xnr_flow_text_index_name_pre,startdate,enddate)
-		print weibo_xnr_flow_text_listname
+		#print weibo_xnr_flow_text_listname
 
 	query_body={
 		'query':{
@@ -314,8 +314,12 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 			xnr_user_detail['influence']=xnr_assess_result['influence']
 			xnr_user_detail['penetration']=xnr_assess_result['penetration']
 			xnr_user_detail['safe']=xnr_assess_result['safe']
+
 		except:
-			xnr_user_info=[]
+			xnr_user_detail['total_post_sum']=0
+			xnr_user_detail['influence']=0
+			xnr_user_detail['penetration']=0
+			xnr_user_detail['safe']=0
 		xnr_user_info.append(xnr_user_detail)
 	
 	#对xnr_user_info进行排序
@@ -323,12 +327,13 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 	
 	#累计统计
 	Cumulative_statistics_dict=dict()
-	try:		
+	if xnr_user_no:		
 		Cumulative_statistics_dict['date_time']='累计统计'
 		Cumulative_statistics_dict['user_fansnum']=xnr_user_info[0]['user_fansnum']
 		total_post_sum=0
 		daily_post_num=0
 		business_post_num=0
+		hot_follower_num=0
 		influence_sum=0
 		penetration_sum=0
 		safe_sum=0
@@ -349,7 +354,7 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 		Cumulative_statistics_dict['influence']=influence_sum/number
 		Cumulative_statistics_dict['penetration']=penetration_sum/number
 		Cumulative_statistics_dict['safe']=safe_sum/number
-	except:
+	else:
 		Cumulative_statistics_dict=dict()
 	return Cumulative_statistics_dict,xnr_user_info
 
@@ -854,7 +859,12 @@ def delete_weibo_xnr(xnr_user_no):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail):
-	result=True
-	return result
+	task_id=task_detail['mid']
+	try:
+		es_xnr.index(index='xnr_flow_text_2017-09-05',doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+		mark=True
+	except:
+		mark=False
+	return mark
 	
 
