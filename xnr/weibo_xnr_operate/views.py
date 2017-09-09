@@ -345,10 +345,10 @@ def ajax_related_recommendation():
 # 显示粉丝
 @mod.route('/create_group_show_fans/')
 def ajax_create_group_show_fans():
-	task_detail = dict()
-	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+	
+	xnr_user_no = request.args.get('xnr_user_no','')
 
-	results = get_create_group_show_fans(task_detail)
+	results = get_create_group_show_fans(xnr_user_no)
 
 	return json.dumps(results)
 

@@ -1086,7 +1086,7 @@ def get_show_group(xnr_user_no):
 ## 展示粉丝
 def get_create_group_show_fans(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
-
+    print 'xnr_user_no:::',xnr_user_no
     es_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
             id=xnr_user_no)['_source']
 

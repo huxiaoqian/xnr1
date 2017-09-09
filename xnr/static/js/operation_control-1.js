@@ -192,6 +192,29 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
     public_ajax.call_request('get',liNews_url,historyNews);
 })
 //========历史消息====
+$('.choosetime .demo-label input').on('click',function () {
+    var _val=$(this).val();
+    if (_val=='mize'){
+        $('.customizeTime').show();
+    }else {
+        $('.customizeTime').val('').hide();
+    }
+
+});
+$(".customizeTime").keydown(function(e) {
+    if (e.keyCode == 13) {
+        var _val=$(this).val();
+        var reg = new RegExp("^[0-9]*$");
+        if (reg.test(_val)){
+
+        }else {
+            $('#successfail p').text('只能输入数字。');
+            $('#successfail').modal('show');
+        }
+
+    }
+});
+
 var htp=[];
 $('#container .rightWindow .oli #content .hisnews input').on('click',function () {
     htp=[];
@@ -209,8 +232,8 @@ function historyNews(data) {
 }
 //===========
 // =====关注列表====
-$('.focusSEN .demo-label').on('click',function () {
-    var orderType=$(this).find('input').attr('value');
+$('.focusSEN .demo-label input').on('click',function () {
+    var orderType=$(this).val();
     var ClickFocusOn_url='/weibo_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type=influence';
     public_ajax.call_request('get',ClickFocusOn_url,focusOn);
 })
@@ -238,12 +261,19 @@ function focusOn(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "编号",//标题
-                field: "uid",//键名
+                title: "头像",//标题
+                field: "photo_url",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        return '<img style="width: 30px;height: 30px;" src="/static/images/unknown.png">';
+                    }else {
+                        return '<img style="width: 30px;height: 30px;" src="'+row.photo_url+'">';
+                    };
+                }
             },
             {
                 title: "用户昵称",//标题
@@ -271,11 +301,7 @@ function focusOn(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){
-                            return '男';
-                        }else {
-                            return '女';
-                        }
+                        if (row.sex==1){return '男'}else if (row.sex==2){return '女'}else{return '未知'}
                     };
                 }
             },
@@ -370,18 +396,19 @@ function focusOn(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var ID=row.id;
-                    return '<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="查看详情"><i class="icon icon-link"></i></span>&nbsp;&nbsp;'+
+                    var ID=row.uid;
+                    return '<span style="cursor: pointer;" onclick="focus_ornot(\''+ID+'\',\'cancel_follow_user\')" title="取消关注"><i class="icon icon-heart-empty"></i></span>';
+                        //'<span style="cursor: pointer;" onclick="lookDetails(\''+ID+'\')" title="查看详情"><i class="icon icon-link"></i></span>&nbsp;&nbsp;'+
                         //'<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="修改"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="revoked(\''+ID+'\')" title="取消关注"><i class="icon icon-heart-empty"></i></span>';
+                        //'<span style="cursor: pointer;" onclick="focus_ornot(\''+ID+'\',\'cancel_follow_user\')" title="取消关注"><i class="icon icon-heart-empty"></i></span>';
                 }
             },
         ],
     });
 }
 //=====粉丝列表====
-$('.fansSEN .demo-label').on('click',function () {
-    var orderType=$(this).find('input').attr('value');
+$('.fansSEN .demo-label input').on('click',function () {
+    var orderType=$(this).val();
     var clikcFans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
     public_ajax.call_request('get',clikcFans_url,fans);
 })
@@ -542,11 +569,36 @@ function fans(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var ID=row.id;
-                    return '<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="查看详情"><i class="icon icon-link"></i></span>&nbsp;&nbsp;'+
+                    return '<span style="cursor: pointer;" onclick="revoked(\''+ID+'\',\'attach_fans_follow\')" title="直接关注"><i class="icon icon-heart"></i></span>';
+                    //'<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="查看详情"><i class="icon icon-link"></i></span>&nbsp;&nbsp;'+
                         //'<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="修改"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="revoked(\''+ID+'\')" title="直接关注"><i class="icon icon-heart"></i></span>';
+                        //'<span style="cursor: pointer;" onclick="revoked(\''+ID+'\',\'attach_fans_follow\')" title="直接关注"><i class="icon icon-heart"></i></span>';
                 }
             },
         ],
     });
+}
+//======查看详情===关注与否====
+// function lookDetails(_id) {
+//     var details_url='/weibo_xnr_manage/lookup_detail_weibouser/?uid='+_id;
+//     public_ajax.call_request('get',details_url,detailsOK);
+// }
+// function detailsOK(data) {
+//     console.log(data)
+// }
+function focus_ornot(_id,mid) {
+    var focusNOT_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+_id;
+    public_ajax.call_request('get',focusNOT_url,focusOrNot);
+}
+//=========
+function succeedFail(data) {
+    var t ='操作成功';
+    if (!data){t='操作失败'}else {
+        setTimeout(function () {
+            public_ajax.call_request('get',focusOn_url,focusOn);
+            public_ajax.call_request('get',fans_url,fans);
+        },700);
+    };
+    $('#focusOrNot p').text(t);
+    $('#focusOrNot').modal('show');
 }
