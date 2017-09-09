@@ -58,6 +58,17 @@ function calendar(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.keywords==''||row.keywords=='null'||row.keywords=='unknown'||!row.keywords){
+                        return '暂无统计';
+                    }else {
+                        if (row.countdown_days.toString().indexOf('-')==-1){
+                            return row.countdown_days;
+                        }else {
+                            return row.countdown_days.toString().replace(/-/g,'已过去 ');
+                        }
+                    };
+                },
             },
             {
                 title: "描述",//标题
@@ -86,16 +97,14 @@ function calendar(data) {
                         row.content_recommend=='unknown'||!row.content_recommend){
                         return '暂无内容';
                     }else {
-                        var cot=row.content_recommend,str='';
-                        for (var t of cot){
-                            str+=
-                                '<div class="post_center">'+
-                                '    <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                                '    <div class="center_rel">'+
-                                '        <span class="center_2">'+t+'</span>'+
-                                '    </div>'+
-                                '</div>';
-                        }
+                        var str=
+                            '<div class="post_center">'+
+                            '    <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                            '    <div class="center_rel">'+
+                            '        <span class="center_2">'+row.content_recommend+'</span>'+
+                            '    </div>'+
+                            '</div>';
+                        return str;
                     };
                 },
             },

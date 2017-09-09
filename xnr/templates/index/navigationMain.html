@@ -346,6 +346,7 @@
                 id_or_name=userName;
             }
             localStorage.setItem('user',encodeURI(userID));
+            localStorage.setItem('userRelName',encodeURI(userName));
             localStorage.setItem('userName',encodeURI(id_or_name));
             window.open(htmlUrl);
         }
