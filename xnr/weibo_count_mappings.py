@@ -20,14 +20,14 @@ def weibo_xnr_count_info_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'date_time':{
+                    'date_time':{                #时间，例如：2017-09-07
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'fans_num':{
+                    'fans_num':{                #粉丝数
                         'type':'long'
                     },
-                    'total_post_sum':{
+                    'total_post_sum':{        #
                         'type':'long'
                     },
                     'daily_post_num':{
