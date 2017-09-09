@@ -1,5 +1,12 @@
+// var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
+// var to_ts=Date.parse(new Date())/1000;
+var from_ts=1479513600,to_ts=1479981600;
+//选择时间范围
+$('.timeSure').on('click',function () {
+    
+})
 //----关键词云
-var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts=1479513600&to_ts=1479981600';
+var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
 public_ajax.call_request('get',word_url,wordCloud);
 require.config({
     paths: {
@@ -51,13 +58,32 @@ function wordCloud(data) {
     );
 }
 //热门帖子
-var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600' +
+$('#theme-2 .demo-radio').on('click',function () {
+    var classify_id=$(this).val();
+    var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
+    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    public_ajax.call_request('get',NEWhotPost_url,hotPost);
+});
+$('#theme-3 .demo-radio').on('click',function () {
+    var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
+    var order_id=$(this).val();
+    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    public_ajax.call_request('get',NEWhotPost_url,hotPost);
+});
+var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
     console.log(data)
 }
 //活跃用户
+$('#user-1 .demo-radio').on('click',function () {
+    var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
+    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id;
+    public_ajax.call_request('get',NEWactivePost_url,activeUser);
+});
 var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id=1';
 public_ajax.call_request('get',activePost_url,activeUser);
 function activeUser(persondata) {
