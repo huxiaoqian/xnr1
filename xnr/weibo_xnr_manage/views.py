@@ -236,6 +236,7 @@ def ajax_attach_fans_follow():
     task_detail=dict()
     task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
     task_detail['uid']=request.args.get('uid','')   #关注对象的uid
+    task_detail['trace_type']=request.args.get('trace_type','')
     results=attach_fans_follow(task_detail)
     return json.dumps(results)
 

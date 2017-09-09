@@ -262,7 +262,22 @@ def xnr_today_remind(xnr_user_no,now_time):
 #	step 4：operate count (进入，操作统计)  #
 #############################################
 #step 4.1：history count
-#def show_history_count(xnr_user_no,range_date):
+#def show_history_count(xnr_user_no,date_range):
+
+#查找影响力、渗透力、安全性
+def xnr_assessment_detail(xnr_user_no,date_time):
+    xnr_assess_id=xnr_user_no+date_time
+    xnr_user_detail=[]
+    try:
+        xnr_assess_result=es_xnr.get(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,id=xnr_assess_id)['_source']
+        xnr_user_detail['influence']=xnr_assess_result['influence']
+        xnr_user_detail['penetration']=xnr_assess_result['penetration']
+        xnr_user_detail['safe']=xnr_assess_result['safe']
+    except:
+        xnr_user_detail['influence']=0
+        xnr_user_detail['penetration']=0
+        xnr_user_detail['safe']=0
+    return xnr_user_detail
 
 def wxnr_history_count(xnr_user_no,startdate,enddate):
 	if startdate=='' and enddate=='':
@@ -710,13 +725,14 @@ def cancel_follow_user(task_detail):
     follower_uid=task_detail['uid']
 
     #调用取消关注函数
-    mark=unfollow_tweet_func(account_name,password,follower_uid)
+    
+    mark=unfollow_tweet_func(xnr_user_no,account_name,password,follower_uid)
     #修改关注列表
-    if mark:
-        save_mark=delete_xnr_followers(xnr_user_no,follower_uid)
-    else:
-        save_mark=False
-    return mark,save_mark
+    #if mark:
+    #    save_mark=delete_xnr_followers(xnr_user_no,follower_uid)
+    #else:
+    #    save_mark=False
+    return mark
 
 #直接关注
 def attach_fans_follow(task_detail):
@@ -726,16 +742,18 @@ def attach_fans_follow(task_detail):
     password=xnr_es_result['password']
 
     follower_uid=task_detail['uid']
+    trace_type=task_detail['trace_type']
 
     #调用关注函数
-    mark=follow_tweet_func(account_name,password,follower_uid)
+    
+    mark=follow_tweet_func(xnr_user_no,account_name,password,follower_uid,trace_type)
     #保存至关注列表
-    if mark:
-        save_mark=save_xnr_followers(xnr_user_no,follower_uid)
-    else:
-        save_mark=False
+    #if mark:
+    #    save_mark=save_xnr_followers(xnr_user_no,follower_uid)
+    #else:
+    #    save_mark=False
 
-    return mark,save_mark
+    return mark
 
 #查看详情
 def lookup_detail_weibouser(uid):
