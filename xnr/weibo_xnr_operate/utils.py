@@ -1083,6 +1083,23 @@ def get_show_group(xnr_user_no):
 
     return group_dict
 
+## 展示粉丝
+def get_create_group_show_fans(xnr_user_no):
+    uid = xnr_user_no2uid(xnr_user_no)
+
+    es_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+            id=xnr_user_no)['_source']
+
+    fans_list = es_result['fans_list']
+
+    results_all = {}
+
+    for fans_uid in fans_list:
+        nick_name,photo_url = uid2nick_name_photo(fans_uid)
+        results_all[fans_uid] = [nick_name,photo_url]
+
+    return results_all
+
 
 def get_add_sensor_user(xnr_user_no,sensor_uid_list):
 

@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="/static/css/operation_control.css">
     <style>
         .fixed-table-toolbar .search {width:100%}
+        .fixed-table-pagination .page-list{display: none;}
         .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
         .demo-radio{display:none!important;}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
@@ -15,7 +16,7 @@
 <div id="container">
     <div class="leftWindow">
         <ul class="navlist">
-            <!--<li class="listname"><a href="###" style="font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>-->
+            <li class="listname"><a href="###" style="display:none;font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-inbox"></i>&nbsp;历史统计</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-time"></i>&nbsp;定时发送任务列表</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-exclamation-sign"></i>&nbsp;历史消息</a></li>
@@ -139,12 +140,32 @@
         </div>
         <div class="li-4 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;关注列表</h4>
+            <div class="focusSEN" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='influence'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按影响力
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='sensitive'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                </label>
+            </div>
             <div class="focus">
                 <div id="focus"></div>
             </div>
         </div>
         <div class="li-5 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;粉丝列表</h4>
+            <div class="fansSEN" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='influence'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按影响力
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='sensitive'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                </label>
+            </div>
             <div class="fans">
                 <div id="fans"></div>
             </div>

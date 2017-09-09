@@ -94,7 +94,11 @@ function retComLike(_this) {
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='get_weibohistory_like'){
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
+        var uid=$(_this).parents('.center_rel').find('.uid').text();
+        var timestamp=$(_this).parents('.center_rel').find('.timestamp').text();
+        var text=$(_this).parents('.center_rel').find('.center_2').text();
+        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&text='+text+
+            '&timestamp='+timestamp+'&nick_name='+REL_name;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='get_weibohistory_comment'){
         $(_this).parents('.everySpeak').find('.commentDown').show();
