@@ -3,7 +3,7 @@
 import sys
 import json
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr 
+from global_utils import es_xnr as es
 from global_utils import weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
 
 
@@ -20,9 +20,24 @@ def weibo_xnr_count_info_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'uid':{                     # uid
+                    'date_time':{
                         'type':'string',
                         'index':'not_analyzed'
+                    },
+                    'fans_num':{
+                        'type':'long'
+                    },
+                    'total_post_sum':{
+                        'type':'long'
+                    },
+                    'daily_post_num':{
+                         'type':'long'
+                    },
+                    'business_post_num':{
+                         'type':'long'
+                    },
+                    'hot_follower_num':{
+                         'type':'long'
                     }
                 }
             }
