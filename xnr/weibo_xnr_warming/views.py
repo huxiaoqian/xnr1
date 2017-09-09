@@ -62,6 +62,7 @@ def ajax_addto_speech_warming():
 
 ###事件涌现预警
 #显示预警内容
+#main_user_info=[.....]返回信息见weibo_user表
 #http://219.224.134.213:9209/weibo_xnr_warming/show_event_warming/?xnr_user_no=WXNR0004
 @mod.route('/show_event_warming/')
 def ajax_show_event_warming():

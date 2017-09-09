@@ -262,6 +262,8 @@ def xnr_today_remind(xnr_user_no,now_time):
 #	step 4：operate count (进入，操作统计)  #
 #############################################
 #step 4.1：history count
+#def show_history_count(xnr_user_no,range_date):
+
 def wxnr_history_count(xnr_user_no,startdate,enddate):
 	if startdate=='' and enddate=='':
 		now_time=int(time.time())
@@ -357,6 +359,7 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 	else:
 		Cumulative_statistics_dict=dict()
 	return Cumulative_statistics_dict,xnr_user_info
+
 
 #step 4.2: timing task list
 ###########获取定时发送任务列表##############
