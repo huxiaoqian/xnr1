@@ -341,7 +341,7 @@ function submitViews(_this) {
         $('#pormpt').modal('show');
     }else {
         var conViewsUrl='/weibo_xnr_operate/submit_hot_keyword_task/?xnr_user_no='+xnrUser+'&task_id='+taskID+'&keywords_string='+vale.replace(/，/g,'')+
-        'submit_user=admin@qq.com';
+        'submit_user='+admin;
         public_ajax.call_request('get',conViewsUrl,conViews);
     }
 }
@@ -367,25 +367,28 @@ function contantREM(_this) {
 }
 //内容推荐中的微博直接发布还是定时发布
 function sureTiming(_this) {
-    var a=$('#recommend-2 input:radio[name="gh"]:checked').val();
+    var a=$(_this).parents('.post_perfect').find('input:radio[class=_timing_recommend]:checked').val();
     var t=$(_this).parent().prev().text();
     var CNpost_url='';
     if (a=='zhi'){
         CNpost_url='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
     }else {
-        if ($('#recommend-2 .START').val() && $('#recommend-2 .ENDING').val()){
+        var m =$('#recommend-2 .START').val();
+        var n =$('#recommend-2 .ENDING').val();
+        if (m&&n&&(m<n)){
             var a=Date.parse(new Date($('.START').val()))/1000;
             var b=Date.parse(new Date($('.ENDING').val()))/1000;
             CNpost_url+='&post_time_sts='+a+'&post_time_ets='+b;
         }else {
-            $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间。');
+            $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间,并保证开始时间小于结束时间。');
             $('#pormpt').modal('show');
         }
     }
     public_ajax.call_request('get',CNpost_url,conViews);
 }
+var calI=0;
 function calNot(data) {
-    if (data=='正在计算'){
+    if (data=='正在计算'||data=='尚未计算'){
         $('#pormpt p').text('正在计算...');
         $('#pormpt').modal('show');
     }else {
@@ -430,11 +433,11 @@ function calNot(data) {
                             '           <span class="center_2">'+txt+ '</span>'+
                             '           <div class="center_3" style="margin: 10px 0;padding-top: 10px;border-top:1px solid silver;">'+
                             '               <label class="demo-label">'+
-                            '                   <input class="demo-radio" type="radio" name="gh" value="zhi" checked>'+
+                            '                   <input class="demo-radio" type="radio" name="gh'+calI+'" value="zhi" checked>'+
                             '                   <span class="demo-checkbox demo-radioInput"></span> 直接发布'+
                             '               </label>'+
                             '               <label class="demo-label">'+
-                            '                   <input class="demo-radio" type="radio" value="time" name="gh">'+
+                            '                   <input class="demo-radio" type="radio" value="time" name="gh'+calI+'">'+
                             '                   <span class="demo-checkbox demo-radioInput"></span> 定时发布'+
                             '               </label>'+
                             '               <input type="text" size="16" class="form_datetime _timing_recommend START" placeholder="选择开始时间" style="line-height:13px;font-size: 10px;'+
@@ -447,7 +450,7 @@ function calNot(data) {
                             '   </div>'+
                             '</div>';
                         return str;
-
+                        calI++;
                     }
                 },
             ],
@@ -459,12 +462,12 @@ function calNot(data) {
             todayBtn: true,
             pickerPosition: "bottom-left"
         });
-        $('.START').on('changeDate', function(ev){
-            $('.ENDING').datetimepicker('setStartDate',ev.date);
-        });
-        $('.ENDING').on('changeDate', function(ev){
-            $('.START').datetimepicker('setEndDate',ev.date);
-        });
+        // $('.START').on('changeDate', function(ev){
+        //     $('.ENDING').datetimepicker('setStartDate',ev.date);
+        // });
+        // $('.ENDING').on('changeDate', function(ev){
+        //     $('.START').datetimepicker('setEndDate',ev.date);
+        // });
         $('#content_recommend').modal('show');
     }
 }
@@ -484,7 +487,7 @@ function related(_this) {
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
 function relatedWEIbo(data) {
-    if (data=='正在计算'){
+    if (data=='正在计算'||data=='尚未计算'){
         $('#pormpt p').text('正在计算...');
         $('#pormpt').modal('show');
     }else {
@@ -631,32 +634,5 @@ function businessWeibo(data) {
     $('#defaultWeibo3 p').hide();
     $('.defaultWeibo3 .search .form-control').attr('placeholder','搜索关键词或子观点相关的微博（回车搜索）');
 }
-
-
-//群成员列表
-var gmUrl='';
-// public_ajax.call_request('get',gmUrl,gmlist);
-function gmlist(data) {
-
-}
-//新建一个群
-$('.sureADD').on('click',function () {
-    var n=$('.groupNUM').val();
-    var m=[];
-    $("#grouplist input:checkbox:checked").each(function (index,item) {
-        m.push($(this).val());
-    });
-    if (n==''){
-        $('#pormpt p').text('群名称不能为空。');
-        $('#pormpt').modal('show');
-    }else if (m.length==0){
-        $('#pormpt p').text('请勾选成员');
-        $('#pormpt').modal('show');
-    }else {
-        var mn='/weibo_xnr_operate/create_group/?xnr_user_no='+nowUser+'&group='+ n +
-            '&members='+m.join(',');
-        public_ajax.call_request('get',mn,postYES);
-    }
-})
 
 

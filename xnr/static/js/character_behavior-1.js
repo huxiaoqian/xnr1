@@ -44,10 +44,10 @@ function weibo(data) {
                             time=getLocalTime(item.timestamp);
                         };
                         var sye_1='',sye_2='';
-                        // if (){
-                        //     sye1='border-color: transparent transparent #131313';
-                        //     sye2='color: yellow';
-                        // }
+                        if (Number(item.sensitive) < 50){
+                            sye_1='border-color: transparent transparent #131313';
+                            sye_2='color: yellow';
+                        }
                         str+=
                             '<div class="center_rel">'+
                             '   <div class="icons" style="'+sye_1+'">'+
@@ -69,7 +69,12 @@ function weibo(data) {
                             '    </div>'+
                             '</div>'
                     });
-
+                    var nameuid;
+                    if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'||!row.user_name){
+                        nameuid=row.uid;
+                    }else {
+                        nameuid=row.user_name;
+                    };
                     var rel_str=
                         '<div class="everyUser" style="margin: 0 auto;">'+
                         '        <div class="user_center">'+
@@ -79,8 +84,8 @@ function weibo(data) {
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '                <a class="center_1" href="###">'+row.user_name+'</a>'+
-                        '                <a class="mainUID" style="display: none;">'+row.user_name+'</a>'+
+                        '                <a class="center_1" href="###">'+nameuid+'</a>'+
+                        '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
                         '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  一键上报</a>'+
                         '            </div>'+
                         '           <div>'+str+'</div>'+
@@ -100,7 +105,11 @@ function retComLike(_this) {
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='get_weibohistory_like'){
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
+        var uid=$(_this).parents('.center_rel').find('.uid').text();
+        var timestamp=$(_this).parents('.center_rel').find('.timestamp').text();
+        var text=$(_this).parents('.center_rel').find('.center_2').text();
+        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&text='+text+
+        '&timestamp='+timestamp+'&nick_name='+REL_name;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='get_weibohistory_comment'){
         $(_this).parents('.center_rel').find('.commentDown').show();
@@ -126,17 +135,19 @@ function comMent(_this){
 function oneUP(_this) {
     //[mid,text,timestamp,retweeted,like,comment]
     var len=$(_this).parents('.everyUser').find('.center_rel');
+    var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
     var dataStr='';
     for (var i=0;i<len.length;i++){
         var alldata=[];
         var mid = $(len[i]).find('.mid').text();alldata.push(mid);
         var txt=$(len[i]).find('.center_2').text().toString().replace(/#/g,'%23');alldata.push(txt);
         var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
-        var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push('');
+        var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
         var comment = $(len[i]).find('.comment').text();alldata.push(comment);
-        dataStr+=alldata.join(',').toString()+'*';
+        dataStr+=alldata.join(',').toString();
+        if (i!=len.length-1){dataStr+='*'}
     }
-    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+uid+
+    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
     '&weibo_info='+dataStr;
     console.log(once_url)
     public_ajax.call_request('get',once_url,postYES);

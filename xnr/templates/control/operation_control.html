@@ -4,18 +4,30 @@
     <link rel="stylesheet" href="/static/css/operation_control.css">
     <style>
         .fixed-table-toolbar .search {width:100%}
+        .fixed-table-pagination .page-list{display: none;}
         .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
         .demo-radio{display:none!important;}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
         .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        .customizeTime {
+            display:none;
+            background: transparent;
+            width: 200px;
+            padding: 2px 7px;
+            color: white;
+            font-size: 12px;
+            border: 1px solid silver;
+            border-radius: 5px;
+            text-align: center;
+        }
     </style>
 {% endblock %}
 {% block main %}
 <div id="container">
     <div class="leftWindow">
         <ul class="navlist">
-            <!--<li class="listname"><a href="###" style="font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>-->
+            <li class="listname"><a href="###" style="display:none;font-size: 18px;"><i class="icon icon-bookmark"></i>&nbsp;操作统计</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-inbox"></i>&nbsp;历史统计</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-time"></i>&nbsp;定时发送任务列表</a></li>
             <li class="listname listItem"><a class="options" href="###"><i class="icon icon-exclamation-sign"></i>&nbsp;历史消息</a></li>
@@ -38,6 +50,29 @@
         </div>
         <div class="li-3 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
+            <div class="choosetime" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <span class="demo-checkbox demo-radioInput"></span> 1天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <span class="demo-checkbox demo-radioInput"></span> 7天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <span class="demo-checkbox demo-radioInput"></span> 15天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <span class="demo-checkbox demo-radioInput"></span> 30天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time" value='mize'>
+                    <span class="demo-checkbox demo-radioInput"></span> 自定义
+                </label>
+                <input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>
+            </div>
             <div class="news">
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active" midurl="show_history_posting&daily_post">
@@ -139,12 +174,32 @@
         </div>
         <div class="li-4 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;关注列表</h4>
+            <div class="focusSEN" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='influence' checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 按影响力
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='sensitive'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                </label>
+            </div>
             <div class="focus">
                 <div id="focus"></div>
             </div>
         </div>
         <div class="li-5 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;粉丝列表</h4>
+            <div class="fansSEN" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='influence' checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 按影响力
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='sensitive'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                </label>
+            </div>
             <div class="fans">
                 <div id="fans"></div>
             </div>
@@ -156,6 +211,21 @@
 <!--查看内容-->
 <!--提示弹框-->
 <div class="modal fade" id="successfail" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="focusOrNot" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
