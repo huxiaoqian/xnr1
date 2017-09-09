@@ -3,8 +3,20 @@
 var from_ts=1479513600,to_ts=1479981600;
 //选择时间范围
 $('.timeSure').on('click',function () {
-    
-})
+    from_ts = $('.start').val();
+    to_ts = $('.end').val();
+    if (from_ts==''||to_ts==''){
+        $('#pormpt p').text('请检查选择的时间（不能为空）');
+        $('#pormpt').modal('show');
+    }else {
+        public_ajax.call_request('get',word_url,wordCloud);
+        public_ajax.call_request('get',hotPost_url,hotPost);
+        public_ajax.call_request('get',activePost_url,activeUser);
+    }
+});
+$('.perTime .demo-label .demo-radio').on('click',function () {
+    var day=$(this).val();
+});
 //----关键词云
 var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
 public_ajax.call_request('get',word_url,wordCloud);
@@ -84,7 +96,8 @@ $('#user-1 .demo-radio').on('click',function () {
     var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id;
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
-var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id=1';
+var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
+    '&from_ts='+from_ts+'&to_ts='+to_ts+'&classify_id=1';
 public_ajax.call_request('get',activePost_url,activeUser);
 function activeUser(persondata) {
     console.log(persondata)
