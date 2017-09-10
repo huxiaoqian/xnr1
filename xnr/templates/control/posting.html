@@ -5,9 +5,11 @@
 <link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
 <style>
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
+    #grouplist .demo-label{width: 95px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin-top: 10px;}
+    #grouplist .demo-radioInput{margin-top: 0;}
     #theme-4 .demo-label,#grouplist .demo-label{margin-left: 10px;}
     .demo-radio{display:none!important;}
-    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top: -3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
@@ -552,6 +554,7 @@
 {% block my_js %}
 <script>
     judgment('2');
+    //==================================以下====关于群可见后的操作==================================================
     $('.friends .dropdown-menu li').on('click',function(e) {
         if (e.target.innerHTML||e.target.innerHTML.toString().substring(1,4)=='img'){
             $('.friends button b').attr('title',e.target.innerText).text(e.target.innerText);
@@ -560,23 +563,74 @@
             $('.friends button b').attr('title',a).text(a);
         }
         if (e.target.innerHTML=='群可见'||$(this).find('span').text()=='群可见'){
-            var gl_url='/weibo_xnr_operate/show_group/?xnr_user_no='+nowUser;
-             public_ajax.call_request('get',gl_url,gpList)
+            var glfans_url='/weibo_xnr_operate/create_group_show_fans/?xnr_user_no='+ID_Num;
+            public_ajax.call_request('get',glfans_url,glfans);
+            var gl_url='/weibo_xnr_operate/show_group/?xnr_user_no='+ID_Num;
+            public_ajax.call_request('get',gl_url,gpList);
         }
     });
-    function gpList(data) {
-        var str='';
-        for (var k in data){
-            str+=
-                '<label class="demo-label" title="'+data[k]+'">'+
-                '   <input class="demo-radio" type="checkbox" name="gg" value='+k+'>'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
-                '</label>';
+    //========粉丝列表
+    function glfans(data) {
+        console.log(data)
+        if (isEmptyObject(data)){
+            $('#grouplist .gpmember').text('你还未有粉丝。');
+        }else {
+            var str='';
+            for (var f in data){
+                var name=data[f][0],photo=data[f][1];
+                if (data[f][0]==''){name=f};
+                if (data[f][1]==''){photo='/static/images/unknown.png'};
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="checkbox" name="ff" value='+f+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span>'+
+                    '   <img src="'+photo+'" style="width:20px;height:20px;"/>  '+ name+
+                    '</label>';
+            }
+            $('#grouplist .gpmember').html(str);
         }
-        $('#grouplist .group').html(str);
+    }
+    //========群列表
+    function gpList(data) {
+        if (isEmptyObject(data)){
+            $('#grouplist .group').text('还未创建任何群组');
+        }else {
+            var str='';
+            for (var k in data){
+                str+=
+                    '<label class="demo-label" title="'+data[k]+'">'+
+                    '   <input class="demo-radio" type="checkbox" name="gg" value='+k+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                    '</label>';
+            }
+            $('#grouplist .group').html(str);
+        }
         $('#grouplist').modal('show');
     };
+    //====确定这些群可见的===
+    function groupSure() {
 
+    }
+    //===新建一个群===
+    $('.sureADD').on('click',function () {
+        var n=$('.groupNUM').val();
+        var m=[];
+        $("#grouplist input:checkbox:checked").each(function (index,item) {
+            m.push($(this).val());
+        });
+        if (n==''){
+            $('#pormpt p').text('群名称不能为空。');
+            $('#pormpt').modal('show');
+        }else if (m.length==0){
+            $('#pormpt p').text('请勾选成员');
+            $('#pormpt').modal('show');
+        }else {
+            var mn='/weibo_xnr_operate/create_group/?xnr_user_no='+nowUser+'&group='+ n +
+                '&members='+m.join(',');
+            public_ajax.call_request('get',mn,postYES);
+        }
+    });
+    //===================================以上====关于群可见后的操作=========================================
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,

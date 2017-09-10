@@ -20,24 +20,24 @@ def weibo_xnr_count_info_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'date_time':{                #时间，例如：2017-09-07
+                    'date_time':{                #日期，例如：2017-09-07
                         'type':'string',
                         'index':'not_analyzed'
                     },
                     'fans_num':{                #粉丝数
                         'type':'long'
                     },
-                    'total_post_sum':{        #
+                    'total_post_sum':{          #总发帖量
                         'type':'long'
                     },
-                    'daily_post_num':{
-                         'type':'long'
+                    'daily_post_num':{          #日常发帖量
+                        'type':'long'
                     },
-                    'business_post_num':{
-                         'type':'long'
+                    'business_post_num':{       #业务发帖量
+                        'type':'long'
                     },
-                    'hot_follower_num':{
-                         'type':'long'
+                    'hot_follower_num':{        #热点追踪量
+                        'type':'long'
                     }
                 }
             }
