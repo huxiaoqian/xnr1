@@ -243,7 +243,7 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
+    result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
 
     # f_domain_data = open('domain.txt','rb')
 
@@ -298,7 +298,3 @@ if __name__ == '__main__':
     # print 'results:::',results
 
     #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':["3632086395"]}})
-
-
-
-
