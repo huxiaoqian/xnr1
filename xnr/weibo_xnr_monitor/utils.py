@@ -52,7 +52,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
     #编码：把一个Python对象编码转换成Json字符串   json.dumps()
     #解码：把Json格式字符串解码转换成Python对象   json.loads()
-    userslist = json.loads(userslist)					
+    # userslist = json.loads(userslist)					
     user_condition_list=[{'terms':{'uid':userslist}}]
 
     #step 3:lookup the content
@@ -122,14 +122,10 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     #step2: users condition
     #make sure the users range by classify choice
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
-    userslist = json.loads(userslist)
-    user_condition_list=[{'terms':{'uid':userslist}}]
 
-    #step 3:keyword condition,delete
-    #if search_content:
-    #    keyword_condition_list=[{'match':{'text':{'query':search_content}}}]
-    #else:
-    #    keyword_condition_list=[]
+    #userslist = json.loads(userslist)
+
+    user_condition_list=[{'terms':{'uid':userslist}}]
 
     #step 4:sort order condition set
     if order_id==1:         #按时间排序
@@ -137,12 +133,14 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     elif order_id==2:       #按热度排序
         sort_condition_list=[{'hot':{'order':'desc'}}]
     elif order_id==3:       #按敏感度排序
-        sort_condition_list=[{'mingan':{'order':'desc'}}]
+        sort_condition_list=[{'sensitive':{'order':'desc'}}]
     else:                   #默认设为按时间排序
         sort_condition_list=[{'timestamp':{'order':'desc'}}]
 
     #step 5:lookup the content
     flow_text_index_name_list=[]
+    hot_result=[]
+    print range_time_list
     for range_item in range_time_list:
     	iter_condition_list=[]
         if classify_id==1:             #当类别选择为所关注用户时
@@ -155,32 +153,33 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
         flow_text_index_name=flow_text_index_name_pre+range_from_date
-        flow_text_index_name_list.append(flow_text_index_name)
+        #flow_text_index_name_list.append(flow_text_index_name)
         #print flow_text_index_name
         #print iter_condition_list
         print sort_condition_list
-    print flow_text_index_name_list
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'bool':{
-                        'must':iter_condition_list
+    #print flow_text_index_name_list
+        query_body={
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'bool':{
+                            'must':iter_condition_list
+                            }
                         }
                     }
-                }
-            },
-        'size':MAX_VALUE,		
-        'sort':sort_condition_list
-        }
-    try:
-        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-            body=query_body)['hits']['hits']
-        #print 'folw_text_exit:',flow_text_exist
-        hot_result=flow_text_exist['_source']
-    except:
-        flow_text_exist=[]
-        hot_result=flow_text_exist 
+                },
+            'size':MAX_VALUE,		
+            'sort':sort_condition_list
+            }
+        try:
+            flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+                body=query_body)['hits']['hits']
+            result=[]
+            for item in flow_text_exist:
+                result.append(item['_source'])            
+        except:
+            result=[]
+        hot_result.append(result)
     return hot_result
 
 #################微博操作##########
@@ -356,26 +355,20 @@ def lookup_active_weibouser(classify_id,weiboxnr_id):
     for item in condition_list:
         print item
         query_body={
-            '_source':{
-                'include':[
-                    'id',            #用户ID
-                    'nick_name',     #昵称
-                    'user_location', #注册地
-                    #'fansum',        #粉丝数
-                    #'weibosum',      #微博数，该字段暂未创建
-                    #'infulence'     #影响力，该字段需创建然后计算
-                ]
-            },
+
             'query':item,
             'size':MID_VALUE,		#查询影响力排名前500的用户即可
             #'sort':{'infuluence':{'order':'desc'}}    #根据影响力排名
             }
     try:
         flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+        results=[]
+        for item in flow_text_exist:
+            results.append(item['_source'])
     except:
-        flow_text_exist=[]
+        results=[]
 
-    return flow_text_exist
+    return results
 
 #weibo_user_detail
 def weibo_user_detail(user_id):

@@ -3,11 +3,18 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/domain_library.css">
 <style>
+    a.disabled {
+        pointer-events: none;
+        filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+        -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+        opacity: 0.5; /*其他，透明度50%*/
+    }
     .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-toolbar .search{width: 100%}
 </style>
 {% endblock %}
 {% block main %}
@@ -25,29 +32,32 @@
                 <span style="font-size: 18px;font-weight: 900;color: #fff;">渗透领域创建</span>
             </div>
             <div class="b-1-2">
-                <div class="b-opt"><span>领域名称：</span><input type="text" class="name"/></div>
-                <div class="b-opt"><span>领域描述：</span><input type="text" class="description"></div>
+                <div class="b-opt"><span>领域名称：</span><input type="text" class="name" placeholder="请输入领域名称"></div>
+                <div class="b-opt"><span>领域描述：</span><input type="text" class="description" placeholder="请输入领域描述"></div>
                 <div class="b-opt">
                     <span>创建方式：</span>
-                    <div style="display: inline-block;width: 500px;text-align: left;">
+                    <div class="keyUser" style="display: inline-block;width: 500px;text-align: left;">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="deadio" checked>
+                            <input class="demo-radio" type="radio" name="deadio" value="by_keywords&keywords_string" checked>
                             <span class="demo-radioInput"></span> 按关键词
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="deadio">
+                            <input class="demo-radio" type="radio" name="deadio" value="by_seed_users&seed_users">
                             <span class="demo-radioInput"></span> 按种子用户
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="deadio">
-                            <span class="demo-radioInput"></span> 按当前输入用户
+                            <input class="demo-radio" type="radio" name="deadio" value="by_all_users&all_users">
+                            <span class="demo-radioInput"></span> 按所有用户
                         </label>
                     </div>
                     <input type="text" class="way" style="margin-left:110px;">
+                    <input type="file" class="uidlist" style="margin-left:110px;display: none;"
+                           placeholder="文件中的UID请用逗号分隔（请传txt文件）" multiple onchange="filelist(this.files)">
                 </div>
-                <div class="b-opt"><span>备注：</span><input type="text" class="remarks"></div>
-                <div class="b-opt" style="margin:20px 0 20px 110px;"><div class="addBuild"><p>创</p>
-                    <p>建</p></div></div>
+                <div class="b-opt"><span>备注：</span><input type="text" class="remarks" placeholder="请输入备注信息"></div>
+                <div class="b-opt" style="margin:20px 0 20px 110px;">
+                    <div class="addBuild"><p>创</p><p>建</p></div>
+                </div>
             </div>
         </div>
     </div>
@@ -64,10 +74,25 @@
     </div>
 </div>
 <!--模态框-->
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
 
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 <!--群体详情-->
 <div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 900px;margin: 60px auto 0;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -85,17 +110,19 @@
         </div>
     </div>
 </div>
-
 <!--群体描述-->
 <div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 1000px;margin: 60px auto 0;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体描述</h4>
+                <h4 class="modal-title">群体描述<span id="gd-1"></span></h4>
             </div>
             <div class="modal-body">
                 <div class="groupDetails">
+                    <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                    <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                    <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
                 </div>
             </div>
         </div>
@@ -147,5 +174,8 @@
 <script>
     judgment('8');
 </script>
+<script src="/static/js/worldcloud.min.js"></script>
+<script src="/static/js/dark.js"></script>
 <script src="/static/js/domain_library-1.js"></script>
+
 {% endblock %}

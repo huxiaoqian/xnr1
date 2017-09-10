@@ -10,7 +10,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.25);
+    background: rgba(8,23,44,0.5);
     position: relative;
     top: 80px;
 }

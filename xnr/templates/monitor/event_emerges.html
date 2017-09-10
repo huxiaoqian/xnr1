@@ -3,6 +3,45 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/event_emerges.css">
 <style>
+    /**/
+    .event-2 .mainWeibo .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .event-2 .mainWeibo .table-no-bordered,.table>tbody>tr>td,.event-2 .mainWeibo .fixed-table-container,
+    .event-2 .mainWeibo .bootstrap-table .table>thead>tr>th,.event-2 .mainWeibo .bootstrap-table .table,.event-2 .mainWeibo .table>tbody>tr>td{
+        border: none;
+    }
+    .event-2 .mainWeibo .bootstrap-table thead,.event-2 .mainWeibo .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .event-2 .mainWeibo .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .event-2 .mainWeibo .bootstrap-table .table:not(.table-condensed),.event-2 .mainWeibo .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .event-2 .mainWeibo .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .event-2 .mainWeibo .fixed-table-container {top: 15px;}
+    .event-2 .mainWeibo .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .event-2 .mainWeibo .fixed-table-toolbar .search {width: 100%;}
+    .event-2 .mainWeibo .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .event-2 .mainWeibo .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+
+    /**/
     .demo-label{display:inline-block}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
@@ -17,57 +56,37 @@
             <span class="icon icon-fire note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">事件涌现预警</b>
         </div>
-        <div class="output">导出至Excel文件</div>
-        <div class="eventSearch">
-            <input type="text" class="search"/>
-            <span class="sureFind">确定</span>
-        </div>
+        <div class="output1">导出至Excel文件</div>
+        <div class="output2">导出至Word文件</div>
     </div>
-    <div class="weiboContent" style="">
-        <div class="text_information">
-            <div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>
-            <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
-                <table id="input-table" class="In-table" style="width:100%;">
-                    <tbody class="In-table" style="width:100%!important;">
-                    </tbody>
-                </table>
-            </div>
-            <div class="fanye" style="width:100%;text-align:center;margin-top: 20px;">
-                    <span style="display:none;">
-                        每页显示
-                        <input type="text" id="PageNo" size="5" value="5" style="text-align:center;border:1px solid #ccc;"/>组
-                    </span>
-                <div id="div-button" style="display:inline-block;margin-left:5px;">
-                    <input type="button" value="首页" id="F-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                    <input type="button" value="上一页" id="Pre-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                    <input type="button" value="下一页" id="Nex-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                    <input type="button" value="尾页" id="L-page" style="border-radius: 5px;padding: 3px 5px;font-size: 10px;">
-                </div>
-                <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
-                <span style="display:inline-block;">总共<span id="s1"></span>页</span>
-            </div>
-        </div>
+    <div class="weiboContent">
+        <div id="weiboContent"></div>
     </div>
-    <div class="everyEvent" style="margin: 20px auto;">
+    <div class="everyEvent" style="margin:0 auto;">
         <div class="event_center">
             <div style="margin: 10px 0;">
-                <!--<input type="checkbox" class="amid">-->
                 <label class="demo-label">
                     <input class="demo-radio" type="checkbox" name="demo-checkbox">
                     <span class="demo-checkbox demo-radioInput"></span>
                 </label>
-                <img src="/static/images/post-6.png" alt="" class="center_icon">
-                <a class="center_1" href="###">小小小鸟</a>
-                <a href="###" class="report" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  一键上报</a>
+                <img src="/static/images/post-6.png" class="center_icon">
+                <a class="center_1">小小猪猪侠</a>
+                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  一键上报</a>
             </div>
             <div class="centerdetails" style="padding-left:40px;">
                 <div class="event-1">
-                    <p style="font-size: 16px;color:#b0bdd0;"><i class="icon icon-bookmark" style="color:#0de2ce;"></i> 主要参与用户</p>
-                    <div class="mainEvent">
-                        <div id="mainEvent"></div>
+                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>
+                    <div class="mainJoin">
+                        <div id="mainJoin"></div>
                     </div>
                 </div>
-                <p style="font-size: 16px;color:#b0bdd0;"><i class="icon icon-bookmark" style="color:#0de2ce;"></i> 相关典型微博</p>
+                <div class="event-2">
+                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>
+                    <div class="mainWeibo">
+                        <div id="mainWeibo"></div>
+                    </div>
+                </div>
+
                 <div class="center_rel">
                     <div class="icons">
                         <i class="icon icon-warning-sign weiboFlag"></i>
@@ -88,45 +107,18 @@
 </div>
 
 <!--模态框-->
-<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">系统提示</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <div class="coverbody">
-                    <div class="option1">
-                        <span>一、请先选择要进入的虚拟人身份</span>
-                        <div class="identity">
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> ZZ0902
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> SADJ93
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> KVF820
-                            </label>
-                        </div>
-                    </div>
-                    <div class="option2">
-                        <span>二、请先选择虚拟人的显示模式</span>
-                        <div class="showType">
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 隐身
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 昵称可见
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
-                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
             </div>
         </div>
     </div>
