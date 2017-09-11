@@ -86,7 +86,7 @@ def create_qq_xnr(xnr_info):
     try:
         # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
         #     return 0
-        es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number, \
+        es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
         body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'create_ts':create_ts,\
                 'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no})
         result = 1
