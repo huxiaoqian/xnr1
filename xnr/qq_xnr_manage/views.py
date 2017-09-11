@@ -29,8 +29,9 @@ def ajax_get_qr_code():
 def ajax_add_qq_xnr():
     xnr_info = {}
     qq_number = request.args.get('qq_number','')
-    qq_groups = request.args.get('qq_groups','')        #所有群号逗号分隔
+    qq_groups = request.args.get('qq_groups','')        #所有群号中文逗号分隔
     nickname = request.args.get('qq_nickname','')
+    remark = request.args.get('remark','')   # 备注
     # active_time = request.args.get('qq_active_time')
     create_time = int(time.time())
     xnr_info['qq_number'] = qq_number

@@ -33,27 +33,40 @@ def qq_xnr_mappings():
                     #     'type': 'string',
                     #     'index': 'not_analyzed'
                     # },
-                    'today_speak_num':{             # 今日发言数
-                        'type': 'long',
-                        'index': 'not_analyzed'
-                    },
-                    'all_speak_num':{               # 历史发言总数
-                        'type': 'long',
-                        'index': 'not_analyzed'
-                    },
-                    'today_remind':{
-                        'type': 'string',
-                        'index': 'not_analyzed'
-                    },
+                    # 'today_speak_num':{             # 今日发言数
+                    #     'type': 'long',
+                    #     'index': 'not_analyzed'
+                    # },
+                    # 'all_speak_num':{               # 历史发言总数
+                    #     'type': 'long',
+                    #     'index': 'not_analyzed'
+                    # },
+                    # 'today_remind':{
+                    #     'type': 'string',
+                    #     'index': 'not_analyzed'
+                    # },
                     'create_ts':{                    # 创建时间
-                        'type':'long',
-                        'index':'not_analyzed'
+                        'type':'long'
                     },
                     'qqbot_port':{
                         'type':'string',
                         'index':'not_analyzed'
-                    }
-                    #}                
+                    },
+                    'user_no':{
+                        'type':'int'
+                    },
+                    'xnr_user_no':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'password':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'remark':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    }     
                 }
             }
         }

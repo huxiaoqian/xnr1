@@ -78,4 +78,4 @@ if __name__ == '__main__':
     qq_number = 123456
     # date = '2017-06-24'
     date = QQ_S_DATE
-    gourp_message_mappings(qq_number, date)
+    group_message_mappings(qq_number, date)
