@@ -245,13 +245,7 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0002',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0003',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0006',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0005',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0007',body={'doc':{'submitter':'admin@qq.com'}})
-    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
+    result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
 
     # f_domain_data = open('domain.txt','rb')
 
@@ -280,7 +274,8 @@ if __name__ == '__main__':
     #         print 'domain:::',domain
     #         es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
 
-    # es.delete(index='weibo_domain',doc_type='group',id='wu_zhen')
+    #es.delete(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0002')
+    #['5537979196','3969238480','3302557313','5717296960']
     # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
     # f_domain_data.write(json.dumps(result))
 
@@ -295,7 +290,13 @@ if __name__ == '__main__':
     #         item = item['_source']
     #         xnr_user_no = item['xnr_user_no']
     #         es.index(index='weibo_xnr',doc_type='user',id=xnr_user_no,body=item)
+    # query_body = {
+    # 	'query':{
+    # 		'term':{'member_uids':'1725252714'}
+    # 	}
+    # }
 
+    # results = es.search(index='weibo_domain',doc_type='group',body=query_body)['hits']['hits']
+    # print 'results:::',results
 
-
-
+    #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':["3632086395"]}})
