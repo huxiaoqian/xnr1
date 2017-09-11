@@ -122,7 +122,6 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     #step2: users condition
     #make sure the users range by classify choice
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
-
     #userslist = json.loads(userslist)
 
     user_condition_list=[{'terms':{'uid':userslist}}]

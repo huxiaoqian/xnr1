@@ -7,10 +7,10 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from xnr.global_utils import es_flow_text
 from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,\
-                  xnr_today_remind,change_continue_xnrinfo,wxnr_timing_tasks,\
+                  xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				  show_history_posting,show_at_content,show_comment_content,show_like_content,\
-				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,wxnr_history_count
+				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
                   create_xnr_flow_text
@@ -57,6 +57,7 @@ def ajax_xnr_today_remind():
 	return json.dumps(results)
 
 #历史统计
+'''
 #http://219.224.134.213:9209/weibo_xnr_manage/wxnr_history_count/?xnr_user_no=WXNR0004&startdate=2017-09-01&enddate=2017-09-05
 @mod.route('/wxnr_history_count/')
 def ajax_wxnr_history_count():
@@ -65,8 +66,21 @@ def ajax_wxnr_history_count():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=wxnr_history_count(xnr_user_no,startdate,enddate)
 	return json.dumps(results)
+'''
 
-
+#按时间条件显示历史统计结果
+#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=today&start_time=0&end_time=1505044800
+#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=''&start_time=1504526400&end_time=1505044800
+@mod.route('/show_history_count/')
+def ajax_show_history_count():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	date_range=dict()
+	#今日统计type=today,start_time=0,end_time=当前时间；其他时间条件则type=''，start_time=起始时间，end_time=终止时间
+	date_range['type']=request.args.get('type','')
+	date_range['start_time']=int(request.args.get('start_time',''))
+	date_range['end_time']=int(request.args.get('end_time',''))
+	results=show_history_count(xnr_user_no,date_range)
+	return json.dumps(results)
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
 #http://219.224.134.213:9209/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no=WXNR0003
@@ -78,11 +92,13 @@ def ajax_change_continue_xnrinfo():
 
 #step 4.2:timing task list
 #获取定时发送任务列表
-#test:http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks/?user_id=WXNR0004
-@mod.route('/wxnr_timing_tasks/')
-def ajax_wxnr_timing_tasks():
-	user_id=request.args.get('user_id','')
-	results=wxnr_timing_tasks(user_id)
+#http://219.224.134.213:9209/weibo_xnr_manage/show_timing_tasks/xnr_user_no=WXNR0004&start_time=1500108142&end_time=1500108142
+@mod.route('/show_timing_tasks/')
+def ajax_show_timing_tasks():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	results=show_timing_tasks(xnr_user_no,start_time,end_time)
 	return json.dumps(results)
 
 #查看某一具体任务
@@ -127,7 +143,9 @@ def ajax_show_history_posting():
 	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
 	# daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
 	require_detail['task_source']=request.args.get('task_source','').split(',')
-	require_detail['now_time']=int(time.time())    
+	#require_detail['now_time']=int(time.time())    
+	require_detail['start_time']=int(request.args.get('start_time',''))
+	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_history_posting(require_detail)
 	return json.dumps(results)
 
@@ -139,6 +157,8 @@ def ajax_show_at_content():
 	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
 	#content_type='weibo'表示@我的微博，='at'表示@我的评论
 	require_detail['content_type']=request.args.get('content_type','').split(',')
+	require_detail['start_time']=int(request.args.get('start_time',''))
+	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_at_content(require_detail)
 	return json.dumps(results)
 
@@ -150,6 +170,8 @@ def ajax_show_comment_content():
 	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
 	## make 发出的评论   receive 收到的评论
 	require_detail['comment_type']=request.args.get('comment_type','').split(',')    
+	require_detail['start_time']=int(request.args.get('start_time',''))
+	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_comment_content(require_detail)
 	return json.dumps(results)
 
@@ -161,6 +183,8 @@ def ajax_show_like_content():
 	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
 	## send 发出的赞   receive 收到的赞
 	require_detail['like_type']=request.args.get('like_type','').split(',')
+	require_detail['start_time']=int(request.args.get('start_time',''))
+	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_like_content(require_detail)
 	return json.dumps(results)
 
