@@ -61,12 +61,14 @@ class SinaOperateAPI:
     def request_image_url(self, image_path):
         image_url = 'http://picupload.service.weibo.com/interface/pic_upload.php?&mime=image%2Fjpeg' \
                     '&data=base64&url=0&markpos=1&logo=&nick=0&marks=1&app=miniblog'
-
+        print 'image_path:::',image_path
         _path = re.sub("[\[\]'\" ]", "", image_path)
+        print '_path::::',_path
         img_path = _path.split(',')
 
         image_ids = []
         for img in img_path:
+            print 'img:::',img
             try:
                 b = base64.b64encode(open(img, 'rb').read())
                 data = urllib.urlencode({'b64_data': b})

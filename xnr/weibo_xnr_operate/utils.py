@@ -3,6 +3,8 @@ import os
 import time
 import json
 import sys
+import random
+import base64
 
 #reload(sys)
 #sys.path.append('../../')
@@ -35,10 +37,29 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
-                        FOLLOWERS_LIST
+                        FOLLOWERS_LIST,IMAGE_PATH
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
+
+def get_image_path(image_code):
+
+    image_code_list = image_code.encode('utf-8').split('，')
+    image_path_list = []
+    for image in image_code_list:
+        imgData = base64.b64decode(image)
+        time_name = time.strftime('%Y%m%d%H%M%S')
+        image_path = time_name + '_%d' % random.randint(0,100)
+        leniyimg = open(IMAGE_PATH+image_path+'.jpg','wb')   
+        leniyimg.write(imgData)
+        leniyimg.close()
+
+        image_path_join = os.path.join(IMAGE_PATH,image_path+'.jpg')
+        print 'image_path_join:::',image_path_join
+        image_path_list.append(image_path_join)
+    
+    return image_path_list
+
 
 def push_keywords_task(task_detail):
 
@@ -64,7 +85,7 @@ def get_submit_tweet(task_detail):
     tweet_type = task_detail['tweet_type']
     #operate_type = task_detail['operate_type']
     xnr_user_no = task_detail['xnr_user_no']
-    p_url = task_detail['p_url']
+    p_url = task_detail['p_url'].encode('utf-8')
     rank = task_detail['rank']
     rankid = task_detail['rankid']
 

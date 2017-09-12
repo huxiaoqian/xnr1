@@ -51,6 +51,7 @@ $('#container .type_page #myTabs a').on('click',function () {
     public_ajax.call_request('get',recommendUrl,recommendlist);
 })
 
+//
 var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
@@ -70,13 +71,13 @@ function obtain(t) {
 }
 $('#sure_post').on('click',function () {
     obtain('o');
-    var txt=$('#post-2-content').val();
+    var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
     var flag=$('.friends button b').text(),rank='';
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
     //原创
     var post_url_1='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank;
-        //'&p_url=["/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/images/1.jpg","/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/images/2.jpg"]';
+    if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
             var a=Date.parse(new Date($('.start').val()))/1000;
@@ -90,12 +91,13 @@ $('#sure_post').on('click',function () {
         }
     }
     if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
+    console.log(post_url_1)
     public_ajax.call_request('get',post_url_1,postYES)
 });
 //群可见的情况
 var rankidList=[];
 function groupSure() {
-    $("#grouplist input:checkbox:checked").each(function (index,item) {
+    $("#grouplist input:checkbox[name='gg']:checked").each(function (index,item) {
         rankidList.push('1022:230491'+$(this).val());
     });
 }

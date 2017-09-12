@@ -241,13 +241,13 @@ def get_influ_retweeted_num(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        if S_TYPE == 'test':
-            es_results = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
-                                body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-            current_time = es_results[0]['_source']['timestamp']
-        else:
-            current_time = time.time()
-    
+        # if S_TYPE == 'test':
+        #     es_results = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
+        #                         body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
+        #     current_time = es_results[0]['_source']['timestamp']
+        # else:
+        #     current_time = time.time()
+        current_time = time.time()
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -320,13 +320,13 @@ def get_influ_commented_num(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        if S_TYPE == 'test':
-            es_results = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
-                                body={'query':{'term':{'comment_type':'receive'}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-            current_time = es_results[0]['_source']['timestamp']
-        else:
-            current_time = time.time()
-    
+        # if S_TYPE == 'test':
+        #     es_results = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+        #                         body={'query':{'term':{'comment_type':'receive'}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
+        #     current_time = es_results[0]['_source']['timestamp']
+        # else:
+        #     current_time = time.time()
+        current_time = time.time()
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -402,13 +402,13 @@ def get_influ_like_num(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        if S_TYPE == 'test':
-            es_results = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
-                                body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-            current_time = es_results[0]['_source']['timestamp']
-        else:
-            current_time = time.time()
-    
+        # if S_TYPE == 'test':
+        #     es_results = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
+        #                         body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
+        #     current_time = es_results[0]['_source']['timestamp']
+        # else:
+        #     current_time = time.time()
+        current_time = time.time()
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -483,13 +483,13 @@ def get_influ_at_num(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        if S_TYPE == 'test':
-            es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
-                                body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-            current_time = es_results[0]['_source']['timestamp']
-        else:
-            current_time = time.time()
-    
+        # if S_TYPE == 'test':
+        #     es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+        #                         body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
+        #     current_time = es_results[0]['_source']['timestamp']
+        # else:
+        #     current_time = time.time()
+        current_time = time.time()
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -562,13 +562,13 @@ def get_influ_private_num(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        if S_TYPE == 'test':
-            es_results = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
-                                body={'query':{'term':{'private_type':'receive'}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-            current_time = es_results[0]['_source']['timestamp']
-        else:
-            current_time = time.time()
-    
+        # if S_TYPE == 'test':
+        #     es_results = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+        #                         body={'query':{'term':{'private_type':'receive'}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
+        #     current_time = es_results[0]['_source']['timestamp']
+        # else:
+        #     current_time = time.time()
+        current_time = time.time()
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -681,7 +681,7 @@ def penetration_total(xnr_user_no):
     total_dict['fans_group'] = {}
     total_dict['feedback_total'] = {}
     total_dict['self_info'] = {}
-    total_dict['warning_report'] = {}
+    total_dict['warning_report_total'] = {}
 
     follow_group = get_pene_follow_group_sensitive(xnr_user_no)
     fans_group = get_pene_fans_group_sensitive(xnr_user_no)
@@ -879,11 +879,11 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item):
         index_name_sort = weibo_feedback_comment_index_name
         index_type_sort = weibo_feedback_comment_index_type
 
-    # if S_TYPE == 'test':
-    #     current_time = datetime2ts(S_DATE)
-    # else:
-    #     current_time = time.time()
-    current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE)
+    else:
+        current_time = time.time()
+    #current_time = int(time.time())
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
     
@@ -931,13 +931,17 @@ def get_pene_warning_report_sensitive(xnr_user_no):
     report_type_list = [u'人物',u'事件',u'言论']
     
 
-    if S_TYPE == 'test':
-        es_time_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
-                        body={'query':{'match_all':{}},'sort':{'report_time':{'order':'desc'}}})['hits']['hits']
+    # if S_TYPE == 'test':
+    #     es_time_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+    #                     body={'query':{'match_all':{}},'sort':{'report_time':{'order':'desc'}}})['hits']['hits']
 
-        current_time = es_time_result[0]['_source']['report_time']
+    #     current_time = es_time_result[0]['_source']['report_time']
+    # else:
+    #     current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE)
     else:
-        current_time = int(time.time())
+        current_time = time.time()
 
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
