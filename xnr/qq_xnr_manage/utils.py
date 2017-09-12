@@ -6,6 +6,7 @@ import sys
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type, ABS_LOGIN_PATH
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
+from xnr.utils import user_no2qq_id
 import socket
 from xnr.qq.getgroup import getgroup_v2
 from xnr.qq.receiveQQGroupMessage import execute_v2
@@ -58,28 +59,36 @@ def find_port(exist_port_list):
     return port
 
 
-
-
-
-
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
     qq_number = xnr_info['qq_number']
-    qq_groups = xnr_info['qq_groups']
+    qq_groups = xnr_info['qq_groups'].split('，')
     nickname = xnr_info['nickname']
     
     # active_time = xnr_info[3]
     create_ts = xnr_info['create_ts']
     exist_port_list = get_all_ports()           #返回list形式int型端口号
     qqbot_port = find_port(exist_port_list)
-    qq_groups_num = len(qq_groups.split(','))
+    #qq_groups_num = len(qq_groups)
     # qq_groups = getgroup_v2(qq_number)
+
+    es_results = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body={'query':{'match_all':{}},\
+                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+    if es_results:
+        user_no_max = es_results[0]['_source']['user_no']
+        user_no_current = user_no_max + 1 
+    else:
+        user_no_current = 1
+
+    task_detail['user_no'] = user_no_current
+    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 WXNR0001
+
     try:
         # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
         #     return 0
-        es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number, \
+        es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
         body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'create_ts':create_ts,\
-                'qqbot_port':qqbot_port,'qq_groups_num':qq_groups_num})
+                'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no})
         result = 1
     except:
         result = 0

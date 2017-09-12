@@ -431,7 +431,7 @@ def get_influ_like_num(xnr_user_no):
                     }
                 }
             }
-
+            
             query_body_total = {
                 'query':{
                     'bool':{

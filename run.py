@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import base64
 import os
 import flask_security
 from flask_login import current_user
@@ -38,6 +39,8 @@ def allowed_file(filename):
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        print 'request::',request.files
+        
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)

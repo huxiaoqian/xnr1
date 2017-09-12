@@ -45,6 +45,9 @@ def uid2nick_name_photo(uid):
         
     return nick_name,photo_url
 
+def user_no2qq_id(user_no):
+    task_id = 'QXNR'+str('%04d'%user_no)  #五位数 QXNR0001
+    return task_id
 
 def user_no2_id(user_no):
     task_id = 'WXNR'+str('%04d'%user_no)  #五位数 WXNR0001
