@@ -12,7 +12,9 @@ $('.b-1-2 .keyUser input:radio[name="deadio"]').on('click',function () {
         $('.way').hide();
         $('.uidlist').show();
     }
-})
+});
+var lab_list={'by_seed_users':'按种子用户','by_keywords':'按关键词','by_all_users':'按所有用户'};
+var labType_list={'by_seed_users':'seed_users','by_keywords':'keywords_string','by_all_users':'all_users'};
 var filesUID='';
 function filelist(files) {
     for(var i=0,f;f=files[i];i++){
@@ -117,6 +119,13 @@ function group(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.create_type==''||row.create_type=='null'||row.create_type=='unknown'||!row.create_type){
+                        return '未知';
+                    }else {
+                        return lab_list[row.create_type];
+                    };
+                },
             },
             {
                 title: "创建进度",//标题
@@ -174,7 +183,7 @@ function group(data) {
                     else if (Number(row.compute_status) > 1){dis1='';dis2=''}
                     return '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_group_detail_portrait\')" class="icon icon-group '+dis1+'" title="查看群体"></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\')" class="icon icon-paste '+dis2+'" title="查看描述"></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\'show_domain_role_info\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+row.create_type+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color: white;" onclick="delt(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
                 },
             },
@@ -450,9 +459,15 @@ function groupList(data) {
         ],
     });
 }
+//更新
+function refresh(domainName,description,remark,create_type) {
+    var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
+        '&description='+description+'&submitter='+admin+'&remark='+remark+
+        '&create_type='+create_type+'&'+labType_list[create_type]+'='+word_user;
+    public_ajax.call_request('get',upNew_url,successFail);
+}
 //删除
 function delt(domain) {
     var delte_url='/weibo_xnr_knowledge_base_management/delete_domain/?domain_name='+domain;
-    console.log(creat_url);
     public_ajax.call_request('get',delte_url,successFail);
 }

@@ -61,7 +61,7 @@
 		}).delegate('.face', {
 			click : function(event) {
 				$('#sinaEmotion').hide();
-				$target.insertText($(this).children('img').prop('alt'));
+				$target.append($(this).children('img').prop('alt'));
 				event.preventDefault();
 			}
 		});

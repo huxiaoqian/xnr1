@@ -22,7 +22,7 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
-from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,\
+from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
                            ts2datetime,datetime2ts,ts2datetimestr
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.weibo_xnr_warming.utils import show_date_warming
@@ -565,7 +565,7 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 ###########获取定时发送任务列表##############
 def show_timing_tasks(xnr_user_no,start_time,end_time):
 	#获取虚拟人编号
-	user_no_str=user_id[4:8]
+	user_no_str=xnr_user_no[4:8]
 	#print user_no_str
 	user_no=long(user_no_str)
 	#print user_no
@@ -654,7 +654,7 @@ def show_history_posting(require_detail):
 
 	date_range_start_ts=require_detail['start_time']
 	date_range_end_ts=require_detail['end_time']
-	get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
 
 	query_body={
 		'query':{
