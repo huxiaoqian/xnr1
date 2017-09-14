@@ -26,6 +26,8 @@ var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=t
 public_ajax.call_request('get',comURL,com);
 function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
+        var mid;
+        if (idbox=='comment-1'){mid='reply_comment'}else {mid='reply_retweet'}
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
             data:data,
@@ -111,7 +113,7 @@ function com(data) {
                             '            </div>'+
                             '        </div>'+
                             '        <div class="com com-2">'+
-                            '            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的评论：'+
+                            '            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的回复：'+
                             '            <span class="com-2-tent">'+txt+'</span>'+
                             '        </div>'+
                             '        <div class="com com-3" style="overflow: hidden;">'+
@@ -128,7 +130,7 @@ function com(data) {
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                             '                </label>'+
-                            '                <a href="###" class="clone-2-4" midurl="reply_comment" onclick="comMent(this)">回复</a>'+
+                            '                <a href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent(this)">回复</a>'+
                             '            </div>'+
                             '        </div>'+
                             '    </div>'+
@@ -245,7 +247,7 @@ function letter(data) {
                         '            <img src="/static/images/post-1.png" class="clone-2-1">'+
                         '            <img src="/static/images/post-2.png" class="clone-2-2">'+
                         '            <img src="/static/images/post-11.png" class="clone-2-3">'+
-                        '            <a href="###" class="clone-2-4" midurl="reply_retweet" onclick="comMent(this)">发送</a>'+
+                        '            <a href="###" class="clone-2-4" midurl="reply_private" onclick="comMent(this)">发送</a>'+
                         '        </div>'+
                         '    </div>'+
                         '</div>';
@@ -259,6 +261,7 @@ function letter(data) {
 };
 //=====@回复======
 function reply(data) {
+    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,
@@ -286,7 +289,7 @@ function reply(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
+                    var name,txt,img,time;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
@@ -297,33 +300,65 @@ function reply(data) {
                     }else {
                         img=row.photo_url;
                     };
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        time='暂无内容';
+                    }else {
+                        time=getLocalTime(row.timestamp);
+                    };
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
                         txt=row.text;
                     };
+
+                    var star1='<img src="/static/images/level.png" alt="">',
+                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                    if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
+                        star=star2.repeat(5);
+                    }else if (row.sensitive_info>0&&row.sensitive_info<=3){
+                        star+=star1;
+                        star+=star2.repeat(4);
+                    }else if (row.sensitive_info>3&&row.sensitive_info<=5){
+                        star+=star1.repeat(2);
+                        star+=star2.repeat(3);
+                    }else if (row.sensitive_info>5&&row.sensitive_info<=7){
+                        star+=star1.repeat(3);
+                        star+=star2.repeat(2);
+                    }else if (row.sensitive_info>7&&row.sensitive_info<=10){
+                        star+=star1.repeat(4);
+                        star+=star2.repeat(1);
+                    }else if (row.sensitive_info>10){
+                        star+=star1.repeat(5);
+                    };
+                    if (row.weibo_type=='follow'){
+                        user='已关注用户';
+                    }else if (row.weibo_type=='friend'){
+                        user='相互关注用户';
+                    }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+                        user='未关注用户';
+                    }
+
                     var str=
                         '<div class="replyAll">'+
                         '    <div class="replyEvery">'+
-                        '        <img src="/static/images/unknown.png" alt="" class="rep-head">'+
+                        '        <img src="'+img+'" alt="" class="rep-head">'+
+                        '        <span style="display: none;" class="mid">'+row.mid+'</span>'+
                         '        <div class="rep rep-1">'+
-                        '            <b class="rep-1-name">一只狗的使命</b>'+
+                        '            <b class="rep-1-name">来自 '+user+'</b>&nbsp;&nbsp;'+
+                        '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;'+
                         '            <div class="rep-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
-                        '                <div class="rep-img" style="display: inline-block;">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
-                        '                </div>'+
+                        '                <div class="rep-img" style="display: inline-block;">'+star+'</div>'+
                         '            </div>'+
-                        '            <div class="rep-1-time">2017-11-11 12:12</div>'+
+                        // '            <div class="rep-1-time">'+time+'</div>'+
                         '        </div>'+
                         '        <div class="rep rep-2">'+
-                        '            <span class="rep-2-tent">嘿嘿以哇哈打开上课就放假哦if哦啊是否看见了卡接卡撒佛家</span>'+
+                        '            <b style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的回复：'+
+                        '            <span class="rep-2-tent">'+txt+'</span>'+
                         '        </div>'+
                         '        <div class="rep rep-3">'+
-                        '            <img src="/static/images/demo.jpg" alt="" class="rep-3-img">'+
-                        '            <a class="rep-3-reply copyFinish" datatype="replyClone">回复</a>'+
+                        // '            <img src="/static/images/demo.jpg" alt="" class="rep-3-img">'+
+                        '            <a class="rep-3-reply copyFinish" datatype="replyClone" onclick="showInput(this)">回复</a>'+
                         '        </div>'+
                         '    </div>'+
                         '    <div class="replyClone">'+
@@ -335,7 +370,7 @@ function reply(data) {
                         '                <input class="demo-radio clone-2-3" type="checkbox" name="desc4">'+
                         '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                         '            </label>'+
-                        '            <a href="###" class="clone-2-4">回复</a>'+
+                        '            <a href="###" class="clone-2-4" midurl="reply_at" onclick="comMent(this)">发送</a>'+
                         '        </div>'+
                         '    </div>'+
                         '</div>';
@@ -501,51 +536,16 @@ function comMent(_this){
     var middle=$(_this).attr('midurl');
     var mid = $(_this).parent().parent().parent().find('.mid').text();
     if (txt!=''){
-        var comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-        public_ajax.call_request('get',comurl,postYES)
+        var comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&mid='+mid;
+        if (middle!='reply_at'){
+            comurl+='&xnr_user_no='+xnrUser+'&tweet_type=日常发帖';
+        }
+        public_ajax.call_request('get',comurl,postYES);
     }else {
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
     }
 }
-//============================
-$('#comment-1 .commentClone .clone-2-4').on('click',function () {
-    var txt = $(this).parent().prev().val();
-    if (txt!=''){
-        var post_url_1='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-        public_ajax.call_request('get',post_url_1,postYES)
-    }else {
-        $('#pormpt p').text('回复内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-});
-//评论回复中的回复
-$('.clone-2-4').on('click',function () {
-    var txt=$(this).parent().prev().val();
-})
-
-//转发
-$('.forwardClone .clone-2-4').on('click',function () {
-    var txt = $(this).parent().prev().val();
-    var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type='+actType+'&operate_type='+operateType+'&uid='+uid+
-        '&text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-    public_ajax.call_request('get',post_url_2,postYES)
-});
-
-//@用户
-$('.replyClone .clone-2-4').on('click',function () {
-    var txt = $(this).parent().prev().val();
-    var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-    public_ajax.call_request('get',post_url_3,postYES)
-});
-
-//私信
-$('.letterClone .clone-2-4').on('click',function () {
-    var txt = $(this).parent().prev().val();
-    var post_url_4='/weibo_xnr_operate/reply_private/?text='+txt+'&xnr_user_no='+xnrUser+'&uid='+uid;
-    public_ajax.call_request('get',post_url_4,postYES)
-});
-
 
 //关注回粉
 // 关注
