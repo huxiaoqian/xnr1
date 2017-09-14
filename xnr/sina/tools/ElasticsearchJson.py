@@ -8,7 +8,7 @@ from elasticsearch.helpers import bulk, scan
 from sensitive.get_sensitive import get_sensitive_info,get_sensitive_user
 import sys
 sys.path.append('../../')
-from utils import uid2xnr_user_no,save_to_fans_follow_ES,judge_sensing_sensor
+from utils import uid2xnr_user_no,save_to_fans_follow_ES,judge_sensing_sensor,judge_trace_follow
 from global_utils import es_xnr as es
 from global_utils import R_WEIBO_XNR_FANS_FOLLOWERS as r_fans_follows 
 from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
@@ -87,6 +87,9 @@ def executeES(indexName, typeName, listData):
                 sensor_mark = judge_sensing_sensor(xnr_user_no,data['uid'])
                 data['sensor_mark'] = sensor_mark
 
+                trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
+                data['trace_follow_mark'] = trace_follow_mark
+
         elif indexName == 'weibo_feedback_fans':
             _id = data["root_uid"]+'_'+data["mid"]
             xnr_user_no = uid2xnr_user_no(data["root_uid"])
@@ -96,10 +99,12 @@ def executeES(indexName, typeName, listData):
             if xnr_user_no:
                 save_to_fans_follow_ES(xnr_user_no,data["uid"],save_type,follow_type)
                 save_to_redis_fans_follow(xnr_user_no,data["uid"],save_type)
-                print '!!!!fans!!!'
+                
                 sensor_mark = judge_sensing_sensor(xnr_user_no,data['uid'])
-                print 'sensor_mark:::',sensor_mark
                 data['sensor_mark'] = sensor_mark
+
+                trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
+                data['trace_follow_mark'] = trace_follow_mark
 
         else:
             _id = data["mid"]
