@@ -10,16 +10,20 @@
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
         .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
         .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-        .customizeTime {
+        #start_1,#end_1,#sure-1,#start_2,#end_2,#sure-2,#start_3,#end_3,#sure-3 {
             display:none;
-            background: transparent;
-            width: 200px;
-            padding: 2px 7px;
+        }
+        #sure-1,#sure-2,#sure-3 {
+            padding:1px 6px;
             color: white;
             font-size: 12px;
             border: 1px solid silver;
             border-radius: 5px;
-            text-align: center;
+            background:transparent;
+            cursor: pointer;
+        }
+        #sure-1:hover,#sure-2:hover,#sure-3:hover {
+            background: rgba(8,23,44,0.65);
         }
     </style>
 {% endblock %}
@@ -38,40 +42,107 @@
     <div class="rightWindow">
         <div class="li-1 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史统计</h4>
+            <div class="choosetime choosetime-1" style="margin: 10px 0;" midurl="show_history_count">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <span class="demo-checkbox demo-radioInput"></span> 今天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <span class="demo-checkbox demo-radioInput"></span> 昨天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <span class="demo-checkbox demo-radioInput"></span> 7天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <span class="demo-checkbox demo-radioInput"></span> 30天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time1" value='mize' shhi="1">
+                    <span class="demo-checkbox demo-radioInput"></span> 自定义
+                </label>
+                <input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <span id="sure-1" class="sureTime" shhi="1">确定</span>
+                <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
+            </div>
             <div class="history">
                 <div id="history"></div>
             </div>
         </div>
         <div class="li-2 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;定时发送任务列表</h4>
+            <div class="choosetime choosetime-2" style="margin: 10px 0;" midurl="show_timing_tasks">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time2" value=''>
+                    <span class="demo-checkbox demo-radioInput"></span> 今天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <span class="demo-checkbox demo-radioInput"></span> 昨天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <span class="demo-checkbox demo-radioInput"></span> 7天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <span class="demo-checkbox demo-radioInput"></span> 30天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time2" value='mize' shhi="2">
+                    <span class="demo-checkbox demo-radioInput"></span> 自定义
+                </label>
+                <input type="text" size="16" id="start_2" class="form_datetime" placeholder="开始时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <input type="text" size="16" id="end_2" class="form_datetime" placeholder="结束时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <span id="sure-2" class="sureTime" shhi="2">确定</span>
+                <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
+            </div>
             <div class="time">
                 <div id="time"></div>
             </div>
         </div>
         <div class="li-3 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
-            <div class="choosetime" style="margin: 10px 0;">
+            <div class="choosetime choosetime-3" style="margin: 10px 0;" midurl="show_history_posting">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time" value=''>
-                    <span class="demo-checkbox demo-radioInput"></span> 1天
+                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <span class="demo-checkbox demo-radioInput"></span> 今天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <span class="demo-checkbox demo-radioInput"></span> 昨天
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 7天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time" value=''>
-                    <span class="demo-checkbox demo-radioInput"></span> 15天
-                </label>
-                <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time" value=''>
+                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 30天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time" value='mize'>
+                    <input class="demo-radio" type="radio" name="time3" value='mize' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 自定义
                 </label>
-                <input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>
+                <input type="text" size="16" id="start_3" class="form_datetime" placeholder="开始时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <input type="text" size="16" id="end_3" class="form_datetime" placeholder="结束时间"
+                       style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                <span id="sure-3" class="sureTime" shhi="3">确定</span>
+                <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
             </div>
             <div class="news">
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">
@@ -373,6 +444,23 @@
         todayBtn: true,
         pickerPosition: "bottom-left"
     });
-
+    $('#start_1').on('changeDate', function(ev){
+        $('#end_1').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end_1').on('changeDate', function(ev){
+        $('#start_1').datetimepicker('setEndDate',ev.date);
+    });
+    $('#start_2').on('changeDate', function(ev){
+        $('#end_2').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end_2').on('changeDate', function(ev){
+        $('#start_2').datetimepicker('setEndDate',ev.date);
+    });
+    $('#start_3').on('changeDate', function(ev){
+        $('#end_3').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end_3').on('changeDate', function(ev){
+        $('#start_3').datetimepicker('setEndDate',ev.date);
+    });
 </script>
 {% endblock %}

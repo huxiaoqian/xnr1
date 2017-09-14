@@ -107,6 +107,9 @@
             <li role="presentation">
                 <a href="#business" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;业务发帖</a>
             </li>
+            <li role="presentation">
+                <a href="#reportNote" role="tab" data-toggle="tab"><b class="icon icon-cloud-upload"></b>&nbsp;跟踪转发</a>
+            </li>
         </ul>
         <div class="post_post">
             <div class="post-1" style="margin-top: 20px;">
@@ -432,6 +435,10 @@
                     </div>
                 </div>
             </div>
+
+            <div role="tabpanel" class="tab-pane" id="reportNote">
+
+            </div>
         </div>
 
         <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
@@ -630,9 +637,10 @@
                     img.src = e.target.result;
                     editor.appendChild(img);
                     var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
+                    var rr=res.substring(0,res.length);
                     $.ajax({
                         type:'GET',
-                        url:'/weibo_xnr_operate/get_image_path/?image_code='+res,
+                        url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
                         async:true,
                         //timeout:300,
                         //data:{"name":"xm"},//传参数
@@ -660,7 +668,6 @@
     }
     var imgRoad=[];
     function uploadIMG(data) {
-        console.log(data)
         imgRoad.push(data[0]);
     }
     function show(){

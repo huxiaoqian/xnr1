@@ -47,7 +47,7 @@ class SinaOperateAPI:
             response = urllib2.urlopen(request, timeout=90)
 
             content = response.read()
-            #print content
+            #print 'content::',content
             succ = json.loads(content)
             if succ['code'] == '100000':
                 print 'publish success...', succ['msg']
@@ -131,7 +131,7 @@ class SinaOperateAPI:
         """
         w_url = 'http://weibo.com/aj/v6/mblog/forward?ajwvr=6&domain=%s&__rnd=%d' % (self.uid, int(time.time() * 1000))
         print w_url
-
+        print '!!!!'
         post_data = {
             "_t": "0",
             "appkey": "",
@@ -152,6 +152,7 @@ class SinaOperateAPI:
             "r_id": "",
             "style_type": "1"
         }
+        print 'post_data::',post_data
         return self.__getPostURL(w_url, post_data)
 
     def comment(self):

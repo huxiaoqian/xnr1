@@ -86,7 +86,7 @@ function weibo(data) {
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+nameuid+'</a>'+
                         '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
-                        '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  一键上报</a>'+
+                        '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '           <div>'+str+'</div>'+
                         '        </div>'+
@@ -149,7 +149,6 @@ function oneUP(_this) {
     }
     var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
     '&weibo_info='+dataStr;
-    console.log(once_url)
     public_ajax.call_request('get',once_url,postYES);
 }
 //操作返回结果

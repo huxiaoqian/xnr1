@@ -1,5 +1,5 @@
 var flag='',idbox='comment-1';
-var xnrUser=nowUser;
+var xnrUser=ID_Num;
 $('.copyFinish').on('click',function () {
     flag=$('#myTabs li.active').attr('flag');
     var _name=$(this).parent().prev().prev().find('b').text();
@@ -21,11 +21,10 @@ $('#container .desc_index .demo-label').on('click',function () {
     var comURL='/weibo_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1;
     public_ajax.call_request('get',comURL,com);
 })
-//评论回复
+//评论回复----转发回复
 var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
 public_ajax.call_request('get',comURL,com);
 function com(data) {
-    console.log(data)
     if (idbox=='comment-1'||idbox=='forwarding-1'){
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
@@ -70,31 +69,54 @@ function com(data) {
                         }else {
                             txt=row.text;
                         };
+                        var star1='<img src="/static/images/level.png" alt="">',
+                            star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
+                            star=star2.repeat(5);
+                        }else if (row.sensitive_info>0&&row.sensitive_info<=3){
+                            star+=star1;
+                            star+=star2.repeat(4);
+                        }else if (row.sensitive_info>3&&row.sensitive_info<=5){
+                            star+=star1.repeat(2);
+                            star+=star2.repeat(3);
+                        }else if (row.sensitive_info>5&&row.sensitive_info<=7){
+                            star+=star1.repeat(3);
+                            star+=star2.repeat(2);
+                        }else if (row.sensitive_info>7&&row.sensitive_info<=10){
+                            star+=star1.repeat(4);
+                            star+=star2.repeat(1);
+                        }else if (row.sensitive_info>10){
+                            star+=star1.repeat(5);
+                        };
+                        if (row.weibo_type=='follow'){
+                            user='已关注用户';
+                        }else if (row.weibo_type=='friend'){
+                            user='相互关注用户';
+                        }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+                            user='未关注用户';
+                        }
                         var str=
                             '<div class="commentAll">'+
                             '    <div class="commentEvery">'+
                             '        <img src="'+img+'" alt="" class="com-head">'+
                             '        <div class="com com-1">'+
-                            '            <b class="com-1-name">'+name+'</b>'+
-                            '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                            '            <b class="com-1-name">来自 '+user+'</b>&nbsp;&nbsp;&nbsp;'+
+                            '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;&nbsp;'+
                             '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                             '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                             '            <div class="com-level">'+
                             '                <span style="display: inline-block;">敏感度：</span>'+
-                            '                <div class="com-img" style="display: inline-block;">'+
-                            '                    <img src="/static/images/level.png" alt="">'+
-                            '                    <img src="/static/images/level.png" alt="">'+
-                            '                    <img src="/static/images/level.png" alt="">'+
+                            '                <div class="com-img" style="display: inline-block;">'+star+
                             '                </div>'+
                             '            </div>'+
                             '        </div>'+
                             '        <div class="com com-2">'+
-                            '            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">演员的修养</b>的评论：'+
+                            '            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的评论：'+
                             '            <span class="com-2-tent">'+txt+'</span>'+
                             '        </div>'+
-                            '        <div class="com com-3">'+
-                            '            <span class="com-3-time">2017-11-11 11:11</span>'+
-                            '            <span>来自<span class="com-3-source">微博用户 weibo.com</span></span>'+
+                            '        <div class="com com-3" style="overflow: hidden;">'+
+                            // '            <span class="com-3-time">2017-11-11 11:11</span>'+
+                            // '            <span>来自<span class="com-3-source">'+user+'</span></span>'+
                             '            <a class="com-3-reply copyFinish" datatype="commentClone" onclick="showInput(this)">回复</a>'+
                             '        </div>'+
                             '        <div class="commentClone">'+
@@ -126,6 +148,7 @@ function com(data) {
         focus(data);
     }
 }
+//====私信回复====
 function letter(data) {
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
@@ -171,21 +194,44 @@ function letter(data) {
                         txt=row.text;
                         // console.log(row.text.split('\n'))
                     };
+                    var star1='<img src="/static/images/level.png" alt="">',
+                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                    if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
+                        star=star2.repeat(5);
+                    }else if (row.sensitive_info>0&&row.sensitive_info<=3){
+                        star+=star1;
+                        star+=star2.repeat(4);
+                    }else if (row.sensitive_info>3&&row.sensitive_info<=5){
+                        star+=star1.repeat(2);
+                        star+=star2.repeat(3);
+                    }else if (row.sensitive_info>5&&row.sensitive_info<=7){
+                        star+=star1.repeat(3);
+                        star+=star2.repeat(2);
+                    }else if (row.sensitive_info>7&&row.sensitive_info<=10){
+                        star+=star1.repeat(4);
+                        star+=star2.repeat(1);
+                    }else if (row.sensitive_info>10){
+                        star+=star1.repeat(5);
+                    };
+                    if (row.weibo_type=='follow'){
+                        user='已关注用户';
+                    }else if (row.weibo_type=='friend'){
+                        user='相互关注用户';
+                    }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+                        user='未关注用户';
+                    }
                     var str=
-                        '<div class="letterAll">'+
+                        '<div class="letterAll" style="background:rgba(8,23,44,0.35);">'+
                         '    <div class="letterEvery">'+
                         '        <img src="'+img+'" alt="" class="let-head">'+
                         '        <div class="let let-1">'+
-                        '            <b class="let-1-name">'+name+'</b>'+
-                        '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '            <b class="let-1-name">来自 '+user+'&nbsp;'+name+'</b>&nbsp;&nbsp;&nbsp;'+
+                        '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;'+
                         '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '            <div class="let-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
-                        '                <div class="let-img" style="display: inline-block;">'+
-                        '                <img src="/static/images/level.png" alt="">'+
-                        '                <img src="/static/images/level.png" alt="">'+
-                        '                <img src="/static/images/level.png" alt="">'+
+                        '                <div class="let-img" style="display: inline-block;">'+star+'</div>'+
                         '            </div>'+
                         '        </div>'+
                         '        <div class="let let-2">'+
@@ -193,8 +239,8 @@ function letter(data) {
                         '            <a class="let-2-reply copyFinish" datatype="letterClone" onclick="showInput(this)">回复</a>'+
                         '        </div>'+
                         '    </div>'+
-                        '    <div class="letterClone">'+
-                        '        <input type="text" class="clone-1" style="width: 71.5%;"/>'+
+                        '    <div class="letterClone" style="text-align: center;">'+
+                        '        <input type="text" class="clone-1" style="width:79%;"/>'+
                         '        <div class="clone-2">'+
                         '            <img src="/static/images/post-1.png" class="clone-2-1">'+
                         '            <img src="/static/images/post-2.png" class="clone-2-2">'+
@@ -211,6 +257,7 @@ function letter(data) {
     $('#'+idbox+' p').hide();
     $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 };
+//=====@回复======
 function reply(data) {
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
@@ -300,6 +347,7 @@ function reply(data) {
     $('#'+idbox+' p').hide();
     $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 };
+//=====关注回粉--回复======
 function focus(data) {
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
@@ -354,12 +402,31 @@ function focus(data) {
                     }else {
                         geo=row.geo;
                     };
+                    var star1='<img src="/static/images/level.png" alt="">',
+                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                    if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
+                        star=star2.repeat(5);
+                    }else if (row.sensitive_info>0&&row.sensitive_info<=3){
+                        star+=star1;
+                        star+=star2.repeat(4);
+                    }else if (row.sensitive_info>3&&row.sensitive_info<=5){
+                        star+=star1.repeat(2);
+                        star+=star2.repeat(3);
+                    }else if (row.sensitive_info>5&&row.sensitive_info<=7){
+                        star+=star1.repeat(3);
+                        star+=star2.repeat(2);
+                    }else if (row.sensitive_info>7&&row.sensitive_info<=10){
+                        star+=star1.repeat(4);
+                        star+=star2.repeat(1);
+                    }else if (row.sensitive_info>10){
+                        star+=star1.repeat(5);
+                    };
                     if (row.weibo_type=='follow'){
-                        fol='已关注';
+                        fol='已关注';user='已关注用户';
                     }else if (row.weibo_type=='friends'){
-                        fol='相互关注';
+                        fol='相互关注';user='相互关注用户';
                     }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
-                        fol='未关注';
+                        fol='未关注';user='未关注用户';
                     }
                     if (row.sensor_mark){
                         mark='重点关注用户';
@@ -375,10 +442,7 @@ function focus(data) {
                         '            <b class="uid" style="display: none;">'+row.uid+'</b>'+
                         '            <div class="foc-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
-                        '                <div class="foc-img" style="display: inline-block;">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
-                        '                    <img src="/static/images/level.png" alt="">'+
+                        '                <div class="foc-img" style="display: inline-block;">'+star+
                         '                </div>'+
                         '            </div>'+
                         '            <div class="foc-fm" style="float: right;margin-left:10px;">'+
@@ -419,13 +483,14 @@ function postYES(data) {
     if (data[0]){
         f='操作成功';
     }else {
-        f='操作失败';
+        f='操作失败，'+data[1];
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
 //评论
 function showInput(_this) {
+    $(_this).hide();
     var _name=$(_this).parent().parent().find('b').text();
     var _dataType=$(_this).attr('datatype');
     $(_this).parent().parent().parent().find('.'+_dataType+' .clone-1').attr('placeholder','回复'+_name);
@@ -448,8 +513,7 @@ $('#comment-1 .commentClone .clone-2-4').on('click',function () {
     var txt = $(this).parent().prev().val();
     if (txt!=''){
         var post_url_1='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
-        console.log(post_url_1)
-        // public_ajax.call_request('get',post_url_1,postYES)
+        public_ajax.call_request('get',post_url_1,postYES)
     }else {
         $('#pormpt p').text('回复内容不能为空。');
         $('#pormpt').modal('show');
@@ -464,24 +528,22 @@ $('.clone-2-4').on('click',function () {
 $('.forwardClone .clone-2-4').on('click',function () {
     var txt = $(this).parent().prev().val();
     var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type='+actType+'&operate_type='+operateType+'&uid='+uid+
-        '&text='+txt+'&weibo_mail_account='+weiboMail+'&weibo_phone_account='+weiboPhone+'&mid='+mid;
-    //public_ajax.call_request('get',post_url_2,postYES)
+        '&text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
+    public_ajax.call_request('get',post_url_2,postYES)
 });
 
 //@用户
 $('.replyClone .clone-2-4').on('click',function () {
     var txt = $(this).parent().prev().val();
-    var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&weibo_mail_account='+weiboMail+
-        '&weibo_phone_account='+weiboPhone+'&mid='+mid;
-    //public_ajax.call_request('get',post_url_3,postYES)
+    var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&mid='+mid;
+    public_ajax.call_request('get',post_url_3,postYES)
 });
 
 //私信
 $('.letterClone .clone-2-4').on('click',function () {
     var txt = $(this).parent().prev().val();
-    var post_url_4='/weibo_xnr_operate/reply_private/?text='+txt+'&weibo_mail_account='+weiboMail+
-        '&weibo_phone_account='+weiboPhone+'&uid='+uid;
-    //public_ajax.call_request('get',post_url_4,postYES)
+    var post_url_4='/weibo_xnr_operate/reply_private/?text='+txt+'&xnr_user_no='+xnrUser+'&uid='+uid;
+    public_ajax.call_request('get',post_url_4,postYES)
 });
 
 
@@ -500,17 +562,10 @@ function addfocus(_this) {
     }
     public_ajax.call_request('get',post_url_5,postYES)
 }
-$('.foc-join').on('click',function () {
-    var post_url_5='/weibo_xnr_operate/follow_operate/?weibo_mail_account='+weiboMail+
-        '&weibo_phone_account='+weiboPhone+'&uid='+uid;
-    //public_ajax.call_request('get',post_url_5,postYES)
-});
-//取消关注
-$('.foc-join').on('click',function () {
-    var post_url_6='/weibo_xnr_operate/unfollow_operate/?weibo_mail_account='+weiboMail+
-        '&weibo_phone_account='+weiboPhone+'&uid='+uid;
-    //public_ajax.call_request('get',post_url_6,postYES)
-});
+//关注重点用户
+function addheavy() {
+
+}
 
 
 //==========================================================

@@ -1,6 +1,6 @@
 function auto() {
-    var has_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+ID_Num;
-    var notHao_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+ID_Num;
+    var has_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
+    var notHao_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
     public_ajax.call_request('GET',has_url,has_table);
     public_ajax.call_request('GET',notHao_url,not_yet);
 }
