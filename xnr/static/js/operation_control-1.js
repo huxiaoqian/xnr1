@@ -1,9 +1,16 @@
-var timingTask_url='/weibo_xnr_manage/wxnr_timing_tasks/?user_id='+ID_Num;
+var start_time='1500108142';
+var end_time='1500108142';
+//历史统计
+var hidtoryTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=today&start_time=0&end_time=1505044800'
+// public_ajax.call_request('get',hidtoryTotal_url,hidtoryTotal);
+//定时发送任务列表
+var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no=WXNR0004&start_time=1500108142&end_time=1500108142';
 public_ajax.call_request('get',timingTask_url,timingTask);
 var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
 }
 function timingTask(data) {
+    console.log(data)
     $('#time').bootstrapTable('load', data);
     $('#time').bootstrapTable({
         data:data,
@@ -185,13 +192,17 @@ function successfail(data) {
     $('#successfail p').text(t);
     $('#successfail').modal('show');
 }
-//-------
+//------历史消息type分页-------
+var typeDown='';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
+    htp=[];
     var middle=$(this).attr('midurl').split('&');
-    var liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1];
+    typeDown=middle[0];
+    var liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
+        '&start_time='+start_time+'&end_time='+end_time;
     public_ajax.call_request('get',liNews_url,historyNews);
 })
-//========历史消息====
+//========历史消息=时间段选择===
 $('.choosetime .demo-label input').on('click',function () {
     var _val=$(this).val();
     if (_val=='mize'){
@@ -214,18 +225,20 @@ $(".customizeTime").keydown(function(e) {
 
     }
 });
-
+//------历史消息type分页下的按钮选择-----
 var htp=[];
-$('#container .rightWindow .oli #content .hisnews input').on('click',function () {
-    htp=[];
-    $(".hisnews input:checkbox:checked").each(function (index,item) {
+$('#container .rightWindow .oli #content input').on('click',function () {
+    var flag=$(this).parents('.tab-pane').attr('id');
+    $("#"+flag+" input:checkbox:checked").each(function (index,item) {
         htp.push($(this).val());
     });
-    var taskSource=htp.join(',');
-    var againHistoryNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source='+taskSource;
+    var content_type=htp.join(',');
+    var againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+        '&start_time='+start_time+'&end_time='+end_time;
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
-var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post,hot_post';
+var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post,hot_post'+
+    '&start_time='+start_time+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
     console.log(data)

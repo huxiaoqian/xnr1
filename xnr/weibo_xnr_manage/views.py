@@ -92,7 +92,7 @@ def ajax_change_continue_xnrinfo():
 
 #step 4.2:timing task list
 #获取定时发送任务列表
-#http://219.224.134.213:9209/weibo_xnr_manage/show_timing_tasks/xnr_user_no=WXNR0004&start_time=1500108142&end_time=1500108142
+#http://219.224.134.213:9209/weibo_xnr_manage/show_timing_tasks/?xnr_user_no=WXNR0004&start_time=1500108142&end_time=1500108142
 @mod.route('/show_timing_tasks/')
 def ajax_show_timing_tasks():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -136,7 +136,7 @@ def ajax_wxnr_timing_tasks_revoked():
 
 #step 4.3: history information
 #step 4.3.1:show history posting
-#http://219.224.134.213:9209/weibo_xnr_manage/show_history_posting/?xnr_user_no=WXNR0004&task_source=daily_post,business_post
+#http://219.224.134.213:9209/weibo_xnr_manage/show_history_posting/?xnr_user_no=WXNR0004&task_source=daily_post,business_post&start_time=1504540800&end_time=1504627140
 @mod.route('/show_history_posting/')
 def ajax_show_history_posting():
 	require_detail=dict()
@@ -150,7 +150,7 @@ def ajax_show_history_posting():
 	return json.dumps(results)
 
 #step 4.3.2:show at content
-#http://219.224.134.213:9209/weibo_xnr_manage/show_at_content/?xnr_user_no=WXNR0004&content_type=weibo,at
+#http://219.224.134.213:9209/weibo_xnr_manage/show_at_content/?xnr_user_no=WXNR0004&content_type=weibo,at&start_time=1501948800&end_time=1504627200
 @mod.route('/show_at_content/')
 def ajax_show_at_content():
 	require_detail=dict()
@@ -163,7 +163,8 @@ def ajax_show_at_content():
 	return json.dumps(results)
 
 #step 4.3.3: show comment content
-#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_content/?xnr_user_no=WXNR0003&comment_type=make,receive
+#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_content/?xnr_user_no=WXNR0003&comment_type=make,receive&start_time=1501948800&end_time=1504627200
+@mod.route('/show_at_content/')
 @mod.route('/show_comment_content/')
 def ajax_show_comment_content():
 	require_detail=dict()
@@ -176,7 +177,7 @@ def ajax_show_comment_content():
 	return json.dumps(results)
 
 #step 4.3.4:show like content
-#http://219.224.134.213:9209/weibo_xnr_manage/show_like_content/?xnr_user_no=WXNR0004&like_type=send,receive
+#http://219.224.134.213:9209/weibo_xnr_manage/show_like_content/?xnr_user_no=WXNR0004&like_type=send,receive&start_time=1480045631&end_time=1504627200
 @mod.route('/show_like_content/')
 def ajax_show_like_content():
 	require_detail=dict()

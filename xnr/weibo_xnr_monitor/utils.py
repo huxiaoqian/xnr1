@@ -67,7 +67,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
         flow_text_index_name_list.append(flow_text_index_name)
         #print flow_text_index_name
         #print iter_condition_list
-        
+    #print iter_condition_list    
     query_body={
         'query':{
         	'filtered':{

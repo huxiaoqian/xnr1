@@ -22,7 +22,7 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
-from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,\
+from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
                            ts2datetime,datetime2ts,ts2datetimestr
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.weibo_xnr_warming.utils import show_date_warming
@@ -282,6 +282,7 @@ def xnr_assessment_detail(xnr_user_no,date_time):
 
 #累计统计
 def xnr_cumulative_statistics(xnr_date_info):
+    print xnr_date_info
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     Cumulative_statistics_dict['user_fansnum']=xnr_date_info[0]['user_fansnum']
@@ -293,14 +294,15 @@ def xnr_cumulative_statistics(xnr_date_info):
     penetration_sum=0
     safe_sum=0
     number=len(xnr_date_info)
-    for item in xnr_date_info:
-        total_post_sum=total_post_sum+item['total_post_sum']
-        daily_post_num=daily_post_num+item['daily_post_num']
-        business_post_num=business_post_num+item['business_post_num']
-        hot_follower_num=hot_follower_num+item['hot_follower_num']
-        influence_sum=influence_sum+item['influence']
-        penetration_sum=penetration_sum+item['penetration']
-        safe_sum=safe_sum+item['safe']
+    for i in xrange(0,len(xnr_date_info)):
+        total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
+        daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
+        business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
+        hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
+        influence_sum=influence_sum+xnr_date_info[i]['influence']
+        penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
+        safe_sum=safe_sum+xnr_date_info[i]['safe']
+        print total_post_sum,daily_post_num
 
     Cumulative_statistics_dict['total_post_sum']=total_post_sum
     Cumulative_statistics_dict['daily_post_num']=daily_post_num
@@ -411,12 +413,15 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         temp_date_ts=start_date_ts
         xnr_date_info=[]
         while temp_date_ts <= end_date_ts:
-            temp_next_date_ts=temp_date_ts+DAY
+            temp_next_date_ts=temp_date_ts+DAY 
+            #print temp_next_date_ts           
             temp_next_date_time=ts2datetime(temp_next_date_ts)
             temp_date_detail=lookup_history_count_info(xnr_user_no,temp_next_date_time)
             assessment_detail=xnr_assessment_detail(xnr_user_no,temp_next_date_time)
+            #print temp_date_detail
             xnr_date_detail=dict(temp_date_detail,**assessment_detail)
             xnr_date_info.append(xnr_date_detail)
+            temp_date_ts=temp_next_date_ts
     return xnr_date_info
 
 
@@ -437,15 +442,22 @@ def lookup_history_count_info(xnr_user_no,date_time):
     }
     try:
         history_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+        #print history_result
         date_result=[]
         for item in history_result:
-            date_result.append(item['_source'])
+            date_result.append(item['_source'][0])
     except:
+        date_result=[]
+    if date_result:
+    	#print date_result
+        return date_result
+    else:
     	#生成未统计日期的信息
         #对当前时间信息进行统计生成信息保存至文件
         create_time=datetime2ts(date_time)
-        date_result=create_xnr_history_info_count(xnr_user_no,create_time)
-    return date_result	
+        create_result=create_xnr_history_info_count(xnr_user_no,create_time)
+        #print create_result
+        return create_result
 
 
 #历史统计表查询组织
@@ -565,7 +577,7 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 ###########获取定时发送任务列表##############
 def show_timing_tasks(xnr_user_no,start_time,end_time):
 	#获取虚拟人编号
-	user_no_str=user_id[4:8]
+	user_no_str=xnr_user_no[4:8]
 	#print user_no_str
 	user_no=long(user_no_str)
 	#print user_no
@@ -648,14 +660,15 @@ def show_history_posting(require_detail):
 	task_source=require_detail['task_source']
 	es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 	uid=es_result['uid']
+	print uid,task_source
 
 	#date_range_end_ts=require_detail['now_time']
 	#weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,date_range_end_ts)
 
 	date_range_start_ts=require_detail['start_time']
 	date_range_end_ts=require_detail['end_time']
-	get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
-
+	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+	print weibo_xnr_flow_text_listname
 	query_body={
 		'query':{
 			'filtered':{
@@ -675,12 +688,12 @@ def show_history_posting(require_detail):
 
 	try:
 		result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-		results=[]
+		post_result=[]
 		for item in result:
-			results.append(item['_source'])
+			post_result.append(item['_source'])
 	except:
-		results=[]
-	return results
+		post_result=[]
+	return post_result
 
 #step 4.3.2:show at content
 def show_at_content(require_detail):
@@ -815,6 +828,7 @@ def show_like_content(require_detail):
         'sort':{'timestamp':{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
+
     results=[]
     for i in xrange(0,len(like_type)):
         if like_type[i] == 'receive':
@@ -829,6 +843,7 @@ def show_like_content(require_detail):
         for item in result:
             result_temp.append(item['_source'])
         results.append(result_temp)
+    print condition_list
     return results
 
 

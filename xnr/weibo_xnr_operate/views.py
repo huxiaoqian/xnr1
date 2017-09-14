@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+from flask import Flask
 import os
 import time
 import json
@@ -15,14 +16,53 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
-                get_show_trace_followers
+                get_show_trace_followers,get_image_path
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
+#from xnr import create_app
 
 '''
 日常发帖
 
 '''
+
+# Create app
+# app = Flask(__name__)
+
+# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+# UPLOAD_FOLDER = os.path.join(APP_ROOT, 'xnr/weibo_images/') 
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# @mod.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'],
+#                                filename)
+
+# def allowed_file(filename):
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+# @mod.route('/upload/', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         file = request.files['file']
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             # return redirect(url_for('uploaded_file',
+#             #                         filename=filename))
+#             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#             return path
+#
+
+# 获取图片路径
+@mod.route('/get_image_path/')
+def ajax_get_image_path():
+    image_code = request.args.get('image_code','') # 以中文逗号隔开
+    results = get_image_path(image_code)
+    return json.dumps(results)
+
 @mod.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':

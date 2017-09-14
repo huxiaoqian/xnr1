@@ -3,41 +3,42 @@ public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
     $('.title .tit-2 .score').text(data);
 }
-var titleName='关注群体敏感度';
-$('#container .type_page #myTabs li').on('click',function () {
-    var mid=$(this).attr('midurl');
-    titleName=$(this).find('a').text().toString().trim();
-    if (mid=='pene_feedback_sensitive'){$('.social-1-opt').show()}else {$('.social-1-opt').hide()};
-    var penetration_url='/weibo_xnr_assessment/'+mid+'/?xnr_user_no='+ID_Num;
-    public_ajax.call_request('get',penetration_url,penetration);
-});
-var defaultUrl='/weibo_xnr_assessment/pene_follow_group_sensitive/?xnr_user_no='+ID_Num;
+var defaultUrl='/weibo_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',defaultUrl,penetration);
 //=====
-$('.social-1-opt label.soc input').on('click',function() {
-    var flag=$(this).val();
-    var social_url='/weibo_xnr_assessment/pene_feedback_sensitive/?xnr_user_no='+ID_Num+'&sort_item='+flag;
-    public_ajax.call_request('get',social_url,penetration);
-});
+function publicData(data) {
+    var a=[];
+    for (var b in data){
+        a.push(data[b])
+    }
+    return a;
+}
 //画图
 function penetration(data) {
     //total_num、day_num、growth_rate
-    if (isEmptyObject(data['sensitive_info'])){
+    console.log(data)
+    if (isEmptyObject(data)){
         $('#penContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
-        var time=[],totData=[];
-        for (var i in data['sensitive_info']){
-            totData.push(data['sensitive_info'][i]);
+        var time=[],fans_group=[];
+        for (var i in data['fans_group']){
+            fans_group.push(data['fans_group'][i]);
             time.push(getLocalTime(i));
         };
-        var myChart = echarts.init(document.getElementById('penContent'),'dark');
+        var feedback_total=publicData(data['feedback_total']);
+        var follow_group=publicData(data['follow_group']);
+        var self_info=publicData(data['self_info']);
+        var warning_report_total=publicData(data['warning_report_total']);
+        var myChart = echarts.init(document.getElementById('penetration'),'dark');
         var option = {
             backgroundColor:'transparent',
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data:[titleName]
+                data:['关注群体敏感度','粉丝群体敏感度','发布信息敏感度','社交反馈敏感度','预警上报敏感度'],
+                width: '400',
+                left:'center'
             },
             toolbox: {
                 show: true,
@@ -64,9 +65,73 @@ function penetration(data) {
             },
             series: [
                 {
-                    name:titleName,
+                    name:'关注群体敏感度',
                     type:'line',
-                    data:totData,
+                    data:follow_group,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'粉丝群体敏感度',
+                    type:'line',
+                    data:fans_group,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'社交反馈敏感度',
+                    type:'line',
+                    data:feedback_total,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'发布信息敏感度',
+                    type:'line',
+                    data:self_info,
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最大值'},
+                            {type: 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'预警上报敏感度',
+                    type:'line',
+                    data:warning_report_total,
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
