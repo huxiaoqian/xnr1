@@ -1,10 +1,32 @@
 var start_time='1500108142';
 var end_time='1500108142';
+// var end_time=Date.parse(new Date())/1000;
+//几天前的时间戳
+function getDaysBefore(m){
+    var date = new Date(),
+        timestamp, newDate;
+    if(!(date instanceof Date)){
+        date = new Date(date);
+    }
+    timestamp = date.getTime();
+    return timestamp;
+};
+//当天零点的时间戳
+function todayTimetamp() {
+    var start=new Date();
+    start.setHours(0);
+    start.setMinutes(0);
+    start.setSeconds(0);
+    start.setMilliseconds(0);
+    var todayStartTime=Date.parse(start)/1000;
+    return todayStartTime
+}
 //=====历史统计====定时任务列表====历史消息===时间段选择===
 $('.choosetime .demo-label input').on('click',function () {
     var _val=$(this).val();
     var sh=$(this).attr('shhi');
     var mid=$(this).parents('.choosetime').attr('midurl');
+    var task=$(this).parents('.choosetime').attr('task');
     if (_val=='mize'&&sh!=0){
         $(this).parents('.choosetime').find('#start_'+sh).show();
         $(this).parents('.choosetime').find('#end_'+sh).show();
@@ -13,17 +35,54 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#start_'+sh).hide();
         $(this).parents('.choosetime').find('#end_'+sh).hide();
         $(this).parents('.choosetime').find('#sure-'+sh).hide();
+        var his_timing_task_url;
+        if (mid=='show_history_count'){
+            if (_val==0){
+                his_timing_task_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+            }else {
+                _start=getDaysBefore(_val);
+                his_timing_task_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+_start+'&end_time='+end_time;
+            }
+        }else if (mid=='show_history_posting'){
+            var conTP=[];
+            $(".li-3 .news .tab-pane.active input:checkbox:checked").each(function (index,item) {
+                conTP.push($(this).val());
+            });
+            var mid_2=$(".li-3 .news .tab-pane.active").attr('midurl');
+            if (_val==0){
+                his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+                    '&start_time='+todayTimetamp()+'&end_time='+end_time;
+            }else {
+                _start=getDaysBefore(_val);
+                his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+                    '&start_time='+_start+'&end_time='+end_time;
+            }
+        }else {
+            var startTime='';
+            if (_val==0){
+                startTime=todayTimetamp();
+            }else {
+                startTime=getDaysBefore(_val);
+            }
+            his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
+        }
+        public_ajax.call_request('get',his_timing_task_url,task);
     }
 });
 $('.sureTime').on('click',function () {
     var t=$(this).attr('shhi');
     var s=$(this).parents('.choosetime').find('#start_'+t).val();
-    var e=$(this).parents('.choosetime').find('#end'+t).val();
-    if (s==''||e==''){
+    var d=$(this).parents('.choosetime').find('#end_'+t).val();
+    if (s==''||d==''){
         $('#successfail p').text('时间不能为空。');
         $('#successfail').modal('show');
     }else {
         var mid=$(this).parents('.choosetime').attr('midurl');
+        var task=$(this).parents('.choosetime').attr('task');
+        var his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
+            '&end_time='+(Date.parse(new Date(d))/1000);
+        console.log(his_timing_task_url)
+        public_ajax.call_request('get',his_timing_task_url,task);
     }
 });
 $(".customizeTime").keydown(function(e) {
@@ -36,23 +95,21 @@ $(".customizeTime").keydown(function(e) {
             $('#successfail p').text('只能输入数字。');
             $('#successfail').modal('show');
         }
-
     }
 });
 //历史统计
-var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time=1505044800'
+var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(data) {
-    console.log(data)
+    // console.log(data)
 }
 //定时发送任务列表
-var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time=1500108142&end_time=1500108142';
+var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',timingTask_url,timingTask);
 var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
 }
 function timingTask(data) {
-    console.log(data)
     $('#time').bootstrapTable('load', data);
     $('#time').bootstrapTable({
         data:data,
@@ -235,33 +292,74 @@ function successfail(data) {
     $('#successfail').modal('show');
 }
 //------历史消息type分页-------
-var typeDown='';
+var typeDown='show_history_posting';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
     htp=[];
-    var middle=$(this).attr('midurl').split('&');
+    var middle=$(this).attr('midurl').split('&'),liNews_url='';
+    var tm=$('input:radio[name="time3"]:checked').val();
     typeDown=middle[0];
-    var liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
-        '&start_time='+start_time+'&end_time='+end_time;
+    if (tm){
+        if (tm!='mize'){
+            liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
+                '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
+        }else {
+            var s=$(this).parents('.news').prev().find('#start_3').val();
+            var d=$(this).parents('.choosetime').find('#end_3').val();
+            if (s==''||d==''){
+                $('#successfail p').text('时间不能为空。');
+                $('#successfail').modal('show');
+                return false;
+            }else {
+                liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
+                    '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
+            }
+        }
+    }else {
+        liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+middle[1]+
+            '&start_time='+todayTimetamp()+'&end_time='+end_time;
+    }
+    console.log(liNews_url)
     public_ajax.call_request('get',liNews_url,historyNews);
 })
 
 //------历史消息type分页下的按钮选择-----
 var htp=[];
-$('#container .rightWindow .oli #content input').on('click',function () {
+$('#container .rightWindow .oli .news #content input').on('click',function () {
     var flag=$(this).parents('.tab-pane').attr('id');
+    htp=[];
     $("#"+flag+" input:checkbox:checked").each(function (index,item) {
         htp.push($(this).val());
     });
-    var content_type=htp.join(',');
-    var againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
-        '&start_time='+start_time+'&end_time='+end_time;
+    var content_type=htp.join(','),againHistoryNews_url='';
+    var tm=$('input:radio[name="time3"]:checked').val();
+    if (tm){
+        if (tm!='mize'){
+            againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+                '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
+        }else {
+            var s=$(this).parents('.news').prev().find('#start_3').val();
+            var d=$(this).parents('.choosetime').find('#end_3').val();
+            if (s==''||d==''){
+                $('#successfail p').text('时间不能为空。');
+                $('#successfail').modal('show');
+                return false;
+            }else {
+                againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+                    '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
+            }
+        }
+    }else {
+        againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+            '&start_time='+todayTimetamp()+'&end_time='+end_time;
+    }
+    console.log(againHistoryNews_url)
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
-var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post,hot_post'+
-    '&start_time='+start_time+'&end_time='+end_time;
+var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
+    '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    console.log(data)
+    // console.log(data)
 }
 //===========
 // =====关注列表====
@@ -521,16 +619,16 @@ function fans(data) {
             },
             {
                 title: "年龄",//标题
-                field: "create_time",//键名
+                field: "age",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'){
+                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
                         return '未知';
                     }else {
-                        return getLocalTime(row.create_time);
+                        return row.age;
                     };
                 }
             },
@@ -572,7 +670,7 @@ function fans(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.influence==''||row.influence=='null'||row.influence=='unknown'){
+                    if (row.influence==''||row.influence=='null'||row.influence=='unknown'||!row.influence){
                         return 0;
                     }else {
                         return row.influence;
@@ -596,7 +694,7 @@ function fans(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var ID=row.id;
-                    return '<span style="cursor: pointer;" onclick="revoked(\''+ID+'\',\'attach_fans_follow\')" title="直接关注"><i class="icon icon-heart"></i></span>';
+                    return '<span style="cursor: pointer;" onclick="focus_ornot(\''+ID+'\',\'attach_fans_follow\')" title="直接关注"><i class="icon icon-heart"></i></span>';
                     //'<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="查看详情"><i class="icon icon-link"></i></span>&nbsp;&nbsp;'+
                         //'<span style="cursor: pointer;" onclick="lookRevise(\''+ID+'\')" title="修改"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;'+
                         //'<span style="cursor: pointer;" onclick="revoked(\''+ID+'\',\'attach_fans_follow\')" title="直接关注"><i class="icon icon-heart"></i></span>';
@@ -617,7 +715,7 @@ function fans(data) {
 
 function focus_ornot(_id,mid) {
     var focusNOT_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+_id;
-    public_ajax.call_request('get',focusNOT_url,focusOrNot);
+    public_ajax.call_request('get',focusNOT_url,succeedFail);
 }
 //=========
 function succeedFail(data) {

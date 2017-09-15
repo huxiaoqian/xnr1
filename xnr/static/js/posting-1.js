@@ -42,15 +42,177 @@ $('#container .type_page #myTabs a').on('click',function () {
         arrowName='@用户推荐';
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
         recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
-    }else if (arrow== '#business'){
+    }else if (arrow=='#business'){
         arrowName='@敏感用户推荐';
         public_ajax.call_request('get',busWeiboUrl,businessWeibo);
         recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
+    }else if (arrow=='#reportNote'){
+        $('.post_post').hide();
     }
-    $('#user_recommend .tit').text(arrowName);
-    public_ajax.call_request('get',recommendUrl,recommendlist);
+    if (arrow!='#reportNote'){
+        $('.post_post').show();
+        $('#user_recommend .tit').text(arrowName);
+        public_ajax.call_request('get',recommendUrl,recommendlist);
+    }
 })
+//=========跟踪转发===========
+var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
+var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
+public_ajax.call_request('get',flow_faw_url,flow_faw);
+public_ajax.call_request('get',focus_main_url,focus_main);
+function flow_faw(data) {
+    console.log(data)
+    $('#follow_forward').bootstrapTable('load', data);
+    $('#follow_forward').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 2,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.nick_name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <span class="center_2">'+txt+
+                        '           </span>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+}
+function focus_main(data) {
+    console.log(data)
+    $('#focus_main').bootstrapTable('load', data);
+    $('#focus_main').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 2,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.nick_name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <span class="center_2">'+txt+
+                        '           </span>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+}
+//=========跟踪转发==完=========
 
+//====================
 //
 var operateType,actType;
 function obtain(t) {

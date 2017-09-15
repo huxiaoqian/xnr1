@@ -31,23 +31,23 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    .bootstrap-table {
+    .weiboTable .bootstrap-table {
         margin: 0 auto;
         height: auto!important;
     }
-    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
-    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+    .weiboTable .table-no-bordered,.weiboTable .table>tbody>tr>td,.weiboTable .fixed-table-container,
+    .weiboTable .bootstrap-table .table>thead>tr>th,.weiboTable .bootstrap-table .table,.weiboTable .table>tbody>tr>td{
         border: none;
     }
-    .bootstrap-table thead,.fixed-table-pagination .page-list {
+    .weiboTable .bootstrap-table thead,.weiboTable .fixed-table-pagination .page-list {
         display: none!important;
     }
-    .fixed-table-body {
+    .weiboTable .fixed-table-body {
         height: auto!important;
         overflow-y: hidden;
     }
-    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-    .table>tbody>tr>td{
+    .weiboTable .bootstrap-table .table:not(.table-condensed),.weiboTable .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .weiboTable .table>tbody>tr>td{
         padding: 0!important;
     }
     .fixed-table-container {top: 15px;}
@@ -64,7 +64,7 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
-    .table:not(.table-condensed)>tbody>tr>td {
+    .weiboTable .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
     }
     /**/
@@ -182,7 +182,7 @@
             </div>
         </div>
         <div class="tab-content" id="content">
-            <div role="tabpanel" class="tab-pane active" id="everyday">
+            <div role="tabpanel" class="weiboTable tab-pane active" id="everyday">
                 <div class="everyday-1" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
@@ -283,7 +283,7 @@
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane" id="hot">
+            <div role="tabpanel" class="weiboTable tab-pane" id="hot">
                 <div class="hot-1" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">热门事件推荐</span>
@@ -394,7 +394,7 @@
                 </div>
             </div>
 
-            <div role="tabpanel" class="tab-pane" id="business">
+            <div role="tabpanel" class="weiboTable tab-pane" id="business">
                 <div class="business-1" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">微博推荐</span>
@@ -437,7 +437,20 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="reportNote">
-
+                <div class="reportNote-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">跟随转发任务</span>
+                </div>
+                <div class="follow_forward">
+                    <div id="follow_forward"></div>
+                </div>
+                <div class="reportNote-2" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">重点关注用户</span>
+                </div>
+                <div class="focus_main">
+                    <div id="focus_main"></div>
+                </div>
             </div>
         </div>
 

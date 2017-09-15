@@ -384,6 +384,7 @@ function reply(data) {
 };
 //=====关注回粉--回复======
 function focus(data) {
+    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,
@@ -411,7 +412,7 @@ function focus(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,img,fan_source,geo,description,fol='',mark='';
+                    var name,img,fan_source,geo,description,fol='',mark='',sent='';
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
@@ -463,17 +464,24 @@ function focus(data) {
                     }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
                         fol='未关注';user='未关注用户';
                     }
-                    if (row.sensor_mark){
-                        mark='重点关注用户';
+                    if (row.trace_follow_mark){
+                        mark='重点关注';
                     }else {
-                        mark='加入重点用户'
+                        mark='普通关注';
+                    }
+                    if (row.sensor_mark){
+                        sent='敏感用户';
+                    }else {
+                        sent='普通用户';
                     }
                     var str=
                         '<div class="focusAll">'+
                         '    <div class="focusEvery">'+
                         '        <img src="'+img+'" alt="" class="foc-head">'+
                         '        <div class="foc foc-1">'+
-                        '            <b class="foc-1-name">'+name+'</b>'+
+                        '            <b class="foc-1-name">'+name+'</b>&nbsp;&nbsp;'+
+                        '            <b class="foc-1-sent">'+sent+'</b>&nbsp;&nbsp;'+
+                        '            <b class="foc-1-mark">'+mark+'</b>'+
                         '            <b class="uid" style="display: none;">'+row.uid+'</b>'+
                         '            <div class="foc-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
@@ -485,11 +493,11 @@ function focus(data) {
                         '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+fol+'</b></span>'+
                         '              </span>'+
                         '            </div>'+
-                        '            <div class="foc-fm-2" style="float: right;">'+
-                        '              <span class="heavy-join" onclick="addheavy(this)">'+
-                        '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+mark+'</b></span>'+
-                        '              </span>'+
-                        '            </div>'+
+                        // '            <div class="foc-fm-2" style="float: right;">'+
+                        // '              <span class="heavy-join" onclick="addheavy(this)">'+
+                        // '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+mark+'</b></span>'+
+                        // '              </span>'+
+                        // '            </div>'+
                         '            <div class="foc-1-option">'+
                         '                <span>关注</span>&nbsp;<b class="foc-opt-1">'+row.follower+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '                <span>粉丝</span>&nbsp;<b class="foc-opt-2">'+row.fans+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
@@ -536,9 +544,17 @@ function comMent(_this){
     var middle=$(_this).attr('midurl');
     var mid = $(_this).parent().parent().parent().find('.mid').text();
     if (txt!=''){
-        var comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&mid='+mid;
+        var comurl;
         if (middle!='reply_at'){
-            comurl+='&xnr_user_no='+xnrUser+'&tweet_type=日常发帖';
+            comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&xnr_user_no='+xnrUser;
+            if (middle=='reply_private'){
+                var uid = $(_this).parent().parent().parent().find('.uid').text();
+                comurl+='&uid='+uid;
+            }else {
+                comurl+='&mid='+mid;
+            }
+        }else {
+            comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&mid='+mid;
         }
         public_ajax.call_request('get',comurl,postYES);
     }else {
@@ -549,24 +565,22 @@ function comMent(_this){
 
 //关注回粉
 // 关注
+var ff_uid,f_txt;
 function addfocus(_this) {
-    var uid=$(_this).parents('.focusEvery').find('.uid').text();
-    var f=$(_this).find('b').text();
-    var post_url_5;
-    if (f=='未关注'){
-        post_url_5='/weibo_xnr_operate/follow_operate/?xnr_user_no='+xnrUser+'&uid='+uid;
-        $(_this).parents('.focusEvery').find('.uid').text('已关注')
+    ff_uid=$(_this).parents('.focusEvery').find('.uid').text();
+    f_txt=$(_this).find('b').text();
+    if (f_txt!='未关注'){
+        var f1_url='/weibo_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+uid;
+        public_ajax.call_request('get',f1_url,postYES)
     }else {
-        post_url_5='/weibo_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+uid;
-        $(_this).parents('.focusEvery').find('.uid').text('未关注')
+        $('#focus_modal').modal('show');
     }
-    public_ajax.call_request('get',post_url_5,postYES)
 }
-//关注重点用户
-function addheavy() {
-
+function focusUserSure() {
+    var f2_url,trace_type;
+    trace_type=$('#focus_modal input:radio[name="fcs"]:checked').val();
+    f2_url='/weibo_xnr_operate/follow_operate/?xnr_user_no='+xnrUser+'&uid='+ff_uid+'&trace_type='+trace_type;
+    public_ajax.call_request('get',f2_url,postYES)
 }
-
-
 //==========================================================
 

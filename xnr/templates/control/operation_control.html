@@ -42,21 +42,21 @@
     <div class="rightWindow">
         <div class="li-1 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史统计</h4>
-            <div class="choosetime choosetime-1" style="margin: 10px 0;" midurl="show_history_count">
+            <div class="choosetime choosetime-1" style="margin: 10px 0;" midurl="show_history_count" task="historyTotal">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <input class="demo-radio" type="radio" name="time1" value='0' shhi="1">
                     <span class="demo-checkbox demo-radioInput"></span> 今天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <input class="demo-radio" type="radio" name="time1" value='1' shhi="1">
                     <span class="demo-checkbox demo-radioInput"></span> 昨天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <input class="demo-radio" type="radio" name="time1" value='7' shhi="1">
                     <span class="demo-checkbox demo-radioInput"></span> 7天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time1" value='' shhi="1">
+                    <input class="demo-radio" type="radio" name="time1" value='30' shhi="1">
                     <span class="demo-checkbox demo-radioInput"></span> 30天
                 </label>
                 <label class="demo-label">
@@ -80,19 +80,19 @@
             <h4><i class="icon icon-lightbulb"></i>&nbsp;定时发送任务列表</h4>
             <div class="choosetime choosetime-2" style="margin: 10px 0;" midurl="show_timing_tasks">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time2" value=''>
+                    <input class="demo-radio" type="radio" name="time2" value='0'>
                     <span class="demo-checkbox demo-radioInput"></span> 今天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <input class="demo-radio" type="radio" name="time2" value='1' shhi="2">
                     <span class="demo-checkbox demo-radioInput"></span> 昨天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <input class="demo-radio" type="radio" name="time2" value='7' shhi="2">
                     <span class="demo-checkbox demo-radioInput"></span> 7天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time2" value='' shhi="2">
+                    <input class="demo-radio" type="radio" name="time2" value='30' shhi="2">
                     <span class="demo-checkbox demo-radioInput"></span> 30天
                 </label>
                 <label class="demo-label">
@@ -116,19 +116,19 @@
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
             <div class="choosetime choosetime-3" style="margin: 10px 0;" midurl="show_history_posting">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <input class="demo-radio" type="radio" name="time3" value='0' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 今天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <input class="demo-radio" type="radio" name="time3" value='1' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 昨天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <input class="demo-radio" type="radio" name="time3" value='7' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 7天
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="time3" value='' shhi="3">
+                    <input class="demo-radio" type="radio" name="time3" value='30' shhi="3">
                     <span class="demo-checkbox demo-radioInput"></span> 30天
                 </label>
                 <label class="demo-label">
@@ -146,16 +146,16 @@
             </div>
             <div class="news">
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active" midurl="show_history_posting&daily_post">
+                    <li role="presentation" class="active" midurl="show_history_posting&daily_post&task_source">
                         <a href="#his_post" role="tab" data-toggle="tab"><b class="icon icon-beaker"></b>&nbsp;历史发帖</a>
                     </li>
-                    <li role="presentation" midurl="show_at_content&weibo">
+                    <li role="presentation" midurl="show_at_content&weibo&content_type">
                         <a href="#mine" role="tab" data-toggle="tab"><b class="icon icon-comments"></b>&nbsp;@我的</a>
                     </li>
-                    <li role="presentation" midurl="show_comment_content&make">
+                    <li role="presentation" midurl="show_comment_content&make&comment_type">
                         <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;评论</a>
                     </li>
-                    <li role="presentation" midurl="show_like_content&send">
+                    <li role="presentation" midurl="show_like_content&send&like_type">
                         <a href="#thumbs" role="tab" data-toggle="tab"><b class="icon icon-thumbs-up"></b>&nbsp;点赞</a>
                     </li>
                 </ul>
