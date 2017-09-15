@@ -87,6 +87,11 @@ weibo_role_index_type = 'role'
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
 weibo_xnr_timing_list_index_type = 'timing_list'
 
+# use to retweet tweet at future time
+weibo_xnr_retweet_timing_list_index_name = 'tweet_retweet_timing_list'
+weibo_xnr_retweet_timing_list_index_type = 'timing_list'
+
+
 #use to test lookup weibocontent,can be deleted after test
 
 #use to save feedback info

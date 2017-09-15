@@ -30,7 +30,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                            index_sensing,type_sensing
+                            index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
+                            weibo_xnr_retweet_timing_list_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -847,7 +848,7 @@ def get_reply_follow(task_detail):
     else:
         return False
 
-    mark = follow_tweet_func(account_name,password,uid,trace_type)
+    mark = follow_tweet_func(xnr_user_no,account_name,password,uid,trace_type)
 
     return mark
 
@@ -870,7 +871,7 @@ def get_reply_unfollow(task_detail):
     else:
         return False
 
-    mark = unfollow_tweet_func(account_name,password,uid)
+    mark = unfollow_tweet_func(xnr_user_no,account_name,password,uid)
 
     return mark
 
@@ -992,7 +993,7 @@ def get_related_recommendation(task_detail):
         recommend_set_list = FOLLOWERS_LIST
     
     else:
-        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['followers_uids']
+        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['followers_list']
         recommend_set_list = list(set(recommend_list))
 
     if sort_item != 'friend':
@@ -1179,6 +1180,198 @@ def get_delete_sensor_user(xnr_user_no,sensor_uid_list):
 
     return mark
 
+def get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
+
+        try:
+            trace_follow_list = result['trace_follow_list']
+        except:
+            trace_follow_list = []
+
+        try:
+            followers_list = result['followers_list']
+        except:
+            followers_list = []
+
+        trace_follow_list = list(set(trace_follow_list) | set(uid_list))
+
+        followers_list = list(set(followers_list)|set(uid_list))
+
+        es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list,'followers_list':followers_list}})
+
+        mark = True
+    
+    except:
+
+        item_exists = {}
+
+        item_exists['xnr_user_no'] = xnr_user_no
+        item_exists['trace_follow_list'] = uid_list
+        item_exists['followers_list'] = uid_list
+
+        es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body=item_exists)
+
+        mark = True
+
+    return [mark,fail_nick_name_list]
+
+def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    fail_uids = []
+
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)['_source']
+        
+        trace_follow_list = result['trace_follow_list']
+
+        # 共同uids
+        comment_uids = list(set(trace_follow_list).intersection(set(uid_list)))
+
+        # 取消失败uid
+        fail_uids = list(set(comment_uids).difference(set(uid_list)))
+
+        # 求差
+        trace_follow_list = list(set(trace_follow_list).difference(set(uid_list))) 
+
+
+        es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list}})
+
+        mark = True
+    except:
+        mark = False
+
+    return [mark,fail_uids,fail_nick_name_list]
+
+def get_show_retweet_timing_list(xnr_user_no):
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+
+    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
+        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
+
+
+def get_show_trace_followers(xnr_user_no):
+    
+    es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)['_source']
+
+    trace_follow_list = es_get_result['trace_follow_list']
+
+    weibo_user_info = []
+
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'uid':trace_follow_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE,
+    #     'sort':{'fansnum':{'order':'desc'}}
+    # }
+
+    # results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+    #                 body=query_body)['hits']['hits']
+
+    mget_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                            body={'ids':trace_follow_list})['docs']
+    print 'mget_results::',mget_results
+    for result in mget_results:
+        if result['found']:
+            weibo_user_info.append(result['_source'])
+
+    return weibo_user_info
 
 
 

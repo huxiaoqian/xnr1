@@ -806,14 +806,23 @@ def show_like_content(require_detail):
     start_time=require_detail['start_time']
     end_time=require_detail['end_time']
 
-    condition_list=[]
+    results=[]
+    for i in xrange(0,len(like_type)):
+        if like_type[i] == 'receive':
+            temp_result=lookup_receive_like(uid,start_time,end_time)
+        elif like_type[i] == 'send':
+            temp_result=lookup_send_like(uid,start_time,end_time)
+        results.append(temp_result)
+    return results
+
+def lookup_receive_like(uid,start_time,end_time):
     query_body={
         'query':{
             'filtered':{
                 'filter':{
                 	'bool':{
                 		'must':[
-                			condition_list,
+                			{'term':{'uid':uid}},
                 			{'range':{
 								'timestamp':{
 									'gte':start_time,
@@ -828,24 +837,45 @@ def show_like_content(require_detail):
         'sort':{'timestamp':{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-
-    results=[]
-    for i in xrange(0,len(like_type)):
-        if like_type[i] == 'receive':
-            condition_list=[]
-            condition_list.append({'term':{'uid':uid}})
-            result=es_xnr.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
-        elif like_type[i] == 'send':
-            condition_list=[]
-            condition_list.append({'term':{'root_uid':uid}})
-            result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
-        result_temp=[]
+    try:
+        result=es_xnr.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
+        results=[]
         for item in result:
-            result_temp.append(item['_source'])
-        results.append(result_temp)
-    print condition_list
+            results.append(item['_source'])
+    except:
+        results=[]
     return results
 
+def lookup_send_like(uid,start_time,end_time):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                	'bool':{
+                		'must':[
+                			{'term':{'root_uid':uid}},
+                			{'range':{
+								'timestamp':{
+									'gte':start_time,
+									'lte':end_time
+								}
+							}}
+                		]
+                	}
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+    try:
+        result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
+        results=[]
+        for item in result:
+            results.append(item['_source'])
+    except:
+        results=[]
+    return results
 
 ###########################################################################
 #	step 4.3 & 4.4 & 4.5：微博相关操作，调用公共函数                      #

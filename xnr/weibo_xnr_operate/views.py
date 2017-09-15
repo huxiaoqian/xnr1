@@ -15,7 +15,8 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_private,get_show_at,get_reply_at,get_show_follow,get_reply_follow,get_like_operate,\
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
-                get_image_path
+                get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
+                get_show_trace_followers,get_image_path
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
@@ -61,8 +62,8 @@ def ajax_get_image_path():
     image_code = request.args.get('image_code','') # 以中文逗号隔开
     print 'image_code::',image_code
     results = get_image_path(image_code)
-
     return json.dumps(results)
+
 @mod.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -425,3 +426,39 @@ def ajax_create_group():
     results = get_create_group(task_detail)
 
     return json.dumps(results)
+
+# 展示跟随转发定时列表
+@mod.route('/show_retweet_timing_list/')
+def ajax_show_retweet_timing_list():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_retweet_timing_list(xnr_user_no)
+
+    return json.dumps(results)
+
+# 展示重点关注用户信息
+@mod.route('/show_trace_followers/')
+def ajax_show_trace_followers():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_trace_followers(xnr_user_no)
+
+    return json.dumps(results)
+
+# 重点关注
+@mod.route('/trace_follow/')
+def ajax_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)   # [mark,fail_nick_name_list]  fail_nick_name_list为添加失败，原因是背景信息库没有这些人，请换成对应uid试试。
+
+# 取消重点关注
+@mod.route('/un_trace_follow/')
+def ajax_un_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
