@@ -1,10 +1,20 @@
-// var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
-// var to_ts=Date.parse(new Date())/1000;
-var from_ts=1479513600,to_ts=1479981600;
+var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
+var to_ts=Date.parse(new Date())/1000;
+// var from_ts=1479513600,to_ts=1479981600;
+$('.title .perTime .demo-label input').on('click',function () {
+    var _val=$(this).val();
+    if (_val=='resize'){
+        $('.titTime').show();
+    }else {
+        $('.titTime').hide();
+    }
+})
 //选择时间范围
 $('.timeSure').on('click',function () {
-    from_ts = $('.start').val();
-    to_ts = $('.end').val();
+    var from = $('.start').val();
+    var to = $('.end').val();
+    from_ts=Date.parse(new Date(from))/1000;
+    to_ts=Date.parse(new Date(to))/1000;
     if (from_ts==''||to_ts==''){
         $('#pormpt p').text('请检查选择的时间（不能为空）');
         $('#pormpt').modal('show');
@@ -13,9 +23,6 @@ $('.timeSure').on('click',function () {
         public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
     }
-});
-$('.perTime .demo-label .demo-radio').on('click',function () {
-    var day=$(this).val();
 });
 //----关键词云
 var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
@@ -178,11 +185,18 @@ function activeUser(persondata) {
             },
             {
                 title: "微博数",//标题
-                field: "",//键名
+                field: "weibo_count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.weibo_count==''||row.weibo_count=='null'||row.weibo_count=='unknown'||!row.weibo_count){
+                        return '0';
+                    }else {
+                        return row.weibo_count;
+                    };
+                }
             },
             {
                 title: "影响力",//标题
@@ -191,6 +205,13 @@ function activeUser(persondata) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.influence==''||row.influence=='null'||row.influence=='unknown'||!row.influence){
+                        return '0';
+                    }else {
+                        return row.influence;
+                    };
+                }
             },
             {
                 title: "网民详情",//标题

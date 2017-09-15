@@ -420,3 +420,29 @@ body {
     padding-right: 5px!important;
     border: 1px solid #ddd!important;
 }
+
+.reportNote-2 .add_user,
+.reportNote-2 .del_user {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
+    color: white;font-weight: 700;
+    padding: 3px 10px;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.reportNote-2 .add_user:hover,
+.reportNote-2 .del_user:hover {
+    background: rgba(0, 0, 0, 0.74);
+}
+span.disableCss{
+
+    pointer-events:none;
+
+    color:#afafaf!important;
+
+    cursor:default!important;
+
+}

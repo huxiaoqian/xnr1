@@ -15,8 +15,8 @@ $('#container .type_page #myTabs a').on('click',function () {
     public_ajax.call_request('get',comURL,com);
 })
 //排序选择
-$('#container .desc_index .demo-label').on('click',function () {
-    var tp1=$(this).find('input').val();
+$('#container .desc_index .demo-label input').on('click',function () {
+    var tp1=$(this).val();
     var tp2=$('#myTabs li.active').attr('tp');
     var comURL='/weibo_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1;
     public_ajax.call_request('get',comURL,com);
@@ -125,7 +125,7 @@ function com(data) {
                             '            <input type="text" class="clone-1" placeholder=""/>'+
                             '            <div class="clone-2">'+
                             '                <img src="/static/images/post-1.png" class="clone-2-1">'+
-                            '                <img src="/static/images/post-2.png" class="clone-2-2">'+
+                            // '                <img src="/static/images/post-2.png" class="clone-2-2">'+
                             '                <label class="demo-label">'+
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
@@ -245,8 +245,8 @@ function letter(data) {
                         '        <input type="text" class="clone-1" style="width:79%;"/>'+
                         '        <div class="clone-2">'+
                         '            <img src="/static/images/post-1.png" class="clone-2-1">'+
-                        '            <img src="/static/images/post-2.png" class="clone-2-2">'+
-                        '            <img src="/static/images/post-11.png" class="clone-2-3">'+
+                        // '            <img src="/static/images/post-2.png" class="clone-2-2">'+
+                        // '            <img src="/static/images/post-11.png" class="clone-2-3">'+
                         '            <a href="###" class="clone-2-4" midurl="reply_private" onclick="comMent(this)">发送</a>'+
                         '        </div>'+
                         '    </div>'+
@@ -365,7 +365,7 @@ function reply(data) {
                         '        <input type="text" class="clone-1"/>'+
                         '        <div class="clone-2">'+
                         '            <img src="/static/images/post-1.png" class="clone-2-1">'+
-                        '            <img src="/static/images/post-2.png" class="clone-2-2">'+
+                        // '            <img src="/static/images/post-2.png" class="clone-2-2">'+
                         '            <label class="demo-label">'+
                         '                <input class="demo-radio clone-2-3" type="checkbox" name="desc4">'+
                         '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
@@ -570,17 +570,35 @@ function addfocus(_this) {
     ff_uid=$(_this).parents('.focusEvery').find('.uid').text();
     f_txt=$(_this).find('b').text();
     if (f_txt!='未关注'){
-        var f1_url='/weibo_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+uid;
-        public_ajax.call_request('get',f1_url,postYES)
+        $('#del_focus_modal').modal('show');
     }else {
         $('#focus_modal').modal('show');
     }
+}
+function delFocus() {
+    var f1_url='/weibo_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+ff_uid;
+    public_ajax.call_request('get',f1_url,focusYES)
 }
 function focusUserSure() {
     var f2_url,trace_type;
     trace_type=$('#focus_modal input:radio[name="fcs"]:checked').val();
     f2_url='/weibo_xnr_operate/follow_operate/?xnr_user_no='+xnrUser+'&uid='+ff_uid+'&trace_type='+trace_type;
-    public_ajax.call_request('get',f2_url,postYES)
+    public_ajax.call_request('get',f2_url,focusYES)
+}
+function focusYES(data) {
+    var f='';
+    if (data[0]){
+        f='操作成功';
+        var si=$('input:radio[name="fcs"]:checked').val();
+        var ssr='/weibo_xnr_operate/show_fans/?xnr_user_no='+ID_Num+'&sort_item='+si;
+        setTimeout(function () {
+            public_ajax.call_request('get',ssr,focus);
+        },500)
+    }else {
+        f='操作失败，'+data[1];
+    }
+    $('#focusSure p').text(f);
+    $('#focusSure').modal('show');
 }
 //==========================================================
 

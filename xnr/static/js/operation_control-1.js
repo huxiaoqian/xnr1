@@ -1,6 +1,6 @@
-var start_time='1500108142';
-var end_time='1500108142';
-// var end_time=Date.parse(new Date())/1000;
+// var start_time='1500108142';
+// var end_time='1500108142';
+var end_time=Date.parse(new Date())/1000;
 //几天前的时间戳
 function getDaysBefore(m){
     var date = new Date(),
@@ -9,7 +9,8 @@ function getDaysBefore(m){
         date = new Date(date);
     }
     timestamp = date.getTime();
-    return timestamp;
+    newDate = new Date(timestamp - m * 24 * 3600 * 1000);
+    return Number(Date.parse(newDate).toString().substring(0,10));
 };
 //当天零点的时间戳
 function todayTimetamp() {
@@ -45,10 +46,10 @@ $('.choosetime .demo-label input').on('click',function () {
             }
         }else if (mid=='show_history_posting'){
             var conTP=[];
-            $(".li-3 .news .tab-pane.active input:checkbox:checked").each(function (index,item) {
+            $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
                 conTP.push($(this).val());
             });
-            var mid_2=$(".li-3 .news .tab-pane.active").attr('midurl');
+            var mid_2=$(".li-3 .news li.active").attr('midurl').split('&');
             if (_val==0){
                 his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
                     '&start_time='+todayTimetamp()+'&end_time='+end_time;
@@ -66,7 +67,8 @@ $('.choosetime .demo-label input').on('click',function () {
             }
             his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
         }
-        public_ajax.call_request('get',his_timing_task_url,task);
+        console.log(his_timing_task_url)
+        public_ajax.call_request('get',his_timing_task_url, window[task]);
     }
 });
 $('.sureTime').on('click',function () {
@@ -81,8 +83,18 @@ $('.sureTime').on('click',function () {
         var task=$(this).parents('.choosetime').attr('task');
         var his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
             '&end_time='+(Date.parse(new Date(d))/1000);
+        if (mid=='show_history_count'){his_timing_task_url+='&type='};
+        if (mid=='show_history_posting'){
+            var conTP=[];
+            $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
+                conTP.push($(this).val());
+            });
+            var mid_2=$(".li-3 .news li.active").attr('midurl').split('&');
+            his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+                '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        }
         console.log(his_timing_task_url)
-        public_ajax.call_request('get',his_timing_task_url,task);
+        public_ajax.call_request('get',his_timing_task_url,window[task]);
     }
 });
 $(".customizeTime").keydown(function(e) {
@@ -101,8 +113,299 @@ $(".customizeTime").keydown(function(e) {
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(data) {
-    // console.log(data)
+    historyTotalTable(data[0]);
+    historyTotalLine(data[1]);
 }
+function historyTotalLine(data) {
+    var time=[],fansDate=[],totalPostData=[],dailyPost=[],
+        hotData=[],businessData=[],influeData=[],pentData=[],safeData=[];
+    $.each(data,function (index,item) {
+        time.push(item.date_time);
+        fansDate.push(item.user_fansnum)
+        totalPostData.push(item.total_post_sum)
+        dailyPost.push(item.daily_post_num)
+        hotData.push(item.hot_follower_num)
+        businessData.push(item.business_post_num)
+        influeData.push(item.influence)
+        pentData.push(item.penetration)
+        safeData.push(item.safe)
+    });
+    var myChart = echarts.init(document.getElementById('history-1'),'dark');
+    var option = {
+        backgroundColor:'transparent',
+        title: {
+            text: '',
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['总粉丝数','总发帖量','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
+            width:'400',
+            left:'center'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            name:'时间',
+            type: 'category',
+            boundaryGap: false,
+            data: time
+        },
+        yAxis: {
+            name:'数量',
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} '
+            }
+        },
+        series: [
+            {
+                name:'总粉丝数',
+                type:'line',
+                data:fansDate,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'总发帖量',
+                type:'line',
+                data:totalPostData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'日常发帖',
+                type:'line',
+                data:dailyPost,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'热点跟随',
+                type:'line',
+                data:hotData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'业务发帖',
+                type:'line',
+                data:businessData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'影响力',
+                type:'line',
+                data:influeData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'渗透力',
+                type:'line',
+                data:pentData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'安全性',
+                type:'line',
+                data:safeData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+}
+function historyTotalTable(dataTable) {
+    var data=[dataTable];
+    $('#history-2').bootstrapTable('load', data);
+    $('#history-2').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 3,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "名称",//标题
+                field: "date_time",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.date_time==''||row.date_time=='null'||row.date_time=='unknown'||!row.date_time){
+                        return '未知';
+                    }else {
+                        return row.date_time;
+                    };
+                }
+            },
+            {
+                title: "总粉丝数",//标题
+                field: "user_fansnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "总发帖量",//标题
+                field: "total_post_sum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "日常发帖",//标题
+                field: "daily_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "热点跟随",//标题
+                field: "hot_follower_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "业务发帖",//标题
+                field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "影响力",//标题
+                field: "influence",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "渗透力",//标题
+                field: "penetration",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "安全性",//标题
+                field: "safe",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+        ],
+    });
+}
+
 //定时发送任务列表
 var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',timingTask_url,timingTask);
@@ -239,7 +542,7 @@ function lookRevise(_id) {
 function saw(data) {
     var t1='无内容',t2='无备注',m='未知';
     if (data.post_time!=''||data.post_time!='null'||data.post_time!='unknown'||!data.post_time){
-        m= getLocalTime(data.post_time);
+        m = getLocalTime(data.post_time);
     }
     if (data.text!=''||data.text!='null'||data.text!='unknown'||!data.text){
         t1= data.text;
@@ -292,8 +595,9 @@ function successfail(data) {
     $('#successfail').modal('show');
 }
 //------历史消息type分页-------
-var typeDown='show_history_posting';
+var typeDown='show_history_posting',boxShoes='historyCenter';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
+    boxShoes=$(this).attr('box');
     htp=[];
     var middle=$(this).attr('midurl').split('&'),liNews_url='';
     var tm=$('input:radio[name="time3"]:checked').val();
@@ -304,7 +608,7 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
-            var d=$(this).parents('.choosetime').find('#end_3').val();
+            var d=$(this).parents('.news').prev().find('#end_3').val();
             if (s==''||d==''){
                 $('#successfail p').text('时间不能为空。');
                 $('#successfail').modal('show');
@@ -338,7 +642,7 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
-            var d=$(this).parents('.choosetime').find('#end_3').val();
+            var d=$(this).parents('.news').prev().find('#end_3').val();
             if (s==''||d==''){
                 $('#successfail p').text('时间不能为空。');
                 $('#successfail').modal('show');
@@ -359,7 +663,164 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    // console.log(data)
+    console.log(data);
+    var showHide1='none',showHide2='block',showHide3='none',showHide4='none';
+    if (boxShoes=='historyCenter'){showHide1='block'};
+    if (boxShoes=='myweibo'){showHide3='block'};
+    if (boxShoes=='commentCOT'){showHide2='none';showHide4='block'};
+    $('#'+boxShoes).bootstrapTable('load', data);
+    $('#'+boxShoes).bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 2,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name,txt,img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.nick_name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
+                        '       <div class="center_rel" style="text-align: left;">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;&nbsp;'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;&nbsp;'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                        '           <span class="center_2">'+txt+
+                        '           </span>'+
+                        '           <div class="center_3">'+
+                        '               <span class="cen3-4" data-toggle="modal" data-target="#wordcloud" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
+                        '               <span class="cen3-5" onclick="dialogue(this)" style="display:'+showHide4+';"><i class="icon icon-book"></i>&nbsp;&nbsp;查看对话</span>'+
+                        '               <span class="cen3-6" onclick="showInput(this)" style="display:'+showHide4+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+
+                        '           </div>'+
+                        '           <div class="commentDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
+                }
+            },
+        ],
+    });
+}
+//=====评论======
+//查看对话
+function dialogue(_this) {
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var dialogue_url='/weibo_xnr_manage/show_comment_dialog/?mid='+mid;
+    public_ajax.call_request('get',dialogue_url,dialogue_show)
+};
+function dialogue_show(data) {
+    console.log(data);
+    if (data.length!=0){
+
+    }else {
+        $('#successfail p').text('对话内容为空。');
+        $('#successfail').modal('show');
+    }
+}
+//加入语料库
+function joinWord() {
+    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
+    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
+    var theme_daily_name=[],tt='';
+    if (corpus_type=='主题语料'){tt=2};
+    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
+        theme_daily_name.push($(this).val());
+    });
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+text+
+        '&uid='+uid+'&mid='+mid+'&retweeted='+retweeted+'&comment='+comment+'&like=0&create_type='+create_type;
+}
+//评论
+function showInput(_this) {
+    $(_this).parents('.post_perfect').find('.commentDown').show();
+};
+function comMent(_this){
+    var txt = $(_this).prev().val();
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    if (txt!=''){
+        var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&r_mid='+mid;
+        public_ajax.call_request('get',post_url_3,postYES)
+    }else {
+        $('#successfail p').text('评论内容不能为空。');
+        $('#successfail').modal('show');
+    }
+}
+//转发
+function retweet(_this) {
+    obtain('r');
+    var txt = $(_this).parent().prev().text();
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var post_url_2='/weibo_xnr_operate/get_weibohistory_retweet/?xnr_user_no='+xnrUser+'&text='+txt+'&r_mid='+mid;
+    public_ajax.call_request('get',post_url_2,postYES)
+}
+//点赞
+function thumbs(_this) {
+    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
+    var txt = $(_this).parent().prev().text();
+    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+xnrUser;
+    '/weibo_xnr_manage/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&nick_name='+userRelName+
+    '&text='+txt+'&timestamp='+timestamp;
+    public_ajax.call_request('get',post_url_4,postYES)
+};
+//收藏
+function collect(_this) {
+
+}
+//操作返回结果
+function postYES(data) {
+    var f='';
+    if (data[0]){
+        f='操作成功';
+    }else {
+        f='操作失败';
+    }
+    $('#successfail p').text(f);
+    $('#successfail').modal('show');
 }
 //===========
 // =====关注列表====

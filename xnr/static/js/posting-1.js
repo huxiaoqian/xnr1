@@ -48,6 +48,8 @@ $('#container .type_page #myTabs a').on('click',function () {
         recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
     }else if (arrow=='#reportNote'){
         $('.post_post').hide();
+        public_ajax.call_request('get',flow_faw_url,flow_faw);
+        public_ajax.call_request('get',focus_main_url,focus_main);
     }
     if (arrow!='#reportNote'){
         $('.post_post').show();
@@ -58,8 +60,6 @@ $('#container .type_page #myTabs a').on('click',function () {
 //=========跟踪转发===========
 var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
 var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
-public_ajax.call_request('get',flow_faw_url,flow_faw);
-public_ajax.call_request('get',focus_main_url,focus_main);
 function flow_faw(data) {
     console.log(data)
     $('#follow_forward').bootstrapTable('load', data);
@@ -82,59 +82,102 @@ function flow_faw(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "",//标题
-                field: "",//键名
+                title: "头像",//标题
+                field: "photo_url",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        name='未命名';
-                    }else {
-                        name=row.nick_name;
-                    };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
-                        img='/static/images/unknown.png';
+                        return '<img src="/static/images/unknown.png" style="width: 30px;height: 30px;"/>'
                     }else {
-                        img=row.photo_url;
+                        return '<img src="'+row.photo_url+'" style="width: 30px;height: 30px;"/>'
                     };
+                }
+            },
+            {
+                title: "昵称",//标题
+                field: "nick_name",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        return row.uid;
+                    }else {
+                        return row.nick_name;
+                    };
+                }
+            },
+            {
+                title: "微博发布时间",//标题
+                field: "timestamp",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        return '未知';
+                    }else {
+                        return getLocalTime(row.timestamp);
+                    };
+                }
+            },
+            {
+                title: "微博转发时间",//标题
+                field: "timestamp_set",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.timestamp_set==''||row.timestamp_set=='null'||row.timestamp_set=='unknown'){
+                        return '未知';
+                    }else {
+                        return getLocalTime(row.timestamp_set);
+                    };
+                }
+            },
+            {
+                title: "微博内容",//标题
+                field: "text",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
-                        txt='暂无内容';
+                        return '无内容';
                     }else {
-                        txt=row.text;
+                        return '<p title="'+row.text+'"'+
+                            'style="width: 130px;margin:0 auto;white-space: nowrap;overflow: hidden;text-overflow: ellipsis">'+row.text+'</p>';
                     };
-                    var str=
-                        '<div class="post_perfect">'+
-                        '   <div class="post_center-hot">'+
-                        '       <img src="'+img+'" class="center_icon">'+
-                        '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        '           <span class="center_2">'+txt+
-                        '           </span>'+
-                        '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        '           </div>'+
-                        '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                        '           </div>'+
-                        '       </div>'+
-                        '   </div>'+
-                        '</div>';
-                    return str;
+                }
+            },
+            {
+                title: "转发状态",//标题
+                field: "compute_status",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.compute_status == 0) {
+                        return '未转发'
+                    } else if (row.compute_status == 1) {
+                        return '已转发'
+                    } else {
+                        return '未知'
+                    };
                 }
             },
         ],
     });
 }
+var mainUserUid=[];
 function focus_main(data) {
     console.log(data)
     $('#focus_main').bootstrapTable('load', data);
@@ -158,58 +201,130 @@ function focus_main(data) {
         columns: [
             {
                 title: "",//标题
-                field: "",//键名
+                field: "select",
+                checkbox: true,
+                align: "center",//水平
+                valign: "middle"//垂直
+            },
+            {
+                title: "头像",//标题
+                field: "photo_url",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        name='未命名';
-                    }else {
-                        name=row.nick_name;
-                    };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
-                        img='/static/images/unknown.png';
+                        return '<img src="/static/images/unknown.png" style="width: 30px;height: 30px;"/>'
                     }else {
-                        img=row.photo_url;
+                        return '<img src="'+row.photo_url+'" style="width: 30px;height: 30px;"/>'
                     };
-                    if (row.text==''||row.text=='null'||row.text=='unknown'){
-                        txt='暂无内容';
-                    }else {
-                        txt=row.text;
-                    };
-                    var str=
-                        '<div class="post_perfect">'+
-                        '   <div class="post_center-hot">'+
-                        '       <img src="'+img+'" class="center_icon">'+
-                        '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        '           <span class="center_2">'+txt+
-                        '           </span>'+
-                        '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        '           </div>'+
-                        '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                        '           </div>'+
-                        '       </div>'+
-                        '   </div>'+
-                        '</div>';
-                    return str;
                 }
             },
+            {
+                title: "昵称",//标题
+                field: "nick_name",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        return row.uid;
+                    }else {
+                        return row.nick_name;
+                    };
+                }
+            },
+            {
+                title: "性别",//标题
+                field: "sex",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
+                        return '未知';
+                    }else {
+                        if (row.sex==1){return '男'}else if (row.sex==2){return '女'}else{return '未知'}
+                    };
+                }
+            },
+            {
+                title: "所在地",//标题
+                field: "user_location",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
+                        return '未知';
+                    }else {
+                        return row.user_location;
+                    };
+                }
+            },
+            {
+                title: "微博数",//标题
+                field: "statusnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "粉丝数",//标题
+                field: "fansnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "好友数",//标题
+                field: "friendsnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
         ],
+        onCheck:function (row) {
+            mainUserUid.push(row.uid);_judge()
+        },
+        onUncheck:function (row) {
+            mainUserUid.removeByValue(row.uid);_judge()
+        },
+        onCheckAll:function (row) {
+            mainUserUid.push(row.uid);_judge()
+        },
+        onUncheckAll:function (row) {
+            mainUserUid.removeByValue(row.uid);_judge()
+        },
     });
 }
+Array.prototype.removeByValue = function(val) {
+    for(var i=0; i<this.length; i++) {
+        if(this[i] == val) {
+            this.splice(i, 1);
+            break;
+        }
+    }
+};
+function _judge() {
+    if (mainUserUid.length==0){
+        $('.reportNote-2 span.del_user').addClass('disableCss');
+    }else {
+        $('.reportNote-2 span.del_user').removeClass('disableCss');
+    }
+
+}
+$('.reportNote-2 span.del_user').on('click',function () {
+    var del_url='/weibo_xnr_operate/un_trace_follow/?xnr_user_no='+ID_Num+'&uid_string='+mainUserUid.join('，');
+    public_ajax.call_request('get',del_url,postYES())
+})
 //=========跟踪转发==完=========
 
 //====================
@@ -338,8 +453,8 @@ function defalutWords(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
@@ -394,7 +509,7 @@ function thumbs(_this) {
 //操作返回结果
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
         f='操作失败';
@@ -471,8 +586,8 @@ function hotWeibo(data) {
                         '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似微博"></i>&nbsp;&nbsp;相似微博</span>'+
                         '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
                         '               <span onclick="related(this)"><i class="icon icon-stethoscope" title="事件子观点及相关微博"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
-                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i><b class="forwarding">&nbsp;&nbsp;'+row.retweeted+'</b></span>'+
-                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i><b class="comment">&nbsp;&nbsp;'+row.comment+'</b></span>'+
+                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i>&nbsp;&nbsp;<b class="forwarding">'+row.retweeted+'</b></span>'+
+                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i>&nbsp;&nbsp;<b class="comment">'+row.comment+'</b></span>'+
                         '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="赞"></i></span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
@@ -520,8 +635,27 @@ function conViews(data) {
     $('#pormpt').modal('show');
 }
 //加入语料库
+var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
-
+    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
+    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
+    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
+    $('#wordcloud').modal('show');
+}
+function joinWord() {
+    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
+    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
+    var theme_daily_name=[],tt='11';
+    if (corpus_type=='主题语料'){tt=22};
+    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
+        theme_daily_name.push($(this).val());
+    });
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
+        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
+        '&like=0&create_type='+create_type;
+    public_ajax.call_request('get',corpus_url,postYES);
 }
 //内容推荐
 function contantREM(_this) {
@@ -779,8 +913,8 @@ function businessWeibo(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
