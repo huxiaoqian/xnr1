@@ -324,7 +324,29 @@ function _judge() {
 $('.reportNote-2 span.del_user').on('click',function () {
     var del_url='/weibo_xnr_operate/un_trace_follow/?xnr_user_no='+ID_Num+'&uid_string='+mainUserUid.join('，');
     public_ajax.call_request('get',del_url,postYES())
-})
+});
+//添加
+$('#addHeavyUser .demo-label input').on('click',function () {
+    var param=$(this).val();
+    if (param=='uid_string'){
+        $('#addHeavyUser .heavy-2').text('UID：');
+        $('#addHeavyUser .heavy-3').attr('placeholder','请输入人物UID（多个用逗号分隔）');
+    }else {
+        $('#addHeavyUser .heavy-2').text('人物昵称：');
+        $('#addHeavyUser .heavy-3').attr('placeholder','请输入人物昵称（多个用逗号分隔）');
+    }
+});
+function addHeavySure() {
+    var uid_name=$('#addHeavyUser .heavy-3').val().toString().replace(/,/g,'，');
+    if (!uid_name){
+        $('#pormpt p').text('输入内容不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var m=$('#addHeavyUser input:radio[name="heavy"]:checked').val();
+        var useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+        public_ajax.call_request('get',useradd_url,postYES)
+    }
+}
 //=========跟踪转发==完=========
 
 //====================

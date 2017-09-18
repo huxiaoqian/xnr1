@@ -27,7 +27,7 @@
     .event-2 .mainWeibo .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
-    .event-2 .mainWeibo .fixed-table-toolbar .search {width: 100%;}
+    .fixed-table-toolbar .search {width: 100%;}
     .event-2 .mainWeibo .form-control {
         text-align: center;
         font-size: 14px;
@@ -40,7 +40,14 @@
     .event-2 .mainWeibo .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
     }
-
+    /**/
+    .weiboContent .fixed-table-container thead th .both {
+        background-image:none!important;
+    }
+    .table .table {
+        background: transparent!important;
+    }
+    .bootstrap-table .table>thead>tr>th {width: 7%;}
     /**/
     .demo-label{display:inline-block}
     .demo-radio{display:none}
@@ -62,48 +69,7 @@
     <div class="weiboContent">
         <div id="weiboContent"></div>
     </div>
-    <div class="everyEvent" style="margin:0 auto;">
-        <div class="event_center">
-            <div style="margin: 10px 0;">
-                <label class="demo-label">
-                    <input class="demo-radio" type="checkbox" name="demo-checkbox">
-                    <span class="demo-checkbox demo-radioInput"></span>
-                </label>
-                <img src="/static/images/post-6.png" class="center_icon">
-                <a class="center_1">小小猪猪侠</a>
-                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  一键上报</a>
-            </div>
-            <div class="centerdetails" style="padding-left:40px;">
-                <div class="event-1">
-                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>
-                    <div class="mainJoin">
-                        <div id="mainJoin"></div>
-                    </div>
-                </div>
-                <div class="event-2">
-                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>
-                    <div class="mainWeibo">
-                        <div id="mainWeibo"></div>
-                    </div>
-                </div>
 
-                <div class="center_rel">
-                    <div class="icons">
-                        <i class="icon icon-warning-sign weiboFlag"></i>
-                    </div>
-                    <span class="center_2">
-                    【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                </span>
-                    <div class="center_3">
-                        <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;2017-11-12 11:23</span>
-                        <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">222</b>）</span>
-                        <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">222</b>）</span>
-                        <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">222</b>）</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!--模态框-->

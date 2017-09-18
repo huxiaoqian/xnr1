@@ -60,7 +60,7 @@
         background-color: #2a556f!important;
     }
     .fixed-table-toolbar .search {width: 100%;}
-    .form-control {
+    .form-control,.heavy-3 {
         text-align: center;
         font-size: 14px;
         color: white;
@@ -69,6 +69,8 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
+    #addHeavyUser .heavy-3 {width: 300px;margin: 20px 0 0 10px;}
+    #addHeavyUser .h-1 {display: inline-block;width:75px;text-align: right;}
     .weiboTable .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
     }
@@ -452,7 +454,7 @@
                 <div class="reportNote-2" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">重点关注用户</span>
-                    <span class="add_user" title="添加新的重点用户">添加用户</span>
+                    <span class="add_user" data-toggle="modal" data-target="#addHeavyUser" title="添加新的重点用户">添加用户</span>
                     <span class="del_user disableCss" title="请勾选您要删除的用户">删除用户</span>
                 </div>
                 <div class="focus_main">
@@ -786,6 +788,42 @@
         </div>
     </div>
 </div>
+
+<!--添加重点用户-->
+<div class="modal fade" id="addHeavyUser" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加重点关注用户</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <span class="h-1">添加方式：</span>
+                    <label class="demo-label" style="margin:5px 0 0 10px;">
+                        <input class="demo-radio" type="radio" name="heavy" value='uid_string' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 按UID方式
+                    </label>
+                    <label class="demo-label" style="margin:5px 0 0 10px;">
+                        <input class="demo-radio" type="radio" name="heavy" value='nick_name_string'>
+                        <span class="demo-checkbox demo-radioInput"></span> 按人物昵称
+                    </label>
+                </div>
+                <div>
+                    <span class="heavy-2 h-1">UID：</span>
+                    <input type="text" class="heavy-3" placeholder="请输入人物UID（多个用逗号分隔）"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addHeavySure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
 {% endblock %}
 
 {% block my_js %}
