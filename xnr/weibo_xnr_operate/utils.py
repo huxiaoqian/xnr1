@@ -5,6 +5,7 @@ import json
 import sys
 import random
 import base64
+import re
 
 #reload(sys)
 #sys.path.append('../../')
@@ -48,7 +49,12 @@ def get_image_path(image_code):
     image_code_list = image_code.encode('utf-8').split('，')
     image_path_list = []
     for image in image_code_list:
-        imgData = base64.b64decode(image)
+        image_new = image.replace(' ','+')
+        #print 'image_new:::::',image_new
+        print 'image_new::::',image_new
+        print '123123'
+        imgData = base64.decodestring(image_new)
+        #imgData = base64.b64encode(image_new)
         time_name = time.strftime('%Y%m%d%H%M%S')
         image_path = time_name + '_%d' % random.randint(0,100)
         leniyimg = open(IMAGE_PATH+image_path+'.jpg','wb')   
@@ -81,7 +87,7 @@ def push_keywords_task(task_detail):
     return mark
 
 def get_submit_tweet(task_detail):
-
+    print 'task_detail[p_url]:::',task_detail['p_url']
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
     #operate_type = task_detail['operate_type']
@@ -765,6 +771,7 @@ def get_show_at(task_detail):
     return results_all
 
 def get_reply_at():
+    
     return []
 
 def get_show_fans(task_detail):

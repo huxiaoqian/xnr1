@@ -60,6 +60,7 @@ mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 @mod.route('/get_image_path/')
 def ajax_get_image_path():
     image_code = request.args.get('image_code','') # 以中文逗号隔开
+    print 'image_code::',image_code
     results = get_image_path(image_code)
     return json.dumps(results)
 
@@ -405,12 +406,12 @@ def ajax_related_recommendation():
 # 显示粉丝
 @mod.route('/create_group_show_fans/')
 def ajax_create_group_show_fans():
-	
-	xnr_user_no = request.args.get('xnr_user_no','')
+    
+    xnr_user_no = request.args.get('xnr_user_no','')
 
-	results = get_create_group_show_fans(xnr_user_no)
+    results = get_create_group_show_fans(xnr_user_no)
 
-	return json.dumps(results)
+    return json.dumps(results)
 
 # 创建群组
 @mod.route('/create_group/')

@@ -41,6 +41,10 @@ body {
     margin-bottom: 10px;
     width: 950px;
 }
+#container .type_page #content .letterEvery {
+    background:transparent;
+    padding:10px 10px 30px 80px;
+}
 #container .type_page #content .focusEvery {
     /*width: 100%;*/
     /*height: 170px;*/
@@ -89,6 +93,9 @@ body {
 #container .type_page #content .focusEvery .foc-1-name {
     font-size: 20px;
     font-weight: 900;
+}
+#container .type_page #content .replyEvery .rep-1-name{
+    font-size: 14px;
 }
 #container .type_page #content .focusEvery .foc-1 .foc-1-option {
     margin: 10px 0;
@@ -195,6 +202,9 @@ body {
     border-radius: 5px;
     background: rgba(5, 23, 55, 0.45);
     transition: all linear 0.5s;
+}
+#container .type_page #content .replyClone .clone-1 {
+    width: 100%;
 }
 #container .type_page #content .commentClone .clone-1:focus,
 #container .type_page #content .forwardClone .clone-1:focus,
