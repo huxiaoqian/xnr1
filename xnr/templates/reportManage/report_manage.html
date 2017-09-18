@@ -4,20 +4,61 @@
 <link rel="stylesheet" href="/static/css/report_manage.css">
 <style>
     .fixed-table-toolbar .search {width: 100%;}
-    .bootstrap-table .table>thead>tr>th {width: 4%;}
-    .bootstrap-table .table>thead>tr>th:last-child {width:14%!important;}
-    .bootstrap-table .table>thead>tr>th:first-child {width:1%!important;}
+    /*.bootstrap-table .table>thead>tr>th {width: 4%;}*/
+    /*.bootstrap-table .table>thead>tr>th:last-child {width:14%!important;}*/
+    /*.bootstrap-table .table>thead>tr>th:first-child {width:1%!important;}*/
     .table>tbody>tr>td {vertical-align: middle!important;}
     .fixed-table-container tbody .selected td {background-color: #2a556f!important;}
     #container .type_page #myTabs a {
         color: white;
     }
     .type2 .demo-label{width: 90px;}
-    .demo-label{display:inline-block;margin-left: 10px;cursor:pointer;}
+    .demo-label{display:inline-block;cursor:pointer;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+
+    /**/
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    .fixed-table-container thead th .both {
+        background-image:none!important;
+    }
 </style>
 {% endblock %}
 {% block main %}

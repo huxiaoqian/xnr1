@@ -370,13 +370,11 @@ body {
     width: 20px;
     height:20px;
 }
-
 #content_recommend #post_center-recommend a {
     cursor: pointer;
     display: inline-block;
     margin: 0 10px;
 }
-
 .modal-open .modal {
     overflow-y: auto;
 }
