@@ -83,7 +83,7 @@ function influe(data) {
             },
             legend: {
                 data:legend,
-                width: '500',
+                width: '600',
                 left:'center'
             },
             xAxis: [
@@ -100,8 +100,6 @@ function influe(data) {
                     type: 'value',
                     name: '数量',
                     min: 0,
-                    max: 250,
-                    interval: 50,
                     axisLabel: {
                         formatter: '{value} 人'
                     }
@@ -110,8 +108,6 @@ function influe(data) {
                     type: 'value',
                     name: '增加数',
                     min: 0,
-                    max: 250,
-                    interval: 50,
                     axisLabel: {
                         formatter: '{value} 人'
                     }
@@ -155,7 +151,7 @@ function influe(data) {
                     data:privateData
                 },
                 {
-                    name:'粉丝增加数',
+                    name:'粉丝总数',
                     type:'bar',
                     data:totalFans
                 },

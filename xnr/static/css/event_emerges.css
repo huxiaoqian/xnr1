@@ -43,8 +43,9 @@ body {
 #container .title .output2 {
     left: 60px;
 }
-#container .title .output1:hover,#container .title .output2:hover {
-    background:rgba(3, 8, 16, 0.61);
+#container .title .output1:hover,#container .title .output2:hover,
+.weiboContent #div-button input:hover {
+    background:rgba(3, 8, 16, 0.61)!important;
 }
 #container .weiboContent {
     margin-top: 30px;
@@ -69,6 +70,7 @@ body {
     height: 20px;
 }
 #container .everyEvent .event_center .center_rel {
+    width: 910px;
     position: relative;
     padding:10px 10px 10px 70px;
     background: rgba(16, 33, 51, 0.42);
@@ -131,12 +133,12 @@ body {
 #container .everyEvent .event_center .center_3 span:hover {
     color:#eb7350;
 }
-#container #weiboContent .commentDown {
+#container .commentDown {
     width: 100%;
     padding: 5px;
     margin: 10px 0;
 }
-#container #weiboContent .commentDown input {
+#container .commentDown input {
     width: 90%;
     color: white;
     display: inline-block;
@@ -146,7 +148,7 @@ body {
     border-radius: 5px;
     text-align: center;
 }
-#container #weiboContent .commentDown span {
+#container .commentDown span {
     color: white;
     display: inline-block;
     padding: 4px 8px;
@@ -155,6 +157,7 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-#container #weiboContent .commentDown span:hover {
+#container .commentDown span:hover {
     background: #333333;
 }
+

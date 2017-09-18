@@ -82,21 +82,23 @@ def get_show_domain_group_summary(xnr_user_no):
         for result in es_result:
             item = {}
             result = result['_source']
+            print 'result::',result
             item['group_size'] = result['group_size']
             item['domain_name'] = result['domain_name']
             item['create_time'] = result['create_time']
             item['compute_status'] = result['compute_status']
+            item['create_type'] = result['create_type']
             item['remark'] = result['remark']
             item['description'] = result['description']
 
             create_type = json.loads(result['create_type'].encode('utf-8'))
 
-            if not create_type['by_keywords']:
-                item['create_type'] = 'by_keywords'
-            elif not create_type['by_seed_users']:
-                item['create_type'] = 'by_seed_users'
-            elif not create_type['by_all_users']:
-                item['create_type'] = 'by_all_users'
+            # if not create_type['by_keywords']:
+            #     item['create_type'] = 'by_keywords'
+            # elif not create_type['by_seed_users']:
+            #     item['create_type'] = 'by_seed_users'
+            # elif not create_type['by_all_users']:
+            #     item['create_type'] = 'by_all_users'
 
             result_all.append(item)
     else:

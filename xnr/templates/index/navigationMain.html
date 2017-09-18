@@ -294,8 +294,7 @@
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
-        htmlUrl='/personalCenter/individual/';
-        $('#choosePerson').modal('show');
+        window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
         htmlUrl='/control/operationControl/';
