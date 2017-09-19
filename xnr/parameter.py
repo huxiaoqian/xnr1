@@ -86,6 +86,10 @@ ACTIVE_UID = '2919766227'
 #MAX_PRIVATE = 100
 #MAX_AT = 1000
 
+WHITE_UID_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/'
+
+WHITE_UID_FILE_NAME = 'white_uid.txt'
+
 IMAGE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/weibo_images/'
 
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'

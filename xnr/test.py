@@ -66,12 +66,12 @@ from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 # es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
 #     id='WXNR0004',body={'doc':{'trace_follow_list':follow_list,'followers_list':follow_list}})
 
-with open("./fans_followers.json","r") as load_f:
-    #print 'load_f::',load_f
-    load_dict = json.load(load_f)
-    print load_dict
-    es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-        id='WXNR0004',body=load_dict['_source'])
+# with open("./fans_followers.json","r") as load_f:
+#     #print 'load_f::',load_f
+#     load_dict = json.load(load_f)
+#     print load_dict
+#     es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+#         id='WXNR0004',body=load_dict['_source'])
 
 # # query_body = {
 # #     'query':{
@@ -82,3 +82,4 @@ with open("./fans_followers.json","r") as load_f:
 # results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
 
 # print 'results::',results
+
