@@ -6,20 +6,25 @@ weibo information monitor function about database task
 import sys
 import json
 #import time,datetime
-from xnr.time_utils import ts2datetime,datetime2ts
+from xnr.time_utils import ts2datetime,datetime2ts,ts2datetimestr
 from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
                              weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
-                             weibo_xnr_index_name,weibo_xnr_index_type
+                             weibo_xnr_index_name,weibo_xnr_index_type,\
+                             xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
+                             weibo_bci_index_name_pre,weibo_bci_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
-from xnr.parameter import MAX_VALUE,DAY,MID_VALUE
+from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
 
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
-    result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=weiboxnr_id)
-    followers_list=result['_source']['followers_list']
+    try:
+        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=weiboxnr_id)
+        followers_list=result['_source']['followers_list']
+    except:
+    	followers_list=[]
     return followers_list
     #return result
 
@@ -167,7 +172,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
                         }
                     }
                 },
-            'size':MAX_VALUE,		
+            'size':MAX_SEARCH_SIZE,		
             'sort':sort_condition_list
             }
         try:
@@ -274,16 +279,18 @@ def attach_fans_follow(task_detail):
     password=xnr_es_result['password']
 
     follower_uid=task_detail['uid']
+    trace_type=task_detail['trace_type']
 
     #调用关注函数
-    mark=follow_tweet_func(account_name,password,follower_uid)
+    
+    mark=follow_tweet_func(xnr_user_no,account_name,password,follower_uid,trace_type)
     #保存至关注列表
-    if mark:
-        save_mark=save_xnr_followers(xnr_user_no,follower_uid)
-    else:
-        save_mark=False
+    #if mark:
+    #    save_mark=save_xnr_followers(xnr_user_no,follower_uid)
+    #else:
+    #    save_mark=False
 
-    return mark,save_mark
+    return mark
 
 ###加入语料库
 #task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
@@ -312,7 +319,7 @@ def addto_weibo_corpus(task_detail):
 
 ###############################################################
 #批量添加关注
-def attach_fans_batch(xnr_user_no_list,fans_id_list):
+def attach_fans_batch(xnr_user_no_list,fans_id_list,trace_type):
     for xnr_user_no in xnr_user_no_list:
         xnr_es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
         account_name=xnr_es_result['weibo_mail_account']
@@ -322,52 +329,105 @@ def attach_fans_batch(xnr_user_no_list,fans_id_list):
         save_mark_list=[]
         #调用关注函数：
         for uid in fans_id_list:
-            mark=follow_tweet_func(account_name,password,uid)
+            mark=follow_tweet_func(xnr_user_no,account_name,password,uid,trace_type)
+            #mark=follow_tweet_func(account_name,password,uid)
             mark_list.append(mark)
             #保存至关注列表
-            if mark:
-                save_mark=save_xnr_followers(xnr_user_no,uid)
-            else:
-                save_mark=False
-            save_mark_list.append(save_mark)
+            #if mark:
+            #    save_mark=save_xnr_followers(xnr_user_no,uid)
+            #else:
+            #    save_mark=False
+            #save_mark_list.append(save_mark)
     return mark_list
 
 
 #lookup acitve_user
 #input:classify_id,weiboxnr_id
 #output:active weibo_user info list
-def lookup_active_weibouser(classify_id,weiboxnr_id):
+def lookup_active_weibouser(classify_id,weiboxnr_id,end_time):
     #step1: users condition
     #make sure the users range by classify choice
     userlist = lookup_weiboxnr_concernedusers(weiboxnr_id)
 
     if classify_id==1:		#concrenedusers
     	condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
-        #print 'aaaa'
     elif classify_id==2:	#unconcrenedusers
     	condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
     else:
     	condition_list=[{'match_all':{}}]
-    print userlist,classify_id,condition_list
+    #print userlist,classify_id,condition_list
 
-    #step 2:lookup users and ranked by infuluence
+    #step 2:lookup users 
     for item in condition_list:
-        print item
         query_body={
 
             'query':item,
             'size':MID_VALUE,		#查询影响力排名前500的用户即可
-            #'sort':{'infuluence':{'order':'desc'}}    #根据影响力排名
             }
-    try:
-        flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
-        results=[]
-        for item in flow_text_exist:
-            results.append(item['_source'])
-    except:
-        results=[]
+        try:
+            flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+            results=[]
+            for item in flow_text_exist:
+                uid=item['_source']['uid']
+                #微博数
+                item['_source']['weibos_sum']=count_weibouser_weibosum(uid,end_time)
+                #影响力
+                item['_source']['influence']=count_weibouser_influence(uid,end_time)
+                results.append(item['_source'])
+            results.sort(key=lambda k:(k.get('influence',0)),reverse=True)
+        except:
+            results=[]
 
     return results
+
+#查询微博数
+def count_weibouser_weibosum(uid,end_time):
+    date_time=ts2datetimestr(end_time-DAY)
+    index_name=xnr_flow_text_index_name_pre+date_time
+
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'uid':uid}
+                }
+            }
+        },
+        'size':1,
+        'sort':{'timestamp':{'order':'desc'}}
+    }
+    try:
+    	weibo_result=es_xnr.search(index=index_name,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+    	for item in weibo_result:
+    		weibos_sum=item['_source']['weibos_sum']
+    except:
+    	weibos_sum=0
+    return weibos_sum
+
+#计算影响力
+def count_weibouser_influence(uid,end_time):
+    #now_time=int(time.time())
+    date_time=ts2datetimestr(end_time-DAY)
+    index_name=weibo_bci_index_name_pre+date_time
+    
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':1,
+        'sort':{'user_index':{'order':'desc'}}
+    }
+    try:
+        max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        for item in max_result:
+           max_user_index=item['_source']['user_index']
+
+        user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        user_index=user_result['user_index']
+        infulence_value=user_index/max_user_index*100
+    except:
+        infulence_value=0
+    return infulence_value
 
 #weibo_user_detail
 def weibo_user_detail(user_id):

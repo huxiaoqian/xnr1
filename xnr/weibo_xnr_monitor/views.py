@@ -84,6 +84,7 @@ def ajax_attach_fans_follow():
     task_detail=dict()
     task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
     task_detail['uid']=request.args.get('uid','')   #关注对象的uid
+    task_detail['trace_type']=request.args.get('trace_type','')
     results=attach_fans_follow(task_detail)
     return json.dumps(results)
 
@@ -112,17 +113,20 @@ def ajax_addto_weibo_corpus():
 def ajax_attach_fans_batch():
     xnr_user_no_list=request.args.get('xnr_user_no_list','').split(',')   #虚拟人no的list
     fans_id_list=request.args.get('fans_id_list','').split(',')            #勾选的活跃用户id的list
-    results=attach_fans_batch(xnr_user_no_list,fans_id_list)
+    trace_type=request.args.get('trace_type','')
+    results=attach_fans_batch(xnr_user_no_list,fans_id_list,trace_type)
     return json.dumps(results)
 
 
 #活跃用户
-#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0001&classify_id=1
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0004&classify_id=1&end_time=1504540800
 @mod.route('/lookup_active_weibouser/')
 def ajax_lookup_active_weibouser():
     weiboxnr_id=request.args.get('weiboxnr_id','')
     classify_id=request.args.get('classify_id','')
-    result=lookup_active_weibouser(classify_id,weiboxnr_id)
+    #start_time=int(request.args.get('start_time',''))
+    end_time=int(request.args.get('end_time'))
+    result=lookup_active_weibouser(classify_id,weiboxnr_id,end_time)
     return json.dumps(result)
 
 
