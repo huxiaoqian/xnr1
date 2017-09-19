@@ -16,7 +16,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
-                get_show_trace_followers,get_image_path
+                get_show_trace_followers,get_image_path,get_reply_total
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
@@ -242,6 +242,22 @@ def ajax_bussiness_recomment_tweets():
 
 '''
 
+## 转发、评论、at回复
+@mod.route('/reply_total/')
+def ajax_reply_total():
+    task_detail = dict()
+    task_detail['tweet_type'] = request.args.get('tweet_type','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['text'] = request.args.get('text','').encode('utf-8')
+    task_detail['r_mid'] = request.args.get('r_mid','')
+    task_detail['mid'] = request.args.get('mid','')
+    task_detail['uid'] = request.args.get('uid','')
+    task_detail['retweet_option'] = request.args.get('retweet_option','')
+
+    mark = get_reply_total(task_detail)
+
+    return json.dumps(mark)
+
 # 评论及回复
 @mod.route('/show_comment/')
 def ajax_show_comment():
@@ -284,7 +300,6 @@ def ajax_reply_retweet():
     mark = get_reply_retweet(task_detail)
 
     return json.dumps(mark)
-
 
 # 私信及回复
 @mod.route('/show_private/')

@@ -147,6 +147,18 @@ def retweet_tweet_func(account_name,password,text,r_mid):
     
     return mark
 
+## 回复
+def reply_tweet_func(account_name,password,text,r_mid,mid,uid):
+    xnr = SinaLauncher(account_name,password)
+    xnr.login()
+    user = SinaOperateAPI(xnr.uid)
+    user.text = text
+    user.r_mid = r_mid
+    # user.r_uid = xnr.uid
+    user.uid = uid
+    user.cid = mid
+    mark = user.receive()
+    return mark
 
 ## 评论微博
 def comment_tweet_func(account_name,password,text,r_mid):
@@ -157,10 +169,11 @@ def comment_tweet_func(account_name,password,text,r_mid):
     user.text = text
     user.r_mid = r_mid
     mark = user.comment()
+    #mark = user.receive()
 
     return mark
 
-## 私信
+# ## 私信
 def private_tweet_func(account_name,password,text,r_mid):
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -170,9 +183,6 @@ def private_tweet_func(account_name,password,text,r_mid):
     mark = user.privmessage()
 
     return mark
-
-## at回复
-
 
 ## 点赞
 def like_tweet_func(account_name,password,r_mid):
