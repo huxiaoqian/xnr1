@@ -55,10 +55,10 @@ function weibo(data) {
                         '<div class="everySpeak" style="margin: 0 auto;">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel">'+
-                        // '                <label class="demo-label">'+
-                        // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                        // '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                        // '                </label>'+
+                        '                <label class="demo-label">'+
+                        '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+name+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
@@ -73,7 +73,7 @@ function weibo(data) {
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
-                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;一键上报</span>'+
+                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="评论内容"/>'+

@@ -37,7 +37,7 @@ function penetration(data) {
             },
             legend: {
                 data:['关注群体敏感度','粉丝群体敏感度','发布信息敏感度','社交反馈敏感度','预警上报敏感度'],
-                width: '400',
+                width: '600',
                 left:'center'
             },
             toolbox: {
