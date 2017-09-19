@@ -31,7 +31,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                             index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
-                            weibo_xnr_retweet_timing_list_index_type
+                            weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
+                            weibo_private_white_uid_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -39,7 +40,7 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
-                        FOLLOWERS_LIST,IMAGE_PATH
+                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
@@ -696,6 +697,22 @@ def get_show_private(task_detail):
     sort_item = task_detail['sort_item']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
+    # white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+    # white_uid_list = []
+    # with open(white_uid_path,'rb') as f:
+    # 	for line in f:
+    # 		line = line.strip('\n')
+    # 		white_uid_list.append(line[0])
+
+    # white_uid_list = list(set(white_uid_list))
+    # print 'white_uid_list:::',white_uid_list
+    try:
+    	es_get = es.get(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+    				id=xnr_user_no)['_source']
+    	white_uid_list = es_get['white_uid_list']
+    	
+    except:
+    	white_uid_list = []
 
     query_body = {
         'query':{
@@ -703,7 +720,8 @@ def get_show_private(task_detail):
                 'must':[
                     {'term':{'root_uid':uid}},
                     {'term':{'private_type':'receive'}}
-                ]
+                ],
+                'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -759,7 +777,7 @@ def get_show_at(task_detail):
         'sort':{sort_item:{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-
+    	
     es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                             body=query_body)['hits']['hits']
 
@@ -1374,6 +1392,36 @@ def get_show_trace_followers(xnr_user_no):
 
     return weibo_user_info
 
+def get_add_private_white_uid(xnr_user_no,white_uid_string):
+
+	white_uid_list = white_uid_string.encode('utf-8').split('，')
+	mark = False
+
+	try:
+		get_result = es.get(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			id=xnr_user_no)['_source']
+
+		white_uid_list_old = get_result['white_uid_list']
+		white_uid_list_old.extend(white_uid_list)
+
+		get_result['white_uid_list'] = white_uid_list_old
+
+		es.update(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			body={'doc':get_result})
+
+		mark = True
+	
+	except:
+		item_dict = {}
+		item_dict['xnr_user_no'] = xnr_user_no
+		item_dict['white_uid_list'] = white_uid_list
+
+		es.index(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			id=xnr_user_no,body=item_dict)
+		
+		mark = True
+
+	return mark
 
 
 
