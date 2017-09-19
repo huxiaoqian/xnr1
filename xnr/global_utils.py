@@ -144,6 +144,10 @@ id_sensing = "social_sensing_task"
 social_sensing_index_name = 'social_sensing_text'
 social_sensing_index_type = 'text'
 
+weibo_private_white_uid_index_name = 'weibo_private_white_uid'
+weibo_private_white_uid_index_type = 'white_uid'
+
+
 # content recommendation & sub opinion 
 
 weibo_hot_keyword_task_index_name = 'recommend_subopinion_keywords_task'

@@ -16,7 +16,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
-                get_show_trace_followers,get_image_path
+                get_show_trace_followers,get_image_path,get_add_private_white_uid
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
@@ -462,3 +462,12 @@ def ajax_un_trace_follow_operate():
     results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
 
     return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
+
+# 添加私信白名单
+@mod.route('/add_private_white_uid/')
+def ajax_add_private_white_uid():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	white_uid_string = request.args.get('white_uid_string','')    # 多个uid用中文逗号分开
+	results = get_add_private_white_uid(xnr_user_no,white_uid_string)
+
+	return json.dumps(results)
