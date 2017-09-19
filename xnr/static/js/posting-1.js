@@ -305,14 +305,6 @@ function focus_main(data) {
         },
     });
 }
-Array.prototype.removeByValue = function(val) {
-    for(var i=0; i<this.length; i++) {
-        if(this[i] == val) {
-            this.splice(i, 1);
-            break;
-        }
-    }
-};
 function _judge() {
     if (mainUserUid.length==0){
         $('.reportNote-2 span.del_user').addClass('disableCss');
@@ -343,7 +335,19 @@ function addHeavySure() {
         $('#pormpt').modal('show');
     }else {
         var m=$('#addHeavyUser input:radio[name="heavy"]:checked').val();
-        var useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+        var useradd_url;
+        if(m=='uid_string'){
+            var reg = new RegExp("^[0-9]*$");
+            if(reg.test(m)){
+                useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+            }else {
+                $('#pormpt p').text('UID为数字。');
+                $('#pormpt').modal('show');
+            }
+        }else {
+            useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+        }
+
         public_ajax.call_request('get',useradd_url,postYES)
     }
 }

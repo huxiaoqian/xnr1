@@ -31,7 +31,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                             index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
-                            weibo_xnr_retweet_timing_list_index_type
+                            weibo_xnr_retweet_timing_list_index_type,weibo_domain_index_name,\
+                            weibo_domain_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -44,6 +45,16 @@ from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TO
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
+
+def get_show_domain():
+    domain_name_dict = {}
+    query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
+    es_results = es.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,body=query_body)['hits']['hits']
+    if es_results:
+        for result in es_results:
+            result = result['_source']
+            domain_name_dict[result['domain_pinyin']] = result['domain_name']
+    return domain_name_dict
 
 def get_image_path(image_code):
 

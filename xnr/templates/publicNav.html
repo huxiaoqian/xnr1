@@ -107,6 +107,15 @@
             return !1;
         return !0
     }
+    //删除数组指定项
+    Array.prototype.removeByValue = function(val) {
+        for(var i=0; i<this.length; i++) {
+            if(this[i] == val) {
+                this.splice(i, 1);
+                break;
+            }
+        }
+    };
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {

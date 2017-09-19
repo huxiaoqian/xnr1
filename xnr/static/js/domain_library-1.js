@@ -55,7 +55,6 @@ var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
     var person=eval(data)
-    console.log(person)
     $('#group-2').bootstrapTable('load', person);
     $('#group-2').bootstrapTable({
         data:person,
@@ -123,7 +122,12 @@ function group(data) {
                     if (row.create_type==''||row.create_type=='null'||row.create_type=='unknown'||!row.create_type){
                         return '未知';
                     }else {
-                        return lab_list[row.create_type];
+                        var crType=JSON.parse(row.create_type);
+                        for (var k in crType){
+                            if (crType[k].length!=0){
+                                return lab_list[k];
+                            }
+                        }
                     };
                 },
             },
@@ -178,12 +182,19 @@ function group(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
+                    var crType=JSON.parse(row.create_type),thisType,thisUser;
+                    for (var k in crType){
+                        if (crType[k].length!=0){
+                            thisType = k;
+                            thisUser =crType[k];
+                        }
+                    }
                     var dis1='disabled',dis2='disabled';
                     if (row.compute_status=='1'){dis1=''}
                     else if (Number(row.compute_status) > 1){dis1='';dis2=''}
                     return '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_group_detail_portrait\')" class="icon icon-group '+dis1+'" title="查看群体"></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\')" class="icon icon-paste '+dis2+'" title="查看描述"></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+row.create_type+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+thisType+'\',\''+thisUser+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color: white;" onclick="delt(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
                 },
             },
@@ -460,7 +471,7 @@ function groupList(data) {
     });
 }
 //更新
-function refresh(domainName,description,remark,create_type) {
+function refresh(domainName,description,remark,create_type,word_user) {
     var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
         '&description='+description+'&submitter='+admin+'&remark='+remark+
         '&create_type='+create_type+'&'+labType_list[create_type]+'='+word_user;

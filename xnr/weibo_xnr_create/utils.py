@@ -60,7 +60,7 @@ def get_show_domain():
     if es_results:
         for result in es_results:
             result = result['_source']
-            domain_name_dict[result['domain_pinyin']] = json.loads(result['domain_name'])
+            domain_name_dict[result['domain_pinyin']] = result['domain_name']
     return domain_name_dict
 
 def get_show_weibo_xnr():

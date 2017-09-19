@@ -16,7 +16,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
-                get_show_trace_followers,get_image_path,get_reply_total
+                get_show_trace_followers,get_image_path,get_reply_total,get_show_domain
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
@@ -55,6 +55,13 @@ mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 #             return path
 #
+
+# 返回渗透领域
+@mod.route('/show_domain_second/')
+def ajax_show_domain():
+    #xnr_user_no = request.args.get('xnr_user_no','')
+    domain_name_dict = get_show_domain()
+    return json.dumps(domain_name_dict)
 
 # 获取图片路径
 @mod.route('/get_image_path/')
