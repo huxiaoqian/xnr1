@@ -61,9 +61,15 @@ def find_port(exist_port_list):
 
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
+    
     qq_number = xnr_info['qq_number']
-    qq_groups = xnr_info['qq_groups'].split('，')
+    qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
     nickname = xnr_info['nickname']
+
+    search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+        body={'query':{'term':{'qq_number':qq_number}}})['hits']['hits']
+    if search_result:
+        return '当前qq已经被添加！'
     
     # active_time = xnr_info[3]
     create_ts = xnr_info['create_ts']
@@ -80,8 +86,8 @@ def create_qq_xnr(xnr_info):
     else:
         user_no_current = 1
 
-    task_detail['user_no'] = user_no_current
-    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 WXNR0001
+    #task_detail['user_no'] = user_no_current
+    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 QXNR0001
 
     try:
         # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
@@ -95,7 +101,7 @@ def create_qq_xnr(xnr_info):
 
     if result == 1:
         #qqbot_port = '8199'
-        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' >> login'+qqbot_port+'.txt'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
         print 'p_str1:', p_str1
         p2 = subprocess.Popen(p_str1, \
                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

@@ -1,6 +1,6 @@
-var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
-var to_ts=Date.parse(new Date())/1000;
-// var from_ts=1479513600,to_ts=1479981600;
+// var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
+// var to_ts=Date.parse(new Date())/1000;
+var from_ts=1479513600,to_ts=1479981600;
 $('.title .perTime .demo-label input').on('click',function () {
     var _val=$(this).val();
     if (_val=='resize'){
@@ -144,7 +144,7 @@ function hotPost(data) {
                         txt=row.text;
                     };
                     var str=
-                        '<div class="post_perfect" style="margin: 20px auto;">'+
+                        '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+

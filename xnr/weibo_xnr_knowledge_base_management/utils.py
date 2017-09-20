@@ -10,12 +10,47 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type
 from xnr.time_utils import ts2datetime
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict
+from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
+                        EXAMPLE_MODEL_PATH
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 '''
 领域知识库
 '''
+
+def get_generate_example_model(domain_name,role_name):
+
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    role_en = domain_ch2en_dict[role_name]
+
+    task_id = domain_pinyin + '_' + role_en
+
+    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
+
+    example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
+    
+    try:
+        with open(example_model_file_name,"w") as dump_f:
+        for item in result:
+            json.dump(item,dump_f)
+
+        mark = True
+    except:
+        mark = False
+
+    return mark
+
+
+def get_export_example_model(domain_name,role_name):
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    role_en = domain_ch2en_dict[role_name]
+
+    task_id = domain_pinyin + '_' + role_en
+    example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
+    with open(example_model_file_name,"r") as dump_f:
+        es_result = json.load(item,dump_f)
+
+    return es_result
 
 def get_create_type_content(create_type,keywords_string,seed_users,all_users):
 
@@ -63,8 +98,8 @@ def domain_create_task(xnr_user_no,domain_name,create_type,create_time,submitter
         item_exist['group_size'] = ''
         
         item_exist['compute_status'] = 0  # 存入创建信息
-        es_xnr.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
-    
+        es.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
+
 
         mark = True
     except:
@@ -197,8 +232,6 @@ def get_show_domain_description(xnr_user_no,domain_name):
 def get_show_domain_role_info(domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    print 'domain_name::',domain_name
-    print 'domain_pinyin::',domain_pinyin
     role_en = domain_ch2en_dict[role_name]
 
     task_id = domain_pinyin + '_' + role_en
