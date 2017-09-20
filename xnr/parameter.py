@@ -62,6 +62,9 @@ SUB_OPINION_WEIBO_LIMIT = 3
 ## 读取hashtag
 UID_TXT_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_warming'
 
+## 生成实例模板
+EXAMPLE_MODEL_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/example_model/'
+
 # 主动社交，朋友圈推荐，weibo_user库中 friend_list字段
 FRIEND_LIST = ['3077463611','3925294372','1666458704','1663088660','3605949192','3700715461','5664244064','5764699905','2567277481']
 

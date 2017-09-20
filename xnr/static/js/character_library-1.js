@@ -6,78 +6,62 @@ function field_user(data) {
     for (var k in data){
         str+=
             '<label class="demo-label" title="'+data[k]+'">'+
-            '   <input class="demo-radio" type="radio" name="chara" id="'+k+'" value="'+data[k]+'">'+
+            '   <input class="demo-radio" type="radio" name="chara" id="'+k+'" value="'+data[k]+'" onclick="$domain(this)">'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
             '</label>';
     }
     $('#container .tit-2 .field-1').html(str);
-    $('tit-2 .field-1 input[name=chara]').on('click',function () {
-        domainName=$(this).parent().attr('title');
-        var domain_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
-        public_ajax.call_request('get',domain_url,domain)
-    });
+}
+function $domain(_this) {
+    domainName=$(_this).parent().attr('title');
+    var domain_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
+    public_ajax.call_request('get',domain_url,domain);
 }
 function domain(data) {
-    console.log(data)
+    var str='';
+    if (data.length==0){
+        str='暂无数据';
+    }else {
+        for(var i=0;i<data.length;i++){
+            str+=
+                '<label class="demo-label" title="'+data[i]+'">'+
+                '   <input class="demo-radio" value="'+data[i]+'" type="radio" name="'+name+'" onclick="allDataFun(this)">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
+                '</label>';
+        }
+    }
+    $('#container .tit-3 .field-2').html(str);
 }
-//----性格特征---
-function character(data) {
-    var myChart = echarts.init(document.getElementById('opt-2-2'),'dark');
-    var option = {
-        backgroundColor:'transparent',
-        title: {
-            text: '基础雷达图'
-        },
-        tooltip: {},
-        legend: {
-            data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
-        },
-        radar: {
-            // shape: 'circle',
-            name: {
-                textStyle: {
-                    color: '#fff',
-                    backgroundColor: '#999',
-                    borderRadius: 3,
-                    padding: [3, 5]
-                }
-            },
-            indicator: [
-                { name: '销售（sales）', max: 6500},
-                { name: '管理（Administration）', max: 16000},
-                { name: '信息技术（Information Techology）', max: 30000},
-                { name: '客服（Customer Support）', max: 38000},
-                { name: '研发（Development）', max: 52000},
-                { name: '市场（Marketing）', max: 25000}
-            ]
-        },
-        series: [{
-            name: '预算 vs 开销（Budget vs spending）',
-            type: 'radar',
-            // areaStyle: {normal: {}},
-            data : [
-                {
-                    value : [4300, 10000, 28000, 35000, 50000, 19000],
-                    name : '预算分配（Allocated Budget）'
-                },
-                {
-                    value : [5000, 14000, 28000, 31000, 42000, 21000],
-                    name : '实际开销（Actual Spending）'
-                }
-            ]
-        }]
-    };
-    myChart.setOption(option);
+function allDataFun(_this) {
+    var domain_name = $('.field-1 input:radio[name="chara"]:checked').val();
+    var allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name='+domain_name+'&role_name='+$(_this).val();
+    public_ajax.call_request('get',allData_url,allDataChart);
 }
-//----政治倾向---
-function tendency(data) {
-    var myChart = echarts.init(document.getElementById('opt-2-4'),'dark');
+function allDataChart(data) {
+    character_tendency(data['psy_feature'],'opt-2-2','性格特征');
+    character_tendency(data['political_side'],'opt-2-4','政治倾向');
+    locationplace(data['geo'],'opt-3-2','地理位置');
+    active_daily(data['active_time'],'opt-4-2','活跃数量');
+    active_daily(data['day_post_num'],'opt-4-4','日发帖量');
+
+}
+// ----性格特征-------政治倾向---
+var side={'mid':'中立','left':'左倾','right':'右倾'}
+function character_tendency(data,idClassName,name) {
+    var data=eval(JSON.parse(JSON.stringify(data)));
+    var leg=[],seriesData=[];
+    $.each(data,function (index,item) {
+        if (idClassName=='opt-2-4'){item[0]=side[item[0]]}
+        leg.push(item[0]);
+        seriesData.push(
+            {value:item[1], name:item[0]}
+        )
+    });
+    var myChart = echarts.init(document.getElementById(idClassName),'dark');
     var option = {
         backgroundColor:'transparent',
         title : {
-            text: '某站点用户访问来源',
-            subtext: '纯属虚构',
-            x:'center'
+            text: '',
         },
         tooltip : {
             trigger: 'item',
@@ -86,21 +70,15 @@ function tendency(data) {
         legend: {
             orient: 'vertical',
             left: 'left',
-            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            data: leg
         },
         series : [
             {
-                name: '访问来源',
+                name: name,
                 type: 'pie',
                 radius : '55%',
                 center: ['50%', '60%'],
-                data:[
-                    {value:335, name:'直接访问'},
-                    {value:310, name:'邮件营销'},
-                    {value:234, name:'联盟广告'},
-                    {value:135, name:'视频广告'},
-                    {value:1548, name:'搜索引擎'}
-                ],
+                data:seriesData,
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -113,9 +91,14 @@ function tendency(data) {
     };
     myChart.setOption(option);
 }
-//----地理位置---
-function location(data) {
+
+// ----地理位置---
+
+function locationplace(data,idClassName,name) {
+    var data=JSON.parse(data);
     var geoCoordMap = {
+        '香港':[114.15,22.15],
+        "鹰潭": [117.03,28.14],
         "海门":[121.15,31.89],
         "鄂尔多斯":[109.781327,39.608266],
         "招远":[120.38,37.35],
@@ -305,8 +288,19 @@ function location(data) {
         "菏泽":[115.480656,35.23375],
         "合肥":[117.27,31.86],
         "武汉":[114.31,30.52],
-        "大庆":[125.03,46.58]
+        "大庆":[125.03,46.58],
+        "鹰潭":[28.14, 117.03]
     };
+    var cityData=[];
+    for(var a in data){
+        for (var b in data[a]){
+            if (b in geoCoordMap){
+                cityData.push({name: b, value: data[a][b]})
+            }
+        }
+    }
+    console.log(data)
+    var myChart = echarts.init(document.getElementById(idClassName),'dark');
 
     var convertData = function (data) {
         var res = [];
@@ -322,12 +316,10 @@ function location(data) {
         return res;
     };
 
-    option = {
+    var option = {
         backgroundColor:'transparent',
         title: {
-            text: '全国主要城市空气质量',
-            subtext: 'data from PM25.in',
-            sublink: 'http://www.pm25.in',
+            // text: '全国主要城市空气质量',
             x:'center',
             textStyle: {
                 color: '#fff'
@@ -339,18 +331,18 @@ function location(data) {
                 return params.name + ' : ' + params.value[2];
             }
         },
-        legend: {
-            orient: 'vertical',
-            y: 'bottom',
-            x:'right',
-            data:['pm2.5'],
-            textStyle: {
-                color: '#fff'
-            }
-        },
+        // legend: {
+        //     orient: 'vertical',
+        //     y: 'bottom',
+        //     x:'right',
+        //     data:['pm2.5'],
+        //     textStyle: {
+        //         color: '#fff'
+        //     }
+        // },
         visualMap: {
             min: 0,
-            max: 200,
+            max: 1000,
             calculable: true,
             inRange: {
                 color: ['#50a3ba', '#eac736', '#d94e5d']
@@ -378,201 +370,10 @@ function location(data) {
         },
         series: [
             {
-                name: 'pm2.5',
+                name: name,
                 type: 'scatter',
                 coordinateSystem: 'geo',
-                data: convertData([
-                    {name: "海门", value: 9},
-                    {name: "鄂尔多斯", value: 12},
-                    {name: "招远", value: 12},
-                    {name: "舟山", value: 12},
-                    {name: "齐齐哈尔", value: 14},
-                    {name: "盐城", value: 15},
-                    {name: "赤峰", value: 16},
-                    {name: "青岛", value: 18},
-                    {name: "乳山", value: 18},
-                    {name: "金昌", value: 19},
-                    {name: "泉州", value: 21},
-                    {name: "莱西", value: 21},
-                    {name: "日照", value: 21},
-                    {name: "胶南", value: 22},
-                    {name: "南通", value: 23},
-                    {name: "拉萨", value: 24},
-                    {name: "云浮", value: 24},
-                    {name: "梅州", value: 25},
-                    {name: "文登", value: 25},
-                    {name: "上海", value: 25},
-                    {name: "攀枝花", value: 25},
-                    {name: "威海", value: 25},
-                    {name: "承德", value: 25},
-                    {name: "厦门", value: 26},
-                    {name: "汕尾", value: 26},
-                    {name: "潮州", value: 26},
-                    {name: "丹东", value: 27},
-                    {name: "太仓", value: 27},
-                    {name: "曲靖", value: 27},
-                    {name: "烟台", value: 28},
-                    {name: "福州", value: 29},
-                    {name: "瓦房店", value: 30},
-                    {name: "即墨", value: 30},
-                    {name: "抚顺", value: 31},
-                    {name: "玉溪", value: 31},
-                    {name: "张家口", value: 31},
-                    {name: "阳泉", value: 31},
-                    {name: "莱州", value: 32},
-                    {name: "湖州", value: 32},
-                    {name: "汕头", value: 32},
-                    {name: "昆山", value: 33},
-                    {name: "宁波", value: 33},
-                    {name: "湛江", value: 33},
-                    {name: "揭阳", value: 34},
-                    {name: "荣成", value: 34},
-                    {name: "连云港", value: 35},
-                    {name: "葫芦岛", value: 35},
-                    {name: "常熟", value: 36},
-                    {name: "东莞", value: 36},
-                    {name: "河源", value: 36},
-                    {name: "淮安", value: 36},
-                    {name: "泰州", value: 36},
-                    {name: "南宁", value: 37},
-                    {name: "营口", value: 37},
-                    {name: "惠州", value: 37},
-                    {name: "江阴", value: 37},
-                    {name: "蓬莱", value: 37},
-                    {name: "韶关", value: 38},
-                    {name: "嘉峪关", value: 38},
-                    {name: "广州", value: 38},
-                    {name: "延安", value: 38},
-                    {name: "太原", value: 39},
-                    {name: "清远", value: 39},
-                    {name: "中山", value: 39},
-                    {name: "昆明", value: 39},
-                    {name: "寿光", value: 40},
-                    {name: "盘锦", value: 40},
-                    {name: "长治", value: 41},
-                    {name: "深圳", value: 41},
-                    {name: "珠海", value: 42},
-                    {name: "宿迁", value: 43},
-                    {name: "咸阳", value: 43},
-                    {name: "铜川", value: 44},
-                    {name: "平度", value: 44},
-                    {name: "佛山", value: 44},
-                    {name: "海口", value: 44},
-                    {name: "江门", value: 45},
-                    {name: "章丘", value: 45},
-                    {name: "肇庆", value: 46},
-                    {name: "大连", value: 47},
-                    {name: "临汾", value: 47},
-                    {name: "吴江", value: 47},
-                    {name: "石嘴山", value: 49},
-                    {name: "沈阳", value: 50},
-                    {name: "苏州", value: 50},
-                    {name: "茂名", value: 50},
-                    {name: "嘉兴", value: 51},
-                    {name: "长春", value: 51},
-                    {name: "胶州", value: 52},
-                    {name: "银川", value: 52},
-                    {name: "张家港", value: 52},
-                    {name: "三门峡", value: 53},
-                    {name: "锦州", value: 54},
-                    {name: "南昌", value: 54},
-                    {name: "柳州", value: 54},
-                    {name: "三亚", value: 54},
-                    {name: "自贡", value: 56},
-                    {name: "吉林", value: 56},
-                    {name: "阳江", value: 57},
-                    {name: "泸州", value: 57},
-                    {name: "西宁", value: 57},
-                    {name: "宜宾", value: 58},
-                    {name: "呼和浩特", value: 58},
-                    {name: "成都", value: 58},
-                    {name: "大同", value: 58},
-                    {name: "镇江", value: 59},
-                    {name: "桂林", value: 59},
-                    {name: "张家界", value: 59},
-                    {name: "宜兴", value: 59},
-                    {name: "北海", value: 60},
-                    {name: "西安", value: 61},
-                    {name: "金坛", value: 62},
-                    {name: "东营", value: 62},
-                    {name: "牡丹江", value: 63},
-                    {name: "遵义", value: 63},
-                    {name: "绍兴", value: 63},
-                    {name: "扬州", value: 64},
-                    {name: "常州", value: 64},
-                    {name: "潍坊", value: 65},
-                    {name: "重庆", value: 66},
-                    {name: "台州", value: 67},
-                    {name: "南京", value: 67},
-                    {name: "滨州", value: 70},
-                    {name: "贵阳", value: 71},
-                    {name: "无锡", value: 71},
-                    {name: "本溪", value: 71},
-                    {name: "克拉玛依", value: 72},
-                    {name: "渭南", value: 72},
-                    {name: "马鞍山", value: 72},
-                    {name: "宝鸡", value: 72},
-                    {name: "焦作", value: 75},
-                    {name: "句容", value: 75},
-                    {name: "北京", value: 79},
-                    {name: "徐州", value: 79},
-                    {name: "衡水", value: 80},
-                    {name: "包头", value: 80},
-                    {name: "绵阳", value: 80},
-                    {name: "乌鲁木齐", value: 84},
-                    {name: "枣庄", value: 84},
-                    {name: "杭州", value: 84},
-                    {name: "淄博", value: 85},
-                    {name: "鞍山", value: 86},
-                    {name: "溧阳", value: 86},
-                    {name: "库尔勒", value: 86},
-                    {name: "安阳", value: 90},
-                    {name: "开封", value: 90},
-                    {name: "济南", value: 92},
-                    {name: "德阳", value: 93},
-                    {name: "温州", value: 95},
-                    {name: "九江", value: 96},
-                    {name: "邯郸", value: 98},
-                    {name: "临安", value: 99},
-                    {name: "兰州", value: 99},
-                    {name: "沧州", value: 100},
-                    {name: "临沂", value: 103},
-                    {name: "南充", value: 104},
-                    {name: "天津", value: 105},
-                    {name: "富阳", value: 106},
-                    {name: "泰安", value: 112},
-                    {name: "诸暨", value: 112},
-                    {name: "郑州", value: 113},
-                    {name: "哈尔滨", value: 114},
-                    {name: "聊城", value: 116},
-                    {name: "芜湖", value: 117},
-                    {name: "唐山", value: 119},
-                    {name: "平顶山", value: 119},
-                    {name: "邢台", value: 119},
-                    {name: "德州", value: 120},
-                    {name: "济宁", value: 120},
-                    {name: "荆州", value: 127},
-                    {name: "宜昌", value: 130},
-                    {name: "义乌", value: 132},
-                    {name: "丽水", value: 133},
-                    {name: "洛阳", value: 134},
-                    {name: "秦皇岛", value: 136},
-                    {name: "株洲", value: 143},
-                    {name: "石家庄", value: 147},
-                    {name: "莱芜", value: 148},
-                    {name: "常德", value: 152},
-                    {name: "保定", value: 153},
-                    {name: "湘潭", value: 154},
-                    {name: "金华", value: 157},
-                    {name: "岳阳", value: 169},
-                    {name: "长沙", value: 175},
-                    {name: "衢州", value: 177},
-                    {name: "廊坊", value: 193},
-                    {name: "菏泽", value: 194},
-                    {name: "合肥", value: 229},
-                    {name: "武汉", value: 273},
-                    {name: "大庆", value: 279}
-                ]),
+                data: convertData(cityData),
                 symbolSize: 12,
                 label: {
                     normal: {
@@ -590,11 +391,25 @@ function location(data) {
                 }
             }
         ]
-    }
+    };
+
+    myChart.setOption(option);
 }
+
 //----活跃时间---日发帖量----
-function active_daily(data) {
-    var myChart = echarts.init(document.getElementById('opt-4-2'),'dark');
+
+function active_daily(data,idClassName,name) {
+    var data=eval(JSON.parse(JSON.stringify(data)));
+    var timeLEG;
+    if (idClassName=='opt-4-2'){
+        timeLEG=['0:00~0:59', '1:00~1:59', '2:00~2:59', '3:00~3:59', '4:00~4:59', '5:00~5:59', '6:00~6:59',
+            '7:00~7:59', '8:00~8:59', '9:00~9:59', '10:00~10:59', '11:00~11:59', '12:00~12:59', '13:00~13:59',
+            '14:00~14:59', '15:00~15:59', '16:00~16:59', '17:00~17:59', '18:00~18:59', '19:00~19:59', '20:00~20:59',
+            '21:00~21:59', '22:00~22:59', '23:00~23:59'];
+    }else {
+        timeLEG=['周一','周二','周三','周四','周五','周六','周日'];
+    }
+    var myChart = echarts.init(document.getElementById(idClassName),'dark');
     var option = {
         backgroundColor:'transparent',
         color: ['#3398DB'],
@@ -612,8 +427,9 @@ function active_daily(data) {
         },
         xAxis : [
             {
+                name :'时间',
                 type : 'category',
-                data : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                data : timeLEG,
                 axisTick: {
                     alignWithLabel: true
                 }
@@ -621,15 +437,16 @@ function active_daily(data) {
         ],
         yAxis : [
             {
+                name:'数量',
                 type : 'value'
             }
         ],
         series : [
             {
-                name:'直接访问',
+                name:name,
                 type:'bar',
-                barWidth: '60%',
-                data:[10, 52, 200, 334, 390, 330, 220]
+                barWidth:'60%',
+                data:data
             }
         ]
     };

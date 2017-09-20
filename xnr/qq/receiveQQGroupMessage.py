@@ -71,7 +71,7 @@ def onQQMessage(bot, contact, member, content):
             print 'qq_json:',qq_json
 
             conMD5 = string_md5(content)
-            '''
+            
             nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
             index_name = group_message_index_name_pre+ str(nowDate)
             index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
@@ -79,7 +79,7 @@ def onQQMessage(bot, contact, member, content):
                 group_message_mappings(bot.session.qq,nowDate)
 
             es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
-            '''
+            
 
 def string_md5(str):
     md5 = ''
@@ -103,7 +103,7 @@ def execute_v2(qqbot_port):
     bot.Run()
 
 if __name__ == '__main__':
-    #execute()
+    execute()
     opts, args = getopt.getopt(sys.argv[1:], 'hi:o:')
     for op, value in opts:
         if op == '-i':
