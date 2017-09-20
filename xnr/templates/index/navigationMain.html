@@ -71,9 +71,9 @@
     <div class="bg13">
         <div class="personal" style="top: 100px;left: 260px;">
             <i class="icon icon-github-alt"></i>
-            <div class="cover" id="personal">
+            <div class="cover" id="personal" style="left: 20px;">
                 <em class="icon icon-plus-sign"></em>
-                <span>个人中心</span>
+                <span>我的虚拟人</span>
             </div>
         </div>
         <div class="control" style="top: 370px;left: 160px;">
@@ -218,7 +218,21 @@
         </div>
     </div>
 </div>
-
+<!---->
+<!--事件子观点及相关微博-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -280,8 +294,7 @@
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
-        htmlUrl='/personalCenter/individual/';
-        $('#choosePerson').modal('show');
+        window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
         htmlUrl='/control/operationControl/';
@@ -321,15 +334,21 @@
         var userID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userName=$('input:radio[name="ID"]:checked').attr('valueName');
         var userType=$('input:radio[name="choose"]:checked').val();
-        var id_or_name='';
-        if (userType=='隐身'){
-            id_or_name=userID;
+        if (!userID||!userName||!userType){
+            $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+            $('#pormpt').modal('show');
         }else {
-            id_or_name=userName;
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userID;
+            }else {
+                id_or_name=userName;
+            }
+            localStorage.setItem('user',encodeURI(userID));
+            localStorage.setItem('userRelName',encodeURI(userName));
+            localStorage.setItem('userName',encodeURI(id_or_name));
+            window.open(htmlUrl);
         }
-        localStorage.setItem('user',encodeURI(userID));
-        localStorage.setItem('userName',encodeURI(id_or_name));
-        window.open(htmlUrl);
     });
 
     //登录类型

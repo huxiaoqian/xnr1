@@ -143,6 +143,14 @@ def weibo_xnr_fans_followers_mappings():
                     'followers_list':{                #关注列表
                         'type':'string',
                         'index':'not_analyzed'
+                    },
+                    'xnr_user_no':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'trace_follow_list':{
+                        'type':'string',
+                        'index':'not_analyzed'
                     }
                 }
             }
@@ -158,5 +166,5 @@ def weibo_xnr_fans_followers_mappings():
 
 if __name__=='__main__':
   
-    weibo_xnr_mappings()
-    #weibo_xnr_fans_followers_mappings()
+    #weibo_xnr_mappings()
+    weibo_xnr_fans_followers_mappings()

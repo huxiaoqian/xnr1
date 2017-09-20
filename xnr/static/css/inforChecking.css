@@ -12,7 +12,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.25);
+    background: rgba(8,23,44,0.5);
     position: relative;
     top: 80px;
 }
@@ -29,6 +29,7 @@ body {
     font-weight: 900;
 }
 #container .title .titTime {
+    margin-top: 10px;
     padding: 10px;
     text-align: center;
 }
@@ -43,9 +44,9 @@ body {
     border-radius: 5px;
     cursor: pointer;
 }
-#container .title .titTime input {
-    width: 160px;
-}
+/*#container .title .titTime input {*/
+    /*width: 160px;*/
+/*}*/
 #container .title .titTime .timeSure {
     display: inline-block;
     margin-left: 10px;
@@ -72,14 +73,14 @@ body {
     padding: 3px 7px;
     background:rgba(8,23,44,0.35);
 }
-#container .content-2 .hot-2 #search-hot {
-    background: transparent;
-    border: 1px solid silver;
-}
-#container .content-2 .hot-2 #search-hot:hover {
-    /*background: rgba(5, 23, 55, 0.45);*/
-    background: rgba(3, 8, 16, 0.61);
-}
+/*#container .content-2 .hot-2 #search-hot {*/
+    /*background: transparent;*/
+    /*border: 1px solid silver;*/
+/*}*/
+/*#container .content-2 .hot-2 #search-hot:hover {*/
+    /*!*background: rgba(5, 23, 55, 0.45);*!*/
+    /*background: rgba(3, 8, 16, 0.61);*/
+/*}*/
 #container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 {
     margin: 10px 0;
     text-align:center;
@@ -108,10 +109,10 @@ body {
 }
 #container .content-3 .user-2 .userList .addFocus {
     position: absolute;
-    top: 30px;
-    right: 10px;
+    top:10px;
+    right:0;
     display: block;
-    padding: 5px 10px;
+    padding:7px 10px;
     background: transparent;
     border: 1px solid silver;
     border-radius: 5px;

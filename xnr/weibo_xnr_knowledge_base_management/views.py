@@ -12,7 +12,7 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   create_corpus,show_corpus,show_corpus_class,show_select_corpus,change_select_corpus,delete_corpus,\
                   get_create_type_content,domain_create_task,get_show_domain_group_summary,\
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
-                  get_show_domain_role_info
+                  get_show_domain_role_info,get_delete_domain
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
@@ -27,11 +27,11 @@ def ajax_create_domain():
     all_users = request.args.get('all_users','')  #按所有用户方式，传递所有uid
     create_type_new = get_create_type_content(create_type,keywords_string,seed_users,all_users)
     create_time = int(time.time())
-    submitter, = request.args.get('submitter','admin@qq.com')
+    submitter = request.args.get('submitter','admin@qq.com')
     description = request.args.get('description','')
     remark = request.args.get('remark','')
 
-    mark = domain_create_task(xnr_user_no,domain_name,create_type_new,create_time,submitter,description,remark,compute_status=0)
+    mark = domain_create_task(xnr_user_no,domain_name,create_type_new,create_time,submitter,description,remark)
 
     return json.dumps(mark)  # True False
 
@@ -70,6 +70,14 @@ def ajax_show_domain_role_info():
     results = get_show_domain_role_info(domain_name,role_name)
 
     return json.dumps(results)
+
+## 删除领域
+@mod.route('/delete_domain/')
+def ajax_delete_domain():
+    domain_name = request.args.get('domain_name','')
+    mark = get_delete_domain(domain_name)
+
+    return json.dumps(mark)
 
 #根据
 @mod.route('/create_weibo_xnr/')

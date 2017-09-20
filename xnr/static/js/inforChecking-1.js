@@ -1,18 +1,45 @@
+var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
+var to_ts=Date.parse(new Date())/1000;
+// var from_ts=1479513600,to_ts=1479981600;
+$('.title .perTime .demo-label input').on('click',function () {
+    var _val=$(this).val();
+    if (_val=='resize'){
+        $('.titTime').show();
+    }else {
+        $('.titTime').hide();
+    }
+})
+//选择时间范围
+$('.timeSure').on('click',function () {
+    var from = $('.start').val();
+    var to = $('.end').val();
+    from_ts=Date.parse(new Date(from))/1000;
+    to_ts=Date.parse(new Date(to))/1000;
+    if (from_ts==''||to_ts==''){
+        $('#pormpt p').text('请检查选择的时间（不能为空）');
+        $('#pormpt').modal('show');
+    }else {
+        public_ajax.call_request('get',word_url,wordCloud);
+        public_ajax.call_request('get',hotPost_url,hotPost);
+        public_ajax.call_request('get',activePost_url,activeUser);
+    }
+});
 //----关键词云
-// public_ajax.call_request('get',word_url,wordCloud);
+var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
+public_ajax.call_request('get',word_url,wordCloud);
 require.config({
     paths: {
         echarts: '/static/js/echarts-2/build/dist',
     }
 });
 function wordCloud(data) {
-    var data=eval(data);
+    console.log(data)
     var wordSeries=[];
     $.each(data,function (index,item) {
         wordSeries.push(
             {
-                name: item[0],
-                value: item[1].toFixed(2) *100,
+                name: item['key'],
+                value: item['doc_count'],
                 itemStyle: createRandomItemStyle()
             }
         )
@@ -35,7 +62,7 @@ function wordCloud(data) {
                 },
                 series: [{
                     type: 'wordCloud',
-                    size: ['80%', '80%'],
+                    size: ['100%', '100%'],
                     textRotation : [0, 0, 0, 0],
                     textPadding: 0,
                     autoSize: {
@@ -45,34 +72,48 @@ function wordCloud(data) {
                     data: wordSeries
                 }]
             };
-
             myChart.setOption(option);
-            var ecConfig = require('echarts/config');
-            myChart.on(ecConfig.EVENT.HOVER, function (param){
-                var selected = param.name;
-            });
         }
     );
 }
-//表格
-function userlist(persondata) {
-    var person=window.JSON?JSON.parse(persondata):eval("("+persondata+")");
-    var person_all=[];
-    $.each(person,function (index,item) {
-        person_all.push({
-            'name':item[1],
-            'include':item[2],
-            'time':item[5],
-            'keywords':item[3],
-            'label':item[4],
-        })
-    });
-    $('.userList #userList').bootstrapTable('load', person_all);
+//热门帖子
+$('#theme-2 .demo-radio').on('click',function () {
+    var classify_id=$(this).val();
+    var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
+    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    public_ajax.call_request('get',NEWhotPost_url,hotPost);
+});
+$('#theme-3 .demo-radio').on('click',function () {
+    var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
+    var order_id=$(this).val();
+    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    public_ajax.call_request('get',NEWhotPost_url,hotPost);
+});
+var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+    '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
+public_ajax.call_request('get',hotPost_url,hotPost);
+function hotPost(data) {
+    console.log(data)
+}
+//活跃用户
+$('#user-1 .demo-radio').on('click',function () {
+    var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
+    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id;
+    public_ajax.call_request('get',NEWactivePost_url,activeUser);
+});
+var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
+    '&from_ts='+from_ts+'&to_ts='+to_ts+'&classify_id=1';
+public_ajax.call_request('get',activePost_url,activeUser);
+function activeUser(persondata) {
+    console.log(persondata)
+    $('.userList #userList').bootstrapTable('load', persondata);
     $('.userList #userList').bootstrapTable({
-        data:person_all,
+        data:persondata,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 10,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -87,8 +128,15 @@ function userlist(persondata) {
         sortOrder:"desc",
         columns: [
             {
+                title: "添加关注",//标题
+                field: "select",
+                checkbox: true,
+                align: "center",//水平
+                valign: "middle"//垂直
+            },
+            {
                 title: "用户ID",//标题
-                field: "",//键名
+                field: "id",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -99,58 +147,71 @@ function userlist(persondata) {
             },
             {
                 title: "昵称",//标题
-                field: "",//键名
+                field: "nick_name",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[2];
-                // }
+                formatter: function (value, row, index) {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                        return '无昵称';
+                    }else {
+                        return row.nick_name;
+                    };
+                }
             },
             {
                 title: "注册地",//标题
-                field: "",//键名
+                field: "user_location",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[5];
-                // },
+                formatter: function (value, row, index) {
+                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
+                        return '未知';
+                    }else {
+                        return row.user_location;
+                    };
+                }
             },
             {
                 title: "粉丝数",//标题
-                field: "",//键名
+                field: "fansnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                formatter: function (value, row, index) {
-
-                },
             },
             {
                 title: "微博数",//标题
-                field: "",//键名
+                field: "weibo_count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-
-                },
+                    if (row.weibo_count==''||row.weibo_count=='null'||row.weibo_count=='unknown'||!row.weibo_count){
+                        return '0';
+                    }else {
+                        return row.weibo_count;
+                    };
+                }
             },
             {
                 title: "影响力",//标题
-                field: "",//键名
+                field: "influence",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-
-                },
+                    if (row.influence==''||row.influence=='null'||row.influence=='unknown'||!row.influence){
+                        return '0';
+                    }else {
+                        return row.influence;
+                    };
+                }
             },
             {
                 title: "网民详情",//标题
@@ -160,35 +221,38 @@ function userlist(persondata) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;" onclick="">网民详情</a>'
+                    return '<span style="cursor: pointer;" onclick="networkPeo(\''+row.id+'\')" ' +
+                        'title="查看详情"><i class="icon icon-link"></i></span>'
                 },
             },
-            {
-                title: "添加关注",//标题
-                field: "select",
-                checkbox: true,
-                align: "center",//水平
-                valign: "middle"//垂直
-            },
         ],
-        onClickCell: function (field, value, row, $element) {
-            if ($element[0].innerText=='查看') {
-                window.open();
-            }else if ($element[0].innerText=='') {
-                window.open();
-            }
-        }
     });
-},
+}
 //-------------------颜色----------------------
 function createRandomItemStyle() {
     return {
         normal: {
             color: 'rgb(' + [
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160)
+                Math.round(Math.random() * 260),
+                Math.round(Math.random() * 260),
+                Math.round(Math.random() * 260)
             ].join(',') + ')'
         }
     };
+}
+//加入语料库  data-toggle="modal" data-target="#wordcloud"
+function joinWord() {
+    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
+    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
+    var theme_daily_name=[],tt='';
+    if (corpus_type=='主题语料'){tt=2};
+    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
+        theme_daily_name.push($(this).val());
+    });
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+text+
+        '&uid='+uid+'&mid='+mid+'&retweeted='+retweeted+'&comment='+comment+'&like=0&create_type='+create_type;
+}
+//查看网民详情
+function networkPeo(_id) {
+    console.log(_id)
 }

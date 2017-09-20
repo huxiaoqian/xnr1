@@ -48,10 +48,6 @@ def search_by_xnr_number(xnr_qq_number, current_date):
             pass
     return results
 
-
-
-
-
 def search_by_period(xnr_qq_number,startdate,enddate):
     results = {}
     query_body = {

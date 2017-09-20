@@ -3,6 +3,9 @@ import os
 import time
 import json
 import sys
+import random
+import base64
+import re
 
 #reload(sys)
 #sys.path.append('../../')
@@ -27,7 +30,9 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                            index_sensing,type_sensing
+                            index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
+                            weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
+                            weibo_private_white_uid_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -35,10 +40,34 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
-                        FOLLOWERS_LIST
+                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
+
+def get_image_path(image_code):
+
+    image_code_list = image_code.encode('utf-8').split('，')
+    image_path_list = []
+    for image in image_code_list:
+        image_new = image.replace(' ','+')
+        #print 'image_new:::::',image_new
+        print 'image_new::::',image_new
+        print '123123'
+        imgData = base64.decodestring(image_new)
+        #imgData = base64.b64encode(image_new)
+        time_name = time.strftime('%Y%m%d%H%M%S')
+        image_path = time_name + '_%d' % random.randint(0,100)
+        leniyimg = open(IMAGE_PATH+image_path+'.jpg','wb')   
+        leniyimg.write(imgData)
+        leniyimg.close()
+
+        image_path_join = os.path.join(IMAGE_PATH,image_path+'.jpg')
+        print 'image_path_join:::',image_path_join
+        image_path_list.append(image_path_join)
+    
+    return image_path_list
+
 
 def push_keywords_task(task_detail):
 
@@ -59,12 +88,12 @@ def push_keywords_task(task_detail):
     return mark
 
 def get_submit_tweet(task_detail):
-
+    print 'task_detail[p_url]:::',task_detail['p_url']
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
     #operate_type = task_detail['operate_type']
     xnr_user_no = task_detail['xnr_user_no']
-    p_url = task_detail['p_url']
+    p_url = task_detail['p_url'].encode('utf-8')
     rank = task_detail['rank']
     rankid = task_detail['rankid']
 
@@ -126,7 +155,7 @@ def save_to_tweet_timing_list(task_detail):
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-    
+    print 'es_result:::',es_result
     if es_result:
         uid = es_result['uid']
         daily_interests = es_result['daily_interests']
@@ -150,29 +179,44 @@ def get_recommend_at_user(xnr_user_no):
                         'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
     '''
     ## daily_interests 字段为单个值
-    query_body = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'daily_interests':daily_interests_list}
-                }
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'daily_interests':daily_interests_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE
+    # }
+    # #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    # es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                     body=query_body)['hits']['hits']
 
-    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                        body=query_body)['hits']['hits']
-    print 'es_results_len::',len(es_results)
-    if not es_results:
-        if S_TYPE != 'test':
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-        else:
-            es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':1000,\
-                                'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    #print 'es_results_len::',len(es_results)
+    #if not es_results:
+    if S_TYPE != 'test':
+        query_body = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'daily_interests':daily_interests_list}
+                    }
+                }
+            },
+            'size':MAX_SEARCH_SIZE
+        }
+        #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body=query_body)['hits']['hits']
+        # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+        #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+        #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    else:
+
+        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                            body={'query':{'match_all':{}},'size':1000,\
+                            'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
 
     uid_list = []
     if es_results_daily:
@@ -185,6 +229,7 @@ def get_recommend_at_user(xnr_user_no):
     es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
+
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']
@@ -652,6 +697,22 @@ def get_show_private(task_detail):
     sort_item = task_detail['sort_item']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
+    # white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+    # white_uid_list = []
+    # with open(white_uid_path,'rb') as f:
+    # 	for line in f:
+    # 		line = line.strip('\n')
+    # 		white_uid_list.append(line[0])
+
+    # white_uid_list = list(set(white_uid_list))
+    # print 'white_uid_list:::',white_uid_list
+    try:
+    	es_get = es.get(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+    				id=xnr_user_no)['_source']
+    	white_uid_list = es_get['white_uid_list']
+    	
+    except:
+    	white_uid_list = []
 
     query_body = {
         'query':{
@@ -659,7 +720,8 @@ def get_show_private(task_detail):
                 'must':[
                     {'term':{'root_uid':uid}},
                     {'term':{'private_type':'receive'}}
-                ]
+                ],
+                'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -715,7 +777,7 @@ def get_show_at(task_detail):
         'sort':{sort_item:{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-
+    	
     es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                             body=query_body)['hits']['hits']
 
@@ -727,6 +789,7 @@ def get_show_at(task_detail):
     return results_all
 
 def get_reply_at():
+    
     return []
 
 def get_show_fans(task_detail):
@@ -789,7 +852,8 @@ def get_show_follow(task_detail):
 def get_reply_follow(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     uid = task_detail['uid']
-
+    trace_type = task_detail['trace_type']
+    
     es_get_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 
     weibo_mail_account = es_get_result['weibo_mail_account']
@@ -803,7 +867,7 @@ def get_reply_follow(task_detail):
     else:
         return False
 
-    mark = follow_tweet_func(account_name,password,uid)
+    mark = follow_tweet_func(xnr_user_no,account_name,password,uid,trace_type)
 
     return mark
 
@@ -826,7 +890,7 @@ def get_reply_unfollow(task_detail):
     else:
         return False
 
-    mark = unfollow_tweet_func(account_name,password,uid)
+    mark = unfollow_tweet_func(xnr_user_no,account_name,password,uid)
 
     return mark
 
@@ -948,7 +1012,7 @@ def get_related_recommendation(task_detail):
         recommend_set_list = FOLLOWERS_LIST
     
     else:
-        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['followers_uids']
+        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['followers_list']
         recommend_set_list = list(set(recommend_list))
 
     if sort_item != 'friend':
@@ -1066,6 +1130,23 @@ def get_show_group(xnr_user_no):
 
     return group_dict
 
+## 展示粉丝
+def get_create_group_show_fans(xnr_user_no):
+    uid = xnr_user_no2uid(xnr_user_no)
+    print 'xnr_user_no:::',xnr_user_no
+    es_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+            id=xnr_user_no)['_source']
+
+    fans_list = es_result['fans_list']
+
+    results_all = {}
+
+    for fans_uid in fans_list:
+        nick_name,photo_url = uid2nick_name_photo(fans_uid)
+        results_all[fans_uid] = [nick_name,photo_url]
+
+    return results_all
+
 
 def get_add_sensor_user(xnr_user_no,sensor_uid_list):
 
@@ -1118,7 +1199,229 @@ def get_delete_sensor_user(xnr_user_no,sensor_uid_list):
 
     return mark
 
+def get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
 
+    mark = False
+    fail_nick_name_list = []
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
+
+        try:
+            trace_follow_list = result['trace_follow_list']
+        except:
+            trace_follow_list = []
+
+        try:
+            followers_list = result['followers_list']
+        except:
+            followers_list = []
+
+        trace_follow_list = list(set(trace_follow_list) | set(uid_list))
+
+        followers_list = list(set(followers_list)|set(uid_list))
+
+        es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list,'followers_list':followers_list}})
+
+        mark = True
+    
+    except:
+
+        item_exists = {}
+
+        item_exists['xnr_user_no'] = xnr_user_no
+        item_exists['trace_follow_list'] = uid_list
+        item_exists['followers_list'] = uid_list
+
+        es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body=item_exists)
+
+        mark = True
+
+    return [mark,fail_nick_name_list]
+
+def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    fail_uids = []
+
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)['_source']
+        
+        trace_follow_list = result['trace_follow_list']
+
+        # 共同uids
+        comment_uids = list(set(trace_follow_list).intersection(set(uid_list)))
+
+        # 取消失败uid
+        fail_uids = list(set(comment_uids).difference(set(uid_list)))
+
+        # 求差
+        trace_follow_list = list(set(trace_follow_list).difference(set(uid_list))) 
+
+
+        es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list}})
+
+        mark = True
+    except:
+        mark = False
+
+    return [mark,fail_uids,fail_nick_name_list]
+
+def get_show_retweet_timing_list(xnr_user_no):
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+
+    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
+        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
+
+
+def get_show_trace_followers(xnr_user_no):
+    
+    es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)['_source']
+
+    trace_follow_list = es_get_result['trace_follow_list']
+
+    weibo_user_info = []
+
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'uid':trace_follow_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE,
+    #     'sort':{'fansnum':{'order':'desc'}}
+    # }
+
+    # results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
+    #                 body=query_body)['hits']['hits']
+
+    mget_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                            body={'ids':trace_follow_list})['docs']
+    print 'mget_results::',mget_results
+    for result in mget_results:
+        if result['found']:
+            weibo_user_info.append(result['_source'])
+
+    return weibo_user_info
+
+def get_add_private_white_uid(xnr_user_no,white_uid_string):
+
+	white_uid_list = white_uid_string.encode('utf-8').split('，')
+	mark = False
+
+	try:
+		get_result = es.get(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			id=xnr_user_no)['_source']
+
+		white_uid_list_old = get_result['white_uid_list']
+		white_uid_list_old.extend(white_uid_list)
+
+		get_result['white_uid_list'] = white_uid_list_old
+
+		es.update(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			body={'doc':get_result})
+
+		mark = True
+	
+	except:
+		item_dict = {}
+		item_dict['xnr_user_no'] = xnr_user_no
+		item_dict['white_uid_list'] = white_uid_list
+
+		es.index(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
+			id=xnr_user_no,body=item_dict)
+		
+		mark = True
+
+	return mark
 
 
 

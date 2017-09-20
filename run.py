@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import base64
 import os
 import flask_security
 from flask_login import current_user
@@ -38,21 +39,25 @@ def allowed_file(filename):
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        print 'request::',request.files
+        
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
+            # return redirect(url_for('uploaded_file',
+            #                         filename=filename))
+            path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            return path
+    # return '''
+    # <!doctype html>
+    # <title>Upload new File</title>
+    # <h1>Upload new File</h1>
+    # <form action="" method=post enctype=multipart/form-data>
+    #   <p><input type=file name=file>
+    #      <input type=submit value=Upload>
+    # </form>
+    # '''
 
 # Create user role data to test with
 @app.route('/create_user_role_test')

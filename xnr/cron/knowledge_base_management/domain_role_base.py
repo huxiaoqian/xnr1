@@ -66,13 +66,13 @@ def save_detect_results(detect_results, decect_task_information):
         item_exist = dict()
         
         item_exist['xnr_user_no'] = decect_task_information['xnr_user_no']
-        item_exist['domain_pinyin'] = json.dumps(decect_task_information['domain_pinyin'])
-        item_exist['domain_name'] = json.dumps(decect_task_information['domain_name'])
-        item_exist['create_type'] = json.dumps(decect_task_information['create_type'])
+        item_exist['domain_pinyin'] = decect_task_information['domain_pinyin']
+        item_exist['domain_name'] = decect_task_information['domain_name']
+        item_exist['create_type'] = decect_task_information['create_type']
         item_exist['create_time'] = decect_task_information['create_time']
-        item_exist['submitter'] = json.dumps(decect_task_information['submitter'])
-        item_exist['description'] = json.dumps(decect_task_information['description'])
-        item_exist['remark'] = json.dumps(decect_task_information['remark'])
+        item_exist['submitter'] = decect_task_information['submitter']
+        item_exist['description'] = decect_task_information['description']
+        item_exist['remark'] = decect_task_information['remark']
         item_exist['group_size'] = len(detect_results)
         item_exist['member_uids'] = detect_results
         
@@ -103,7 +103,7 @@ def save_group_description_results(group_results,decect_task_information):
         item_exist['xnr_user_no'] = decect_task_information['xnr_user_no']
         item_exist['domain_pinyin'] = decect_task_information['domain_pinyin']
         item_exist['domain_name'] = decect_task_information['domain_name']
-        item_exist['create_type'] = json.dumps(decect_task_information['create_type'])
+        item_exist['create_type'] = decect_task_information['create_type']
         item_exist['create_time'] = decect_task_information['create_time']
         item_exist['submitter'] = decect_task_information['submitter']
         item_exist['description'] = decect_task_information['description']

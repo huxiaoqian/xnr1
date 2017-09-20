@@ -1,6 +1,6 @@
 var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/'
 public_ajax.call_request('get',reportDefaul_url,reportDefaul);
-var currentData={};
+// var currentData={};
 function reportDefaul(data) {
     console.log(data);
     $('#person').bootstrapTable('load', data);
@@ -8,7 +8,7 @@ function reportDefaul(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 10,//单页记录数
+        pageSize: 3,//单页记录数
         pageList: [15,25,35],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -24,143 +24,99 @@ function reportDefaul(data) {
         columns: [
             {
                 title: "",//标题
-                field: "select",
-                checkbox: true,
-                align: "center",//水平
-                valign: "middle"//垂直
-            },
-            {
-                title: "上报名称",//标题
-                field: "event_name",//键名
+                field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.event_name;
-                    }
-                }
-            },
-            {
-                title: "上报时间",//标题
-                field: "report_time",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
-                        return '暂无';
-                    }else {
-                        return getLocalTime(row.report_time);
-                    }
-                }
-            },
-            {
-                title: "上报类型",//标题
-                field: "report_type",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.report_type==''||row.report_type=='null'||row.report_type=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.report_type;
-                    }
-                }
-            },
-            {
-                title: "虚拟人",//标题
-                field: "xnr_user_no",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.xnr_user_no;
-                    }
-                },
-            },
-            {
-                title: "人物UID",//标题
-                field: "uid",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.uid;
-                    }
-                },
-            },
-            {
-                title: '上报内容',//标题
-                field: "report_content",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    var repData=row.report_content['weibo_list'];
-                    var str='';
-                    $.each(repData,function (index,item) {
-                        var txt;
-                        if (item.text==''||item.text=='null'||item.text=='unknown'){
-                            txt='暂无内容';
+                    var artical=row.report_content.weibo_list,str='';
+                    $.each(artical,function (index,item) {
+                        var text,time;
+                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                            text='暂无内容';
                         }else {
-                            txt=item.text;
+                            text=item.text;
                         };
+                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
+                            time='未知';
+                        }else {
+                            time=getLocalTime(item.timestamp);
+                        };
+                        var sye_1='',sye_2='';
+                        if (Number(item.sensitive) < 50){
+                            sye_1='border-color: transparent transparent #131313';
+                            sye_2='color: yellow';
+                        }
                         str+=
-                            '<div class="post_center-every">'+
-                            '    <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                            '    <div class="center_rel">'+
-                            '        <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                            '        <i class="mid" style="display: none;">'+item.mid+'</i>'+
-                            // '        <i class="tamp" style="display: none;">'+row.report_time+'</i>'+
-                            // '        <i class="name" style="display: none;">'+row.event_name+'</i>'+
-                            '        <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(item.timestamp)+'</span>'+
-                            '        <span class="center_2">'+txt+
-                            '        </span>'+
-                            // '        <div class="center_3">'+
-                            // '            <span class="cen3-1" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            // '            <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            // '            <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（<b class="praise">'+item.like+'</b>）</span>'+
-                            // '        </div>'+
-                            // '        <div class="commentDown" style="width: 100%;display: none;">'+
-                            // '            <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                            // '            <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                            // '        </div>'+
+                            '<div class="center_rel" style="margin-top: 10px;">'+
+                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                            '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                            '   <span class="center_2">'+text+'</span>'+
+                            '   <div class="center_3">'+
+                            '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                            '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                            '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                            '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                             '    </div>'+
-                            '</div>';
-                    })
-                    return str;
-                    // return '暂无数据';
-                },
+                            '</div>'
+                    });
+                    var nameuid,time,report_type,xnr;
+                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
+                        nameuid = row.uid;
+                    }else {
+                        nameuid = row.event_name;
+                    };
+                    if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
+                        time = '未知';
+                    }else {
+                        time = getLocalTime(row.report_time);
+                    };
+                    if (row.report_type==''||row.report_type=='null'||row.report_type=='unknown'){
+                        report_type = '暂无';
+                    }else {
+                        report_type = row.report_type;
+                    };
+                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
+                        xnr = '暂无';
+                    }else {
+                        xnr = row.xnr_user_no;
+                    }
+                    var rel_str=
+                        '<div class="post_center-every" style="margin: 10px auto 0;text-align: left;">'+
+                        '        <div class="user_center">'+
+                        '            <div style="margin: 10px 0;">'+
+                        '                <label class="demo-label">'+
+                        '                    <input class="demo-radio" type="checkbox" name="printData">'+
+                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        '                </label>'+
+                        '                <img src="/static/images/post-6.png" class="center_icon">'+
+                        '                <a class="center_1">上报名称：'+nameuid+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">上报时间：'+time+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">上报类型：'+report_type+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">虚拟人：'+xnr+'</a>'+
+                        '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
+                        '            </div>'+
+                        '           <div>'+str+'</div>'+
+                        '        </div>'+
+                        '    </div>';
+                    return rel_str;
+                }
             },
         ],
-        onCheck:function (row) {
-            currentData[row.report_time]=row;
-        },
-        onUncheck:function (row) {
-            delete currentData[row.report_time];
-        },
-        onCheckAll:function (row) {
-            currentData[row.report_time]=row;
-        },
-        onUncheckAll:function (row) {
-            delete currentData[row.report_time];
-        },
+        // onCheck:function (row) {
+        //     currentData[row.report_time]=row;
+        // },
+        // onUncheck:function (row) {
+        //     delete currentData[row.report_time];
+        // },
+        // onCheckAll:function (row) {
+        //     currentData[row.report_time]=row;
+        // },
+        // onUncheckAll:function (row) {
+        //     delete currentData[row.report_time];
+        // },
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }

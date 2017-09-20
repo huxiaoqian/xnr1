@@ -25,53 +25,20 @@
             <b class="score" style="color:#f44336;"></b>
         </div>
     </div>
-    <div class="type_page" style="width: 90%;margin: 20px auto 30px;">
-        <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active" midurl="influ_fans_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-github-alt"></b>&nbsp;粉丝数</a>
-            </li>
-            <!--<li role="presentation">-->
-                <!--<a href="#fansgroup" role="tab" data-toggle="tab"><b class="icon icon-signal"></b>&nbsp;粉丝群的粉丝数</a>-->
-            <!--</li>-->
-            <li role="presentation" midurl="influ_retweeted_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-share"></b>&nbsp;被转发</a>
-            </li>
-            <li role="presentation" midurl="influ_commented_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-comment"></b>&nbsp;被评论</a>
-            </li>
-            <li role="presentation" midurl="influ_like_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-thumbs-up"></b>&nbsp;被点赞</a>
-            </li>
-            <li role="presentation" midurl="influ_at_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-heart"></b>&nbsp;被@</a>
-            </li>
-            <li role="presentation" midurl="influ_private_num">
-                <a href="#fans" role="tab" data-toggle="tab"><b class="icon icon-envelope-alt"></b>&nbsp;被私信</a>
-            </li>
-        </ul>
-        <div class="influence">
-            <div class="tab-content" id="content">
-                <div role="tabpanel" class="tab-pane active" id="fans">
-                    <div class="fans-1 caption" style="margin-top: 20px;">
-                        <div class="fans-1-opt" style="display: inline-block;">
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo1" value="all" checked>
-                                <span class="demo-checkbox demo-radioInput"></span> 总趋势
-                            </label>
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo1" value="increase">
-                                <span class="demo-checkbox demo-radioInput"></span> 增长率
-                            </label>
-                        </div>
-                    </div>
-                    <div id="fans-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
-                    <div id="fans-3" style="width:800px;height:400px;margin: 30px auto 0;display: none;"></div>
-                </div>
-
-            </div>
+    <div class="quota" style="width: 950px;">
+        <div class="quota-opt" style="display: inline-block;margin: 20px 0;">
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="demo1" value="all" checked>
+                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="demo1" value="increase">
+                <span class="demo-checkbox demo-radioInput"></span> 增长率
+            </label>
         </div>
+        <div id="quota-1" style="width: 950px;height:500px;margin: 30px auto 0;"></div>
+        <div id="quota-2" style="width: 950px;height:500px;margin: 30px auto 0;display: none;"></div>
     </div>
-
 </div>
 <!--模态框-->
 <div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">

@@ -20,6 +20,7 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
                         weibo_report_management_index_type,weibo_xnr_fans_followers_index_name,\
                         weibo_xnr_fans_followers_index_type,weibo_hot_keyword_task_index_name,\
                         weibo_hot_keyword_task_index_type,index_sensing,type_sensing
+from utils import save_to_fans_follow_ES
 
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
@@ -124,8 +125,9 @@ def publish_tweet_func(account_name,password,text,p_url,rank,rankid):
     user = SinaOperateAPI(xnr.uid)
     user.text = text
     user.rank = rank
+    print 'p_url::',p_url
     new_p_url = user.request_image_url(p_url)
-    #print 'new_p_url::',new_p_url
+    print 'new_p_url::',new_p_url
     user.pic_ids = ' '.join(new_p_url)
     user.rankid = rankid
     #print 'user.pic_ids::',user.pic_ids
@@ -169,6 +171,9 @@ def private_tweet_func(account_name,password,text,r_mid):
 
     return mark
 
+## at回复
+
+
 ## 点赞
 def like_tweet_func(account_name,password,r_mid):
 
@@ -181,7 +186,7 @@ def like_tweet_func(account_name,password,r_mid):
     return mark
 
 ## 关注
-def follow_tweet_func(xnr_user_no,account_name,password,uid):
+def follow_tweet_func(xnr_user_no,account_name,password,uid,trace_type):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -190,7 +195,7 @@ def follow_tweet_func(xnr_user_no,account_name,password,uid):
     mark = user.followed()
     save_type = 'followers'
     follow_type = 'follow'
-    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type)
 
     return mark
 
@@ -205,7 +210,8 @@ def unfollow_tweet_func(xnr_user_no,account_name,password,uid):
 
     save_type = 'followers'
     follow_type = 'unfollow'
-    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type)
+    trace_type = 'unfollow'
+    save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type)
 
     return mark
 
@@ -243,13 +249,7 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0002',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0003',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0006',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0005',body={'doc':{'submitter':'admin@qq.com'}})
-    es.update(index='weibo_xnr',doc_type='user',id='WXNR0007',body={'doc':{'submitter':'admin@qq.com'}})
-    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
+    result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
 
     # f_domain_data = open('domain.txt','rb')
 
@@ -278,7 +278,8 @@ if __name__ == '__main__':
     #         print 'domain:::',domain
     #         es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
 
-    # es.delete(index='weibo_domain',doc_type='group',id='wu_zhen')
+    #es.delete(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0002')
+    #['5537979196','3969238480','3302557313','5717296960']
     # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
     # f_domain_data.write(json.dumps(result))
 
@@ -293,7 +294,13 @@ if __name__ == '__main__':
     #         item = item['_source']
     #         xnr_user_no = item['xnr_user_no']
     #         es.index(index='weibo_xnr',doc_type='user',id=xnr_user_no,body=item)
+    # query_body = {
+    # 	'query':{
+    # 		'term':{'member_uids':'1725252714'}
+    # 	}
+    # }
 
+    # results = es.search(index='weibo_domain',doc_type='group',body=query_body)['hits']['hits']
+    # print 'results:::',results
 
-
-
+    #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':["3632086395"]}})

@@ -103,6 +103,23 @@ def get_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):
         index_name_list.append(index_name)
     return index_name_list
 
+
+def get_xnr_flow_text_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
+    index_name_list=[]
+    #date_range_start_ts=FLOW_TEXT_START_DATE
+    if ts2datetime(date_range_start_ts) != ts2datetime(date_range_end_ts):
+        iter_date_ts=date_range_end_ts
+        while iter_date_ts >= date_range_start_ts:
+            date_range_start_date=ts2datetime(iter_date_ts)
+            index_name=index_name_pre+date_range_start_date
+            index_name_list.append(index_name)
+            iter_date_ts=iter_date_ts-DAY
+    else:
+        date_range_start_date=ts2datetime(date_range_start_ts)
+        index_name=index_name_pre+date_range_start_date
+        index_name_list.append(index_name)
+    return index_name_list
+    
 # use to search certain period of group message without the upper bound of days limit
 
 def get_groupmessage_index_list(startdate,enddate):
@@ -114,6 +131,20 @@ def get_groupmessage_index_list(startdate,enddate):
         date_range_start_ts = datetime2ts(startdate) + i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
         index_name = group_message_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+
+    return index_name_list
+
+
+def get_timeset_indexset_list(index_name_pre,startdate,enddate):
+    
+    index_name_list = []
+    days_num = (datetime2ts(enddate)-datetime2ts(startdate))/DAY
+
+    for i in range(0,(days_num+1)):
+        date_range_start_ts = datetime2ts(startdate) + i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
 
     return index_name_list

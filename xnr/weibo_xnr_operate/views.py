@@ -1,4 +1,5 @@
 #-*- coding:utf-8 -*-
+from flask import Flask
 import os
 import time
 import json
@@ -13,14 +14,74 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_show_comment,get_reply_comment,get_show_retweet,get_reply_retweet,get_show_private,\
                 get_reply_private,get_show_at,get_reply_at,get_show_follow,get_reply_follow,get_like_operate,\
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
-                get_show_fans,get_add_sensor_user,get_delete_sensor_user
+                get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
+                get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
+                get_show_trace_followers,get_image_path,get_add_private_white_uid
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
+#from xnr import create_app
 
 '''
 日常发帖
 
 '''
+
+# Create app
+# app = Flask(__name__)
+
+# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+# APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+# UPLOAD_FOLDER = os.path.join(APP_ROOT, 'xnr/weibo_images/') 
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# @mod.route('/uploads/<filename>')
+# def uploaded_file(filename):
+#     return send_from_directory(app.config['UPLOAD_FOLDER'],
+#                                filename)
+
+# def allowed_file(filename):
+#     return '.' in filename and \
+#            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+# @mod.route('/upload/', methods=['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         file = request.files['file']
+#         if file and allowed_file(file.filename):
+#             filename = secure_filename(file.filename)
+#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#             # return redirect(url_for('uploaded_file',
+#             #                         filename=filename))
+#             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#             return path
+#
+
+# 获取图片路径
+@mod.route('/get_image_path/')
+def ajax_get_image_path():
+    image_code = request.args.get('image_code','') # 以中文逗号隔开
+    print 'image_code::',image_code
+    results = get_image_path(image_code)
+    return json.dumps(results)
+
+@mod.route('/upload/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect(url_for('uploaded_file',
+                                    filename=filename))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
 
 # 日常发布微博
 @mod.route('/submit_tweet/')
@@ -286,6 +347,7 @@ def ajax_reply_follow():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
+    task_detail['trace_type'] = request.args.get('trace_type','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
     mark = get_reply_follow(task_detail)
 
     return json.dumps(mark)
@@ -344,13 +406,12 @@ def ajax_related_recommendation():
 # 显示粉丝
 @mod.route('/create_group_show_fans/')
 def ajax_create_group_show_fans():
-	task_detail = dict()
-	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    
+    xnr_user_no = request.args.get('xnr_user_no','')
 
-	results = get_create_group_show_fans(task_detail)
+    results = get_create_group_show_fans(xnr_user_no)
 
-	return json.dumps(results)
-
+    return json.dumps(results)
 
 # 创建群组
 @mod.route('/create_group/')
@@ -365,3 +426,48 @@ def ajax_create_group():
     results = get_create_group(task_detail)
 
     return json.dumps(results)
+
+# 展示跟随转发定时列表
+@mod.route('/show_retweet_timing_list/')
+def ajax_show_retweet_timing_list():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_retweet_timing_list(xnr_user_no)
+
+    return json.dumps(results)
+
+# 展示重点关注用户信息
+@mod.route('/show_trace_followers/')
+def ajax_show_trace_followers():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_trace_followers(xnr_user_no)
+
+    return json.dumps(results)
+
+# 重点关注
+@mod.route('/trace_follow/')
+def ajax_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)   # [mark,fail_nick_name_list]  fail_nick_name_list为添加失败，原因是背景信息库没有这些人，请换成对应uid试试。
+
+# 取消重点关注
+@mod.route('/un_trace_follow/')
+def ajax_un_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
+
+# 添加私信白名单
+@mod.route('/add_private_white_uid/')
+def ajax_add_private_white_uid():
+	xnr_user_no = request.args.get('xnr_user_no','')
+	white_uid_string = request.args.get('white_uid_string','')    # 多个uid用中文逗号分开
+	results = get_add_private_white_uid(xnr_user_no,white_uid_string)
+
+	return json.dumps(results)

@@ -9,7 +9,7 @@ Fifteen = 60 * 15
 HALF_HOUR = 1800
 HOUR = 3600
 FOUR_HOUR = 3600*4
-MAX_VALUE = 9999
+MAX_VALUE = 999
 WEEK = 7
 WEEK_TIME = 7*24*3600
 MONTH = 30
@@ -21,11 +21,12 @@ USER_NUM = 100 #人物行为预警返回用户数量
 USER_CONTENT_NUM=3 #人物行为预警每个用户返回的敏感微博数量
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 # weibo
+SPEECH_WARMING_NUM=100 #言论预警数量
 
 MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
-MAX_SEARCH_SIZE = 9999 ## 从数据库中最大检索数量
+MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 200
@@ -47,6 +48,13 @@ SENSITIVE_AT_RECOMMEND_USER_TOP = 10
 
 BCI_USER_NUMBER = 1000
 USER_POETRAIT_NUMBER = 1000
+
+## 随机转发 起止时间 5min- 60min
+RETWEET_START_TS = 60*5  # 取决于定时扫描最小间隔
+RETWEET_END_TS = 60*60
+
+## 随机转发跟踪uid
+TRACE_FOLLOW_LIST = ['5622091306','5650736291','3738565314','5489151972']
 
 # 子观点微博条数限制
 SUB_OPINION_WEIBO_LIMIT = 3
@@ -78,6 +86,11 @@ ACTIVE_UID = '2919766227'
 #MAX_PRIVATE = 100
 #MAX_AT = 1000
 
+WHITE_UID_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/'
+
+WHITE_UID_FILE_NAME = 'white_uid.txt'
+
+IMAGE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/weibo_images/'
 
 DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 

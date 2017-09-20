@@ -3,6 +3,7 @@
 use to manage the system
 '''
 import os
+import json
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import weibo_log_management_index_name,weibo_log_management_index_type,\
 						weibo_authority_management_index_name,weibo_authority_management_index_type,\
@@ -41,7 +42,11 @@ def show_log_list():
 		'sort':{'operate_time':{'order':'desc'}}
 	}
 	result=es.search(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		item['_source']['log_id']=item['_id']
+		results.append(item['_source'])
+	return results
 
 #delete log list
 def delete_log_list(log_id):
@@ -63,7 +68,7 @@ def create_role_authority(role_name,description):
 	authority_id=role_name
 
 	try:
-		es.index(index=weibo_authority_management_index_name,doc_type=weibo_account_management_index_type,id=authority_id,body=authority_detail)
+		es.index(index=weibo_authority_management_index_name,doc_type=weibo_authority_management_index_type,id=authority_id,body=authority_detail)
 		result=True
 	except:
 		result=False
@@ -74,10 +79,14 @@ def show_authority_list():
 	query_body={
 		'query':{
 			'match_all':{}
-		}
+		},
+		'size':MAX_VALUE
 	}
 	result=es.search(index=weibo_authority_management_index_name,doc_type=weibo_authority_management_index_type,body=query_body)['hits']['hits']
-	return result	
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 #change the authority description
 def change_authority_list(role_name,description):
@@ -123,15 +132,15 @@ def create_user_account(user_account_info):
 def add_user_xnraccount(account_id,xnr_accountid):
 	user_account_info=es.get(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,id=account_id)
 	origin_xnr_account=user_account_info['_source']['my_xnrs']
-	origin_xnr_account=json.loads(origin_xnr_account)
 	if origin_xnr_account:
-		origin_xnr_account.append(xnr_accountid)
+		origin_xnr_account.extend(xnr_accountid)
 	else:
 		origin_xnr_account=xnr_accountid
-
+	new_xnr_account=[]
+	[new_xnr_account.append(i) for i in origin_xnr_account if not i in new_xnr_account]
 	try:
 		es.update(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,id=account_id,\
-			body={'doc':{'my_xnrs':origin_xnr_account}})
+			body={'doc':{'my_xnrs':new_xnr_account}})
 		result=True
 	except:
 		result=False
@@ -147,7 +156,10 @@ def show_users_account():
 		'size':MAX_VALUE
 	}
 	result=es.search(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,body=query_body)['hits']['hits']
-	return result
+	results=[]
+	for item in result:
+		results.append(item['_source'])
+	return results
 
 #delete account
 #step 1:delete the user account
@@ -163,7 +175,7 @@ def delete_user_account(account_id):
 def delete_user_xnraccount(account_id,xnr_accountid):
 	user_account_info=es.get(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,id=account_id)
 	origin_xnr_account=user_account_info['_source']['my_xnrs']
-	origin_xnr_account=json.loads(origin_xnr_account)
+
 	if origin_xnr_account:
 		origin_xnr_account.remove(xnr_accountid)
 	else:
@@ -175,13 +187,17 @@ def delete_user_xnraccount(account_id,xnr_accountid):
 		result=True
 	except:
 		result=False
+	return result
 
 #change user account info
 #user_account_info=[user_id,user_name,my_xnrs]
-def change_user_account(account_id,change_user_account):
+def change_user_account(change_detail):
+	user_id=change_detail['user_id']
+	user_name=change_detail['user_name']
+	my_xnrs=change_detail['my_xnrs']
 	try:
-		es.update(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,id=account_id,\
-			body={'doc':{'user_id':change_user_account[0],'user_name':change_user_account[1],'my_xnrs':change_user_account[2]}})
+		es.update(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,id=user_id,\
+			body={'doc':{'user_id':user_id,'user_name':user_name,'my_xnrs':my_xnrs}})
 		result=True
 	except:
 		result=False

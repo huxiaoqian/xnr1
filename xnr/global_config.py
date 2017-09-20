@@ -10,8 +10,9 @@ S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
 S_UID = '1910774981' #'3986246393'
 S_DATE_BCI = '2016-11-27'
 
-QQ_S_DATE = '2016-07-12'
-
+QQ_S_DATE = '2017-07-12'
+QQ_S_DATE_NEW = '2017-08-25'
+QQ_GROUP_MESSAGE_START_DATE = '2017-08-23'
 
 PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
 

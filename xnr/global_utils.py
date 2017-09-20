@@ -87,6 +87,11 @@ weibo_role_index_type = 'role'
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
 weibo_xnr_timing_list_index_type = 'timing_list'
 
+# use to retweet tweet at future time
+weibo_xnr_retweet_timing_list_index_name = 'tweet_retweet_timing_list'
+weibo_xnr_retweet_timing_list_index_type = 'timing_list'
+
+
 #use to test lookup weibocontent,can be deleted after test
 
 #use to save feedback info
@@ -125,6 +130,10 @@ weibo_feedback_group_index_type = 'text'
 weibo_xnr_save_like_index_name='weibo_xnr_save_like'
 weibo_xnr_save_like_index_type='text'
 
+#use to save weibo xnr count info
+weibo_xnr_count_info_index_name='weibo_xnr_count_info'
+weibo_xnr_count_info_index_type='text'
+
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
@@ -134,6 +143,10 @@ type_sensing = "task"
 id_sensing = "social_sensing_task"
 social_sensing_index_name = 'social_sensing_text'
 social_sensing_index_type = 'text'
+
+weibo_private_white_uid_index_name = 'weibo_private_white_uid'
+weibo_private_white_uid_index_type = 'white_uid'
+
 
 # content recommendation & sub opinion 
 
