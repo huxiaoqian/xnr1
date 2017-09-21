@@ -192,10 +192,12 @@ function group(data) {
                     var dis1='disabled',dis2='disabled';
                     if (row.compute_status=='1'){dis1=''}
                     else if (Number(row.compute_status) > 1){dis1='';dis2=''}
-                    return '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_group_detail_portrait\')" class="icon icon-group '+dis1+'" title="查看群体"></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\')" class="icon icon-paste '+dis2+'" title="查看描述"></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+thisType+'\',\''+thisUser+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
+                    return '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\',\'show_domain_group_detail_portrait\')" class="icon icon-paste '+dis2+'" title="查看详情"></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color: white;" onclick="delt(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
+                        // '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_group_detail_portrait\')" class="icon icon-group '+dis1+'" title="查看群体"></a>&nbsp;&nbsp;'+
+                        // '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\')" class="icon icon-paste '+dis2+'" title="查看描述"></a>&nbsp;&nbsp;'+
+                        // '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+thisType+'\',\''+thisUser+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
+                        // '<a style="cursor: pointer;color: white;" onclick="delt(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
                 },
             },
         ],
@@ -203,31 +205,53 @@ function group(data) {
 };
 //查看描述
 var g='',$domain='';
-function seeDesGroup(name,midUrl) {
-    g=midUrl;$domain=name;
-    var seeDesGroup_url='/weibo_xnr_knowledge_base_management/'+midUrl+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
-    public_ajax.call_request('get',seeDesGroup_url,DesGroup)
+// function seeDesGroup(name,midUrl) {
+//     g=midUrl;$domain=name;
+//     var seeDesGroup_url='/weibo_xnr_knowledge_base_management/'+midUrl+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+//     public_ajax.call_request('get',seeDesGroup_url,DesGroup)
+// }
+function seeDesGroup(name,midUrl_1,midUrl_2) {
+    $domain=name;
+    var seeDesGroup_url_1='/weibo_xnr_knowledge_base_management/'+midUrl_1+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+    public_ajax.call_request('get',seeDesGroup_url_1,DesGroup_1)
+    var seeDesGroup_url_2='/weibo_xnr_knowledge_base_management/'+midUrl_2+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+    public_ajax.call_request('get',seeDesGroup_url_2,groupList);
+    $('.titleMain').text(name);
 }
-//'/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name='+$domain+'&role_name=草根'
-function DesGroup(data) {
+function DesGroup_1(data) {
     console.log(data);
-    if (g=='show_domain_description'){
-        var desc=data['description'],des='';
-        if (desc==''||desc=='null'||desc=='unknown'||!desc){
-            des='无描述';
-        }else {
-            des = desc;
-        };
-        $('#groupDepict #gd-1').text(des);
-        character_topic(data['role_distribute'],'gd-2','角色分类');
-        character_topic(data['topic_preference'],'gd-3','词汇偏好');
-        words(data['word_preference']);
-        $('#groupDepict').modal('show');
+    var desc=data['description'],des='';
+    if (desc==''||desc=='null'||desc=='unknown'||!desc){
+        des='无描述';
     }else {
-        groupList(data);
-        $('#allGroup').modal('show');
-    }
+        des = desc;
+    };
+    $('.allGroup_div #_gd').text(des);
+    character_topic(data['role_distribute'],'gd-2','角色分类');
+    character_topic(data['topic_preference'],'gd-3','话题偏好');
+    words(data['word_preference']);
+    $('.allGroup_div').show();
+    $('.loadGO').hide();
 }
+// function DesGroup(data) {
+//     console.log(data);
+//     if (g=='show_domain_description'){
+//         var desc=data['description'],des='';
+//         if (desc==''||desc=='null'||desc=='unknown'||!desc){
+//             des='无描述';
+//         }else {
+//             des = desc;
+//         };
+//         $('#groupDepict #gd-1').text(des);
+//         character_topic(data['role_distribute'],'gd-2','词汇偏好');
+//         character_topic(data['topic_preference'],'gd-3','角色分类');
+//         words(data['word_preference']);
+//         $('#groupDepict').modal('show');
+//     }else {
+//         groupList(data);
+//         $('#allGroup').modal('show');
+//     }
+// }
 //角色分类-----词汇偏好
 function character_topic(data,box,title) {
     var leg=[],every=[];
@@ -297,14 +321,14 @@ function words(data) {
     var option = {
         backgroundColor:'transparent',
         title: {
-            text: '话题偏好',
+            text: '词汇偏好',
             left:'right'
         },
         tooltip: {
             show: true
         },
         series: [{
-            name: '话题',
+            name: '词汇',
             type: 'wordCloud',
             size: ['80%', '80%'],
             textRotation : [0, 45, 90, -45],
@@ -320,6 +344,7 @@ function words(data) {
 }
 //群体成员
 function groupList(data) {
+    console.log(data)
     $('#grouplist').bootstrapTable('load', data);
     $('#grouplist').bootstrapTable({
         data:data,
@@ -329,7 +354,7 @@ function groupList(data) {
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
-        searchOnEnterKey: false,//回车搜索
+        searchOnEnterKey: true,//回车搜索
         showRefresh: false,//刷新按钮
         showColumns: false,//列选择按钮
         buttonsAlign: "right",//按钮对齐方式
@@ -463,12 +488,21 @@ function groupList(data) {
                     if (row.weibo_type==''||row.weibo_type=='null'||row.weibo_type=='unknown'||!row.weibo_type){
                         return '未知';
                     }else {
-                        return row.weibo_type;
+                        var yy='';
+                        if (row.weibo_type=='follow'){
+                            user='已关注用户';
+                        }else if (row.weibo_type=='friend'){
+                            user='相互关注用户';
+                        }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+                            user='未关注用户';
+                        }
+                        return yy;
                     };
                 },
             },
         ],
     });
+    $('.groupDepict_div').show();
 }
 //更新
 function refresh(domainName,description,remark,create_type,word_user) {

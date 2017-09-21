@@ -31,12 +31,17 @@ function domain(data) {
         }
     }
     $('#container .tit-3 .field-2').html(str);
+    $('#container .tit-3').show();
 }
 function allDataFun(_this) {
     var domain_name = $('.field-1 input:radio[name="chara"]:checked').val();
     var allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name='+domain_name+'&role_name='+$(_this).val();
     public_ajax.call_request('get',allData_url,allDataChart);
 }
+//默认
+var default_allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name=维权群体&role_name=政府机构及人士';
+public_ajax.call_request('get',default_allData_url,allDataChart);
+//=======
 function allDataChart(data) {
     character_tendency(data['psy_feature'],'opt-2-2','性格特征');
     character_tendency(data['political_side'],'opt-2-4','政治倾向');
@@ -291,15 +296,17 @@ function locationplace(data,idClassName,name) {
         "大庆":[125.03,46.58],
         "鹰潭":[28.14, 117.03]
     };
-    var cityData=[];
+    var cityData=[],maxAry=[];
     for(var a in data){
         for (var b in data[a]){
             if (b in geoCoordMap){
                 cityData.push({name: b, value: data[a][b]})
+                maxAry.push(data[a][b]);
             }
         }
     }
-    console.log(data)
+    var maxNum=Math.max.apply(null,maxAry);
+
     var myChart = echarts.init(document.getElementById(idClassName),'dark');
 
     var convertData = function (data) {
@@ -342,10 +349,10 @@ function locationplace(data,idClassName,name) {
         // },
         visualMap: {
             min: 0,
-            max: 1000,
+            max: (maxNum+100),
             calculable: true,
             inRange: {
-                color: ['#50a3ba', '#eac736', '#d94e5d']
+                color: ['#79f507', '#f5b707', '#FF5722']
             },
             textStyle: {
                 color: '#fff'
@@ -360,11 +367,11 @@ function locationplace(data,idClassName,name) {
             },
             itemStyle: {
                 normal: {
-                    areaColor: '#323c48',
+                    areaColor: 'rgb(30, 111, 208)',
                     borderColor: '#111'
                 },
                 emphasis: {
-                    areaColor: '#2a333d'
+                    areaColor: '#ffeb3b'
                 }
             }
         },

@@ -77,6 +77,7 @@ function wordCloud(data) {
                 myChart.setOption(option);
             }
         );
+        $('#content-1-word p').hide();
     }
 
 }
@@ -173,6 +174,7 @@ function hotPost(data) {
             },
         ],
     });
+    $('#hot_post p').hide();
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //活跃用户
@@ -332,6 +334,7 @@ function activeUser(persondata) {
             act_user_list.removeByValue(row.id);_judge()
         },
     });
+    $('#userList p').hide();
 }
 var act_user_list=[];
 function _judge() {
