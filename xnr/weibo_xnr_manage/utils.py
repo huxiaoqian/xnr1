@@ -473,11 +473,25 @@ def show_history_count(xnr_user_no,date_range):
     else:
         start_time=date_range['start_time']
         end_time=date_range['end_time']
+        now_time=int(time.time())
+        system_start_time=FLOW_TEXT_START_DATE
+        if end_time > now_time:
+            end_time=now_time
+        if start_time > system_start_time:
+            start_time=system_start_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
 
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
 
     return Cumulative_statistics_dict,xnr_date_info
+
+def delete_history_count(task_id):
+    try:
+        es_xnr.delete(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id)
+        result=True
+    except:
+        result=False
+    return result
 
 '''
 def wxnr_history_count(xnr_user_no,startdate,enddate):
@@ -581,9 +595,9 @@ def wxnr_history_count(xnr_user_no,startdate,enddate):
 ###########获取定时发送任务列表##############
 def show_timing_tasks(xnr_user_no,start_time,end_time):
 	#获取虚拟人编号
-	user_no_str=xnr_user_no[4:8]
+	#user_no_str=xnr_user_no[4:8]
 	#print user_no_str
-	user_no=long(user_no_str)
+	#user_no=long(user_no_str)
 	#print user_no
 	query_body={
 		'query':{
@@ -591,7 +605,7 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
 				'filter':{
 					'bool':{
 						'must':[
-							{'term':{'user_no':user_no}},
+							{'term':{'xnr_user_no':xnr_user_no}},
 							{'range':{
 								'post_time':{
 									'gte':start_time,
