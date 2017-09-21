@@ -173,18 +173,19 @@ def ajax_change_sensitive_words():
 
 ## 时间节点预警
 #添加时间节点预警
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp=2001-09-11&keywords=911事件&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp=1931-09-18&keywords=918事变&create_type=my_xnrs&content_recommend=九一八事变（又称奉天事变、柳条湖事件）是日本在中国东北蓄意制造并发动的一场侵华战争，是日本帝国主义侵华的开端。
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?date_name=911事件&timestamp=2001-09-11&keywords=911事件,911暴乱&create_type=all_xnrs&content_recommend=“9·11事件”（September 11 attacks），又称“911‘、“9·11恐怖袭击事件”[1]  ，是2001年9月11日发生在美国纽约世界贸易中心的一起系列恐怖袭击事件.
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/create_date_remind/?date_name=918事件&timestamp=1931-09-18&keywords=918事变&create_type=my_xnrs&content_recommend=九一八事变（又称奉天事变、柳条湖事件）是日本在中国东北蓄意制造并发动的一场侵华战争，是日本帝国主义侵华的开端。
 @mod.route('/create_date_remind/')
 def ajax_create_date_remind():
+    date_name=request.args.get('date_name','')
     timestamp = request.args.get('timestamp','')
-    keywords = request.args.get('keywords','')
+    keywords = request.args.get('keywords','').split(',')
     #keywords_string = '&'.join(keywords.encode('utf-8').split('，'))  # 字符串，以 '&'连接
     create_type = request.args.get('create_type','')
     create_time = int(time.time())
     content_recommend = request.args.get('content_recommend','')
     
-    mark = get_create_date_remind(timestamp,keywords,create_type,create_time,content_recommend)
+    mark = get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend)
 
     return json.dumps(mark)
 
@@ -212,20 +213,21 @@ def ajax_show_select_date_remind():
     return json.dumps(results)
 
 #修改指定的时间节点预警内容
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1503135422&keywords=美国911事件&create_type=all_xnrs
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1505912182&date_name=918事件&keywords=918事件,918暴乱,口罩&create_type=all_xnrs
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')
-    keywords=request.args.get('keywords','')
+    date_name=request.args.get('date_name','')
+    keywords=request.args.get('keywords','').split(',')
     create_type = request.args.get('create_type','')
     create_time=int(time.time())
-    results=change_date_remind(task_id,keywords,create_type,create_time)
+    results=change_date_remind(task_id,date_name,keywords,create_type,create_time)
     return json.dumps(results)
 
 
 #删除指定的时间节点预警内容
 #http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id=1503135316
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id=1503409186
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id=1505888910
 @mod.route('/delete_date_remind/')
 def ajax_delete_date_remind():
     task_id=request.args.get('task_id','')

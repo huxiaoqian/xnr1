@@ -323,9 +323,10 @@ def change_sensitive_words(words_id,change_info):
 ###########  functional module 2: time alert node manage #########
 
 #step 1:    add time alert node 
-def get_create_date_remind(timestamp,keywords,create_type,create_time,content_recommend):
+def get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend):
     task_detail = dict()
     #task_detail['date_time'] = ts2datetime(int(timestamp))[5:10]
+    task_detail['date_name']=date_name
     task_detail['date_time']=timestamp[5:10]
     task_detail['keywords'] = keywords
     task_detail['create_type'] = create_type
@@ -385,17 +386,17 @@ def show_select_date_remind(task_id):
     return result
 
 #step 3.2: change the selected time alert node
-def change_date_remind(task_id,keywords,create_type,create_time):
+def change_date_remind(task_id,date_name,keywords,create_type,create_time):
     date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
     content_recommend=date_result['content_recommend']
     date_time=date_result['date_time']
-    create_type=create_type
-    keywords=keywords
-    create_time=create_time
+    #create_type=create_type
+    #keywords=keywords
+    #create_time=create_time
 
     try:
         es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
-            body={"doc":{'date_time':date_time,'keywords':keywords,'create_type':create_type,\
+            body={"doc":{'date_name':date_name,'date_time':date_time,'keywords':keywords,'create_type':create_type,\
             'create_time':create_time,'content_recommend':content_recommend}})
         result=True
     except:
