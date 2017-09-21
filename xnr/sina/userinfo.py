@@ -1,4 +1,4 @@
-# -*-coding: utf-8-*-
+#-*-coding: utf-8-*-
 import base64
 import json
 import os.path
@@ -21,17 +21,19 @@ class SinaOperateAPI:
         if uid:
             u_url += "&uid=" + uid
         if screen_name:
-            u_url += "&screen_name=" + screen_name
-
-        try:
-            request = urllib2.Request(u_url)
-            response = urllib2.urlopen(request, timeout=60)
-
-            content = json.loads(response.read())
-            return content
-        except Exception, e:
-            print "download page error!!! ", e
-            return ''
+            u_url += "&screen_name=" + urllib.quote(screen_name)
+        print 'u_url:', u_url
+        #try:
+        user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+        headers = {'User-Agent': user_agent}
+        request = urllib2.Request(url= u_url, headers=headers)
+        response = urllib2.urlopen(request, timeout=600)
+        
+        content = json.loads(response.read())
+        return content
+        #except Exception, e:
+        #    print "download page error!!! ", e
+        #    return ''
 
     def getCoutry(self, key=None):
         u_url = 'https://api.weibo.com/2/common/get_country.json?access_token=2.009t4mFGWp4peBbb59564f4e5n6k6B'
@@ -142,3 +144,6 @@ if __name__ == '__main__':
     execute()
     # user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
     # print user
+    # execute()
+    user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
+    print user
