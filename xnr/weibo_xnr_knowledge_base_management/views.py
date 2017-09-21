@@ -13,21 +13,31 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   get_create_type_content,domain_create_task,get_show_domain_group_summary,\
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
                   get_show_domain_role_info,get_delete_domain,get_export_example_model,\
-                  get_generate_example_model
+                  get_generate_example_model,get_show_example_model
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
 ## 生成实例模板
 @mod.route('/generate_example_model/')
 def ajax_generate_example_model():
+    xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
-    results = get_generate_example_model(domain_name,role_name)
+    results = get_generate_example_model(xnr_user_no,domain_name,role_name)
 
     return json.dumps(results)
 
 ## 导出实例模板
+
+@mod.route('/show_example_model/')
+def ajax_show_example_model():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_example_model(xnr_user_no)
+
+    return json.dumps(results)
+
 @mod.route('/export_example_model/')
+def ajax_export_example_model():
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
     results = get_export_example_model(domain_name,role_name)

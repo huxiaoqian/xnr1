@@ -8,7 +8,8 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
-                            weibo_role_index_type
+                            weibo_role_index_type,weibo_example_model_index_name,\
+                            weibo_example_model_index_type
 from xnr.time_utils import ts2datetime
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH
@@ -18,7 +19,7 @@ from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type
 领域知识库
 '''
 
-def get_generate_example_model(domain_name,role_name):
+def get_generate_example_model(xnr_user_no,domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     role_en = domain_ch2en_dict[role_name]
@@ -31,14 +32,33 @@ def get_generate_example_model(domain_name,role_name):
     
     try:
         with open(example_model_file_name,"w") as dump_f:
-        for item in result:
-            json.dump(item,dump_f)
+            for item in es_result:
+                json.dump(item,dump_f)
+
+        item_dict = dict()
+        item_dict['xnr_user_no'] = xnr_user_no
+        item_dict['domain_name'] = domain_name
+        item_dict['role_name'] = role_name
+
+        es.index(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_name,\
+            body=item_dict,id=task_id)
 
         mark = True
     except:
         mark = False
 
     return mark
+
+def get_show_example_model(xnr_user_no):
+
+    es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
+        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})
+    result_all = []
+    for result in es_results:
+        result = result['_source']
+        result_all.append(result)
+        
+    return result_all
 
 
 def get_export_example_model(domain_name,role_name):

@@ -3,7 +3,36 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/purview.css">
 <style>
-
+    #addPurviewModal .purContent .purCC,
+    #editPur .edit .editCC {
+        margin-bottom: 15px;
+    }
+    #addPurviewModal .purContent .purCC span,
+    #editPur .edit .editCC span {
+        display: inline-block;
+        width: 70px;
+        margin: 0 10px;
+        text-align: right;
+    }
+    #addPurviewModal .purContent .purCC input,
+    #editPur .edit .editCC input {
+        display: inline-block;
+        width: 400px;
+        text-align: center;
+        padding: 3px 6px;
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #editPur .edit .editCC .newDES {
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        color: white;
+        padding: 4px 6px;
+        resize: none;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -15,32 +44,94 @@
         </div>
     </div>
     <div class="purviewlist">
+        <span class="addPur" data-toggle="modal" data-target="#addPurviewModal">添加权限管理</span>
         <div id="purviewlist"></div>
     </div>
 </div>
 <!--模态框-->
-
-<!--群体详情-->
-<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体详情列表</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <div class="grouplist">
-                    <div id="grouplist"></div>
-                </div>
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
             </div>
-            <!--<div class="modal-footer">-->
-            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
-            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
-            <!--</div>-->
         </div>
     </div>
 </div>
-
+<!--//删除确认-->
+<div class="modal fade" id="delAgain" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureDelPur()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--更改权限-->
+<div class="modal fade" id="editPur" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">权限更改</h4>
+            </div>
+            <div class="modal-body">
+                <div class="edit">
+                    <div class="editCC">
+                        <span>角色：</span><input type="text" class="character" readonly/>
+                    </div>
+                    <div class="editCC">
+                        <span style="vertical-align: top;">权限描述：</span>
+                        <textarea cols="53" rows="5" class="newDES" placeholder="请输入权限描述"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="modifySure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加权限-->
+<div class="modal fade" id="addPurviewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加新的权限</h4>
+            </div>
+            <div class="modal-body">
+                <div class="purContent">
+                    <div class="purCC">
+                        <span>角色：</span><input type="text" class="purNAME" readonly/>
+                    </div>
+                    <div class="purCC">
+                        <span style="vertical-align: top;">权限描述：</span>
+                        <textarea name="" cols="53" rows="5" class="purDES" placeholder="请输入权限描述"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addPurSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--群体描述-->
 <div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -57,44 +148,6 @@
     </div>
 </div>
 
-<!--群体更新-->
-<div class="modal fade" id="update" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体更新</h4>
-            </div>
-            <div class="modal-body">
-                <p style="">是否进行群体的更新计算？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--群体删除-->
-<div class="modal fade" id="delt" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体删除</h4>
-            </div>
-            <div class="modal-body">
-                <p style="">您确定要删除该群体吗？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 {% endblock %}
 
@@ -102,5 +155,5 @@
 <script>
     judgment('9');
 </script>
-<script src="/static/js/purviewlist.js"></script>
+<script src="/static/js/purview.js"></script>
 {% endblock %}
