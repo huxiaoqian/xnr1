@@ -34,6 +34,9 @@
         display: inline-block;
         margin:0 20px 10px 0;
     }
+    #modifyAccount .modAct .modActCC .nowXnr .everyXnr span {
+        text-align: center;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -50,7 +53,7 @@
     </div>
 </div>
 <!--模态框-->
-<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+<div class="modal fade" id="pormpt" tabindex="2" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -152,7 +155,7 @@
                     <div class="modActCC">
                         <span style="vertical-align: top;">虚拟人：</span>
                         <div class="nowXnr" style="display: inline-block;width: 400px;position: relative;left: -4px;"></div>
-                        <div style="width:400px;margin-left: 90px;">
+                        <div style="width:400px;margin-left:109px;">
                             <input type="text" class="newXnrList" placeholder="添加新的虚拟人（多个虚拟人用逗号分隔）">
                             <button class='addXnr' onclick="addVirSure()">添加</button>
                         </div>
@@ -172,6 +175,16 @@
 {% block my_js %}
 <script>
     judgment('9');
+    $(document).ready(function() {
+        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
+        $(document).on('show.bs.modal', '.modal', function() {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+    });
 </script>
 <script src="/static/js/virtual.js"></script>
 {% endblock %}

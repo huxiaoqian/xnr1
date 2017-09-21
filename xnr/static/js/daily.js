@@ -127,7 +127,7 @@ function AddLogSure() {
         var addLog_url='/system_manage/create_log_list/?user_id='+user_id+'&user_name='+user_name+
             '&login_time='+(Date.parse(new Date(login_time))/1000)+'&login_ip='+login_ip+
             '&operate_time='+(Date.parse(new Date(operate_time))/1000)+'&operate_content='+operate_content;
-        public_ajax.call_request('get',delLOG_Url,successFail);
+        public_ajax.call_request('get',addLog_url,successFail);
     }else {
         $('#pormpt p').text('请检查您输入的内容，不能为空。');
         $('#pormpt').modal('show');
@@ -148,6 +148,9 @@ function successFail(data) {
     var f='';
     if (data[0]||data||data[0][0]){
         f='操作成功';
+        setTimeout(function () {
+            public_ajax.call_request('get',dailyLOG_Url,dailyLOG);
+        },700);
     }else {
         f='操作失败';
     }

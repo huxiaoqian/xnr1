@@ -125,6 +125,11 @@ def ajax_submit_timing_post_task():
 
     task_detail['text'] = request.args.get('text','')
     #task_detail['task_status'] = request.args.get('task_status','')
+    
+    task_detail['p_url']  = json.loads(json.dumps(request.args.get('p_url','').encode('utf-8')))  
+    task_detail['rank'] = request.args.get('rank','')
+    task_detail['rankid'] = request.args.get('rankid','')
+
     task_detail['task_status'] = 0
     task_detail['remark'] = request.args.get('remark','')
 
