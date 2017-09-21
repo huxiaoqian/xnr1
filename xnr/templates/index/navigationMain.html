@@ -317,16 +317,19 @@
         $('#choosePerson').modal('show');
     });
     $('#reportedmange').on('click',function () {
-        htmlUrl='/reportManage/management/';
-        $('#choosePerson').modal('show');
+        window.open('/reportManage/management/');
+        //htmlUrl='/reportManage/management/';
+        //$('#choosePerson').modal('show');
     });
     $('#knowledgebase').on('click',function () {
-        htmlUrl='/knowledge/domainLibrary/';
-        $('#choosePerson').modal('show');
+        window.open('/knowledge/domainLibrary/');
+        //htmlUrl='/knowledge/domainLibrary/';
+        //$('#choosePerson').modal('show');
     });
     $('#system').on('click',function () {
-        htmlUrl='/systemManage/daily/';
-        $('#choosePerson').modal('show');
+        window.open('/systemManage/daily/');
+        //htmlUrl='/systemManage/daily/';
+        //$('#choosePerson').modal('show');
     });
 
     //选择虚拟人确定进入
