@@ -15,6 +15,7 @@
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .fixed-table-toolbar .search{width: 100%}
+    .fixed-table-pagination .page-list {display: none!important;}
 </style>
 {% endblock %}
 {% block main %}
@@ -71,6 +72,30 @@
         <div class="group-2">
             <div id="group-2"></div>
         </div>
+        <h2 class="titleMain" style="margin: 10px 0;width: 100%;text-align: center;color: white;"></h2>
+        <div class="allGroup_div" style="display: none;">
+            <div class="g-1-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">群体描述&nbsp;<span id="_gd" style="color: antiquewhite;"></span></span>
+            </div>
+            <div class="grouplist">
+                <div id="grouplist">
+                    <p class="loadGO" style="width: 100%;text-align: center;color: white;
+        margin-top:40px;font-size: 18px;">正在拼命加载中...</p>
+                </div>
+            </div>
+        </div>
+        <div class="groupDepict_div" style="display: none;margin-top: 30px;">
+            <div class="g-1-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">群体详情列表</span>
+            </div>
+            <div class="groupDetails">
+                <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+            </div>
+        </div>
     </div>
 </div>
 <!--模态框-->
@@ -90,44 +115,45 @@
         </div>
     </div>
 </div>
-<!--群体详情-->
-<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 900px;margin: 60px auto 0;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体详情列表</h4>
-            </div>
-            <div class="modal-body">
-                <div class="grouplist">
-                    <div id="grouplist"></div>
-                </div>
-            </div>
-            <!--<div class="modal-footer">-->
-                <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
-                <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
+
+<!--&lt;!&ndash;群体详情&ndash;&gt;-->
+<!--<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">-->
+    <!--<div class="modal-dialog" role="document" style="width: 900px;margin: 60px auto 0;">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--<h4 class="modal-title">群体详情列表</h4>-->
             <!--</div>-->
-        </div>
-    </div>
-</div>
-<!--群体描述-->
-<div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document" style="width: 1000px;margin: 60px auto 0;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体描述<span id="gd-1"></span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="groupDetails">
-                    <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
-                    <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
-                    <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+            <!--<div class="modal-body">-->
+                <!--<div class="grouplist">-->
+                    <!--<div id="grouplist"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;<div class="modal-footer">&ndash;&gt;-->
+                <!--&lt;!&ndash;<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash;群体描述&ndash;&gt;-->
+<!--<div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">-->
+    <!--<div class="modal-dialog" role="document" style="width: 1000px;margin: 60px auto 0;">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--<h4 class="modal-title">群体描述<span id="gd-1"></span></h4>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--<div class="groupDetails">-->
+                    <!--<div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>-->
+                    <!--<div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>-->
+                    <!--<div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 
 <!--群体更新-->
 <div class="modal fade" id="update" tabindex="-1" role="dialog">

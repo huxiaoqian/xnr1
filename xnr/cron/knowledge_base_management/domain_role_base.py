@@ -245,7 +245,7 @@ def detect_by_keywords(keywords,datetime_list):
         flow_text_index_name = flow_text_index_name_pre + datetime
         count = MAX_DETECT_COUNT
         es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                    body={'query':{'bool':{'must':nest_query_list}},'size':count,'sort':[{'user_fansnum':{'order':'desc'}}]})['hits']['hits']
+                    body={'query':{'bool':{'should':nest_query_list}},'size':count,'sort':[{'user_fansnum':{'order':'desc'}}]})['hits']['hits']
         
         for i in range(len(es_results)):
 
@@ -404,7 +404,7 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
     uid_weibo_keywords_dict = dict()
     keywords_dict_all_users = dict()
     uid_weibo = [] # [[uid1,text1,ts1],[uid2,text2,ts2],...]
-
+    print 'uids_list::',uids_list
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
         query_body = {
@@ -784,7 +784,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     day_hour_counts_all_np = np.array(day_hour_counts_all)
     day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0)  ## 对二维数组按列求和
 
-    day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
+    #day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
  
     role_feature_analysis_results['top_keywords'] = keywords_dict_all_users_sort
     role_feature_analysis_results['political_side'] = political_side_count_sort

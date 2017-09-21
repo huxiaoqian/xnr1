@@ -147,6 +147,18 @@ def retweet_tweet_func(account_name,password,text,r_mid):
     
     return mark
 
+## 回复
+def reply_tweet_func(account_name,password,text,r_mid,mid,uid):
+    xnr = SinaLauncher(account_name,password)
+    xnr.login()
+    user = SinaOperateAPI(xnr.uid)
+    user.text = text
+    user.r_mid = r_mid
+    # user.r_uid = xnr.uid
+    user.uid = uid
+    user.cid = mid
+    mark = user.receive()
+    return mark
 
 ## 评论微博
 def comment_tweet_func(account_name,password,text,r_mid):
@@ -157,10 +169,11 @@ def comment_tweet_func(account_name,password,text,r_mid):
     user.text = text
     user.r_mid = r_mid
     mark = user.comment()
+    #mark = user.receive()
 
     return mark
 
-## 私信
+# ## 私信
 def private_tweet_func(account_name,password,text,r_mid):
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -170,9 +183,6 @@ def private_tweet_func(account_name,password,text,r_mid):
     mark = user.privmessage()
 
     return mark
-
-## at回复
-
 
 ## 点赞
 def like_tweet_func(account_name,password,r_mid):
@@ -239,9 +249,13 @@ def getUserShow(uid=None, screen_name=None):
         u_url += "&screen_name=" + screen_name
 
     try:
+        print 'u_url::',u_url
         request = urllib2.Request(u_url)
+        print 'request:::',request
         response = urllib2.urlopen(request, timeout=60)
+        print 'response::',response
         content = json.loads(response.read())
+        print 'content::',content
         return content
     except Exception, e:
         print "download page error!!! ", e
@@ -249,8 +263,8 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
-
+    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
+    print getUserShow(screen_name='巨星大大')
     # f_domain_data = open('domain.txt','rb')
 
     # for data in f_domain_data:

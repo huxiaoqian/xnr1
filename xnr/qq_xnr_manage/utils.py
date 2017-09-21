@@ -62,10 +62,16 @@ def find_port(exist_port_list):
 
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
+    
     qq_number = xnr_info['qq_number']
-    qq_groups = xnr_info['qq_groups'].split(',')
+    qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
     qqbot_mc = xnr_info['qqbot_mc']
     nickname = xnr_info['nickname']
+
+    search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+        body={'query':{'term':{'qq_number':qq_number}}})['hits']['hits']
+    if search_result:
+        return '当前qq已经被添加！'
     
     # active_time = xnr_info[3]
     create_ts = xnr_info['create_ts']
@@ -96,6 +102,8 @@ def create_qq_xnr(xnr_info):
         result = 0
     print 'result:', result
     if result == 1:
+        #qqbot_port = '8199'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
         #qqbot_port = '8190'
         qqbot_num = qq_number
         qqbot_port = str(qqbot_port)
