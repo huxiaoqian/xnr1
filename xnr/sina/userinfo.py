@@ -130,13 +130,15 @@ def execute():
     输入发布内容（和rank）
     :return:
     """
-    xnr = SinaLauncher('', '')
+    xnr = SinaLauncher('weiboxnr05@126.com', 'Bh123456')
     xnr.login()
 
-    user = SinaOperateAPI()
+    #user = SinaOperateAPI()
 
+    #user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
+    print xnr.uid
 
 if __name__ == '__main__':
-    # execute()
-    user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
-    print user
+    execute()
+    # user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
+    # print user

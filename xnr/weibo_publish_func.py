@@ -249,9 +249,13 @@ def getUserShow(uid=None, screen_name=None):
         u_url += "&screen_name=" + screen_name
 
     try:
+        print 'u_url::',u_url
         request = urllib2.Request(u_url)
+        print 'request:::',request
         response = urllib2.urlopen(request, timeout=60)
+        print 'response::',response
         content = json.loads(response.read())
+        print 'content::',content
         return content
     except Exception, e:
         print "download page error!!! ", e
@@ -259,8 +263,8 @@ def getUserShow(uid=None, screen_name=None):
 
 if __name__ == '__main__':
 
-    result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
-
+    #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
+    print getUserShow(screen_name='巨星大大')
     # f_domain_data = open('domain.txt','rb')
 
     # for data in f_domain_data:

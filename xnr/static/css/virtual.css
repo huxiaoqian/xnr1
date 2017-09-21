@@ -32,14 +32,11 @@ body {
     margin-right: 5px;
     color: #fff;
 }
-#container .options {
-    width: 90%;
-    margin: 20px auto;
-}
-#container .purviewlist {
+#container .virtualtable {
     position: relative;
 }
-#container .purviewlist .addPur {
+#container .virtualtable .addaccount,
+#modifyAccount .modAct .modActCC .addXnr {
     position: absolute;
     top:10px;
     right: 0;
@@ -51,6 +48,15 @@ body {
     color: white;
     cursor: pointer;
 }
-#container .purviewlist .addPur:hover {
+#modifyAccount .modAct .modActCC .newXnrList {
+    width: 85%;
+}
+#modifyAccount .modAct .modActCC .addXnr {
+    padding:3px 10px;
+    position: static;
+    display: inline-block;
+}
+#container .virtualtable .addaccount:hover,
+#modifyAccount .modAct .modActCC .addXnr:hover {
     background: rgba(49, 49, 49, 0.78);
 }
