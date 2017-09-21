@@ -242,9 +242,9 @@ def xnr_today_remind(xnr_user_no,now_time):
     date_remind_content=[]
     date_result=show_date_warming(now_time)
     for date_item in date_result:
-        if (date_item[-1]['countdown_days']>0) and (date_item[-1]['countdown_days']<REMIND_DAY):
+        if (date_item['countdown_days']>0) and (date_item['countdown_days']<REMIND_DAY):
             date_remind_flag=date_remind_flag+1
-            date_remind_content_temp=str(date_item[-1]['countdown_days'])+'天后是'+date_item[0]['keywords'].encode('utf-8')+'，请注意！'
+            date_remind_content_temp=str(date_item['countdown_days'])+'天后是'+date_item['date_name'].encode('utf-8')+'纪念日，请注意！'
             date_remind_content.append(date_remind_content_temp)
     date_remind=[date_remind_flag,date_remind_content]
 
@@ -282,7 +282,7 @@ def xnr_assessment_detail(xnr_user_no,date_time):
 
 #累计统计
 def xnr_cumulative_statistics(xnr_date_info):
-    print xnr_date_info
+    #print xnr_date_info
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     Cumulative_statistics_dict['user_fansnum']=xnr_date_info[0]['user_fansnum']
@@ -290,27 +290,30 @@ def xnr_cumulative_statistics(xnr_date_info):
     daily_post_num=0
     business_post_num=0
     hot_follower_num=0
-    influence_sum=0
-    penetration_sum=0
-    safe_sum=0
+    #influence_sum=0
+    #penetration_sum=0
+    #safe_sum=0
     number=len(xnr_date_info)
     for i in xrange(0,len(xnr_date_info)):
         total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
         daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
         business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
         hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
-        influence_sum=influence_sum+xnr_date_info[i]['influence']
-        penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
-        safe_sum=safe_sum+xnr_date_info[i]['safe']
-        print total_post_sum,daily_post_num
+        #influence_sum=influence_sum+xnr_date_info[i]['influence']
+        #penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
+        #safe_sum=safe_sum+xnr_date_info[i]['safe']
+        #print total_post_sum,daily_post_num
 
     Cumulative_statistics_dict['total_post_sum']=total_post_sum
     Cumulative_statistics_dict['daily_post_num']=daily_post_num
     Cumulative_statistics_dict['business_post_num']=business_post_num
     Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
-    Cumulative_statistics_dict['influence']=influence_sum/number
-    Cumulative_statistics_dict['penetration']=penetration_sum/number
-    Cumulative_statistics_dict['safe']=safe_sum/number
+    #Cumulative_statistics_dict['influence']=influence_sum/number
+    #Cumulative_statistics_dict['penetration']=penetration_sum/number
+    #Cumulative_statistics_dict['safe']=safe_sum/number
+    Cumulative_statistics_dict['influence']=xnr_date_info[0]['influence']
+    Cumulative_statistics_dict['penetration']=xnr_date_info[0]['penetration']
+    Cumulative_statistics_dict['safe']=xnr_date_info[0]['safe']
     return Cumulative_statistics_dict
 
 #从流数据中对今日信息进行统计
@@ -422,6 +425,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
             xnr_date_detail=dict(temp_date_detail,**assessment_detail)
             xnr_date_info.append(xnr_date_detail)
             temp_date_ts=temp_next_date_ts
+    xnr_date_info.sort(key=lambda k:(k.get('date_time',0)),reverse=True)
     return xnr_date_info
 
 
@@ -660,7 +664,7 @@ def show_history_posting(require_detail):
 	task_source=require_detail['task_source']
 	es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 	uid=es_result['uid']
-	print uid,task_source
+	#print uid,task_source
 
 	#date_range_end_ts=require_detail['now_time']
 	#weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,date_range_end_ts)
@@ -668,7 +672,7 @@ def show_history_posting(require_detail):
 	date_range_start_ts=require_detail['start_time']
 	date_range_end_ts=require_detail['end_time']
 	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
-	print weibo_xnr_flow_text_listname
+	#print weibo_xnr_flow_text_listname
 	query_body={
 		'query':{
 			'filtered':{
@@ -1164,7 +1168,7 @@ def delete_weibo_xnr(xnr_user_no):
 def create_xnr_flow_text(task_detail):
 	task_id=task_detail['mid']
 	try:
-		es_xnr.index(index='xnr_flow_text_2017-09-05',doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+		es_xnr.index(index='xnr_flow_text_2017-09-18',doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 		mark=True
 	except:
 		mark=False
