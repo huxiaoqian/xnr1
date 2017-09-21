@@ -10,11 +10,11 @@ from xnr.global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xn
                              es_flow_text,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_report_management_index_name,weibo_report_management_index_type,\
                              weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
-                             xnr_flow_text_index_type,es_user_profile,profile_index_name,profile_index_type
+                             xnr_flow_text_index_name_pre,xnr_flow_text_index_type,es_user_profile,profile_index_name,profile_index_type
 from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
-from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list
-from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM
+from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
+from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY
 
 ###################################################################
 ###################       personal warming       ##################
@@ -52,7 +52,7 @@ def show_personnal_warming(xnr_user_no,day_time):
     }
     first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
         body=query_body)['aggregations']['followers_sensitive_num']['buckets']
-    print first_sum_result
+    #print first_sum_result
     top_userlist=[]
     if USER_NUM < len(first_sum_result):
         temp_num=USER_NUM
@@ -348,18 +348,57 @@ def show_date_warming(today_time):
     #取出预警时间进行处理
     date_warming_result=[]
     for item in result:
-        countdown_days=dict()
+        #计算距离日期
         date_time=item['_source']['date_time']
         year=ts2yeartime(today_time)
         warming_date=year+'-'+date_time
         today_date=ts2datetime(today_time)
         countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
-        item['_source']['countdown_days']=countdown_num
-        #countdown_days['countdown_days']=countdown_num
-        #temp_list=[item['_source'],countdown_days]
+        if countdown_num<0:
+            new_warming_year=str(int(year)+1)
+            new_warming_date=new_warming_year+'-'+date_time
+            countdown_numday=(datetime2ts(new_warming_date)-datetime2ts(today_date))/DAY
+            item['_source']['countdown_days']=countdown_numday
+        else:
+            item['_source']['countdown_days']=countdown_num
+        
+        #根据给定的关键词查询预警微博
+        keywords=item['_source']['keywords']
+        item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming(keywords,today_time)
+
         date_warming_result.append(item['_source'])
         
     return date_warming_result
+
+
+def lookup_weibo_date_warming(keywords,today_time):
+    keyword_query_list=[]
+    for keyword in keywords:
+        keyword_query_list.append({'wildcard':{'text':'*'+keyword+'*'}})
+
+    end_time=today_time-DAY*REMIND_DAY
+    #index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
+    index_name_list='xnr_flow_text_2017-09-13'
+
+    
+    query_body={
+            'query':{
+                'bool':{
+                   'must':keyword_query_list
+                }           
+            }
+        }
+    print keyword_query_list
+    #try:
+    temp_result=es_xnr.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+    date_result=[]
+    print temp_result
+    for item in temp_result:
+        date_result.append(item['_source'])
+    #except:
+        #date_result=[]
+    return date_result
+
 
 ###################################################################
 ###################       微博操作公共函数       ##################
