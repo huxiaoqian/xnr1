@@ -15,6 +15,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY
+from xnr.global_config import S_TYPE
 
 ###################################################################
 ###################       personal warming       ##################
@@ -26,8 +27,6 @@ def show_personnal_warming(xnr_user_no,day_time):
     #查询关注列表
     es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
     followers_list=es_xnr_result['followers_list']
-
-    flow_text_index_list=get_flow_text_index_list(int(day_time))
 
     #计算敏感度排名靠前的用户
     query_body={
@@ -50,7 +49,13 @@ def show_personnal_warming(xnr_user_no,day_time):
             },
         'size':MAX_SEARCH_SIZE
     }
-    first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
+    flow_text_index_list=get_flow_text_index_list(int(day_time))
+    weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(int(day_time))
+    if S_TYPE == 'test':        
+        first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
+        body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+    else:        
+        first_sum_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
         body=query_body)['aggregations']['followers_sensitive_num']['buckets']
     #print first_sum_result
     top_userlist=[]
@@ -89,7 +94,10 @@ def show_personnal_warming(xnr_user_no,day_time):
             'size':USER_CONTENT_NUM,
             'sort':{'sensitive':{'order':'desc'}}
         }
-        second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        if S_TYPE == 'test':
+            second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        else:
+        	second_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
         s_result=[]
         for item in second_result:
             s_result.append(item['_source'])
@@ -107,7 +115,6 @@ def show_personnal_warming(xnr_user_no,day_time):
 
 #show the speech wariming content
 def show_speech_warming(xnr_user_no,show_type,day_time):
-    flow_text_index_list=get_flow_text_index_list(int(day_time))
     #关注用户
     es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
     followers_list=es_xnr_result['followers_list']
@@ -126,11 +133,18 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
         'size':SPEECH_WARMING_NUM,
         'sort':{'sensitive':{'order':'desc'}}
     }
-
-    results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    result=[]
-    for item in results:
-    	result.append(item['_source'])
+    try:
+        if S_TYPE == 'test':
+            flow_text_index_list=get_flow_text_index_list(int(day_time))
+            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        else:
+            weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(int(day_time))
+            results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in results:
+            result.append(item['_source'])
+    except:
+    	result=[]
     return result
 
 
@@ -207,14 +221,15 @@ def get_hashtag():
 #（4）计算微博数据的转发数、评论数、敏感等级，得到微博影响力的初始值,
 #计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
 def show_event_warming(xnr_user_no):
-    
-    #hashtag_list = get_hashtag()
-    hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
-
     now_time=int(time.time())
-    #weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
-    weibo_xnr_flow_text_listname=['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24',\
+    if S_TYPE =='test':    
+        hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
+        weibo_xnr_flow_text_listname=['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24',\
     'flow_text_2016-11-23','flow_text_2016-11-22','flow_text_2016-11-21']
+    else:        
+        hashtag_list = get_hashtag()
+        weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
+
 
     #虚拟人的粉丝列表和关注列表
     try:
@@ -240,9 +255,10 @@ def show_event_warming(xnr_user_no):
             }
         }
         try:
-        #event_results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-            event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-            #print event_results
+            if S_TYPE == 'test':            
+                event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+            else:
+                event_results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
             weibo_result=[]
             fans_num_dict=dict()
             followers_num_dict=dict()
@@ -372,31 +388,32 @@ def show_date_warming(today_time):
 
 
 def lookup_weibo_date_warming(keywords,today_time):
-    keyword_query_list=[]
+    #keyword_query_list=[]
     for keyword in keywords:
-        keyword_query_list.append({'wildcard':{'text':'*'+keyword+'*'}})
-
+    	keyword_query_list=keyword+''
+        #keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
     end_time=today_time-DAY*REMIND_DAY
-    #index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
-    index_name_list='xnr_flow_text_2017-09-13'
+    if S_TYPE =='test':
+        index_name_list=['xnr_flow_text_2017-09-13','xnr_flow_text_2017-09-18']
+    else:
+    	index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
+    #print index_name_list
 
-    
     query_body={
-            'query':{
-                'bool':{
-                   'must':keyword_query_list
-                }           
+        'query':{
+            'match':{
+                'text':keyword_query_list
             }
         }
-    print keyword_query_list
-    #try:
-    temp_result=es_xnr.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-    date_result=[]
-    print temp_result
-    for item in temp_result:
-        date_result.append(item['_source'])
-    #except:
-        #date_result=[]
+    }
+    try:
+        temp_result=es_xnr.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        date_result=[]
+        #print temp_result
+        for item in temp_result:
+            date_result.append(item['_source'])
+    except:
+            date_result=[]
     return date_result
 
 
