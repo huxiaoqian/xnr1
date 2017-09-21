@@ -3,13 +3,50 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/speech_library.css">
 <style>
-    .fixed-table-toolbar .search {width: 100%;}
-    .bootstrap-table .table>thead>tr>th{width: 8%}
     .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /*====*/
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container thead th .both{
+        background-image: none!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .bootstrap-table .table>thead>tr>th{width: 8%}
 </style>
 {% endblock %}
 {% block main %}
@@ -24,11 +61,11 @@
             <div style="display: inline-block;">
                 <label class="demo-label allMY" value="all_xnrs">
                     <input class="demo-radio" type="radio" name="mine" value="all_xnrs">
-                    <span class="demo-radioInput"></span> 所有虚拟人
+                    <span class="demo-radioInput"></span> 共享
                 </label>
                 <label class="demo-label allMY" value="my_xnrs">
                     <input class="demo-radio" type="radio" name="mine" value="my_xnrs">
-                    <span class="demo-radioInput"></span> 我的虚拟人
+                    <span class="demo-radioInput"></span> 私有
                 </label>
             </div>
         </div>

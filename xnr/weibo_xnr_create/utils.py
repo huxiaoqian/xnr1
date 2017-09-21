@@ -60,8 +60,7 @@ def get_show_domain():
     if es_results:
         for result in es_results:
             result = result['_source']
-            print '!!!',result['domain_name']
-            domain_name_dict[result['domain_pinyin']] = json.loads(result['domain_name'])
+            domain_name_dict[result['domain_pinyin']] = result['domain_name']
     return domain_name_dict
 
 def get_show_weibo_xnr():
@@ -79,7 +78,8 @@ def get_role_sort_list(domain_name):
     try:
         es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)['_source']
 
-        role_sort_list_en = json.loads(es_result['role_distribute'])
+        #role_sort_list_en = json.loads(es_result['role_distribute'])
+        role_sort_list_en = es_result['role_distribute']
         role_sort_list_zh = []
         for item in role_sort_list_en:
             role_zh = domain_en2ch_dict[item[0]]

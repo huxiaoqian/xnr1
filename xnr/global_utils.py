@@ -83,6 +83,11 @@ weibo_domain_index_type = 'group'
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
 
+# use to save example model
+weibo_example_model_index_name = 'weibo_example_model'
+weibo_example_model_index_type = 'model'
+
+
 # use to publish tweet at future time
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
 weibo_xnr_timing_list_index_type = 'timing_list'

@@ -3,7 +3,8 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/character_library.css">
 <style>
-    .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
+    .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;
+        width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -23,9 +24,9 @@
 
             </div>
         </div>
-        <div class="tit-3" style="padding-left: 50px;">
+        <div class="tit-3" style="padding-left: 50px;display: none;">
             <span style="color: white;font-size: 16px;font-weight: 700;">选择身份：</span>
-            <div class="field-2">
+            <div class="field-2" style="color: white;margin-top: 10px;">
 
             </div>
         </div>
