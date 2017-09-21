@@ -67,6 +67,11 @@
         /*}*/
         .history-2 .fixed-table-toolbar {display: none;}
         /**/
+        .table>thead>tr>th {border-top: none!important;}
+        .li-1 .fixed-table-container thead th .both {background-image: none!important;}
+        .li-1 .bootstrap-table .table:not(.table-condensed) {padding: 0!important;}
+        .li-1 .bootstrap-table .table {border-bottom: none!important;}
+        .li-1 .fixed-table-pagination { display:none!important;}
     </style>
 {% endblock %}
 {% block main %}
@@ -115,10 +120,13 @@
                 <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
             </div>
             <div class="history-2">
-                <div id="history-2"></div>
+                <div id="history-2">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
-            <div class="history-1" style="width: 100%;">
-                <div id="history-1"style="width: 100%;height: 300px;"></div>
+            <div class="history-1" style="width: 100%;margin-top: 30px;">
+                <div id="history-1"style="width: 100%;height: 300px;">
+                </div>
             </div>
         </div>
         <div class="li-2 oli">
@@ -154,7 +162,9 @@
                 <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
             </div>
             <div class="time">
-                <div id="time"></div>
+                <div id="time">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
         </div>
         <div class="li-3 oli">
@@ -222,7 +232,9 @@
                             </label>
                         </div>
                         <div class="historyCenter">
-                            <div id="historyCenter"></div>
+                            <div id="historyCenter">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                            </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="mine">
@@ -252,11 +264,13 @@
                             </label>
                         </div>
                         <div class="commentCOT">
-                            <div id="commentCOT"></div>
+                            <div id="commentCOT">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...</p>
+                            </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="thumbs" box="likes">
-                        <div class="likes">
+                        <div class="favorit">
                             <label class="demo-label" title="收到的评论">
                                 <input class="demo-radio" type="checkbox" name="likely" value='send' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 收到的评论
@@ -266,9 +280,11 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 发出的评论
                             </label>
                         </div>
-                    </div>
-                    <div class="likes">
-                        <div id="likes"></div>
+                        <div class="likes">
+                            <div id="likes">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -286,7 +302,9 @@
                 </label>
             </div>
             <div class="focus">
-                <div id="focus"></div>
+                <div id="focus">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
         </div>
         <div class="li-5 oli">
@@ -302,7 +320,9 @@
                 </label>
             </div>
             <div class="fans">
-                <div id="fans"></div>
+                <div id="fans">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
         </div>
     </div>

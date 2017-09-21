@@ -122,7 +122,12 @@ function sureDelPur() {
 function successFail(data) {
     console.log(data)
     var f='';
-    if (data[0]||data||data[0][0]){f='操作成功'}else {f='操作失败'}
+    if (data[0]||data||data[0][0]){
+        f='操作成功';
+        setTimeout(function () {
+            public_ajax.call_request('get',purview_Url,purview);
+        },800);
+    }else {f='操作失败'}
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }

@@ -339,10 +339,11 @@ function obtain(t) {
 $('#sure_post').on('click',function () {
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
-    var flag=$('.friends button b').text(),rank='';
+    var flag=$('.friends button b').text(),rank='',middle_timing='submit_tweet';
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
+    if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
     //原创
-    var post_url_1='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+
+    var post_url_1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&operate_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank;
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){

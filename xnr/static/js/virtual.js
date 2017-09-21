@@ -120,7 +120,7 @@ function modifyAccountSure() {
     }
 }
 //删除账户
-var del_id='',del_account='';
+var del_id='',del_account='',delCnrGone=0;
 function deleteVir(_id,account) {
     del_id=_id,del_account=account;
     $('#delPrompt').modal('show');
@@ -129,12 +129,17 @@ function delVirSure() {
     var delVir_url='/system_manage/delete_user_xnraccount/?account_id='+del_id+'&xnr_accountid='+del_account;
     public_ajax.call_request('get',delVir_url,successFail);
 }
-
 //删除指定的虚拟人
+var thisXnr;
 function delXnr(_this) {
-    var xnrNum=$(_this).prev().text();
+    thisXnr=_this;
+    var xnrNum=$(_this).prev().text();delCnrGone=1;
     var delXne_url='/system_manage/delete_user_xnraccount/?account_id='+nowNewXnr+'&xnr_accountid='+xnrNum;
     public_ajax.call_request('get',delXne_url,successFail);
+}
+function delThis() {
+    console.log($(thisXnr).parent())
+    $(thisXnr).parent().remove();
 }
 //为指定账户下添加虚拟人
 var addXnrGone=0;
@@ -152,7 +157,6 @@ function addVirSure() {
 
 //=====
 function successFail(data) {
-    console.log(data)
     var f='';
     if (data[0]||data||data[0][0]){
         f='操作成功';
@@ -166,6 +170,13 @@ function successFail(data) {
             $('#modifyAccount .nowXnr').append(str);
             addXnrGone=0;
         }
+        if (delCnrGone==1){
+            delThis();
+            delCnrGone=0;
+        }
+        setTimeout(function () {
+            public_ajax.call_request('get',virtual_url,virtual);
+        },700);
     }else {f='操作失败'}
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
