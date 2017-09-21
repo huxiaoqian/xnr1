@@ -19,7 +19,7 @@ def weibo_xnr_timing_list_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'user_no':{
+					'xnr_user_no':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -47,6 +47,18 @@ def weibo_xnr_timing_list_mappings():
 					},
 					'task_status':{ # 0-尚未发送，1-已发送，-1 -撤销任务
 						'type':'long'
+					},
+					'p_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'rank':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'rankid':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 
 				}

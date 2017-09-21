@@ -13,7 +13,7 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
-                  create_xnr_flow_text
+                  create_xnr_flow_text,delete_history_count
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 
@@ -80,6 +80,12 @@ def ajax_show_history_count():
 	date_range['start_time']=int(request.args.get('start_time',''))
 	date_range['end_time']=int(request.args.get('end_time',''))
 	results=show_history_count(xnr_user_no,date_range)
+	return json.dumps(results)
+
+@mod.route('/delete_history_count/')
+def ajax_delete_history_count():
+	task_id=request.args.get('task_id','')
+	results=delete_history_count(task_id)
 	return json.dumps(results)
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no

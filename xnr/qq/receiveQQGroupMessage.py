@@ -96,16 +96,28 @@ def execute():
     bot.Run()
 
 
-def execute_v2(qqbot_port):
-    os.system('mkdir ' +  QRCODE_PATH+qqbot_port)
-    bot.Login(['-p', qqbot_port, '-b', QRCODE_PATH+qqbot_port])
+def execute_v2(qqbot_port, qqbot_num, qqbot_mailauth):
+    if not os.path.exists(QRCODE_PATH+qqbot_port):
+        os.system('mkdir ' +  QRCODE_PATH+qqbot_port)
+    bot.Login(['-p', qqbot_port, '-b', QRCODE_PATH+qqbot_port, \
+            '-r', '-q', qqbot_num, \
+            '-m', qqbot_num+'@qq.com', '-mc', qqbot_mailauth, \
+            '-dm'])
     bot.Plug('receiveQQGroupMessage')
     bot.Run()
 
 if __name__ == '__main__':
-    execute()
-    opts, args = getopt.getopt(sys.argv[1:], 'hi:o:')
+    #execute()
+    opts, args = getopt.getopt(sys.argv[1:], 'hi:o:m:')
     for op, value in opts:
         if op == '-i':
             qqbot_port = value
-            execute_v2(qqbot_port)
+        elif op == '-o':
+            qqbot_num = value
+        elif op == '-m':
+            qqbot_mailauth = value
+    print 'qqbot_port, qqbot_num. qqbot_mailauth:', qqbot_port
+    print 'qqbot_mailauth:', qqbot_mailauth
+    print 'qqbot_num:', qqbot_num
+    execute_v2(qqbot_port, qqbot_num, qqbot_mailauth)
+    #mailauthcode:sirtgdmgwiivbegf
