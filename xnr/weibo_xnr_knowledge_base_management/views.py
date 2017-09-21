@@ -213,7 +213,7 @@ def ajax_show_select_date_remind():
     return json.dumps(results)
 
 #修改指定的时间节点预警内容
-#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1505912182&date_name=918事件&keywords=918事件,918暴乱,口罩&create_type=all_xnrs
+#http://219.224.134.213:9209/weibo_xnr_knowledge_base_management/change_date_remind/?task_id=1505912182&date_name=918事件&keywords=918事件,918暴乱,口罩,没错&create_type=all_xnrs
 @mod.route('/change_date_remind/')
 def ajax_change_date_remind():
     task_id=request.args.get('task_id','')
