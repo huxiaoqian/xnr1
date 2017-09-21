@@ -4,7 +4,8 @@ use to save function---about deal database
 '''
 import sys
 import subprocess
-from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type, ABS_LOGIN_PATH
+from xnr.global_utils import es_xnr,qq_xnr_index_name,\
+        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
 import socket
@@ -64,6 +65,7 @@ def create_qq_xnr(xnr_info):
     
     qq_number = xnr_info['qq_number']
     qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
+    qqbot_mc = xnr_info['qqbot_mc']
     nickname = xnr_info['nickname']
 
     search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
@@ -87,8 +89,8 @@ def create_qq_xnr(xnr_info):
         user_no_current = 1
 
     #task_detail['user_no'] = user_no_current
-    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 QXNR0001
-
+    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 WXNR0001
+    print 'xnr_user_no:', xnr_user_no
     try:
         # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
         #     return 0
@@ -98,10 +100,16 @@ def create_qq_xnr(xnr_info):
         result = 1
     except:
         result = 0
-
+    print 'result:', result
     if result == 1:
         #qqbot_port = '8199'
         p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
+        #qqbot_port = '8190'
+        qqbot_num = qq_number
+        qqbot_port = str(qqbot_port)
+        qqbot_mc = 'sirtgdmgwiivbegf'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
+        #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
         print 'p_str1:', p_str1
         p2 = subprocess.Popen(p_str1, \
                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

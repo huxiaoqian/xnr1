@@ -34,20 +34,20 @@ def sendfromweb(xnr_qq_number,group,content):
     for line in p.stdout.readlines():
         print 'return line:', line
         line_list += line
-    return line_list
     '''
     try:
         result = sendMessage(bot,group,content)
     except:
         bot.Login()
         result = sendMessage(bot,group,content)
+    '''
     if result:
         update_flag = speak_num_update(str(bot.session.qq))        #按照虚拟人qq号更新历史及当日发言信息
         # print bot.session.qq
         if update_flag:
             return 1    
     return 0
-    '''
+    
 
 # 用于更新es中的历史和当日发言数
 def speak_num_update(xnr_qq_number):
