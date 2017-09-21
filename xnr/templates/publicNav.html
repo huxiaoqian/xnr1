@@ -63,6 +63,23 @@
         <b class="coorName"></b>
     </div>
 </div>
+<div class="modal fade" id="errorInfor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">错误提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                        请求失败！！可能是因为服务器速度太慢或者网络原因导致。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 <!-- 导航结束 -->
 
@@ -130,6 +147,7 @@
                 error:function (xhr,textStatus,errorThrown) {
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown)
+                    $('#errorInfor').modal('show');
                 },
                 global:false//是否触发全局请求,需要触发就是true,不需要false
             });
