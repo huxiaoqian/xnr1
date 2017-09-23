@@ -17,6 +17,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
 from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
+from xnr.global_config import S_TYPE
 
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
@@ -62,17 +63,19 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     #step 3:lookup the content
     flow_text_index_name_list = []
+    xnr_flow_text_index_name_list = []
     for range_item in range_time_list:
         iter_condition_list=[item for item in user_condition_list]
         iter_condition_list.append(range_item)
 
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
-        flow_text_index_name=flow_text_index_name_pre+range_from_date
-        flow_text_index_name_list.append(flow_text_index_name)
-        #print flow_text_index_name
-        #print iter_condition_list
-    #print iter_condition_list    
+        if S_TYPE == 'test':
+            flow_text_index_name=flow_text_index_name_pre+range_from_date
+            flow_text_index_name_list.append(flow_text_index_name)
+        else:
+            weibo_xnr_flow_text_index_name=xnr_flow_text_index_name_pre+range_from_date
+            xnr_flow_text_index_name_list.append(weibo_xnr_flow_text_index_name) 
     query_body={
         'query':{
         	'filtered':{
@@ -90,11 +93,12 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     }
 
     try:
-        #print '123'
-        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-            body=query_body)['aggregations']['keywords']['buckets']
-        #print 'flow_text_exist:',flow_text_exist
-        #print '456'
+        if S_TYPE == 'test':
+            flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
+        else:
+            flow_text_exist=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
     except:
         flow_text_exist=[]
 
