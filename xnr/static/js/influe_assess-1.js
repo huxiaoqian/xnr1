@@ -5,12 +5,18 @@ function score(data) {
 }
 $('#container .quota .quota-opt .demo-label input').on('click',function () {
     var a=$(this).val();
-    if (a=='all'){
+    if (a=='todayValue'){
         $('#quota-1').show();
         $('#quota-2').hide();
+        $('#quota-3').hide();
+    }else if (a=='totalValue') {
+        $('#quota-1').hide();
+        $('#quota-2').hide();
+        $('#quota-3').show();
     }else {
         $('#quota-1').hide();
         $('#quota-2').show();
+        $('#quota-3').hide();
     }
 })
 var influe_url='/weibo_xnr_assessment/influence_total/?xnr_user_no='+ID_Num;
@@ -25,7 +31,8 @@ function publicData(data) {
 }
 var time=[],growLEG=[],
     growthatData=[],growthfansData=[],growthcommentData=[],
-    growthlikeData=[], growthprivateData=[],growthretweetData=[];
+    growthlikeData=[], growthprivateData=[],growthretweetData=[],
+    legend2=[],totalAt2=[],totalFans2=[],totalComment2=[],totallike2=[],totalPrivate2=[],totalRetweet2=[];
 function influe(data) {
     //total_num、day_num、growth_rate
     //粉丝数   被转发   被评论   被点赞   被@  被私信
@@ -33,8 +40,7 @@ function influe(data) {
     if (isEmptyObject(data)){
         $('#quota-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
-        var legend=[],atData=[],fansData=[],commentData=[],likeData=[],privateData=[],retweetData=[],
-            totalAt=[],totalFans=[],totalComment=[],totallike=[],totalPrivate=[],totalRetweet=[];
+        var legend=[],atData=[],fansData=[],commentData=[],likeData=[],privateData=[],retweetData=[];
         for (var t in data['day_num']['at']){time.push(getLocalTime(t))}
         for (var i in data['day_num']){
             if (i=='at'){legend.push('被@');atData=publicData(data['day_num'][i]);}
@@ -44,13 +50,147 @@ function influe(data) {
             else if (i=='private'){legend.push('被私信');privateData=publicData(data['day_num'][i])}
             else if (i=='retweet'){legend.push('被转发');retweetData=publicData(data['day_num'][i])}
         }
+        var myChart = echarts.init(document.getElementById('quota-1'),'dark');
+        var option = {
+            backgroundColor:'transparent',
+            title : {
+                text: '',
+                subtext: ''
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:legend
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : time
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'粉丝',
+                    type:'bar',
+                    data:fansData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'被转发',
+                    type:'bar',
+                    data:retweetData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'被评论',
+                    type:'bar',
+                    data:commentData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'被点赞',
+                    type:'bar',
+                    data:likeData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'被@',
+                    type:'bar',
+                    data:atData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'被私信',
+                    type:'bar',
+                    data:privateData,
+                    markPoint : {
+                        data : [
+                            {type : 'max', name: '最大值'},
+                            {type : 'min', name: '最小值'}
+                        ]
+                    },
+                    markLine : {
+                        data : [
+                            {type : 'average', name: '平均值'}
+                        ]
+                    }
+                },
+            ]
+        };
+        myChart.setOption(option);
         for (var m in data['total_trend']){
-            if (m=='at'){legend.push('被@总数');totalAt=publicData(data['total_trend'][m])}
-            else if (m=='comment'){legend.push('被评论总数');totalComment=publicData(data['total_trend'][m])}
-            else if (m=='fans'){legend.push('粉丝总数');totalFans=publicData(data['total_trend'][m])}
-            else if (m=='like'){legend.push('被点赞总数');totallike=publicData(data['total_trend'][m])}
-            else if (m=='private'){legend.push('被私信总数');totalPrivate=publicData(data['total_trend'][m])}
-            else if (m=='retweet'){legend.push('被转发总数');totalRetweet=publicData(data['total_trend'][m])}
+            if (m=='at'){legend2.push('被@总数');totalAt2=publicData(data['total_trend'][m])}
+            else if (m=='comment'){legend2.push('被评论总数');totalComment2=publicData(data['total_trend'][m])}
+            else if (m=='fans'){legend2.push('粉丝总数');totalFans2=publicData(data['total_trend'][m])}
+            else if (m=='like'){legend2.push('被点赞总数');totallike2=publicData(data['total_trend'][m])}
+            else if (m=='private'){legend2.push('被私信总数');totalPrivate2=publicData(data['total_trend'][m])}
+            else if (m=='retweet'){legend2.push('被转发总数');totalRetweet2=publicData(data['total_trend'][m])}
         }
         for (var h in data['growth_rate']){
             if (h=='at'){growLEG.push('被@增长率');growthatData=publicData(data['growth_rate'][h])}
@@ -60,132 +200,151 @@ function influe(data) {
             else if (h=='private'){growLEG.push('被私信增长率');growthprivateData=publicData(data['growth_rate'][h])}
             else if (h=='retweet'){growLEG.push('被转发增长率');growthretweetData=publicData(data['growth_rate'][h])}
         };
-
-        var myChart = echarts.init(document.getElementById('quota-1'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    crossStyle: {
-                        color: '#999'
-                    }
-                }
-            },
-            toolbox: {
-                feature: {
-                    dataView: {show: true, readOnly: false},
-                    magicType: {show: true, type: ['line', 'bar']},
-                    restore: {show: true},
-                    saveAsImage: {show: true}
-                }
-            },
-            legend: {
-                data:legend,
-                width: '600',
-                left:'center'
-            },
-            xAxis: [
-                {
-                    type: 'category',
-                    data: time,
-                    axisPointer: {
-                        type: 'shadow'
-                    }
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    name: '数量',
-                    min: 0,
-                    axisLabel: {
-                        formatter: '{value} 人'
-                    }
-                },
-                {
-                    type: 'value',
-                    name: '增加数',
-                    min: 0,
-                    axisLabel: {
-                        formatter: '{value} 人'
-                    }
-                },
-            ],
-            series: [
-                {
-                    name:'粉丝',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:fansData
-                },
-                {
-                    name:'被转发',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:retweetData
-                },
-                {
-                    name:'被评论',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:commentData
-                },
-                {
-                    name:'被点赞',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:likeData
-                },
-                {
-                    name:'被@',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:atData
-                },
-                {
-                    name:'被私信',
-                    type:'line',
-                    yAxisIndex: 1,
-                    data:privateData
-                },
-                {
-                    name:'粉丝总数',
-                    type:'bar',
-                    data:totalFans
-                },
-                {
-                    name:'被转发总数',
-                    type:'bar',
-                    data:totalRetweet
-                },
-                {
-                    name:'被评论总数',
-                    type:'bar',
-                    data:totalComment
-                },
-                {
-                    name:'被点赞总数',
-                    type:'bar',
-                    data:totallike
-                },
-                {
-                    name:'被@总数',
-                    type:'bar',
-                    data:totalAt
-                },
-                {
-                    name:'被私信总数',
-                    type:'bar',
-                    data:totalPrivate
-                },
-            ]
-        };
-        myChart.setOption(option);
+        total();
         increase();
     }
 
+}
+//累计值
+function total() {
+    var myChart = echarts.init(document.getElementById('quota-3'),'dark');
+    var option = {
+        backgroundColor:'transparent',
+        title: {
+            text: '',
+            subtext: ''
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:legend2,
+            width: '600',
+            left:'center'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: time
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} 人'
+            }
+        },
+        series: [
+            {
+                name:'粉丝总数',
+                type:'line',
+                data:totalFans2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'被转发总数',
+                type:'line',
+                data:totalRetweet2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'被评论总数',
+                type:'line',
+                data:totalComment2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'被点赞总数',
+                type:'line',
+                data:totallike2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'被@总数',
+                type:'line',
+                data:totalAt2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'被私信总数',
+                type:'line',
+                data:totalPrivate2,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+        ]
+    };
+    myChart.setOption(option);
 }
 //增长率
 function increase() {

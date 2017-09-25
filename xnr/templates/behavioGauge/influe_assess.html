@@ -27,9 +27,17 @@
     </div>
     <div class="quota" style="width: 950px;">
         <div class="quota-opt" style="display: inline-block;margin: 20px 0;">
+            <!--<label class="demo-label">-->
+                <!--<input class="demo-radio" type="radio" name="demo1" value="all" checked>-->
+                <!--<span class="demo-checkbox demo-radioInput"></span> 总趋势-->
+            <!--</label>-->
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="demo1" value="all" checked>
-                <span class="demo-checkbox demo-radioInput"></span> 总趋势
+                <input class="demo-radio" type="radio" name="demo1" value="todayValue" checked>
+                <span class="demo-checkbox demo-radioInput"></span> 当天值
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="demo1" value="totalValue">
+                <span class="demo-checkbox demo-radioInput"></span> 累计值
             </label>
             <label class="demo-label">
                 <input class="demo-radio" type="radio" name="demo1" value="increase">
@@ -37,6 +45,7 @@
             </label>
         </div>
         <div id="quota-1" style="width: 950px;height:500px;margin: 30px auto 0;"></div>
+        <div id="quota-3" style="width: 950px;height:500px;margin: 30px auto 0;display: none;"></div>
         <div id="quota-2" style="width: 950px;height:500px;margin: 30px auto 0;display: none;"></div>
     </div>
 </div>

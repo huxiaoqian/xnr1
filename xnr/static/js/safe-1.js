@@ -239,6 +239,7 @@ function weiboData(data) {
                         '           <div class="center_2" style="margin: 5px 0;">'+txt+
                         '           </div>'+
                         '           <div class="center_3">'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -288,10 +289,32 @@ function thumbs(_this) {
     var post_url_3='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
     public_ajax.call_request('get',post_url_3,postYES)
 };
+var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
+function joinlab(_this) {
+    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
+    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
+    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
+    $('#wordcloud').modal('show');
+}
+function joinWord() {
+    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
+    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
+    var theme_daily_name=[],tt='11';
+    if (corpus_type=='主题语料'){tt=22};
+    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
+        theme_daily_name.push($(this).val());
+    });
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
+        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
+        '&like=0&create_type='+create_type;
+    public_ajax.call_request('get',corpus_url,postYES);
+}
 //操作返回结果
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data||data[0][0]){
         f='操作成功';
     }else {
         f='操作失败';

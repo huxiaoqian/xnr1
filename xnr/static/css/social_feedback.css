@@ -91,8 +91,9 @@ body {
 }
 #container .type_page #content .replyEvery .rep-1-name,
 #container .type_page #content .focusEvery .foc-1-name {
-    font-size: 20px;
+    /*font-size: 20px;*/
     font-weight: 900;
+    color: #fa7d3c;
 }
 #container .type_page #content .replyEvery .rep-1-name{
     font-size: 14px;
@@ -102,11 +103,16 @@ body {
     color: silver;
     font-size: 12px;
 }
+#container .type_page #content .focusEvery .foc-2 .foc-1-option {
+    color: silver;
+    font-size: 12px;
+}
 #container .type_page #content .focusEvery .foc-2 p{
     font-size: 12px;
     margin: 10px 0;
 }
-#container .type_page #content .focusEvery .foc-1 .foc-1-option b {
+#container .type_page #content .focusEvery .foc-1 .foc-1-option b,
+#container .type_page #content .focusEvery .foc-2 .foc-1-option b {
     color:#ec7a7a;
 }
 #container .type_page #content .replyEvery .rep-1-time {

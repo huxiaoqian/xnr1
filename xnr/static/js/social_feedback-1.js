@@ -387,6 +387,7 @@ function reply(data) {
 };
 //=====关注回粉--回复======
 function focus(data) {
+    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,
@@ -414,11 +415,16 @@ function focus(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,img,fan_source,geo,description,fol='',mark='',sent='';
+                    var name,time,img,fan_source,geo,description,fol='',mark='',sent='';
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
                         name=row.nick_name;
+                    };
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        time='未知';
+                    }else {
+                        time=getLocalTime(row.timestamp);
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
                         img='/static/images/unknown.png';
@@ -493,7 +499,8 @@ function focus(data) {
                         '        <div class="foc foc-1">'+
                         '            <b class="foc-1-name">'+name+'</b>&nbsp;&nbsp;'+
                         '            <b class="foc-1-sent">'+sent+'</b>&nbsp;&nbsp;'+
-                        '            <b class="foc-1-mark">'+mark+'</b>'+
+                        '            <b class="foc-1-mark">'+mark+'</b>&nbsp;&nbsp;'+
+                        '            <b class="time"><i class="icon icon-time"></i>&nbsp;'+time+'</b>'+
                         '            <b class="uid" style="display: none;">'+row.uid+'</b>'+
                         '            <div class="foc-level">'+
                         '                <span style="display: inline-block;">敏感度：</span>'+
@@ -510,16 +517,21 @@ function focus(data) {
                         // '                     <i class="icon icon-ok"></i>&nbsp;|&nbsp;<span><i class="icon icon-plus" style="color:#f77911;"></i>&nbsp;<b>'+mark+'</b></span>'+
                         // '              </span>'+
                         // '            </div>'+
-                        '            <div class="foc-1-option">'+
+                        // '            <div class="foc-1-option">'+
+                        // '                <span>关注</span>&nbsp;<b class="foc-opt-1">'+row.follower+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        // '                <span>粉丝</span>&nbsp;<b class="foc-opt-2">'+row.fans+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        // '                <span>微博</span>&nbsp;<b class="foc-opt-3">'+row.weibos+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        // '            </div>'+
+                        '        </div>'+
+                        '        <div class="foc foc-2">'+
+                        '            <div style="display: inline-block;margin:10px 0;"><span>地址：</span>&nbsp;&nbsp;<b class="foc-2-1">'+geo+'</b></div>'+
+                        '            <div style="display: inline-block;margin-left: 30px;">通过<b class="foc-2-3" style="color:#ec7a7a;">'+fan_source+'</b>关注</div>'+
+                        '            <div class="foc-1-option" style="display: inline-block;margin-left: 30px;">'+
                         '                <span>关注</span>&nbsp;<b class="foc-opt-1">'+row.follower+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '                <span>粉丝</span>&nbsp;<b class="foc-opt-2">'+row.fans+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '                <span>微博</span>&nbsp;<b class="foc-opt-3">'+row.weibos+'</b>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '            </div>'+
-                        '        </div>'+
-                        '        <div class="foc foc-2">'+
-                        '            <div><span>地址</span>&nbsp;&nbsp;&nbsp;&nbsp;<b class="foc-2-1">'+geo+'</b></div>'+
-                        '            <div><b class="foc-2-2">'+description+'</b></div>'+
-                        '            <div>通过<b class="foc-2-3" style="color:#ec7a7a;">'+fan_source+'</b>关注</div>'+
+                        '            <div>描述：<b class="foc-2-2">'+description+'</b></div>'+
                         '        </div>'+
                         '    </div>'+
                         '</div>';
