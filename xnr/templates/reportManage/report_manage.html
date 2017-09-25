@@ -59,6 +59,14 @@
     .fixed-table-container thead th .both {
         background-image:none!important;
     }
+    .filesList span {
+        display: inline-block;
+        padding: 3px 6px;
+        margin: 5px 15px 5px 0;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: #0e2233;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -71,40 +79,42 @@
         <a class="output" id="output1">导出至Excel文件</a>
         <a class="output" id="output2" style="margin-left: 20px;">导出至Word文件</a>
     </div>
-    <div class="type" style="margin: 20px 0;">
-        <span class="type-1">类型：</span>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="demo1" checked>
-            <span class="demo-checkbox demo-radioInput"></span> 微博
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="demo1">
-            <span class="demo-checkbox demo-radioInput"></span> QQ群
-        </label>
+    <div class="filesList" style="display: none;margin:0 20px;">
+        <b style="display: inline-block;margin: 10px 0;">准备导出的文件列表：（选择好以后点击上方按钮导出文件）</b>
+        <div class="filesName"></div>
     </div>
-    <div class="type type2">
+    <!--<div class="type" style="margin: 20px 0;">-->
+        <!--<span class="type-1">类型：</span>-->
+        <!--<label class="demo-label">-->
+            <!--<input class="demo-radio" type="radio" name="demo1" checked>-->
+            <!--<span class="demo-checkbox demo-radioInput"></span> 微博-->
+        <!--</label>-->
+        <!--<label class="demo-label">-->
+            <!--<input class="demo-radio" type="radio" name="demo1">-->
+            <!--<span class="demo-checkbox demo-radioInput"></span> QQ群-->
+        <!--</label>-->
+    <!--</div>-->
+    <!--<div class="willoutput">-->
+        <!--<span class="will-1">将要导出的数据编号：</span>-->
+        <!--<div class="dataNum"></div>-->
+    <!--</div>-->
+    <div class="type type2" style="margin:10px 0;">
         <span class="type-1">上报类型：</span>
         <label class="demo-label" value="人物">
-            <input class="demo-radio" type="radio" name="demo2">
+            <input class="demo-radio" type="checkbox" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 人物
         </label>
         <label class="demo-label" value="言论">
-            <input class="demo-radio" type="radio" name="demo2">
+            <input class="demo-radio" type="checkbox" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 言论
         </label>
         <label class="demo-label" value="事件">
-            <input class="demo-radio" type="radio" name="demo2">
+            <input class="demo-radio" type="checkbox" name="demo2">
             <span class="demo-checkbox demo-radioInput"></span> 事件
         </label>
     </div>
     <div class="person">
-        <div id="person"></div>
-    </div>
-    <div class="speaking">
-        <div id="speaking"></div>
-    </div>
-    <div class="event">
-        <div id="event"></div>
+        <table id="person"></table>
     </div>
 </div>
 <!--提示信息-->
@@ -130,5 +140,8 @@
 <script>
     judgment('7');
 </script>
+<script src="/static/js/Blob.js"></script>
+<script src="/static/js/FileSaver.js"></script>
+<script src="/static/js/tableExport.js"></script>
 <script src="/static/js/report_manage-1.js"></script>
 {% endblock %}

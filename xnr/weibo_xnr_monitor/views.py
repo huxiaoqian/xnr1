@@ -15,6 +15,7 @@ mod=Blueprint('weibo_xnr_monitor',__name__,url_prefix='/weibo_xnr_monitor')
 
 #function 1:lookup_weibo_keywordstiing to create wordcloud
 #test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_weibo_keywordstring/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002
+#http://219.224.134.213:9209/weibo_xnr_monitor/lookup_weibo_keywordstring/?from_ts=1479513600&to_ts=1479600000&weiboxnr_id=WXNR0002
 @mod.route('/lookup_weibo_keywordstring/')
 def ajax_lookup_weibo_keywordstring():
     from_ts=request.args.get('from_ts','')
@@ -24,7 +25,7 @@ def ajax_lookup_weibo_keywordstring():
     return json.dumps(result)
 
 #热门帖子
-#classify_id=1,表示所关注用户；classify_id=0,表示未关注用户
+#classify_id=全部用户 0，已关注用户 1，未关注用户-1
 #order_id=1,表示按时间排序，order_id=2，表示按热度排序，order_id=3，表示按敏感度排序，默认按时间排序
 #test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002&classify_id=1&order_id=1
 @mod.route('/lookup_hot_posts/')

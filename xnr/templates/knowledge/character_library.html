@@ -3,6 +3,22 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/character_library.css">
 <style>
+    #container .title #buildModal {
+        display: inline-block;
+        color: white;
+        font-weight: 700;
+        position: relative;
+        top:-5px;
+        left: 40px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+    }
+    #container .title #buildModal:hover {
+        background:rgba(3, 8, 16, 0.61);
+    }
     .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;
         width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     .demo-radio{display:none}
@@ -17,6 +33,7 @@
         <div class="tit-1">
             <span class="icon icon-github account_icon"></span>
             <b>角色知识库</b>
+            <a id="buildModal">生成实例模板</a>
         </div>
         <div class="tit-2" style="padding-left: 50px;margin: 15px 0;">
             <span style="color: white;font-size: 16px;font-weight: 700;">选择领域：</span>
@@ -103,59 +120,20 @@
         </div>
     </div>
 </div>
-
-<!--群体描述-->
-<div class="modal fade" id="groupDepict" tabindex="-1" role="dialog">
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体描述</h4>
+                <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <div class="groupDetails">
-                </div>
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
             </div>
         </div>
-    </div>
-</div>
-
-<!--群体更新-->
-<div class="modal fade" id="update" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体更新</h4>
-            </div>
-            <div class="modal-body">
-                <p style="">是否进行群体的更新计算？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--群体删除-->
-<div class="modal fade" id="delt" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">群体删除</h4>
-            </div>
-            <div class="modal-body">
-                <p style="">您确定要删除该群体吗？</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
-            </div>
-        </div>
-
     </div>
 </div>
 
