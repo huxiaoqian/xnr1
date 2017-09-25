@@ -436,11 +436,12 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     #print userlist,classify_id,condition_list
 
     #step 2:lookup users 
+    user_max_index=count_maxweibouser_influence(end_time)
     for item in condition_list:
         query_body={
 
             'query':item,
-            'size':MID_VALUE,       #查询影响力排名前500的用户即可
+            'size':HOT_WEIBO_NUM,       #查询影响力排名前500的用户即可
             }
         try:
             flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
@@ -450,7 +451,11 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
                 #微博数
                 item['_source']['weibos_sum']=count_weibouser_weibosum(uid,end_time)
                 #影响力
-                item['_source']['influence']=count_weibouser_influence(uid,end_time)
+                user_index=count_weibouser_index(uid,end_time)
+                if user_max_index >0:
+                    item['_source']['influence']=user_index/user_max_index*100
+                else:
+                    item['_source']['influence']=0
                 if item['_source']['influence']>=INFLUENCE_MIN:
                     results.append(item['_source'])
             results.sort(key=lambda k:(k.get('influence',0)),reverse=True)
@@ -484,8 +489,7 @@ def count_weibouser_weibosum(uid,end_time):
     return weibos_sum
 
 #计算影响力
-def count_weibouser_influence(uid,end_time):
-    #now_time=int(time.time())
+def count_maxweibouser_influence(end_time):
     date_time=ts2datetimestr(end_time-DAY)
     index_name=weibo_bci_index_name_pre+date_time
     
@@ -497,16 +501,28 @@ def count_weibouser_influence(uid,end_time):
         'sort':{'user_index':{'order':'desc'}}
     }
     try:
-        max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        if S_TYPE == 'test':
+            temp_index_name='bci_20161121'
+            max_result=es_user_profile.search(index=temp_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        else:
+            max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
            max_user_index=item['_source']['user_index']
-
-        user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
-        user_index=user_result['user_index']
-        infulence_value=user_index/max_user_index*100
     except:
-        infulence_value=0
-    return infulence_value
+        max_user_index=0
+    return max_user_index
+
+def count_weibouser_index(uid,end_time):
+    try:
+        if S_TYPE == 'test':
+            temp_index_name='bci_20161121'
+            user_result=es_user_profile.get(index=temp_index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        else:
+            user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        user_index=user_result['user_index']
+    except:
+        user_index=0
+    return user_index
 
 #weibo_user_detail
 def weibo_user_detail(user_id):
