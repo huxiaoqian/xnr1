@@ -189,7 +189,7 @@ def ajax_submit_hot_keyword_task():
     task_detail = dict()
 
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人 
-    task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid 
+    task_detail['mid'] = request.args.get('task_id','') # 当前代表微博的mid 
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
     print '!!!!',task_detail['keywords_string']
     task_detail['compute_status'] = 0 # 尚未计算

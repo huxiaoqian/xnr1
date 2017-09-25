@@ -50,6 +50,10 @@ def qq_xnr_mappings():
                     'remark':{
                         'type':'string',
                         'index':'not_analyzed'
+                    },
+                    'access_id':{
+                        'type':'string',
+                        'index':'no'
                     }     
                 }
             }
