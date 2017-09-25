@@ -172,7 +172,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
                         }
                     }
                 },
-            'size':MAX_SEARCH_SIZE,		
+            'size':100,		
             'sort':sort_condition_list
             }
         try:
