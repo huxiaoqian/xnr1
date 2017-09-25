@@ -47,7 +47,7 @@ body {
 #container .title .output:hover {
     background:rgba(3, 8, 16, 0.61);
 }
-#container .type .type-1 {
+#container .type .type-1{
     display: inline-block;
     width: 90px;
     text-align: right;

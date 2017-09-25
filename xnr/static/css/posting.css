@@ -301,7 +301,7 @@ body {
 #container #content #hot .post_perfect .center_3 span,
 #container #content #hot .post_perfect .center_3_top span {
     display: inline-block;
-    width: 16%;
+    /*width: 16%;*/
     /*max-width: 90px;*/
     white-space: nowrap;
     overflow: hidden;

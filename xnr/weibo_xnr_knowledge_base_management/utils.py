@@ -220,22 +220,22 @@ def get_show_domain_description(xnr_user_no,domain_name):
 
     item['group_size'] = es_result['group_size']
     item['description'] = es_result['description']
-    topic_preference_list = es_result['topic_preference']
+    topic_preference_list = json.loads(es_result['topic_preference'])
     topic_preference_list_chinese = []
     for topic_preference_item in topic_preference_list:
         topic_preference_item_chinese = topic_en2ch_dict[topic_preference_item[0]]
         topic_preference_list_chinese.append([topic_preference_item_chinese,topic_preference_item[1]])
 
     item['topic_preference'] = topic_preference_list_chinese
-    item['word_preference'] = es_result['top_keywords']
-    role_distribute_list = es_result['role_distribute']
+    item['word_preference'] = json.loads(es_result['top_keywords'])
+    role_distribute_list = json.loads(es_result['role_distribute'])
     role_distribute_list_chinese = []
     for role_distribute_item in role_distribute_list:
         role_distribute_item_chinese = domain_en2ch_dict[role_distribute_item[0]]
         role_distribute_list_chinese.append([role_distribute_item_chinese,role_distribute_item[1]])
 
     item['role_distribute'] = role_distribute_list_chinese
-    political_side_list = es_result['political_side']
+    political_side_list = json.loads(es_result['political_side'])
     political_side_list_chinese = []
     for political_side_item in political_side_list:
         if political_side_item[0] == 'mid':
@@ -248,7 +248,6 @@ def get_show_domain_description(xnr_user_no,domain_name):
     item['political_side'] = political_side_list_chinese
 
     return item
-
 def get_show_domain_role_info(domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
