@@ -52,12 +52,13 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
 def get_show_example_model(xnr_user_no):
 
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})
+        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})['hits']['hits']
     result_all = []
-    for result in es_results:
-        result = result['_source']
-        result_all.append(result)
-        
+    if es_results:
+        for result in es_results:
+            result = result['_source']
+            result_all.append(result)
+            
     return result_all
 
 
