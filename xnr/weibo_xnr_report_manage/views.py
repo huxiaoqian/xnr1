@@ -28,7 +28,7 @@ def ajax_show_report_content():
 #http://219.224.134.213:9209/weibo_xnr_report_manage/show_report_typecontent/?report_type=事件
 @mod.route('/show_report_typecontent/')
 def ajax_show_report_typecontent():
-	report_type=request.args.get('report_type','')
+	report_type=request.args.get('report_type','').split(',')
 	results=show_report_typecontent(report_type)
 	return json.dumps(results)
 
