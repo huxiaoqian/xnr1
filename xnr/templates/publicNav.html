@@ -63,6 +63,23 @@
         <b class="coorName"></b>
     </div>
 </div>
+<div class="modal fade" id="errorInfor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">错误提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                        请求失败！！可能是因为服务器速度太慢或者网络原因导致。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 <!-- 导航结束 -->
 
@@ -107,6 +124,15 @@
             return !1;
         return !0
     }
+    //删除数组指定项
+    Array.prototype.removeByValue = function(val) {
+        for(var i=0; i<this.length; i++) {
+            if(this[i] == val) {
+                this.splice(i, 1);
+                break;
+            }
+        }
+    };
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {
@@ -121,6 +147,7 @@
                 error:function (xhr,textStatus,errorThrown) {
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown)
+                    $('#errorInfor').modal('show');
                 },
                 global:false//是否触发全局请求,需要触发就是true,不需要false
             });
@@ -247,15 +274,15 @@
             afterEle=
                 '<li class="main_li">'+
                 '    <i class="icon icon-lightbulb"></i>'+
-                '    <a class="li_a" href="/behavioGauge/influeAssess/">日志管理</a>'+
+                '    <a class="li_a" href="/systemManage/daily/">日志管理</a>'+
                 '</li>'+
                 '<li class="main_li">'+
                 '    <i class="icon icon-tint"></i>'+
-                '    <a class="li_a" href="/behavioGauge/penetration/">权限管理</a>'+
+                '    <a class="li_a" href="/systemManage/purview/">权限管理</a>'+
                 '</li>'+
                 '<li class="main_li">'+
                 '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/behavioGauge/safe/">虚拟人管理</a>'+
+                '    <a class="li_a" href="/systemManage/virtual/">虚拟人管理</a>'+
                 '</li>';
         };
         $('.behind').html(afterEle);

@@ -5,7 +5,8 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from global_utils import es_xnr as es
 from global_utils import weibo_domain_index_name,weibo_domain_index_type,\
-						weibo_role_index_name,weibo_role_index_type
+						weibo_role_index_name,weibo_role_index_type,\
+						weibo_example_model_index_name,weibo_example_model_index_type
 
 
 def domain_base_mappings():
@@ -133,7 +134,40 @@ def role_base_mappings():
 	if not es.indices.exists(index=weibo_role_index_name):
 		es.indices.create(index=weibo_role_index_name,body=index_info,ignore=400)
 
+def example_model_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			weibo_example_model_index_type:{
+				'properties':{
+					'domain_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'role_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'xnr_user_no':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'create_time':{
+						'type':'long'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=weibo_example_model_index_name):
+
+		es.indices.create(index=weibo_example_model_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
 	domain_base_mappings()
 	role_base_mappings()
+	example_model_mappings()

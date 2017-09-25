@@ -64,8 +64,10 @@ function addLabel(data,className,name) {
 function labelSTR(data,name,radioCheckbox='radio') {
     var str='';
     if (data.length==0){
-        //str='暂无数据';
-        if (name=='demo3'){
+        if (name=='demo2'){
+            str='暂无数据';
+            return str;
+        }else if (name=='demo3'){
             data=['左倾','中立','右倾'];
         }else if (name='demo4'){
             data=['中立','积极','悲伤','焦虑','生气','厌恶','消极其他'];

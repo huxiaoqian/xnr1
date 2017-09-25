@@ -131,6 +131,9 @@ body {
     /*white-space: nowrap;*/
     /*overflow: hidden;*/
     /*text-overflow: ellipsis;*/
+    max-width: 730px;
+    width: 100%;
+    display: block;
 }
 #container .type_page #content .commentEvery .com-3 .com-3-reply,
 #container .type_page #content .forwardEvery .for-3 .for-3-reply,

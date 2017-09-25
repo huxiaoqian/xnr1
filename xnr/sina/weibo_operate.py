@@ -47,7 +47,7 @@ class SinaOperateAPI:
             response = urllib2.urlopen(request, timeout=90)
 
             content = response.read()
-            #print 'content::',content
+            
             succ = json.loads(content)
             if succ['code'] == '100000':
                 print 'publish success...', succ['msg']
@@ -179,6 +179,7 @@ class SinaOperateAPI:
             "rid": "",
             "uid": self.uid
         }
+        print 'post_data:::',post_data
         return self.__getPostURL(w_url, post_data)
 
     def receive(self):
@@ -192,9 +193,10 @@ class SinaOperateAPI:
         :param uid:
         :return:
         """
+        #w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
-
+        print 'aaaaaaaaaaaaaaaaaa'
         post_data = {
             "_t": "0",
             "act": "reply",
@@ -211,6 +213,7 @@ class SinaOperateAPI:
             "root_comment_id": "0",
             "uid": self.uid
         }
+        print 'post_data:::',post_data
         return self.__getPostURL(w_url, post_data)
 
     def privmessage(self):

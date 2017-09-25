@@ -11,7 +11,7 @@ from elasticsearch.helpers import scan
 ## 引入各个分类器
 
 from political.political_main import political_classify
-from domain.test_domain_v2 import domain_classfiy
+#from domain.test_domain_v2 import domain_classfiy
 from topic.test_topic import topic_classfiy
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 from character.test_ch_sentiment import classify_sentiment
@@ -26,10 +26,12 @@ reload(sys)
 sys.path.append('../../')
 
 from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
-                        TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW
+                        TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW,\
+                        WHITE_UID_PATH, WHITE_UID_FILE_NAME
 
 from global_utils import r,weibo_target_domain_detect_queue_name,weibo_target_domain_analysis_queue_name,\
-                        es_flow_text,flow_text_index_name_pre,flow_text_index_type
+                        es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
+                        portrait_index_name,portrait_index_type
 from global_utils import es_xnr,weibo_domain_index_name,weibo_domain_index_type,\
                         weibo_role_index_name,weibo_role_index_type
 
@@ -239,19 +241,45 @@ def detect_by_keywords(keywords,datetime_list):
         flow_text_index_name = flow_text_index_name_pre + datetime
         nest_query_list = []
         for keyword in keyword_list:
-            nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+            #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+            nest_query_list.append({'match':{query_item:keyword}})
         #keyword_query_list.append({'bool':{'must':nest_query_list}})
 
         flow_text_index_name = flow_text_index_name_pre + datetime
         count = MAX_DETECT_COUNT
-        es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                    body={'query':{'bool':{'must':nest_query_list}},'size':count,'sort':[{'user_fansnum':{'order':'desc'}}]})['hits']['hits']
+
+        white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+        white_uid_list = []
+        with open(white_uid_path,'r') as f:
+            for line in f:
+                line = line.strip('\n')
+                white_uid_list.append(line)
+
+        white_uid_list = list(set(white_uid_list))
+        #print 'white_uid_list:::',white_uid_list
+        if len(nest_query_list) == 1:
+            SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
+        else:
+            SHOULD_PERCENT = '0.75'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
         
+        query_body = {
+            'query':{
+                'bool':{
+                    'should':nest_query_list,
+                    "minimum_should_match": SHOULD_PERCENT
+                }
+            },
+            'size':count,
+            'sort':[{'user_fansnum':{'order':'desc'}}]
+        }
+        es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+                    body=query_body)['hits']['hits']
+        #'must_not':{'terms':{'uid':white_uid_list}},
         for i in range(len(es_results)):
 
             uid = es_results[i]['_source']['uid']
             group_uid_list.add(uid)
-
+        group_uid_list = list(group_uid_list)
         return group_uid_list
 
 
@@ -261,8 +289,8 @@ def detect_by_keywords(keywords,datetime_list):
 # output：近期与种子用户有转发和评论关系的微博用户群体的画像数据
 
 def detect_by_seed_users(seed_users):
-    retweet_mark == 1
-    comment_mark == 1
+    retweet_mark = 1
+    comment_mark = 1
 
     group_uid_list = []
     all_union_result_dict = {}
@@ -332,6 +360,8 @@ def detect_by_seed_users(seed_users):
     !!!! 有一个转化提取 
     从 all_union_result_dict   中提取 所有的uid
     '''
+    for seeder_uid in all_union_result_dict:
+        
     return group_uid_list
 
 
@@ -491,7 +521,20 @@ def group_description_analysis(detect_results,datetime_list):
     keywords_dict_all_users_sort = sorted(keywords_dict_all_users.items(),key=lambda x:x[1], reverse=True)[:TOP_KEYWORDS_NUM]
 
     ## 群体角色分布
+
+    '''
     domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    '''
+    mget_domain_results = es.mget(index=portrait_index_name,doc_type=portrait_index_name,\
+                    body={'ids':uids_list})['docs']
+    
+    r_domain = dict()
+    for domain_result in mget_domain_results:
+        domain_result = domain_result['_source']
+        uid = domain_result['uid']
+        role_name = domain_result['domain']
+        r_domain[uid] = role_name
+
     role_list = r_domain.values()
     #print 'r_domain::::::',r_domain
     role_set = set(role_list)
