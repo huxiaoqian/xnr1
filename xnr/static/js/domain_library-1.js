@@ -54,7 +54,8 @@ function successFail(data) {
 var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
-    var person=eval(data)
+    var person=eval(data);
+    console.log(person)
     $('#group-2').bootstrapTable('load', person);
     $('#group-2').bootstrapTable({
         data:person,
@@ -145,6 +146,22 @@ function group(data) {
                 },
             },
             {
+                title: "关键词",//标题
+                field: "create_type",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var crType=JSON.parse(row.create_type);
+                    for (var k in crType){
+                        if (crType[k].length!=0){
+                            return crType[k].join(',');
+                        }
+                    }
+                },
+            },
+            {
                 title: "描述",//标题
                 field: "description",//键名
                 sortable: true,//是否可排序
@@ -193,7 +210,8 @@ function group(data) {
                     if (row.compute_status=='1'){dis1=''}
                     else if (Number(row.compute_status) > 1){dis1='';dis2=''}
                     return '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\',\'show_domain_group_detail_portrait\')" class="icon icon-paste '+dis2+'" title="查看详情"></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color: white;" onclick="delt(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
+                        '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+thisType+'\',\''+thisUser+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color: white;" onclick="deltDomain(\''+row.domain_name+'\')" class="icon icon-trash" title="删除"></a>';
                         // '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_group_detail_portrait\')" class="icon icon-group '+dis1+'" title="查看群体"></a>&nbsp;&nbsp;'+
                         // '<a style="cursor: pointer;color: white;" onclick="seeDesGroup(\''+row.domain_name+'\',\'show_domain_description\')" class="icon icon-paste '+dis2+'" title="查看描述"></a>&nbsp;&nbsp;'+
                         // '<a style="cursor: pointer;color: white;" onclick="refresh(\''+row.domain_name+'\',\''+row.description+'\',\''+row.remark+'\',\''+thisType+'\',\''+thisUser+'\')" class="icon icon-repeat" title="更新"></a>&nbsp;&nbsp;'+
@@ -231,7 +249,7 @@ function DesGroup_1(data) {
     character_topic(data['topic_preference'],'gd-3','话题偏好');
     words(data['word_preference']);
     $('.allGroup_div').show();
-    $('.loadGO').hide();
+    // $('.loadGO').hide();
 }
 // function DesGroup(data) {
 //     console.log(data);
@@ -488,7 +506,7 @@ function groupList(data) {
                     if (row.weibo_type==''||row.weibo_type=='null'||row.weibo_type=='unknown'||!row.weibo_type){
                         return '未知';
                     }else {
-                        var yy='';
+                        var user='';
                         if (row.weibo_type=='follow'){
                             user='已关注用户';
                         }else if (row.weibo_type=='friend'){
@@ -496,13 +514,14 @@ function groupList(data) {
                         }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
                             user='未关注用户';
                         }
-                        return yy;
+                        return user;
                     };
                 },
             },
         ],
     });
-    $('.groupDepict_div').show();
+    $('#grouplist p').hide();
+    // $('.groupDepict_div').show();
 }
 //更新
 function refresh(domainName,description,remark,create_type,word_user) {
@@ -512,7 +531,12 @@ function refresh(domainName,description,remark,create_type,word_user) {
     public_ajax.call_request('get',upNew_url,successFail);
 }
 //删除
-function delt(domain) {
-    var delte_url='/weibo_xnr_knowledge_base_management/delete_domain/?domain_name='+domain;
+var del_Domain_id='';
+function deltDomain(domain) {
+    del_Domain_id=domain;
+    $('#delt').modal('show');
+}
+function delt() {
+    var delte_url='/weibo_xnr_knowledge_base_management/delete_domain/?domain_name='+del_Domain_id;
     public_ajax.call_request('get',delte_url,successFail);
 }

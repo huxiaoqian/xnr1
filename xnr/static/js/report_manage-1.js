@@ -1,11 +1,11 @@
-var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/'
+var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
 public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 var currentData={},currentDataPrival={};
 function reportDefaul(data) {
     console.log(data);
     $.each(data,function (index,item) {
         currentDataPrival[item.report_time]=item;
-    })
+    });
     $('#person').bootstrapTable('load', data);
     $('#person').bootstrapTable({
         data:data,
