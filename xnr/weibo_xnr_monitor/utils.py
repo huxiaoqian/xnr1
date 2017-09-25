@@ -15,8 +15,9 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
                              weibo_bci_index_name_pre,weibo_bci_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
-from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE
+from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
+from xnr.global_config import S_TYPE
 
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
@@ -32,7 +33,6 @@ def lookup_weiboxnr_concernedusers(weiboxnr_id):
 #input:from_ts,to_ts,weiboxnr_id
 #output:keywords_dict,it's used to create wordcloud
 def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
-    
     #step 1 :adjust the time condition for time
     from_date_ts=datetime2ts(ts2datetime(from_ts))
     to_date_ts=datetime2ts(ts2datetime(to_ts))
@@ -62,17 +62,19 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     #step 3:lookup the content
     flow_text_index_name_list = []
+    xnr_flow_text_index_name_list = []
     for range_item in range_time_list:
         iter_condition_list=[item for item in user_condition_list]
         iter_condition_list.append(range_item)
 
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
-        flow_text_index_name=flow_text_index_name_pre+range_from_date
-        flow_text_index_name_list.append(flow_text_index_name)
-        #print flow_text_index_name
-        #print iter_condition_list
-    #print iter_condition_list    
+        if S_TYPE == 'test':
+            flow_text_index_name=flow_text_index_name_pre+range_from_date
+            flow_text_index_name_list.append(flow_text_index_name)
+        else:
+            weibo_xnr_flow_text_index_name=xnr_flow_text_index_name_pre+range_from_date
+            xnr_flow_text_index_name_list.append(weibo_xnr_flow_text_index_name) 
     query_body={
         'query':{
         	'filtered':{
@@ -90,11 +92,12 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     }
 
     try:
-        #print '123'
-        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-            body=query_body)['aggregations']['keywords']['buckets']
-        #print 'flow_text_exist:',flow_text_exist
-        #print '456'
+        if S_TYPE == 'test':
+            flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
+        else:
+            flow_text_exist=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
     except:
         flow_text_exist=[]
 
@@ -104,6 +107,76 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 #lookup hot posts
 #input:from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_id
 #output:weibo hot_posts content
+def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
+    #step 1 :adjust the time condition for time
+    from_date_ts=datetime2ts(ts2datetime(from_ts))
+    to_date_ts=datetime2ts(ts2datetime(to_ts))
+    xnr_flow_text_index_name_list=[]
+    if from_date_ts != to_date_ts:
+        iter_date_ts=from_date_ts
+        while iter_date_ts <= to_date_ts:            
+            index_name=xnr_flow_text_index_name_pre+ts2datetime(iter_date_ts)
+            xnr_flow_text_index_name_list.append(index_name)
+            iter_next_date_ts=iter_date_ts+DAY
+            iter_date_ts=iter_next_date_ts
+    else:
+        # lookup from_ts and to_ts ranges in the same index
+        index_name=xnr_flow_text_index_name_pre+ts2datetime(from_date_ts)
+        xnr_flow_text_index_name_list.append(index_name)
+        
+
+    #step 4:sort order condition set
+    if order_id==1:         #按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]         
+    elif order_id==2:       #按热度排序
+        sort_condition_list=[{'retweeted':{'order':'desc'}}]
+    elif order_id==3:       #按敏感度排序
+        sort_condition_list=[{'sensitive':{'order':'desc'}}]
+    else:                   #默认设为按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]
+
+    userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    #全部用户 0，已关注用户 1，未关注用户-1
+
+    #user_condition_list=[]
+    if classify_id == 1:
+        user_condition_list=[{'bool':{'must':{'terms':{'uid':userslist}}}}]
+    elif classify_id == -1:
+        user_condition_list=[{'bool':{'must_not':{'terms':{'uid':userslist}}}}]
+    else:
+        user_condition_list=[{'match_all':{}}]
+
+    query_body={
+        'query':user_condition_list,
+        'size':HOT_WEIBO_NUM,     
+        'sort':sort_condition_list
+        }
+
+    if S_TYPE == 'test':
+        try:
+            flow_text_index_name=['flow_text_2016-11-23','flow_text_2016-11-24']
+            print flow_text_index_name
+            es_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+                body=query_body)['hits']['hits']
+            hot_result=[]
+            for item in es_result:
+                hot_result.append(item['_source'])
+        except:
+            hot_result=[]
+    else:
+        try:
+            es_result=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+                body=query_body)['hits']['hits']
+            hot_result=[]
+            for item in es_result:
+                hot_result.append(item['_source'])
+        except:
+            hot_result=[]
+    return hot_result
+
+
+
+'''
 def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     #step 1 :adjust the time condition for time
     from_date_ts=datetime2ts(ts2datetime(from_ts))
@@ -185,6 +258,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
             result=[]
         hot_result.append(result)
     return hot_result
+'''
 
 #################微博操作##########
 #转发微博
