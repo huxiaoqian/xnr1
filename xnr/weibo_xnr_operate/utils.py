@@ -85,13 +85,17 @@ def push_keywords_task(task_detail):
     print 'task_detail::',task_detail
 
     try:
-        task_id = task_detail['task_id']
-        xnr_user_no = task_detail['xnr_user_no']
+        item_dict = {}
+        item_dict['mid'] = task_detail['task_id']
+        item_dict['xnr_user_no'] = task_detail['xnr_user_no']
         keywords_string = '&'.join(task_detail['keywords_string'].encode('utf-8').split('，'))
-        task_detail['keywords_string'] = keywords_string
-        _id = xnr_user_no+'_'+task_id
+        item_dict['keywords_string'] = keywords_string
+        item_dict['compute_status'] = task_detail['compute_status']
+        item_dict['submit_time'] = task_detail['submit_time']
+        item_dict['submit_user'] = task_detail['submit_user']
+        _id = item_dict['xnr_user_no']+'_'+task_detail['task_id']
         es.index(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-                id=_id,body=task_detail)
+                id=_id,body=item_dict)
         mark = True
     except:
         mark = False

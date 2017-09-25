@@ -28,8 +28,7 @@ from parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOL
                         TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
 
 
-# # 影响力粉丝数
-
+# 影响力粉丝数
 def compute_influence_num(xnr_user_no):
 
     uid = xnr_user_no2uid(xnr_user_no)
@@ -485,6 +484,7 @@ def cron_compute_mark():
 
         current_time = int(time.time())
         current_date = ts2datetime(current_time)
+        current_time_new = datetime2ts(current_date)
 
         _id = xnr_user_no + '_' + current_date
 
@@ -494,7 +494,7 @@ def cron_compute_mark():
         item['penetration'] = penetration
         item['safe'] = safe
         item['date'] = current_date
-        item['timestamp'] = current_time
+        item['timestamp'] = current_time_new
 
         es.index(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
             id=_id,body=item)

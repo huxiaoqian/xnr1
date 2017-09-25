@@ -2,22 +2,36 @@
 #-*- coding:utf-8 -*-
 import json
 import pinyin
+import numpy as np
+from xnr.global_config import S_TYPE
 from xnr.global_utils import es_xnr as es
+from xnr.global_utils import es_user_portrait
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                             weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type,weibo_example_model_index_name,\
-                            weibo_example_model_index_type
+                            weibo_example_model_index_type,profile_index_name,profile_index_type
 from xnr.time_utils import ts2datetime
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
-                        EXAMPLE_MODEL_PATH
+                        EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 '''
 领域知识库
 '''
+
+#use to merge dict
+#input: dict1, dict2, dict3...
+#output: merge dict
+def union_dict(*objs):
+    _keys = set(sum([obj.keys() for obj in objs], []))
+    _total = {}
+    for _key in _keys:
+        _total[_key] = sum([int(obj.get(_key, 0)) for obj in objs])
+    
+    return _total
 
 def get_generate_example_model(xnr_user_no,domain_name,role_name):
 
@@ -27,14 +41,73 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
     task_id = domain_pinyin + '_' + role_en
 
     es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
+    item = es_result
 
+    role_group_uids = json.loads(item['member_uids'])
+
+    mget_results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':role_group_uids})['docs']
+
+    topic_list = []
+    for mget_item in mget_results:
+        
+        if mget_item['found']:
+            keywords_list = json.loads(mget_item['_source']['keywords'])
+            topic_list.extend(keywords_list)
+    
+    topic_keywords_dict = {}
+    for topic_item in topic_list:
+        keyword = topic_item[0]
+        keyword_count = topic_item[1]
+        try:
+            topic_keywords_dict[keyword] += keyword_count
+        except:
+            topic_keywords_dict[keyword] = keyword_count
+
+    monitor_keywords_list = []
+    for i in range(3):
+        
+        keyword_max = max(topic_keywords_dict,key=topic_keywords_dict.get)
+        monitor_keywords_list.append(keyword_max)
+        del topic_keywords_dict[keyword_max]
+
+    item['monitor_keywords'] = '&'.join(monitor_keywords_list)
+
+    for mget_item in mget_results:
+        if mget_item['found']:
+            item['nick_name'] = mget_item['_source']['uname']
+            item['location'] = mget_item['_source']['location']
+            item['gender'] = mget_item['_source']['gender']
+            uid = mget_item['_source']['uid']
+            try:
+                profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+                if profile_results['description']:
+                    item['description'] = profile_results['description']
+                    break
+            except:
+                pass
+
+    item['business_goal'] = u'渗透'
+    item['daily_interests'] = u'数码'
+    # if S_TYPE == 'test':
+    #     user_mget_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
+    #     if user_mget_results
+    item['age'] = 30
+    item['career'] = u'自由职业'
+
+    active_time_list_np = np.array(json.loads(item['active_time']))
+    active_time_list_np_sort = np.argsort(-active_time_list_np)[:TOP_ACTIVE_TIME]
+    item['active_time'] = active_time_list_np_sort.tolist()
+
+    day_post_num_list = np.array(json.loads(item['day_post_num']))
+    item['day_post_num'] = np.mean(day_post_num_list).tolist()
+    
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     
     try:
         with open(example_model_file_name,"w") as dump_f:
-            for item in es_result:
-                json.dump(item,dump_f)
+            json.dump(item,dump_f)
 
+        
         item_dict = dict()
         item_dict['xnr_user_no'] = xnr_user_no
         item_dict['domain_name'] = domain_name
