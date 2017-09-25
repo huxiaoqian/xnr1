@@ -241,7 +241,8 @@ def detect_by_keywords(keywords,datetime_list):
         flow_text_index_name = flow_text_index_name_pre + datetime
         nest_query_list = []
         for keyword in keyword_list:
-            nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+            #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+            nest_query_list.append({'match':{query_item:keyword}})
         #keyword_query_list.append({'bool':{'must':nest_query_list}})
 
         flow_text_index_name = flow_text_index_name_pre + datetime
@@ -249,21 +250,22 @@ def detect_by_keywords(keywords,datetime_list):
 
         white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
         white_uid_list = []
-        with open(white_uid_path,'rb') as f:
+        with open(white_uid_path,'r') as f:
             for line in f:
                 line = line.strip('\n')
-                white_uid_list.append(line[0])
+                white_uid_list.append(line)
 
         white_uid_list = list(set(white_uid_list))
+        #print 'white_uid_list:::',white_uid_list
         if len(nest_query_list) == 1:
             SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
         else:
-            SHOULD_PERCENT = 0.75  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+            SHOULD_PERCENT = '0.75'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+        
         query_body = {
             'query':{
                 'bool':{
                     'should':nest_query_list,
-                    'must_not':{'terms':{'uid':white_uid_list}},
                     "minimum_should_match": SHOULD_PERCENT
                 }
             },
@@ -271,17 +273,13 @@ def detect_by_keywords(keywords,datetime_list):
             'sort':[{'user_fansnum':{'order':'desc'}}]
         }
         es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-<<<<<<< HEAD
                     body=query_body)['hits']['hits']
-=======
-                    body={'query':{'bool':{'should':nest_query_list}},'size':count,'sort':[{'user_fansnum':{'order':'desc'}}]})['hits']['hits']
->>>>>>> 785bc1352fc0543fca999168af81a92a00447313
-        
+        #'must_not':{'terms':{'uid':white_uid_list}},
         for i in range(len(es_results)):
 
             uid = es_results[i]['_source']['uid']
             group_uid_list.add(uid)
-
+        group_uid_list = list(group_uid_list)
         return group_uid_list
 
 
@@ -291,8 +289,8 @@ def detect_by_keywords(keywords,datetime_list):
 # output：近期与种子用户有转发和评论关系的微博用户群体的画像数据
 
 def detect_by_seed_users(seed_users):
-    retweet_mark == 1
-    comment_mark == 1
+    retweet_mark = 1
+    comment_mark = 1
 
     group_uid_list = []
     all_union_result_dict = {}
@@ -362,6 +360,8 @@ def detect_by_seed_users(seed_users):
     !!!! 有一个转化提取 
     从 all_union_result_dict   中提取 所有的uid
     '''
+    for seeder_uid in all_union_result_dict:
+        
     return group_uid_list
 
 
@@ -434,7 +434,7 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
     uid_weibo_keywords_dict = dict()
     keywords_dict_all_users = dict()
     uid_weibo = [] # [[uid1,text1,ts1],[uid2,text2,ts2],...]
-    print 'uids_list::',uids_list
+
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
         query_body = {
@@ -534,7 +534,7 @@ def group_description_analysis(detect_results,datetime_list):
         uid = domain_result['uid']
         role_name = domain_result['domain']
         r_domain[uid] = role_name
-        
+
     role_list = r_domain.values()
     #print 'r_domain::::::',r_domain
     role_set = set(role_list)
@@ -827,7 +827,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     day_hour_counts_all_np = np.array(day_hour_counts_all)
     day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0)  ## 对二维数组按列求和
 
-    #day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
+    day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
  
     role_feature_analysis_results['top_keywords'] = keywords_dict_all_users_sort
     role_feature_analysis_results['political_side'] = political_side_count_sort
