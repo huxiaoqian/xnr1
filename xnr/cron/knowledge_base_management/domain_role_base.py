@@ -11,7 +11,7 @@ from elasticsearch.helpers import scan
 ## 引入各个分类器
 
 from political.political_main import political_classify
-#from domain.test_domain_v2 import domain_classfiy
+from domain.test_domain_v2 import domain_classfiy
 from topic.test_topic import topic_classfiy
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 from character.test_ch_sentiment import classify_sentiment
@@ -260,7 +260,7 @@ def detect_by_keywords(keywords,datetime_list):
         if len(nest_query_list) == 1:
             SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
         else:
-            SHOULD_PERCENT = '0.75'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+            SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
         
         query_body = {
             'query':{
@@ -292,7 +292,7 @@ def detect_by_seed_users(seed_users):
     retweet_mark = 1
     comment_mark = 1
 
-    group_uid_list = []
+    group_uid_list = set()
     all_union_result_dict = {}
     #get retweet/comment es db_number
     now_ts = time.time()
@@ -360,8 +360,12 @@ def detect_by_seed_users(seed_users):
     !!!! 有一个转化提取 
     从 all_union_result_dict   中提取 所有的uid
     '''
-    for seeder_uid in all_union_result_dict:
-        
+    for seeder_uid,inter_dict in all_union_result_dict.iteritems():
+        for uid, inter_count in inter_dict.iteritems():
+            group_uid_list.add(uid)
+
+    group_uid_list = list(group_uid_list)
+
     return group_uid_list
 
 
@@ -386,7 +390,6 @@ def add_task_2_queue(decect_task_information):
         status = False
 
     return status
-
 
 def political_classify_sort(uids_list,uid_weibo_keywords_dict):
 
@@ -521,19 +524,22 @@ def group_description_analysis(detect_results,datetime_list):
     keywords_dict_all_users_sort = sorted(keywords_dict_all_users.items(),key=lambda x:x[1], reverse=True)[:TOP_KEYWORDS_NUM]
 
     ## 群体角色分布
-
-    '''
-    domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
-    '''
-    mget_domain_results = es.mget(index=portrait_index_name,doc_type=portrait_index_name,\
-                    body={'ids':uids_list})['docs']
     
     r_domain = dict()
-    for domain_result in mget_domain_results:
-        domain_result = domain_result['_source']
-        uid = domain_result['uid']
-        role_name = domain_result['domain']
-        r_domain[uid] = role_name
+
+    if S_TYPE == 'test':
+        domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    else:
+        mget_domain_results = es_xnr.mget(index=portrait_index_name,doc_type=portrait_index_name,\
+                        body={'ids':uids_list})['docs']
+        
+        
+        if mget_domain_results:
+            for domain_result in mget_domain_results:
+                domain_result = domain_result['_source']
+                uid = domain_result['uid']
+                role_name = domain_result['domain']
+                r_domain[uid] = role_name
 
     role_list = r_domain.values()
     #print 'r_domain::::::',r_domain
@@ -835,7 +841,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     role_feature_analysis_results['personality'] = character_result_dict_sort
     role_feature_analysis_results['geo'] = geo_cityTopic_results_merge
     role_feature_analysis_results['day_post_num'] = day_post_median_all
-    role_feature_analysis_results['active_time'] = day_hour_counts_aver_time
+    role_feature_analysis_results['active_time'] = day_hour_counts_aver
     role_feature_analysis_results['psy_feature'] = psy_feature_sort
     role_feature_analysis_results['member_uids'] = uids_list
 
@@ -897,7 +903,7 @@ def compute_domain_base():
                     status = add_task_2_queue(decect_task_information)
             #print 'detect_results:::::::',detect_results
             print 'step 1: 开始群体描述计算'
-
+            print 'detect_results:::',detect_results
             group_results,role_uids_dict = group_description_analysis(detect_results,datetime_list)
             print 'role_uids_dict:::::',role_uids_dict
             if group_results:
