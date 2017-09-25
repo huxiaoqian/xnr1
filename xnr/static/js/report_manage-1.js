@@ -1,8 +1,11 @@
 var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/'
 public_ajax.call_request('get',reportDefaul_url,reportDefaul);
-// var currentData={};
+var currentData={},currentDataPrival={};
 function reportDefaul(data) {
     console.log(data);
+    $.each(data,function (index,item) {
+        currentDataPrival[item.report_time]=item;
+    })
     $('#person').bootstrapTable('load', data);
     $('#person').bootstrapTable({
         data:data,
@@ -51,7 +54,7 @@ function reportDefaul(data) {
                         str+=
                             '<div class="center_rel" style="margin-top: 10px;">'+
                             '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                            // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                             '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                             '   <span class="center_2">'+text+'</span>'+
                             '   <div class="center_3">'+
@@ -88,41 +91,45 @@ function reportDefaul(data) {
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" type="checkbox" name="printData">'+
+                        '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" onclick="chooseNo(this)">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
+                        '                <a class="ID" style="display: none;">'+row.report_time+'</a>'+
                         '                <a class="center_1">上报名称：'+nameuid+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">上报时间：'+time+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">上报类型：'+report_type+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">虚拟人：'+xnr+'</a>'+
                         '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
                         '            </div>'+
-                        '           <div>'+str+'</div>'+
+                        '           <div class="weiboContent">'+str+'</div>'+
                         '        </div>'+
                         '    </div>';
                     return rel_str;
                 }
             },
         ],
-        // onCheck:function (row) {
-        //     currentData[row.report_time]=row;
-        // },
-        // onUncheck:function (row) {
-        //     delete currentData[row.report_time];
-        // },
-        // onCheckAll:function (row) {
-        //     currentData[row.report_time]=row;
-        // },
-        // onUncheckAll:function (row) {
-        //     delete currentData[row.report_time];
-        // },
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
+//=========
+function chooseNo(_this) {
+    var yesNO=$(_this).attr('YesNo'),_id=$(_this).parents('.post_center-every').find('.ID').text();
+    if (yesNO==0){
+        currentData[_id]=currentDataPrival[_id];
+        $(_this).attr('YesNo','1');
+    }else {
+        delete currentData[_id];
+        $(_this).attr('YesNo','0');
+    }
+}
 //切换类型
+var types=[];
 $('.type2 .demo-label').on('click',function () {
     var thisType=$(this).attr('value');
+    $(".type2 input:checkbox:checked").each(function (index,item) {
+        types.push($(this).val());
+    });
     var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
@@ -166,9 +173,9 @@ function postYES(data) {
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
-//导出文件
-function exportTableToCSV(filename) {
-    var str =  '';
+//导出excel
+$('#output1').click(function(){
+    var all=[];
     for (var k in currentData){
         var name='',time='',type='',user='',uid='',txt='';
         if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
@@ -200,31 +207,110 @@ function exportTableToCSV(filename) {
             txt='暂无内容';
         }else {
             $.each(currentData[k].report_content['weibo_list'],function (index,item) {
-                if (item.text==''||item.text=='null'||item.text=='unknown'){
-                    txt='暂无内容';
-                }else {
-                    txt=item.text;
-                };
-            })
+                txt+=item.text;
+            });
         };
-        str+='上报名称：'+name+'\n上报时间：'+time+'\n上报类型：'+type+'\n虚拟人：'+user+'\n人物UID：'+uid+
-            '\n'+'上报内容：'+txt+'\n\n\n';
+        all.push(
+            [
+                {"value":name, "type":"ROW_HEADER"},
+                {"value":time, "type":"ROW_HEADER"},
+                {"value":type, "type":"ROW_HEADER"},
+                {"value":user, "type":"ROW_HEADER"},
+                {"value":uid, "type":"ROW_HEADER"},
+                {"value":txt, "type":"ROW_HEADER"},
+            ]
+        )
     };
-
-    str =  encodeURIComponent(str);
-    csvData = "data:text/csv;charset=utf-8,\ufeff"+str;
-    $(this).attr({
-        'download': filename,
-        'href': csvData,
-        'target': '_blank'
-    });
-    // $('#pormpt p').text('素材导出成功。');
-    // $('#pormpt').modal('show');
-}
-
-$("a[id='output']").on('click', function (event) {
-    filename="上报数据列表EXCEL.csv";
-    exportTableToCSV.apply(this, [filename]);
+    var data = {
+        "title":[
+            {"value":"上报名称", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+            {"value":"上报时间", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+            {"value":"上报类型", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+            {"value":"虚拟人", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+            {"value":"人物UID", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+            {"value":"上报内容", "type":"ROW_HEADER_HEADER", "datatype":"string"},
+        ],
+        "data":all
+    };
+    if(data == '')
+        return;
+    JSONToExcelConvertor(data.data, "Report", data.title);
 });
+
+function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
+    //先转化json
+    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+    var excel = '<table>';
+
+    //设置表头
+    var row = "<tr>";
+    for (var i = 0, l = ShowLabel.length; i < l; i++) {
+        row += "<td>" + ShowLabel[i].value + '</td>';
+    }
+
+    //换行
+    excel += row + "</tr>";
+
+    //设置数据
+    for (var i = 0; i < arrData.length; i++) {
+        var row = "<tr>";
+        for (var index in arrData[i]) {
+            var value = arrData[i][index].value === "." ? "" : arrData[i][index].value;
+            if (value){
+                row += '<td>' + value + '</td>';
+            }
+        }
+
+        excel += row + "</tr>";
+    }
+
+    excel += "</table>";
+
+    var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
+    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
+    excelFile += '; charset=UTF-8">';
+    excelFile += "<head>";
+    excelFile += "<!--[if gte mso 9]>";
+    excelFile += "<xml>";
+    excelFile += "<x:ExcelWorkbook>";
+    excelFile += "<x:ExcelWorksheets>";
+    excelFile += "<x:ExcelWorksheet>";
+    excelFile += "<x:Name>";
+    excelFile += "{worksheet}";
+    excelFile += "</x:Name>";
+    excelFile += "<x:WorksheetOptions>";
+    excelFile += "<x:DisplayGridlines/>";
+    excelFile += "</x:WorksheetOptions>";
+    excelFile += "</x:ExcelWorksheet>";
+    excelFile += "</x:ExcelWorksheets>";
+    excelFile += "</x:ExcelWorkbook>";
+    excelFile += "</xml>";
+    excelFile += "<![endif]-->";
+    excelFile += "</head>";
+    excelFile += "<body>";
+    excelFile += excel;
+    excelFile += "</body>";
+    excelFile += "</html>";
+
+
+    var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
+
+    var link = document.createElement("a");
+    link.href = uri;
+
+    link.style = "visibility:hidden";
+    link.download = FileName + ".xls";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+//导出word
+$('#output2').on('click',function () {
+    tableExport('person', 'Report', 'doc');
+});
+
 
 

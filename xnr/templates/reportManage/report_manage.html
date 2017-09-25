@@ -71,18 +71,18 @@
         <a class="output" id="output1">导出至Excel文件</a>
         <a class="output" id="output2" style="margin-left: 20px;">导出至Word文件</a>
     </div>
-    <div class="type" style="margin: 20px 0;">
-        <span class="type-1">类型：</span>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="demo1" checked>
-            <span class="demo-checkbox demo-radioInput"></span> 微博
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="demo1">
-            <span class="demo-checkbox demo-radioInput"></span> QQ群
-        </label>
-    </div>
-    <div class="type type2">
+    <!--<div class="type" style="margin: 20px 0;">-->
+        <!--<span class="type-1">类型：</span>-->
+        <!--<label class="demo-label">-->
+            <!--<input class="demo-radio" type="radio" name="demo1" checked>-->
+            <!--<span class="demo-checkbox demo-radioInput"></span> 微博-->
+        <!--</label>-->
+        <!--<label class="demo-label">-->
+            <!--<input class="demo-radio" type="radio" name="demo1">-->
+            <!--<span class="demo-checkbox demo-radioInput"></span> QQ群-->
+        <!--</label>-->
+    <!--</div>-->
+    <div class="type type2" style="margin: 20px 0;">
         <span class="type-1">上报类型：</span>
         <label class="demo-label" value="人物">
             <input class="demo-radio" type="radio" name="demo2">
@@ -98,13 +98,7 @@
         </label>
     </div>
     <div class="person">
-        <div id="person"></div>
-    </div>
-    <div class="speaking">
-        <div id="speaking"></div>
-    </div>
-    <div class="event">
-        <div id="event"></div>
+        <table id="person"></table>
     </div>
 </div>
 <!--提示信息-->
@@ -130,5 +124,8 @@
 <script>
     judgment('7');
 </script>
+<script src="/static/js/Blob.js"></script>
+<script src="/static/js/FileSaver.js"></script>
+<script src="/static/js/tableExport.js"></script>
 <script src="/static/js/report_manage-1.js"></script>
 {% endblock %}
