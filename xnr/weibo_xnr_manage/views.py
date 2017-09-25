@@ -71,6 +71,7 @@ def ajax_wxnr_history_count():
 #按时间条件显示历史统计结果
 #http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=today&start_time=0&end_time=1505044800
 #http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=''&start_time=1504526400&end_time=1505044800
+#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=&start_time=1505372455&end_time=1505977232
 @mod.route('/show_history_count/')
 def ajax_show_history_count():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -82,6 +83,7 @@ def ajax_show_history_count():
 	results=show_history_count(xnr_user_no,date_range)
 	return json.dumps(results)
 
+#http://219.224.134.213:9209/weibo_xnr_manage/delete_history_count/?task_id=WXNR0004_2017-09-27
 @mod.route('/delete_history_count/')
 def ajax_delete_history_count():
 	task_id=request.args.get('task_id','')
