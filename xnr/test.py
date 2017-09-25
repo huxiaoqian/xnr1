@@ -83,3 +83,8 @@ from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 
 # print 'results::',results
 
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0002')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0003')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0005')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0006')
+#es.update(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti',body={'doc':{'xnr_user_no':'WXNR0004'}})

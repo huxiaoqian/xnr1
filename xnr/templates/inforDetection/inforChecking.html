@@ -3,6 +3,49 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/inforChecking.css">
 <style>
+    <!---->
+    .hot_post .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .hot_post .table-no-bordered,.hot_post .table>tbody>tr>td,.hot_post .fixed-table-container,
+    .hot_post .bootstrap-table .table>thead>tr>th,.hot_post .bootstrap-table .table,.hot_post .table>tbody>tr>td{
+        border: none;
+    }
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .hot_post .bootstrap-table thead,.hot_post .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .hot_post .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .hot_post .bootstrap-table .table:not(.table-condensed),.hot_post .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .hot_post .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .hot_post .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    th.bs-checkbox {width: 10%!important;}
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    .hot_post .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .hot_post .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    /**/
     .demo-label{display:inline-block;margin:5px 0 0 10px;width:110px;cursor: pointer;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
@@ -14,7 +57,12 @@
     .fixed-table-container tbody .selected td {
         background-color: #31708f!important;
     }
-    .bootstrap-table .table>thead>tr>th {width: 10%!important;}
+    .disableCss{
+        pointer-events:none;
+        color:#afafaf!important;
+        cursor:default!important;
+    }
+    /**/
 </style>
 {% endblock %}
 {% block main %}
@@ -27,7 +75,7 @@
         <div class="perTime" style="margin: 10px 0;padding: 0 20px;">
             <span style="display: inline-block;width: 100px;text-align: center;">时间范围</span>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="day" value="0">
+                <input class="demo-radio" type="radio" name="day" value="0" checked>
                 <span class="demo-radioInput"></span> 今天
             </label>
             <label class="demo-label">
@@ -59,7 +107,9 @@
         <div class="content-1" style="margin-top: 20px;">
             <img src="/static/images/icon.png" alt="">
             <span style="font-size: 16px;font-weight: 900;color: #fff">关键词云</span>
-            <div id="content-1-word" style="width: 90%;height:300px;margin: 0 auto;"></div>
+            <div id="content-1-word" style="width: 90%;height:300px;margin: 0 auto;">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+            </div>
         </div>
         <div class="content-2" style="margin-top: 20px;">
             <div class="hot-1">
@@ -74,10 +124,10 @@
                 <div>
                     <span style="display: inline-block;width: 70px;">分类：</span>
                     <div id="theme-2" style="display: inline-block;">
-                        <!--<label class="demo-label">-->
-                            <!--<input class="demo-radio" type="radio" name="demo-radio">-->
-                            <!--<span class="demo-radioInput"></span> 全部用户-->
-                        <!--</label>-->
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo-radio">
+                            <span class="demo-radioInput"></span> 全部用户
+                        </label>
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="demo-radio" value="1" checked>
                             <span class="demo-radioInput"></span> 已关注用户
@@ -105,27 +155,32 @@
                         </label>
                     </div>
                 </div>
-                <div class="Posts">
-                    <div class="post_perfect" style="margin: 20px auto;">
-                        <div class="post_center-hot">
-                            <img src="/static/images/post-6.png" alt="" class="center_icon">
-                            <div class="center_rel">
-                                <a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：
-                                <span class="center_2">
-                                【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！
-                                </span>
-                                <div class="center_3">
-                                    <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>
-                                    <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>
-                                    <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>
-                                    <span class="cen3-4"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>
-                                    <span class="cen3-5" data-toggle="modal" data-target="#wordcloud"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>
-                                </div>
-                            </div>
-                        </div>
+                <div class="hot_post">
+                    <div id="hot_post">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                     </div>
                 </div>
 
+                <!--<div class="Posts">-->
+                    <!--<div class="post_perfect" style="margin: 20px auto;">-->
+                        <!--<div class="post_center-hot">-->
+                            <!--<img src="/static/images/post-6.png" alt="" class="center_icon">-->
+                            <!--<div class="center_rel">-->
+                                <!--<a class="center_1" href="###" style="color: #f98077;">何仙姑</a>：-->
+                                <!--<span class="center_2">-->
+                                <!--【郑州现《人民的名义》现实版窗口：站也不是 蹲也不是】据网友@张琬晖 爆料，郑州市社保局办事窗口不高不低，站也不是，蹲也不是，和《人民的名义》演的一样一样的！@映象网 调查发现，2014年就有媒体关注过这个问题，但一直未整改。达康书记@吴刚de微博 你快来看看吧！-->
+                                <!--</span>-->
+                                <!--<div class="center_3">-->
+                                    <!--<span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>-->
+                                    <!--<span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>-->
+                                    <!--<span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>-->
+                                    <!--<span class="cen3-4"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>-->
+                                    <!--<span class="cen3-5" data-toggle="modal" data-target="#wordcloud"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
             </div>
         </div>
@@ -151,8 +206,10 @@
                     </label>
                 </div>
                 <div class="userList">
-                    <span class="addFocus">添加关注</span>
-                    <div id="userList"></div>
+                    <span class="addFocus disableCss">添加关注</span>
+                    <div id="userList">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
                 </div>
             </div>
         </div>
