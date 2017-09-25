@@ -415,8 +415,13 @@ def get_hot_content_recommend(xnr_user_no,task_id):
 def get_hot_subopinion(xnr_user_no,task_id):
     
     task_id_new = xnr_user_no+'_'+task_id
-    es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+    es_task = []
+    try:
+        es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
                     id=task_id_new)['_source']
+    except:
+        return '尚未提交计算'
+
     if es_task:
         if es_task['compute_status'] != 2:
             return '正在计算'
