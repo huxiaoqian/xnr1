@@ -22,6 +22,7 @@ USER_CONTENT_NUM=3 #人物行为预警每个用户返回的敏感微博数量
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 # weibo
 SPEECH_WARMING_NUM=100 #言论预警数量
+HOT_WEIBO_NUM=50 #热门帖子、热门用户数量
 
 MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
