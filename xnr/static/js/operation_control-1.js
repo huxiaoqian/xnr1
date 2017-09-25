@@ -437,7 +437,7 @@ function timingTask(data) {
         columns: [
             {
                 title: "编号",//标题
-                field: "user_no",//键名
+                field: "xnr_user_no",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -451,7 +451,7 @@ function timingTask(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.task_source==''||row.task_source=='null'||row.task_source=='unknown'){
+                    if (row.task_source==''||row.task_source=='null'||row.task_source=='unknown'||!row.task_source){
                         return '未知';
                     }else {
                         return row.task_source;
@@ -466,7 +466,7 @@ function timingTask(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'){
+                    if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'||!row.operate_type){
                         return '未知';
                     }else {
                         return TYPE[row.operate_type];
