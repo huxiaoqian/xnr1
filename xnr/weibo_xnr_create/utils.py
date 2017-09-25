@@ -79,7 +79,7 @@ def get_role_sort_list(domain_name):
         es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)['_source']
 
         #role_sort_list_en = json.loads(es_result['role_distribute'])
-        role_sort_list_en = es_result['role_distribute']
+        role_sort_list_en = json.loads(es_result['role_distribute'])
         role_sort_list_zh = []
         for item in role_sort_list_en:
             role_zh = domain_en2ch_dict[item[0]]

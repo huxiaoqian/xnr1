@@ -38,14 +38,19 @@ $('.addBuild').on('click',function () {
     }else {
         word_user=filesUID;
     }
-    var creat_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
-        '&description='+description+'&submitter='+admin+'&remark='+remark+
-        '&create_type='+param[0]+'&'+param[1]+'='+word_user;
-    console.log(creat_url);
-    public_ajax.call_request('get',creat_url,successFail);
+    if (domainName||description||word_user){
+        var creat_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
+            '&description='+description+'&submitter='+admin+'&remark='+remark+
+            '&create_type='+param[0]+'&'+param[1]+'='+word_user;
+        console.log(creat_url);
+        public_ajax.call_request('get',creat_url,successFail);
+    }else {
+        $('#pormpt p').text('检查输入的信息（不能为空）');
+        $('#pormpt').modal('show');
+    }
+
 })
 function successFail(data) {
-    console.log(data)
     var f='操作成功';
     if(!data){f='操作失败'}else {public_ajax.call_request('get',libGroup_url,group)};
     $('#pormpt p').text(f);
@@ -82,9 +87,13 @@ function group(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[1];
-                // }
+                formatter: function (value, row, index) {
+                    if (row.domain_name==''||row.domain_name=='null'||row.domain_name=='unknown'||!row.domain_name){
+                        return '未知';
+                    }else {
+                        return row.domain_name;
+                    };
+                }
             },
             {
                 title: "群体人数",//标题
@@ -156,7 +165,13 @@ function group(data) {
                     var crType=JSON.parse(row.create_type);
                     for (var k in crType){
                         if (crType[k].length!=0){
-                            return crType[k].join(',');
+                            if (crType[k][0]==""){
+                                return '无';
+                            }else{
+                                return crType[k].join(',');
+                            };
+                        }else {
+                            return '未知';
                         }
                     }
                 },

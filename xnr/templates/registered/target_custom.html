@@ -3,6 +3,22 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/target_custom.css">
 <style>
+    /*<!---->*/
+    #container .title #inPut {
+        display: inline-block;
+        color: white;
+        font-weight: 700;
+        margin-left: 30px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+    }
+    #container .title #inPut:hover {
+        background:rgba(3, 8, 16, 0.61);
+    }
+    /**/
     #container .type_page #myTabs a {
         color: white;
     }
@@ -20,16 +36,19 @@
         <div class="tit-1">
             <img src="/static/images/target.png" class="icon">
             <b>第一步：目标定制</b>
+
+            <input type='file' id='example_modal' onchange='showData()' style='display: none;margin-left: 30px;'/>
+            <a id="inPut" onclick="importModal()">导入实例模板</a>
+
         </div>
         <div class="tit-2">
             <div style="margin: 15px 0;">
                 <b>渗透领域：</b>
                 <span class="buildNew">没有想要的？点我创建</span>
             </div>
-            <div class="field">
-
-            </div>
+            <div class="field"></div>
         </div>
+
     </div>
     <div class="buildOption">
         <div class="build-1">
@@ -185,7 +204,32 @@
     judgment('6');
     $('.buildNew').on('click',function () {
         window.open('/knowledge/domainLibrary/');
-    })
+    });
+    function importModal(){
+//        $("#example_modal").trigger("click");
+        var filesList='/weibo_xnr_knowledge_base_management/show_example_model/?xnr_user_no='+ID_Num;
+        public_ajax.call_request('get',filesList,$file);
+    };
+    function $file(data) {
+        console.log(data)
+    }
+    function showData(evt){
+        var files = evt;
+        for(var i=0,f;f=files[i];i++){
+            var reader = new FileReader();
+            reader.onload = function (oFREvent) {
+                var relData = oFREvent.target.result;
+                console.log(relData);
+                var domainRole_url='/weibo_xnr_knowledge_base_management/export_example_model/?domain_name='+domain_name+
+                '&role_name='+role_name;
+                public_ajax.call_request('get',domainRole_url,storageData);
+            };
+            reader.readAsText(f,'GB2312');
+        }
+    };
+    function storageData(data) {
+
+    }
 </script>
 <script src="/static/js/target_custom-1.js"></script>
 {% endblock %}

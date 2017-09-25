@@ -91,7 +91,7 @@ function reportDefaul(data) {
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" onclick="chooseNo(this)">'+
+                        '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" value="'+row.report_time+'" onclick="chooseNo(this)">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
@@ -109,19 +109,56 @@ function reportDefaul(data) {
                 }
             },
         ],
+        onPageChange:function (number, size) {
+            console.log(number)
+            var ft=$('.filesList .everyCopy');
+            for(var a=0;a<ft.length;a++){
+                var b=$(ft[a]).find('i').attr('pointIds');
+                var tt=$("#person input[type='checkbox'][value='"+b+"']");
+                $(tt[0]).prop('checked', true);
+                $(tt[0]).attr('YesNo','1');
+            }
+        }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
 //=========
+
+var $this_point;
 function chooseNo(_this) {
+    $this_point=_this;
     var yesNO=$(_this).attr('YesNo'),_id=$(_this).parents('.post_center-every').find('.ID').text();
+    $('.filesList').show();
     if (yesNO==0){
         currentData[_id]=currentDataPrival[_id];
+        var dataIndex=$(_this).parents('.post_center-every').parent().parent().attr('data-index');
+        var $Index=Number(dataIndex)+1;
+        var t='<span class="everyCopy">第 '+($Index)+' 条数据&nbsp;&nbsp;<i class="icon icon-remove" style="cursor: pointer;" ' +
+            'pointIds="'+_id+'" onclick="deltPointData(this)"></i></span>';
+        $('.filesName').append(t);
         $(_this).attr('YesNo','1');
     }else {
         delete currentData[_id];
         $(_this).attr('YesNo','0');
+        var ft=$('.filesList .everyCopy');
+        for(var a=0;a<ft.length;a++){
+            var b=$(ft[a]).find('i').attr('pointIds');
+            if (_id==b){
+                $(ft[a]).remove();
+                $(_this).attr('YesNo','0');
+            }
+        }
     }
+}
+function deltPointData(_this) {
+    var pointID=$(_this).attr('pointIds');
+    $(_this).parent().remove();
+    delete currentData[pointID];
+    $($this_point).attr('YesNo','0');
+    var tt=$("input[type='checkbox'][value='"+pointID+"']");
+    $(tt[0]).prop('checked', false);
+    var h=$('.filesList .everyCopy').length;
+    if (h==0){$('.filesList').hide()}
 }
 //切换类型
 var types=[];
@@ -133,6 +170,7 @@ $('.type2 .demo-label').on('click',function () {
     var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
+
 //转发===评论===点赞
 // function retComLike(_this) {
 //     var mid=$(_this).parents('.post_center-every').find('.mid').text();
@@ -175,6 +213,7 @@ function postYES(data) {
 }
 //导出excel
 $('#output1').click(function(){
+    console.log(currentData)
     var all=[];
     for (var k in currentData){
         var name='',time='',type='',user='',uid='',txt='';
@@ -221,6 +260,7 @@ $('#output1').click(function(){
             ]
         )
     };
+
     var data = {
         "title":[
             {"value":"上报名称", "type":"ROW_HEADER_HEADER", "datatype":"string"},
