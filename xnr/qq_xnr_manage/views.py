@@ -14,7 +14,6 @@ from xnr.qq.qrCode import getQRCode_v2
 
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
-
 @mod.route('/get_qr_code/')
 def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
