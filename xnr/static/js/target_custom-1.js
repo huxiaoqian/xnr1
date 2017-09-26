@@ -19,18 +19,32 @@ function field(data) {
     });
 }
 //模板导入
-var modalAllData;
+var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
     console.log(data)
     modalAllData=data;
     $(".field input[type='radio'][value='"+data.domains+"']").attr("checked",true);
     var creat_url='/weibo_xnr_create/domain2role/?domain_name='+data.domains;
     public_ajax.call_request('get',creat_url,creat_1);
+    var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+domainName+'&role_name='+roleName;
+    public_ajax.call_request('get',creat_url_2,creat_2);
+    $$political_side=data.political_side;
+    $$psy_feature=data.psy_feature;
+
+    var bus=data.business_goal.split('&');
+    for (var f of bus){
+        $(".build-4 input[name='demo66'][type='checkbox'][value='"+f+"']").attr("checked",true);
+    }
+    var day=data.daily_interests.split('&');
+    for (var f of day){
+        $(".build-5 input[name='demo6'][type='checkbox'][value='"+f+"']").attr("checked",true);
+    }
+    if (data.monitor_keywords){
+        $('.build-6 .keywords').val(data.monitor_keywords.toString().replace(/&/g,'，'))
+    }
 }
 //==========模板
 var domainName='',roleName='';
-if ($_A){domainName=$_A};
-if ($_B){roleName=$_B};
 function creat_1(data) {
     addLabel(data,'opt-1','demo2');
 }
@@ -84,11 +98,21 @@ function labelSTR(data,name,radioCheckbox='radio') {
         }
     }
     for(var i=0;i<data.length;i++){
+        var cc='';
+        if (roleName==data[i]){cc='checked'};
+        if ($$political_side==data[i]){cc='checked'};
+        if ($$psy_feature){
+            var psy=$$psy_feature.split('&');
+            for (var f of psy){
+                if (f==data[i]){
+                    cc='checked';
+                }
+            }
+        };
         str+= '<label class="demo-label" title="'+data[i]+'">'+
-            '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
+            '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'" '+cc+'>'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
             '</label>';
-        $("input[type='"+radioCheckbox+"'][value='"+roleName+"']").attr("checked",true);
     }
 
     return str;

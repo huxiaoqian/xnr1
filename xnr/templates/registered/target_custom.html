@@ -241,11 +241,11 @@
             $('#modalList').modal('show');
         }
     }
-    var $_A='',$_B='';
+
     function shutModal(_this) {
         var a=$(_this).find('.m-1').text();
         var b=$(_this).find('.m-2').text();
-        $_A=a;$_B=b;
+        domainName=a;roleName=b;
         var showModal_url='/weibo_xnr_knowledge_base_management/export_example_model/?domain_name='+a+
             '&role_name='+b+'&xnr_user_no='+ID_Num;
         public_ajax.call_request('get',showModal_url,inModalData);
