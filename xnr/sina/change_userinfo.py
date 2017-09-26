@@ -1,13 +1,14 @@
 #-*- coding: utf-8 -*-
 import time
-from selenium impoer webdriver
+from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
-def change_userinfo(uname, pwd, profile_info_dict):
+def change_userinfo(uname, pwd, uid, profile_info_dict):
     #step1: login
     driver = webdriver.Firefox(executable_path='geckodriver')
     url = 'http://www.weibo.com/login.php'
     driver.get(url)
+    time.sleep(2)
     driver.find_element_by_xpath('//*[@id="loginname"]').send_keys(uname)
     time.sleep(1)
     driver.find_element_by_name('password').send_keys(pwd)
@@ -70,4 +71,4 @@ if __name__=='__main__':
     profile_info_dict = {'description': 'aaaa', 'location_province':'黑龙江',\
             'location_city':'大庆','gender': 'man',\
             'birth':['1985', '08', '06']}
-    change_userinfo(uname, pwd, userinfo_dict)
+    change_userinfo(uname, pwd, uid, userinfo_dict)
