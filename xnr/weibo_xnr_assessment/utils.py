@@ -57,12 +57,12 @@ def get_influence_total_trend(xnr_user_no):
     total_dict['day_num']['at'] = at_dict['day_num']
     total_dict['day_num']['private'] = private_dict['day_num']
 
-    total_dict['growth_rate']['fans'] = fans_dict['growth_rate']
-    total_dict['growth_rate']['retweet'] = retweet_dict['growth_rate']
-    total_dict['growth_rate']['comment'] = comment_dict['growth_rate']
-    total_dict['growth_rate']['like'] = like_dict['growth_rate']
-    total_dict['growth_rate']['at'] = at_dict['growth_rate']
-    total_dict['growth_rate']['private'] = private_dict['growth_rate']
+    total_dict['growth_rate']['fans'] = round(fans_dict['growth_rate'],2)
+    total_dict['growth_rate']['retweet'] = round(retweet_dict['growth_rate'],2)
+    total_dict['growth_rate']['comment'] = round(comment_dict['growth_rate'],2)
+    total_dict['growth_rate']['like'] = round(like_dict['growth_rate'],2)
+    total_dict['growth_rate']['at'] = round(at_dict['growth_rate'],2)
+    total_dict['growth_rate']['private'] = round(private_dict['growth_rate'],2)
 
     return total_dict
 
@@ -706,11 +706,11 @@ def penetration_total(xnr_user_no):
         warning_report_total[timestamp] = float(warning_report['event'][timestamp] + \
             warning_report['user'][timestamp] + warning_report['tweet'][timestamp])/3
 
-    total_dict['follow_group'] = follow_group['sensitive_info']
-    total_dict['fans_group'] = fans_group['sensitive_info']
-    total_dict['self_info'] = self_info['sensitive_info']
-    total_dict['warning_report_total'] = warning_report_total
-    total_dict['feedback_total'] = feedback_total['sensitive_info']
+    total_dict['follow_group'] = round(follow_group['sensitive_info'],2)
+    total_dict['fans_group'] = round(fans_group['sensitive_info'],2)
+    total_dict['self_info'] = round(self_info['sensitive_info'],2)
+    total_dict['warning_report_total'] = round(warning_report_total,2)
+    total_dict['feedback_total'] = round(feedback_total['sensitive_info'],2)
 
     return total_dict
 
@@ -762,7 +762,7 @@ def get_pene_follow_group_sensitive(xnr_user_no):
         }
         es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
             body=query_body_info)['aggregations']
-        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+        sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
         
         if sensitive_value == None:
             sensitive_value = 0.0
