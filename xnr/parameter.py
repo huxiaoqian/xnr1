@@ -17,11 +17,11 @@ MONTH_TIME = 30*24*3600
 EXPIRE_TIME = 8*24*3600
 DAY_HOURS = 24  # 一天24小时
 FLOW_TEXT_START_DATE = 1502553600 # 2017-08-13
-USER_NUM = 100 #人物行为预警返回用户数量
+USER_NUM = 50 #人物行为预警返回用户数量
 USER_CONTENT_NUM=3 #人物行为预警每个用户返回的敏感微博数量
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 # weibo
-SPEECH_WARMING_NUM=100 #言论预警数量
+SPEECH_WARMING_NUM=50 #言论预警数量
 HOT_WEIBO_NUM=50 #热门帖子、热门用户数量
 INFLUENCE_MIN=1 #影响力阈值
 

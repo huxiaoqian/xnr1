@@ -224,8 +224,7 @@ def show_event_warming(xnr_user_no):
     now_time=int(time.time())
     if S_TYPE =='test':    
         hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
-        weibo_xnr_flow_text_listname=['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24',\
-    'flow_text_2016-11-23','flow_text_2016-11-22','flow_text_2016-11-21']
+        weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
     else:        
         hashtag_list = get_hashtag()
         weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
