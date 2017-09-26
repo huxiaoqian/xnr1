@@ -23,6 +23,7 @@ from xnr.time_utils import get_flow_text_index_list,datetime2ts
 from xnr.utils import nickname2uid,user_no2_id,_id2user_no
 #from xnr.weibo_publish_func import getUserShow
 from xnr.sina.userinfo import SinaOperateAPI
+from xnr.sina.get_userinfo import get_userinfo
 from xnr.sina.change_userinfo import change_userinfo
 #from xnr.test_tianjin import get_user_portrait_data
 from xnr.sina.tools.Launcher import SinaLauncher
@@ -89,14 +90,14 @@ def get_modify_userinfo(task_detail):
 
 def get_add_other_info(nick_name):
 
-    user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-
-    item_dict = {}
-    item['nick_name'] = user['screen_name']
-    item['location'] = user['location']
-    item['gender'] = user['gender']
-    item['age'] = user['age']
-    item['description'] = user['description']
+    # #user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    # get_userinfo(uname, pwd, uid)
+    # item_dict = {}
+    # item['nick_name'] = user['screen_name']
+    # item['location'] = user['location']
+    # item['gender'] = user['gender']
+    # item['age'] = user['age']
+    # item['description'] = user['description']
 
     return item_dict
 
