@@ -113,7 +113,7 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
         item_dict['domain_name'] = domain_name
         item_dict['role_name'] = role_name
 
-        es.index(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_name,\
+        es.index(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
             body=item_dict,id=task_id)
 
         mark = True
@@ -129,9 +129,12 @@ def get_show_example_model(xnr_user_no):
     print 'xnr_user_no::',xnr_user_no
     #print '!!!!!',{'query':{'term':{'xnr_user_no':xnr_user_no}}}
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-        body={'query':{'match_all':{}}})
+        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})['hits']['hits']
+    print 'weibo_example_model_index_name:::',weibo_example_model_index_name
+    print 'weibo_example_model_index_type::',weibo_example_model_index_type
+    print 'xnr_user_no::',xnr_user_no
+    print 'es_results::',es_results
     result_all = []
-    print 'es_results::=============================',es_results
     for result in es_results:
         result = result['_source']
         result_all.append(result)
