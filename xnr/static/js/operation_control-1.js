@@ -668,10 +668,10 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
     console.log(data);
-    var showHide1='none',showHide2='block',showHide3='none',showHide4='none';
-    if (boxShoes=='historyCenter'){showHide1='block'};
-    if (boxShoes=='myweibo'){showHide3='block'};
-    if (boxShoes=='commentCOT'){showHide2='none';showHide4='block'};
+    var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none';
+    if (boxShoes=='historyCenter'){showHide1='inline-block'};
+    if (boxShoes=='myweibo'){showHide3='inline-block'};
+    if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block'};
     $('#'+boxShoes).bootstrapTable('load', data);
     $('#'+boxShoes).bootstrapTable({
         data:data,
@@ -700,15 +700,16 @@ function historyNews(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
                         name='未命名';
                     }else {
-                        name=row.nick_name;
+                        name=row.xnr_user_no;
                     };
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||
+                        row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
                         img='/static/images/unknown.png';
                     }else {
-                        img=row.photo_url;
+                        img=row.photo_url||row.picture_url;
                     };
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
@@ -728,7 +729,7 @@ function historyNews(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" data-toggle="modal" data-target="#wordcloud" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -767,6 +768,15 @@ function dialogue_show(data) {
     }
 }
 //加入语料库
+var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
+function joinlab(_this) {
+    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
+    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
+    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
+    $('#wordcloud').modal('show');
+}
 function joinWord() {
     var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
     var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
@@ -775,8 +785,9 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+text+
-        '&uid='+uid+'&mid='+mid+'&retweeted='+retweeted+'&comment='+comment+'&like=0&create_type='+create_type;
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+wordTxt+
+        '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+'&like=0&create_type='+create_type;
+    public_ajax.call_request('get',corpus_url,postYES)
 }
 //评论
 function showInput(_this) {
@@ -786,7 +797,7 @@ function comMent(_this){
     var txt = $(_this).prev().val();
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
-        var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&r_mid='+mid;
+        var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#successfail p').text('评论内容不能为空。');
@@ -798,7 +809,7 @@ function retweet(_this) {
     obtain('r');
     var txt = $(_this).parent().prev().text();
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_operate/get_weibohistory_retweet/?xnr_user_no='+xnrUser+'&text='+txt+'&r_mid='+mid;
+    var post_url_2='/weibo_xnr_operate/get_weibohistory_retweet/?xnr_user_no='+ID_Num+'&text='+txt+'&r_mid='+mid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
 //点赞
@@ -807,8 +818,8 @@ function thumbs(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
     var txt = $(_this).parent().prev().text();
-    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+xnrUser;
-    '/weibo_xnr_manage/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&nick_name='+userRelName+
+    var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
+    '/weibo_xnr_manage/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&nick_name='+REL_name+
     '&text='+txt+'&timestamp='+timestamp;
     public_ajax.call_request('get',post_url_4,postYES)
 };

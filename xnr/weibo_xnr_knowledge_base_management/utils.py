@@ -123,10 +123,15 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
     return mark
 
 def get_show_example_model(xnr_user_no):
-
+    print 'es::',es
+    print 'weibo_example_model_index_name:::',weibo_example_model_index_name
+    print 'weibo_example_model_index_type:::',weibo_example_model_index_type
+    print 'xnr_user_no::',xnr_user_no
+    #print '!!!!!',{'query':{'term':{'xnr_user_no':xnr_user_no}}}
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})
+        body={'query':{'match_all':{}}})
     result_all = []
+    print 'es_results::=============================',es_results
     for result in es_results:
         result = result['_source']
         result_all.append(result)
