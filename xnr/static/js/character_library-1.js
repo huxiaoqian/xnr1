@@ -463,7 +463,7 @@ function locationplace(data,idClassName,name) {
             }
         }
     }
-    var maxNum=Math.max.apply(null,maxAry);
+    var maxNum=Math.max.apply(null,maxAry)||0;
 
     var myChart = echarts.init(document.getElementById(idClassName),'dark');
 
@@ -623,8 +623,8 @@ $('#buildModal').on('click',function(){
     var domain_name=$('.field-1 input:radio[name="chara"]:checked').val();
     var role_name=$('.field-2 input:radio:checked').val();
     console.log(domain_name,role_name)
-    if (domain_name&&role_name){
-        var modal_url='/weibo_xnr_knowledge_base_management/generate_example_model/?xnr_user_no='+domain+
+    if (domain_name && role_name){
+        var modal_url='/weibo_xnr_knowledge_base_management/generate_example_model/?xnr_user_no='+ID_Num+
             '&domain_name='+domain_name+'&role_name='+role_name;
         public_ajax.call_request('get',modal_url,success);
     }else {

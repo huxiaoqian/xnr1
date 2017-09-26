@@ -32,6 +32,7 @@ def ajax_generate_example_model():
 @mod.route('/show_example_model/')
 def ajax_show_example_model():
     xnr_user_no = request.args.get('xnr_user_no','')
+    print 'xnr_user_no:::',xnr_user_no
     results = get_show_example_model(xnr_user_no)
 
     return json.dumps(results)
