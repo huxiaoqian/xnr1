@@ -118,3 +118,34 @@ body {
 #container .content-3 .user-2 .userList .addFocus:hover {
     background: rgba(3, 8, 16, 0.61);
 }
+.datetimepicker td, .datetimepicker th {
+    color: black;
+}
+
+#container .commentDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .commentDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .commentDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .commentDown span:hover {
+    background: rgba(28, 28, 28, 0.96);
+}
