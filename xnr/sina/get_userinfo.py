@@ -3,7 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
-def get_userinfo(uname, pwd, uid):
+def get_userinfo(uname, pwd):
     #step1: login
     driver = webdriver.Firefox(executable_path='geckodriver')
     url = 'http://www.weibo.com/login.php'
@@ -14,7 +14,24 @@ def get_userinfo(uname, pwd, uid):
     driver.find_element_by_name('password').send_keys(pwd)
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="pl_login_form"]/div/div[3]/div[6]/a').click()
-    time.sleep(1)
+    time.sleep(7)
+    print 'get current url'
+    #step1.5: get nick name
+    #nick_name_str = driver.find_element_by_xpath('//*[@id="v6_pl_rightmod_myinfo"]/div/div/div[2]/div/a[1]')
+    #nick_name_str = driver.find_element_by_xpath('//*[@id="plc_top"]/div/div/div[3]/div[1]/ul/li[5]/a/em[2]')
+    #nick_name = nick_name_str.text
+    #print 'step1.5 nick_name:', nick_name
+    now_url = driver.current_url
+    #print 'now_url:', now_url
+    url_list = now_url.split('/')
+    #print 'url_list:', url_list
+    try:
+        uid = url_list[4]
+    except:
+        time.sleep(5)
+        now_url = driver.current_url
+        uid = now_url.split('/')[4]
+    #print 'uid:', uid
     #step2: profile url
     profile_url = 'http://www.weibo.com/p/100505'+uid+'/info?mod=pedit'
     driver.get(profile_url)
@@ -23,7 +40,7 @@ def get_userinfo(uname, pwd, uid):
     profile_url_2 = 'http://account.weibo.com/set/iframe?skin=skin048'
     driver.get(profile_url_2)
     time.sleep(1)
-    profile_info_dict = {}
+    profile_info_dict = {'uid': uid}
     #step4: get nickname
     uname_str = driver.find_element_by_xpath('//*[@id="pl_content_account"]/div[1]/div[1]/div[2]/div[2]')
     nick_name = uname_str.text
@@ -58,10 +75,11 @@ def get_userinfo(uname, pwd, uid):
     profile_info_dict['job'] = job
     print 'job:', job
     print 'profile_info_dict:', profile_info_dict
+    
     driver.close()
 
 if __name__=='__main__':
     uname = 'weiboxnr04@126.com'
     pwd = 'xnr123456'
     uid = '6346321407'
-    get_userinfo(uname, pwd, uid)
+    get_userinfo(uname, pwd)
