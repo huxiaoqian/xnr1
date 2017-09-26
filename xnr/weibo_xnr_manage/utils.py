@@ -830,6 +830,7 @@ def show_like_content(require_detail):
 
     results=[]
     for i in xrange(0,len(like_type)):
+        temp_result=[]
         if like_type[i] == 'receive':
             temp_result=lookup_receive_like(uid,start_time,end_time)
         elif like_type[i] == 'send':
@@ -1065,40 +1066,43 @@ def lookup_detail_weibouser(uid):
 	return result
 
 #step 4.4: list of concerns
-def wxnr_list_concerns(user_id,order_type):        
-	result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
-	followers_list=result['_source']['followers_list']
-	query_body={
-		'query':{
-			'filtered':{
-				'filter':{
-					'terms':{'uid':followers_list}
-				}
-			}
+def wxnr_list_concerns(user_id,order_type):
+    try:
+        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
+        followers_list=result['_source']['followers_list']
+    except:
+        followers_list=[]
 
-		},
-		'size':MAX_SEARCH_SIZE
-	}
-	concern_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'uid':followers_list}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+    concern_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
 
-	user_result=[]
-	for item in concern_result:
-		uid=item['_source']['uid']
-		try:
-			temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-			item['_source']['topic_string']=temp_user_result['topic_string']
-			item['_source']['sensitive']=temp_user_result['sensitive']
-		except:
-			item['_source']['topic_string']=''
-			item['_source']['sensitive']=0
-		#计算影响力
-		item['_source']['influence']=count_weibouser_influence(uid)
-		#组合结果
-		user_result.append(item['_source'])
+    user_result=[]
+    for item in concern_result:
+        uid=item['_source']['uid']
+        try:
+            temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
+            item['_source']['topic_string']=temp_user_result['topic_string']
+            item['_source']['sensitive']=temp_user_result['sensitive']
+        except:
+            item['_source']['topic_string']=''
+            item['_source']['sensitive']=0
+        #计算影响力
+        item['_source']['influence']=count_weibouser_influence(uid)
+        #组合结果
+        user_result.append(item['_source'])
 
-	#对结果按要求排序
-	user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-	return user_result
+    #对结果按要求排序
+    user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
+    return user_result
 
 #计算影响力
 def count_weibouser_influence(uid):
@@ -1128,35 +1132,38 @@ def count_weibouser_influence(uid):
 
 #step 4.5: list of fans
 def wxnr_list_fans(user_id,order_type):
-	result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
-	fans_list=result['_source']['fans_list']
-	query_body={
-		'query':{
-			'filtered':{
-				'filter':{
-					'terms':{'uid':fans_list}
-				}
-			}
+    try:
+        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
+        fans_list=result['_source']['fans_list']
+    except:
+        fans_list=[]
 
-		},
-		'size':MAX_SEARCH_SIZE
-	}
-	fans_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
-	user_result=[]
-	for item in fans_result:
-		uid=item['_source']['uid']
-		try:
-			temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-			item['_source']['sensitive']=temp_user_result['sensitive']
-		except:
-			item['_source']['sensitive']=0
-		#计算影响力
-		item['_source']['influence']=count_weibouser_influence(uid)
-		#组合结果
-		user_result.append(item['_source'])
-	#对结果按要求排序
-	user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-	return user_result
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'uid':fans_list}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+    fans_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
+    user_result=[]
+    for item in fans_result:
+        uid=item['_source']['uid']
+        try:
+            temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
+            item['_source']['sensitive']=temp_user_result['sensitive']
+        except:
+            item['_source']['sensitive']=0
+        #计算影响力
+        item['_source']['influence']=count_weibouser_influence(uid)
+        #组合结果
+        user_result.append(item['_source'])
+    #对结果按要求排序
+    user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
+    return user_result
 
 
 

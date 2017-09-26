@@ -93,7 +93,8 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     try:
         if S_TYPE == 'test':
-            flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+            temp_flow_text_index_name_list=['flow_text_2016-11-22','flow_text_2016-11-23']
+            flow_text_exist=es_flow_text.search(index=temp_flow_text_index_name_list,doc_type=flow_text_index_type,\
                 body=query_body)['aggregations']['keywords']['buckets']
         else:
             flow_text_exist=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
@@ -441,7 +442,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
         query_body={
 
             'query':item,
-            'size':HOT_WEIBO_NUM,       #查询影响力排名前500的用户即可
+            'size':HOT_WEIBO_NUM,       #查询影响力排名前50的用户即可
             }
         try:
             flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
