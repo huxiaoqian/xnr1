@@ -39,9 +39,10 @@ def ajax_show_example_model():
 
 @mod.route('/export_example_model/')
 def ajax_export_example_model():
+    xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
-    results = get_export_example_model(domain_name,role_name)
+    results = get_export_example_model(xnr_user_no,domain_name,role_name)
 
     return json.dumps(results)
 
