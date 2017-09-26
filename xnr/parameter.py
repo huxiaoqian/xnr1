@@ -64,6 +64,9 @@ TRACE_FOLLOW_LIST = ['5622091306','5650736291','3738565314','5489151972']
 # 子观点微博条数限制
 SUB_OPINION_WEIBO_LIMIT = 3
 
+# top心理特征
+TOP_PSY_FEATURE = 4
+
 ## 读取hashtag
 UID_TXT_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_warming'
 
