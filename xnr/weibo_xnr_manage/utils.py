@@ -393,7 +393,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
 
 def show_condition_history_count(xnr_user_no,start_time,end_time):
     query_body={
-    	'fields':['date_time','user_fansnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
+    	#'fields':['date_time','user_fansnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
         'query':{
             'filtered':{
                 'filter':{
@@ -413,11 +413,15 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         },
         'sort':{'timestamp':{'order':'desc'}} 
     }
+    
     try:
         xnr_count_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+        xnr_date_info=[]
+        for item in xnr_count_result:
+            xnr_date_info.append(item['_source'])
     except:
-        xnr_count_result=[]
-    return xnr_count_result
+        xnr_date_info=[]
+    return xnr_date_info
 
 #历史统计表查询组织
 def show_history_count(xnr_user_no,date_range):	
@@ -436,7 +440,9 @@ def show_history_count(xnr_user_no,date_range):
             start_time=system_start_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
 
+    #print xnr_date_info
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
+
 
     return Cumulative_statistics_dict,xnr_date_info
 
