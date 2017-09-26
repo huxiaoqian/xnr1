@@ -5,7 +5,7 @@ import random
 import json
 import sys
 import base64
-from global_utils import es_xnr as es
+from global_utils import es_xnr as es,r
 from global_utils import es_user_portrait,portrait_index_name,portrait_index_type
 from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
@@ -88,8 +88,13 @@ from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 # es.delete(index='weibo_domain',doc_type='group',id='AV64pqMhS8CBAF2ZGzdS')
 # es.delete(index='weibo_domain',doc_type='group',id='AV63955tS8CBAF2ZGzdO')
 # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
-es.delete(index='weibo_domain',doc_type='group',id='mao_fen_qun_ti')
-es.delete(index='weibo_domain',doc_type='group',id='xi_da_da_fen_si_qun')
+es.delete(index='weibo_example_model',doc_type='weibo_example_model',id='min_yun_ren_shi_grassroot')
+# print r.sadd('qq_group_set_01',['121567','5674567'])
+# m = r.smembers('qq_group_set_01')
+# if "123123123" in m:
+# 	print '1111'
+
+#es.delete(index='weibo_domain',doc_type='group',id='xi_da_da_fen_si_qun')
 # es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043525622087918')
 # es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043433776005723')
 # es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043274014747152')
