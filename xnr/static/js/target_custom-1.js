@@ -29,7 +29,7 @@ function inModalData(data) {
     var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+domainName+'&role_name='+roleName;
     public_ajax.call_request('get',creat_url_2,creat_2);
     $$political_side=data.political_side;
-    $$psy_feature=data.psy_feature;
+    $$psy_feature=data.psy_feature.split('&');
 
     var bus=data.business_goal.split('&');
     for (var f of bus){
@@ -102,8 +102,7 @@ function labelSTR(data,name,radioCheckbox='radio') {
         if (roleName==data[i]){cc='checked'};
         if ($$political_side==data[i]){cc='checked'};
         if ($$psy_feature){
-            var psy=$$psy_feature.split('&');
-            for (var f of psy){
+            for (var f of $$psy_feature){
                 if (f==data[i]){
                     cc='checked';
                 }

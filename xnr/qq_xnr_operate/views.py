@@ -32,9 +32,6 @@ def ajax_search_by_period():
     return json.dumps(results)
 
 
-
-
-
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')
@@ -59,7 +56,6 @@ def show_all_groups():
     # groups = getgroup(xnr_qq_number)
     groups = getgroup_v2(xnr_qq_number)
     return json.dumps(groups)
-
 
 
 

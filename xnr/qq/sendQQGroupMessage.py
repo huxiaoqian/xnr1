@@ -189,8 +189,13 @@ def get_qqxnr_port(qq_xnr, group):
     qq_xnr_info = {}
     #step0: read qq_xnr es to get qqbot_port/xnr_qq_number/xnr_nickname
     try:
-        qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
-                id=qq_xnr,_source=True)['_source']
+        # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+        #         id=qq_xnr,_source=True)['_source']
+
+        qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                     body={'query':{'term':{'qq_number':qq_number}}},_source=True)['hits']['hits']
+        qq_xnr_es_result = qq_xnr_search_result[0]['_source']
+
     except:
         print 'qq_xnr is not exist'
         return qq_xnr_info
@@ -213,6 +218,8 @@ def get_qqxnr_port(qq_xnr, group):
             #print 'item_line_list:', qq_group_number, len(qq_group_number)
     qq_xnr_info['qq_group_number'] = qq_group_number
     qq_xnr_info['qq_group_nickname'] = group
+
+    print 'qq_xnr_info::',qq_xnr_info
     return qq_xnr_info
 
 def sendfromweb_v2(qq_xnr, group, content):
