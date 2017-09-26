@@ -24,13 +24,14 @@ def ajax_get_qr_code():
     else:
         return False
 
+# qq_number=1965056593&qq_groups=513304542&qq_nickname=维权律师&access_id=kwnrymiokjemiicb
 @mod.route('/add_qq_xnr/')
 def ajax_add_qq_xnr():
     xnr_info = {}
     qq_number = request.args.get('qq_number','')
     qq_groups = request.args.get('qq_groups','')        #所有群号中文逗号分隔
     nickname = request.args.get('qq_nickname','')
-    qqbot_mc = request.args.get('qqbot_mc', 'sirtgdmgwiivbegf')
+    #qqbot_mc = request.args.get('qqbot_mc', 'sirtgdmgwiivbegf')
     remark = request.args.get('remark','')   # 备注
     access_id = request.args.get('access_id','')
     # active_time = request.args.get('qq_active_time')
@@ -39,8 +40,9 @@ def ajax_add_qq_xnr():
     xnr_info['qq_groups'] = qq_groups
     xnr_info['nickname'] = nickname
     xnr_info['create_ts'] = create_time
-    xnr_info['qqbot_mc'] = qqbot_mc
+    #xnr_info['qqbot_mc'] = qqbot_mc
     xnr_info['access_id'] = access_id
+    xnr_info['remark'] = remark
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
 
@@ -69,3 +71,5 @@ def ajax_search_qq_xnr():
     qq_number = request.args.get('qq_number','')
     results = search_qq_xnr(qq_number)
     return json.dumps(results)
+
+# @mod.route('//')

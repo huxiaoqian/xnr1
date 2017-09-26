@@ -13,16 +13,16 @@ from qqbot.utf8logger import INFO
 
 from elasticsearch import Elasticsearch
 from sensitive_compute import sensitive_check
-
 import sys, getopt
 
 reload(sys)
 sys.path.append('../')
-sys.path.append('/home/ubuntu8/huxiaoqian/xnr/xnr1/xnr/')
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/')
 #sys.path.append('../cron/qq_group_message/')
 
 # es = Elasticsearch("http://219.224.134.213:9205/")
-from global_utils import es_xnr as es
+from global_utils import es_xnr as es,r,r_qq_group_set_pre
+import sys, getopt
 from global_utils import group_message_index_name_pre, \
         group_message_index_type, qq_document_task_name, QRCODE_PATH
 
@@ -69,17 +69,25 @@ def onQQMessage(bot, contact, member, content):
             }
             qq_json = json.dumps(qq_item)
             print 'qq_json:',qq_json
+            # 判断该qq群是否在redis的群set中
+            qq_number  = qq_item['xnr_qq_number']
+            qq_group_number = qq_item['qq_group_number']
 
-            conMD5 = string_md5(content)
-            
-            nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-            index_name = group_message_index_name_pre+ str(nowDate)
-            index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
-            if not es.indices.exists(index=index_name):
-                group_message_mappings(bot.session.qq,nowDate)
+            r_qq_group_set = r_qq_group_set_pre + qq_number
+            qq_group_set = r.smembers(r_qq_group_set)
 
-            es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
+            if qq_group_number in qq_group_set:
             
+                conMD5 = string_md5(content)
+                
+                nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+                index_name = group_message_index_name_pre+ str(nowDate)
+                index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
+                if not es.indices.exists(index=index_name):
+                    group_message_mappings(bot.session.qq,nowDate)
+
+                es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
+                
 
 def string_md5(str):
     md5 = ''

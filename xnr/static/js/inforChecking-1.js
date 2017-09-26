@@ -1,14 +1,42 @@
-// var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
-// var to_ts=Date.parse(new Date())/1000;
-var from_ts=1479513600,to_ts=1479981600;
+//几天前的时间戳
+function getDaysBefore(m){
+    var date = new Date(),
+        timestamp, newDate;
+    if(!(date instanceof Date)){
+        date = new Date(date);
+    }
+    timestamp = date.getTime();
+    newDate = new Date(timestamp - m * 24 * 3600 * 1000);
+    return Number(Date.parse(newDate).toString().substring(0,10));
+};
+//当天零点的时间戳
+function todayTimetamp() {
+    var start=new Date();
+    start.setHours(0);
+    start.setMinutes(0);
+    start.setSeconds(0);
+    start.setMilliseconds(0);
+    var todayStartTime=Date.parse(start)/1000;
+    return todayStartTime
+}
+var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
+var to_ts=Date.parse(new Date())/1000;
 $('.title .perTime .demo-label input').on('click',function () {
     var _val=$(this).val();
     if (_val=='resize'){
         $('.titTime').show();
     }else {
+        if (_val==0){
+            from_ts=todayTimetamp();
+        }else {
+            from_ts=getDaysBefore(_val);
+        }
+        public_ajax.call_request('get',word_url,wordCloud);
+        public_ajax.call_request('get',hotPost_url,hotPost);
+        public_ajax.call_request('get',activePost_url,activeUser);
         $('.titTime').hide();
     }
-})
+});
 //选择时间范围
 $('.timeSure').on('click',function () {
     var from = $('.start').val();
@@ -100,7 +128,6 @@ var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts=
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
-    console.log(data)
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
@@ -129,10 +156,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
                         name='未命名';
                     }else {
-                        name=row.nick_name;
+                        name=row.uid;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
                         img='/static/images/unknown.png';
@@ -184,7 +211,7 @@ $('#user-1 .demo-radio').on('click',function () {
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
 var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
-    '&from_ts='+from_ts+'&to_ts='+to_ts+'&classify_id=1';
+    '&start_time='+from_ts+'&end_time='+to_ts+'&classify_id=1';
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
@@ -304,7 +331,7 @@ function activeUser(persondata) {
                     if (row.influence==''||row.influence=='null'||row.influence=='unknown'||!row.influence){
                         return '0';
                     }else {
-                        return row.influence;
+                        return row.influence.toFixed(2);
                     };
                 }
             },
@@ -336,7 +363,6 @@ function activeUser(persondata) {
     });
     $('#userList p').hide();
 }
-var act_user_list=[];
 function _judge() {
     if (act_user_list.length==0){
         $('.userList .addFocus').addClass('disableCss');
@@ -390,7 +416,7 @@ function comMent(_this){
     var txt = $(_this).prev().val();
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
-        var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+xnrUser+'&r_mid='+mid;
+        var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
@@ -402,7 +428,7 @@ function comMent(_this){
 function retweet(_this) {
     var txt = $(_this).parent().prev().text();
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?&xnr_user_no='+xnrUser+
+    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?&xnr_user_no='+ID_Num+
         '&text='+txt+'&r_mid='+mid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
@@ -413,15 +439,16 @@ function thumbs(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
     var txt = $(_this).parent().prev().text();
-    var post_url_4='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
-        '&uid='+uid+'&nick_name='+userRelName+'&text='+txt+'&timestamp='+timestamp;
-    public_ajax.call_request('get',post_url_4,postYES)
+    var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
+        '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
+    console.log(post_r_s_url)
+    public_ajax.call_request('get',post_r_s_url,postYES)
 };
 
 //关注该用户
 function focusThis(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var post_url_6='/weibo_xnr_monitor/attach_fans_follow/?xnr_user_no='+ID_NUM+'&uid='+uid;
+    var post_url_6='/weibo_xnr_monitor/attach_fans_follow/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',post_url_6,postYES)
 }
 
