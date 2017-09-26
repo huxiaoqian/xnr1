@@ -27,7 +27,7 @@ def ajax_lookup_weibo_keywordstring():
 #热门帖子
 #classify_id=全部用户 0，已关注用户 1，未关注用户-1
 #order_id=1,表示按时间排序，order_id=2，表示按热度排序，order_id=3，表示按敏感度排序，默认按时间排序
-#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002&classify_id=1&order_id=1
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_hot_posts/?from_ts=1479513600&to_ts=1479981600&weiboxnr_id=WXNR0002&classify_id=0&order_id=1
 @mod.route('/lookup_hot_posts/')
 def ajax_lookup_hot_posts():
     from_ts=request.args.get('from_ts','')
@@ -120,14 +120,14 @@ def ajax_attach_fans_batch():
 
 
 #活跃用户
-#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0004&classify_id=1&end_time=1504540800
+#test:http://219.224.134.213:9209/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id=WXNR0004&classify_id=1&start_time=1504224000&end_time=1504540800
 @mod.route('/lookup_active_weibouser/')
 def ajax_lookup_active_weibouser():
     weiboxnr_id=request.args.get('weiboxnr_id','')
     classify_id=request.args.get('classify_id','')
-    #start_time=int(request.args.get('start_time',''))
+    start_time=int(request.args.get('start_time',''))
     end_time=int(request.args.get('end_time'))
-    result=lookup_active_weibouser(classify_id,weiboxnr_id,end_time)
+    result=lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time)
     return json.dumps(result)
 
 
