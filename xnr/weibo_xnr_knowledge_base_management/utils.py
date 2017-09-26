@@ -146,7 +146,7 @@ def get_export_example_model(domain_name,role_name):
     task_id = domain_pinyin + '_' + role_en
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     with open(example_model_file_name,"r") as dump_f:
-        es_result = json.load(item,dump_f)
+        es_result = json.load(dump_f)
 
     return es_result
 

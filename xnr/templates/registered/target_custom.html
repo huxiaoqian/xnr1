@@ -197,6 +197,21 @@
         </div>
     </div>
 </div>
+
+<!--模板-->
+<div class="modal fade" id="modalList" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">模板列表</h4>
+            </div>
+            <div class="modal-body" id="MList">
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -211,25 +226,32 @@
         public_ajax.call_request('get',filesList,$file);
     };
     function $file(data) {
-        console.log(data)
-    }
-    function showData(evt){
-        var files = evt;
-        for(var i=0,f;f=files[i];i++){
-            var reader = new FileReader();
-            reader.onload = function (oFREvent) {
-                var relData = oFREvent.target.result;
-                console.log(relData);
-                var domainRole_url='/weibo_xnr_knowledge_base_management/export_example_model/?domain_name='+domain_name+
-                '&role_name='+role_name;
-                public_ajax.call_request('get',domainRole_url,storageData);
-            };
-            reader.readAsText(f,'GB2312');
+        if (data.length==0){
+            $('#prompt p').text('抱歉，暂无模板可以用。');
+            $('#prompt').modal('show');
+        }else {
+            var str='';
+            $.each(data,function (index,item) {
+                str+='<div style="display: inline-block;margin-right: 15px;padding:4px 7px;background-color:#0a4c73;cursor:pointer;' +
+                    'color: white;" onclick="shutModal(this)">' +
+                    '<span>领域：</span><b class="m-1">'+item.domain_name+'</b><span>' +
+                    '&nbsp;&nbsp;身份：</span><b class="m-2">'+item.role_name+'</b></div>';
+            });
+            $('#MList').html(str);
+            $('#modalList').modal('show');
         }
-    };
-    function storageData(data) {
-
     }
+    var $_A='',$_B='';
+    function shutModal(_this) {
+        var a=$(_this).find('.m-1').text();
+        var b=$(_this).find('.m-2').text();
+        $_A=a;$_B=b;
+        var showModal_url='/weibo_xnr_knowledge_base_management/export_example_model/?domain_name='+a+
+            '&role_name='+b+'&xnr_user_no='+ID_Num;
+        public_ajax.call_request('get',showModal_url,inModalData);
+        $('#modalList').modal('hide');
+    }
+
 </script>
 <script src="/static/js/target_custom-1.js"></script>
 {% endblock %}
