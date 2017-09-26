@@ -125,13 +125,12 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
 def get_show_example_model(xnr_user_no):
 
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})['hits']['hits']
+        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})
     result_all = []
-    if es_results:
-        for result in es_results:
-            result = result['_source']
-            result_all.append(result)
-            
+    for result in es_results:
+        result = result['_source']
+        result_all.append(result)
+        
     return result_all
 
 
@@ -322,6 +321,7 @@ def get_show_domain_description(xnr_user_no,domain_name):
     item['political_side'] = political_side_list_chinese
 
     return item
+
 def get_show_domain_role_info(domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')

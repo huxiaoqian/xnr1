@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 import time
-from selenium impoer webdriver
+from selenium import webdriver
 from selenium.webdriver.support.select import Select
 
 def change_userinfo(uname, pwd, profile_info_dict):
