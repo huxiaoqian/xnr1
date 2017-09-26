@@ -41,7 +41,7 @@ def show_report_typecontent(report_type):
 				'filter':{
 					'bool':{
 						'must':{
-							'term':{'report_type':report_type}
+							'terms':{'report_type':report_type}
 						}
 					}					
 				}
