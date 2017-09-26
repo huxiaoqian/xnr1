@@ -16,14 +16,17 @@ from global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_fee
                         flow_text_index_name_pre,\
                         portrait_index_name,portrait_index_type,\
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
-                        weibo_xnr_index_name,weibo_xnr_index_type
+                        weibo_xnr_index_name,weibo_xnr_index_type,xnr_flow_text_index_name_pre,\
+                        xnr_flow_text_index_type,\
+                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
                         
 from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
 
 #from utils import xnr_user_no2uid,uid2nick_name_photo
 from global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
-from time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list
+from time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list,\
+                        get_timeset_indexset_list
 from parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
                         TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
 
@@ -467,6 +470,63 @@ def uid2nick_name_photo(uid):
         
     return nick_name,photo_url
 
+#统计信息表
+def create_xnr_history_info_count(xnr_user_no,current_date):
+    #create_date=ts2datetime(create_time)
+    weibo_xnr_flow_text_name=xnr_flow_text_index_name_pre+current_date
+
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no}
+                }
+            }
+        },
+        'aggs':{
+            'all_task_source':{
+                'terms':{
+                    'field':'task_source'
+                }
+            }
+        }
+    }
+
+    xnr_user_detail=dict()
+    #时间
+    xnr_user_detail['date_time']=current_date
+    try:
+        xnr_result=es_xnr.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+        #今日总粉丝数
+        for item in xnr_result['hits']['hits']:
+            xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+        # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
+        for item in xnr_result['aggregations']['all_task_source']['buckets']:
+            if item['key'] == 'daily_post':
+                xnr_user_detail['daily_post_num']=item['doc_count']
+            elif item['key'] == 'business_post':
+                xnr_user_detail['business_post_num']=item['doc_count']
+            elif item['key'] == 'hot_post':
+                xnr_user_detail['hot_follower_num']=item['doc_count']
+        #总发帖量
+        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']
+    except:
+        xnr_user_detail['user_fansnum']=0
+        xnr_user_detail['daily_post_num']=0
+        xnr_user_detail['business_post_num']=0
+        xnr_user_detail['hot_follower_num']=0
+        xnr_user_detail['total_post_sum']=0
+
+    count_id=xnr_user_no+'_'+current_date
+    xnr_user_detail['xnr_user_no']=xnr_user_no
+
+    # try:
+    #     es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=xnr_user_detail,id=count_id)
+    #     mark=xnr_user_detail
+    # except:
+    #     mark=dict()
+    return xnr_user_detail
+
 def cron_compute_mark():
 
     xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
@@ -488,18 +548,30 @@ def cron_compute_mark():
 
         _id = xnr_user_no + '_' + current_date
 
-        item = {}
-        item['xnr_user_no'] = xnr_user_no
-        item['influence'] = influence
-        item['penetration'] = penetration
-        item['safe'] = safe
-        item['date'] = current_date
-        item['timestamp'] = current_time_new
+        xnr_user_detail = create_xnr_history_info_count(xnr_user_no,current_date)
 
-        es.index(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
-            id=_id,body=item)
+        #item = {}
+        #xnr_user_detail['xnr_user_no'] = xnr_user_no
+        xnr_user_detail['influence'] = influence
+        xnr_user_detail['penetration'] = penetration
+        xnr_user_detail['safe'] = safe
+        #xnr_user_detail['date'] = current_date
+        xnr_user_detail['timestamp'] = current_time_new
 
-        print 'item::',item
+        # es.index(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
+        #     id=_id,body=item)
+
+        try:
+
+            es.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+                id=_id,body=xnr_user_detail)
+            
+            mark = True
+
+        except:
+            mark = False
+
+        return mark
 
 if __name__ == '__main__':
 
