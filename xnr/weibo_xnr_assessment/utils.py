@@ -16,7 +16,8 @@ from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo
                         flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                         flow_text_index_name_pre,weibo_report_management_index_name,weibo_report_management_index_type,\
                         portrait_index_name,portrait_index_type,xnr_flow_text_index_type,\
-                        weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type
+                        weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
+                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -57,12 +58,12 @@ def get_influence_total_trend(xnr_user_no):
     total_dict['day_num']['at'] = at_dict['day_num']
     total_dict['day_num']['private'] = private_dict['day_num']
 
-    total_dict['growth_rate']['fans'] = round(fans_dict['growth_rate'],2)
-    total_dict['growth_rate']['retweet'] = round(retweet_dict['growth_rate'],2)
-    total_dict['growth_rate']['comment'] = round(comment_dict['growth_rate'],2)
-    total_dict['growth_rate']['like'] = round(like_dict['growth_rate'],2)
-    total_dict['growth_rate']['at'] = round(at_dict['growth_rate'],2)
-    total_dict['growth_rate']['private'] = round(private_dict['growth_rate'],2)
+    total_dict['growth_rate']['fans'] = fans_dict['growth_rate']
+    total_dict['growth_rate']['retweet'] = retweet_dict['growth_rate']
+    total_dict['growth_rate']['comment'] = comment_dict['growth_rate']
+    total_dict['growth_rate']['like'] = like_dict['growth_rate']
+    total_dict['growth_rate']['at'] = at_dict['growth_rate']
+    total_dict['growth_rate']['private'] = private_dict['growth_rate']
 
     return total_dict
 
@@ -81,12 +82,11 @@ def compute_growth_rate_total(day8_dict,total8_dict):
             print 'total_num_lastday:::',total_num_lastday
             if not total_num_lastday:
                 total_num_lastday = 1
-            total_dict['growth_rate'][timestamp] = float(day_num)/total_num_lastday
+            total_dict['growth_rate'][timestamp] = round(float(day_num)/total_num_lastday,2)
             total_dict['day_num'][timestamp] = day8_dict[timestamp]
             total_dict['total_num'][timestamp] = total8_dict[timestamp]
         except:
             continue
-            #print '123123'
 
     return total_dict
 
@@ -637,14 +637,14 @@ def get_influ_private_num(xnr_user_no):
 def compute_influence_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-09-10')
+        current_time = datetime2ts('2017-09-26')
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
+    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
             id=_id)['_source']
 
     influence = get_result['influence']
@@ -659,14 +659,14 @@ def compute_influence_num(xnr_user_no):
 def compute_penetration_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-09-10')
+        current_time = datetime2ts('2017-09-26')
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
+    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
             id=_id)['_source']
 
     pene_mark = get_result['penetration']
@@ -706,11 +706,17 @@ def penetration_total(xnr_user_no):
         warning_report_total[timestamp] = float(warning_report['event'][timestamp] + \
             warning_report['user'][timestamp] + warning_report['tweet'][timestamp])/3
 
-    total_dict['follow_group'] = round(follow_group['sensitive_info'],2)
-    total_dict['fans_group'] = round(fans_group['sensitive_info'],2)
-    total_dict['self_info'] = round(self_info['sensitive_info'],2)
-    total_dict['warning_report_total'] = round(warning_report_total,2)
-    total_dict['feedback_total'] = round(feedback_total['sensitive_info'],2)
+    # total_dict['follow_group'] = round(follow_group['sensitive_info'],2)
+    # total_dict['fans_group'] = round(fans_group['sensitive_info'],2)
+    # total_dict['self_info'] = round(self_info['sensitive_info'],2)
+    # total_dict['warning_report_total'] = round(warning_report_total,2)
+    # total_dict['feedback_total'] = round(feedback_total['sensitive_info'],2)
+
+    total_dict['follow_group'] = follow_group['sensitive_info']
+    total_dict['fans_group'] = fans_group['sensitive_info']
+    total_dict['self_info'] = self_info['sensitive_info']
+    total_dict['warning_report_total'] = warning_report_total
+    total_dict['feedback_total'] = feedback_total['sensitive_info']
 
     return total_dict
 
@@ -1086,14 +1092,14 @@ def get_pene_warning_report_sensitive(xnr_user_no):
 def compute_safe_num(xnr_user_no):
     
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-09-10')
+        current_time = datetime2ts('2017-09-26')
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
+    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
             id=_id)['_source']
 
     safe_mark = get_result['safe']

@@ -15,7 +15,7 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_example_model_index_type,profile_index_name,profile_index_type
 from xnr.time_utils import ts2datetime
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
-                        EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME
+                        EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 '''
@@ -42,6 +42,26 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
 
     es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
     item = es_result
+
+    # 政治倾向
+    political_side = json.loads(item['political_side'])[0][0]
+
+    if political_side == 'mid':
+        item['political_side'] = u'中立'
+    elif political_side == 'left':
+        item['political_side'] = u'左倾'
+    else:
+        item['political_side'] = u'右倾'
+
+    # 心理特征
+    psy_feature_list = []
+
+    psy_feature = json.loads(item['psy_feature'])
+
+    for i in range(TOP_PSY_FEATURE):
+        psy_feature_list.append(psy_feature[i][0])
+
+    item['psy_feature'] = psy_feature_list
 
     role_group_uids = json.loads(item['member_uids'])
 
