@@ -18,9 +18,19 @@ function field(data) {
         public_ajax.call_request('get',creat_url,creat_1)
     });
 }
-
+//模板导入
+var modalAllData;
+function inModalData(data) {
+    console.log(data)
+    modalAllData=data;
+    $(".field input[type='radio'][value='"+data.domains+"']").attr("checked",true);
+    var creat_url='/weibo_xnr_create/domain2role/?domain_name='+data.domains;
+    public_ajax.call_request('get',creat_url,creat_1);
+}
+//==========模板
 var domainName='',roleName='';
-
+if ($_A){domainName=$_A};
+if ($_B){roleName=$_B};
 function creat_1(data) {
     addLabel(data,'opt-1','demo2');
 }
@@ -42,7 +52,7 @@ function addLabel(data,className,name) {
                     ary.push(item[0].toString());
                 });
                 _string=labelSTR(ary,n[k]);
-            }else if(k==1){
+            }else if (k==1){
                 $.each(data['psy_feature'],function (index,item) {
                     ary.push(item[0].toString());
                 });
@@ -78,7 +88,9 @@ function labelSTR(data,name,radioCheckbox='radio') {
             '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
             '</label>';
+        $("input[type='"+radioCheckbox+"'][value='"+roleName+"']").attr("checked",true);
     }
+
     return str;
 }
 
