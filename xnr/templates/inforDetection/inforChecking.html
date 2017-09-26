@@ -45,6 +45,9 @@
     .hot_post .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
     }
+    #userList {
+        padding:0!important;
+    }
     /**/
     .demo-label{display:inline-block;margin:5px 0 0 10px;width:110px;cursor: pointer;}
     .demo-radio{display:none}
@@ -125,15 +128,15 @@
                     <span style="display: inline-block;width: 70px;">分类：</span>
                     <div id="theme-2" style="display: inline-block;">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo-radio">
+                            <input class="demo-radio" type="radio" name="demo-radio" value="0" checked>
                             <span class="demo-radioInput"></span> 全部用户
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo-radio" value="1" checked>
+                            <input class="demo-radio" type="radio" name="demo-radio" value="1">
                             <span class="demo-radioInput"></span> 已关注用户
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo-radio" value="0">
+                            <input class="demo-radio" type="radio" name="demo-radio" value="-1">
                             <span class="demo-radioInput"></span> 未关注用户
                         </label>
                     </div>
@@ -192,12 +195,12 @@
             <div class="user-2" style="margin-left: 30px;">
                 <span style="display:inline-block;width:70px;">分类：</span>
                 <div id="user-1" style="display: inline-block;">
-                    <!--<label class="demo-label">-->
-                        <!--<input class="demo-radio" type="radio" name="deadio">-->
-                        <!--<span class="demo-radioInput"></span> 全部用户-->
-                    <!--</label>-->
                     <label class="demo-label">
-                        <input class="demo-radio" type="radio" name="deadio" value="1" checked>
+                        <input class="demo-radio" type="radio" name="deadio" value="0" checked>
+                        <span class="demo-radioInput"></span> 全部用户
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="deadio" value="1">
                         <span class="demo-radioInput"></span> 已关注用户
                     </label>
                     <label class="demo-label">
@@ -231,11 +234,11 @@
                     <span style="position: relative;top:-3px;">虚拟人选择：</span>
                     <label class="demo-label" style="margin-bottom:0;">
                         <input class="demo-radio" type="radio" name="xnr" value='my_xnrs' checked>
-                        <span class="demo-checkbox demo-radioInput"></span> 我的虚拟人
+                        <span class="demo-checkbox demo-radioInput"></span> 私有
                     </label>
                     <label class="demo-label" style="margin-bottom:0;">
                         <input class="demo-radio" type="radio" name="xnr" value='all_xnrs'>
-                        <span class="demo-checkbox demo-radioInput"></span> 所有虚拟人
+                        <span class="demo-checkbox demo-radioInput"></span> 共享
                     </label>
                 </div>
                 <div class="word-1" style="margin: 10px;">

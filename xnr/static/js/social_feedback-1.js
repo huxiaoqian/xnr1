@@ -28,6 +28,7 @@ function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
         var mid;
         if (idbox=='comment-1'){mid='reply_comment'}else {mid='reply_retweet'}
+        console.log(data)
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
             data:data,
@@ -55,7 +56,7 @@ function com(data) {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        var name,txt,img;
+                        var name,txt,img,time;
                         if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                             name='未命名';
                         }else {
@@ -70,6 +71,11 @@ function com(data) {
                             txt='暂无内容';
                         }else {
                             txt=row.text;
+                        };
+                        if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                            time='未知';
+                        }else {
+                            time=getLocalTime(row.timestamp);
                         };
                         var star1='<img src="/static/images/level.png" alt="">',
                             star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
@@ -96,6 +102,8 @@ function com(data) {
                             user='相互关注用户';
                         }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
                             user='未关注用户';
+                        }else if (row.weibo_type=='self'){
+                            user='用户自己（'+row.nick_name+'）';
                         }
                         var str=
                             '<div class="commentAll">'+
@@ -103,7 +111,7 @@ function com(data) {
                             '        <img src="'+img+'" alt="" class="com-head">'+
                             '        <div class="com com-1">'+
                             '            <b class="com-1-name">来自 '+user+'</b>&nbsp;&nbsp;&nbsp;'+
-                            '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;&nbsp;'+
+                            '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;&nbsp;'+
                             '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                             '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                             '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
@@ -153,6 +161,7 @@ function com(data) {
 }
 //====私信回复====
 function letter(data) {
+    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,
@@ -180,7 +189,7 @@ function letter(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
+                    var name,txt,img,time;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
@@ -196,6 +205,11 @@ function letter(data) {
                     }else {
                         txt=row.text;
                         // console.log(row.text.split('\n'))
+                    };
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                        time='未知';
+                    }else {
+                        time=getLocalTime(row.timestamp);
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
                         star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
@@ -229,7 +243,7 @@ function letter(data) {
                         '        <img src="'+img+'" alt="" class="let-head">'+
                         '        <div class="let let-1">'+
                         '            <b class="let-1-name">来自 '+user+'&nbsp;'+name+'</b>&nbsp;&nbsp;&nbsp;'+
-                        '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;'+
+                        '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;'+
                         '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
@@ -301,8 +315,8 @@ function reply(data) {
                     }else {
                         img=row.photo_url;
                     };
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
-                        time='暂无内容';
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                        time='未知';
                     }else {
                         time=getLocalTime(row.timestamp);
                     };
@@ -421,7 +435,7 @@ function focus(data) {
                     }else {
                         name=row.nick_name;
                     };
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
                         time='未知';
                     }else {
                         time=getLocalTime(row.timestamp);

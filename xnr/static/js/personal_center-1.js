@@ -163,6 +163,7 @@ function has_table(has_data) {
 };
 function not_yet(no_data) {
     var undone_person=eval(no_data);
+    console.log(undone_person)
     $('.undone_list #undonelist').bootstrapTable('load', undone_person);
     $('.undone_list #undonelist').bootstrapTable({
         data:undone_person,
@@ -198,8 +199,8 @@ function not_yet(no_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'){
-                        return '暂无';
+                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'||!row.create_time){
+                        return '未知';
                     }else {
                         return getLocalTime(row.create_time);
                     };
