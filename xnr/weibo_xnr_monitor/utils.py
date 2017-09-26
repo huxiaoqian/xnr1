@@ -6,7 +6,7 @@ weibo information monitor function about database task
 import sys
 import json
 #import time,datetime
-from xnr.time_utils import ts2datetime,datetime2ts,ts2datetimestr
+from xnr.time_utils import ts2datetime,datetime2ts,ts2datetimestr,get_xnr_flow_text_index_listname
 from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
@@ -15,8 +15,9 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
                              weibo_bci_index_name_pre,weibo_bci_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
-from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE
+from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
+from xnr.global_config import S_TYPE
 
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
@@ -32,7 +33,6 @@ def lookup_weiboxnr_concernedusers(weiboxnr_id):
 #input:from_ts,to_ts,weiboxnr_id
 #output:keywords_dict,it's used to create wordcloud
 def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
-    
     #step 1 :adjust the time condition for time
     from_date_ts=datetime2ts(ts2datetime(from_ts))
     to_date_ts=datetime2ts(ts2datetime(to_ts))
@@ -62,17 +62,19 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     #step 3:lookup the content
     flow_text_index_name_list = []
+    xnr_flow_text_index_name_list = []
     for range_item in range_time_list:
         iter_condition_list=[item for item in user_condition_list]
         iter_condition_list.append(range_item)
 
         range_from_ts=range_item['range']['timestamp']['gte']
         range_from_date=ts2datetime(range_from_ts)
-        flow_text_index_name=flow_text_index_name_pre+range_from_date
-        flow_text_index_name_list.append(flow_text_index_name)
-        #print flow_text_index_name
-        #print iter_condition_list
-    #print iter_condition_list    
+        if S_TYPE == 'test':
+            flow_text_index_name=flow_text_index_name_pre+range_from_date
+            flow_text_index_name_list.append(flow_text_index_name)
+        else:
+            weibo_xnr_flow_text_index_name=xnr_flow_text_index_name_pre+range_from_date
+            xnr_flow_text_index_name_list.append(weibo_xnr_flow_text_index_name) 
     query_body={
         'query':{
         	'filtered':{
@@ -90,11 +92,12 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     }
 
     try:
-        #print '123'
-        flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-            body=query_body)['aggregations']['keywords']['buckets']
-        #print 'flow_text_exist:',flow_text_exist
-        #print '456'
+        if S_TYPE == 'test':
+            flow_text_exist=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
+        else:
+            flow_text_exist=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+                body=query_body)['aggregations']['keywords']['buckets']
     except:
         flow_text_exist=[]
 
@@ -104,6 +107,81 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 #lookup hot posts
 #input:from_ts,to_ts,weiboxnr_id,classify_id,search_content,order_id
 #output:weibo hot_posts content
+def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
+    #step 1 :adjust the time condition for time
+    from_date_ts=datetime2ts(ts2datetime(from_ts))
+    to_date_ts=datetime2ts(ts2datetime(to_ts))
+    xnr_flow_text_index_name_list=[]
+    if from_date_ts != to_date_ts:
+        iter_date_ts=from_date_ts
+        while iter_date_ts <= to_date_ts:            
+            index_name=xnr_flow_text_index_name_pre+ts2datetime(iter_date_ts)
+            xnr_flow_text_index_name_list.append(index_name)
+            iter_next_date_ts=iter_date_ts+DAY
+            iter_date_ts=iter_next_date_ts
+    else:
+        # lookup from_ts and to_ts ranges in the same index
+        index_name=xnr_flow_text_index_name_pre+ts2datetime(from_date_ts)
+        xnr_flow_text_index_name_list.append(index_name)
+        
+
+    #step 4:sort order condition set
+    if order_id==1:         #按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]         
+    elif order_id==2:       #按热度排序
+        sort_condition_list=[{'retweeted':{'order':'desc'}}]
+    elif order_id==3:       #按敏感度排序
+        sort_condition_list=[{'sensitive':{'order':'desc'}}]
+    else:                   #默认设为按时间排序
+        sort_condition_list=[{'timestamp':{'order':'desc'}}]
+
+    userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
+    #全部用户 0，已关注用户 1，未关注用户-1
+    range_time_list={'range':{'timestamp':{'gte':from_ts,'lt':to_ts}}}
+
+    user_condition_list=[]
+    if classify_id == 1:
+        user_condition_list=[{'bool':{'must':[{'terms':{'uid':userslist}},range_time_list]}}]
+    elif classify_id == -1:
+        user_condition_list=[{'bool':{'must_not':[{'terms':{'uid':userslist}},range_time_list]}}]
+    elif classify_id == 0:
+        user_condition_list=[{'match_all':{}}]
+
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':user_condition_list
+            }
+
+        },
+        'size':HOT_WEIBO_NUM,     
+        'sort':sort_condition_list
+        }
+
+    if S_TYPE == 'test':
+        try:
+            flow_text_index_name=['flow_text_2016-11-22','flow_text_2016-11-23','flow_text_2016-11-24']
+            es_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+                body=query_body)['hits']['hits']
+            hot_result=[]
+            for item in es_result:
+                hot_result.append(item['_source'])
+        except:
+            hot_result=[]
+    else:
+        try:
+            es_result=es_xnr.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+                body=query_body)['hits']['hits']
+            hot_result=[]
+            for item in es_result:
+                hot_result.append(item['_source'])
+        except:
+            hot_result=[]
+    return hot_result
+
+
+
+'''
 def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     #step 1 :adjust the time condition for time
     from_date_ts=datetime2ts(ts2datetime(from_ts))
@@ -172,7 +250,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
                         }
                     }
                 },
-            'size':MAX_SEARCH_SIZE,		
+            'size':100,		
             'sort':sort_condition_list
             }
         try:
@@ -185,6 +263,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
             result=[]
         hot_result.append(result)
     return hot_result
+'''
 
 #################微博操作##########
 #转发微博
@@ -340,29 +419,29 @@ def attach_fans_batch(xnr_user_no_list,fans_id_list,trace_type):
             #save_mark_list.append(save_mark)
     return mark_list
 
-
 #lookup acitve_user
 #input:classify_id,weiboxnr_id
 #output:active weibo_user info list
-def lookup_active_weibouser(classify_id,weiboxnr_id,end_time):
+def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     #step1: users condition
     #make sure the users range by classify choice
     userlist = lookup_weiboxnr_concernedusers(weiboxnr_id)
 
-    if classify_id==1:		#concrenedusers
-    	condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
-    elif classify_id==2:	#unconcrenedusers
-    	condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
+    if classify_id==1:      #concrenedusers
+        condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
+    elif classify_id==2:    #unconcrenedusers
+        condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
     else:
-    	condition_list=[{'match_all':{}}]
+        condition_list=[{'match_all':{}}]
     #print userlist,classify_id,condition_list
 
     #step 2:lookup users 
+    user_max_index=count_maxweibouser_influence(end_time)
     for item in condition_list:
         query_body={
 
             'query':item,
-            'size':MID_VALUE,		#查询影响力排名前500的用户即可
+            'size':HOT_WEIBO_NUM,       #查询影响力排名前500的用户即可
             }
         try:
             flow_text_exist=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
@@ -372,8 +451,13 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,end_time):
                 #微博数
                 item['_source']['weibos_sum']=count_weibouser_weibosum(uid,end_time)
                 #影响力
-                item['_source']['influence']=count_weibouser_influence(uid,end_time)
-                results.append(item['_source'])
+                user_index=count_weibouser_index(uid,end_time)
+                if user_max_index >0:
+                    item['_source']['influence']=user_index/user_max_index*100
+                else:
+                    item['_source']['influence']=0
+                if item['_source']['influence']>=INFLUENCE_MIN:
+                    results.append(item['_source'])
             results.sort(key=lambda k:(k.get('influence',0)),reverse=True)
         except:
             results=[]
@@ -397,16 +481,15 @@ def count_weibouser_weibosum(uid,end_time):
         'sort':{'timestamp':{'order':'desc'}}
     }
     try:
-    	weibo_result=es_xnr.search(index=index_name,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-    	for item in weibo_result:
-    		weibos_sum=item['_source']['weibos_sum']
+        weibo_result=es_xnr.search(index=index_name,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        for item in weibo_result:
+            weibos_sum=item['_source']['weibos_sum']
     except:
-    	weibos_sum=0
+        weibos_sum=0
     return weibos_sum
 
 #计算影响力
-def count_weibouser_influence(uid,end_time):
-    #now_time=int(time.time())
+def count_maxweibouser_influence(end_time):
     date_time=ts2datetimestr(end_time-DAY)
     index_name=weibo_bci_index_name_pre+date_time
     
@@ -418,21 +501,33 @@ def count_weibouser_influence(uid,end_time):
         'sort':{'user_index':{'order':'desc'}}
     }
     try:
-        max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        if S_TYPE == 'test':
+            temp_index_name='bci_20161121'
+            max_result=es_user_profile.search(index=temp_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        else:
+            max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
            max_user_index=item['_source']['user_index']
-
-        user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
-        user_index=user_result['user_index']
-        infulence_value=user_index/max_user_index*100
     except:
-        infulence_value=0
-    return infulence_value
+        max_user_index=0
+    return max_user_index
+
+def count_weibouser_index(uid,end_time):
+    try:
+        if S_TYPE == 'test':
+            temp_index_name='bci_20161121'
+            user_result=es_user_profile.get(index=temp_index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        else:
+            user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        user_index=user_result['user_index']
+    except:
+        user_index=0
+    return user_index
 
 #weibo_user_detail
 def weibo_user_detail(user_id):
-	result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user_id)['_source']
-	return result
+    result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user_id)['_source']
+    return result
             
 
 

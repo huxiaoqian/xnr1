@@ -91,8 +91,9 @@ body {
 }
 #container .type_page #content .replyEvery .rep-1-name,
 #container .type_page #content .focusEvery .foc-1-name {
-    font-size: 20px;
+    /*font-size: 20px;*/
     font-weight: 900;
+    color: #fa7d3c;
 }
 #container .type_page #content .replyEvery .rep-1-name{
     font-size: 14px;
@@ -102,11 +103,16 @@ body {
     color: silver;
     font-size: 12px;
 }
+#container .type_page #content .focusEvery .foc-2 .foc-1-option {
+    color: silver;
+    font-size: 12px;
+}
 #container .type_page #content .focusEvery .foc-2 p{
     font-size: 12px;
     margin: 10px 0;
 }
-#container .type_page #content .focusEvery .foc-1 .foc-1-option b {
+#container .type_page #content .focusEvery .foc-1 .foc-1-option b,
+#container .type_page #content .focusEvery .foc-2 .foc-1-option b {
     color:#ec7a7a;
 }
 #container .type_page #content .replyEvery .rep-1-time {
@@ -131,6 +137,9 @@ body {
     /*white-space: nowrap;*/
     /*overflow: hidden;*/
     /*text-overflow: ellipsis;*/
+    max-width: 730px;
+    width: 100%;
+    display: block;
 }
 #container .type_page #content .commentEvery .com-3 .com-3-reply,
 #container .type_page #content .forwardEvery .for-3 .for-3-reply,

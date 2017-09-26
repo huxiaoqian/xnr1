@@ -62,10 +62,34 @@ def find_port(exist_port_list):
 
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
+    qq_group_exist_list = []
     qq_number = xnr_info['qq_number']
-    qq_groups = xnr_info['qq_groups'].split(',')
+    qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
     qqbot_mc = xnr_info['qqbot_mc']
     nickname = xnr_info['nickname']
+    access_id = xnr_info['access_id']
+
+    query_body_qq_exist = {
+        'query':{
+            'term':{'qq_number':qq_number}
+        }
+    }
+
+    search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+        body=query_body_qq_exist)['hits']['hits']
+
+    if search_result:
+        return ['当前qq已经被添加！',qq_group_exist_list]
+    
+
+    query_body_qq_group_exist = {
+        'query':{
+            'bool':{
+                'must'
+            }
+        }
+    }
+
     
     # active_time = xnr_info[3]
     create_ts = xnr_info['create_ts']
@@ -91,11 +115,13 @@ def create_qq_xnr(xnr_info):
         es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
         body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'create_ts':create_ts,\
                 'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no})
-        result = 1
+        result = True
     except:
-        result = 0
+        result = False
     print 'result:', result
-    if result == 1:
+    if result == True:
+        #qqbot_port = '8199'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
         #qqbot_port = '8190'
         qqbot_num = qq_number
         qqbot_port = str(qqbot_port)

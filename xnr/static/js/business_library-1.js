@@ -181,6 +181,7 @@ function creatTYPE() {
 var time_url='/weibo_xnr_knowledge_base_management/show_date_remind/';
 public_ajax.call_request('get',time_url,time);
 function time(data) {
+    console.log(data)
     $('#timeWarn').bootstrapTable('load', data);
     $('#timeWarn').bootstrapTable({
         data:data,
@@ -207,6 +208,21 @@ function time(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+            },
+            {
+                title: "事件名称",//标题
+                field: "date_name",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.date_name==''||row.date_name=='null'||row.date_name=='unknown'){
+                        return '暂无';
+                    }else {
+                        return row.date_name;
+                    }
+                },
             },
             {
                 title: "关键词",//标题
@@ -247,7 +263,7 @@ function time(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     return '<span style="cursor: pointer;" onclick="delTime(\''+row.create_time+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="modifyTime(\''+row.id+'\',\''+row.keywords+'\',\''+row.create_type+
+                        '<span style="cursor: pointer;" onclick="modifyTime(\''+row.id+'\',\''+row.keywords+'\',\''+row.create_type+'\',\''+row.date_name+
                         '\')"><i title="修改节点" class="icon icon-edit"></i></span>';
                 }
             },
@@ -275,32 +291,47 @@ $('.addNode').on('click',function () {
             '-o-transform': 'translate(0%)',
             'transform': 'translate(0%)'
         });
+        $(".timeVal3").css({
+            '-webkit-transform': 'translate(0%)',
+            '-moz-transform': 'translate(0%)',
+            '-ms-transform': 'translate(0%)',
+            '-o-transform': 'translate(0%)',
+            'transform': 'translate(0%)'
+        });
         adT=1;
     }else {
         var word=$('.timeVal2').val().toString().replace(/,/g,'，');
         var time=$('.timeVal1').val();
+        var name=$('.timeVal3').val();
         if (word==''||time==''){
             $('#pormpt p').text('敏感词或事件节点不能为空。');
             $('#pormpt').modal('show');
             $(this).html('<i class="icon icon-plus"></i>&nbsp;&nbsp;<b>添加敏感词</b>');
             $(".timeVal1").css({
-                '-webkit-transform': 'translate(280%)',
-                '-moz-transform': 'translate(280%)',
-                '-ms-transform': 'translate(280%)',
-                '-o-transform': 'translate(280%)',
-                'transform': 'translate(280%)'
+                '-webkit-transform': 'translate(380%)',
+                '-moz-transform': 'translate(380%)',
+                '-ms-transform': 'translate(380%)',
+                '-o-transform': 'translate(380%)',
+                'transform': 'translate(380%)'
             });
             $(".timeVal2").css({
-                '-webkit-transform': 'translate(280%)',
-                '-moz-transform': 'translate(280%)',
-                '-ms-transform': 'translate(280%)',
-                '-o-transform': 'translate(280%)',
-                'transform': 'translate(280%)'
+                '-webkit-transform': 'translate(380%)',
+                '-moz-transform': 'translate(380%)',
+                '-ms-transform': 'translate(380%)',
+                '-o-transform': 'translate(380%)',
+                'transform': 'translate(380%)'
+            });
+            $(".timeVal3").css({
+                '-webkit-transform': 'translate(380%)',
+                '-moz-transform': 'translate(380%)',
+                '-ms-transform': 'translate(380%)',
+                '-o-transform': 'translate(380%)',
+                'transform': 'translate(380%)'
             });
             adT=0;
         }else {
             creatTYPE();
-            var addUrl='/weibo_xnr_knowledge_base_management/create_date_remind/?timestamp='+time+
+            var addUrl='/weibo_xnr_knowledge_base_management/create_date_remind/?date_name='+name+'&timestamp='+time+
                 '&keywords='+word+'&create_type='+creat_type;
             public_ajax.call_request('get',addUrl,addYES_time);
         }
@@ -315,20 +346,22 @@ function delTime(time) {
 }
 //修改时间节点敏感词
 var taskID='',timetype='';
-function modifyTime(_id,key,type) {
+function modifyTime(_id,key,type,name) {
     taskID=_id;
     timetype=type;
+    $('#time .name1').val(name);
     $('#time .time1').val(key);
     $('#time').modal('show');
 }
 function sureTime() {
+    var newNames=$('#time .name2').val();
     var newWords=$('#time .time2').val();
-    if (newWords==''){
+    if (newWords==''||newNames==''){
         $('#pormpt p').text('新的时间节点敏感词不能为空。');
         $('#pormpt').modal('show');
     }else {
         var plyURL='/weibo_xnr_knowledge_base_management/change_date_remind/?task_id='+taskID+'&keywords='+newWords
-        +'&create_type='+timetype;
+        +'&create_type='+timetype+'&date_name='+newNames;
         public_ajax.call_request('get',plyURL,addYES_time);
     }
 }

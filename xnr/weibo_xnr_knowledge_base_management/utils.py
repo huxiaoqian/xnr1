@@ -2,20 +2,148 @@
 #-*- coding:utf-8 -*-
 import json
 import pinyin
+import numpy as np
+from xnr.global_config import S_TYPE
 from xnr.global_utils import es_xnr as es
+from xnr.global_utils import es_user_portrait
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                             weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
-                            weibo_role_index_type
+                            weibo_role_index_type,weibo_example_model_index_name,\
+                            weibo_example_model_index_type,profile_index_name,profile_index_type
 from xnr.time_utils import ts2datetime
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict
+from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
+                        EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 '''
 领域知识库
 '''
+
+#use to merge dict
+#input: dict1, dict2, dict3...
+#output: merge dict
+def union_dict(*objs):
+    _keys = set(sum([obj.keys() for obj in objs], []))
+    _total = {}
+    for _key in _keys:
+        _total[_key] = sum([int(obj.get(_key, 0)) for obj in objs])
+    
+    return _total
+
+def get_generate_example_model(xnr_user_no,domain_name,role_name):
+
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    role_en = domain_ch2en_dict[role_name]
+
+    task_id = domain_pinyin + '_' + role_en
+
+    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
+    item = es_result
+
+    role_group_uids = json.loads(item['member_uids'])
+
+    mget_results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':role_group_uids})['docs']
+
+    topic_list = []
+    for mget_item in mget_results:
+        
+        if mget_item['found']:
+            keywords_list = json.loads(mget_item['_source']['keywords'])
+            topic_list.extend(keywords_list)
+    
+    topic_keywords_dict = {}
+    for topic_item in topic_list:
+        keyword = topic_item[0]
+        keyword_count = topic_item[1]
+        try:
+            topic_keywords_dict[keyword] += keyword_count
+        except:
+            topic_keywords_dict[keyword] = keyword_count
+
+    monitor_keywords_list = []
+    for i in range(3):
+        
+        keyword_max = max(topic_keywords_dict,key=topic_keywords_dict.get)
+        monitor_keywords_list.append(keyword_max)
+        del topic_keywords_dict[keyword_max]
+
+    item['monitor_keywords'] = '&'.join(monitor_keywords_list)
+
+    for mget_item in mget_results:
+        if mget_item['found']:
+            item['nick_name'] = mget_item['_source']['uname']
+            item['location'] = mget_item['_source']['location']
+            item['gender'] = mget_item['_source']['gender']
+            uid = mget_item['_source']['uid']
+            try:
+                profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+                if profile_results['description']:
+                    item['description'] = profile_results['description']
+                    break
+            except:
+                pass
+
+    item['business_goal'] = u'渗透'
+    item['daily_interests'] = u'数码'
+    # if S_TYPE == 'test':
+    #     user_mget_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
+    #     if user_mget_results
+    item['age'] = 30
+    item['career'] = u'自由职业'
+
+    active_time_list_np = np.array(json.loads(item['active_time']))
+    active_time_list_np_sort = np.argsort(-active_time_list_np)[:TOP_ACTIVE_TIME]
+    item['active_time'] = active_time_list_np_sort.tolist()
+
+    day_post_num_list = np.array(json.loads(item['day_post_num']))
+    item['day_post_num'] = np.mean(day_post_num_list).tolist()
+    
+    example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
+    
+    try:
+        with open(example_model_file_name,"w") as dump_f:
+            json.dump(item,dump_f)
+
+        
+        item_dict = dict()
+        item_dict['xnr_user_no'] = xnr_user_no
+        item_dict['domain_name'] = domain_name
+        item_dict['role_name'] = role_name
+
+        es.index(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_name,\
+            body=item_dict,id=task_id)
+
+        mark = True
+    except:
+        mark = False
+
+    return mark
+
+def get_show_example_model(xnr_user_no):
+
+    es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
+        body={'query':{'term':{'xnr_user_no':xnr_user_no}}})
+    result_all = []
+    for result in es_results:
+        result = result['_source']
+        result_all.append(result)
+        
+    return result_all
+
+
+def get_export_example_model(domain_name,role_name):
+    domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
+    role_en = domain_ch2en_dict[role_name]
+
+    task_id = domain_pinyin + '_' + role_en
+    example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
+    with open(example_model_file_name,"r") as dump_f:
+        es_result = json.load(item,dump_f)
+
+    return es_result
 
 def get_create_type_content(create_type,keywords_string,seed_users,all_users):
 
@@ -63,8 +191,8 @@ def domain_create_task(xnr_user_no,domain_name,create_type,create_time,submitter
         item_exist['group_size'] = ''
         
         item_exist['compute_status'] = 0  # 存入创建信息
-        es_xnr.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
-    
+        es.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
+
 
         mark = True
     except:
@@ -165,22 +293,22 @@ def get_show_domain_description(xnr_user_no,domain_name):
 
     item['group_size'] = es_result['group_size']
     item['description'] = es_result['description']
-    topic_preference_list = es_result['topic_preference']
+    topic_preference_list = json.loads(es_result['topic_preference'])
     topic_preference_list_chinese = []
     for topic_preference_item in topic_preference_list:
         topic_preference_item_chinese = topic_en2ch_dict[topic_preference_item[0]]
         topic_preference_list_chinese.append([topic_preference_item_chinese,topic_preference_item[1]])
 
     item['topic_preference'] = topic_preference_list_chinese
-    item['word_preference'] = es_result['top_keywords']
-    role_distribute_list = es_result['role_distribute']
+    item['word_preference'] = json.loads(es_result['top_keywords'])
+    role_distribute_list = json.loads(es_result['role_distribute'])
     role_distribute_list_chinese = []
     for role_distribute_item in role_distribute_list:
         role_distribute_item_chinese = domain_en2ch_dict[role_distribute_item[0]]
         role_distribute_list_chinese.append([role_distribute_item_chinese,role_distribute_item[1]])
 
     item['role_distribute'] = role_distribute_list_chinese
-    political_side_list = es_result['political_side']
+    political_side_list = json.loads(es_result['political_side'])
     political_side_list_chinese = []
     for political_side_item in political_side_list:
         if political_side_item[0] == 'mid':
@@ -197,8 +325,6 @@ def get_show_domain_description(xnr_user_no,domain_name):
 def get_show_domain_role_info(domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    print 'domain_name::',domain_name
-    print 'domain_pinyin::',domain_pinyin
     role_en = domain_ch2en_dict[role_name]
 
     task_id = domain_pinyin + '_' + role_en

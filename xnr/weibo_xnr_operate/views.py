@@ -16,7 +16,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_reply_unfollow,get_direct_search,get_related_recommendation,get_create_group,get_show_group,\
                 get_show_fans,get_add_sensor_user,get_delete_sensor_user,get_create_group_show_fans,\
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
-                get_show_trace_followers,get_image_path,get_add_private_white_uid
+                get_show_trace_followers,get_image_path,get_reply_total,get_show_domain
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
@@ -55,6 +55,13 @@ mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 #             return path
 #
+
+# 返回渗透领域
+@mod.route('/show_domain_second/')
+def ajax_show_domain():
+    #xnr_user_no = request.args.get('xnr_user_no','')
+    domain_name_dict = get_show_domain()
+    return json.dumps(domain_name_dict)
 
 # 获取图片路径
 @mod.route('/get_image_path/')
@@ -118,6 +125,11 @@ def ajax_submit_timing_post_task():
 
     task_detail['text'] = request.args.get('text','')
     #task_detail['task_status'] = request.args.get('task_status','')
+    
+    task_detail['p_url']  = json.loads(json.dumps(request.args.get('p_url','').encode('utf-8')))  
+    task_detail['rank'] = request.args.get('rank','')
+    task_detail['rankid'] = request.args.get('rankid','')
+
     task_detail['task_status'] = 0
     task_detail['remark'] = request.args.get('remark','')
 
@@ -177,8 +189,9 @@ def ajax_submit_hot_keyword_task():
     task_detail = dict()
 
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人 
-    task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid 
+    task_detail['mid'] = request.args.get('task_id','') # 当前代表微博的mid 
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
+    print '!!!!',task_detail['keywords_string']
     task_detail['compute_status'] = 0 # 尚未计算
     task_detail['submit_time'] = int(time.time()) # 当前时间
     task_detail['submit_user'] = request.args.get('submit_user','admin@qq.com') 
@@ -242,6 +255,22 @@ def ajax_bussiness_recomment_tweets():
 
 '''
 
+## 转发、评论、at回复
+@mod.route('/reply_total/')
+def ajax_reply_total():
+    task_detail = dict()
+    task_detail['tweet_type'] = request.args.get('tweet_type','')
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['text'] = request.args.get('text','').encode('utf-8')
+    task_detail['r_mid'] = request.args.get('r_mid','')
+    task_detail['mid'] = request.args.get('mid','')
+    task_detail['uid'] = request.args.get('uid','')
+    task_detail['retweet_option'] = request.args.get('retweet_option','')
+
+    mark = get_reply_total(task_detail)
+
+    return json.dumps(mark)
+
 # 评论及回复
 @mod.route('/show_comment/')
 def ajax_show_comment():
@@ -284,7 +313,6 @@ def ajax_reply_retweet():
     mark = get_reply_retweet(task_detail)
 
     return json.dumps(mark)
-
 
 # 私信及回复
 @mod.route('/show_private/')
@@ -462,12 +490,3 @@ def ajax_un_trace_follow_operate():
     results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
 
     return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
-
-# 添加私信白名单
-@mod.route('/add_private_white_uid/')
-def ajax_add_private_white_uid():
-	xnr_user_no = request.args.get('xnr_user_no','')
-	white_uid_string = request.args.get('white_uid_string','')    # 多个uid用中文逗号分开
-	results = get_add_private_white_uid(xnr_user_no,white_uid_string)
-
-	return json.dumps(results)

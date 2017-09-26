@@ -28,6 +28,7 @@ from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tw
 from xnr.weibo_xnr_warming.utils import show_date_warming
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
 from caculate_history_info import create_xnr_history_info_count
+from xnr.global_config import S_TYPE
 
 ##########################################
 #	step 2：show weibo_xnr 	information  #
@@ -685,7 +686,10 @@ def show_history_posting(require_detail):
 
 	date_range_start_ts=require_detail['start_time']
 	date_range_end_ts=require_detail['end_time']
-	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+	if S_TYPE == 'test':
+		weibo_xnr_flow_text_listname=['xnr_flow_text_2017-09-05']
+	else:
+		weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
 	#print weibo_xnr_flow_text_listname
 	query_body={
 		'query':{
