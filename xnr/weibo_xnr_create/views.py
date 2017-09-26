@@ -159,7 +159,7 @@ def ajax_show_xnr_info():
 
     return json.dumps(result)
 
-# 保存第三步信息1  绑定成功
+# 保存第三步信息1  绑定成功 
 @mod.route('/save_step_three_1/')
 def ajax_save_step_three_1():
     task_detail = dict()
@@ -168,7 +168,10 @@ def ajax_save_step_three_1():
     task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
 
+    results = get_add_other_info(task_detail)
     mark = get_save_step_three_1(task_detail)
+    #results = get_user_info(task_detail)
+
     return json.dumps(mark)  #True：保存成功  False：保存失败
 
 # 保存第三步信息2  关注成功

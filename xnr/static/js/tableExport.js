@@ -1,5 +1,3 @@
-
-
 (function(view){
     "use strict";
     var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -49,12 +47,16 @@
     view.tableExport = function(tableId, filename, type){
         var relDiv=$('#'+tableId).find('.post_center-every');
         var table=[];
-        $.each(relDiv,function (index,item) {
-            if ($(item).find("input[name='printData']").is(':checked')){
-                var t=$(item).parents('tr');
-                table.push(t[0]);
-            }
-        });
+        // $.each(relDiv,function (index,item) {
+        //     if ($(item).find("input[name='printData']").is(':checked')){
+        //         var t=$(item).parents('tr');
+        //         table.push(t[0]);
+        //     }
+        // });
+        for (var t in wordCurrentData){
+            table.push(wordCurrentData[t]);
+        }
+        console.log(table)
         var doc = view.document,
             //table = doc.getElementById(tableId),
             charSet = doc.characterSet

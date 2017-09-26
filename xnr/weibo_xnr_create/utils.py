@@ -88,16 +88,32 @@ def get_modify_userinfo(task_detail):
 
     return result
 
-def get_add_other_info(nick_name):
+def get_add_other_info(task_detail):
 
-    # #user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-    # get_userinfo(uname, pwd, uid)
-    # item_dict = {}
-    # item['nick_name'] = user['screen_name']
-    # item['location'] = user['location']
-    # item['gender'] = user['gender']
-    # item['age'] = user['age']
-    # item['description'] = user['description']
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    else:
+        account_name = weibo_phone_account
+
+    password = task_detail['password']
+
+    #user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    user = get_userinfo(account_name, password)
+    
+    item_dict = {}
+
+    if user:
+       
+        item_dict['nick_name'] = user['nick_name']
+        item_dict['location'] = user['location']
+        item_dict['gender'] = user['gender']
+        now_year = int(time.strftime('%Y',time.localtime(time.time())))
+        age = now_year - int(user['birth'][:4])
+        item_dict['age'] = age
+        item_dict['description'] = user['description']
 
     return item_dict
 
@@ -415,20 +431,18 @@ def get_save_step_one(task_detail):
 
 def get_save_step_two(task_detail):
 
-    #task_id = task_detail['task_id']
-    es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
-                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1 
-    else:
-        user_no_current = 1
+    nick_name = task_detail['nick_name']
 
-    task_detail['user_no'] = user_no_current
-    task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
+    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    task_id = es_result[0]['_source']['xnr_user_no']
+    item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
+
+    #task_detail['user_no'] = user_no_current
+    #task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
     #try:    
     #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
-    item_exist = dict()
+    #item_exist = dict()
 
     item_exist['submitter'] = task_detail['submitter']
     item_exist['user_no'] = task_detail['user_no']
@@ -451,47 +465,73 @@ def get_save_step_two(task_detail):
     item_exist['create_status'] = 1 # 第二步完成
     item_exist['xnr_user_no'] = task_id # 虚拟人编号
 
-    es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
+    #es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
+    es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
 
     mark = True
-    #except:        
-    #    mark = False
-    
+ 
     return mark
 
 def get_save_step_three_1(task_detail):
-    #task_id = task_detail['task_id']
-    #try:
-    #print 'task_detail:::',task_detail
-    nick_name = task_detail['nick_name'].encode('utf-8')
-    #operate = SinaOperateAPI()
-    #user_info = operate.getUserShow(screen_name=nick_name)
-    #uid = user_info['id']
-    try:
-        if task_detail['weibo_mail_account']:
-            uname = task_detail['weibo_mail_account']
+
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
+
+    query_body_exist = {
+        'query':{
+            'bool':{
+                'should':[
+                    {'term':{'weibo_mail_account':weibo_mail_account}},
+                    {'term':{'weibo_phone_account':weibo_phone_account}}
+                ]
+            }
+        }
+    }
+
+    exist_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body_exist)['hits']['hits']
+    mark = False
+    if not exist_results:
+        
+        try:
+            if task_detail['weibo_mail_account']:
+                uname = task_detail['weibo_mail_account']
+            else:
+                uname = task_detail['weibo_phone_account']
+            xnr = SinaLauncher(uname, task_detail['password'])
+            xnr.login()
+            uid = xnr.uid
+        except:
+            return '账户名或密码输入错误，请检查后输入！！'
+        #uid = getUserShow(screen_name=nick_name)['data']['uid']
+        # query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+        # es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+        # task_id = es_result[0]['_source']['xnr_user_no']
+        #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
+        item_exist = dict()
+        item_exist['uid'] = uid
+        item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
+        item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
+        item_exist['password'] = task_detail['password']
+        item_exist['create_status'] = 2 # 创建完成
+
+        es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
+                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+            user_no_current = user_no_max + 1 
         else:
-            uname = task_detail['weibo_phone_account']
-        xnr = SinaLauncher(uname, task_detail['password'])
-        xnr.login()
-        uid = xnr.uid
-    except:
-        return '账户名或密码输入错误，请检查后输入！！'
-    #uid = getUserShow(screen_name=nick_name)['data']['uid']
-    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
-    item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
-    item_exist['uid'] = uid
-    item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
-    item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
-    item_exist['password'] = task_detail['password']
-    item_exist['create_status'] = 2 # 创建完成
+            user_no_current = 1
 
-    # 更新 weibo_xnr表
-    es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
+        item_exist['user_no'] = user_no_current
+        task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
 
-    mark =True
+        item_exist['xnr_user_no'] = task_id
+
+        #  weibo_xnr表
+        #es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
+        es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)        
+
+        mark =True
         
     #except:        
         #mark = False
