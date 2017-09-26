@@ -141,9 +141,10 @@ def execute():
     print xnr.uid
 
 if __name__ == '__main__':
-    execute()
+    #execute()
     # user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
     # print user
     # execute()
     user = SinaOperateAPI().getUserShow(screen_name='巨星大大')
+
     print user

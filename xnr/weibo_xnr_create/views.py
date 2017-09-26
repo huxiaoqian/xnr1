@@ -11,7 +11,8 @@ from flask import Blueprint, url_for, render_template, request,\
 from utils import get_domain_info,get_role_info,get_role_sort_list,\
                 get_role2feature_info,get_recommend_step_two,get_recommend_follows,\
                 get_save_step_one,get_save_step_two,get_save_step_three_1,get_save_step_three_2,\
-                get_xnr_info,get_show_domain,get_show_weibo_xnr,get_nick_name_unique
+                get_xnr_info,get_show_domain,get_show_weibo_xnr,get_nick_name_unique,\
+                get_add_other_info,get_modify_userinfo
 #from weibo_publish_func import getUserShow
 from weibo_publish_func import newest_time_func
 #from utils import get_user_data
@@ -71,6 +72,30 @@ def ajax_recommend_step_two():
     #task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     recommend_results = get_recommend_step_two(task_detail)
     return json.dumps(recommend_results)
+
+# 根据昵称填充其他信息
+@mod.route('/add_other_info/')
+def ajax_add_other_info():
+
+    nick_name = request.args.get('nick_name','')
+    results = get_add_other_info(nick_name)
+
+    return json.dumps(results)
+
+# 修改第二步信息
+@mod.route('/modify_userinfo()/')
+def ajax_modify_userinfo():
+    task_detail = {}
+    task_detail['nick_name'] = request.args.get('nick_name','')
+    task_detail['age'] = request.args.get('age','')
+    task_detail['description'] = request.args.get('description','')
+    task_detail['location'] = request.args.get('location','')
+    task_detail['gender'] = request.args.get('gender','')
+
+
+    results = get_modify_userinfo(task_detail)
+
+    return json.dumps(results)
 
 #第三步绑定账户关注用户推荐
 @mod.route('/recommend_follows/')
