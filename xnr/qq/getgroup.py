@@ -3,6 +3,9 @@
 import subprocess
 from qqbot import _bot as bot
 from qqbot.utf8logger import INFO
+import sys
+sys.path.append('../')
+from global_utils import es_xnr as es,qq_xnr_index_name,qq_xnr_index_type
 
 def getgroup():
     result = {}
@@ -22,18 +25,18 @@ def getgroup_v2(qq_xnr):
     group_dict = {}
     #step0: get qqbot_port
     
-    try:
-        qq_xnr_es_result = es.get(index_name=qq_xnr_index_name,\
-                doc_type=qq_xnr_index_type, id=qq_xnr, _source=True)['_source']
-    except:
-        print 'qq_xnr is not exist'
-        return group_dict
+    #try:
+    qq_xnr_es_result = es.get(index=qq_xnr_index_name,\
+            doc_type=qq_xnr_index_type, id=qq_xnr, _source=True)['_source']
+    # except:
+    #     print 'qq_xnr is not exist'
+    #     return group_dict
     
     #step1: get group list
     #test
     #qqbot_port ='8199'
     qqbot_port = qq_xnr_es_result['qqbot_port']
-    p_str = 'qq ' + qqbot_port + ' list group'
+    p_str = 'qq ' + str(qqbot_port) + ' list group'
     p = subprocess.Popen(p_str, shell=True, \
             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     line_count = 0
@@ -41,6 +44,7 @@ def getgroup_v2(qq_xnr):
         line_count += 1
         if line_count >= 5 and line_count%2==1:
             item_line_list = line.split('|')
+            print 'item_line_list::',item_line_list.encode('utf-8')
             qq_group_number = str(int(item_line_list[2]))
             qq_group_name = item_line_list[3]
             group_dict[qq_group_number] = qq_group_name
@@ -48,6 +52,7 @@ def getgroup_v2(qq_xnr):
 
 if __name__ == '__main__':
     #groups = getgroup()
+    qq_xnr = 'QXNR0001'
     groups = getgroup_v2(qq_xnr)
     # for group in groups:
     #     group_name = group.name
