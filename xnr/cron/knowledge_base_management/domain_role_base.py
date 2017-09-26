@@ -231,56 +231,75 @@ def get_flow_text_datetime_list(date_range_end_ts):
 # output：近期微博包含上述关键词的微博用户群体的画像数据
 def detect_by_keywords(keywords,datetime_list):
     keyword_list = keywords
+    print 'keyword_list:::',keyword_list
+    print 'datetime_list::',datetime_list
     group_uid_list = set()
 
     if datetime_list == []:
         return []
     #keyword_query_list = []
     query_item = 'keywords_string'
+    flow_text_index_name_list = []
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
-        nest_query_list = []
-        for keyword in keyword_list:
-            #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
-            nest_query_list.append({'match':{query_item:keyword}})
-        #keyword_query_list.append({'bool':{'must':nest_query_list}})
+        flow_text_index_name_list.append(flow_text_index_name)
 
-        flow_text_index_name = flow_text_index_name_pre + datetime
-        count = MAX_DETECT_COUNT
-
-        white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
-        white_uid_list = []
-        with open(white_uid_path,'r') as f:
-            for line in f:
-                line = line.strip('\n')
-                white_uid_list.append(line)
-
-        white_uid_list = list(set(white_uid_list))
-        #print 'white_uid_list:::',white_uid_list
-        if len(nest_query_list) == 1:
-            SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
-        else:
-            SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+    nest_query_list = []
+    for keyword in keyword_list:
+        nest_query_list.append({'match':{query_item:keyword}})
+        #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
         
-        query_body = {
-            'query':{
-                'bool':{
-                    'should':nest_query_list,
-                    "minimum_should_match": SHOULD_PERCENT
-                }
-            },
-            'size':count,
-            'sort':[{'user_fansnum':{'order':'desc'}}]
-        }
-        es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                    body=query_body)['hits']['hits']
-        #'must_not':{'terms':{'uid':white_uid_list}},
-        for i in range(len(es_results)):
+    #keyword_query_list.append({'bool':{'must':nest_query_list}})
 
-            uid = es_results[i]['_source']['uid']
-            group_uid_list.add(uid)
-        group_uid_list = list(group_uid_list)
-        return group_uid_list
+    
+    count = MAX_DETECT_COUNT
+
+    white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+    white_uid_list = []
+    with open(white_uid_path,'r') as f:
+        for line in f:
+            line = line.strip()
+            white_uid_list.append(line)
+
+    white_uid_list = list(set(white_uid_list))
+    print 'white_uid_list:::',white_uid_list
+    if len(nest_query_list) == 1:
+        SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
+    else:
+        SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+    
+    query_body = {
+        'query':{
+            'bool':{
+                'should':nest_query_list,
+                "minimum_should_match": SHOULD_PERCENT,
+                'must_not':{'terms':{'uid':white_uid_list}}
+            }
+        },
+        'size':count,
+        'sort':[{'user_fansnum':{'order':'desc'}}]
+    }
+    # query_body = {
+    #     'query':{
+    #         'bool':{
+    #             'should':nest_query_list
+    #         }
+    #     },
+    #     'size':count,
+    #     'sort':[{'user_fansnum':{'order':'desc'}}]
+    # }
+    es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+                body=query_body)['hits']['hits']
+    #'must_not':{'terms':{'uid':white_uid_list}},
+    print 'flow_text_index_name_list::',flow_text_index_name_list
+    print 'query_body::',query_body
+    print 'es_results:::',es_results
+    for i in range(len(es_results)):
+
+        uid = es_results[i]['_source']['uid']
+        group_uid_list.add(uid)
+    group_uid_list = list(group_uid_list)
+    return group_uid_list
 
 
 

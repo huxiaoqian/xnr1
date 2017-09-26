@@ -84,7 +84,9 @@ def create_qq_xnr(xnr_info):
 
     query_body_qq_group_exist = {
         'query':{
-            ''
+            'bool':{
+                'must'
+            }
         }
     }
 
