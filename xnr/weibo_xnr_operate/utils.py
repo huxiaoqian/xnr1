@@ -31,12 +31,13 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                             index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
-                            weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
+                            weibo_domain_index_name,weibo_domain_index_type,weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
                             weibo_private_white_uid_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
-                                like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func#,at_tweet_func
+                                like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func,\
+                                reply_tweet_func #,at_tweet_func
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
@@ -44,6 +45,16 @@ from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TO
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
+
+def get_show_domain():
+    domain_name_dict = {}
+    query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
+    es_results = es.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,body=query_body)['hits']['hits']
+    if es_results:
+        for result in es_results:
+            result = result['_source']
+            domain_name_dict[result['domain_pinyin']] = result['domain_name']
+    return domain_name_dict
 
 def get_image_path(image_code):
 
@@ -74,13 +85,17 @@ def push_keywords_task(task_detail):
     print 'task_detail::',task_detail
 
     try:
-        task_id = task_detail['task_id']
-        xnr_user_no = task_detail['xnr_user_no']
+        item_dict = {}
+        item_dict['mid'] = task_detail['task_id']
+        item_dict['xnr_user_no'] = task_detail['xnr_user_no']
         keywords_string = '&'.join(task_detail['keywords_string'].encode('utf-8').split('，'))
-        task_detail['keywords_string'] = keywords_string
-        _id = xnr_user_no+'_'+task_id
+        item_dict['keywords_string'] = keywords_string
+        item_dict['compute_status'] = task_detail['compute_status']
+        item_dict['submit_time'] = task_detail['submit_time']
+        item_dict['submit_user'] = task_detail['submit_user']
+        _id = item_dict['xnr_user_no']+'_'+task_detail['task_id']
         es.index(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
-                id=_id,body=task_detail)
+                id=_id,body=item_dict)
         mark = True
     except:
         mark = False
@@ -404,8 +419,13 @@ def get_hot_content_recommend(xnr_user_no,task_id):
 def get_hot_subopinion(xnr_user_no,task_id):
     
     task_id_new = xnr_user_no+'_'+task_id
-    es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
+    es_task = []
+    try:
+        es_task = es.get(index=weibo_hot_keyword_task_index_name,doc_type=weibo_hot_keyword_task_index_type,\
                     id=task_id_new)['_source']
+    except:
+        return '尚未提交计算'
+
     if es_task:
         if es_task['compute_status'] != 2:
             return '正在计算'
@@ -571,6 +591,50 @@ def get_bussiness_recomment_tweets(sort_item):
 社交反馈
 '''
 
+def get_reply_total(task_detail):
+
+    text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
+    r_mid = task_detail['r_mid']
+    mid = task_detail['mid']
+    uid = task_detail['uid']
+    retweet_option = task_detail['retweet_option']
+
+
+    es_get_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+
+    weibo_mail_account = es_get_result['weibo_mail_account']
+    weibo_phone_account = es_get_result['weibo_phone_account']
+    password = es_get_result['password']
+
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+
+    # 发布微博
+
+    mark_reply = reply_tweet_func(account_name,password,text,r_mid,mid,uid)
+
+    mark_retweet = ['','']
+
+    if retweet_option == 'true':
+
+        mark_retweet = retweet_tweet_func(account_name,password,text,r_mid)
+
+    # 保存微博
+    try:
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
+
+    return mark_reply,mark_retweet
+
+
 def get_show_comment(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
@@ -599,6 +663,7 @@ def get_show_comment(task_detail):
             results_all.append(item['_source'])
 
     return results_all
+
 
 def get_reply_comment(task_detail):
 
@@ -660,7 +725,6 @@ def get_show_retweet(task_detail):
             results_all.append(item['_source'])
 
     return results_all
-
 
 def get_reply_retweet(task_detail):
     text = task_detail['text']
@@ -788,9 +852,39 @@ def get_show_at(task_detail):
 
     return results_all
 
-def get_reply_at():
+def get_reply_at(task_detail):
+    text = task_detail['text']
+    xnr_user_no = task_detail['xnr_user_no']
+    mid = task_detail['mid']
+    r_mid = task_detail['r_mid']
+    uid = task_detail['uid']
+
+    es_get_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+
+    weibo_mail_account = es_get_result['weibo_mail_account']
+    weibo_phone_account = es_get_result['weibo_phone_account']
+    password = es_get_result['password']
     
-    return []
+
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    elif weibo_phone_account:
+        account_name = weibo_phone_account
+    else:
+        return False
+
+    # 发布微博
+
+    mark = reply_tweet_func(account_name,password,text,r_mid,mid,uid)
+
+    # 保存微博
+    try:
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
+
+    return mark
 
 def get_show_fans(task_detail):
     xnr_user_no = task_detail['xnr_user_no']

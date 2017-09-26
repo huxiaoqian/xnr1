@@ -83,3 +83,17 @@ from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 
 # print 'results::',results
 
+#es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043525244676524')
+# es.delete(index='weibo_domain',doc_type='group',id='AV6396lYQIwrAS0usE0H')
+# es.delete(index='weibo_domain',doc_type='group',id='AV64pqMhS8CBAF2ZGzdS')
+# es.delete(index='weibo_domain',doc_type='group',id='AV63955tS8CBAF2ZGzdO')
+# es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
+es.delete(index='weibo_domain',doc_type='group',id='mao_fen_qun_ti')
+es.delete(index='weibo_domain',doc_type='group',id='xi_da_da_fen_si_qun')
+# es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043525622087918')
+# es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043433776005723')
+# es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043274014747152')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0003')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0005')
+# es.delete(index='qq_xnr',doc_type='user',id='QXNR0006')
+#es.update(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti',body={'doc':{'xnr_user_no':'WXNR0004'}})

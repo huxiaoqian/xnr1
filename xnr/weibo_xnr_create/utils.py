@@ -23,6 +23,7 @@ from xnr.time_utils import get_flow_text_index_list,datetime2ts
 from xnr.utils import nickname2uid,user_no2_id,_id2user_no
 #from xnr.weibo_publish_func import getUserShow
 from xnr.sina.userinfo import SinaOperateAPI
+from xnr.sina.change_userinfo import change_userinfo
 #from xnr.test_tianjin import get_user_portrait_data
 from xnr.sina.tools.Launcher import SinaLauncher
 '''
@@ -37,6 +38,68 @@ from parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,ACTIV
                         DAILY_INTEREST_TOP_USER
 from time_utils import get_flow_text_index_list
 '''
+
+def get_modify_userinfo(task_detail):
+    item_dict = {}
+    nick_name = task_detail['nick_name']
+    location_list = task_detail['location'].encode('utf-8').split('，')
+    item_dict['location_province'] = location_list[0]
+    item_dict['location_city'] = location_list[1]
+    item_dict['description'] = task_detail['description']
+    gender = task_detail['gender']
+    if gender == u'男':
+        item_dict['gender'] = 'man'
+    else:
+        item_dict['gender'] = 'woman'
+
+    age = task_detail['age']
+    birth_year = time.localtime().tm_year - age
+    month = '%02d'%random.randint(0,13)
+    day = '%02d'%random.randint(0,29)
+
+    item_dict['birth'] = [str(birth_year),month,day]
+
+    query_body = {  
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'nick_name':nick_name}
+                }
+            }
+        }
+    }
+    es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    xnr_result = es_results[0]
+
+    weibo_mail_account = xnr_result['weibo_mail_account']
+    weibo_phone_account = xnr_result['weibo_phone_account']
+
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    else:
+        account_name = weibo_phone_account
+
+    password = xnr_result['password']
+
+
+    result = change_userinfo(account_name, password, item_dict)
+
+    return result
+
+def get_add_other_info(nick_name):
+
+    user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+
+    item_dict = {}
+    item['nick_name'] = user['screen_name']
+    item['location'] = user['location']
+    item['gender'] = user['gender']
+    item['age'] = user['age']
+    item['description'] = user['description']
+
+    return item_dict
+
 
 def get_nick_name_unique(nick_name):
     query_body = {
@@ -60,8 +123,7 @@ def get_show_domain():
     if es_results:
         for result in es_results:
             result = result['_source']
-            print '!!!',result['domain_name']
-            domain_name_dict[result['domain_pinyin']] = json.loads(result['domain_name'])
+            domain_name_dict[result['domain_pinyin']] = result['domain_name']
     return domain_name_dict
 
 def get_show_weibo_xnr():
@@ -79,6 +141,7 @@ def get_role_sort_list(domain_name):
     try:
         es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)['_source']
 
+        #role_sort_list_en = json.loads(es_result['role_distribute'])
         role_sort_list_en = json.loads(es_result['role_distribute'])
         role_sort_list_zh = []
         for item in role_sort_list_en:

@@ -22,6 +22,8 @@ USER_CONTENT_NUM=3 #人物行为预警每个用户返回的敏感微博数量
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 # weibo
 SPEECH_WARMING_NUM=100 #言论预警数量
+HOT_WEIBO_NUM=50 #热门帖子、热门用户数量
+INFLUENCE_MIN=1 #影响力阈值
 
 MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
@@ -49,6 +51,9 @@ SENSITIVE_AT_RECOMMEND_USER_TOP = 10
 BCI_USER_NUMBER = 1000
 USER_POETRAIT_NUMBER = 1000
 
+## 实例模板：top活跃的时间段
+TOP_ACTIVE_TIME = 3
+
 ## 随机转发 起止时间 5min- 60min
 RETWEET_START_TS = 60*5  # 取决于定时扫描最小间隔
 RETWEET_END_TS = 60*60
@@ -61,6 +66,9 @@ SUB_OPINION_WEIBO_LIMIT = 3
 
 ## 读取hashtag
 UID_TXT_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_warming'
+
+## 生成实例模板
+EXAMPLE_MODEL_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/example_model/'
 
 # 主动社交，朋友圈推荐，weibo_user库中 friend_list字段
 FRIEND_LIST = ['3077463611','3925294372','1666458704','1663088660','3605949192','3700715461','5664244064','5764699905','2567277481']

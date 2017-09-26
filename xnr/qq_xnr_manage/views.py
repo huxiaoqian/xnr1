@@ -15,7 +15,6 @@ from xnr.qq.qrCode import getQRCode_v2
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
 
-
 @mod.route('/get_qr_code/')
 def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
@@ -33,6 +32,7 @@ def ajax_add_qq_xnr():
     nickname = request.args.get('qq_nickname','')
     qqbot_mc = request.args.get('qqbot_mc', 'sirtgdmgwiivbegf')
     remark = request.args.get('remark','')   # 备注
+    access_id = request.args.get('access_id','')
     # active_time = request.args.get('qq_active_time')
     create_time = int(time.time())
     xnr_info['qq_number'] = qq_number
@@ -40,6 +40,7 @@ def ajax_add_qq_xnr():
     xnr_info['nickname'] = nickname
     xnr_info['create_ts'] = create_time
     xnr_info['qqbot_mc'] = qqbot_mc
+    xnr_info['access_id'] = access_id
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
 

@@ -113,6 +113,7 @@ $(".customizeTime").keydown(function(e) {
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(data) {
+    console.log(data)
     historyTotalTable(data[0]);
     historyTotalLine(data[1]);
 }
@@ -404,6 +405,7 @@ function historyTotalTable(dataTable) {
             },
         ],
     });
+    $('#history-2 p').hide();
 }
 
 //定时发送任务列表
@@ -413,6 +415,7 @@ var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
 }
 function timingTask(data) {
+    console.log(data)
     $('#time').bootstrapTable('load', data);
     $('#time').bootstrapTable({
         data:data,
@@ -434,7 +437,7 @@ function timingTask(data) {
         columns: [
             {
                 title: "编号",//标题
-                field: "user_no",//键名
+                field: "xnr_user_no",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -448,7 +451,7 @@ function timingTask(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.task_source==''||row.task_source=='null'||row.task_source=='unknown'){
+                    if (row.task_source==''||row.task_source=='null'||row.task_source=='unknown'||!row.task_source){
                         return '未知';
                     }else {
                         return row.task_source;
@@ -463,7 +466,7 @@ function timingTask(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'){
+                    if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'||!row.operate_type){
                         return '未知';
                     }else {
                         return TYPE[row.operate_type];
@@ -531,6 +534,7 @@ function timingTask(data) {
             },
         ],
     });
+    $('#time p').hide();
 }
 
 //操作
@@ -744,6 +748,7 @@ function historyNews(data) {
             },
         ],
     });
+    $('#'+boxShoes+' p').hide();
 }
 //=====评论======
 //查看对话
@@ -996,6 +1001,7 @@ function focusOn(data) {
             },
         ],
     });
+    $('#focus p').hide();
 }
 //=====粉丝列表====
 $('.fansSEN .demo-label input').on('click',function () {
@@ -1163,6 +1169,7 @@ function fans(data) {
             },
         ],
     });
+    $('#fans p').hide();
 }
 //======查看详情===关注与否====
 

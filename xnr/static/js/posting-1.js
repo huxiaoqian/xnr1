@@ -82,96 +82,60 @@ function flow_faw(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "头像",//标题
-                field: "photo_url",//键名
+                title: "",//标题
+                field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
-                        return '<img src="/static/images/unknown.png" style="width: 30px;height: 30px;"/>'
-                    }else {
-                        return '<img src="'+row.photo_url+'" style="width: 30px;height: 30px;"/>'
-                    };
-                }
-            },
-            {
-                title: "昵称",//标题
-                field: "nick_name",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
+                    var name,txt,img,postTime,retweedTime,$_status;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        return row.uid;
+                        name='未命名';
                     }else {
-                        return row.nick_name;
+                        name=row.nick_name;
                     };
-                }
-            },
-            {
-                title: "微博发布时间",//标题
-                field: "timestamp",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
-                        return '未知';
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
                     }else {
-                        return getLocalTime(row.timestamp);
+                        img=row.photo_url;
                     };
-                }
-            },
-            {
-                title: "微博转发时间",//标题
-                field: "timestamp_set",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.timestamp_set==''||row.timestamp_set=='null'||row.timestamp_set=='unknown'){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.timestamp_set);
-                    };
-                }
-            },
-            {
-                title: "微博内容",//标题
-                field: "text",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
-                        return '无内容';
+                        txt='暂无内容';
                     }else {
-                        return '<p title="'+row.text+'"'+
-                            'style="width: 130px;margin:0 auto;white-space: nowrap;overflow: hidden;text-overflow: ellipsis">'+row.text+'</p>';
+                        txt=row.text;
                     };
-                }
-            },
-            {
-                title: "转发状态",//标题
-                field: "compute_status",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        postTime = '未知';
+                    }else {
+                        postTime = getLocalTime(row.timestamp);
+                    };
+                    if (row.timestamp_set==''||row.timestamp_set=='null'||row.timestamp_set=='unknown'){
+                        retweedTime = '未知';
+                    }else {
+                        retweedTime = getLocalTime(row.timestamp_set);
+                    };
                     if (row.compute_status == 0) {
-                        return '未转发'
+                        $_status = '未转发'
                     } else if (row.compute_status == 1) {
-                        return '已转发'
+                        $_status = '已转发'
                     } else {
-                        return '未知'
+                        $_status = '未知'
                     };
+                    var str=
+                        '<div class="post_perfect" style="margin: 10px 0;width: 950px;">'+
+                        '   <div class="post_center-hot">'+
+                        '       <img src="'+img+'" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                        '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;微博发布时间：'+postTime+'</a>&nbsp;&nbsp;'+
+                        '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;微博转发时间：'+retweedTime+'</a>&nbsp;&nbsp;'+
+                        '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;转发状态：'+$_status+'</a>&nbsp;&nbsp;'+
+                        '           <div class="center_2" style="text-align: left;margin: 10px 0;">'+txt+'</div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>';
+                    return str;
                 }
             },
         ],
@@ -305,14 +269,6 @@ function focus_main(data) {
         },
     });
 }
-Array.prototype.removeByValue = function(val) {
-    for(var i=0; i<this.length; i++) {
-        if(this[i] == val) {
-            this.splice(i, 1);
-            break;
-        }
-    }
-};
 function _judge() {
     if (mainUserUid.length==0){
         $('.reportNote-2 span.del_user').addClass('disableCss');
@@ -343,7 +299,19 @@ function addHeavySure() {
         $('#pormpt').modal('show');
     }else {
         var m=$('#addHeavyUser input:radio[name="heavy"]:checked').val();
-        var useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+        var useradd_url;
+        if(m=='uid_string'){
+            var reg = new RegExp("^[0-9]*$");
+            if(reg.test(m)){
+                useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+            }else {
+                $('#pormpt p').text('UID为数字。');
+                $('#pormpt').modal('show');
+            }
+        }else {
+            useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
+        }
+
         public_ajax.call_request('get',useradd_url,postYES)
     }
 }
@@ -371,10 +339,11 @@ function obtain(t) {
 $('#sure_post').on('click',function () {
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
-    var flag=$('.friends button b').text(),rank='';
+    var flag=$('.friends button b').text(),rank='',middle_timing='submit_tweet';
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
+    if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
     //原创
-    var post_url_1='/weibo_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+
+    var post_url_1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&operate_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank;
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
@@ -605,12 +574,12 @@ function hotWeibo(data) {
                         // '           </div>'+
                         '           <div class="center_3">'+
                         '               <span onclick="joinlab(this)"><i class="icon icon-upload-alt" title="加入语料库"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似微博"></i>&nbsp;&nbsp;相似微博</span>'+
-                        '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
+                        // '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似微博"></i>&nbsp;&nbsp;相似微博</span>'+
+                        // '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
                         '               <span onclick="related(this)"><i class="icon icon-stethoscope" title="事件子观点及相关微博"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
-                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i>&nbsp;&nbsp;<b class="forwarding">'+row.retweeted+'</b></span>'+
-                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i>&nbsp;&nbsp;<b class="comment">'+row.comment+'</b></span>'+
-                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="赞"></i></span>'+
+                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i>&nbsp;&nbsp;转发&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="赞"></i>&nbsp;&nbsp;赞</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -641,8 +610,8 @@ function submitViews(_this) {
         $('#pormpt p').text('观点不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var conViewsUrl='/weibo_xnr_operate/submit_hot_keyword_task/?xnr_user_no='+xnrUser+'&task_id='+taskID+'&keywords_string='+vale.replace(/，/g,'')+
-        'submit_user='+admin;
+        var conViewsUrl='/weibo_xnr_operate/submit_hot_keyword_task/?xnr_user_no='+xnrUser+'&task_id='+taskID+'&keywords_string='+vale.toString().replace(/,/g,'，')+
+        '&submit_user='+admin;
         public_ajax.call_request('get',conViewsUrl,conViews);
     }
 }
@@ -807,8 +776,10 @@ function related(_this) {
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
 function relatedWEIbo(data) {
-    if (data=='正在计算'||data=='尚未计算'){
-        $('#pormpt p').text('正在计算...');
+    console.log(data)
+    var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+    if (reg.test(data)){
+        $('#pormpt p').text(data);
         $('#pormpt').modal('show');
     }else {
         var dataNew=[];

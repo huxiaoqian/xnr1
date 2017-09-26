@@ -26,10 +26,12 @@ reload(sys)
 sys.path.append('../../')
 
 from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
-                        TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW
+                        TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW,\
+                        WHITE_UID_PATH, WHITE_UID_FILE_NAME
 
 from global_utils import r,weibo_target_domain_detect_queue_name,weibo_target_domain_analysis_queue_name,\
-                        es_flow_text,flow_text_index_name_pre,flow_text_index_type
+                        es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
+                        portrait_index_name,portrait_index_type
 from global_utils import es_xnr,weibo_domain_index_name,weibo_domain_index_type,\
                         weibo_role_index_name,weibo_role_index_type
 
@@ -229,30 +231,75 @@ def get_flow_text_datetime_list(date_range_end_ts):
 # output：近期微博包含上述关键词的微博用户群体的画像数据
 def detect_by_keywords(keywords,datetime_list):
     keyword_list = keywords
+    print 'keyword_list:::',keyword_list
+    print 'datetime_list::',datetime_list
     group_uid_list = set()
 
     if datetime_list == []:
         return []
     #keyword_query_list = []
     query_item = 'keywords_string'
+    flow_text_index_name_list = []
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
-        nest_query_list = []
-        for keyword in keyword_list:
-            nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
-        #keyword_query_list.append({'bool':{'must':nest_query_list}})
+        flow_text_index_name_list.append(flow_text_index_name)
 
-        flow_text_index_name = flow_text_index_name_pre + datetime
-        count = MAX_DETECT_COUNT
-        es_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                    body={'query':{'bool':{'must':nest_query_list}},'size':count,'sort':[{'user_fansnum':{'order':'desc'}}]})['hits']['hits']
+    nest_query_list = []
+    for keyword in keyword_list:
+        nest_query_list.append({'match':{query_item:keyword}})
+        #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
         
-        for i in range(len(es_results)):
+    #keyword_query_list.append({'bool':{'must':nest_query_list}})
 
-            uid = es_results[i]['_source']['uid']
-            group_uid_list.add(uid)
+    
+    count = MAX_DETECT_COUNT
 
-        return group_uid_list
+    white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+    white_uid_list = []
+    with open(white_uid_path,'r') as f:
+        for line in f:
+            line = line.strip()
+            white_uid_list.append(line)
+
+    white_uid_list = list(set(white_uid_list))
+    print 'white_uid_list:::',white_uid_list
+    if len(nest_query_list) == 1:
+        SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
+    else:
+        SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+    
+    query_body = {
+        'query':{
+            'bool':{
+                'should':nest_query_list,
+                "minimum_should_match": SHOULD_PERCENT,
+                'must_not':{'terms':{'uid':white_uid_list}}
+            }
+        },
+        'size':count,
+        'sort':[{'user_fansnum':{'order':'desc'}}]
+    }
+    # query_body = {
+    #     'query':{
+    #         'bool':{
+    #             'should':nest_query_list
+    #         }
+    #     },
+    #     'size':count,
+    #     'sort':[{'user_fansnum':{'order':'desc'}}]
+    # }
+    es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
+                body=query_body)['hits']['hits']
+    #'must_not':{'terms':{'uid':white_uid_list}},
+    print 'flow_text_index_name_list::',flow_text_index_name_list
+    print 'query_body::',query_body
+    print 'es_results:::',es_results
+    for i in range(len(es_results)):
+
+        uid = es_results[i]['_source']['uid']
+        group_uid_list.add(uid)
+    group_uid_list = list(group_uid_list)
+    return group_uid_list
 
 
 
@@ -261,10 +308,10 @@ def detect_by_keywords(keywords,datetime_list):
 # output：近期与种子用户有转发和评论关系的微博用户群体的画像数据
 
 def detect_by_seed_users(seed_users):
-    retweet_mark == 1
-    comment_mark == 1
+    retweet_mark = 1
+    comment_mark = 1
 
-    group_uid_list = []
+    group_uid_list = set()
     all_union_result_dict = {}
     #get retweet/comment es db_number
     now_ts = time.time()
@@ -332,6 +379,12 @@ def detect_by_seed_users(seed_users):
     !!!! 有一个转化提取 
     从 all_union_result_dict   中提取 所有的uid
     '''
+    for seeder_uid,inter_dict in all_union_result_dict.iteritems():
+        for uid, inter_count in inter_dict.iteritems():
+            group_uid_list.add(uid)
+
+    group_uid_list = list(group_uid_list)
+
     return group_uid_list
 
 
@@ -356,7 +409,6 @@ def add_task_2_queue(decect_task_information):
         status = False
 
     return status
-
 
 def political_classify_sort(uids_list,uid_weibo_keywords_dict):
 
@@ -491,7 +543,23 @@ def group_description_analysis(detect_results,datetime_list):
     keywords_dict_all_users_sort = sorted(keywords_dict_all_users.items(),key=lambda x:x[1], reverse=True)[:TOP_KEYWORDS_NUM]
 
     ## 群体角色分布
-    domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    
+    r_domain = dict()
+
+    if S_TYPE == 'test':
+        domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    else:
+        mget_domain_results = es_xnr.mget(index=portrait_index_name,doc_type=portrait_index_name,\
+                        body={'ids':uids_list})['docs']
+        
+        
+        if mget_domain_results:
+            for domain_result in mget_domain_results:
+                domain_result = domain_result['_source']
+                uid = domain_result['uid']
+                role_name = domain_result['domain']
+                r_domain[uid] = role_name
+
     role_list = r_domain.values()
     #print 'r_domain::::::',r_domain
     role_set = set(role_list)
@@ -792,7 +860,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     role_feature_analysis_results['personality'] = character_result_dict_sort
     role_feature_analysis_results['geo'] = geo_cityTopic_results_merge
     role_feature_analysis_results['day_post_num'] = day_post_median_all
-    role_feature_analysis_results['active_time'] = day_hour_counts_aver_time
+    role_feature_analysis_results['active_time'] = day_hour_counts_aver
     role_feature_analysis_results['psy_feature'] = psy_feature_sort
     role_feature_analysis_results['member_uids'] = uids_list
 
@@ -854,7 +922,7 @@ def compute_domain_base():
                     status = add_task_2_queue(decect_task_information)
             #print 'detect_results:::::::',detect_results
             print 'step 1: 开始群体描述计算'
-
+            print 'detect_results:::',detect_results
             group_results,role_uids_dict = group_description_analysis(detect_results,datetime_list)
             print 'role_uids_dict:::::',role_uids_dict
             if group_results:

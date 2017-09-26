@@ -21,7 +21,7 @@ function themeWord(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 10,//单页记录数
+        pageSize: 2,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -36,81 +36,124 @@ function themeWord(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "主题类型",//标题
-                field: "theme_daily_name",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.theme_daily_name;
-                    }
-                }
-            },
-            {
-                title: "创建时间",//标题
-                field: "timestamp",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
-                        return '暂无';
-                    }else {
-                        return getLocalTime(row.timestamp);
-                    }
-                }
-            },
-            {
-                title: "内容",//标题
-                field: "text",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.text==''||row.text=='null'||row.text=='unknown'){
-                        return '暂无';
-                    }else {
-                        var str='';
-                        str+=
-                            '<div class="post_perfect">'+
-                            '   <div class="post_center-hot">'+
-                            '       <div class="center_rel">'+
-                            '           <a class="center_1" href="###" style="color: #f98077;display: none;">'+row.uid+'</a>'+
-                            '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                            '           <i class="uid" style="display: none;">'+row.id+'</i>'+
-                            '           <span class="center_2">'+row.text+
-                            '           </span>'+
-                            '           <div class="center_3">'+
-                            '               <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                            '               <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                            '               <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（'+row.like+'）</span>'+
-                            '           </div>'+
-                            '       </div>'+
-                            '   </div>'+
-                            '</div>';
-                        return str;
-                    }
-                }
-            },
-            {
-                title: "操作",//标题
+                title: "",//标题
                 field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+11+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+
-                        '\')"><i title="修改" class="icon icon-edit"></i></span>';
+                    var theme,time,img;
+                    if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
+                        theme = '暂无';
+                    }else {
+                        theme = row.theme_daily_name;
+                    }
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        time = '暂无';
+                    }else {
+                        time = getLocalTime(row.timestamp);
+                    }
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect" style="margin:0 auto 10px;">' +
+                        '   <div class="post_center_hot">' +
+                        '    <img src="/static/images/post-6.png" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">主题类型：'+theme+'</a>&nbsp;'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '           <span class="centerDel" style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+11+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '           <span class="centerEdit" style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+'\')"><i title="修改" class="icon icon-edit"></i></span>'+
+                        '           <div class="center_2" style="text-align: left;margin: 10px 0;"><b style="color:#f98077;">摘要内容：</b>'+txt+'</div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>'
+                    return str;
                 }
             },
+            // {
+            //     title: "主题类型",//标题
+            //     field: "theme_daily_name",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             return row.theme_daily_name;
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "创建时间",//标题
+            //     field: "timestamp",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             return getLocalTime(row.timestamp);
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "内容",//标题
+            //     field: "text",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.text==''||row.text=='null'||row.text=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             var str='';
+            //             str+=
+            //                 '<div class="post_perfect">'+
+            //                 '   <div class="post_center-hot">'+
+            //                 '       <div class="center_rel">'+
+            //                 '           <a class="center_1" href="###" style="color: #f98077;display: none;">'+row.uid+'</a>'+
+            //                 '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+            //                 '           <i class="uid" style="display: none;">'+row.id+'</i>'+
+            //                 '           <span class="center_2">'+row.text+
+            //                 '           </span>'+
+            //                 '           <div class="center_3">'+
+            //                 '               <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+            //                 '               <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+            //                 '               <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（'+row.like+'）</span>'+
+            //                 '           </div>'+
+            //                 '       </div>'+
+            //                 '   </div>'+
+            //                 '</div>';
+            //             return str;
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "操作",//标题
+            //     field: "",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         return '<span style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+11+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+            //             '<span style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+
+            //             '\')"><i title="修改" class="icon icon-edit"></i></span>';
+            //     }
+            // },
         ],
 
     });
@@ -141,81 +184,124 @@ function day(data) {
         sortOrder:"desc",
         columns: [
             {
-                title: "主题类型",//标题
-                field: "theme_daily_name",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
-                        return '暂无';
-                    }else {
-                        return row.theme_daily_name;
-                    }
-                }
-            },
-            {
-                title: "创建时间",//标题
-                field: "timestamp",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
-                        return '暂无';
-                    }else {
-                        return getLocalTime(row.timestamp);
-                    }
-                }
-            },
-            {
-                title: "内容",//标题
-                field: "text",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.text==''||row.text=='null'||row.text=='unknown'){
-                        return '暂无';
-                    }else {
-                        var str='';
-                        str+=
-                            '<div class="post_perfect">'+
-                            '   <div class="post_center-hot">'+
-                            '       <div class="center_rel">'+
-                            '           <a class="center_1" href="###" style="color: #f98077;display: none;">'+row.uid+'</a>'+
-                            '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                            '           <i class="uid" style="display: none;">'+row.id+'</i>'+
-                            '           <span class="center_2">'+row.text+
-                            '           </span>'+
-                            '           <div class="center_3">'+
-                            '               <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                            '               <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                            '               <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（'+row.like+'）</span>'+
-                            '           </div>'+
-                            '       </div>'+
-                            '   </div>'+
-                            '</div>';
-                        return str;
-                    }
-                }
-            },
-            {
-                title: "操作",//标题
+                title: "",//标题
                 field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+22+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+44+
-                        '\')"><i title="修改" class="icon icon-edit"></i></span>';
+                    var theme,time,img;
+                    if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
+                        theme = '暂无';
+                    }else {
+                        theme = row.theme_daily_name;
+                    }
+                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+                        time = '暂无';
+                    }else {
+                        time = getLocalTime(row.timestamp);
+                    }
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row.text;
+                    };
+                    var str=
+                        '<div class="post_perfect" style="margin:0 auto 10px;">' +
+                        '   <div class="post_center_hot">' +
+                        '    <img src="/static/images/post-6.png" class="center_icon">'+
+                        '       <div class="center_rel">'+
+                        '           <a class="center_1" href="###" style="color: #f98077;">主题类型：'+theme+'</a>&nbsp;'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '           <span class="centerDel" style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+11+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '           <span class="centerEdit" style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+'\')"><i title="修改" class="icon icon-edit"></i></span>'+
+                        '           <div class="center_2" style="text-align: left;margin: 10px 0;"><b style="color:#f98077;">摘要内容：</b>'+txt+'</div>'+
+                        '       </div>'+
+                        '   </div>'+
+                        '</div>'
+                    return str;
                 }
             },
+            // {
+            //     title: "主题类型",//标题
+            //     field: "theme_daily_name",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             return row.theme_daily_name;
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "创建时间",//标题
+            //     field: "timestamp",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             return getLocalTime(row.timestamp);
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "内容",//标题
+            //     field: "text",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.text==''||row.text=='null'||row.text=='unknown'){
+            //             return '暂无';
+            //         }else {
+            //             var str='';
+            //             str+=
+            //                 '<div class="post_perfect">'+
+            //                 '   <div class="post_center-hot">'+
+            //                 '       <div class="center_rel">'+
+            //                 '           <a class="center_1" href="###" style="color: #f98077;display: none;">'+row.uid+'</a>'+
+            //                 '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+            //                 '           <i class="uid" style="display: none;">'+row.id+'</i>'+
+            //                 '           <span class="center_2">'+row.text+
+            //                 '           </span>'+
+            //                 '           <div class="center_3">'+
+            //                 '               <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+            //                 '               <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+            //                 '               <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞（'+row.like+'）</span>'+
+            //                 '           </div>'+
+            //                 '       </div>'+
+            //                 '   </div>'+
+            //                 '</div>';
+            //             return str;
+            //         }
+            //     }
+            // },
+            // {
+            //     title: "操作",//标题
+            //     field: "",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         return '<span style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+22+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+            //             '<span style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+44+
+            //             '\')"><i title="修改" class="icon icon-edit"></i></span>';
+            //     }
+            // },
         ],
 
     });
