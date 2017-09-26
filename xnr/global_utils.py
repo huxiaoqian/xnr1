@@ -57,7 +57,7 @@ qq_document_task_name = 'qq_document'
 
 #use to identify the qq login png save file
 QRCODE_PATH = '/root/.qqbot-tmp/'
-ABS_LOGIN_PATH = '/home/ubuntu8/huxiaoqian/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
+ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
 
 
 '''
@@ -136,7 +136,7 @@ weibo_xnr_save_like_index_name='weibo_xnr_save_like'
 weibo_xnr_save_like_index_type='text'
 
 #use to save weibo xnr count info
-weibo_xnr_count_info_index_name='weibo_xnr_count_info'
+weibo_xnr_count_info_index_name='weibo_xnr_count'
 weibo_xnr_count_info_index_type='text'
 
 # xnr_flow_text
@@ -248,3 +248,6 @@ R_CLUSTER_FLOW2 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CL
 # sensitive user
 R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)
 R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)
+
+# 存储qq监测群
+r_qq_group_set_pre = 'qq_group_set_'

@@ -5,7 +5,7 @@ use to save function---about deal database
 import sys
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
-        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH
+        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
 import socket
@@ -63,11 +63,15 @@ def find_port(exist_port_list):
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
     qq_group_exist_list = []
+    qq_group_new_list = []
     qq_number = xnr_info['qq_number']
     qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
-    qqbot_mc = xnr_info['qqbot_mc']
+    #qqbot_mc = xnr_info['qqbot_mc']
     nickname = xnr_info['nickname']
     access_id = xnr_info['access_id']
+    remark = xnr_info['remark']
+    # redis 群名
+    r_qq_group_set = r_qq_group_set_pre + qq_number
 
     query_body_qq_exist = {
         'query':{
@@ -79,60 +83,99 @@ def create_qq_xnr(xnr_info):
         body=query_body_qq_exist)['hits']['hits']
 
     if search_result:
-        return ['当前qq已经被添加！',qq_group_exist_list]
+        #return ['当前qq已经被添加！',qq_group_exist_list]
     
-
-    query_body_qq_group_exist = {
-        'query':{
-            'bool':{
-                'must'
+        for group_qq_number in qq_groups:
+            query_body_qq_group_exist = {
+                'query':{
+                    'bool':{
+                        'must':[
+                            {'term':{'qq_number':qq_number}},
+                            {'term':{'qq_groups':group_qq_number}}
+                        ]
+                    }
+                }
             }
-        }
-    }
 
-    
-    # active_time = xnr_info[3]
-    create_ts = xnr_info['create_ts']
-    exist_port_list = get_all_ports()           #返回list形式int型端口号
-    qqbot_port = find_port(exist_port_list)
-    #qq_groups_num = len(qq_groups)
-    # qq_groups = getgroup_v2(qq_number)
+            exits_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+            body=query_body_qq_group_exist)['hits']['hits']
 
-    es_results = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body={'query':{'match_all':{}},\
-                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1 
+            if exits_result:
+                qq_group_exist_list.append(group_qq_number)
+            else:
+                print '!!!!redis',r.sadd(r_qq_group_set,group_qq_number)
+                qq_group_new_list.append(group_qq_number)
+        if not qq_group_new_list:
+            return ['当前群已经添加',qq_group_exist_list]
+
+        else:
+            # 把不在的群添加进去
+            qq_exist_results = es_xnr.search(index=qq_xnr_index_name,doc_type=\
+                qq_xnr_index_type,body={'query':{'term':{'qq_number':qq_number}}})['hits']['hits']
+            
+            qq_exist_result = qq_exist_results[0]['_source']
+            xnr_user_no = qq_exist_result['xnr_user_no']
+            qq_groups = qq_exist_result['qq_groups']
+            qq_groups.extend(qq_group_new_list)
+            qq_exist_result['qq_groups'] = qq_groups
+            qq_exist_result['qq_group_num'] = len(qq_groups)
+
+            es_xnr.update(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no,\
+                body={'doc':qq_exist_result})
+
+            result = True
     else:
-        user_no_current = 1
 
-    #task_detail['user_no'] = user_no_current
-    xnr_user_no = user_no2qq_id(user_no_current)  #五位数 WXNR0001
-    print 'xnr_user_no:', xnr_user_no
-    try:
-        # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
-        #     return 0
-        es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
-        body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'create_ts':create_ts,\
-                'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no})
-        result = True
-    except:
-        result = False
-    print 'result:', result
-    if result == True:
-        #qqbot_port = '8199'
-        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
-        #qqbot_port = '8190'
-        qqbot_num = qq_number
-        qqbot_port = str(qqbot_port)
-        qqbot_mc = 'sirtgdmgwiivbegf'
-        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
-        #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
-        print 'p_str1:', p_str1
-        p2 = subprocess.Popen(p_str1, \
-               shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        #print 'output:', p2.stdout.readlines()
-    return result
+        # active_time = xnr_info[3]
+        create_ts = xnr_info['create_ts']
+        exist_port_list = get_all_ports()           #返回list形式int型端口号
+        qqbot_port = find_port(exist_port_list)
+        #qq_groups_num = len(qq_groups)
+        # qq_groups = getgroup_v2(qq_number)
+
+        es_results = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body={'query':{'match_all':{}},\
+                        'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+            user_no_current = user_no_max + 1 
+        else:
+            user_no_current = 1
+
+        #task_detail['user_no'] = user_no_current
+        xnr_user_no = user_no2qq_id(user_no_current)  #五位数 QXNR0001
+        print 'xnr_user_no:', xnr_user_no
+        try:
+            # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
+            #     return 0
+            
+            ## 存入es
+            es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
+            body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'qq_group_num':len(qq_groups),'create_ts':create_ts,\
+                    'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no,\
+                    'access_id':access_id,'remark':remark})
+            
+            ## 存入redis
+            
+            for qq_group_number in qq_groups:
+                print '###redis',r.sadd(r_qq_group_set,qq_group_number)
+            result = True
+        except:
+            result = False
+        print 'result:', result
+        if result == True:
+            #qqbot_port = '8199'
+            p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
+            #qqbot_port = '8190'
+            qqbot_num = qq_number
+            qqbot_port = str(qqbot_port)
+            qqbot_mc = access_id #'sirtgdmgwiivbegf'
+            p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
+            #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
+            print 'p_str1:', p_str1
+            p2 = subprocess.Popen(p_str1, \
+                   shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            #print 'output:', p2.stdout.readlines()
+    return [result,qq_group_exist_list]
 
 def show_qq_xnr(MAX_VALUE):
     query_body = {
