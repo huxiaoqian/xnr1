@@ -129,9 +129,9 @@ def get_show_example_model(xnr_user_no):
     print 'xnr_user_no::',xnr_user_no
     #print '!!!!!',{'query':{'term':{'xnr_user_no':xnr_user_no}}}
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-        body={'query':{'match_all':{}}})
+        body={'query':{'match_all':{}}})['hits']['hits']
     result_all = []
-    print 'es_results::=============================',es_results
+    print 'es_results::',es_results
     for result in es_results:
         result = result['_source']
         result_all.append(result)
