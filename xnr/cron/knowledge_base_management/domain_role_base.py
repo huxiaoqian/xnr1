@@ -246,8 +246,8 @@ def detect_by_keywords(keywords,datetime_list):
 
     nest_query_list = []
     for keyword in keyword_list:
-        nest_query_list.append({'match':{query_item:keyword}})
-        #nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+        #nest_query_list.append({'match':{query_item:keyword}})
+        nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
         
     #keyword_query_list.append({'bool':{'must':nest_query_list}})
 
@@ -268,26 +268,27 @@ def detect_by_keywords(keywords,datetime_list):
     else:
         SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
     
+    # query_body = {
+    #     'query':{
+    #         'bool':{
+    #             'should':nest_query_list,
+    #             "minimum_should_match": SHOULD_PERCENT,
+    #             'must_not':{'terms':{'uid':white_uid_list}}
+    #         }
+    #     },
+    #     'size':count,
+    #     'sort':[{'user_fansnum':{'order':'desc'}}]
+    # }
     query_body = {
         'query':{
             'bool':{
                 'should':nest_query_list,
-                "minimum_should_match": SHOULD_PERCENT,
                 'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
         'size':count,
         'sort':[{'user_fansnum':{'order':'desc'}}]
     }
-    # query_body = {
-    #     'query':{
-    #         'bool':{
-    #             'should':nest_query_list
-    #         }
-    #     },
-    #     'size':count,
-    #     'sort':[{'user_fansnum':{'order':'desc'}}]
-    # }
     es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
                 body=query_body)['hits']['hits']
     #'must_not':{'terms':{'uid':white_uid_list}},
