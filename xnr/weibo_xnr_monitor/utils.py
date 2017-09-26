@@ -93,7 +93,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
 
     try:
         if S_TYPE == 'test':
-            temp_flow_text_index_name_list=['flow_text_2016-11-22','flow_text_2016-11-23']
+            temp_flow_text_index_name_list=['flow_text_2016-11-24','flow_text_2016-11-25']
             flow_text_exist=es_flow_text.search(index=temp_flow_text_index_name_list,doc_type=flow_text_index_type,\
                 body=query_body)['aggregations']['keywords']['buckets']
         else:

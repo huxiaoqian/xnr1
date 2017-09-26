@@ -89,6 +89,15 @@ def ajax_delete_history_count():
 	task_id=request.args.get('task_id','')
 	results=delete_history_count(task_id)
 	return json.dumps(results)
+
+@mod.route('/create_history_count/')
+def ajax_create_history_count():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['date_time']=request.args.get('date_time','')
+	task_detail['safe']=int(request.args.get('safe',''))
+	results=create_history_count(task_detail)
+	return json.dumps(results)
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
 #http://219.224.134.213:9209/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no=WXNR0003

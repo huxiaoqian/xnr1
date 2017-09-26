@@ -26,6 +26,8 @@ from xnr.qq_xnr_manage.views import mod as qqxnrmanageModule
 from xnr.qq_xnr_operate.views import mod as qqxnroperateModule
 from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
 from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
+from xnr.qq_xnr_report_manage.views import mod as qqxnrreportmanageModule
+from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
@@ -60,6 +62,8 @@ def create_app():
     app.register_blueprint(qqxnroperateModule)
     app.register_blueprint(qqxnrassessmentModule)
     app.register_blueprint(qqxnrmonitorModule)
+    app.register_blueprint(qqxnrreportmanageModule)
+    app.register_blueprint(qqxnrwarmingModule)
     # the debug toolbar is only enabled in debug mode
     app.config['DEBUG'] = True
 
