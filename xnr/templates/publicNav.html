@@ -37,8 +37,9 @@
     <div class="nav_bottom">
         <ul class="list">
             <li class="main_li" id="backHome">
-                <i class="icon icon-home"></i>
-                <a class="list_one li_a">首页</a>
+                <a class="list_one li_a">
+                    <i class="icon icon-home"></i>&nbsp;首页
+                </a>
             </li>
             <div class="behind" style="float: left;"></div>
         </ul>
@@ -195,20 +196,24 @@
             $('.coorName').text('操作控制');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-user"></i>'+
-                '    <a class="li_a" href="/control/operationControl/">虚拟人中心</a>'+
+                '    <a class="li_a" href="/control/operationControl/">'+
+                '        <i class="icon icon-user"></i>&nbsp;虚拟人中心' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-pencil"></i>'+
-                '    <a class="li_a" href="/control/posting/">发帖操作</a>'+
+                '    <a class="li_a" href="/control/posting/">' +
+                '        <i class="icon icon-pencil"></i>&nbsp;发帖操作' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-random"></i>'+
-                '    <a class="li_a" href="/control/socialFeedback/">社交反馈</a>'+
+                '    <a class="li_a" href="/control/socialFeedback/">' +
+                '        <i class="icon icon-random"></i>&nbsp;社交反馈' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-headphones"></i>'+
-                '    <a class="li_a" href="/control/activeSocialization/">主动社交</a>'+
+                '    <a class="li_a" href="/control/activeSocialization/">' +
+                '        <i class="icon icon-headphones"></i>&nbsp;主动社交' +
+                '    </a>'+
                 '</li>';
         }else if (typeNum==3){
             $('.coorName').text('信息监测');
@@ -216,35 +221,42 @@
             $('.coorName').text('预警监控');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-user-md"></i>'+
-                '    <a class="li_a" href="/monitor/characterBehavior/">人物行为预警</a>'+
+                '    <a class="li_a" href="/monitor/characterBehavior/">' +
+                '        <i class="icon icon-user-md"></i>&nbsp;人物行为预警' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-comment-alt"></i>'+
-                '    <a class="li_a" href="/monitor/speechContent/">言论内容预警</a>'+
+                '    <a class="li_a" href="/monitor/speechContent/">' +
+                '        <i class="icon icon-comment-alt"></i>&nbsp;言论内容预警' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-bullhorn"></i>'+
-                '    <a class="li_a" href="/monitor/eventEmerges/">事件涌现预警</a>'+
+                '    <a class="li_a" href="/monitor/eventEmerges/">' +
+                '        <i class="icon icon-bullhorn"></i>&nbsp;事件涌现预警' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-time"></i>'+
-                '    <a class="li_a" href="/monitor/timeWarning/">时间预警</a>'+
+                '    <a class="li_a" href="/monitor/timeWarning/">' +
+                '        <i class="icon icon-time"></i>&nbsp;时间预警' +
+                '    </a>'+
                 '</li>';
         }else if (typeNum==5){
             $('.coorName').text('行为评估');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-lightbulb"></i>'+
-                '    <a class="li_a" href="/behavioGauge/influeAssess/">影响力评估</a>'+
+                '    <a class="li_a" href="/behavioGauge/influeAssess/">' +
+                '        <i class="icon icon-lightbulb"></i>&nbsp;影响力评估' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-tint"></i>'+
-                '    <a class="li_a" href="/behavioGauge/penetration/">渗透力评估</a>'+
+                '    <a class="li_a" href="/behavioGauge/penetration/">' +
+                '        <i class="icon icon-tint"></i>&nbsp;渗透力评估' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/behavioGauge/safe/">安全性评估</a>'+
+                '    <a class="li_a" href="/behavioGauge/safe/">' +
+                '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
+                '    </a>'+
                 '</li>';
         }else if (typeNum==6){
             $('.coorName').text('虚拟人定制');
@@ -254,35 +266,42 @@
             $('.coorName').text('知识库管理');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-globe"></i>'+
-                '    <a class="li_a" href="/knowledge/domainLibrary/">领域知识库</a>'+
+                '    <a class="li_a" href="/knowledge/domainLibrary/">' +
+                '        <i class="icon icon-globe"></i>&nbsp;领域知识库' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-github"></i>'+
-                '    <a class="li_a" href="/knowledge/characterLibrary/">角色知识库</a>'+
+                '    <a class="li_a" href="/knowledge/characterLibrary/">' +
+                '        <i class="icon icon-github"></i>&nbsp;角色知识库' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/knowledge/businessLibrary/">业务知识库</a>'+
+                '    <a class="li_a" href="/knowledge/businessLibrary/">' +
+                '        <i class="icon icon-glass"></i>&nbsp;业务知识库' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-comment"></i>'+
-                '    <a class="li_a" href="/knowledge/speechLibrary/">言论知识库</a>'+
+                '    <a class="li_a" href="/knowledge/speechLibrary/">' +
+                '        <i class="icon icon-comment"></i>&nbsp;言论知识库' +
+                '    </a>'+
                 '</li>';
         }else if (typeNum==9){
             $('.coorName').text('系统管理');
             afterEle=
                 '<li class="main_li">'+
-                '    <i class="icon icon-lightbulb"></i>'+
-                '    <a class="li_a" href="/systemManage/daily/">日志管理</a>'+
+                '    <a class="li_a" href="/systemManage/daily/">' +
+                '        <i class="icon icon-lightbulb"></i>&nbsp;日志管理' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-tint"></i>'+
-                '    <a class="li_a" href="/systemManage/purview/">权限管理</a>'+
+                '    <a class="li_a" href="/systemManage/purview/">' +
+                '        <i class="icon icon-tint"></i>&nbsp;权限管理' +
+                '    </a>'+
                 '</li>'+
                 '<li class="main_li">'+
-                '    <i class="icon icon-glass"></i>'+
-                '    <a class="li_a" href="/systemManage/virtual/">虚拟人管理</a>'+
+                '    <a class="li_a" href="/systemManage/virtual/">' +
+                '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
+                '    </a>'+
                 '</li>';
         };
         $('.behind').html(afterEle);
