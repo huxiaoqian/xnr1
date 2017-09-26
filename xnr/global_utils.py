@@ -136,7 +136,7 @@ weibo_xnr_save_like_index_name='weibo_xnr_save_like'
 weibo_xnr_save_like_index_type='text'
 
 #use to save weibo xnr count info
-weibo_xnr_count_info_index_name='weibo_xnr_count_info'
+weibo_xnr_count_info_index_name='weibo_xnr_count'
 weibo_xnr_count_info_index_type='text'
 
 # xnr_flow_text
