@@ -100,21 +100,23 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
 
     day_post_num_list = np.array(json.loads(item['day_post_num']))
     item['day_post_num'] = np.mean(day_post_num_list).tolist()
+    item['role_name'] = role_name
     
-    example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
+    task_id_new = xnr_user_no + '_' + domain_pinyin + '_' + role_en
+
+    example_model_file_name = EXAMPLE_MODEL_PATH + task_id_new + '.json'
     
     try:
         with open(example_model_file_name,"w") as dump_f:
             json.dump(item,dump_f)
 
-        
         item_dict = dict()
         item_dict['xnr_user_no'] = xnr_user_no
         item_dict['domain_name'] = domain_name
         item_dict['role_name'] = role_name
 
         es.index(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
-            body=item_dict,id=task_id)
+            body=item_dict,id=task_id_new)
 
         mark = True
     except:
@@ -123,10 +125,7 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
     return mark
 
 def get_show_example_model(xnr_user_no):
-    print 'es::',es
-    print 'weibo_example_model_index_name:::',weibo_example_model_index_name
-    print 'weibo_example_model_index_type:::',weibo_example_model_index_type
-    print 'xnr_user_no::',xnr_user_no
+
     #print '!!!!!',{'query':{'term':{'xnr_user_no':xnr_user_no}}}
     es_results = es.search(index=weibo_example_model_index_name,doc_type=weibo_example_model_index_type,\
         body={'query':{'term':{'xnr_user_no':xnr_user_no}}})['hits']['hits']
@@ -139,11 +138,11 @@ def get_show_example_model(xnr_user_no):
     return result_all
 
 
-def get_export_example_model(domain_name,role_name):
+def get_export_example_model(xnr_user_no,domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     role_en = domain_ch2en_dict[role_name]
 
-    task_id = domain_pinyin + '_' + role_en
+    task_id = xnr_user_no + '_' + domain_pinyin + '_' + role_en
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     with open(example_model_file_name,"r") as dump_f:
         es_result = json.load(dump_f)
