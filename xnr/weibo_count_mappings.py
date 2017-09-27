@@ -38,6 +38,18 @@ def weibo_xnr_count_info_mappings():
                     },
                     'hot_follower_num':{        #热点追踪量
                         'type':'long'
+                    },
+                    'influence':{  # 影响力
+                        'type':'long'
+                    },
+                    'penetration':{  # 渗透力
+                        'type':'long'
+                    },
+                    'safe':{   # 安全性
+                        'type':'long'
+                    },
+                    'timestamp':{ # 时间戳
+                        'type':'long'
                     }
                 }
             }

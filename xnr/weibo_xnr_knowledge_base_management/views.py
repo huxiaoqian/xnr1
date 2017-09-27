@@ -20,10 +20,10 @@ mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/we
 ## 生成实例模板
 @mod.route('/generate_example_model/')
 def ajax_generate_example_model():
-    xnr_user_no = request.args.get('xnr_user_no','')
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
-    results = get_generate_example_model(xnr_user_no,domain_name,role_name)
+    results = get_generate_example_model(domain_name,role_name)
 
     return json.dumps(results)
 
@@ -31,18 +31,18 @@ def ajax_generate_example_model():
 
 @mod.route('/show_example_model/')
 def ajax_show_example_model():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    print 'xnr_user_no:::',xnr_user_no
-    results = get_show_example_model(xnr_user_no)
+    #xnr_user_no = request.args.get('xnr_user_no','')
+    #print 'xnr_user_no:::',xnr_user_no
+    results = get_show_example_model()
 
     return json.dumps(results)
 
 @mod.route('/export_example_model/')
 def ajax_export_example_model():
-    xnr_user_no = request.args.get('xnr_user_no','')
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     role_name = request.args.get('role_name','')
-    results = get_export_example_model(xnr_user_no,domain_name,role_name)
+    results = get_export_example_model(domain_name,role_name)
 
     return json.dumps(results)
 

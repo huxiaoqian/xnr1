@@ -195,10 +195,22 @@ def get_qqxnr_port(qq_xnr, group):
     qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
                  body={'query':{'term':{'qq_number':qq_xnr}}},_source=True)['hits']['hits']
     qq_xnr_es_result = qq_xnr_search_result[0]['_source']
-
+  '''
     # except:
     #     print 'qq_xnr is not exist'
     #     return qq_xnr_info
+    try:
+        # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+        #         id=qq_xnr,_source=True)['_source']
+
+        qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                     body={'query':{'term':{'qq_number':qq_number}}},_source=True)['hits']['hits']
+        qq_xnr_es_result = qq_xnr_search_result[0]['_source']
+
+    except:
+        print 'qq_xnr is not exist'
+        return qq_xnr_info
+    '''
     #qqbot_port = '8189'
     qqbot_port = qq_xnr_es_result['qqbot_port']
     qq_xnr_info['qqbot_port'] = qqbot_port

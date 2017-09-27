@@ -65,15 +65,24 @@ function wordCloud(data) {
        $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'22px'}).text('暂无数据');
     }else {
         var wordSeries=[];
-        $.each(data,function (index,item) {
+        for (var k in data){
             wordSeries.push(
                 {
-                    name: item['key'],
-                    value: item['doc_count'],
+                    name: k,
+                    value: data[k],
                     itemStyle: createRandomItemStyle()
                 }
             )
-        });
+        }
+        // $.each(data,function (index,item) {
+        //     wordSeries.push(
+        //         {
+        //             name: item['key'],
+        //             value: item['doc_count'],
+        //             itemStyle: createRandomItemStyle()
+        //         }
+        //     )
+        // });
         require(
             [
                 'echarts',
@@ -207,7 +216,8 @@ function hotPost(data) {
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
-    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id;
+    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id+
+    '&start_time='+from_ts+'&end_time='+to_ts;
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
 var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+

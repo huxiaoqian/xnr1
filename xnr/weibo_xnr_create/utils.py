@@ -608,6 +608,7 @@ def get_role_info(domain_pinyin,role_name):
 
 if __name__ == '__main__':
     domain_name =  '维权群体'
+    
     #domain_name =  '乌镇'
     create_type = {'by_keywords':['维权','律师'],'by_seed_users':[],'by_all_users':[]}
     #create_type = {'by_keywords':['互联网','乌镇'],'by_seed_users':[],'by_all_users':[]}

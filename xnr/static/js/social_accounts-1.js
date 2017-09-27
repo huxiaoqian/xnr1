@@ -1,10 +1,10 @@
-var task_id='WXNR0001',phone='13192883429',uid='1897879843';
-var name1,name2,password;
+var name1,name2,name3,password;
 $('#go_bind').on('click',function () {
     name1=$('#username1').val();
     name2=$('#username2').val();
+    name3=$('#username3').val();
     password=$('#passwords').val();
-    if ((name1==''||name2=='')&&password==''){
+    if ((name1==''||name2=='')&&password==''&&name3==''){
         $('#_bind_per #information').text('账号名密码不能为空。');
     }else {
         $('#_bind_per #information').text('是否将该微博用户绑定为虚拟人？');
@@ -28,8 +28,9 @@ function bindSF(data) {
     $('#success_fail').modal('show');
 }
 function userLIST() {
-    var bind_url='/weibo_xnr_create/save_step_three_1/?nick_name='+basicData_2.nick_name+'&weibo_mail_account='+name1 +
-        '&weibo_phone_account='+name2+'&password='+password;
+    var taskID=JSON.parse(localStorage.getItem('buildNewXnr'));
+    var bind_url='/weibo_xnr_create/save_step_three_1/?task_id='+taskID+'&weibo_mail_account='+name1 +
+        '&weibo_phone_account='+name2+'&nick_name='+name3+'&password='+password;
     public_ajax.call_request('get',bind_url,bindSF);
 }
 function list(person) {
@@ -77,7 +78,6 @@ function surefocus() {
         people.push($(this).val());
     });
     let focus_url='/weibo_xnr_create/save_step_three_2/?nick_name='+basicData_2.nick_name+'&followers_uids='+people.join(',');
-    console.log(focus_url)
     public_ajax.call_request('get',focus_url,focusSF);
 }
 function focusSF(data) {
