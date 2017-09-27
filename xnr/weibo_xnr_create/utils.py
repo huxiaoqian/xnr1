@@ -8,6 +8,7 @@ import json
 import time
 import os
 import pandas as pd
+import numpy as np
 from collections import Counter
 
 from xnr.global_config import S_TYPE,S_DATE
@@ -99,21 +100,36 @@ def get_add_other_info(task_detail):
         account_name = weibo_phone_account
 
     password = task_detail['password']
-
-    #user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-    user = get_userinfo(account_name, password)
-    
+    print 'account_name:',account_name
+    print 'password::',password
+    #try:
+    xnr = SinaLauncher(account_name,password)
+    xnr.login()
+    uid = xnr.uid
+    print 'xnr::',xnr
+    #nick_name = xnr.screen_name
+    # except:
+    #     return '账户名或密码输入错误，请检查后输入！！'
+    user = SinaOperateAPI().getUserShow(uid=uid)
+    #user = get_userinfo(account_name, password)
+    print 'user:::',user
     item_dict = {}
 
     if user:
-       
-        item_dict['nick_name'] = user['nick_name']
+        print 'user::',user
+        item_dict['nick_name'] = user['screen_name']
         item_dict['location'] = user['location']
-        item_dict['gender'] = user['gender']
-        now_year = int(time.strftime('%Y',time.localtime(time.time())))
-        age = now_year - int(user['birth'][:4])
-        item_dict['age'] = age
+        if user['gender']=='m':
+            item_dict['gender'] = u'男'
+        elif user['gender']=='f':
+            item_dict['gender'] = u'女'
+        #item_dict['gender'] = user['gender']
+        #now_year = int(time.strftime('%Y',time.localtime(time.time())))
+        #age = now_year - int(user['birth'][:4])
+        #item_dict['age'] = age
+        item_dict['age'] = 0
         item_dict['description'] = user['description']
+        item_dict['career'] = ''
 
     return item_dict
 
@@ -200,108 +216,117 @@ def get_recommend_step_two(task_detail):
     role_name_en = domain_ch2en_dict[role_name]
     _id = domain_pinyin + '_' + role_name_en
 
+    #try:
+    recommend_results = dict()
+
+    ## 根据角色信息
+    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=_id)['_source']
+    
+    
+    #### 角色实例
     try:
-        recommend_results = dict()
+        role_example_dict = {}
+        member_uids = json.loads(es_result['member_uids'])
+        member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                                                body={'ids':member_uids})['docs']
+        for result in member_uids_results:
+            if result['found'] == True:
+                result = result['_source']                  
+                role_example_dict[result['uid']] = result['nick_name']
+               
+        recommend_results['role_example'] = role_example_dict
+    except:
+        recommend_results['role_example'] = []
 
-        ## 根据角色信息
-        es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=_id)['_source']
-        
-        #### 角色实例
-        try:
-            role_example_dict = {}
-            member_uids = json.loads(es_result['member_uids'])
-            member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
-                                                    body={'ids':member_uids})['docs']
-            for result in member_uids_results:
-                if result['found'] == True:
-                    result = result['_source']                  
-                    role_example_dict[result['uid']] = result['nick_name']
-            recommend_results['role_example'] = role_example_dict
-        except:
-            recommend_results['role_example'] = []
-        
-        recommend_results['active_time'] = json.loads(es_result['active_time'])[:ACTIVE_TIME_TOP]
-        
-        day_post_num = json.loads(es_result['day_post_num'])
-        day_post_num_new = pd.Series(day_post_num)
-        day_post_num_new = day_post_num_new.fillna(0)
-        day_post_num_new = list(day_post_num_new)
-        day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
-        recommend_results['day_post_num_average'] = day_post_num_average
-        
-        ## 根据日常兴趣
-        create_time = time.time()
-        
-        if S_TYPE == 'test':
-            create_time = datetime2ts(S_DATE)
-        
-        index_name_list = get_flow_text_index_list(create_time)
-        
-        try:
-            query_body = {
-                'query':{
-                    'filtered':{
-                        'filter':{
-                            'terms':{'daily_interests':daily_interests_list}
-                        }
+    active_time_list = json.loads(es_result['active_time'])
+    active_time_list_np = np.array(active_time_list)
+    active_time_list_np_sort = np.argsort(-active_time_list_np)[:ACTIVE_TIME_TOP]
+    active_time_list_np_sort_string = [str(daytime) for daytime in active_time_list_np_sort]
+
+
+
+    recommend_results['active_time'] = '&'.join(list(active_time_list_np_sort_string))
+    day_post_num = json.loads(es_result['day_post_num'])
+    day_post_num_new = pd.Series(day_post_num)
+    day_post_num_new = day_post_num_new.fillna(0)
+    day_post_num_new = list(day_post_num_new)
+    day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
+    recommend_results['day_post_num_average'] = int(day_post_num_average)
+    
+    ## 根据日常兴趣
+    create_time = time.time()
+    
+    if S_TYPE == 'test':
+        create_time = datetime2ts(S_DATE)
+    
+    index_name_list = get_flow_text_index_list(create_time)
+    
+    try:
+        query_body = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'daily_interests':daily_interests_list}
                     }
-                },
-                'sort':{'user_fansnum':{'order':'desc'}},
-                'size':DAILY_INTEREST_TOP_USER,
-                '_source':['uid']
-            }
+                }
+            },
+            'sort':{'user_fansnum':{'order':'desc'}},
+            'size':DAILY_INTEREST_TOP_USER,
+            '_source':['uid']
+        }
 
-            es_results = es_flow_text.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
-          
-            daily_interest_uid_set = set()
-            for result in es_results:
-                daily_interest_uid_set.add(result['_source']['uid'])
-            daily_interest_uid_list = list(daily_interest_uid_set)
-            es_daily_interests_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
-                                                    body={'ids':daily_interest_uid_list})['docs']
-            nick_name_list = []
-            sex_list = []
-            user_location_list = []
-            description_list = []
-           
-            for result in es_daily_interests_results:
-                if result['found'] == True:
-                    result = result['_source']
-                    nick_name_list.append(result['nick_name'])
-                    sex_list.append(result['sex'])
-                    user_location_list.append(result['user_location'])
-                    if result['description']:
-                        description_list.append(result['description'])
-            sex_list_count = Counter(sex_list)
-            sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]
-          
-            user_location_list_count = Counter(user_location_list)
-            user_location_sort_top = sorted(user_location_list_count.items(),key=lambda x:x[1],reverse=True)[:USER_LOCATION_TOP]
-            user_location_top_list = []
-            for user_location in user_location_sort_top:
-                user_location_top_list.append(user_location_sort[0])
+        es_results = es_flow_text.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
+      
+        daily_interest_uid_set = set()
+        for result in es_results:
+            daily_interest_uid_set.add(result['_source']['uid'])
+        daily_interest_uid_list = list(daily_interest_uid_set)
+        es_daily_interests_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                                                body={'ids':daily_interest_uid_list})['docs']
+        nick_name_list = []
+        sex_list = []
+        user_location_list = []
+        description_list = []
+       
+        for result in es_daily_interests_results:
+            if result['found'] == True:
+                result = result['_source']
+                nick_name_list.append(result['nick_name'])
+                sex_list.append(result['sex'])
+                user_location_list.append(result['user_location'])
+                if result['description']:
+                    description_list.append(result['description'])
+        sex_list_count = Counter(sex_list)
+        sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]
+      
+        user_location_list_count = Counter(user_location_list)
+        user_location_sort_top = sorted(user_location_list_count.items(),key=lambda x:x[1],reverse=True)[:USER_LOCATION_TOP]
+        user_location_top_list = []
+        for user_location in user_location_sort_top:
+            user_location_top_list.append(user_location_sort[0])
+        
             
-                
-            recommend_results['nick_name'] = nick_name_list[:NICK_NAME_TOP]
-            recommend_results['role_example'] = recommend_results['role_example'] + nick_name_list[:NICK_NAME_TOP]
-            recommend_results['sex'] = sex_sort
-            recommend_results['user_location'] = user_location_top_list
-            recommend_results['description'] = description_list[:DESCRIPTION_TOP]
-
-        except:
-            print '没有找到日常兴趣相符的用户'
-            recommend_results['nick_name'] = ''
-            recommend_results['sex'] = ''
-            recommend_results['user_location'] = ''
-            recommend_results['description'] = ''
-        ## 年龄、职业
-        recommend_results['age'] = ''
-        recommend_results['career'] = ''
-
-        return recommend_results
+        recommend_results['nick_name'] = '&'.join(nick_name_list[:NICK_NAME_TOP])
+        recommend_results['role_example'] = recommend_results['role_example'] + nick_name_list[:NICK_NAME_TOP]
+        recommend_results['sex'] = sex_sort
+        recommend_results['user_location'] = user_location_top_list
+        recommend_results['description'] = '&'.join(description_list[:DESCRIPTION_TOP])
 
     except:
-        return []
+        print '没有找到日常兴趣相符的用户'
+        recommend_results['nick_name'] = ''
+        recommend_results['sex'] = ''
+        recommend_results['user_location'] = ''
+        recommend_results['description'] = ''
+
+    ## 年龄、职业
+    recommend_results['age'] = 0
+    recommend_results['career'] = u'自由职业'
+
+    return recommend_results
+
+    # except:
+    #     return []
 
 def get_recommend_follows(task_detail):
     recommend_results = dict()
@@ -430,7 +455,24 @@ def get_save_step_one(task_detail):
     return mark
 
 def get_save_step_two(task_detail):
+    #identify xnr number   i.e. WXNR001
+    es_results = es.search(index=weibo_xnr_index_name,\
+            doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
+                  'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+    if es_results:
+        user_no_max = es_results[0]['_source']['user_no']
+        user_no_current = user_no_max + 1
+    else:
+        user_no_current = 1
 
+    item_exist = dict()
+
+    item_exist['user_no'] = user_no_current
+    task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
+    
+    #save step two information
+    # the following is delete
+    '''
     nick_name = task_detail['nick_name']
 
     query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
@@ -443,9 +485,10 @@ def get_save_step_two(task_detail):
     #try:    
     #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     #item_exist = dict()
+    '''
 
     item_exist['submitter'] = task_detail['submitter']
-    item_exist['user_no'] = task_detail['user_no']
+    
     item_exist['domain_name'] = task_detail['domain_name']
     item_exist['role_name'] = task_detail['role_name']
     item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
@@ -453,27 +496,28 @@ def get_save_step_two(task_detail):
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
     item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
-    item_exist['sex'] = task_detail['sex']
-
+    '''
+    #item_exist['sex'] = task_detail['sex']
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['age'] = task_detail['age']
     item_exist['location'] = task_detail['location']
     item_exist['career'] = task_detail['career']
     item_exist['description'] = task_detail['description']
+    '''
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
     item_exist['day_post_average'] = json.dumps(task_detail['day_post_average'].split('-'))
     item_exist['create_status'] = 1 # 第二步完成
     item_exist['xnr_user_no'] = task_id # 虚拟人编号
 
-    #es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
-    es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
+    es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
+    #es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
 
     mark = True
- 
-    return mark
+    return mark, task_id
 
 def get_save_step_three_1(task_detail):
 
+    task_id = task_detail['task_id']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
 
@@ -488,10 +532,10 @@ def get_save_step_three_1(task_detail):
         }
     }
 
-    exist_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body_exist)['hits']['hits']
+    exist_results = es.search(index=weibo_xnr_index_name,\
+            doc_type=weibo_xnr_index_type,body=query_body_exist)['hits']['hits']
     mark = False
-    if not exist_results:
-        
+    if exist_results[0]['_source'] != False:
         try:
             if task_detail['weibo_mail_account']:
                 uname = task_detail['weibo_mail_account']
@@ -513,8 +557,17 @@ def get_save_step_three_1(task_detail):
         item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
         item_exist['password'] = task_detail['password']
         item_exist['create_status'] = 2 # 创建完成
+        item_exist['nick_name'] = task_detail['nick_name']
+        item_exist['location'] = task_detail['location']
+        item_exist['gender'] = task_detail['gender']
+        item_exist['description'] = task_detail['description']
+        item_exist['career'] = task_detail['career']
+        
 
-        es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
+        
+        '''
+        es_results = es.search(index=weibo_xnr_index_name,\
+                doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
                     'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
         if es_results:
             user_no_max = es_results[0]['_source']['user_no']
@@ -524,25 +577,25 @@ def get_save_step_three_1(task_detail):
 
         item_exist['user_no'] = user_no_current
         task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
-
-        item_exist['xnr_user_no'] = task_id
+        '''
+        item_exist['xnr_user_no'] = task_detail['task_id']
 
         #  weibo_xnr表
-        #es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
-        es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)        
+        es.update(index=weibo_xnr_index_name,\
+                doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
+        #es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)        
 
         mark =True
-        
-    #except:        
-        #mark = False
+    else:
+        mark = False
     return mark
 
 def get_save_step_three_2(task_detail):
-    #task_id = task_detail['task_id']
-    nick_name = task_detail['nick_name']
-    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    task_id = task_detail['task_id']
+    # nick_name = task_detail['nick_name']
+    # query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+    # es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    # task_id = es_result[0]['_source']['xnr_user_no']
     #插入 weibo_xnr_fans_followers表
 
     try:
