@@ -113,7 +113,6 @@ $(".customizeTime").keydown(function(e) {
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(data) {
-    console.log(data)
     historyTotalTable(data[0]);
     historyTotalLine(data[1]);
 }

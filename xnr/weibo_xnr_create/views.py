@@ -83,7 +83,7 @@ def ajax_add_other_info():
     return json.dumps(results)
 
 # 修改第二步信息
-@mod.route('/modify_userinfo()/')
+@mod.route('/modify_userinfo/')
 def ajax_modify_userinfo():
     task_detail = {}
     task_detail['nick_name'] = request.args.get('nick_name','')
@@ -135,19 +135,22 @@ def ajax_save_step_two():
     task_detail['business_goal'] = request.args.get('business_goal','') # 业务目标,以中文逗号 “，”连接
     task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
-    task_detail['sex'] = request.args.get('sex','')  # 
-
+    '''
+    #task_detail['sex'] = request.args.get('sex','')
     #task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编号，如：WXNR0001
-    task_detail['nick_name'] = request.args.get('nick_name','') # 昵称
-    task_detail['age'] = request.args.get('age','') # 年龄
-    task_detail['location'] = request.args.get('location','') # 所在地
-    task_detail['career'] = request.args.get('career','') # 职业
-    task_detail['description'] = request.args.get('description','') # 个人简介
-    task_detail['active_time'] = request.args.get('active_time','') # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
-    task_detail['day_post_average'] = request.args.get('day_post_average','') # 日发帖量，以“-”分隔，如：9-12,表示每天平均发帖9到12条。从不：0-0,5条以上：5-max
+    #task_detail['nick_name'] = request.args.get('nick_name','') # 昵称
+    #task_detail['age'] = request.args.get('age','') # 年龄
+    #task_detail['location'] = request.args.get('location','') # 所在地
+    #task_detail['career'] = request.args.get('career','') # 职业
+    #task_detail['description'] = request.args.get('description','') # 个人简介
+    '''
+    task_detail['active_time'] = request.args.get('active_time','') 
+    # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
+    task_detail['day_post_average'] = request.args.get('day_post_average','') 
+    # 日发帖量，以“-”分隔，如：9-12,表示每天平均发帖9到12条。从不：0-0,5条以上：5-max
     
-    mark = get_save_step_two(task_detail)
-    return json.dumps(mark)  #True：保存成功  False：保存失败
+    mark, task_id = get_save_step_two(task_detail)
+    return json.dumps([mark, task_id])  #True：保存成功  False：保存失败
 
 # 第三步返回左侧信息栏信息
 @mod.route('/show_xnr_info/')
@@ -159,23 +162,32 @@ def ajax_show_xnr_info():
 
     return json.dumps(result)
 
-# 保存第三步信息1  绑定成功
+# 保存第三步信息1  绑定成功 
 @mod.route('/save_step_three_1/')
 def ajax_save_step_three_1():
     task_detail = dict()
-    task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人编号，如：WXNR0001
+    task_detail['task_id'] = request.args.get('task_id') #WXNR0001
+    #task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人编号，如：WXNR0001
     task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','') # 邮箱
     task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
+    
+    #step2 info
+    results = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
 
-    mark = get_save_step_three_1(task_detail)
+    new_task_detail = dict(task_detail, **results)
+
+    mark = get_save_step_three_1(new_task_detail)
+    #results = get_user_info(task_detail)
+
     return json.dumps(mark)  #True：保存成功  False：保存失败
 
 # 保存第三步信息2  关注成功
 @mod.route('/save_step_three_2/')
 def ajax_save_step_three_2():
     task_detail = dict()
-    task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称，如：WXNR0001
+    task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编码，如：WXNR0001
+    #task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称
     task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
     print 'task_detail::',task_detail
     mark = get_save_step_three_2(task_detail)

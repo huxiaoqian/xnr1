@@ -61,7 +61,7 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
     for i in range(TOP_PSY_FEATURE):
         psy_feature_list.append(psy_feature[i][0])
 
-    item['psy_feature'] = psy_feature_list
+    item['psy_feature'] = '&'.join(psy_feature_list)
 
     role_group_uids = json.loads(item['member_uids'])
 
@@ -107,7 +107,7 @@ def get_generate_example_model(xnr_user_no,domain_name,role_name):
                 pass
 
     item['business_goal'] = u'渗透'
-    item['daily_interests'] = u'数码'
+    item['daily_interests'] = u'旅游'
     # if S_TYPE == 'test':
     #     user_mget_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
     #     if user_mget_results
@@ -165,7 +165,7 @@ def get_export_example_model(xnr_user_no,domain_name,role_name):
     task_id = xnr_user_no + '_' + domain_pinyin + '_' + role_en
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     with open(example_model_file_name,"r") as dump_f:
-        es_result = json.load(item,dump_f)
+        es_result = json.load(dump_f)
 
     return es_result
 
