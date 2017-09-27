@@ -127,6 +127,7 @@ def ajax_save_step_one():
 @mod.route('/save_step_two/')
 def ajax_save_step_two():
     task_detail = dict()
+    task_detail['task_id'] = request.args.get('task_id', '') # 为空表示需要后台分配，如果有WXNR0001则更新
     task_detail['submitter'] = request.args.get('submitter','admin@qq.com') # 提交用户
     task_detail['domain_name'] = request.args.get('domain_name','') # 渗透领域
     task_detail['role_name'] = request.args.get('role_name','') # 角色定位
@@ -171,6 +172,7 @@ def ajax_save_step_three_1():
     task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','') # 邮箱
     task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
+    task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     
     #step2 info
     results = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton

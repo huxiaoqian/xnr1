@@ -61,7 +61,6 @@ $('#container .type_page #myTabs a').on('click',function () {
 var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
 var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
 function flow_faw(data) {
-    console.log(data)
     $('#follow_forward').bootstrapTable('load', data);
     $('#follow_forward').bootstrapTable({
         data:data,
@@ -143,7 +142,6 @@ function flow_faw(data) {
 }
 var mainUserUid=[];
 function focus_main(data) {
-    console.log(data)
     $('#focus_main').bootstrapTable('load', data);
     $('#focus_main').bootstrapTable({
         data:data,
@@ -359,7 +357,6 @@ $('#sure_post').on('click',function () {
         }
     }
     if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
-    console.log(post_url_1)
     public_ajax.call_request('get',post_url_1,postYES)
 });
 //群可见的情况
@@ -616,6 +613,7 @@ function submitViews(_this) {
     }
 }
 function conViews(data) {
+    console.log(data)
     var x='';
     if (data){
         x='提交成功';
