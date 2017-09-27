@@ -700,12 +700,15 @@ def show_like_content(require_detail):
 
     results=[]
     for i in xrange(0,len(like_type)):
-        temp_result=[]
+        receive_temp_result=[]
+        send_temp_result=[]
         if like_type[i] == 'receive':
-            temp_result=lookup_receive_like(uid,start_time,end_time)
+            receive_temp_result=lookup_receive_like(uid,start_time,end_time)
+            results.extend(receive_temp_result)
         elif like_type[i] == 'send':
-            temp_result=lookup_send_like(uid,start_time,end_time)
-        results.append(temp_result)
+            send_temp_result=lookup_send_like(uid,start_time,end_time)
+            results.extend(send_temp_result)
+        #results.extend(temp_result)
     return results
 
 def lookup_receive_like(uid,start_time,end_time):
@@ -1057,6 +1060,39 @@ def delete_weibo_xnr(xnr_user_no):
 	return result
 
 
+###############################
+#   step 7：虚拟人评估信息  #
+###############################
+def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
+    query_body={
+        'fields':['date_time',assess_type],
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no}},
+                            {'range':{
+                                'timestamp':{
+                                    'gte':start_time,
+                                    'lte':end_time
+                                }
+                            }}
+                        ]
+                    }
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'desc'}} 
+    }
+    try:
+        xnr_assess_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+        assess_result=[]
+        for item in xnr_assess_result:
+            assess_result.append(item['fields'])
+    except:
+        assess_result=[]
+    return assess_result
 
 
 #create xnr_flow_text example

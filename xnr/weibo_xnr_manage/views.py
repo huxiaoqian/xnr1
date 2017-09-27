@@ -13,7 +13,7 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
-                  create_xnr_flow_text,delete_history_count,create_history_count
+                  create_xnr_flow_text,delete_history_count,create_history_count,lookup_xnr_assess_info
 from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
@@ -358,4 +358,17 @@ def ajax_create_xnr_flow_text():
 	task_detail['retweeted']=int(request.args.get('retweeted',''))
 
 	results=create_xnr_flow_text(task_detail)
+	return json.dumps(results)
+
+
+#按指标查询评估信息
+#assess_type=influence,safe,penetration
+#http://219.224.134.213:9209/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=WXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
+@mod.route('/lookup_xnr_assess_info/')
+def ajax_lookup_xnr_assess_info():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	assess_type=request.args.get('assess_type','')
+	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
 	return json.dumps(results)
