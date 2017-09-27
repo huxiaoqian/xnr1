@@ -35,6 +35,7 @@ def getgroup_v2(qq_xnr):
     #step1: get group list
     #test
     #qqbot_port ='8199'
+    print 'qq_xnr_es_result:::',qq_xnr_es_result
     qqbot_port = qq_xnr_es_result['qqbot_port']
     p_str = 'qq ' + str(qqbot_port) + ' list group'
     p = subprocess.Popen(p_str, shell=True, \
@@ -42,12 +43,17 @@ def getgroup_v2(qq_xnr):
     line_count = 0
     for line in p.stdout.readlines():
         line_count += 1
+        
         if line_count >= 5 and line_count%2==1:
             item_line_list = line.split('|')
-            print 'item_line_list::',item_line_list.encode('utf-8')
-            qq_group_number = str(int(item_line_list[2]))
-            qq_group_name = item_line_list[3]
-            group_dict[qq_group_number] = qq_group_name
+            
+            try:
+                qq_group_number = str(int(item_line_list[2]))
+                qq_group_name = item_line_list[3]
+                group_dict[qq_group_number] = qq_group_name
+            except:
+                next
+    print 'group_dict::',group_dict
     return group_dict
 
 if __name__ == '__main__':
