@@ -14,6 +14,14 @@ from xnr.qq.qrCode import getQRCode_v2
 
 mod = Blueprint('qq_xnr_manage', __name__, url_prefix='/qq_xnr_manage')
 
+@mod.route('/history_speak_count/')
+def ajax_history_speak_count():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_history_speak_count(xnr_user_no)
+
+    return json.dumps(results)
+
 @mod.route('/get_qr_code/')
 def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
@@ -54,6 +62,7 @@ def ajax_delete_qq_xnr():
 @mod.route('/show_qq_xnr/')
 def ajax_show_qq_xnr():
     results = {}
+    print '!!!!!'
     results = show_qq_xnr(MAX_VALUE)
     return json.dumps(results)
 

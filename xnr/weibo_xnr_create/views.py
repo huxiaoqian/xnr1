@@ -39,7 +39,8 @@ def ajax_show_domain():
 # 返回虚拟人
 @mod.route('/show_weibo_xnr/')
 def ajax_show_weibo_xnr():
-    weibo_xnr_dict = get_show_weibo_xnr()
+    submitter = request.args.get('submitter','admin@qq.com')
+    weibo_xnr_dict = get_show_weibo_xnr(submitter)
     return json.dumps(weibo_xnr_dict)
 
 # 根据虚拟人推荐角色顺序

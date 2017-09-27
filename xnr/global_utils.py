@@ -210,6 +210,11 @@ weibo_account_management_index_name = 'weibo_account_management'
 weibo_account_management_index_type = 'account'
 
 
+## qq统计
+qq_xnr_history_count_index_name = 'qq_history_count'
+qq_xnr_history_count_index_type = 'count'
+
+
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
     return redis.StrictRedis(host, port)

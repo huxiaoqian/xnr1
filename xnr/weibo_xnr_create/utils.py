@@ -127,14 +127,31 @@ def get_show_domain():
             domain_name_dict[result['domain_pinyin']] = result['domain_name']
     return domain_name_dict
 
-def get_show_weibo_xnr():
+def get_show_weibo_xnr(submitter):
     weibo_xnr_dict = {}
-    query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'submitter':submitter}},
+                    {'term':{'create_status':2}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+
+    #query_body = {'query':{'term':{'create_status':2}},'size':MAX_SEARCH_SIZE}
     es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
     if es_results:
         for result in es_results:
+            #try:
+            print 'result!!!',result
             result = result['_source']
             weibo_xnr_dict[result['xnr_user_no']] = result['nick_name']
+            # except:
+            #     print 'result::',result
+            #     continue
     return weibo_xnr_dict
 
 def get_role_sort_list(domain_name):
@@ -176,6 +193,7 @@ def get_role2feature_info(domain_name,role_name):
         return []
 
 def get_recommend_step_two(task_detail):
+    print 'task_detail:::',task_detail
     domain_name = task_detail['domain_name']
     role_name = task_detail['role_name']
     daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
@@ -191,101 +209,116 @@ def get_recommend_step_two(task_detail):
         es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=_id)['_source']
         
         #### 角色实例
-        try:
-            role_example_dict = {}
-            member_uids = json.loads(es_result['member_uids'])
-            member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
-                                                    body={'ids':member_uids})['docs']
-            for result in member_uids_results:
-                if result['found'] == True:
-                    result = result['_source']                  
-                    role_example_dict[result['uid']] = result['nick_name']
-            recommend_results['role_example'] = role_example_dict
-        except:
-            recommend_results['role_example'] = []
-        
-        recommend_results['active_time'] = json.loads(es_result['active_time'])[:ACTIVE_TIME_TOP]
-        
-        day_post_num = json.loads(es_result['day_post_num'])
-        day_post_num_new = pd.Series(day_post_num)
-        day_post_num_new = day_post_num_new.fillna(0)
-        day_post_num_new = list(day_post_num_new)
-        day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
-        recommend_results['day_post_num_average'] = day_post_num_average
-        
-        ## 根据日常兴趣
-        create_time = time.time()
-        
-        if S_TYPE == 'test':
-            create_time = datetime2ts(S_DATE)
-        
-        index_name_list = get_flow_text_index_list(create_time)
-        
-        try:
-            query_body = {
-                'query':{
-                    'filtered':{
-                        'filter':{
-                            'terms':{'daily_interests':daily_interests_list}
-                        }
-                    }
-                },
-                'sort':{'user_fansnum':{'order':'desc'}},
-                'size':DAILY_INTEREST_TOP_USER,
-                '_source':['uid']
-            }
+        nick_name_list = []
+        user_location_top_list = []
+        description_list = []
+        sex_list = []
+        #try:
+        role_example_dict = {}
+        member_uids = json.loads(es_result['member_uids'])
+        member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                                                body={'ids':member_uids})['docs']
+        count = 0
+        for result in member_uids_results:
+            if result['found'] == True:
+                result = result['_source'] 
+                person_url = 'http://weibo.com/u/'+str(result['uid'])+'/home'
+                nick_name = result['nick_name']
+                nick_name_list.append(nick_name)
+                sex_list.append(result['sex'])
+                description_list.append(result['description'])
+                role_example_dict[result['uid']] = [nick_name,person_url]
+                count += 1
+                if count > NICK_NAME_TOP:
+                    break
 
-            es_results = es_flow_text.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
-          
-            daily_interest_uid_set = set()
-            for result in es_results:
-                daily_interest_uid_set.add(result['_source']['uid'])
-            daily_interest_uid_list = list(daily_interest_uid_set)
-            es_daily_interests_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
-                                                    body={'ids':daily_interest_uid_list})['docs']
-            nick_name_list = []
-            sex_list = []
-            user_location_list = []
-            description_list = []
-           
-            for result in es_daily_interests_results:
-                if result['found'] == True:
-                    result = result['_source']
-                    nick_name_list.append(result['nick_name'])
-                    sex_list.append(result['sex'])
-                    user_location_list.append(result['user_location'])
-                    if result['description']:
-                        description_list.append(result['description'])
-            sex_list_count = Counter(sex_list)
-            sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]
-          
-            user_location_list_count = Counter(user_location_list)
-            user_location_sort_top = sorted(user_location_list_count.items(),key=lambda x:x[1],reverse=True)[:USER_LOCATION_TOP]
-            user_location_top_list = []
-            for user_location in user_location_sort_top:
-                user_location_top_list.append(user_location_sort[0])
-            
-                
-            recommend_results['nick_name'] = nick_name_list[:NICK_NAME_TOP]
-            recommend_results['role_example'] = recommend_results['role_example'] + nick_name_list[:NICK_NAME_TOP]
-            recommend_results['sex'] = sex_sort
-            recommend_results['user_location'] = user_location_top_list
-            recommend_results['description'] = description_list[:DESCRIPTION_TOP]
-
-        except:
-            print '没有找到日常兴趣相符的用户'
-            recommend_results['nick_name'] = ''
-            recommend_results['sex'] = ''
-            recommend_results['user_location'] = ''
-            recommend_results['description'] = ''
-        ## 年龄、职业
-        recommend_results['age'] = ''
-        recommend_results['career'] = ''
-
-        return recommend_results
-
+        recommend_results['role_example'] = role_example_dict
     except:
-        return []
+        recommend_results['role_example'] = []
+    
+    recommend_results['active_time'] = json.loads(es_result['active_time'])[:ACTIVE_TIME_TOP]
+    
+    day_post_num = json.loads(es_result['day_post_num'])
+    day_post_num_new = pd.Series(day_post_num)
+    day_post_num_new = day_post_num_new.fillna(0)
+    day_post_num_new = list(day_post_num_new)
+    day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
+    recommend_results['day_post_num_average'] = day_post_num_average
+    
+    ## 根据日常兴趣
+    # create_time = time.time()
+    
+    # if S_TYPE == 'test':
+    #     create_time = datetime2ts(S_DATE)
+    
+    # index_name_list = get_flow_text_index_list(create_time)
+    
+    # try:
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'daily_interests':daily_interests_list}
+    #             }
+    #         }
+    #     },
+    #     'sort':{'user_fansnum':{'order':'desc'}},
+    #     'size':DAILY_INTEREST_TOP_USER,
+    #     '_source':['uid']
+    # }
+
+    # es_results = es_flow_text.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
+  
+    # daily_interest_uid_set = set()
+    # for result in es_results:
+    #     daily_interest_uid_set.add(result['_source']['uid'])
+    # daily_interest_uid_list = list(daily_interest_uid_set)
+    # es_daily_interests_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+    #                                         body={'ids':daily_interest_uid_list})['docs']
+    # nick_name_list = []
+    # sex_list = []
+    # user_location_list = []
+    # description_list = []
+   
+    # for result in es_daily_interests_results:
+    #     if result['found'] == True:
+    #         result = result['_source']
+    #         nick_name_list.append(result['nick_name'])
+    #         sex_list.append(result['sex'])
+    #         user_location_list.append(result['user_location'])
+    #         if result['description']:
+    #             description_list.append(result['description'])
+    sex_list_count = Counter(sex_list)
+    print 'sex_list_count:::',sex_list_count
+    sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]
+  
+    # user_location_list_count = Counter(user_location_list)
+    # user_location_sort_top = sorted(user_location_list_count.items(),key=lambda x:x[1],reverse=True)[:USER_LOCATION_TOP]
+    # user_location_top_list = []
+    # for user_location in user_location_sort_top:
+    #     user_location_top_list.append(user_location_sort[0])
+    
+        
+    recommend_results['nick_name'] = '&'.join(nick_name_list)
+    recommend_results['role_example'] = recommend_results['role_example']
+    recommend_results['sex'] = sex_sort
+    recommend_results['user_location'] = '&'.join(user_location_top_list)
+    recommend_results['description'] = '&'.join(description_list[:DESCRIPTION_TOP])
+
+    # except:
+    #     print '没有找到日常兴趣相符的用户'
+    #     recommend_results['nick_name'] = ''
+    #     recommend_results['sex'] = ''
+    #     recommend_results['user_location'] = ''
+    #     recommend_results['description'] = ''
+    ## 年龄、职业
+    recommend_results['age'] = ''
+    recommend_results['career'] = ''
+
+    return recommend_results
+
+    # except:
+    #     return []
 
 def get_recommend_follows(task_detail):
     recommend_results = dict()
