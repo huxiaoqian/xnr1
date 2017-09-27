@@ -350,6 +350,7 @@ function weibo(data){
     }
 
 }
+
 // function weibo(data) {
 //     //console.log(data)
 //     $('#weiboContent').bootstrapTable('load', data);
@@ -415,11 +416,13 @@ function weibo(data){
 //     });
 //     startTable();
 // }
+
 function startTable(index) {
     mainJoin(contentList['exo_'+index]['main_user_info'],index)
     mainWeibo(contentList['exo_'+index]['main_weibo_info'],index);
 }
 function mainJoin(data,idx) {
+    console.log(data)
     $('.mainJoinTable'+idx).bootstrapTable('load', data);
     $('.mainJoinTable'+idx).bootstrapTable({
         data:data,
@@ -440,19 +443,23 @@ function mainJoin(data,idx) {
         sortOrder:"desc",
         columns: [
             {
-                title: "编号",//标题
-                field: "",//键名
+                title: "头像",//标题
+                field: "photo_url",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[1];
-                // }
+                formatter: function (value, row, index) {
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                        return '<img style="width: 30px;height: 30px;" src="/static/images/unknown.png">';
+                    }else {
+                        return '<img style="width: 30px;height: 30px;" src="'+row.photo_url+'">';
+                    };
+                }
             },
             {
                 title: "用户UID",//标题
-                field: "",//键名
+                field: "uid",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -463,36 +470,41 @@ function mainJoin(data,idx) {
             },
             {
                 title: "用户昵称",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[5];
-                // },
-            },
-            {
-                title: "关注数",//标题
-                field: "",//键名
+                field: "nick_name",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-
+                    if (row.nick_name==''||row.nick_name=='unknown'||row.nick_name=='numm'||!row.nick_name){
+                        return row.uid;
+                    }else {
+                        return row.nick_name;
+                    }
+                },
+            },
+            {
+                title: "关注数",//标题
+                field: "favoritesnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.favoritesnum==''||row.favoritesnum=='unknown'||row.favoritesnum=='numm'||!row.favoritesnum){
+                        return 0;
+                    }else {
+                        return row.favoritesnum;
+                    }
                 },
             },
             {
                 title: "粉丝数",//标题
-                field: "",//键名
+                field: "fansnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                formatter: function (value, row, index) {
-
-                },
             },
             // {
             //     title: '操作',//标题
@@ -621,7 +633,7 @@ function oneUP(_this) {
             var uid = $(user[i]).children('td').eq(1);alldata.push(uid);
             var nick_name=$(user[i]).children('td').eq(2);alldata.push(nick_name);
             var fansnum = $(user[i]).children('td').eq(4);alldata.push(fansnum);
-            var friendsnum = $(len[i])children('td').eq(5);alldata.push(friendsnum);
+            var friendsnum = $(user[i]).children('td').eq(5);alldata.push(friendsnum);
             weiboString+=alldata.join(',').toString();
             if (i!=user.length-1){userString+='*'}
         }
