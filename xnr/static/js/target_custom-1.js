@@ -1,3 +1,6 @@
+//加载
+var domainName='',roleName='';
+
 //渗透领域
 var field_url='/weibo_xnr_create/show_domain/';
 public_ajax.call_request('get',field_url,field);
@@ -18,8 +21,65 @@ function field(data) {
         public_ajax.call_request('get',creat_url,creat_1)
     });
 }
+var $one=JSON.parse(localStorage.getItem('firstStep'));
+if ($one){
+    domainName=$one.domain_name;
+    roleName=$one.role_name;
+    inModalData($one);
+}
+//模板导入
+var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
+function inModalData(data) {
+    modalAllData=data;
+    var tt=data.domains||data.domain_name;
+    setTimeout(function () {
+        $(".field input[type='radio'][value='"+tt+"']").attr("checked",true);
+    },500);
+    var creat_url='/weibo_xnr_create/domain2role/?domain_name='+(data.domains||data.domain_name);
+    public_ajax.call_request('get',creat_url,creat_1);
+    var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
+    public_ajax.call_request('get',creat_url_2,creat_2);
+    $$political_side=data.political_side;
+    if(data.psy_feature.toString().indexOf('&')==-1){
+        $$psy_feature=data.psy_feature.split(',');
+    }else {
+        $$psy_feature=data.psy_feature.split('&');
+    }
 
-var domainName='',roleName='';
+    var bus=data.business_goal.split('&');
+    for (var f of bus){
+        $(".build-4 input[name='demo66'][type='checkbox'][value='"+f+"']").attr("checked",true);
+    }
+    var day=data.daily_interests.split('&');
+    for (var f of day){
+        $(".build-5 input[name='demo6'][type='checkbox'][value='"+f+"']").attr("checked",true);
+    }
+    if (data.monitor_keywords){
+        $('.build-6 .keywords').val(data.monitor_keywords.toString().replace(/&/g,'，'))
+    }
+    //第二步
+    if(!$one){
+        var nickName,age,location,sex,career,description;
+        if (data.nick_name=='unknown'||data.nick_name=='null'||data.nick_name==''||!data.nick_name){nickName='无昵称'}else{nickName=data.nick_name};
+        if (data.age=='unknown'||data.age=='null'||data.age==''||!data.age){age=0}else{age=data.age};
+        if (data.location=='unknown'||data.location=='null'||data.location==''||!data.location){location='未知'}else{location=data.location};
+        if (data.gender==1){sex='男'}else if(data.gender==2){sex='女'}else{sex='未知'};
+        if (data.career=='unknown'||data.career=='null'||data.career==''||!data.career){career='未知'}else{career=data.career};
+        if (data.description=='unknown'||data.description=='null'||data.description==''||!data.description){description='无描述'}else{description=data.description};
+        var second={
+            'nick_name':nickName,
+            'age':age,
+            'location':location,
+            'sex':sex,
+            'career':career,
+            'description':description
+        }
+        localStorage.setItem('secondStep',JSON.stringify(second));
+    }
+
+
+}
+//==========模板
 
 function creat_1(data) {
     addLabel(data,'opt-1','demo2');
@@ -42,7 +102,7 @@ function addLabel(data,className,name) {
                     ary.push(item[0].toString());
                 });
                 _string=labelSTR(ary,n[k]);
-            }else if(k==1){
+            }else if (k==1){
                 $.each(data['psy_feature'],function (index,item) {
                     ary.push(item[0].toString());
                 });
@@ -70,15 +130,26 @@ function labelSTR(data,name,radioCheckbox='radio') {
         }else if (name=='demo3'){
             data=['左倾','中立','右倾'];
         }else if (name='demo4'){
-            data=['中立','积极','悲伤','焦虑','生气','厌恶','消极其他'];
+            data=['中性','积极','悲伤','焦虑','生气','厌恶','消极其他'];
         }
     }
     for(var i=0;i<data.length;i++){
+        var cc='';
+        if (roleName==data[i]){cc='checked'};
+        if ($$political_side==data[i]){cc='checked'};
+        if ($$psy_feature){
+            for (var f of $$psy_feature){
+                if (f==data[i]){
+                    cc='checked';
+                }
+            }
+        };
         str+= '<label class="demo-label" title="'+data[i]+'">'+
-            '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'">'+
+            '   <input class="demo-radio" value="'+data[i]+'" type="'+radioCheckbox+'" name="'+name+'" '+cc+'>'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
             '</label>';
     }
+
     return str;
 }
 
@@ -113,7 +184,6 @@ $('.nextButton').on('click',function () {
         // window.open('/registered/virtualCreated/?domainName='+domainName+'&roleName='+roleName+'&daily='+daily+
         // '&psyFeature='+psyFeature.join(',')+'&politicalSide='+politicalSide+'&businessGoal='+businessGoal+
         // '&monitorKeywords='+monitorKeywords);
-        window.open('/registered/virtualCreated/');
         var first={
             'domain_name':domainName,
             'role_name':roleName,
@@ -121,9 +191,11 @@ $('.nextButton').on('click',function () {
             'psy_feature':psyFeature.join(','),
             'political_side':politicalSide,
             'business_goal':businessGoal,
-            'monitor_keywords':monitorKeywords}
+            'monitor_keywords':monitorKeywords,
+        };
         localStorage.setItem('firstStep',JSON.stringify(first));
         //public_ajax.call_request('get',saveFirst_url,in_second);
+        window.open('/registered/virtualCreated/');
     }
 });
 function in_second(data) {

@@ -13,7 +13,8 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
-                  create_xnr_flow_text,delete_history_count
+                  create_xnr_flow_text,delete_history_count,create_history_count,lookup_xnr_assess_info
+from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
 
@@ -71,7 +72,7 @@ def ajax_wxnr_history_count():
 #按时间条件显示历史统计结果
 #http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=today&start_time=0&end_time=1505044800
 #http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=''&start_time=1504526400&end_time=1505044800
-#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=&start_time=1505372455&end_time=1505977232
+#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=&start_time=1506182400&end_time=1506433221
 @mod.route('/show_history_count/')
 def ajax_show_history_count():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -88,6 +89,27 @@ def ajax_show_history_count():
 def ajax_delete_history_count():
 	task_id=request.args.get('task_id','')
 	results=delete_history_count(task_id)
+	return json.dumps(results)
+
+#http://219.224.134.213:9209/weibo_xnr_manage/create_history_count/?xnr_user_no=WXNR0004&date_time=2017-09-24&safe=18.12&daily_post_num=4&user_fansnum=2&business_post_num=1&influence=1.45&penetration=20.99&total_post_sum=8&hot_follower_num=2
+@mod.route('/create_history_count/')
+def ajax_create_history_count():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['date_time']=request.args.get('date_time','')
+	#task_detail['safe']=long(request.args.get('safe',''))
+	task_detail['safe']=15.12
+	task_detail['daily_post_num']=int(request.args.get('daily_post_num',''))
+	task_detail['user_fansnum']=int(request.args.get('user_fansnum',''))
+	task_detail['business_post_num']=int(request.args.get('business_post_num',''))
+	task_detail['timestamp']=datetime2ts(request.args.get('date_time',''))
+	#task_detail['influence']=long(request.args.get('influence',''))
+	#task_detail['penetration']=long(request.args.get('penetration',''))
+	task_detail['influence']=2.45
+	task_detail['penetration']=25.99
+	task_detail['total_post_sum']=int(request.args.get('total_post_sum',''))
+	task_detail['hot_follower_num']=int(request.args.get('hot_follower_num',''))
+	results=create_history_count(task_detail)
 	return json.dumps(results)
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
@@ -336,4 +358,17 @@ def ajax_create_xnr_flow_text():
 	task_detail['retweeted']=int(request.args.get('retweeted',''))
 
 	results=create_xnr_flow_text(task_detail)
+	return json.dumps(results)
+
+
+#按指标查询评估信息
+#assess_type=influence,safe,penetration
+#http://219.224.134.213:9209/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=WXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
+@mod.route('/lookup_xnr_assess_info/')
+def ajax_lookup_xnr_assess_info():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	assess_type=request.args.get('assess_type','')
+	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
 	return json.dumps(results)

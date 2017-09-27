@@ -1,6 +1,6 @@
 var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
 public_ajax.call_request('get',reportDefaul_url,reportDefaul);
-var currentData={},currentDataPrival={};
+var currentData={},wordCurrentData={},currentDataPrival={};
 function reportDefaul(data) {
     console.log(data);
     $.each(data,function (index,item) {
@@ -110,7 +110,6 @@ function reportDefaul(data) {
             },
         ],
         onPageChange:function (number, size) {
-            console.log(number)
             var ft=$('.filesList .everyCopy');
             for(var a=0;a<ft.length;a++){
                 var b=$(ft[a]).find('i').attr('pointIds');
@@ -131,6 +130,7 @@ function chooseNo(_this) {
     $('.filesList').show();
     if (yesNO==0){
         currentData[_id]=currentDataPrival[_id];
+        wordCurrentData[_id]=$(_this).parents('.post_center-every').parents('tr')[0];
         var dataIndex=$(_this).parents('.post_center-every').parent().parent().attr('data-index');
         var $Index=Number(dataIndex)+1;
         var t='<span class="everyCopy">第 '+($Index)+' 条数据&nbsp;&nbsp;<i class="icon icon-remove" style="cursor: pointer;" ' +
@@ -139,6 +139,7 @@ function chooseNo(_this) {
         $(_this).attr('YesNo','1');
     }else {
         delete currentData[_id];
+        delete wordCurrentData[_id];
         $(_this).attr('YesNo','0');
         var ft=$('.filesList .everyCopy');
         for(var a=0;a<ft.length;a++){
@@ -154,6 +155,7 @@ function deltPointData(_this) {
     var pointID=$(_this).attr('pointIds');
     $(_this).parent().remove();
     delete currentData[pointID];
+    delete wordCurrentData[pointID];
     $($this_point).attr('YesNo','0');
     var tt=$("input[type='checkbox'][value='"+pointID+"']");
     $(tt[0]).prop('checked', false);
