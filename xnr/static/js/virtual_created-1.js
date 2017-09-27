@@ -25,6 +25,7 @@ function character(data) {
         $('.other-3').css({display:'block'});
     });
     //账户创建信息
+    addRecommend('name',)
     $('#container .account .account-1 a').on('click',function () {
         let _classname=$(this).parent().attr('class'),word='',tit='';
         if (_classname.includes('name')){
@@ -49,18 +50,63 @@ function character(data) {
         _classname+='&account-2&account-2-example&account-2-list';
         publicRecommend(word,_classname,tit);
     });
+
+    var addRR=[
+        {'word':'nick_name','tit':'昵称推荐','_classname':'name'},
+        {'word':'age','tit':'年龄推荐','_classname':'age'},
+        {'word':'sex','tit':'性别推荐','_classname':'gender'},
+        {'word':'user_location','tit':'所在地推荐','_classname':'place'},
+        {'word':'career','tit':'职业推荐','_classname':'career'},
+        {'word':'description','tit':'个人描述推荐','_classname':'description'},
+    ];
+    $.each(addRR,function (index,item) {
+        var field=item.word;
+        var className=item._classname;
+        if (field=='sex'){
+            var s = '';
+            if (recommendData[field]==1){s='男'}else if(recommendData[field]==2){s='女'}else{s='未知'};
+            $("#gender input[type='radio'][value='"+s+"']").attr("checked",true);
+        }else {
+            if (!recommendData[field]||recommendData[field]==''||recommendData==0||isEmptyObject(recommendData[field])){
+                $('#container #'+className).val('暂无推荐');
+            }else {
+                var r=recommendData[field].toString().replace(/&/g,'，');
+                $('#container #'+className).val(r);
+            }
+        }
+
+    })
 }
 
+function addRecommend(field,tit,className) {
+    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||isEmptyObject(recommendData[field])){
+        $('#container #'+className).html('暂无推荐');
+    }else {
+        var r=recommendData[field]
+    }
+}
 function publicRecommend(field,className,tit) {
     var str='';
-    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0){
+    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||isEmptyObject(recommendData[field])){
         str='<p style="text-align: center;">抱歉，暂无数据。</p>';
     }else {
         if (field=='day_post_num_average'){
             str+='<li><a href="###">'+parseInt(recommendData[field])+'条</a></li>';
         }else {
-            for(var a=0;a<recommendData[field].length;a++){
-                var at=recommendData[field][a],time;
+            var rd=[];
+            if (typeof recommendData[field]=='string'){
+                rd=recommendData[field].split('&');
+            }else if (typeof recommendData[field]=='object'){
+                for (var k in recommendData[field]){
+                    if (recommendData[field][k]){
+                        rd.push(recommendData[field][k])
+                    }else {
+                        rd.push(k);
+                    }
+                }
+            }
+            for(var a=0;a<rd.length;a++){
+                var at=rd[a],time;
                 if (field=='active_time'){
                     //time=at+':00-'+at+':59';
                     time='<label class="demo-label">'+
@@ -105,7 +151,8 @@ var second;
 //  /weibo_xnr_create/save_step_two/?task_id=WXNR0001&nick_name=大大DE律师
 // &age=29&location=北京&career=律师&description=这是简介&active_time=9,10,11,19,20&day_post_average=9-12
 $('.previous').on('click',function () {
-    window.location.href='/registered/targetCustom/';
+    n=0;
+    nameJudgment();
 });
 var n=0;
 $('.next').on('click',function () {
@@ -126,27 +173,17 @@ function nameJudgment() {
 function repeatNot(data) {
     if (data){
         values();
-        save();
+        //save();
     }else {
         $('#prompt p').text('您输入的昵称与系统数据重复，请重新输入。');
         $('#prompt').modal('show');
     }
 };
 
-function save() {
-    localStorage.setItem('secondStep',JSON.stringify(second));
-    if (n==0){
-        window.open('/personalCenter/individual/');
-    }else {
-        window.open('/registered/socialAccounts/');
-    }
-}
-
-var task_id='WXNR0001';
 function values() {
     var nickName=$('#name').val();
     var age=$('#age').val();
-    var sex;
+    var sex='';
     $(".gender input[type=radio]:radio:checked").each(function (index,item) {
         sex=$(this).val().toString();
     });
@@ -160,7 +197,7 @@ function values() {
     });
     var active_time=Array.from(new Set(timelist)).join(',');
 
-    var day_post_average;//"abc 123 def".replace(/\s/g, "")
+    var day_post_average='';//"abc 123 def".replace(/\s/g, "")
     if ($('.postNUM').val()){
         if(patch('-',$('.postNUM').val().toString())==1){
             day_post_average=$('.postNUM').val().toString().replace(/\s/g, "");
@@ -174,10 +211,21 @@ function values() {
             day_post_average = $(this).val().toString();
         });
     }
-    var saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
-        '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
-        '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
-        '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
+    if (active_time||day_post_average){
+        var saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&task_id='+
+            '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
+            '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
+            '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+
+            '&active_time='+active_time+'&day_post_average='+day_post_average;
+    }else {
+        $('#prompt p').text('请检查您的活跃时间和日发帖量。');
+        $('#prompt').modal('show');
+        return false;
+    }
+    // var saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
+    //     '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
+    //     '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
+    //     '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
     public_ajax.call_request('get',saveSecond_url,in_three);
     if (n == 1||n == 0){
         second={
@@ -193,8 +241,15 @@ function values() {
     };
 }
 function in_three(data) {
-    if (data){
-        // window.open('/registered/socialAccounts/');
+    console.log(data)
+    if (data||data[0]){
+        localStorage.setItem('secondStep',JSON.stringify(second));
+        if (n==0){
+            window.open('/personalCenter/individual/');
+        }else {
+            window.open('/registered/socialAccounts/');
+        }
+        localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');

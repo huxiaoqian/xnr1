@@ -52,6 +52,7 @@
             <div class="bind_info">
                 <input type="text" id="username1" placeholder="邮箱地址（邮箱与手机选一或全填）"/>
                 <input type="text" id="username2" placeholder="手机号码（邮箱与手机选一或全填）"/>
+                <input type="text" id="username3" placeholder="用户昵称（此项必填）"/>
                 <input type="password" id="passwords" placeholder="Password"/>
                 <span id="go_bind">去绑定</span>
             </div>
@@ -145,11 +146,11 @@
     $("#sex").attr('title',basicData_2.sex).text(basicData_2.sex);
     $("#career").attr('title',basicData_2.career).text(basicData_2.career);
     $("#location").attr('title',basicData_2.location).text(basicData_2.location);
-    $("#field").attr('title',basicData_1.domainName).text(basicData_1.domainName);
-    $("#character").attr('title',basicData_1.roleName).text(basicData_1.roleName);
-    $("#mental").attr('title',basicData_1.psyFeature).text(basicData_1.psyFeature);
-    $("#political").attr('title',basicData_1.politicalSide).text(basicData_1.politicalSide);
-    $("#business").attr('title',basicData_1.businessGoal).text(basicData_1.businessGoal);
+    $("#field").attr('title',(basicData_1.domainName||basicData_1.domain_name)).text(basicData_1.domainName||basicData_1.domain_name);
+    $("#character").attr('title',(basicData_1.roleName||basicData_1.role_name)).text(basicData_1.roleName||basicData_1.role_name);
+    $("#mental").attr('title',(basicData_1.psyFeature||basicData_1.psy_feature)).text(basicData_1.psyFeature||basicData_1.psy_feature);
+    $("#political").attr('title',(basicData_1.politicalSide||basicData_1.political_side)).text(basicData_1.politicalSide||basicData_1.political_side);
+    $("#business").attr('title',(basicData_1.businessGoal||basicData_1.business_goal)).text(basicData_1.businessGoal||basicData_1.business_goal);
 </script>
 <script src="/static/js/social_accounts-1.js"></script>
 {% endblock %}

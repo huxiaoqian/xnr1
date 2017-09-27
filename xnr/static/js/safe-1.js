@@ -1,3 +1,68 @@
+var end=Date.parse(new Date())/1000;
+var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=safe';
+public_ajax.call_request('get',safe_7day_url,safe_7day);
+function safe_7day(data) {
+    console.log(data);
+    var nearTime=[],nearData=[];
+    $.each(data,function (index,item) {
+        nearTime.push(item['date_time'][0]);
+        nearData.push(item['safe'][0]);
+    })
+    var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
+    var option = {
+        backgroundColor:'transparent',
+        title : {
+            text: '安全性一周变化趋势图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: nearTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} '
+            }
+        },
+        series : [
+            {
+                name:'安全性分值',
+                type:'line',
+                data:nearData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+        ]
+    };
+    myChart.setOption(option);
+};
 var scoreUrl='/weibo_xnr_assessment/safe_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
 function score(data) {

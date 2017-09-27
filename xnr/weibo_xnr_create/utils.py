@@ -17,6 +17,7 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_domai
                                 weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type
+from xnr.global_utils import update_userinfo_queue_name
 from xnr.parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,\
                         ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
@@ -100,17 +101,22 @@ def get_add_other_info(task_detail):
         account_name = weibo_phone_account
 
     password = task_detail['password']
+    nick_name = task_detail['nick_name']
     print 'account_name:',account_name
     print 'password::',password
-    #try:
-    xnr = SinaLauncher(account_name,password)
-    xnr.login()
-    uid = xnr.uid
-    print 'xnr::',xnr
-    #nick_name = xnr.screen_name
-    # except:
-    #     return '账户名或密码输入错误，请检查后输入！！'
-    user = SinaOperateAPI().getUserShow(uid=uid)
+    try:
+    # # xnr = SinaLauncher(account_name,password)
+    # # xnr.login()
+    # # uid = xnr.uid
+    # # print 'xnr::',xnr
+    #     user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    #     uid = user['uid']
+    # #nick_name = xnr.screen_name
+        user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    except:
+        #return '账户名或密码输入错误，请检查后输入！！'
+        return '昵称输入错误，请检查后输入！！'
+    
     #user = get_userinfo(account_name, password)
     print 'user:::',user
     item_dict = {}
@@ -163,10 +169,14 @@ def get_show_weibo_xnr():
     weibo_xnr_dict = {}
     query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
     es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    
     if es_results:
         for result in es_results:
             result = result['_source']
-            weibo_xnr_dict[result['xnr_user_no']] = result['nick_name']
+            try:
+                weibo_xnr_dict[result['xnr_user_no']] = result['nick_name']
+            except:
+                pass
     return weibo_xnr_dict
 
 def get_role_sort_list(domain_name):
@@ -456,39 +466,29 @@ def get_save_step_one(task_detail):
 
 def get_save_step_two(task_detail):
     #identify xnr number   i.e. WXNR001
-    es_results = es.search(index=weibo_xnr_index_name,\
+    if not task_detail['task_id']:
+        es_results = es.search(index=weibo_xnr_index_name,\
             doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
                   'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1
-    else:
-        user_no_current = 1
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+            user_no_current = user_no_max + 1
+        else:
+            user_no_current = 1
 
+        item_exist = dict()
+
+        item_exist['user_no'] = user_no_current
+        task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
+        print 'task_id!!!',task_id
+    else:
+        print 'task_id####',task_id
+        task_id = task_detail['task_id']
+
+    #save step two information
     item_exist = dict()
 
-    item_exist['user_no'] = user_no_current
-    task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
-    
-    #save step two information
-    # the following is delete
-    '''
-    nick_name = task_detail['nick_name']
-
-    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
-    item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
-
-    #task_detail['user_no'] = user_no_current
-    #task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
-    #try:    
-    #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
-    #item_exist = dict()
-    '''
-
     item_exist['submitter'] = task_detail['submitter']
-    
     item_exist['domain_name'] = task_detail['domain_name']
     item_exist['role_name'] = task_detail['role_name']
     item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
@@ -518,6 +518,7 @@ def get_save_step_two(task_detail):
 def get_save_step_three_1(task_detail):
 
     task_id = task_detail['task_id']
+    nick_name = task_detail['nick_name']
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
 
@@ -535,17 +536,19 @@ def get_save_step_three_1(task_detail):
     exist_results = es.search(index=weibo_xnr_index_name,\
             doc_type=weibo_xnr_index_type,body=query_body_exist)['hits']['hits']
     mark = False
-    if exist_results[0]['_source'] != False:
+    if not exist_results:
         try:
             if task_detail['weibo_mail_account']:
                 uname = task_detail['weibo_mail_account']
             else:
                 uname = task_detail['weibo_phone_account']
-            xnr = SinaLauncher(uname, task_detail['password'])
-            xnr.login()
-            uid = xnr.uid
+            #xnr = SinaLauncher(uname, task_detail['password'])
+            #xnr.login()
+            user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+            uid = user['uid']
         except:
-            return '账户名或密码输入错误，请检查后输入！！'
+            #return '账户名或密码输入错误，请检查后输入！！'
+            return '昵称输入错误，请检查后输入！！'
         #uid = getUserShow(screen_name=nick_name)['data']['uid']
         # query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
         # es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
@@ -584,7 +587,8 @@ def get_save_step_three_1(task_detail):
         es.update(index=weibo_xnr_index_name,\
                 doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
         #es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)        
-
+        # redis 更新队列
+        #r.lpush(update_userinfo_queue_name, json.dumps(item_exist))
         mark =True
     else:
         mark = False
@@ -634,7 +638,6 @@ def get_xnr_info(task_detail):
     return es_results
     
         
-
 def get_domain_info(domain_pinyin):
 
     domain_info = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)['_source']

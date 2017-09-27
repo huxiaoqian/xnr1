@@ -1,3 +1,69 @@
+var end=Date.parse(new Date())/1000;
+var influe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=influence';
+public_ajax.call_request('get',influe_7day_url,influe_7day);
+function influe_7day(data) {
+    console.log(data);
+    var nearTime=[],nearData=[];
+    $.each(data,function (index,item) {
+        nearTime.push(item['date_time'][0]);
+        nearData.push(item['influence'][0]);
+    })
+    var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
+    var option = {
+        backgroundColor:'transparent',
+        title : {
+            text: '影响力一周变化趋势图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                dataView: {readOnly: false},
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: nearTime
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} '
+            }
+        },
+        series : [
+            {
+                name:'影响力分值',
+                type:'line',
+                data:nearData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+        ]
+    };
+    myChart.setOption(option);
+};
+
 var scoreUrl='/weibo_xnr_assessment/influence_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
@@ -382,7 +448,7 @@ function increase() {
         yAxis: {
             type: 'value',
             axisLabel: {
-                formatter: '{value} %'
+                formatter: '{value}'
             }
         },
         series: [
