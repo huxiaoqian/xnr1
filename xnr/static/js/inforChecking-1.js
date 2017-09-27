@@ -65,15 +65,24 @@ function wordCloud(data) {
        $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'22px'}).text('暂无数据');
     }else {
         var wordSeries=[];
-        $.each(data,function (index,item) {
+        for (var k in data){
             wordSeries.push(
                 {
-                    name: item['key'],
-                    value: item['doc_count'],
+                    name: k,
+                    value: data[k],
                     itemStyle: createRandomItemStyle()
                 }
             )
-        });
+        }
+        // $.each(data,function (index,item) {
+        //     wordSeries.push(
+        //         {
+        //             name: item['key'],
+        //             value: item['doc_count'],
+        //             itemStyle: createRandomItemStyle()
+        //         }
+        //     )
+        // });
         require(
             [
                 'echarts',
