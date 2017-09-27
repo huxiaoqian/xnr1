@@ -68,13 +68,13 @@
                 <div class="options name">
                     <img src="/static/images/icon.png" alt="">
                     <span>昵称：</span>
-                    <input type="text" id="name" placeholder="昵称"/>
+                    <input type="text" id="name" placeholder="昵称" readonly/>
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
                 <div class="options age">
                     <img src="/static/images/icon.png" alt="">
                     <span>年龄：</span>
-                    <input type="text" id="age" placeholder="年龄"/>
+                    <input type="text" id="age" placeholder="年龄" readonly/>
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
                 <div class="options gender">
@@ -82,12 +82,16 @@
                     <span>性别：</span>
                     <div id="gender">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="男">
+                            <input class="demo-radio" type="radio" name="demo" value="男" disabled>
                             <span class="demo-checkbox demo-radioInput"></span> 男
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="女">
+                            <input class="demo-radio" type="radio" name="demo" value="女" disabled>
                             <span class="demo-checkbox demo-radioInput"></span> 女
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="未知" disabled>
+                            <span class="demo-checkbox demo-radioInput"></span> 未知
                         </label>
                     </div>
                     <a class="recommend" href="###">查看推荐</a>
@@ -95,13 +99,13 @@
                 <div class="options place">
                     <img src="/static/images/icon.png" alt="">
                     <span>所在地：</span>
-                    <input type="text" id="place" placeholder="北京"/>
+                    <input type="text" id="place" placeholder="地区" readonly/>
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
                 <div class="options career">
                     <img src="/static/images/icon.png" alt="">
                     <span>职业：</span>
-                    <input type="text" id="career" placeholder="学生"/>
+                    <input type="text" id="career" placeholder="职业" readonly/>
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
                 <div class="options description">
@@ -110,7 +114,7 @@
                         <span>个人描述：</span>
                     </div>
 
-                    <textarea id="description" rows="3" style="resize: none;"></textarea>
+                    <textarea id="description" rows="3" readonly style="resize: none;"></textarea>
                     <a class="recommend" href="###">查看推荐</a>
                 </div>
             </div>
@@ -372,6 +376,17 @@
         basicData=data;
         filling();
     }
+    //
+    var $two=JSON.parse(localStorage.getItem('secondStep'));
+    if ($two){
+        $('#name').val($two.nick_name);
+        $('#age').val($two.age);
+        $(".gender input[type='radio'][value='"+$two.sex+"']").attr("checked",true);
+        $('#place').val($two.location);
+        $('#career').val($two.career);
+        $('#description').val($two.description);
+    }
+    //
     function filling() {
         $('#character1').attr('title',basicData.domain_name).text(basicData.domain_name);
         $('#character2').attr('title',basicData.role_name).text(basicData.role_name);
@@ -392,7 +407,6 @@
                 $(".other_basic input[type='checkbox'][value='"+h+"']").attr("checked",true);
             }
             var postNUM=JSON.parse(basicData.day_post_average);
-            console.log(postNUM)
             var $px=postNUM[0]+'-'+postNUM[1];
             if (postNUM[0]>5){
                 $('.customize').hide();

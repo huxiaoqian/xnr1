@@ -30,7 +30,7 @@ function calendar(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     //时间节点名称、日期、距今、关键词、预警微博
-                    var name,txt='',agoDay,time,keywords;
+                    var name,txt='',agoDay,time,time_2,keywords;
                     if (row.date_name==''||row.date_name=='null'||row.date_name=='unknown'){
                         name='未命名';
                     }else {
@@ -45,6 +45,11 @@ function calendar(data) {
                         time='未知';
                     }else {
                         time=getLocalTime(row.create_time);
+                    };
+                    if (row.date_time==''||row.date_time=='null'||row.date_time=='unknown'){
+                        time_2='未知';
+                    }else {
+                        time_2=row.date_time;
                     };
                     if (row.countdown_days==''||row.countdown_days=='null'||row.countdown_days=='unknown'||!row.countdown_days){
                         agoDay = '暂无统计';
@@ -84,7 +89,8 @@ function calendar(data) {
                         // '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         // '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         // '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;'+time_2+'</span>  '+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  '+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="关键词"><i class="icon icon-bell-alt"></i>&nbsp;&nbsp;'+keywords+'</span>  '+
                         '           <div class="center_2"><p style="color:#f98077;">敏感微博内容：</p>'+txt+'</div>'+

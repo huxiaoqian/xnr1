@@ -1,27 +1,6 @@
 // var start_time='1500108142';
 // var end_time='1500108142';
 var end_time=Date.parse(new Date())/1000;
-//几天前的时间戳
-function getDaysBefore(m){
-    var date = new Date(),
-        timestamp, newDate;
-    if(!(date instanceof Date)){
-        date = new Date(date);
-    }
-    timestamp = date.getTime();
-    newDate = new Date(timestamp - m * 24 * 3600 * 1000);
-    return Number(Date.parse(newDate).toString().substring(0,10));
-};
-//当天零点的时间戳
-function todayTimetamp() {
-    var start=new Date();
-    start.setHours(0);
-    start.setMinutes(0);
-    start.setSeconds(0);
-    start.setMilliseconds(0);
-    var todayStartTime=Date.parse(start)/1000;
-    return todayStartTime
-}
 //=====历史统计====定时任务列表====历史消息===时间段选择===
 $('.choosetime .demo-label input').on('click',function () {
     var _val=$(this).val();
@@ -598,16 +577,23 @@ function successfail(data) {
     $('#successfail').modal('show');
 }
 //------历史消息type分页-------
-var typeDown='show_history_posting',boxShoes='historyCenter';
+var typeDown='show_history_posting',boxShoes='historyCenter',MID='task_source';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
     boxShoes=$(this).attr('box');
     htp=[];
     var middle=$(this).attr('midurl').split('&'),liNews_url='';
     var tm=$('input:radio[name="time3"]:checked').val();
     typeDown=middle[0];
+    MID=middle[2];
+    var $params=[];
+    var paramsParent=$(this).find('a').attr('href');
+    $(paramsParent+" .aa input:checkbox:checked").each(function (index,item) {
+        $params.push($(this).val());
+    });
+    if ($params.length==0){$params.push(middle[1])}
     if (tm){
         if (tm!='mize'){
-            liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
+            liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
@@ -617,12 +603,12 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
                 $('#successfail').modal('show');
                 return false;
             }else {
-                liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&task_source='+middle[1]+
+                liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
                     '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
             }
         }
     }else {
-        liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+middle[1]+
+        liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
     console.log(liNews_url)
@@ -641,7 +627,7 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
     var tm=$('input:radio[name="time3"]:checked').val();
     if (tm){
         if (tm!='mize'){
-            againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+            againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
@@ -651,12 +637,12 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
                 $('#successfail').modal('show');
                 return false;
             }else {
-                againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+                againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
                     '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
             }
         }
     }else {
-        againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&content_type='+content_type+
+        againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
     console.log(againHistoryNews_url)
@@ -668,6 +654,8 @@ public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
     console.log(data);
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none';
+    // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
+    // border_2='border-left:1px solid slategrey;';
     if (boxShoes=='historyCenter'){showHide1='inline-block'};
     if (boxShoes=='myweibo'){showHide3='inline-block'};
     if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block'};
@@ -699,10 +687,11 @@ function historyNews(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img;
-                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
+                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'||
+                        row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
-                        name=row.xnr_user_no;
+                        name=row.xnr_user_no||row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||
                         row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
@@ -729,7 +718,7 @@ function historyNews(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+(row.retweeted||row.retweet)+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
@@ -805,7 +794,6 @@ function comMent(_this){
 }
 //转发
 function retweet(_this) {
-    obtain('r');
     var txt = $(_this).parent().prev().text();
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var post_url_2='/weibo_xnr_operate/get_weibohistory_retweet/?xnr_user_no='+ID_Num+'&text='+txt+'&r_mid='+mid;
