@@ -32,7 +32,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                             index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
-                            weibo_private_white_uid_index_type
+                            weibo_private_white_uid_index_type,daily_interest_index_name_pre,\
+                            daily_interest_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -258,35 +259,40 @@ def get_recommend_at_user(xnr_user_no):
     return uid_nick_name_dict
 
 def get_daily_recommend_tweets(theme,sort_item):
-    query_body = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'daily_interests':theme}
-                }
-            }
-        },
-        'sort':{sort_item:{'order':'desc'}},
-        'size':TOP_WEIBOS_LIMIT_DAILY
-    }
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'term':{'daily_interests':theme}
+    #             }
+    #         }
+    #     },
+    #     'sort':{sort_item:{'order':'desc'}},
+    #     'size':TOP_WEIBOS_LIMIT_DAILY
+    # }
+
 
     if S_TYPE == 'test':
         now_ts = datetime2ts(S_DATE)    
     else:
         now_ts = int(time.time())
+
     datetime = ts2datetime(now_ts-24*3600)
 
-    index_name = flow_text_index_name_pre + datetime
+    #index_name = flow_text_index_name_pre + datetime
+    index_name = daily_interest_index_name_pre + datetime
 
-    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-
-    if not es_results:
-        es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT_DAILY,\
-                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+    #es_results = es_flow_text.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
+     
+    es_results = es.get(index=index_name,doc_type=daily_interest_index_type,id=theme)['_source']
+    content = json.loads(es_results['content'])
+    # if not es_results:
+    #     es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                             body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT_DAILY,\
+    #                             'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
-    for result in es_results_recommend:
-        result = result['_source']
+    for result in content:
+        #result = result['_source']
         uid = result['uid']
         nick_name,photo_url = uid2nick_name_photo(uid)
         result['nick_name'] = nick_name
