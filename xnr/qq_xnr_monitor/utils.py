@@ -3,9 +3,11 @@
 use to save function---about deal database
 '''
 import sys
+import json
 import datetime
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
                              group_message_index_name_pre, group_message_index_type
+from global_utils import qq_report_management_index_name,qq_report_management_index_type
 from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
 from xnr.time_utils import get_groupmessage_index_list,ts2datetime,datetime2ts,ts2date,date2ts
 
@@ -187,3 +189,22 @@ def search_by_period(xnr_qq_number,startdate,enddate):
     if results == {}:
         results={'hits':{'hits':[]}}
     return results
+
+
+def report_warming_content(report_type, report_time, xnr_user_no,\
+               qq_number, qq_content_info):
+    report_dict = dict()
+    report_dict['report_type'] = report_type
+    report_dict['report_time'] = int(report_time)
+    report_dict['xnr_user_no'] = xnr_user_no
+    report_dict['qq_number'] = qq_number
+    report_dict['report_content'] = json.dumps(qq_content_info)
+    report_id = xnr_user_no + '_' + str(report_time)
+    try:
+        es_xnr.index(index=qq_report_management_index_name, \
+            doc_type=qq_report_management_index_type, id=report_id,\
+            body=report_dict)
+        mark = True
+    except:
+        mark = False
+    return mark
