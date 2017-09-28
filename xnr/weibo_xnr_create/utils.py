@@ -88,19 +88,64 @@ def get_modify_userinfo(task_detail):
 
     return result
 
-def get_add_other_info(nick_name):
+def union_dict(*objs):
+    _keys = set(sum([obj.keys() for obj in objs], []))
+    _total = {}
+    for _key in _keys:
+        _total[_key] = sum([int(obj.get(_key, 0)) for obj in objs])
+    
+    return _total
 
-    # #user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-    # get_userinfo(uname, pwd, uid)
-    # item_dict = {}
-    # item['nick_name'] = user['screen_name']
-    # item['location'] = user['location']
-    # item['gender'] = user['gender']
-    # item['age'] = user['age']
-    # item['description'] = user['description']
+def get_add_other_info(task_detail):
 
-    return item_dict
+    weibo_mail_account = task_detail['weibo_mail_account']
+    weibo_phone_account = task_detail['weibo_phone_account']
 
+    if weibo_mail_account:
+        account_name = weibo_mail_account
+    else:
+        account_name = weibo_phone_account
+
+    password = task_detail['password']
+    nick_name = task_detail['nick_name']
+    print 'account_name:',account_name
+    print 'password::',password
+    try:
+    # # xnr = SinaLauncher(account_name,password)
+    # # xnr.login()
+    # # uid = xnr.uid
+    # # print 'xnr::',xnr
+    #     user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    #     uid = user['uid']
+    # #nick_name = xnr.screen_name
+        user = SinaOperateAPI().getUserShow(screen_name=nick_name)
+    except:
+        #return '账户名或密码输入错误，请检查后输入！！'
+        return '昵称输入错误，请检查后输入！！'
+    
+    #user = get_userinfo(account_name, password)
+    print 'user:::',user
+    item_dict = {}
+
+    if user:
+        print 'user::',user
+        item_dict['nick_name'] = user['screen_name']
+        item_dict['location'] = user['location']
+        if user['gender']=='m':
+            item_dict['gender'] = u'男'
+        elif user['gender']=='f':
+            item_dict['gender'] = u'女'
+        #item_dict['gender'] = user['gender']
+        #now_year = int(time.strftime('%Y',time.localtime(time.time())))
+        #age = now_year - int(user['birth'][:4])
+        #item_dict['age'] = age
+        item_dict['age'] = 0
+        item_dict['description'] = user['description']
+        item_dict['career'] = ''
+
+    new_task_detail = union_dict(task_detail,item_dict)
+    
+    return new_task_detail
 
 def get_nick_name_unique(nick_name):
     query_body = {
@@ -472,13 +517,13 @@ def get_save_step_two(task_detail):
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
     item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
-    item_exist['sex'] = task_detail['gender']
+    #item_exist['sex'] = task_detail['sex']
 
-    item_exist['nick_name'] = task_detail['nick_name']
-    item_exist['age'] = task_detail['age']
-    item_exist['location'] = task_detail['location']
-    item_exist['career'] = task_detail['career']
-    item_exist['description'] = task_detail['description']
+    # item_exist['nick_name'] = task_detail['nick_name']
+    # item_exist['age'] = task_detail['age']
+    # item_exist['location'] = task_detail['location']
+    # item_exist['career'] = task_detail['career']
+    # item_exist['description'] = task_detail['description']
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
     item_exist['day_post_average'] = json.dumps(task_detail['day_post_average'].split('-'))
     item_exist['create_status'] = 1 # 第二步完成

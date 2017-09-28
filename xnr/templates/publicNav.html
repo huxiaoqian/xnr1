@@ -32,7 +32,7 @@
 {% block header %}
 <div id="nav">
     <div class="nav_top">
-        <h4 style="color:#373737;">网络虚拟人系统</h4>
+        <h4 style="color:#373737;">虚拟人指挥管理系统</h4>
     </div>
     <div class="nav_bottom">
         <ul class="list">
@@ -160,7 +160,7 @@
     setTimeout(function () {
         localStorage.clear();
         ISclear='clear';
-    },3600000);
+    },21600000);
 
     //ajax请求
     var public_ajax={
@@ -177,8 +177,9 @@
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown);
                     var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。';
-                    if (ISclear='clear'){
+                    if (ISclear=='clear'){
                         errorHtml='登录过期，请清除缓存，重新登录。'
+                        ISclear='againSet';
                     }
                     $('#errorInfor p').text(errorHtml);
                     $('#errorInfor').modal('show');
@@ -203,12 +204,19 @@
         $(this).find('span').text(curtxt);
         $('.current').find('span').text(txt);
         $('.nav_type').text('（'+txt+'）');
+        if (txt=='微博虚拟人'){
+            window.open('/index/navigation/');
+        }else {
+            window.open('/index/navigationQQ/');
+        }
     });
     var loginType=localStorage.getItem('loginType');
     if (decodeURI(loginType)=='weibo'){
         InloginName('/index/navigation/','微博虚拟人','QQ群虚拟人','（微博）');
+        $('#backHome .list_one.li_a').attr('href','/index/navigation/');
     }else {
         InloginName('/index/navigationQQ/','QQ群虚拟人','微博虚拟人','（QQ群）');
+        $('#backHome .list_one.li_a').attr('href','/index/navigationQQ/');
     }
     function InloginName(one,two,three,four) {
         $('#backHome .list_one').attr('href',one);

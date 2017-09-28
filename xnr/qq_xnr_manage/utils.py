@@ -108,10 +108,11 @@ def create_qq_xnr(xnr_info):
             else:
                 print '!!!!redis',r.sadd(r_qq_group_set,group_qq_number)
                 qq_group_new_list.append(group_qq_number)
-        if not qq_group_new_list:
-            return ['当前群已经添加',qq_group_exist_list]
-
-        else:
+        qqbot_port = exits_result[0]['_source']['qqbot_port']
+        #if not qq_group_new_list:
+        #    return ['当前群已经添加',qq_group_exist_list]
+        result = True
+        if qq_group_new_list:
             # 把不在的群添加进去
             qq_exist_results = es_xnr.search(index=qq_xnr_index_name,doc_type=\
                 qq_xnr_index_type,body={'query':{'term':{'qq_number':qq_number}}})['hits']['hits']
@@ -164,20 +165,21 @@ def create_qq_xnr(xnr_info):
             result = True
         except:
             result = False
-        print 'result:', result
-        if result == True:
-            #qqbot_port = '8199'
-            p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
-            #qqbot_port = '8190'
-            qqbot_num = qq_number
-            qqbot_port = str(qqbot_port)
-            qqbot_mc = access_id #'sirtgdmgwiivbegf'
-            p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
-            #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
-            print 'p_str1:', p_str1
-            p2 = subprocess.Popen(p_str1, \
-                   shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            #print 'output:', p2.stdout.readlines()
+    print 'before python recieveQQGroupMessage:', result
+    if result == True:
+        print 'python receiveQQGroupMessage!!!!!!!!!'
+        #qqbot_port = '8199'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
+        #qqbot_port = '8190'
+        qqbot_num = qq_number
+        qqbot_port = str(qqbot_port)
+        qqbot_mc = access_id #'sirtgdmgwiivbegf'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
+        #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
+        print 'p_str1:', p_str1
+        p2 = subprocess.Popen(p_str1, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #print 'output:', p2.stdout.readlines()
     return [result,qq_group_exist_list]
 
 def show_qq_xnr(MAX_VALUE):
