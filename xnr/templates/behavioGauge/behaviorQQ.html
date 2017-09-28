@@ -40,39 +40,39 @@
                         <div style="display: inline-block;">
                             <img src="/static/images/icon.png" alt="">
                             <span style="color: #fff;">得分：</span>
-                            <b class="score" style="color:#f44336;">98</b>
+                            <b class="score" style="color:#f44336;"></b>
                         </div>
-                        <div class="influe-1-opt" style="display: inline-block;margin-left:30px;">
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo-checkbox" checked>
-                                <span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势
-                            </label>
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo-checkbox">
-                                <span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势
-                            </label>
-                        </div>
+                        <!--<div class="influe-1-opt" style="display: inline-block;margin-left:30px;">-->
+                            <!--<label class="demo-label">-->
+                                <!--<input class="demo-radio" type="radio" name="demo-checkbox" checked>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势-->
+                            <!--</label>-->
+                            <!--<label class="demo-label">-->
+                                <!--<input class="demo-radio" type="radio" name="demo-checkbox">-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势-->
+                            <!--</label>-->
+                        <!--</div>-->
                     </div>
-                    <div id="influe-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
+                    <div id="influe-2" style="width:800px;height:400px;margin:30px auto 0;"></div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="penetration">
                     <div class="pen-1 caption" style="display: inline-block;margin-top: 20px;">
                         <div style="display: inline-block;">
                             <img src="/static/images/icon.png" alt="">
                             <span style="color: #fff;">得分：</span>
-                            <b class="score" style="color:#f44336;">98</b>
+                            <b class="score" style="color:#f44336;"></b>
                         </div>
 
-                        <div class="pen-1-opt" style="display: inline-block;margin-left:30px;">
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo" checked>
-                                <span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势
-                            </label>
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="demo">
-                                <span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势
-                            </label>
-                        </div>
+                        <!--<div class="pen-1-opt" style="display: inline-block;margin-left:30px;">-->
+                            <!--<label class="demo-label">-->
+                                <!--<input class="demo-radio" type="radio" name="demo" checked>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 敏感信息量趋势-->
+                            <!--</label>-->
+                            <!--<label class="demo-label">-->
+                                <!--<input class="demo-radio" type="radio" name="demo">-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 敏感度变化趋势-->
+                            <!--</label>-->
+                        <!--</div>-->
                     </div>
                     <div id="pen-2" style="width:800px;height:400px;margin: 30px auto 0;"></div>
                 </div>
@@ -80,12 +80,9 @@
                     <div class="safe-1 caption" style="display: inline-block;margin-top: 20px;">
                         <img src="/static/images/icon.png" alt="">
                         <span style="color: #fff;">得分：</span>
-                        <b class="score" style="color:#f44336;">98</b>
+                        <b class="score" style="color:#f44336;"></b>
                     </div>
-                    <div class="safe-2">
-                        <div id="safe-2-pic1"></div>
-                        <div id="safe-2-pic2"></div>
-                    </div>
+                    <div id="safe-2" style="width:800px;height:400px;margin:30px auto 0;"></div>
                 </div>
             </div>
         </div>
@@ -136,7 +133,8 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/inforCheckingQQ-1.js"></script>
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/behaviorQQ-1.js"></script>
 <script>
     $('.coorName').text('行为评估');
     document.onkeydown = function(e) {
@@ -147,7 +145,5 @@
             console.log("QQ内容：" + document.activeElement.value);
         }
     };
-
-
 </script>
 {% endblock %}

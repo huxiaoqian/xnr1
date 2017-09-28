@@ -8,8 +8,8 @@
         height: auto!important;
     }
     #container .content-1-word .fixed-table-body {text-align: center;}
-    .content-1-word .table-no-bordered,.table>tbody>tr>td,.content-1-word .fixed-table-container,
-    .content-1-word .bootstrap-table .table>thead>tr>th,.content-1-word .bootstrap-table .table,.table>tbody>tr>td{
+    .content-1-word .table-no-bordered,.content-1-word .fixed-table-container,
+    .content-1-word .bootstrap-table .table>thead>tr>th,.content-1-word .bootstrap-table .table,.content-1-word .table>tbody>tr>td{
         border: none;
     }
     .content-1-word .fixed-table-pagination .page-list {
@@ -104,7 +104,7 @@
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff">敏感用户</span>
             </div>
-            <div class="hot-2" style="margin-left: 30px;">
+            <div class="hot-2">
                 <div id="hot-2"></div>
             </div>
         </div>
@@ -128,20 +128,19 @@
         </div>
     </div>
 </div>
-<!--语料库-->
-<div class="modal fade" id="wordlab" tabindex="-1" role="dialog">
+<div class="modal fade" id="errorInfor" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">语料库推荐</h4>
+                <h4 class="modal-title">错误提示</h4>
             </div>
             <div class="modal-body">
-                <div id="wordbox"></div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureInlab()">确定</button>
+                <div class="coverbody">
+                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                    </p>
+                </div>
             </div>
         </div>
     </div>

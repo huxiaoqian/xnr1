@@ -15,9 +15,18 @@ from global_utils import es_xnr,weibo_keyword_count_index_name,weibo_keyword_cou
                              weibo_xnr_index_name,weibo_xnr_index_type,\
                              es_flow_text,flow_text_index_type, weibo_xnr_fans_followers_index_name,\
                              weibo_xnr_fans_followers_index_type, flow_text_index_name_pre, flow_text_index_type
+from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
 test_date = '2016-11-21'
 
+
+def extract_keywords(w_text):
+
+    tr4w = TextRank4Keyword()
+    tr4w.analyze(text=w_text, lower=True, window=4)
+    k_dict = tr4w.get_keywords(100, word_min_len=2)
+
+    return k_dict
 
 #查询虚拟人的关注用户列表
 def lookup_weiboxnr_concernedusers(xnr_user_no):
@@ -54,7 +63,7 @@ def xnr_keywords_compute(xnr_user_no):
                 'keywords':{
                     'terms':{
                         'field':'keywords_string',
-                        'size': 100
+                        'size': 1000
                     }
                 }
             }
@@ -63,12 +72,26 @@ def xnr_keywords_compute(xnr_user_no):
         flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                body=query_body)['aggregations']['keywords']['buckets']
         word_dict = dict()
+
+        word_dict_new = dict()
+
+        keywords_string = ''
         for item in flow_text_exist:
             word = item['key']
             count = item['doc_count']
             word_dict[word] = count
-        
-    return word_dict
+
+            keywords_string += '&'
+            keywords_string += item['key']
+
+        k_dict = extract_keywords(keywords_string)
+
+        for item_item in k_dict:
+            keyword = item_item.word.encode('utf-8')
+            word_dict_new[keyword] = word_dict[keyword]
+    print 'word_dict_new:::',len(word_dict_new.keys())
+    print 'word_dict:::',len(word_dict.keys())
+    return word_dict_new
 
 
 #查询虚拟人列表
@@ -86,6 +109,7 @@ def lookup_xnr_user_list():
     except:
         xnr_user_list=[]
     return xnr_user_list
+
 
 #组织查询和存储
 def compute_keywords_mark():

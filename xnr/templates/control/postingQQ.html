@@ -57,10 +57,10 @@
         height:20px;
     }
     /*下拉按钮*/
-    .demo-label{display:inline-block;margin:15px 0 0 10px;cursor: pointer;}
+    .demo-label{display:inline-block;margin:15px 10px 0 10px;cursor: pointer;}
     .user_example_list .demo-label{width:260px;margin:2px 0 0 5px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     .demo-radio{display:none}
-    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 5px 0 0;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 0 0 0;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     /*--------*/
@@ -80,14 +80,7 @@
             <span style="font-size: 18px;font-weight: 900;color: #fff;">此账号所在的群</span>
         </div>
         <div class="groupName" style="padding: 0 15px;">
-            <label class="demo-label">
-                <input class="demo-radio" type="radio" name="demo-radio" checked>
-                <span class="demo-radioInput"></span> 地图
-            </label>
-            <label class="demo-label">
-                <input class="demo-radio" type="radio" name="demo-radio">
-                <span class="demo-radioInput"></span> 历史
-            </label>
+
         </div>
     </div>
     <div class="type_page">
@@ -127,7 +120,7 @@
             <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
             <div class="add_thing">
                 <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
-                <div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
+                <!--<div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>-->
                 <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
                 <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
             </div>
@@ -180,7 +173,8 @@
 
 <script>
     $('.coorName').text('操作控制');
-    var qqNumber='{{QQ_id}}';
+    var qqID='{{QQ_id}}';
+    var qqNumber='{{QQ_num}}';
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中

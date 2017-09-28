@@ -85,7 +85,7 @@ function wordCloud(data) {
                         textPadding: 0,
                         autoSize: {
                             enable: true,
-                            minSize: 14
+                            minSize: 18
                         },
                         data: wordSeries
                     }]
@@ -116,7 +116,6 @@ var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts=
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
-    console.log(data)
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
@@ -205,6 +204,7 @@ var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
+    console.log(persondata)
     $('.userList #userList').bootstrapTable('load', persondata);
     $('.userList #userList').bootstrapTable({
         data:persondata,
@@ -233,22 +233,22 @@ function activeUser(persondata) {
             },
             {
                 title: "头像",//标题
-                field: "photo_url",//键名
+                field: "url",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
+                    if (row.url==''||row.url=='null'||row.url=='unknown'||!row.url){
                         return '<img style="width: 20px;height: 20px;" src="/static/images/unknown.png"/>';
                     }else {
-                        return '<img style="width: 20px;height: 20px;" src="'+row.photo_url+'"/>';
+                        return '<img style="width: 20px;height: 20px;" src="'+row.url+'"/>';
                     };
                 }
             },
             {
                 title: "用户ID",//标题
-                field: "id",//键名
+                field: "uid",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -259,37 +259,37 @@ function activeUser(persondata) {
             },
             {
                 title: "昵称",//标题
-                field: "nick_name",//键名
+                field: "uname",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        return '无昵称';
+                    if (row.uname==''||row.uname=='null'||row.uname=='unknown'){
+                        return row.uid;
                     }else {
-                        return row.nick_name;
+                        return row.uname;
                     };
                 }
             },
             {
                 title: "注册地",//标题
-                field: "user_location",//键名
+                field: "location",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
+                    if (row.location==''||row.location=='null'||row.location=='unknown'){
                         return '未知';
                     }else {
-                        return row.user_location;
+                        return row.location;
                     };
                 }
             },
             {
                 title: "粉丝数",//标题
-                field: "fansnum",//键名
+                field: "fans_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -297,16 +297,16 @@ function activeUser(persondata) {
             },
             {
                 title: "微博数",//标题
-                field: "weibo_count",//键名
+                field: "total_number",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.weibo_count==''||row.weibo_count=='null'||row.weibo_count=='unknown'||!row.weibo_count){
+                    if (row.total_number==''||row.total_number=='null'||row.total_number=='unknown'||!row.total_number){
                         return '0';
                     }else {
-                        return row.weibo_count;
+                        return row.total_number;
                     };
                 }
             },
@@ -339,16 +339,16 @@ function activeUser(persondata) {
             // },
         ],
         onCheck:function (row) {
-            act_user_list.push(row.id);_judge()
+            act_user_list.push(row.uid);_judge()
         },
         onUncheck:function (row) {
-            act_user_list.removeByValue(row.id);_judge()
+            act_user_list.removeByValue(row.uid);_judge()
         },
         onCheckAll:function (row) {
-            act_user_list.push(row.id);_judge()
+            act_user_list.push(row.uid);_judge()
         },
         onUncheckAll:function (row) {
-            act_user_list.removeByValue(row.id);_judge()
+            act_user_list.removeByValue(row.uid);_judge()
         },
     });
     $('#userList p').hide();
