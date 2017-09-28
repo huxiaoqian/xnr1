@@ -14,10 +14,14 @@ $('#go_bind').on('click',function () {
 function bindSF(data) {
     var txt='';
     if (data){
-        txt='绑定成功';
-        var listURL='/weibo_xnr_create/recommend_follows/?monitor_keywords='+basicData_1.monitorKeywords+
-            '&daily_interests='+basicData_1.daily;
-        public_ajax.call_request('get',listURL,list);
+        if (data=='nick_name error'){
+            txt='昵称输入错误，请检查昵称。';
+        }else {
+            txt='绑定成功';
+            var listURL='/weibo_xnr_create/recommend_follows/?monitor_keywords='+basicData_1.monitorKeywords+
+                '&daily_interests='+basicData_1.daily;
+            public_ajax.call_request('get',listURL,list);
+        }
     }else {
         txt='抱歉，系统网络原因，绑定失败';
         $('.backTWO').show();

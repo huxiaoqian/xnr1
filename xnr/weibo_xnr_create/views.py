@@ -150,7 +150,6 @@ def ajax_save_step_two():
     # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
     task_detail['day_post_average'] = request.args.get('day_post_average','') 
     # 日发帖量，以“-”分隔，如：9-12,表示每天平均发帖9到12条。从不：0-0,5条以上：5-max
-    
     mark, task_id = get_save_step_two(task_detail)
     return json.dumps([mark, task_id])  #True：保存成功  False：保存失败
 

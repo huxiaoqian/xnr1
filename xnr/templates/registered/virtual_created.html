@@ -268,7 +268,7 @@
                             <input class="demo-radio" type="radio" name="Posting">
                             <span class="demo-checkbox demo-radioInput"></span> 自定义
                         </label>
-                        <input type="text" class="postNUM" placeholder="如：6-8" style="display: none;"/>
+                        <input type="text" class="postNUM" name="pos" placeholder="如：6-8" style="display: none;"/>
                     </div>
                     <a class="other_recommend dayPost" href="###">查看推荐</a>
                 </div>
@@ -385,6 +385,21 @@
         $('#place').val($two.location);
         $('#career').val($two.career);
         $('#description').val($two.description);
+
+        for (var t of $two.active_time){
+            $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
+        }
+
+        if ($two.day_post_num>5){
+            $('.other-2 .customize').hide();
+            $('.other-2 .postNUM').show().val(parseInt(Number($two.day_post_num)));
+        }else if ($two.day_post_num==0){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
+        }else if ($two.day_post_num>0&&$two.day_post_num<3){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
+        }else if ($two.day_post_num>=3&&$two.day_post_num<=5){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
+        }
     }
     //
     function filling() {
