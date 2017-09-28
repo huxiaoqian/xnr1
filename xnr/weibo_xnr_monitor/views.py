@@ -32,6 +32,7 @@ def ajax_lookup_weibo_keywordstring():
 def ajax_lookup_hot_posts():
     from_ts=request.args.get('from_ts','')
     to_ts=request.args.get('to_ts','')
+    print 'from_ts, to_ts:', from_ts, to_ts
     weiboxnr_id=request.args.get('weiboxnr_id','')
     classify_id=request.args.get('classify_id','')
     order_id=request.args.get('order_id','')

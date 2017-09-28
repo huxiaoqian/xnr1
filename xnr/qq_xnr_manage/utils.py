@@ -2,12 +2,15 @@
 '''
 use to save function---about deal database
 '''
+import time
 import sys
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
         qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r
+from xnr.global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
+from xnr.time_utils import ts2datetime,datetime2ts
 import socket
 from xnr.qq.getgroup import getgroup_v2
 from xnr.qq.receiveQQGroupMessage import execute_v2
@@ -182,13 +185,39 @@ def show_qq_xnr(MAX_VALUE):
         'query':{
             'match_all':{}
         },
+        'size':MAX_VALUE
     }
     results = []
     result = es_xnr.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, body=query_body)['hits']['hits']
+    qq_xnr_list = []
     for item in result:
+        item_dict = dict()
         temp = item['_source'].copy()
-        results.append(temp)
-    
+        item_dict = dict(item_dict, **temp)
+        #step1: identify login status
+        port = item['_source']['qqbot_port']
+        qqnum = item['_source']['qq_number']
+        xnr_user_no = item['_source']['xnr_user_no']
+        group_dict = getgroup_v2(xnr_user_no)
+        if group_dict:
+            login_status = True
+        else:
+            login_status = False
+        item_dict['login_status'] = login_status
+        now_date = ts2datetime(time.time() - 24*3600)
+        histroy_id = item['_source']['xnr_user_no'] + '_' + now_date
+        try:
+            history_result = es_xnr.get(index=qq_xnr_history_count_index_name,\
+                doc_type=qq_xnr_history_count_index_type, id=histroy_id)['_source']
+            total_post_num = history_result['total_post_num']
+            daily_post_num = history_result['daily_post_num']
+        except:
+            total_post_num = 0
+            daily_post_num = 0
+        item_dict['total_post_num'] = total_post_num
+        item_dict['daily_post_num'] = daily_post_num
+        results.append(item_dict)
+
     return results
 
 def delete_qq_xnr(qq_number):

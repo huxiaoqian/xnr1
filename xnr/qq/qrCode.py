@@ -7,7 +7,7 @@ import subprocess
 #reload(sys)
 #sys.path.append('../')
 #from global_utils import QRCODE_PATH
-
+from xnr.global_utils import es_xnr as es,qq_xnr_index_name,qq_xnr_index_type
 QRCODE_PATH = '/root/.qqbot-tmp/'
 
 def getQRCode():
@@ -35,13 +35,17 @@ def compare(x, y):
     else:
         return 0
 
-def getQRCode_v2(qq_xnr):
+def getQRCode_v2(qq_number):
     #read qq_xnr es to get qqbot_port
     
     try:
-        qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
-                    id=qq_xnr,_source=True)['_source']
-        qqbot_port = qq_xnr_es_result['qqbot_port']
+        # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+        #             id=qq_xnr,_source=True)['_source']
+        # qqbot_port = qq_xnr_es_result['qqbot_port']
+
+        qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                     body={'query':{'term':{'qq_number':qq_number}}},_source=True)['hits']['hits']
+        qqbot_port = qq_xnr_search_result[0]['_source']['qqbot_port']
     except:
         print 'qq_xnr is not exist'
         qqbot_port = ''
@@ -50,7 +54,7 @@ def getQRCode_v2(qq_xnr):
     #test
     #qqbot_port = '8199'
     #get login png
-    port_dir = QRCODE_PATH+qqbot_port+'/'
+    port_dir = QRCODE_PATH+str(qqbot_port)+'/'
     print 'port_dir:', port_dir
     filenames = os.listdir(port_dir)
     print 'filenames:', filenames
