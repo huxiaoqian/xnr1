@@ -265,7 +265,7 @@ def show_event_warming(xnr_user_no):
         test_day_date=S_DATE_EVENT_WARMING
         test_day_time=datetime2ts(test_day_date)
         flow_text_index_list=get_flow_text_index_list(test_day_time)
-        print flow_text_index_list
+        #print flow_text_index_list
         #hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
         #weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
     else:
@@ -284,7 +284,7 @@ def show_event_warming(xnr_user_no):
 
     event_warming_list=[]
     for event_item in hashtag_list:
-        print event_item[0]
+        #print event_item[0]
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
         event_influence_sum=0
@@ -302,46 +302,50 @@ def show_event_warming(xnr_user_no):
             fans_num_dict=dict()
             followers_num_dict=dict()
             alluser_num_dict=dict()
+            #print event_results
             for item in event_results:
-                #统计用户信息
-                if alluser_num_dict.has_key(str(item['_source']['uid'])):
-                    alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
-                else:
-                    alluser_num_dict[str(item['_source']['uid'])]=1
-                    
-                for fans_uid in fans_list:                    
-                    if fans_uid==item['_source']['uid']:
-                        if fans_num_dict.has_key(str(fans_uid)):
-                            fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
-                        else:
-                            fans_num_dict[str(fans_uid)]=1
-                    
-                for followers_uid in followers_list:
-                    if followers_uid==item['_source']['uid']:
-                        if followers_num_dict.has_key(str(followers_uid)):
-                            fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
-                        else:
-                            fans_num_dict[str(followers_uid)]=1
+                if item['_source']['sensitive'] >0:
+                    #统计用户信息
+                    if alluser_num_dict.has_key(str(item['_source']['uid'])):
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                    else:
+                        alluser_num_dict[str(item['_source']['uid'])]=1
+                        
+                    for fans_uid in fans_list:                    
+                        if fans_uid==item['_source']['uid']:
+                            if fans_num_dict.has_key(str(fans_uid)):
+                                fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
+                            else:
+                                fans_num_dict[str(fans_uid)]=1
+                        
+                    for followers_uid in followers_list:
+                        if followers_uid==item['_source']['uid']:
+                            if followers_num_dict.has_key(str(followers_uid)):
+                                fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
+                            else:
+                                fans_num_dict[str(followers_uid)]=1
 
-                #计算影响力
-                origin_influence_value=(item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
-                fans_value=judge_user_type(item['_source']['uid'],fans_list)
-                followers_value=judge_user_type(item['_source']['uid'],followers_list)
-                item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
-                weibo_result.append(item['_source'])
+                    #计算影响力
+                    origin_influence_value=(item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
+                    fans_value=judge_user_type(item['_source']['uid'],fans_list)
+                    followers_value=judge_user_type(item['_source']['uid'],followers_list)
+                    item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                    weibo_result.append(item['_source'])
 
-                #统计影响力、时间
-                event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
-                event_time_sum=item['_source']['timestamp']            
+                    #统计影响力、时间
+                    event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
+                    event_time_sum=item['_source']['timestamp']            
 
-            #典型微博信息
-            weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
-            event_warming_content['main_weibo_info']=weibo_result[:3]
+                #典型微博信息
+                weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
+                event_warming_content['main_weibo_info']=weibo_result
 
-            #事件影响力和事件时间
-            number=len(event_results)
-            event_warming_content['event_influence']=event_influence_sum/number
-            event_warming_content['event_time']=event_time_sum/number
+                #事件影响力和事件时间
+                number=len(event_results)
+                event_warming_content['event_influence']=event_influence_sum/number
+                event_warming_content['event_time']=event_time_sum/number
+            else:
+                pass
         except:
             event_warming_content['main_weibo_info']=[]
             event_warming_content['event_influence']=[]
@@ -508,7 +512,7 @@ def report_warming_content(report_info,user_info,weibo_info):
         #print 'bbbbbb'
         #print 'weibo_info:::',weibo_info
         weibo_info_item=weibo_info.split('*')
-        print weibo_info_item
+        #print weibo_info_item
         for weibo_item in weibo_info_item:
             #print 'weibo_item：：：',weibo_item
             weibo_detail=weibo_item.split(',')
