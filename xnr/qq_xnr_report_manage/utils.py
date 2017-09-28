@@ -33,3 +33,6 @@ def show_report_content(report_type, start_ts, end_ts, qq_xnr_no):
     if es_result:
         result = [item['_source'] for item in es_result]
     return result
+
+
+

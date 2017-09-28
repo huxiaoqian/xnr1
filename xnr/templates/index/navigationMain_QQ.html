@@ -8,9 +8,9 @@
         .weiboQQ {
             position: absolute;
             width: 554px;
-            height: 176px;
+            /*height: 176px;*/
             left: 50%;
-            top: 32%;
+            top: 19%;
             margin: 0 0 0 -277px;
             text-align: center;
         }
@@ -19,11 +19,11 @@
             cursor: pointer;
         }
         @media screen and (min-width:1370px) and (max-width:1920px) {
-            .bg13 .info {
+            .bg13 .warning {
                 top: 700px!important;
                 left: 700px!important;
             }
-            .bg13 .reported {
+            .bg13 .evaluation {
                 top: 700px!important;
                 left: 1100px!important;
             }
@@ -40,49 +40,27 @@
     <div class="bg12"></div>
 
     <div class="bg13">
-        <div class="personal" style="top: 240px;left:160px;">
+        <div class="control" style="top: 240px;left:160px;">
             <i class="icon icon-cogs"></i>
-            <div class="cover" id="personal">
+            <div class="cover" id="control">
                 <em class="icon icon-plus-sign"></em>
                 <span>操作控制</span>
             </div>
         </div>
-        <!--<div class="simulated" style="top: 370px;left: 160px;">-->
-            <!--<i class="icon icon-cloud-upload"></i>-->
-            <!--<div class="cover" id="simulated">-->
-                <!--<em class="icon icon-plus-sign"></em>-->
-                <!--<span>模拟登录</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="control" style="top: 490px;left: 450px;">-->
-            <!--<i class="icon icon-cogs"></i>-->
-            <!--<div class="cover" id="control">-->
-                <!--<em class="icon icon-plus-sign"></em>-->
-                <!--<span>操作控制</span>-->
-            <!--</div>-->
-        <!--</div>-->
-        <div class="info" style="top: 490px;right: 450px;">
+        <div class="warning" style="top: 490px;right:44%;">
             <i class="icon icon-eye-open"></i>
-            <div class="cover" id="info">
+            <div class="cover" id="warning">
                 <em class="icon icon-plus-sign"></em>
                 <span>预警监控</span>
             </div>
         </div>
-        <div class="reported" style="top: 490px;left: 450px;">
+        <div class="evaluation" style="top: 240px;right:160px;">
             <i class="icon icon-sitemap"></i>
-            <div class="cover">
+            <div class="cover" id="evaluation">
                 <em class="icon icon-plus-sign"></em>
                 <span>行为评估</span>
             </div>
         </div>
-        <div class="system" style="top: 240px;right:160px;">
-            <i class="icon icon-inbox"></i>
-            <div class="cover" id="system">
-                <em class="icon icon-plus-sign"></em>
-                <span>上报管理</span>
-            </div>
-        </div>
-
     </div>
 
 
@@ -106,7 +84,51 @@
     </p>
 
 </div>
+<div class="section section5" style="text-align: center">
 
+    <div class="bg"><img src="/static/images/section5.jpg" alt=""></div>
+
+    <!--<strong>[ 功能·监控预警 ]</strong>-->
+
+    <!--<h3>全面监控，为你预警</h3>-->
+
+    <div class="bg51">
+
+        <h4>上报管理</h4>
+
+        <p>
+            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+        </p>
+        <div class="bg51-top" id="reportedmange">
+            <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>上报管理</span>
+        </div>
+    </div>
+    <div class="bg55" style="margin: 0 150px;">
+
+        <h4>知识库管理</h4>
+
+        <p>
+            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+        </p>
+        <div class="bg55-top" id="knowledgebase">
+            <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>知识库管理</span>
+        </div>
+    </div>
+    <div class="bg54">
+
+        <h4>系统管理</h4>
+
+        <p>及时捕获网络重大突发事件和苗头性敏感信息，及时预警和回应疏导舆论焦点，信息预警延迟不超过5分钟。</p>
+
+        <div class="bg54-top" id="system">
+            <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>系统管理</span>
+        </div>
+    </div>
+
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -131,6 +153,24 @@
         });
 
     });
+    $('.bg51').hover(function () {
+        $(".bg51-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg51-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg51-top").removeClass("effeckt-show");
+    });
+    $('.bg54').hover(function () {
+        $(".bg54-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg54-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg54-top").removeClass("effeckt-show");
+    });
+    $('.bg55').hover(function () {
+        $(".bg55-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg55-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg55-top").removeClass("effeckt-show");
+    });
     //登录类型
     localStorage.setItem('loginType',encodeURI('QQ'));
 
@@ -147,15 +187,25 @@
     });
 
     //页面跳转
-    $('#personal').on('click',function () {
+    $('#control').on('click',function () {
         window.open('/personalCenter/individualQQ/');
     });
-    $('#control').on('click',function () {
+    $('#warning').on('click',function () {
+        window.open('/inforDetection/inforCheckingQQ/');
+    });
+    $('#evaluation').on('click',function () {
         window.open('/control/operationControl/');
     });
-     $('#info').on('click',function () {
-         window.open('/inforDetection/inforCheckingQQ/');
-     });
+
+    $('#reportedmange').on('click',function () {
+        window.open('/reportManage/management/');
+    });
+    $('#knowledgebase').on('click',function () {
+        window.open('/knowledge/domainLibrary/');
+    });
+    $('#system').on('click',function () {
+        window.open('/systemManage/daily/');
+    });
 
 </script>
 {% endblock %}
