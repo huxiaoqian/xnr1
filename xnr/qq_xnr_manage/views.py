@@ -27,7 +27,8 @@ def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
     if qq_number:
         path = getQRCode_v2(qq_number)
-        return json.dumps(path)
+        new_path = '/'.join(path.split('/')[-2:])
+        return json.dumps(new_path)
     else:
         return False
 
