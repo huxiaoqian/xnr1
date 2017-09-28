@@ -218,7 +218,8 @@ body {
     float: left;
 }
 .everyday-2 .ed-2-1 .demo-label,.hot-2 .hot-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
-.everyday-2 .ed-2-2 .demo-label,.hot-2 .hot-2-2 .demo-label{width:100px;}
+.everyday-2 .ed-2-2 .demo-label{width:100px;}
+.hot-2 .hot-2-2 .demo-label{width: 120px;}
 .everyday-2 .ed-2-1 .demo-radioInput,.hot-2 .hot-2-1 .demo-radioInput{margin-right:10px;}
 
 

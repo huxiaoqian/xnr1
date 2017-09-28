@@ -46,7 +46,7 @@ function has_table(has_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'){
+                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'||!row.create_time){
                         return '暂无';
                     }else {
                         return getLocalTime(row.create_time);
@@ -91,7 +91,7 @@ function has_table(has_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.active_time==''||row.active_time=='null'||row.active_time=='unknown'){
+                    if (row.active_time==''||row.active_time=='null'||row.active_time=='unknown'||!row.active_time){
                         return '暂无';
                     }else {
                         var t=row.active_time.split(','),str='';
@@ -244,7 +244,7 @@ function not_yet(no_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.active_time==''||row.active_time=='null'||row.active_time=='unknown'){
+                    if (row.active_time==''||row.active_time=='null'||row.active_time=='unknown'||!row.active_time){
                         return '暂无';
                     }else {
                         var t=row.active_time.split(','),str='';
@@ -268,9 +268,6 @@ function not_yet(no_data) {
                 },
             },
         ],
-        onClickCell: function (field, value, row, $element) {
-
-        }
     });
 };
 //今日提醒

@@ -88,7 +88,8 @@ from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 # es.delete(index='weibo_domain',doc_type='group',id='AV64pqMhS8CBAF2ZGzdS')
 # es.delete(index='weibo_domain',doc_type='group',id='AV63955tS8CBAF2ZGzdO')
 # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
-es.delete(index='weibo_example_model',doc_type='model',id='min_yun_ren_shi_grassroot')
+
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0014')
 # print r.sadd('qq_group_set_01',['121567','5674567'])
 # m = r.smembers('qq_group_set_01')
 # if "123123123" in m:

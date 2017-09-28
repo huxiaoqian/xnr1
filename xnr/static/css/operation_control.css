@@ -124,11 +124,17 @@ body {
 }
 
 #container #content .post_perfect {
-    position: relative;
+    /*position: relative;*/
     padding-left: 10px ;
     background: rgba(12, 39, 80, 0.92);
     margin-bottom: 10px;
     /*width: 700px;*/
+}
+#container #content .post_perfect .post_center-hot {
+    position: relative;
+    padding: 10px 10px 10px 30px;
+    /*background-color: rgb(12, 39, 80);*/
+    /*margin-bottom: 15px;*/
 }
 #container #content .post_perfect .center_icon {
     position: absolute;
@@ -155,15 +161,14 @@ body {
 #container #content .commentCOT .post_perfect .center_3 span {
     width: 48%;
 }
-#container #content .post_perfect .center_3 span:nth-child(2),
-#container #content .post_perfect .center_3 span:nth-child(3) {
+#container #content .historyCenter .center_3 span:nth-child(2),
+#container #content .myweibo .center_3 span:nth-child(3) {
     border-left:1px solid slategrey;
-    /*border-right:1px solid slategrey;*/
+    border-right:1px solid slategrey;
 }
-#container #content .post_perfect .center_3 span:nth-child(4) {
-    border-left:1px solid slategrey;
-}
-#container #content .commentCOT .post_perfect .center_3 span:nth-child(2) {
+#container #content .historyCenter .center_3 span:nth-child(4),
+#container #content .myweibo .center_3 span:nth-child(5),
+#container #content .commentCOT .center_3 span:nth-child(7){
     border-left:1px solid slategrey;
 }
 #container #content .post_perfect .center_3 span:hover {
