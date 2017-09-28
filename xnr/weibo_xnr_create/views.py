@@ -39,7 +39,8 @@ def ajax_show_domain():
 # 返回虚拟人
 @mod.route('/show_weibo_xnr/')
 def ajax_show_weibo_xnr():
-    weibo_xnr_dict = get_show_weibo_xnr()
+    submitter = request.args.get('submitter','')
+    weibo_xnr_dict = get_show_weibo_xnr(submitter)
     return json.dumps(weibo_xnr_dict)
 
 # 根据虚拟人推荐角色顺序
@@ -175,9 +176,9 @@ def ajax_save_step_three_1():
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     
     #step2 info
-    results = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
+    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
 
-    new_task_detail = dict(task_detail, **results)
+    #new_task_detail = dict(task_detail, **results)
 
     mark = get_save_step_three_1(new_task_detail)
     #results = get_user_info(task_detail)

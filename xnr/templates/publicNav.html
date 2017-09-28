@@ -160,7 +160,7 @@
     setTimeout(function () {
         localStorage.clear();
         ISclear='clear';
-    },3600000);
+    },21600000);
 
     //ajax请求
     var public_ajax={
@@ -177,8 +177,9 @@
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown);
                     var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。';
-                    if (ISclear='clear'){
+                    if (ISclear=='clear'){
                         errorHtml='登录过期，请清除缓存，重新登录。'
+                        ISclear='againSet';
                     }
                     $('#errorInfor p').text(errorHtml);
                     $('#errorInfor').modal('show');

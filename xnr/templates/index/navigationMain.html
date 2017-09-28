@@ -355,15 +355,14 @@
 
     //登录类型
     localStorage.setItem('loginType',encodeURI('weibo'));
-
+    var admin='admin@qq.com';
     //虚拟人列表
     $.ajax({
         type: 'GET',
-        url: "/weibo_xnr_create/show_weibo_xnr/",
+        url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
         async: true,
         dataType: "json",
         success: function (data) {
-            console.log(data);
             var str='';
             for (var k in data){
                 if (data[k]==''||data[k]=='unknown'){
