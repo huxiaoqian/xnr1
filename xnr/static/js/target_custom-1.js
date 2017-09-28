@@ -31,6 +31,7 @@ if ($one){
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
     modalAllData=data;
+    console.log(data)
     var tt=data.domains||data.domain_name;
     setTimeout(function () {
         $(".field input[type='radio'][value='"+tt+"']").attr("checked",true);
@@ -57,6 +58,10 @@ function inModalData(data) {
     if (data.monitor_keywords){
         $('.build-6 .keywords').val(data.monitor_keywords.toString().replace(/&/g,'，'))
     }
+    var active_time,day_post_num;
+    if (data.active_time=='unknown'||data.active_time=='null'||data.active_time==''||!data.active_time){active_time='未知'}else{active_time=data.active_time};
+    if (data.day_post_num=='unknown'||data.day_post_num=='null'||data.day_post_num==''||!data.day_post_num){day_post_num='未知'}else{day_post_num=data.day_post_num};
+
     //第二步
     if(!$one){
         var nickName,age,location,sex,career,description;
@@ -72,7 +77,9 @@ function inModalData(data) {
             'location':location,
             'sex':sex,
             'career':career,
-            'description':description
+            'description':description,
+            'active_time':active_time,
+            'day_post_num':day_post_num,
         }
         localStorage.setItem('secondStep',JSON.stringify(second));
     }
