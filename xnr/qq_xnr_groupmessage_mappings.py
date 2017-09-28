@@ -59,7 +59,7 @@ def group_message_mappings(qq_number, date):
                         'index':'not_analyzed'
                     },
                     'sensitive_flag':{
-                        'type':'int'
+                        'type':'long'
                         
                     }
                 }
@@ -67,12 +67,13 @@ def group_message_mappings(qq_number, date):
             }
         },
     }
-
+    print 'index_name', index_name
     if not es.indices.exists(index=index_name):
-        es.indices.create(index=index_name,body=index_info,ignore=400)
-    else:
-        es.indices.delete(index=index_name, timeout=100)
-        es.indices.create(index=index_name,body=index_info,ignore=400) 
+        print es.indices.create(index=index_name,body=index_info,ignore=400)
+        
+    #else:
+    #    es.indices.delete(index=index_name, timeout=100)
+    #    es.indices.create(index=index_name,body=index_info,ignore=400) 
 
 if __name__ == '__main__':
     qq_number = 123456

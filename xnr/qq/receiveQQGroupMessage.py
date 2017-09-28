@@ -75,7 +75,10 @@ def onQQMessage(bot, contact, member, content):
 
             r_qq_group_set = r_qq_group_set_pre + qq_number
             qq_group_set = r.smembers(r_qq_group_set)
-
+            #test
+            qq_group_set = set(['531811289'])
+            print 'qq_group_set:', qq_group_set
+            print 'qq_group_number:', qq_group_number
             if qq_group_number in qq_group_set:
             
                 conMD5 = string_md5(content)
@@ -84,6 +87,7 @@ def onQQMessage(bot, contact, member, content):
                 index_name = group_message_index_name_pre+ str(nowDate)
                 index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
                 if not es.indices.exists(index=index_name):
+                    print 'get mapping'
                     group_message_mappings(bot.session.qq,nowDate)
 
                 es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
