@@ -177,7 +177,7 @@ function has_table_QQ(has_data_QQ) {
                     var ld;
                     if (row.login_status){ld = '在线中'}else{ld = '登录'}
                     return '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this,\''+row.qq_number+'\',\''+row.qq_groups.join('，')+'\',\''+row.nickname+'\',\''+row.access_id+'\')" title="'+ld+'"><i class="icon icon-key"></i></a>'+
-                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.qq_number+'\')" title="进入"><i class="icon icon-link"></i></a>'+
+                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\')" title="进入"><i class="icon icon-link"></i></a>'+
                         '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row.qq_number+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -250,9 +250,9 @@ function success_fail(data) {
 }
 
 //进入虚拟人的具体操作
-function enterIn(QQ_id) {
+function enterIn(QQ_id,QQ_num) {
     // var if_in=encodeURI($(_this).parent().prev().text());
-    window.open('/control/postingQQ/?QQ_id='+QQ_id);
+    window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
 }
 
 //添加虚拟人
