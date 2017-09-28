@@ -25,7 +25,6 @@ function character(data) {
         $('.other-3').css({display:'block'});
     });
     //账户创建信息
-    addRecommend('name',)
     $('#container .account .account-1 a').on('click',function () {
         let _classname=$(this).parent().attr('class'),word='',tit='';
         if (_classname.includes('name')){
@@ -52,12 +51,12 @@ function character(data) {
     });
 
     var addRR=[
-        {'word':'nick_name','tit':'昵称推荐','_classname':'name'},
-        {'word':'age','tit':'年龄推荐','_classname':'age'},
-        {'word':'sex','tit':'性别推荐','_classname':'gender'},
-        {'word':'user_location','tit':'所在地推荐','_classname':'place'},
-        {'word':'career','tit':'职业推荐','_classname':'career'},
-        {'word':'description','tit':'个人描述推荐','_classname':'description'},
+        {'word':'nick_name','_classname':'name'},
+        {'word':'age','_classname':'age'},
+        {'word':'sex','_classname':'gender'},
+        {'word':'user_location','_classname':'place'},
+        {'word':'career','_classname':'career'},
+        {'word':'description','_classname':'description'},
     ];
     $.each(addRR,function (index,item) {
         var field=item.word;
@@ -78,16 +77,10 @@ function character(data) {
     })
 }
 
-function addRecommend(field,tit,className) {
-    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||isEmptyObject(recommendData[field])){
-        $('#container #'+className).html('暂无推荐');
-    }else {
-        var r=recommendData[field]
-    }
-}
 function publicRecommend(field,className,tit) {
     var str='';
-    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||isEmptyObject(recommendData[field])){
+    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||
+        isEmptyObject(recommendData[field])){
         str='<p style="text-align: center;">抱歉，暂无数据。</p>';
     }else {
         if (field=='day_post_num_average'){
@@ -179,7 +172,17 @@ function repeatNot(data) {
         $('#prompt').modal('show');
     }
 };
-
+$('.other-2 .choose input').on('click',function () {
+    var s=$(this).attr('name');
+    if (s=='pos'){
+        $('.postNUM').show();
+        $('.customize').hide();
+    }else {
+        $('.postNUM').hide();
+        $('.postNUM').val('');
+        $('.customize').show();
+    }
+})
 function values() {
     var nickName=$('#name').val();
     var age=$('#age').val();
@@ -199,7 +202,8 @@ function values() {
 
     var day_post_average='';//"abc 123 def".replace(/\s/g, "")
     if ($('.postNUM').val()){
-        if(patch('-',$('.postNUM').val().toString())==1){
+        //patch('-',$('.postNUM').val().toString())==1
+        if($('.postNUM').val().toString().indexOf('-')!=-1){
             day_post_average=$('.postNUM').val().toString().replace(/\s/g, "");
         }else {
             $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
@@ -241,7 +245,6 @@ function values() {
     };
 }
 function in_three(data) {
-    console.log(data)
     if (data||data[0]){
         localStorage.setItem('secondStep',JSON.stringify(second));
         if (n==0){

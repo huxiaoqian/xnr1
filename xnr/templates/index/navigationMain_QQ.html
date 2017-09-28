@@ -5,6 +5,37 @@
     <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
     <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
     <style>
+        .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+        .demo-radio{display:none!important;}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        <!---->
+        .modal-header {
+            background: #09344e!important;
+            color: white!important;
+        }
+        .modal-body,.modal-footer {
+            background: #041b29!important;
+            color: white!important;
+        }
+        .table-hover>tbody>tr:hover {
+            background-color: #2a556f!important;
+        }
+        .modal-header .close {
+            color:white!important;
+            opacity: 1!important;
+        }
+        .modal-footer .btn {
+            background-color: transparent;
+            border-color: silver;
+            color: white;
+        }
+        .modal-footer .btn:hover {
+            background-color: rgba(3, 8, 16, 0.61);
+            color: white;
+        }
+        <!---->
         .weiboQQ {
             position: absolute;
             width: 554px;
@@ -129,6 +160,59 @@
     </div>
 
 </div>
+
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity" style="padding: 10px 25px;">
+
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType" style="padding: 10px 25px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                <span class="demo-checkbox demo-radioInput"></span> 隐身
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -187,14 +271,17 @@
     });
 
     //页面跳转
+    var htmlUrl='';
     $('#control').on('click',function () {
         window.open('/personalCenter/individualQQ/');
     });
     $('#warning').on('click',function () {
-        window.open('/inforDetection/inforCheckingQQ/');
+        htmlUrl='/behavioGauge/behaviorQQ/';
+        $('#choosePerson').modal('show');
     });
     $('#evaluation').on('click',function () {
-        window.open('/control/operationControl/');
+        htmlUrl='/behavioGauge/behaviorQQ/';
+        $('#choosePerson').modal('show');
     });
 
     $('#reportedmange').on('click',function () {
@@ -207,5 +294,50 @@
         window.open('/systemManage/daily/');
     });
 
+    //虚拟人列表
+    $.ajax({
+        type: 'GET',
+        url: "/qq_xnr_manage/show_qq_xnr/",
+        async: true,
+        dataType: "json",
+        success: function (data) {
+            var str='';
+            $.each(data,function (index,item) {
+                var name;
+                if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
+                    name='无昵称';
+                }else {
+                    name=item.nickname;
+                }
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueID='+item.xnr_user_no+' valueName='+name+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+name+
+                    '</label>';
+            });
+            $('#choosePerson .identity').html(str);
+        }
+    });
+    //选择虚拟人确定进入
+    $('.sure_in').on('click',function () {
+        var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userName=$('input:radio[name="ID"]:checked').attr('valueName');
+        var userType=$('input:radio[name="choose"]:checked').val();
+        if (!userID||!userName||!userType){
+            $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+            $('#pormpt').modal('show');
+        }else {
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userID;
+            }else {
+                id_or_name=userName;
+            }
+            localStorage.setItem('user',encodeURI(userID));
+            localStorage.setItem('userRelName',encodeURI(userName));
+            localStorage.setItem('userName',encodeURI(id_or_name));
+            window.open(htmlUrl);
+        }
+    });
 </script>
 {% endblock %}

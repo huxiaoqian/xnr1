@@ -535,7 +535,7 @@ def get_save_step_two(task_detail):
     #except:        
     #    mark = False
     
-    return mark
+    return [mark, task_id]
 
 def get_save_step_three_1(task_detail):
     #task_id = task_detail['task_id']

@@ -1,5 +1,5 @@
 {% extends "publicNav.html" %}
-{% block title %}<title>发帖操作</title>{% endblock %}
+{% block title %}<title>操作控制</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/postingQQ.css">
 <link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
@@ -71,7 +71,7 @@
     <div class="title">
         <div style="display: inline-block;">
             <span class="icon icon-edit note_icon" style="color: #fff;"></span>
-            <b style="font-size: 20px;color: #fff;">发帖操作</b>
+            <b style="font-size: 20px;color: #fff;">操作控制</b>
         </div>
     </div>
     <div class="QQgroup" style="margin: 10px auto;">
@@ -179,6 +179,7 @@
 {% block my_js %}
 
 <script>
+    $('.coorName').text('操作控制');
     var qqNumber='{{QQ_id}}';
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
