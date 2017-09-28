@@ -351,78 +351,11 @@ function weibo(data){
 
 }
 
-// function weibo(data) {
-//     //console.log(data)
-//     $('#weiboContent').bootstrapTable('load', data);
-//     $('#weiboContent').bootstrapTable({
-//         data:data,
-//         search: true,//是否搜索
-//         pagination: true,//是否分页
-//         pageSize: 2,//单页记录数
-//         pageList: [15,20,25],//分页步进值
-//         sidePagination: "client",//服务端分页
-//         searchAlign: "left",
-//         searchOnEnterKey: false,//回车搜索
-//         showRefresh: false,//刷新按钮
-//         showColumns: false,//列选择按钮
-//         buttonsAlign: "right",//按钮对齐方式
-//         locale: "zh-CN",//中文支持
-//         detailView: false,
-//         showToggle:false,
-//         sortName:'bci',
-//         sortOrder:"desc",
-//         columns: [
-//             {
-//                 title: "",//标题
-//                 field: "",//键名
-//                 sortable: true,//是否可排序
-//                 order: "desc",//默认排序方式
-//                 align: "center",//水平
-//                 valign: "middle",//垂直
-//                 formatter: function (value, row, index) {
-//                     contentList['exo_'+index]=row;
-//                     var str=
-//                         '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
-//                         '        <div class="event_center">'+
-//                         '            <div style="margin: 10px 0;">'+
-//                         '                <label class="demo-label">'+
-//                         '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-//                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
-//                         '                </label>'+
-//                         '                <img src="/static/images/post-6.png" class="center_icon">'+
-//                         '                <a class="center_1">'+row.event_name+'</a>'+
-//                         '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
-//                         '            </div>'+
-//                         '            <div class="centerdetails" style="padding-left:40px;">'+
-//                         '                <div class="event-1">'+
-//                         '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
-//                         '                    <div class="mainJoin">'+
-//                         '                        <div class="mainJoinTable'+index+'"></div>'+
-//                         '                    </div>'+
-//                         '                </div>'+
-//                         '                <div class="event-2" style="margin: 20px 0;">'+
-//                         '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
-//                         '                    <div class="mainWeibo">'+
-//                         '                        <div class="mainWeiboTable'+index+'"></div>'+
-//                         '                    </div>'+
-//                         '                </div>'+
-//                         '            </div>'+
-//                         '        </div>'+
-//                         '    </div>';
-//                     return str;
-//                 }
-//             },
-//         ],
-//     });
-//     startTable();
-// }
-
 function startTable(index) {
     mainJoin(contentList['exo_'+index]['main_user_info'],index)
     mainWeibo(contentList['exo_'+index]['main_weibo_info'],index);
 }
 function mainJoin(data,idx) {
-    console.log(data)
     $('.mainJoinTable'+idx).bootstrapTable('load', data);
     $('.mainJoinTable'+idx).bootstrapTable({
         data:data,
@@ -521,6 +454,7 @@ function mainJoin(data,idx) {
     });
 }
 function mainWeibo(_data,idx) {
+    console.log(_data)
     $('.mainWeiboTable'+idx).bootstrapTable('load', _data);
     $('.mainWeiboTable'+idx).bootstrapTable({
         data:_data,
@@ -552,7 +486,14 @@ function mainWeibo(_data,idx) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'||!row.text){
                         text='暂无内容';
                     }else {
-                        text=row.text;
+                        if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
+                            var keyword=row.sensitive_words_string.split('&');
+                            for (var f of keyword){
+                                text=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                        }else {
+                            text=row.text;
+                        };
                     };
                     if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
                         time='未知';

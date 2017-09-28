@@ -1,5 +1,5 @@
-// var time=Date.parse(new Date())/1000;
-var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time=1480176000'//+time;
+var time=Date.parse(new Date())/1000;//1480176000
+var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
     console.log(data)
@@ -36,7 +36,14 @@ function weibo(data) {
                         if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                             text='暂无内容';
                         }else {
-                            text=item.text;
+                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                var keyword=item.sensitive_words_string.split('&');
+                                for (var f of keyword){
+                                    text=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                }
+                            }else {
+                                text=item.text;
+                            };
                         };
                         if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
                             time='未知';
@@ -76,7 +83,7 @@ function weibo(data) {
                         nameuid=row.user_name;
                     };
                     var rel_str=
-                        '<div class="everyUser" style="margin: 0 auto;">'+
+                        '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+
