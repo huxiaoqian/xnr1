@@ -15,7 +15,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY
-from xnr.global_config import S_TYPE
+from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI
 
 ###################################################################
 ###################       personal warming       ##################
@@ -25,8 +25,11 @@ from xnr.global_config import S_TYPE
 #show the personal wariming content
 def show_personnal_warming(xnr_user_no,day_time):
     #查询关注列表
-    es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-    followers_list=es_xnr_result['followers_list']
+    try:
+        es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        followers_list=es_xnr_result['followers_list']
+    except:
+        followers_list=[]
 
     #计算敏感度排名靠前的用户
     query_body={
@@ -47,16 +50,24 @@ def show_personnal_warming(xnr_user_no,day_time):
                 }                        
             }
             },
-        'size':MAX_SEARCH_SIZE
+        'size':MAX_VALUE
     }
-    flow_text_index_list=get_flow_text_index_list(int(day_time))
-    weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(int(day_time))
-    if S_TYPE == 'test':        
+
+    #测试状态下时间设置
+    if S_TYPE == 'test':
+        test_day_date=S_DATE_BCI
+        test_day_time=datetime2ts(test_day_date)
+        flow_text_index_list=get_flow_text_index_list(test_day_time)
+    else:
+        flow_text_index_list=get_flow_text_index_list(day_time)
+    #print flow_text_index_list
+    
+    try:   
         first_sum_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,\
         body=query_body)['aggregations']['followers_sensitive_num']['buckets']
-    else:        
-        first_sum_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
-        body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+    except:
+        first_sum_result=[]
+
     #print first_sum_result
     top_userlist=[]
     if USER_NUM < len(first_sum_result):
@@ -65,9 +76,9 @@ def show_personnal_warming(xnr_user_no,day_time):
         temp_num=len(first_sum_result)
     #print temp_num
     for i in xrange(0,temp_num):
-    	user_dict=dict()
-    	user_dict['uid']=first_sum_result[i]['key']
-    	user_dict['sensitive']=first_sum_result[i]['sensitive_num']['value']
+        user_dict=dict()
+        user_dict['uid']=first_sum_result[i]['key']
+        user_dict['sensitive']=first_sum_result[i]['sensitive_num']['value']
         top_userlist.append(user_dict)
 
     #查询敏感用户的最敏感微博内容
@@ -81,23 +92,31 @@ def show_personnal_warming(xnr_user_no,day_time):
             user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
-        	user_detail['user_name']=''
+            user_detail['user_name']=''
 
         query_body={
             'query':{
                 'filtered':{
                     'filter':{
-                        'term':{'uid':user['uid']}
+                        'bool':{
+                            'must':[
+                                {'term':{'uid':user['uid']}},
+                                {'range':{'sensitive':{'gte':1,'lte':100}}}
+                            ]
+                        }
                     }
                 }
             },
             'size':USER_CONTENT_NUM,
             'sort':{'sensitive':{'order':'desc'}}
         }
-        if S_TYPE == 'test':
+        #if S_TYPE == 'test':
+        try:
             second_result=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-        else:
-        	second_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        except:
+            second_result=[]
+        #else:
+        #   second_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
         s_result=[]
         for item in second_result:
             s_result.append(item['_source'])
@@ -116,35 +135,54 @@ def show_personnal_warming(xnr_user_no,day_time):
 #show the speech wariming content
 def show_speech_warming(xnr_user_no,show_type,day_time):
     #关注用户
-    es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-    followers_list=es_xnr_result['followers_list']
+    try:
+        es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        followers_list=es_xnr_result['followers_list']
+    except:
+        followers_list=[]
 
-    if show_type == 0:
-        show_condition_list=[{'bool':{'must_not':{'terms':{'uid':followers_list}}}}]
-    else:
-        show_condition_list=[{'bool':{'must':{'terms':{'uid':followers_list}}}}]
-
-    query_body={
+    un_query_body={
         'query':{
             'filtered':{
-                'filter':show_condition_list
+                'filter':{
+                    'bool':{'must_not':{'terms':{'uid':followers_list}},'must':{'range':{'sensitive':{'gte':1,'lte':100}}}}
+                }
             }
         },
         'size':SPEECH_WARMING_NUM,
         'sort':{'sensitive':{'order':'desc'}}
     }
+
+    in_query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1,'lte':100}}}]}
+                }
+            }
+        },
+        'size':SPEECH_WARMING_NUM,
+        'sort':{'sensitive':{'order':'desc'}}
+    }
+
+    #测试状态下时间设置
+    if S_TYPE == 'test':
+        test_day_date=S_DATE_BCI
+        test_day_time=datetime2ts(test_day_date)
+        flow_text_index_list=get_flow_text_index_list(test_day_time)
+    else:
+        flow_text_index_list=get_flow_text_index_list(day_time)
+
     try:
-        if S_TYPE == 'test':
-            flow_text_index_list=get_flow_text_index_list(int(day_time))
-            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        if show_type == 0:
+            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=un_query_body)['hits']['hits']
         else:
-            weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(int(day_time))
-            results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=in_query_body)['hits']['hits']
         result=[]
         for item in results:
             result.append(item['_source'])
     except:
-    	result=[]
+        result=[]
     return result
 
 
@@ -160,7 +198,7 @@ def addto_speech_warming(xnr_user_no,speech_info):
     if speech_info[0] in followers_list:
         speech_dict['content_type']='follow'
     else:
-    	speech_dict['content_type']='unfollow'
+        speech_dict['content_type']='unfollow'
 
     speech_dict['uid']=speech_info[0]
     speech_dict['text']=speech_info[1]
@@ -253,11 +291,8 @@ def show_event_warming(xnr_user_no):
                 }
             }
         }
-        try:
-            if S_TYPE == 'test':            
-                event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-            else:
-                event_results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        try:         
+            event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
             weibo_result=[]
             fans_num_dict=dict()
             followers_num_dict=dict()
@@ -389,13 +424,13 @@ def show_date_warming(today_time):
 def lookup_weibo_date_warming(keywords,today_time):
     #keyword_query_list=[]
     for keyword in keywords:
-    	keyword_query_list=keyword+''
+        keyword_query_list=keyword+''
         #keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
     end_time=today_time-DAY*REMIND_DAY
     if S_TYPE =='test':
         index_name_list=['xnr_flow_text_2017-09-13','xnr_flow_text_2017-09-18']
     else:
-    	index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
+        index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
     #print index_name_list
 
     query_body={
