@@ -76,7 +76,7 @@ def onQQMessage(bot, contact, member, content):
             r_qq_group_set = r_qq_group_set_pre + qq_number
             qq_group_set = r.smembers(r_qq_group_set)
             #test
-            qq_group_set = set(['531811289'])
+            #qq_group_set = set(['531811289'])
             print 'qq_group_set:', qq_group_set
             print 'qq_group_number:', qq_group_number
             if qq_group_number in qq_group_set:
