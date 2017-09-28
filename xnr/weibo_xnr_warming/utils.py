@@ -7,7 +7,7 @@ import json
 import time
 from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
 from xnr.global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                             es_flow_text,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                             es_flow_text,flow_text_index_name_pre,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_report_management_index_name,weibo_report_management_index_type,\
                              weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,es_user_profile,profile_index_name,profile_index_type
@@ -15,7 +15,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY
-from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI
+from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING
 
 ###################################################################
 ###################       personal warming       ##################
@@ -260,12 +260,17 @@ def get_hashtag():
 #计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
 def show_event_warming(xnr_user_no):
     now_time=int(time.time())
+    hashtag_list = get_hashtag()
     if S_TYPE =='test':    
-        hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
-        weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
-    else:        
-        hashtag_list = get_hashtag()
-        weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
+        test_day_date=S_DATE_EVENT_WARMING
+        test_day_time=datetime2ts(test_day_date)
+        flow_text_index_list=get_flow_text_index_list(test_day_time)
+        print flow_text_index_list
+        #hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
+        #weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
+    else:
+        flow_text_index_list=get_flow_text_index_list(now_time)
+        #weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
 
 
     #虚拟人的粉丝列表和关注列表
@@ -279,7 +284,7 @@ def show_event_warming(xnr_user_no):
 
     event_warming_list=[]
     for event_item in hashtag_list:
-        #print event_item[0]
+        print event_item[0]
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
         event_influence_sum=0
@@ -292,7 +297,7 @@ def show_event_warming(xnr_user_no):
             }
         }
         try:         
-            event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+            event_results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
             weibo_result=[]
             fans_num_dict=dict()
             followers_num_dict=dict()
@@ -404,19 +409,24 @@ def show_date_warming(today_time):
         warming_date=year+'-'+date_time
         today_date=ts2datetime(today_time)
         countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+        '''
         if countdown_num<0:
             new_warming_year=str(int(year)+1)
             new_warming_date=new_warming_year+'-'+date_time
             countdown_numday=(datetime2ts(new_warming_date)-datetime2ts(today_date))/DAY
             item['_source']['countdown_days']=countdown_numday
         else:
-            item['_source']['countdown_days']=countdown_num
+        '''
+        item['_source']['countdown_days']=countdown_num
         
-        #根据给定的关键词查询预警微博
-        keywords=item['_source']['keywords']
-        item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming(keywords,today_time)
+        if abs(countdown_num) < REMIND_DAY:
+            #根据给定的关键词查询预警微博
+            keywords=item['_source']['keywords']
+            item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming(keywords,today_time)
 
-        date_warming_result.append(item['_source'])
+            date_warming_result.append(item['_source'])
+        else:
+            pass
         
     return date_warming_result
 
@@ -426,11 +436,15 @@ def lookup_weibo_date_warming(keywords,today_time):
     for keyword in keywords:
         keyword_query_list=keyword+''
         #keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
-    end_time=today_time-DAY*REMIND_DAY
+
     if S_TYPE =='test':
-        index_name_list=['xnr_flow_text_2017-09-13','xnr_flow_text_2017-09-18']
+        test_time_gap=DAY*REMIND_DAY
+        start_time=datetime2ts(S_DATE_BCI)
+        end_time=start_time - test_time_gap
+        flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,start_time,end_time)
     else:
-        index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
+        end_time=today_time-DAY*REMIND_DAY
+        flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,today_time,end_time)
     #print index_name_list
 
     query_body={
@@ -438,10 +452,11 @@ def lookup_weibo_date_warming(keywords,today_time):
             'match':{
                 'text':keyword_query_list
             }
-        }
+        },
+        'size':MAX_VALUE
     }
     try:
-        temp_result=es_xnr.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        temp_result=es_xnr.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         #print temp_result
         for item in temp_result:

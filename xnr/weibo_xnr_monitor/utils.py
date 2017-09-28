@@ -69,7 +69,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
         keywords_dict=union_dict(today_kewords_dict,history_keywords_dict)
     else:
         keywords_dict=lookup_history_keywords(from_ts,to_ts,xnr_user_no)
-    print 'all keywords_dict:', keywords_dict
+    #print 'all keywords_dict:', keywords_dict
     return keywords_dict 
 
 
@@ -98,7 +98,7 @@ def lookup_history_keywords(from_ts,to_ts,xnr_user_no):
     for item in es_result:
         keywords_dict = json.loads(item['_source']['keyword_value_string'])
         all_keywords_dict=union_dict(all_keywords_dict,keywords_dict)
-    print 'history keyword_dict:', all_keywords_dict
+    #print 'history keyword_dict:', all_keywords_dict
     return all_keywords_dict
 
 #查询今日词云
@@ -143,7 +143,7 @@ def lookup_today_keywords(from_ts,to_ts,xnr_user_no):
         word = item['key']
         count = item['doc_count']
         word_dict[word] = count
-    print 'word_dict:', word_dict
+    #print 'word_dict:', word_dict
     return word_dict
 
 #lookup hot posts
@@ -177,7 +177,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         index_name=flow_text_index_name_pre+ts2datetime(from_date_ts)
         xnr_flow_text_index_name_list.append(index_name)
 
-    print 'flow_text_index_name_list:', xnr_flow_text_index_name_list
+    #print 'flow_text_index_name_list:', xnr_flow_text_index_name_list
 
     if order_id==1:         #按时间排序
         sort_condition_list=[{'timestamp':{'order':'desc'}}]         
@@ -232,7 +232,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
             hot_result.append(item['_source'])
     except:
         hot_result=[]
-    print 'hot_result:', hot_result
+    #print 'hot_result:', hot_result
     return hot_result
 
 
@@ -490,6 +490,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
 
     from_date_ts=datetime2ts(ts2datetime(start_time))
     to_date_ts=datetime2ts(ts2datetime(end_time))
+    print 's_date_bci:', S_DATE_BCI
     print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
     
     bci_index_name = weibo_bci_index_name_pre + ''.join(ts2datetime(today_date_time).split('-'))
@@ -519,10 +520,17 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
             'sort':{'user_index':{'order':'desc'}}
             }
         try:
-            print 'query_body:', query_body
+            #print 'query_body:', query_body
             flow_text_exist=es_flow_text.search(index=bci_index_name,\
                     doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
-            #print 'in flow_text_exist:', len(flow_text_exist)
+            search_uid_list = [item['_source']['user'] for item in flow_text_exist]
+            weibo_user_exist = es_user_profile.search(index=profile_index_name,\
+                    doc_type=profile_index_type,body={'query':{'terms':{'uid':search_uid_list}}})['hits']['hits']
+            #print 'weibo_user_exist:', weibo_user_exist
+            weibo_user_dict = dict()
+            for item in weibo_user_exist:
+                uid = item['_source']['uid']
+                weibo_user_dict[uid] = item['_source']
             for item in flow_text_exist:
                 #print 'item:', item['_source']
                 influence = item['_source']['user_index']/user_max_index*100
@@ -530,9 +538,19 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
                 friends_num = item['_source']['user_friendsnum']
                 total_number = item['_source']['total_number']
                 uid = item['_source']['user']
+                try:
+                    weibo_user_info = weibo_user_dict[uid]
+                    uname = weibo_user_info['nick_name']
+                    location = weibo_user_info['user_location']
+                    url = weibo_user_info['photo_url']
+                except:
+                    uname = ''
+                    location = ''
+                    url = ''
                 #print 'uid:', uid
                 results.append({'uid':uid, 'influence':influence, 'fans_num':fans_num, \
-                        'total_number':total_number, 'friends_num':friends_num})
+                        'total_number':total_number, 'friends_num':friends_num,\
+                        'uname': uname, 'location':location, 'url': url})
                 #print 'results:', results
                 '''
                 uid=item['_source']['uid']
@@ -547,8 +565,8 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
                 if item['_source']['influence']>=INFLUENCE_MIN:
                     results.append(item['_source'])
                 '''
-        except:
-            pass
+        except Exception,e:
+            raise e
 
     return results
 
