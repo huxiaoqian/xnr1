@@ -98,6 +98,7 @@ def union_dict(*objs):
 
 def get_add_other_info(task_detail):
 
+    
     weibo_mail_account = task_detail['weibo_mail_account']
     weibo_phone_account = task_detail['weibo_phone_account']
 
@@ -107,9 +108,11 @@ def get_add_other_info(task_detail):
         account_name = weibo_phone_account
 
     password = task_detail['password']
-    nick_name = task_detail['nick_name']
-    print 'account_name:',account_name
-    print 'password::',password
+    
+    nick_name = str(task_detail['nick_name'])
+    print 'nick_name:', nick_name, type(nick_name)
+    #print 'account_name:',account_name
+    #print 'password::',password
     try:
     # # xnr = SinaLauncher(account_name,password)
     # # xnr.login()
@@ -120,13 +123,14 @@ def get_add_other_info(task_detail):
     # #nick_name = xnr.screen_name
         user = SinaOperateAPI().getUserShow(screen_name=nick_name)
     except:
-        #return '账户名或密码输入错误，请检查后输入！！'
-        return '昵称输入错误，请检查后输入！！'
+    #     #return '账户名或密码输入错误，请检查后输入！！'
+    #     #return '昵称输入错误，请检查后输入！！'
+        return 'nick_name error'
     
     #user = get_userinfo(account_name, password)
     print 'user:::',user
     item_dict = {}
-
+    
     if user:
         print 'user::',user
         item_dict['nick_name'] = user['screen_name']
@@ -535,16 +539,17 @@ def get_save_step_two(task_detail):
     #except:        
     #    mark = False
     
-    return mark
+    return mark,task_id
 
 def get_save_step_three_1(task_detail):
     #task_id = task_detail['task_id']
     #try:
     #print 'task_detail:::',task_detail
+    print 'nick_name:::',task_detail['nick_name']
     nick_name = task_detail['nick_name'].encode('utf-8')
-    #operate = SinaOperateAPI()
-    #user_info = operate.getUserShow(screen_name=nick_name)
-    #uid = user_info['id']
+    operate = SinaOperateAPI()
+    user_info = operate.getUserShow(screen_name=nick_name)
+    uid = user_info['id']
     try:
         if task_detail['weibo_mail_account']:
             uname = task_detail['weibo_mail_account']
@@ -567,7 +572,7 @@ def get_save_step_three_1(task_detail):
     item_exist['create_status'] = 2 # 创建完成
 
     # 更新 weibo_xnr表
-    es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
+    print es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
 
     mark =True
         
@@ -576,11 +581,11 @@ def get_save_step_three_1(task_detail):
     return mark
 
 def get_save_step_three_2(task_detail):
-    #task_id = task_detail['task_id']
+    task_id = task_detail['task_id']
     nick_name = task_detail['nick_name']
-    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+    #es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    #task_id = es_result[0]['_source']['xnr_user_no']
     #插入 weibo_xnr_fans_followers表
 
     try:
