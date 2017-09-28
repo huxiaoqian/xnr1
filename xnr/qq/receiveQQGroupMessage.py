@@ -88,7 +88,7 @@ def onQQMessage(bot, contact, member, content):
                 index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
                 if not es.indices.exists(index=index_name):
                     print 'get mapping'
-                    group_message_mappings(bot.session.qq,nowDate)
+                    print group_message_mappings(bot.session.qq,nowDate)
 
                 es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
                 
