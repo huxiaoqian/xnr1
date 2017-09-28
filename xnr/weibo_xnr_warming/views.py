@@ -19,7 +19,7 @@ mod = Blueprint('weibo_xnr_warming', __name__, url_prefix='/weibo_xnr_warming')
 @mod.route('/show_personnal_warming/')
 def ajax_show_personnal_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
-	day_time=request.args.get('day_time','')
+	day_time=int(request.args.get('day_time',''))
 	#day_time=time.time()
 	results=show_personnal_warming(xnr_user_no,day_time)
 	return json.dumps(results)
@@ -34,7 +34,7 @@ def ajax_show_personnal_warming():
 def ajax_show_speech_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	show_type=request.args.get('show_type','')
-	day_time=request.args.get('day_time','') 
+	day_time=int(request.args.get('day_time','')) 
 	#day_time=time.time()     
 	results=show_speech_warming(xnr_user_no,show_type,day_time)
 	return json.dumps(results)
