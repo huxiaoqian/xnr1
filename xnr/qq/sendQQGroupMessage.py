@@ -188,6 +188,17 @@ def string_md5(str):
 def get_qqxnr_port(qq_xnr, group):
     qq_xnr_info = {}
     #step0: read qq_xnr es to get qqbot_port/xnr_qq_number/xnr_nickname
+    #try:
+        # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+        #         id=qq_xnr,_source=True)['_source']
+
+    qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
+                 body={'query':{'term':{'qq_number':qq_xnr}}},_source=True)['hits']['hits']
+    qq_xnr_es_result = qq_xnr_search_result[0]['_source']
+  '''
+    # except:
+    #     print 'qq_xnr is not exist'
+    #     return qq_xnr_info
     try:
         # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
         #         id=qq_xnr,_source=True)['_source']
@@ -199,14 +210,21 @@ def get_qqxnr_port(qq_xnr, group):
     except:
         print 'qq_xnr is not exist'
         return qq_xnr_info
+    '''
     #qqbot_port = '8189'
-    qq_xnr_info['qqbot_port'] = qq_xnr_es_result['qqbot_port']
+    qqbot_port = qq_xnr_es_result['qqbot_port']
+    qq_xnr_info['qqbot_port'] = qqbot_port
     qq_xnr_info['xnr_qq_number'] = qq_xnr
     qq_xnr_info['xnr_nickname'] = qq_xnr_es_result['nickname']
     qq_xnr_info['speaker_qq_number'] = qq_xnr
     qq_xnr_info['speaker_nickname'] = qq_xnr_es_result['nickname']
     #step1: get qq_group_number
-    p_str = 'qq '+ qqbot_port + ' list group '+ group
+    print 'group::',group
+    print 'group_type::',type(group)
+    print 'qqbot_port_type::',type(qqbot_port)
+    print 'qqbot_port::',qqbot_port
+
+    p_str = 'qq '+ str(qqbot_port) + ' list group '+ group.encode('utf-8')
     p = subprocess.Popen(p_str, \
        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     line_count = 0
@@ -234,14 +252,14 @@ def sendfromweb_v2(qq_xnr, group, content):
     qqbot_port = qq_xnr_info['qqbot_port']
     #test
     #qqbot_port = '8199'
-    shell_str = 'qq '+qqbot_port+' send group '+ group + ' ' + content
+    shell_str = 'qq '+str(qqbot_port)+' send group '+ group.encode('utf-8') + ' ' + content.encode('utf-8')
     p = subprocess.Popen(shell_str, \
              shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     #test
-    #line_list = ''
-    #for line in p.stdout.readlines():
-    #    print 'return line:', line
-    #    line_list += line
+    line_list = ''
+    for line in p.stdout.readlines():
+       print 'return line:', line
+       line_list += line
     
     if '成功' in line_list:
         qq_item = {
@@ -257,6 +275,7 @@ def sendfromweb_v2(qq_xnr, group, content):
         qq_json = json.dumps(qq_item)
         nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
         index_name = sent_group_message_index_name_pre + str(nowDate)
+        conMD5 = string_md5(content)
         index_id = qq_xnr_info['xnr_qq_number'] + '_' + qq_xnr_info['speaker_qq_number'] + '_' + str(int(round(time.time()))) + '_' + conMD5
         return 1
     else:
