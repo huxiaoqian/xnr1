@@ -15,7 +15,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY
-from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI
+from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING
 
 ###################################################################
 ###################       personal warming       ##################
@@ -260,12 +260,17 @@ def get_hashtag():
 #计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
 def show_event_warming(xnr_user_no):
     now_time=int(time.time())
+    hashtag_list = get_hashtag()
     if S_TYPE =='test':    
-        hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
-        weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
-    else:        
-        hashtag_list = get_hashtag()
-        weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
+        test_day_date=S_DATE_EVENT_WARMING
+        test_day_time=datetime2ts(test_day_date)
+        flow_text_index_list=get_flow_text_index_list(test_day_time)
+        print flow_text_index_list
+        #hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
+        #weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
+    else:
+        flow_text_index_list=get_flow_text_index_list(now_time)
+        #weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
 
 
     #虚拟人的粉丝列表和关注列表
@@ -279,7 +284,7 @@ def show_event_warming(xnr_user_no):
 
     event_warming_list=[]
     for event_item in hashtag_list:
-        #print event_item[0]
+        print event_item[0]
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
         event_influence_sum=0
@@ -292,7 +297,7 @@ def show_event_warming(xnr_user_no):
             }
         }
         try:         
-            event_results=es_flow_text.search(index=weibo_xnr_flow_text_listname,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+            event_results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
             weibo_result=[]
             fans_num_dict=dict()
             followers_num_dict=dict()
