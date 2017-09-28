@@ -191,7 +191,6 @@ def ajax_submit_hot_keyword_task():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人 
     task_detail['mid'] = request.args.get('task_id','') # 当前代表微博的mid 
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
-    print '!!!!',task_detail['keywords_string']
     task_detail['compute_status'] = 0 # 尚未计算
     task_detail['submit_time'] = int(time.time()) # 当前时间
     task_detail['submit_user'] = request.args.get('submit_user','admin@qq.com') 
@@ -246,8 +245,9 @@ def ajax_delete_sensor_user():
 # 微博推荐
 @mod.route('/bussiness_recomment_tweets/')
 def ajax_bussiness_recomment_tweets():
+    xnr_user_no = request.args.get('xnr_user_no','')
     sort_item = request.args.get('sort_item','timestamp') 
-    tweets = get_bussiness_recomment_tweets(sort_item)
+    tweets = get_bussiness_recomment_tweets(xnr_user_no,sort_item)
     return json.dumps(tweets)
 
 '''
