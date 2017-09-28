@@ -623,8 +623,7 @@ $('#buildModal').on('click',function(){
     var domain_name=$('.field-1 input:radio[name="chara"]:checked').val();
     var role_name=$('.field-2 input:radio:checked').val();
     if (domain_name && role_name){
-        var modal_url='/weibo_xnr_knowledge_base_management/generate_example_model/?xnr_user_no='+ID_Num+
-            '&domain_name='+domain_name+'&role_name='+role_name;
+        var modal_url='/weibo_xnr_knowledge_base_management/generate_example_model/?domain_name='+domain_name+'&role_name='+role_name;
         public_ajax.call_request('get',modal_url,success);
     }else {
         $('#pormpt p').text('请检查您选择的领域和身份，如不选择，无法生成模板。');

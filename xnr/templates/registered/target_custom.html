@@ -222,7 +222,7 @@
     });
     function importModal(){
 //        $("#example_modal").trigger("click");
-        var filesList='/weibo_xnr_knowledge_base_management/show_example_model/?xnr_user_no='+ID_Num;
+        var filesList='/weibo_xnr_knowledge_base_management/show_example_model/';
         public_ajax.call_request('get',filesList,$file);
     };
     function $file(data) {
@@ -232,7 +232,7 @@
         }else {
             var str='';
             $.each(data,function (index,item) {
-                str+='<div style="display: inline-block;margin-right: 15px;padding:4px 7px;background-color:#0a4c73;cursor:pointer;' +
+                str+='<div style="display: inline-block;margin:0 30px 10px;padding:4px 7px;background-color:#0a4c73;cursor:pointer;' +
                     'color: white;" onclick="shutModal(this)">' +
                     '<span>领域：</span><b class="m-1">'+item.domain_name+'</b><span>' +
                     '&nbsp;&nbsp;身份：</span><b class="m-2">'+item.role_name+'</b></div>';

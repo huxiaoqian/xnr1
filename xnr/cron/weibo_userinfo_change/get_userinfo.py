@@ -67,6 +67,7 @@ def get_userinfo(uname, pwd):
     now_year = int(time.strftime('%Y',time.localtime(time.time())))
     age = now_year - int(birth[:4])
     profile_info_dict['birth'] = age
+    #profile_info_dict['birth'] = birth
     print 'birth:', birth
     #step9: get job
     try:

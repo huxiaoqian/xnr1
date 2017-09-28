@@ -60,6 +60,10 @@ portrait_index_type = 'user'
 #use to identify the qq document task redis list
 qq_document_task_name = 'qq_document'
 
+
+#use to identify the weibo xnr update queue list
+update_userinfo_queue_name = 'update_userinfo'
+
 #use to identify the qq login png save file
 QRCODE_PATH = '/root/.qqbot-tmp/'
 ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
@@ -217,6 +221,11 @@ weibo_authority_management_index_type = 'authority'
 ## 账户管理
 weibo_account_management_index_name = 'weibo_account_management'
 weibo_account_management_index_type = 'account'
+
+
+## qq统计
+qq_xnr_history_count_index_name = 'qq_history_count'
+qq_xnr_history_count_index_type = 'count'
 
 
 #module2.1: init redis

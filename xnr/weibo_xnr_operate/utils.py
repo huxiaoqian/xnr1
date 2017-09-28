@@ -41,7 +41,7 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
-                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME
+                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME,TOP_WEIBOS_LIMIT_DAILY
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
@@ -267,7 +267,7 @@ def get_daily_recommend_tweets(theme,sort_item):
             }
         },
         'sort':{sort_item:{'order':'desc'}},
-        'size':TOP_WEIBOS_LIMIT
+        'size':TOP_WEIBOS_LIMIT_DAILY
     }
 
     if S_TYPE == 'test':
@@ -282,7 +282,7 @@ def get_daily_recommend_tweets(theme,sort_item):
 
     if not es_results:
         es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT_DAILY,\
                                 'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
     for result in es_results_recommend:
@@ -438,11 +438,16 @@ def get_hot_subopinion(xnr_user_no,task_id):
             
                 return contents
 
-def get_tweets_from_flow(sort_item_new):
+def get_tweets_from_flow(monitor_keywords_list,sort_item_new):
+
+    for monitor_keyword in monitor_keywords_list:
+        nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
 
     query_body = {
         'query':{
-            'match_all':{}
+            'bool':{
+                'should':nest_query_list
+            }  
         },
         'sort':{sort_item_new:{'order':'desc'}},
         'size':TOP_WEIBOS_LIMIT
@@ -543,6 +548,7 @@ def get_tweets_from_bci(sort_item_new):
 
 def get_tweets_from_user_portrait(sort_item_new):
 
+
     query_body = {
         'query':{
             'match_all':{}
@@ -566,24 +572,28 @@ def get_tweets_from_user_portrait(sort_item_new):
     
     return es_results
 
-def get_bussiness_recomment_tweets(sort_item):
-    print 'sort_item::',sort_item
-    #sort_item_new = ''
+def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
+    
+    get_results = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    
+    monitor_keywords = get_results['monitor_keywords']
+    monitor_keywords_list = monitor_keywords.encode('utf-8').split('，')
+    
     if sort_item == 'timestamp':
         sort_item_new = 'timestamp'
-        es_results = get_tweets_from_flow(sort_item_new)
+        es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'sensitive_info':
         sort_item_new = 'sensitive'
-        es_results = get_tweets_from_flow(sort_item_new)
+        es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'sensitive_user':
         sort_item_new = 'user_index'
-        es_results = get_tweets_from_bci(sort_item_new)
+        es_results = get_tweets_from_bci(monitor_keywords_list,sort_item_new)
     elif sort_item == 'influence_info':
         sort_item_new = 'retweeted'
-        es_results = get_tweets_from_flow(sort_item_new)
+        es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'influence_user':
         sort_item_new = 'influence'
-        es_results = get_tweets_from_user_portrait(sort_item_new)
+        es_results = get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new)
 
     return es_results
 
