@@ -65,7 +65,8 @@ qq_document_task_name = 'qq_document'
 update_userinfo_queue_name = 'update_userinfo'
 
 #use to identify the qq login png save file
-QRCODE_PATH = '/root/.qqbot-tmp/'
+#QRCODE_PATH = '/root/.qqbot-tmp/'
+QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
 ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
 
 

@@ -1,24 +1,3 @@
-//几天前的时间戳
-function getDaysBefore(m){
-    var date = new Date(),
-        timestamp, newDate;
-    if(!(date instanceof Date)){
-        date = new Date(date);
-    }
-    timestamp = date.getTime();
-    newDate = new Date(timestamp - m * 24 * 3600 * 1000);
-    return Number(Date.parse(newDate).toString().substring(0,10));
-};
-//当天零点的时间戳
-function todayTimetamp() {
-    var start=new Date();
-    start.setHours(0);
-    start.setMinutes(0);
-    start.setSeconds(0);
-    start.setMilliseconds(0);
-    var todayStartTime=Date.parse(start)/1000;
-    return todayStartTime
-}
 var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
 var to_ts=Date.parse(new Date())/1000;
 $('.title .perTime .demo-label input').on('click',function () {
@@ -137,6 +116,7 @@ var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts=
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
+    console.log(data)
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,

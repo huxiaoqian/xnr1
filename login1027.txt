@@ -2708,3 +2708,931 @@ qq_json: {"speaker_qq_number": "7607937", "sensitive_flag": 0, "sensitive_words_
 [2017-09-26 14:35:40] [INFO] 成员的昵称.. 风之旅途_(:3」∠❀)_
 [2017-09-26 14:35:40] [INFO] 最后发言时间.. 1506395512
 [2017-09-26 14:35:40] [INFO] 消息..  /表情 
+qqbot_port, qqbot_num. qqbot_mailauth: 1027
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-09-28 16:03:33] [INFO] QQBot-v2.3.5
+[2017-09-28 16:03:33] [INFO] Python 2.7.3
+[2017-09-28 16:03:33] [INFO] 工作目录：/root/.qqbot-tmp/1027
+[2017-09-28 16:03:33] [INFO] 配置文件：/root/.qqbot-tmp/1027/v2.3.conf
+[2017-09-28 16:03:33] [INFO] 用户名：无
+[2017-09-28 16:03:33] [INFO] 登录方式：自动（qq=1965056593）
+[2017-09-28 16:03:33] [INFO] 命令行服务器端口号：1027
+[2017-09-28 16:03:33] [INFO] 二维码服务器 ip ：无
+[2017-09-28 16:03:33] [INFO] 二维码服务器端口号：无
+[2017-09-28 16:03:33] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-09-28 16:03:33] [INFO] 邮箱服务授权码：******
+[2017-09-28 16:03:33] [INFO] 以文本模式显示二维码：否
+[2017-09-28 16:03:33] [INFO] 调试模式：关闭
+[2017-09-28 16:03:33] [INFO] 掉线后自动重启：是
+[2017-09-28 16:03:33] [INFO] 后台模式（daemon 模式）：是
+[2017-09-28 16:03:33] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-09-28 16:03:33] [INFO] 插件目录1：/root/.qqbot-tmp/1027/plugins
+[2017-09-28 16:03:33] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-09-28 16:03:33] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-09-28 16:03:33] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-09-28 16:03:33] [INFO] 开始自动登录...
+[2017-09-28 16:03:33] [INFO] 成功从文件 "/root/.qqbot-tmp/1027/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-09-28 16:03:34] [INFO] 登录成功。登录账号：袁慧茹(1965056593)
+[2017-09-28 16:03:34] [INFO] 联系人数据库文件：/root/.qqbot-tmp/1027/2017-09-28-10-40-38-1965056593-contact.db
+[2017-09-28 16:03:34] [INFO] 成功：加载插件 receiveQQGroupMessage（回调函数['onQQMessage']、定时任务[]）
+[2017-09-28 16:03:34] [INFO] 已创建计划任务：每天 8:00 重启（需要手工扫码）
+[2017-09-28 16:03:34] [INFO] 已在 127.0.0.1 的 1027 端口开启 QQBot-Term 服务器
+[2017-09-28 16:03:34] [INFO] 请在其他终端使用 qq 命令来控制 QQBot ，示例： qq send buddy jack hello
+[2017-09-28 16:03:34] [INFO] 正在获取 群“SQLAlchemy 交流”的成员列表 ...
+[2017-09-28 16:03:35] [INFO] 已获取并更新 群“SQLAlchemy 交流”的成员列表
+[2017-09-28 16:03:35] [INFO] 来自 群“SQLAlchemy 交流”[成员“芐①個莪＂”] 的消息: ""
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 417263290
+[2017-09-28 16:03:35] [INFO] 群的昵称.. SQLAlchemy 交流
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 459878163
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 芐①個莪＂
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506584926
+[2017-09-28 16:03:35] [INFO] 消息.. 
+[2017-09-28 16:03:35] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:03:35] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "我不会c"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:03:35] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:03:35] [INFO] 消息.. 我不会c
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6211\u4e0d\u4f1ac", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:03:35] [INFO] 来自 群“Python-Flask” 的系统消息： "http://buluo.qq.com/mobile/detail.html?bid=13609&pid=7166856-1506583235&_bid=128&_wv=1027#from=grp_sub_obj&gid=435834988&_wv=1027"
+[2017-09-28 16:03:35] [INFO] 来自 群“房屋买卖违约维权律师”[成员“　鱼在散步”] 的消息: "@N—a 千万别买你这种房子"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 513304542
+[2017-09-28 16:03:35] [INFO] 群的昵称.. 房屋买卖违约维权律师
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 11178514
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 　鱼在散步
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506436344
+[2017-09-28 16:03:35] [INFO] 消息.. @N—a 千万别买你这种房子
+qq_json: {"speaker_qq_number": "11178514", "sensitive_flag": 0, "sensitive_words_string": "", "text": "@N\u2014a \u5343\u4e07\u522b\u4e70\u4f60\u8fd9\u79cd\u623f\u5b50", "qq_group_nickname": "\u623f\u5c4b\u4e70\u5356\u8fdd\u7ea6\u7ef4\u6743\u5f8b\u5e08", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u3000\u9c7c\u5728\u6563\u6b65", "timestamp": 1506436344, "qq_group_number": "513304542"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 513304542
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: ""
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:35] [INFO] 消息.. 
+[2017-09-28 16:03:35] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: ""
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:35] [INFO] 消息.. 
+[2017-09-28 16:03:35] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: "6"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:35] [INFO] 消息.. 6
+qq_json: {"speaker_qq_number": "372992770", "sensitive_flag": 0, "sensitive_words_string": "", "text": "6", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u66fc\u80fd\uff0c", "timestamp": 1506394534, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:35] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“农村最帅前端”] 的消息: "你们一般写一个网站要多久"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:03:35] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 857637472
+[2017-09-28 16:03:35] [INFO] 成员的昵称..    帅气你勇哥
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506145863
+[2017-09-28 16:03:35] [INFO] 消息.. 你们一般写一个网站要多久
+qq_json: {"speaker_qq_number": "857637472", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u4eec\u4e00\u822c\u5199\u4e00\u4e2a\u7f51\u7ad9\u8981\u591a\u4e45", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "   \u5e05\u6c14\u4f60\u52c7\u54e5", "timestamp": 1506145863, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: "除非你的文本特别大，不然就几千万就400G，什么文档啊"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:35] [INFO] 消息.. 除非你的文本特别大，不然就几千万就400G，什么文档啊
+qq_json: {"speaker_qq_number": "372992770", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u9664\u975e\u4f60\u7684\u6587\u672c\u7279\u522b\u5927\uff0c\u4e0d\u7136\u5c31\u51e0\u5343\u4e07\u5c31400G\uff0c\u4ec0\u4e48\u6587\u6863\u554a", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u66fc\u80fd\uff0c", "timestamp": 1506394534, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“重庆-白菜”] 的消息: "要是每条都是一个java报错"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 946316220
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 杨大白菜
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506577594
+[2017-09-28 16:03:35] [INFO] 消息.. 要是每条都是一个java报错
+qq_json: {"speaker_qq_number": "946316220", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8981\u662f\u6bcf\u6761\u90fd\u662f\u4e00\u4e2ajava\u62a5\u9519", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6768\u5927\u767d\u83dc", "timestamp": 1506577594, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:35] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“重庆-白菜”] 的消息: "感觉很可怕"
+[2017-09-28 16:03:35] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:35] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:35] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:35] [INFO] 成员的 QQ.. 946316220
+[2017-09-28 16:03:35] [INFO] 成员的昵称.. 杨大白菜
+[2017-09-28 16:03:35] [INFO] 最后发言时间.. 1506577594
+[2017-09-28 16:03:35] [INFO] 消息.. 感觉很可怕
+qq_json: {"speaker_qq_number": "946316220", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u611f\u89c9\u5f88\u53ef\u6015", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6768\u5927\u767d\u83dc", "timestamp": 1506577594, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:39] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“Captain”] 的消息: "我现在测试的就是固态"
+[2017-09-28 16:03:39] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:39] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:39] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:39] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:39] [INFO] 成员的 QQ.. 16771688
+[2017-09-28 16:03:39] [INFO] 成员的昵称.. Captain
+[2017-09-28 16:03:39] [INFO] 最后发言时间.. 1506499540
+[2017-09-28 16:03:39] [INFO] 消息.. 我现在测试的就是固态
+qq_json: {"speaker_qq_number": "16771688", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6211\u73b0\u5728\u6d4b\u8bd5\u7684\u5c31\u662f\u56fa\u6001", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Captain", "timestamp": 1506499540, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:47] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: "固态这么慢？"
+[2017-09-28 16:03:47] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:47] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:47] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:47] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:47] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:47] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:47] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:47] [INFO] 消息.. 固态这么慢？
+qq_json: {"speaker_qq_number": "372992770", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u56fa\u6001\u8fd9\u4e48\u6162\uff1f", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u66fc\u80fd\uff0c", "timestamp": 1506394534, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:03:56] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: " /表情 固态才4M一秒"
+[2017-09-28 16:03:56] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:03:56] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:03:56] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:03:56] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:03:56] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:03:56] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:03:56] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:03:56] [INFO] 消息..  /表情 固态才4M一秒
+qq_json: {"speaker_qq_number": "372992770", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 \u56fa\u6001\u624d4M\u4e00\u79d2", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u66fc\u80fd\uff0c", "timestamp": 1506394534, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:11] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“沙漠苍狼”] 的消息: "@曼能， 你全是小文件？"
+[2017-09-28 16:04:11] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:11] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:11] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:11] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:11] [INFO] 成员的 QQ.. 862738495
+[2017-09-28 16:04:11] [INFO] 成员的昵称.. 沙漠苍狼
+[2017-09-28 16:04:11] [INFO] 最后发言时间.. 1506503661
+[2017-09-28 16:04:11] [INFO] 消息.. @曼能， 你全是小文件？
+qq_json: {"speaker_qq_number": "862738495", "sensitive_flag": 0, "sensitive_words_string": "", "text": "@\u66fc\u80fd\uff0c \u4f60\u5168\u662f\u5c0f\u6587\u4ef6\uff1f", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6c99\u6f20\u82cd\u72fc", "timestamp": 1506503661, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:22] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“Captain”] 的消息: "就是这个速度"
+[2017-09-28 16:04:22] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:22] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:22] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:22] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:22] [INFO] 成员的 QQ.. 16771688
+[2017-09-28 16:04:22] [INFO] 成员的昵称.. Captain
+[2017-09-28 16:04:22] [INFO] 最后发言时间.. 1506499540
+[2017-09-28 16:04:22] [INFO] 消息.. 就是这个速度
+qq_json: {"speaker_qq_number": "16771688", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5c31\u662f\u8fd9\u4e2a\u901f\u5ea6", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Captain", "timestamp": 1506499540, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:28] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“沙漠苍狼”] 的消息: " /憨笑 "
+[2017-09-28 16:04:28] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:28] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:28] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:28] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:28] [INFO] 成员的 QQ.. 862738495
+[2017-09-28 16:04:28] [INFO] 成员的昵称.. 沙漠苍狼
+[2017-09-28 16:04:28] [INFO] 最后发言时间.. 1506503661
+[2017-09-28 16:04:28] [INFO] 消息..  /憨笑 
+qq_json: {"speaker_qq_number": "862738495", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u61a8\u7b11 ", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6c99\u6f20\u82cd\u72fc", "timestamp": 1506503661, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:32] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“曼能，”] 的消息: "你就是一万T，也可以分成小文件啊"
+[2017-09-28 16:04:32] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:32] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:32] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:32] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:32] [INFO] 成员的 QQ.. 372992770
+[2017-09-28 16:04:32] [INFO] 成员的昵称.. 曼能，
+[2017-09-28 16:04:32] [INFO] 最后发言时间.. 1506394534
+[2017-09-28 16:04:32] [INFO] 消息.. 你就是一万T，也可以分成小文件啊
+qq_json: {"speaker_qq_number": "372992770", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u5c31\u662f\u4e00\u4e07T\uff0c\u4e5f\u53ef\u4ee5\u5206\u6210\u5c0f\u6587\u4ef6\u554a", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u66fc\u80fd\uff0c", "timestamp": 1506394534, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:33] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“VIP-xuheng0628”] 的消息: "问个问题啊"
+[2017-09-28 16:04:33] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:33] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:33] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:33] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:33] [INFO] 成员的 QQ.. 369134
+[2017-09-28 16:04:33] [INFO] 成员的昵称.. Hunter
+[2017-09-28 16:04:33] [INFO] 最后发言时间.. 1501742769
+[2017-09-28 16:04:33] [INFO] 消息.. 问个问题啊
+qq_json: {"speaker_qq_number": "369134", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u95ee\u4e2a\u95ee\u9898\u554a", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Hunter", "timestamp": 1501742769, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:39] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“VIP-xuheng0628”] 的消息: "现在不是规定 日志留存不少于6个月"
+[2017-09-28 16:04:39] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:39] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:39] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:39] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:39] [INFO] 成员的 QQ.. 369134
+[2017-09-28 16:04:39] [INFO] 成员的昵称.. Hunter
+[2017-09-28 16:04:39] [INFO] 最后发言时间.. 1501742769
+[2017-09-28 16:04:39] [INFO] 消息.. 现在不是规定 日志留存不少于6个月
+qq_json: {"speaker_qq_number": "369134", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u73b0\u5728\u4e0d\u662f\u89c4\u5b9a \u65e5\u5fd7\u7559\u5b58\u4e0d\u5c11\u4e8e6\u4e2a\u6708", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Hunter", "timestamp": 1501742769, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:48] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“VIP-xuheng0628”] 的消息: "这个日志，都包含那些日志？"
+[2017-09-28 16:04:48] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:48] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:48] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:48] [INFO] 成员的 QQ.. 369134
+[2017-09-28 16:04:48] [INFO] 成员的昵称.. Hunter
+[2017-09-28 16:04:48] [INFO] 最后发言时间.. 1501742769
+[2017-09-28 16:04:48] [INFO] 消息.. 这个日志，都包含那些日志？
+qq_json: {"speaker_qq_number": "369134", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8fd9\u4e2a\u65e5\u5fd7\uff0c\u90fd\u5305\u542b\u90a3\u4e9b\u65e5\u5fd7\uff1f", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Hunter", "timestamp": 1501742769, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:04:55] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“VIP-xuheng0628”] 的消息: "大家公司那边都存的啥"
+[2017-09-28 16:04:55] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:04:55] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:04:55] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:04:55] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:04:55] [INFO] 成员的 QQ.. 369134
+[2017-09-28 16:04:55] [INFO] 成员的昵称.. Hunter
+[2017-09-28 16:04:55] [INFO] 最后发言时间.. 1501742769
+[2017-09-28 16:04:55] [INFO] 消息.. 大家公司那边都存的啥
+qq_json: {"speaker_qq_number": "369134", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5927\u5bb6\u516c\u53f8\u90a3\u8fb9\u90fd\u5b58\u7684\u5565", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Hunter", "timestamp": 1501742769, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:06:26] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“♚   Git Push”] 的消息: ""
+[2017-09-28 16:06:26] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:06:26] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:06:26] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:06:26] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:06:26] [INFO] 成员的 QQ.. 919664101
+[2017-09-28 16:06:26] [INFO] 成员的昵称.. ♚   Git Push
+[2017-09-28 16:06:26] [INFO] 最后发言时间.. 1505713558
+[2017-09-28 16:06:26] [INFO] 消息.. 
+[2017-09-28 16:06:26] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:06:28] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“♚   Git Push”] 的消息: "刚上两天"
+[2017-09-28 16:06:28] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:06:28] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:06:28] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:06:28] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:06:28] [INFO] 成员的 QQ.. 919664101
+[2017-09-28 16:06:28] [INFO] 成员的昵称.. ♚   Git Push
+[2017-09-28 16:06:28] [INFO] 最后发言时间.. 1505713558
+[2017-09-28 16:06:28] [INFO] 消息.. 刚上两天
+qq_json: {"speaker_qq_number": "919664101", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u521a\u4e0a\u4e24\u5929", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u265a   Git Push", "timestamp": 1505713558, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:06:34] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“M差不多先生”] 的消息: "中文字段 是啥字段类型的"
+[2017-09-28 16:06:34] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:06:34] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:06:34] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:06:34] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:06:34] [INFO] 成员的 QQ.. 253702768
+[2017-09-28 16:06:34] [INFO] 成员的昵称.. M差不多先生
+[2017-09-28 16:06:34] [INFO] 最后发言时间.. 1506560821
+[2017-09-28 16:06:34] [INFO] 消息.. 中文字段 是啥字段类型的
+qq_json: {"speaker_qq_number": "253702768", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4e2d\u6587\u5b57\u6bb5 \u662f\u5565\u5b57\u6bb5\u7c7b\u578b\u7684", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "M\u5dee\u4e0d\u591a\u5148\u751f", "timestamp": 1506560821, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:06:37] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“M差不多先生”] 的消息: "是string吗"
+[2017-09-28 16:06:37] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:06:37] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:06:37] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:06:37] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:06:37] [INFO] 成员的 QQ.. 253702768
+[2017-09-28 16:06:37] [INFO] 成员的昵称.. M差不多先生
+[2017-09-28 16:06:37] [INFO] 最后发言时间.. 1506560821
+[2017-09-28 16:06:37] [INFO] 消息.. 是string吗
+qq_json: {"speaker_qq_number": "253702768", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u662fstring\u5417", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "M\u5dee\u4e0d\u591a\u5148\u751f", "timestamp": 1506560821, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:07:00] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“M差不多先生”] 的消息: ""
+[2017-09-28 16:07:00] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:07:00] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:07:00] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:07:00] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:07:00] [INFO] 成员的 QQ.. 253702768
+[2017-09-28 16:07:00] [INFO] 成员的昵称.. M差不多先生
+[2017-09-28 16:07:00] [INFO] 最后发言时间.. 1506560821
+[2017-09-28 16:07:00] [INFO] 消息.. 
+[2017-09-28 16:07:00] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:07:12] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "国庆打算研究下ssr"
+[2017-09-28 16:07:12] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:07:12] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:07:12] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:07:12] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:07:12] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:07:12] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:07:12] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:07:12] [INFO] 消息.. 国庆打算研究下ssr
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u56fd\u5e86\u6253\u7b97\u7814\u7a76\u4e0bssr", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:07:22] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“M差不多先生”] 的消息: ""
+[2017-09-28 16:07:22] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:07:22] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:07:22] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:07:22] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:07:22] [INFO] 成员的 QQ.. 253702768
+[2017-09-28 16:07:22] [INFO] 成员的昵称.. M差不多先生
+[2017-09-28 16:07:22] [INFO] 最后发言时间.. 1506560821
+[2017-09-28 16:07:22] [INFO] 消息.. 
+[2017-09-28 16:07:22] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:08:02] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一笨笨的宝宝”] 的消息: "国庆抽ssr?"
+[2017-09-28 16:08:02] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:08:02] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:08:02] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:08:02] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:08:02] [INFO] 成员的 QQ.. 1031703364
+[2017-09-28 16:08:02] [INFO] 成员的昵称.. 风之旅途_(:3」∠❀)_
+[2017-09-28 16:08:02] [INFO] 最后发言时间.. 1506407739
+[2017-09-28 16:08:02] [INFO] 消息.. 国庆抽ssr?
+qq_json: {"speaker_qq_number": "1031703364", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u56fd\u5e86\u62bdssr?", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u98ce\u4e4b\u65c5\u9014_(:3\u300d\u2220\u2740)_", "timestamp": 1506407739, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:08:27] [INFO] 来自 群“房屋买卖违约维权律师”[成员“N—a”] 的消息: "只是那全是这种房子，房本出的慢，基本都没有房本"
+[2017-09-28 16:08:27] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:08:27] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:08:27] [INFO] 群的 QQ.. 513304542
+[2017-09-28 16:08:27] [INFO] 群的昵称.. 房屋买卖违约维权律师
+[2017-09-28 16:08:27] [INFO] 成员的 QQ.. 160371018
+[2017-09-28 16:08:27] [INFO] 成员的昵称.. N—a
+[2017-09-28 16:08:27] [INFO] 最后发言时间.. 1506569590
+[2017-09-28 16:08:27] [INFO] 消息.. 只是那全是这种房子，房本出的慢，基本都没有房本
+qq_json: {"speaker_qq_number": "160371018", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u53ea\u662f\u90a3\u5168\u662f\u8fd9\u79cd\u623f\u5b50\uff0c\u623f\u672c\u51fa\u7684\u6162\uff0c\u57fa\u672c\u90fd\u6ca1\u6709\u623f\u672c", "qq_group_nickname": "\u623f\u5c4b\u4e70\u5356\u8fdd\u7ea6\u7ef4\u6743\u5f8b\u5e08", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "N\u2014a", "timestamp": 1506569590, "qq_group_number": "513304542"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 513304542
+[2017-09-28 16:08:37] [INFO] 来自 群“TensorFlow机器学习技术”[成员“henson”] 的消息: ""
+[2017-09-28 16:08:37] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:08:37] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:08:37] [INFO] 群的 QQ.. 348036482
+[2017-09-28 16:08:37] [INFO] 群的昵称.. TensorFlow机器学习技术
+[2017-09-28 16:08:37] [INFO] 成员的 QQ.. 1336824159
+[2017-09-28 16:08:37] [INFO] 成员的昵称.. Henson Wells
+[2017-09-28 16:08:37] [INFO] 最后发言时间.. 1506517241
+[2017-09-28 16:08:37] [INFO] 消息.. 
+[2017-09-28 16:08:37] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:08:47] [INFO] 来自 群“TensorFlow机器学习技术”[成员“henson”] 的消息: "请问为什么resize了还得不到2247*224*3的shape？"
+[2017-09-28 16:08:47] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:08:47] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:08:47] [INFO] 群的 QQ.. 348036482
+[2017-09-28 16:08:47] [INFO] 群的昵称.. TensorFlow机器学习技术
+[2017-09-28 16:08:47] [INFO] 成员的 QQ.. 1336824159
+[2017-09-28 16:08:47] [INFO] 成员的昵称.. Henson Wells
+[2017-09-28 16:08:47] [INFO] 最后发言时间.. 1506517241
+[2017-09-28 16:08:47] [INFO] 消息.. 请问为什么resize了还得不到2247*224*3的shape？
+qq_json: {"speaker_qq_number": "1336824159", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8bf7\u95ee\u4e3a\u4ec0\u4e48resize\u4e86\u8fd8\u5f97\u4e0d\u52302247*224*3\u7684shape\uff1f", "qq_group_nickname": "TensorFlow\u673a\u5668\u5b66\u4e60\u6280\u672f", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Henson Wells", "timestamp": 1506517241, "qq_group_number": "348036482"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 348036482
+[2017-09-28 16:09:40] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“落雪之”] 的消息: "ssr是啥鬼"
+[2017-09-28 16:09:40] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:09:40] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:09:40] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:09:40] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:09:40] [INFO] 成员的 QQ.. 646320175
+[2017-09-28 16:09:40] [INFO] 成员的昵称.. 落雪之
+[2017-09-28 16:09:40] [INFO] 最后发言时间.. 1505444044
+[2017-09-28 16:09:40] [INFO] 消息.. ssr是啥鬼
+qq_json: {"speaker_qq_number": "646320175", "sensitive_flag": 0, "sensitive_words_string": "", "text": "ssr\u662f\u5565\u9b3c", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u843d\u96ea\u4e4b", "timestamp": 1505444044, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:09:55] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "好东西哦"
+[2017-09-28 16:09:55] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:09:55] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:09:55] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:09:55] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:09:55] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:09:55] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:09:55] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:09:55] [INFO] 消息.. 好东西哦
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u597d\u4e1c\u897f\u54e6", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:02] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "加薪的利器"
+[2017-09-28 16:10:02] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:02] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:02] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:02] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:02] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:10:02] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:10:02] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:10:02] [INFO] 消息.. 加薪的利器
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u52a0\u85aa\u7684\u5229\u5668", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:11] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一将来成为大牛的菜宝”] 的消息: "国亲不出去玩，难道是厂家把女朋友寄回来了吗"
+[2017-09-28 16:10:11] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:11] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:11] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:11] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:11] [INFO] 成员的 QQ.. 3206814310
+[2017-09-28 16:10:11] [INFO] 成员的昵称.. 我是菜逼，大牛ing
+[2017-09-28 16:10:11] [INFO] 最后发言时间.. 1506562372
+[2017-09-28 16:10:11] [INFO] 消息.. 国亲不出去玩，难道是厂家把女朋友寄回来了吗
+qq_json: {"speaker_qq_number": "3206814310", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u56fd\u4eb2\u4e0d\u51fa\u53bb\u73a9\uff0c\u96be\u9053\u662f\u5382\u5bb6\u628a\u5973\u670b\u53cb\u5bc4\u56de\u6765\u4e86\u5417", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6211\u662f\u83dc\u903c\uff0c\u5927\u725bing", "timestamp": 1506562372, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:21] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "！"
+[2017-09-28 16:10:21] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:21] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:21] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:21] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:21] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:10:21] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:10:21] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:10:21] [INFO] 消息.. ！
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\uff01", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:30] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一智障宝宝”] 的消息: "怪不得"
+[2017-09-28 16:10:30] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:30] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:30] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:30] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:30] [INFO] 成员的 QQ.. 1821175203
+[2017-09-28 16:10:30] [INFO] 成员的昵称.. 陨落星炎
+[2017-09-28 16:10:30] [INFO] 最后发言时间.. 1506561317
+[2017-09-28 16:10:30] [INFO] 消息.. 怪不得
+qq_json: {"speaker_qq_number": "1821175203", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u602a\u4e0d\u5f97", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u9668\u843d\u661f\u708e", "timestamp": 1506561317, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:37] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一智障宝宝”] 的消息: "没女朋友"
+[2017-09-28 16:10:37] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:37] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:37] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:37] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:37] [INFO] 成员的 QQ.. 1821175203
+[2017-09-28 16:10:37] [INFO] 成员的昵称.. 陨落星炎
+[2017-09-28 16:10:37] [INFO] 最后发言时间.. 1506561317
+[2017-09-28 16:10:37] [INFO] 消息.. 没女朋友
+qq_json: {"speaker_qq_number": "1821175203", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6ca1\u5973\u670b\u53cb", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u9668\u843d\u661f\u708e", "timestamp": 1506561317, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:10:49] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“落雪之”] 的消息: "ssr全称是啥"
+[2017-09-28 16:10:49] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:10:49] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:10:49] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:10:49] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:10:49] [INFO] 成员的 QQ.. 646320175
+[2017-09-28 16:10:49] [INFO] 成员的昵称.. 落雪之
+[2017-09-28 16:10:49] [INFO] 最后发言时间.. 1505444044
+[2017-09-28 16:10:49] [INFO] 消息.. ssr全称是啥
+qq_json: {"speaker_qq_number": "646320175", "sensitive_flag": 0, "sensitive_words_string": "", "text": "ssr\u5168\u79f0\u662f\u5565", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u843d\u96ea\u4e4b", "timestamp": 1505444044, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:11:07] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: ""
+[2017-09-28 16:11:07] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:11:07] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:11:07] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:11:07] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:11:07] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:11:07] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:11:07] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:11:07] [INFO] 消息.. 
+[2017-09-28 16:11:07] [INFO] 您发了一张图片或假消息... 
+[2017-09-28 16:12:26] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "国庆就好好休息嘛"
+[2017-09-28 16:12:26] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:12:26] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:12:26] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:12:26] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:12:26] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:12:26] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:12:26] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:12:26] [INFO] 消息.. 国庆就好好休息嘛
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u56fd\u5e86\u5c31\u597d\u597d\u4f11\u606f\u561b", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:12:39] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "放假就是让你劳逸结合"
+[2017-09-28 16:12:39] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:12:39] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:12:39] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:12:39] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:12:39] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:12:39] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:12:39] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:12:39] [INFO] 消息.. 放假就是让你劳逸结合
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u653e\u5047\u5c31\u662f\u8ba9\u4f60\u52b3\u9038\u7ed3\u5408", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:13:57] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一将来成为大牛的菜宝”] 的消息: "这身段，可以"
+[2017-09-28 16:13:57] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:13:57] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:13:57] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:13:57] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:13:57] [INFO] 成员的 QQ.. 3206814310
+[2017-09-28 16:13:57] [INFO] 成员的昵称.. 我是菜逼，大牛ing
+[2017-09-28 16:13:57] [INFO] 最后发言时间.. 1506562372
+[2017-09-28 16:13:57] [INFO] 消息.. 这身段，可以
+qq_json: {"speaker_qq_number": "3206814310", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8fd9\u8eab\u6bb5\uff0c\u53ef\u4ee5", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u6211\u662f\u83dc\u903c\uff0c\u5927\u725bing", "timestamp": 1506562372, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:14:56] [INFO] 来自 群“elasticsearch”[成员“伤心太平洋”] 的消息: "slowlog z怎么聚合啊"
+[2017-09-28 16:14:56] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:14:56] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:14:56] [INFO] 群的 QQ.. #NULL
+[2017-09-28 16:14:56] [INFO] 群的昵称.. elasticsearch
+[2017-09-28 16:14:56] [INFO] 成员的 QQ.. #NULL
+[2017-09-28 16:14:56] [INFO] 成员的昵称.. 伤心太平洋
+[2017-09-28 16:14:56] [INFO] 最后发言时间.. -1
+[2017-09-28 16:14:56] [INFO] 消息.. slowlog z怎么聚合啊
+qq_json: {"speaker_qq_number": "#NULL", "sensitive_flag": 0, "sensitive_words_string": "", "text": "slowlog z\u600e\u4e48\u805a\u5408\u554a", "qq_group_nickname": "elasticsearch", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u4f24\u5fc3\u592a\u5e73\u6d0b", "timestamp": -1, "qq_group_number": "#NULL"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: #NULL
+[2017-09-28 16:15:01] [INFO] 来自 群“elasticsearch”[成员“伤心太平洋”] 的消息: "slowlog z怎么聚合啊"
+[2017-09-28 16:15:01] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:15:01] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:15:01] [INFO] 群的 QQ.. #NULL
+[2017-09-28 16:15:01] [INFO] 群的昵称.. elasticsearch
+[2017-09-28 16:15:01] [INFO] 成员的 QQ.. #NULL
+[2017-09-28 16:15:01] [INFO] 成员的昵称.. 伤心太平洋
+[2017-09-28 16:15:01] [INFO] 最后发言时间.. -1
+[2017-09-28 16:15:01] [INFO] 消息.. slowlog z怎么聚合啊
+qq_json: {"speaker_qq_number": "#NULL", "sensitive_flag": 0, "sensitive_words_string": "", "text": "slowlog z\u600e\u4e48\u805a\u5408\u554a", "qq_group_nickname": "elasticsearch", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u4f24\u5fc3\u592a\u5e73\u6d0b", "timestamp": -1, "qq_group_number": "#NULL"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: #NULL
+[2017-09-28 16:15:13] [INFO] 来自 群“ELK Elasticsearch高级运维”[成员“伤心太平洋”] 的消息: "slowlog z怎么聚合啊"
+[2017-09-28 16:15:13] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:15:13] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:15:13] [INFO] 群的 QQ.. 264346773
+[2017-09-28 16:15:13] [INFO] 群的昵称.. ELK Elasticsearch高级运维
+[2017-09-28 16:15:13] [INFO] 成员的 QQ.. 834074980
+[2017-09-28 16:15:13] [INFO] 成员的昵称.. 伤心太平洋
+[2017-09-28 16:15:13] [INFO] 最后发言时间.. 1506577718
+[2017-09-28 16:15:13] [INFO] 消息.. slowlog z怎么聚合啊
+qq_json: {"speaker_qq_number": "834074980", "sensitive_flag": 0, "sensitive_words_string": "", "text": "slowlog z\u600e\u4e48\u805a\u5408\u554a", "qq_group_nickname": "ELK Elasticsearch\u9ad8\u7ea7\u8fd0\u7ef4", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u4f24\u5fc3\u592a\u5e73\u6d0b", "timestamp": 1506577718, "qq_group_number": "264346773"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 264346773
+[2017-09-28 16:17:02] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“苦逼的盐焗鸡一号”] 的消息: "群里有养猫的  "
+[2017-09-28 16:17:02] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:17:02] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:17:02] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:17:02] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:17:02] [INFO] 成员的 QQ.. 157096879
+[2017-09-28 16:17:02] [INFO] 成员的昵称.. Battercake
+[2017-09-28 16:17:02] [INFO] 最后发言时间.. 1506566509
+[2017-09-28 16:17:02] [INFO] 消息.. 群里有养猫的  
+qq_json: {"speaker_qq_number": "157096879", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u7fa4\u91cc\u6709\u517b\u732b\u7684  ", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Battercake", "timestamp": 1506566509, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:17:28] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "养过一段时间"
+[2017-09-28 16:17:28] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:17:28] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:17:28] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:17:28] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:17:28] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:17:28] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:17:28] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:17:28] [INFO] 消息.. 养过一段时间
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u517b\u8fc7\u4e00\u6bb5\u65f6\u95f4", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:17:29] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“苦逼的盐焗鸡一号”] 的消息: "吗"
+[2017-09-28 16:17:29] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:17:29] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:17:29] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:17:29] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:17:29] [INFO] 成员的 QQ.. 157096879
+[2017-09-28 16:17:29] [INFO] 成员的昵称.. Battercake
+[2017-09-28 16:17:29] [INFO] 最后发言时间.. 1506566509
+[2017-09-28 16:17:29] [INFO] 消息.. 吗
+qq_json: {"speaker_qq_number": "157096879", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5417", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Battercake", "timestamp": 1506566509, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:18:29] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "咋了"
+[2017-09-28 16:18:29] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:18:29] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:18:29] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:18:29] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:18:29] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:18:29] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:18:29] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:18:29] [INFO] 消息.. 咋了
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u548b\u4e86", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:20:56] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“苦逼的盐焗鸡一号”] 的消息: "@群里唯一最思麻特的宝宝 改天去你家炖了  "
+[2017-09-28 16:20:56] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:20:56] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:20:56] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:20:56] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:20:56] [INFO] 成员的 QQ.. 157096879
+[2017-09-28 16:20:56] [INFO] 成员的昵称.. Battercake
+[2017-09-28 16:20:56] [INFO] 最后发言时间.. 1506566509
+[2017-09-28 16:20:56] [INFO] 消息.. @群里唯一最思麻特的宝宝 改天去你家炖了  
+qq_json: {"speaker_qq_number": "157096879", "sensitive_flag": 0, "sensitive_words_string": "", "text": "@\u7fa4\u91cc\u552f\u4e00\u6700\u601d\u9ebb\u7279\u7684\u5b9d\u5b9d \u6539\u5929\u53bb\u4f60\u5bb6\u7096\u4e86  ", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Battercake", "timestamp": 1506566509, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:22:14] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“落雪之”] 的消息: "养兔子还可以杀来吃"
+[2017-09-28 16:22:14] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:22:14] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:22:14] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:22:14] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:22:14] [INFO] 成员的 QQ.. 646320175
+[2017-09-28 16:22:14] [INFO] 成员的昵称.. 落雪之
+[2017-09-28 16:22:14] [INFO] 最后发言时间.. 1505444044
+[2017-09-28 16:22:14] [INFO] 消息.. 养兔子还可以杀来吃
+qq_json: {"speaker_qq_number": "646320175", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u517b\u5154\u5b50\u8fd8\u53ef\u4ee5\u6740\u6765\u5403", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u843d\u96ea\u4e4b", "timestamp": 1505444044, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:23:43] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "买回来才3厘米"
+[2017-09-28 16:23:43] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:23:43] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:23:43] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:23:43] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:23:43] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:23:43] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:23:43] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:23:43] [INFO] 消息.. 买回来才3厘米
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4e70\u56de\u6765\u624d3\u5398\u7c73", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:25:07] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一笨笨的宝宝”] 的消息: "说起来"
+[2017-09-28 16:25:07] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:25:07] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:25:07] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:25:07] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:25:07] [INFO] 成员的 QQ.. 1031703364
+[2017-09-28 16:25:07] [INFO] 成员的昵称.. 风之旅途_(:3」∠❀)_
+[2017-09-28 16:25:07] [INFO] 最后发言时间.. 1506407739
+[2017-09-28 16:25:07] [INFO] 消息.. 说起来
+qq_json: {"speaker_qq_number": "1031703364", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8bf4\u8d77\u6765", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u98ce\u4e4b\u65c5\u9014_(:3\u300d\u2220\u2740)_", "timestamp": 1506407739, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:25:15] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一笨笨的宝宝”] 的消息: "我家还有两只龟"
+[2017-09-28 16:25:15] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:25:15] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:25:15] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:25:15] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:25:15] [INFO] 成员的 QQ.. 1031703364
+[2017-09-28 16:25:15] [INFO] 成员的昵称.. 风之旅途_(:3」∠❀)_
+[2017-09-28 16:25:15] [INFO] 最后发言时间.. 1506407739
+[2017-09-28 16:25:15] [INFO] 消息.. 我家还有两只龟
+qq_json: {"speaker_qq_number": "1031703364", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6211\u5bb6\u8fd8\u6709\u4e24\u53ea\u9f9f", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u98ce\u4e4b\u65c5\u9014_(:3\u300d\u2220\u2740)_", "timestamp": 1506407739, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:26:15] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“苦逼的盐焗鸡一号”] 的消息: "@群里唯一最思麻特的宝宝 养个几十年   背后能坐小孩子那种来   到时你遛鬼  上面坐着你的孩子   上新闻 "
+[2017-09-28 16:26:15] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:26:15] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:26:15] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:26:15] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:26:15] [INFO] 成员的 QQ.. 157096879
+[2017-09-28 16:26:15] [INFO] 成员的昵称.. Battercake
+[2017-09-28 16:26:15] [INFO] 最后发言时间.. 1506566509
+[2017-09-28 16:26:15] [INFO] 消息.. @群里唯一最思麻特的宝宝 养个几十年   背后能坐小孩子那种来   到时你遛鬼  上面坐着你的孩子   上新闻 
+qq_json: {"speaker_qq_number": "157096879", "sensitive_flag": 0, "sensitive_words_string": "", "text": "@\u7fa4\u91cc\u552f\u4e00\u6700\u601d\u9ebb\u7279\u7684\u5b9d\u5b9d \u517b\u4e2a\u51e0\u5341\u5e74   \u80cc\u540e\u80fd\u5750\u5c0f\u5b69\u5b50\u90a3\u79cd\u6765   \u5230\u65f6\u4f60\u905b\u9b3c  \u4e0a\u9762\u5750\u7740\u4f60\u7684\u5b69\u5b50   \u4e0a\u65b0\u95fb ", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Battercake", "timestamp": 1506566509, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:27:12] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "养猫 啊 "
+[2017-09-28 16:27:12] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:27:12] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:27:12] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:27:12] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:27:12] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:27:12] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:27:12] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:27:12] [INFO] 消息.. 养猫 啊 
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u517b\u732b \u554a ", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:27:16] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "其实不建议"
+[2017-09-28 16:27:16] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:27:16] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:27:16] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:27:16] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:27:16] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:27:16] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:27:16] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:27:16] [INFO] 消息.. 其实不建议
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5176\u5b9e\u4e0d\u5efa\u8bae", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:27:22] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一最思麻特的宝宝”] 的消息: "男不养猫"
+[2017-09-28 16:27:22] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:27:22] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:27:22] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:27:22] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:27:22] [INFO] 成员的 QQ.. 1358223578
+[2017-09-28 16:27:22] [INFO] 成员的昵称.. 246の
+[2017-09-28 16:27:22] [INFO] 最后发言时间.. 1506566351
+[2017-09-28 16:27:22] [INFO] 消息.. 男不养猫
+qq_json: {"speaker_qq_number": "1358223578", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u7537\u4e0d\u517b\u732b", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "246\u306e", "timestamp": 1506566351, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:28:22] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "尤其是在城市里"
+[2017-09-28 16:28:22] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:28:22] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:28:22] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:28:22] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:28:22] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:28:22] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:28:22] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:28:22] [INFO] 消息.. 尤其是在城市里
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5c24\u5176\u662f\u5728\u57ce\u5e02\u91cc", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:28:29] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "猫粮，猫砂，零食罐头，一个月还是得几百上千"
+[2017-09-28 16:28:29] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:28:29] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:28:29] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:28:29] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:28:29] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:28:29] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:28:29] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:28:29] [INFO] 消息.. 猫粮，猫砂，零食罐头，一个月还是得几百上千
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u732b\u7cae\uff0c\u732b\u7802\uff0c\u96f6\u98df\u7f50\u5934\uff0c\u4e00\u4e2a\u6708\u8fd8\u662f\u5f97\u51e0\u767e\u4e0a\u5343", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:29:01] [INFO] 来自 群“TensorFlow机器学习技术”[成员“李号”] 的消息: "reshape?"
+[2017-09-28 16:29:01] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:01] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:01] [INFO] 群的 QQ.. 348036482
+[2017-09-28 16:29:01] [INFO] 群的昵称.. TensorFlow机器学习技术
+[2017-09-28 16:29:01] [INFO] 成员的 QQ.. 463739351
+[2017-09-28 16:29:01] [INFO] 成员的昵称.. 李号
+[2017-09-28 16:29:01] [INFO] 最后发言时间.. 1505721263
+[2017-09-28 16:29:01] [INFO] 消息.. reshape?
+qq_json: {"speaker_qq_number": "463739351", "sensitive_flag": 0, "sensitive_words_string": "", "text": "reshape?", "qq_group_nickname": "TensorFlow\u673a\u5668\u5b66\u4e60\u6280\u672f", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u674e\u53f7", "timestamp": 1505721263, "qq_group_number": "348036482"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 348036482
+[2017-09-28 16:29:01] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“Suning ”] 的消息: "还得买化毛膏"
+[2017-09-28 16:29:01] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:01] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:01] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:29:01] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:29:01] [INFO] 成员的 QQ.. 511145685
+[2017-09-28 16:29:01] [INFO] 成员的昵称.. Suning 
+[2017-09-28 16:29:01] [INFO] 最后发言时间.. 1506566397
+[2017-09-28 16:29:01] [INFO] 消息.. 还得买化毛膏
+qq_json: {"speaker_qq_number": "511145685", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8fd8\u5f97\u4e70\u5316\u6bdb\u818f", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Suning ", "timestamp": 1506566397, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:29:03] [INFO] 正在获取 群“Caffe-TensorFlow-深度学习”的成员列表 ...
+[2017-09-28 16:29:04] [WARNING] 因存在重名或名称中含特殊字符，无法绑定 群“Caffe-TensorFlow-深度学习” 中以下成员的真实QQ号：
+	成员“ ”（uin=2526053422）
+	成员“ ”（uin=2586842981）
+	成员“ ”（uin=4131669768）
+	成员“Eric”（uin=3205071805）
+	成员“Eric”（uin=3999363489）
+	成员“Jason”（uin=1034052619）
+	成员“Jason”（uin=2613705328）
+	成员“Jason”（uin=3877358884）
+	成员“Richard”（uin=626252008）
+	成员“Richard”（uin=987024965）
+	成员“Vision”（uin=3904347816）
+	成员“Vision”（uin=520567097）
+	成员“cy”（uin=569622433）
+	成员“cy”（uin=602698230）
+	成员“”（uin=1554075971）
+	成员“”（uin=1790787302）
+	成员“”（uin=2237276580）
+	成员“　”（uin=2470342091）
+	成员“　”（uin=2628129899）
+	成员“哈哈”（uin=3071211137）
+	成员“哈哈”（uin=671736384）
+	成员“大地”（uin=4010979561）
+	成员“大地”（uin=895968346）
+	成员“大海”（uin=1146402158）
+	成员“大海”（uin=4221958397）
+	成员“大海”（uin=992359868）
+	成员“牛牛”（uin=1635945567）
+	成员“牛牛”（uin=622096308）
+	成员“蜗牛”（uin=23697839）
+	成员“蜗牛”（uin=2850334463）
+	成员“队长别开枪是我”（uin=3670165182）
+	成员“风”（uin=1459511178）
+	成员“风”（uin=1522196373）
+	成员“风”（uin=630693269）
+[2017-09-28 16:29:04] [INFO] 已获取并更新 群“Caffe-TensorFlow-深度学习”的成员列表
+[2017-09-28 16:29:04] [INFO] 来自 群“Caffe-TensorFlow-深度学习”[成员“JUST FOR YOU”] 的消息: "有人懂nlp里边的BiDAF吗》？"
+[2017-09-28 16:29:04] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:04] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:04] [INFO] 群的 QQ.. 182389617
+[2017-09-28 16:29:04] [INFO] 群的昵称.. Caffe-TensorFlow-深度学习
+[2017-09-28 16:29:04] [INFO] 成员的 QQ.. 752448068
+[2017-09-28 16:29:04] [INFO] 成员的昵称.. JUST FOR YOU
+[2017-09-28 16:29:04] [INFO] 最后发言时间.. 1506587343
+[2017-09-28 16:29:04] [INFO] 消息.. 有人懂nlp里边的BiDAF吗》？
+qq_json: {"speaker_qq_number": "752448068", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6709\u4eba\u61c2nlp\u91cc\u8fb9\u7684BiDAF\u5417\u300b\uff1f", "qq_group_nickname": "Caffe-TensorFlow-\u6df1\u5ea6\u5b66\u4e60", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "JUST FOR YOU", "timestamp": 1506587343, "qq_group_number": "182389617"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 182389617
+[2017-09-28 16:29:36] [INFO] 来自 群“Caffe-TensorFlow-深度学习”[成员“JUST FOR YOU”] 的消息: "代码里边的mask是什么意思呀？"
+[2017-09-28 16:29:36] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:36] [INFO] 群的 QQ.. 182389617
+[2017-09-28 16:29:36] [INFO] 群的昵称.. Caffe-TensorFlow-深度学习
+[2017-09-28 16:29:36] [INFO] 成员的 QQ.. 752448068
+[2017-09-28 16:29:36] [INFO] 成员的昵称.. JUST FOR YOU
+[2017-09-28 16:29:36] [INFO] 最后发言时间.. 1506587343
+[2017-09-28 16:29:36] [INFO] 消息.. 代码里边的mask是什么意思呀？
+qq_json: {"speaker_qq_number": "752448068", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4ee3\u7801\u91cc\u8fb9\u7684mask\u662f\u4ec0\u4e48\u610f\u601d\u5440\uff1f", "qq_group_nickname": "Caffe-TensorFlow-\u6df1\u5ea6\u5b66\u4e60", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "JUST FOR YOU", "timestamp": 1506587343, "qq_group_number": "182389617"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 182389617
+[2017-09-28 16:29:36] [INFO] 来自 群“TensorFlow机器学习技术”[成员“henson”] 的消息: "对啊"
+[2017-09-28 16:29:36] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:36] [INFO] 群的 QQ.. 348036482
+[2017-09-28 16:29:36] [INFO] 群的昵称.. TensorFlow机器学习技术
+[2017-09-28 16:29:36] [INFO] 成员的 QQ.. 1336824159
+[2017-09-28 16:29:36] [INFO] 成员的昵称.. Henson Wells
+[2017-09-28 16:29:36] [INFO] 最后发言时间.. 1506517241
+[2017-09-28 16:29:36] [INFO] 消息.. 对啊
+qq_json: {"speaker_qq_number": "1336824159", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5bf9\u554a", "qq_group_nickname": "TensorFlow\u673a\u5668\u5b66\u4e60\u6280\u672f", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Henson Wells", "timestamp": 1506517241, "qq_group_number": "348036482"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 348036482
+[2017-09-28 16:29:43] [INFO] 来自 群“Caffe-TensorFlow-深度学习”[成员“JUST FOR YOU”] 的消息: "跪求大神指教"
+[2017-09-28 16:29:43] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:29:43] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:29:43] [INFO] 群的 QQ.. 182389617
+[2017-09-28 16:29:43] [INFO] 群的昵称.. Caffe-TensorFlow-深度学习
+[2017-09-28 16:29:43] [INFO] 成员的 QQ.. 752448068
+[2017-09-28 16:29:43] [INFO] 成员的昵称.. JUST FOR YOU
+[2017-09-28 16:29:43] [INFO] 最后发言时间.. 1506587343
+[2017-09-28 16:29:43] [INFO] 消息.. 跪求大神指教
+qq_json: {"speaker_qq_number": "752448068", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8dea\u6c42\u5927\u795e\u6307\u6559", "qq_group_nickname": "Caffe-TensorFlow-\u6df1\u5ea6\u5b66\u4e60", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "JUST FOR YOU", "timestamp": 1506587343, "qq_group_number": "182389617"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 182389617
+[2017-09-28 16:30:12] [INFO] 来自 群“Caffe-TensorFlow-深度学习”[成员“JUST FOR YOU”] 的消息: "我看文献里边没有用到mask呀"
+[2017-09-28 16:30:12] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:30:12] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:30:12] [INFO] 群的 QQ.. 182389617
+[2017-09-28 16:30:12] [INFO] 群的昵称.. Caffe-TensorFlow-深度学习
+[2017-09-28 16:30:12] [INFO] 成员的 QQ.. 752448068
+[2017-09-28 16:30:12] [INFO] 成员的昵称.. JUST FOR YOU
+[2017-09-28 16:30:12] [INFO] 最后发言时间.. 1506587343
+[2017-09-28 16:30:12] [INFO] 消息.. 我看文献里边没有用到mask呀
+qq_json: {"speaker_qq_number": "752448068", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6211\u770b\u6587\u732e\u91cc\u8fb9\u6ca1\u6709\u7528\u5230mask\u5440", "qq_group_nickname": "Caffe-TensorFlow-\u6df1\u5ea6\u5b66\u4e60", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "JUST FOR YOU", "timestamp": 1506587343, "qq_group_number": "182389617"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 182389617
+[2017-09-28 16:30:25] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“群里唯一智障宝宝”] 的消息: "买龟？"
+[2017-09-28 16:30:25] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:30:25] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:30:25] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:30:25] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:30:25] [INFO] 成员的 QQ.. 1821175203
+[2017-09-28 16:30:25] [INFO] 成员的昵称.. 陨落星炎
+[2017-09-28 16:30:25] [INFO] 最后发言时间.. 1506561317
+[2017-09-28 16:30:25] [INFO] 消息.. 买龟？
+qq_json: {"speaker_qq_number": "1821175203", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4e70\u9f9f\uff1f", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u9668\u843d\u661f\u708e", "timestamp": 1506561317, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:32:28] [INFO] 来自 群“房屋买卖违约维权律师”[成员“　鱼在散步”] 的消息: "都没出房本这种房子别买"
+[2017-09-28 16:32:28] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:32:28] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:32:28] [INFO] 群的 QQ.. 513304542
+[2017-09-28 16:32:28] [INFO] 群的昵称.. 房屋买卖违约维权律师
+[2017-09-28 16:32:28] [INFO] 成员的 QQ.. 11178514
+[2017-09-28 16:32:28] [INFO] 成员的昵称.. 　鱼在散步
+[2017-09-28 16:32:28] [INFO] 最后发言时间.. 1506436344
+[2017-09-28 16:32:28] [INFO] 消息.. 都没出房本这种房子别买
+qq_json: {"speaker_qq_number": "11178514", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u90fd\u6ca1\u51fa\u623f\u672c\u8fd9\u79cd\u623f\u5b50\u522b\u4e70", "qq_group_nickname": "\u623f\u5c4b\u4e70\u5356\u8fdd\u7ea6\u7ef4\u6743\u5f8b\u5e08", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "\u3000\u9c7c\u5728\u6563\u6b65", "timestamp": 1506436344, "qq_group_number": "513304542"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 513304542
+[2017-09-28 16:32:36] [INFO] 来自 群“Vue Angular Js Node 前端”[成员“苦逼的盐焗鸡一号”] 的消息: " /表情 自己都养不活了"
+[2017-09-28 16:32:36] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:32:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:32:36] [INFO] 群的 QQ.. 339851411
+[2017-09-28 16:32:36] [INFO] 群的昵称.. Vue Angular Js Node 前端
+[2017-09-28 16:32:36] [INFO] 成员的 QQ.. 157096879
+[2017-09-28 16:32:36] [INFO] 成员的昵称.. Battercake
+[2017-09-28 16:32:36] [INFO] 最后发言时间.. 1506566509
+[2017-09-28 16:32:36] [INFO] 消息..  /表情 自己都养不活了
+qq_json: {"speaker_qq_number": "157096879", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 \u81ea\u5df1\u90fd\u517b\u4e0d\u6d3b\u4e86", "qq_group_nickname": "Vue Angular Js Node \u524d\u7aef", "sensitive_value": 0, "xnr_qq_number": "1965056593", "xnr_nickname": "\u8881\u6167\u8339", "speaker_nickname": "Battercake", "timestamp": 1506566509, "qq_group_number": "339851411"}
+qq_group_set: set(['', '5339432', '539697126', '586502775', '513304542'])
+qq_group_number: 339851411
+[2017-09-28 16:33:36] [INFO] 来自 群“房屋买卖违约维权律师”[成员“　鱼在散步”] 的消息: "不过自己看情况吧"
+[2017-09-28 16:33:36] [INFO] test groups [群“消費者維權處理中心”, 群“初四三班”, 群“流年-淡忆-涟漪”, 群“辩论队”, 群“在京北洋人”, 群“网商大赛队长交流群1”, 群“2012我们油田往柒”, 群“大挑队长棒棒哒”, 群“老乡之家”, 群“TensorFlow/keras 技术交流”, 群“书虫巨乐铺”, 群“2018北航校招群”, 群“天大信管系12级”, 群“我爱机器学习9群”, 群“投资久居房产维权群”, 群“Caffe-TensorFlow-深度学习”, 群“数据分析与挖掘读者群”, 群“天大电商2013级”, 群“Tensorflow应用技术-综合”, 群“即将毕业的我们”, 群“高智商2012天大电商V5~”, 群“蓝爸爸叫你回家画画”, 群“自强社宣传部2012”, 群“燃烧的青春”, 群“基地NMB无忧无虑”, 群“至尊电商14级”, 群“ELK Elasticsearch高级运维”, 群“14级嗨皮宿小管”, 群“一群轰纸”, 群“Python技术群™”, 群“elasticsearch-全文检索”, 群“Flask-Web开发”, 群“河南管院老乡会”, 群“北洋之南开金融2012”, 群“IDEA717”, 群“ElasticSearch开发者交流”, 群“elasticsearch”, 群“校园巡讲队员”, 群“Vue Angular Js Node 前端”, 群“天大经管2014级新生群”, 群“Jquery技术交流教程下载”, 群“TensorFlow机器学习技术”, 群“天大电商”, 群“WISER CLUB”, 群“2014天大电商消息群”, 群“WISE Python”, 群“程序员之家.Net|SQL|Linux”, 群“TensorFlow精英群”, 群“SQLAlchemy 交流”, 群“Python-Flask”, 群“新竹|廿四|卫津”, 群“Flask Web技术交流群”, 群“北航蓝协志愿者1群”, 群“elasticsearch技术交流”, 群“16级网安班硕士群”, 群“python flask网站开发”, 群“铁笔银锋”, 群“篆心”, 群“墨写乾坤”, 群“elasticsearch”, 群“房屋买卖违约维权律师”, 群“Flask技术交流群”, 群“深度学习TensorFlow”, 群“中国消费者维权群”, 群“Flask-Admin交流群”, 群“房产维权”, 群“袁慧茹创建的群”, 群“死磕Elasticsearch”]
+[2017-09-28 16:33:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x27ff150>
+[2017-09-28 16:33:36] [INFO] 群的 QQ.. 513304542
+[2017-09-28 16:33:36] [INFO] 群的昵称.. 房屋买卖违约维权律师
+[2017-09-28 16:33:36] [INFO] 成员的 QQ.. 11178514
+[2017-09-28 16:33:36] [INFO] 成员的昵称.. 　鱼在散步
+[2017-09-28 16:33:36] [INFO] 最后发言时间.. 1506436344
+[2017-09-28 16:33:36] [INFO] 消息.. 不过自己看情况吧
