@@ -33,6 +33,11 @@ xnr_index_type = 'user'
 #use to save qq xnr info
 qq_xnr_index_name = 'qq_xnr'
 qq_xnr_index_type = 'user'
+
+## qq上报管理
+qq_report_management_index_name = 'qq_report_management'
+qq_report_management_index_type = 'report'
+
 #use to save xnr group message
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
@@ -142,6 +147,10 @@ weibo_xnr_save_like_index_type='text'
 #use to save weibo xnr count info
 weibo_xnr_count_info_index_name='weibo_xnr_count'
 weibo_xnr_count_info_index_type='text'
+
+#use to save weibo xnr keywords value count info
+weibo_keyword_count_index_name='weibo_keyword_count'
+weibo_keyword_count_index_type='text'
 
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
