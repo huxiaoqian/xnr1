@@ -1,6 +1,6 @@
 # -*-coding:utf-8-*-
 import math
-from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE
+from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE,QQ_S_DATE_ASSESSMENT
 from xnr.global_utils import es_xnr,group_message_index_name_pre,group_message_index_type,\
                     qq_xnr_index_name,qq_xnr_index_type
 from xnr.time_utils import datetime2ts,ts2datetime,get_groupmessage_index_list
@@ -20,7 +20,7 @@ def get_influence_at_num(xnr_user_no):
         nickname = get_result['nickname']
         
     if S_TYPE == 'test':
-        current_time = datetime2ts(QQ_S_DATE_NEW)
+        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
     else:
         current_time = int(time.time())
     

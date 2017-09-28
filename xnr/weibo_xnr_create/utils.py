@@ -538,12 +538,9 @@ def get_save_step_two(task_detail):
     mark = True
     #except:        
     #    mark = False
-    
-<<<<<<< HEAD
+
     return mark,task_id
-=======
-    return [mark, task_id]
->>>>>>> e4aef3950539caed8c547698a7c2678ed1a793f7
+
 
 def get_save_step_three_1(task_detail):
     #task_id = task_detail['task_id']
