@@ -31,51 +31,55 @@ function weibo(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var artical=row.content,str='';
-                    $.each(artical,function (index,item) {
-                        var text,time;
-                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                            text='暂无内容';
-                        }else {
-                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                var keyword=item.sensitive_words_string.split('&');
-                                for (var f of keyword){
-                                    text=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
-                                }
+                    if (artical.length==0||!artical){
+                        str='暂无微博内容';
+                    }else {
+                        $.each(artical,function (index,item) {
+                            var text,time;
+                            if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                                text='暂无内容';
                             }else {
-                                text=item.text;
+                                if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                    var keyword=item.sensitive_words_string.split('&');
+                                    for (var f of keyword){
+                                        text=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                    }
+                                }else {
+                                    text=item.text;
+                                };
                             };
-                        };
-                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
-                            time='未知';
-                        }else {
-                            time=getLocalTime(item.timestamp);
-                        };
-                        var sye_1='',sye_2='';
-                        if (Number(item.sensitive) < 50){
-                            sye_1='border-color: transparent transparent #131313';
-                            sye_2='color: yellow';
-                        }
-                        str+=
-                            '<div class="center_rel">'+
-                            '   <div class="icons" style="'+sye_1+'">'+
-                            '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
-                            '   </div>'+
-                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '   <span class="center_2">'+text+'</span>'+
-                            '   <div class="center_3">'+
-                            '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                            '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            '    </div>'+
-                            '    <div class="commentDown" style="width: 100%;display: none;">'+
-                            '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                            '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                            '    </div>'+
-                            '</div>'
-                    });
+                            if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
+                                time='未知';
+                            }else {
+                                time=getLocalTime(item.timestamp);
+                            };
+                            var sye_1='',sye_2='';
+                            if (Number(item.sensitive) < 50){
+                                sye_1='border-color: transparent transparent #131313';
+                                sye_2='color: yellow';
+                            }
+                            str+=
+                                '<div class="center_rel">'+
+                                '   <div class="icons" style="'+sye_1+'">'+
+                                '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
+                                '   </div>'+
+                                '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                                '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                '   <span class="center_2">'+text+'</span>'+
+                                '   <div class="center_3">'+
+                                '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                                '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                                '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                                '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                                '    </div>'+
+                                '    <div class="commentDown" style="width: 100%;display: none;">'+
+                                '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                                '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                                '    </div>'+
+                                '</div>'
+                        });
+                    }
                     var nameuid;
                     if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'||!row.user_name){
                         nameuid=row.uid;
@@ -142,21 +146,26 @@ function comMent(_this){
 function oneUP(_this) {
     //[mid,text,timestamp,retweeted,like,comment]
     var len=$(_this).parents('.everyUser').find('.center_rel');
-    var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
-    var dataStr='';
-    for (var i=0;i<len.length;i++){
-        var alldata=[];
-        var mid = $(len[i]).find('.mid').text();alldata.push(mid);
-        var txt=$(len[i]).find('.center_2').text().toString().replace(/#/g,'%23');alldata.push(txt);
-        var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
-        var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
-        var comment = $(len[i]).find('.comment').text();alldata.push(comment);
-        dataStr+=alldata.join(',').toString();
-        if (i!=len.length-1){dataStr+='*'}
+    if (len){
+        var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
+        var dataStr='';
+        for (var i=0;i<len.length;i++){
+            var alldata=[];
+            var mid = $(len[i]).find('.mid').text();alldata.push(mid);
+            var txt=$(len[i]).find('.center_2').text().toString().replace(/#/g,'%23');alldata.push(txt);
+            var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
+            var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
+            var comment = $(len[i]).find('.comment').text();alldata.push(comment);
+            dataStr+=alldata.join(',').toString();
+            if (i!=len.length-1){dataStr+='*'}
+        }
+        var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
+            '&weibo_info='+dataStr;
+        public_ajax.call_request('get',once_url,postYES);
+    }else {
+        $('#pormpt p').text('微博内容为空，无法上报。');
+        $('#pormpt').modal('show');
     }
-    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
-    '&weibo_info='+dataStr;
-    public_ajax.call_request('get',once_url,postYES);
 }
 //操作返回结果
 function postYES(data) {

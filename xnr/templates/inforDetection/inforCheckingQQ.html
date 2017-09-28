@@ -1,5 +1,5 @@
 {% extends "publicNav.html" %}
-{% block title %}<title>信息监测</title>{% endblock %}
+{% block title %}<title>预警监控</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/inforChecking.css">
 <style>
@@ -81,7 +81,7 @@
     <div class="title">
         <div style="display: inline-block;">
             <span class="icon icon-rss note_icon" style="color: #fff;"></span>
-            <b style="font-size: 20px;color: #fff;">信息检测</b>
+            <b style="font-size: 20px;color: #fff;">预警监控</b>
         </div>
         <div class="titTime">
             <span>时间范围：从</span>
@@ -152,7 +152,7 @@
 {% block my_js %}
 <script src="/static/js/inforCheckingQQ-1.js"></script>
 <script>
-    judgment('3');
+    $('.coorName').text('预警监控');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         minView:2, //控制时分秒
