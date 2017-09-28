@@ -1,4 +1,4 @@
-var time=Date.parse(new Date())/1000;
+var time=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
@@ -36,14 +36,14 @@ function weibo(data) {
                         if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                             text='暂无内容';
                         }else {
-                            var tt=item.text.toString();
-                            var keyword=item.keywords_string.split('&');
-                            for (var f of keyword){
-                                if (tt.indexOf(f)!=-1){
-                                    tt.replace(new RegExp(f,'g'),'<b style="color:red;">'+f+'</b>')
+                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                var keyword=item.sensitive_words_string.split('&');
+                                for (var f of keyword){
+                                    text=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                                 }
-                            }
-                            text=tt;
+                            }else {
+                                text=item.text;
+                            };
                         };
                         if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
                             time='未知';
@@ -83,7 +83,7 @@ function weibo(data) {
                         nameuid=row.user_name;
                     };
                     var rel_str=
-                        '<div class="everyUser" style="margin: 0 auto;">'+
+                        '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+

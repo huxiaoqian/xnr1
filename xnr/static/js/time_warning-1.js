@@ -55,9 +55,10 @@ function calendar(data) {
                         agoDay = '暂无统计';
                     }else {
                         if (row.countdown_days.toString().indexOf('-')==-1){
-                            agoDay = '还有 '+row.countdown_days+' 天';
+                            agoDay = '距离下一次该日期还有 '+row.countdown_days+' 天';
                         }else {
-                            agoDay = row.countdown_days.toString().replace(/-/g,'距离今天已经 ');
+                            agoDay = row.countdown_days.toString().replace(/-/g,'距离今天已经过去 ');
+                            agoDay+= agoDay+' 天';
                         }
                     };
                     if (row.weibo_date_warming_content==''||row.weibo_date_warming_content=='null'||row.weibo_date_warming_content.length==0||

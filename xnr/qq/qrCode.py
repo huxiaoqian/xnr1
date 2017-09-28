@@ -7,8 +7,8 @@ import subprocess
 #reload(sys)
 #sys.path.append('../')
 #from global_utils import QRCODE_PATH
-from xnr.global_utils import es_xnr as es,qq_xnr_index_name,qq_xnr_index_type
-QRCODE_PATH = '/root/.qqbot-tmp/'
+from xnr.global_utils import es_xnr as es,qq_xnr_index_name,qq_xnr_index_type,QRCODE_PATH
+#QRCODE_PATH = '/root/.qqbot-tmp/'
 
 def getQRCode():
     filenames = os.listdir(QRCODE_PATH)
