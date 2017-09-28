@@ -7,7 +7,7 @@ import json
 import time
 from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
 from xnr.global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                             es_flow_text,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                             es_flow_text,flow_text_index_name_pre,flow_text_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_report_management_index_name,weibo_report_management_index_type,\
                              weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,es_user_profile,profile_index_name,profile_index_type
@@ -404,19 +404,24 @@ def show_date_warming(today_time):
         warming_date=year+'-'+date_time
         today_date=ts2datetime(today_time)
         countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+        '''
         if countdown_num<0:
             new_warming_year=str(int(year)+1)
             new_warming_date=new_warming_year+'-'+date_time
             countdown_numday=(datetime2ts(new_warming_date)-datetime2ts(today_date))/DAY
             item['_source']['countdown_days']=countdown_numday
         else:
-            item['_source']['countdown_days']=countdown_num
+        '''
+        item['_source']['countdown_days']=countdown_num
         
-        #根据给定的关键词查询预警微博
-        keywords=item['_source']['keywords']
-        item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming(keywords,today_time)
+        if abs(countdown_num) < REMIND_DAY:
+            #根据给定的关键词查询预警微博
+            keywords=item['_source']['keywords']
+            item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming(keywords,today_time)
 
-        date_warming_result.append(item['_source'])
+            date_warming_result.append(item['_source'])
+        else:
+            pass
         
     return date_warming_result
 
@@ -426,11 +431,15 @@ def lookup_weibo_date_warming(keywords,today_time):
     for keyword in keywords:
         keyword_query_list=keyword+''
         #keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
-    end_time=today_time-DAY*REMIND_DAY
+
     if S_TYPE =='test':
-        index_name_list=['xnr_flow_text_2017-09-13','xnr_flow_text_2017-09-18']
+        test_time_gap=DAY*REMIND_DAY
+        start_time=datetime2ts(S_DATE_BCI)
+        end_time=start_time - test_time_gap
+        flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,start_time,end_time)
     else:
-        index_name_list=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,today_time,end_time)
+        end_time=today_time-DAY*REMIND_DAY
+        flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,today_time,end_time)
     #print index_name_list
 
     query_body={
@@ -438,10 +447,11 @@ def lookup_weibo_date_warming(keywords,today_time):
             'match':{
                 'text':keyword_query_list
             }
-        }
+        },
+        'size':MAX_VALUE
     }
     try:
-        temp_result=es_xnr.search(index=index_name_list,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        temp_result=es_xnr.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         #print temp_result
         for item in temp_result:
