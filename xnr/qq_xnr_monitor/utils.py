@@ -17,17 +17,14 @@ def aggr_sen_users(xnr_qq_number, startdate ,enddate):
     end_ts = datetime2ts(enddate)
     query_body = {
         "query":{
-            "filtered":{
-                "filter":{
                     "bool":{
                         "must":[
+                            {'term':{'xnr_qq_number': xnr_qq_number}},
                             {"term":{"sensitive_flag":1}},
                             {'range':{'timestamp':{'gte': start_ts, 'lt':end_ts}}}
 
                         ]
                     }
-                }
-            }
         },
         "aggs":{
             "sen_users":{
@@ -37,9 +34,10 @@ def aggr_sen_users(xnr_qq_number, startdate ,enddate):
     }
 
 
-    enddate = datetime.datetime.now().strftime('%Y-%m-%d')
-    startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
+    #enddate = datetime.datetime.now().strftime('%Y-%m-%d')
+    #startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
+    
     print index_names
     results = []
     for index_name in index_names:    
@@ -47,8 +45,9 @@ def aggr_sen_users(xnr_qq_number, startdate ,enddate):
             result = es_xnr.search(index=index_name,\
                     doc_type=group_message_index_type,\
                     body=query_body)["aggregations"]["sen_users"]["buckets"]
-        except:
+        except Exception,e:
             result = []
+        print 'index_name,result:', index_name, result
         if result != []:
             for item in result:
                 inner_item = {}
@@ -59,16 +58,19 @@ def aggr_sen_users(xnr_qq_number, startdate ,enddate):
                     inner_item['qq_nick'] = ''
                     inner_item['qq_groups']=''
                     inner_item['last_speak_ts'] = ''
+                    inner_item['text'] = []
                 else:
                     inner_item['qq_nick'] = info['qq_nick']
                     inner_item['qq_groups']=info['qq_groups']
                     inner_item['last_speak_ts'] = info['last_speak_ts']
+                    inner_item['text'] = info['text']
                 flag = 1
                 for aa in results:                              #检验是否已经在结果中
                     if aa['qq_number'] == inner_item['qq_number']:
                         aa['count'] += inner_item['count']
                         aa['last_speak_ts'] = inner_item['last_speak_ts']
                         aa['qq_groups'].update(inner_item['qq_groups'])     # 多个群发言的更新
+                        aa['text'].extend(inner_item['text'])
                         flag = 0
                         continue
                 if flag:        
@@ -97,16 +99,21 @@ def get_speaker_info(qq_number,index_name):
 
     result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)['hits']['hits']
     results = {}
-    print result
+    #print result
     source = result[0]['_source']
     if source != []:
-        results['qq_nick'] = result['speaker_nickname']
-        results['last_speak_ts'] = result['timestamp']
-        results['qq_groups'] = {result['qq_group_number']:result['qq_group_nickname']}
+        results['qq_nick'] = source['speaker_nickname']
+        results['last_speak_ts'] = source['timestamp']
+        results['qq_groups'] = {source['qq_group_number']:source['qq_group_nickname']}
     for item in result:
         source = item['_source']
         text_item = [source['text'], source['timestamp']]
-        results['text'].append(text_item)
+        #print 'text_item:', text_item
+        try:
+            results['text'].append(text_item)
+        except:
+            results['text'] = [text_item]
+    #print 'final results:', results
     return results
 
 

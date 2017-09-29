@@ -38,9 +38,9 @@ def ajax_search_by_period():
 
 @mod.route('/show_sensitive_users/')
 def show_sensitive_users():
-    xnr_qq_number = request.args.get('xnr_number','')
-    startdate = request.args.get('startdate', '')
-    enddate = request.args.get('enddate', '')
+    xnr_qq_number = request.args.get('xnr_number','1965056593')
+    startdate = request.args.get('startdate', '2017-09-28')
+    enddate = request.args.get('enddate', '2017-09-29')
     users = aggr_sen_users(xnr_qq_number, startdate, enddate)
     results = users
     # results = rank_sen_users(users)

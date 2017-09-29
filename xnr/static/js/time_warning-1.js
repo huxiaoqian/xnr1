@@ -31,7 +31,7 @@ function calendar(data) {
                 formatter: function (value, row, index) {
                     //时间节点名称、日期、距今、关键词、预警微博
                     var name,txt='',agoDay,time,time_2,keywords;
-                    if (row.date_name==''||row.date_name=='null'||row.date_name=='unknown'){
+                    if (row.date_name==''||row.date_name=='null'||row.date_name=='unknown'||!row.date_name){
                         name='未命名';
                     }else {
                         name=row.date_name;
@@ -41,12 +41,12 @@ function calendar(data) {
                     }else {
                         keywords = row.keywords.join('，');
                     };
-                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'){
+                    if (row.create_time==''||row.create_time=='null'||row.create_time=='unknown'||!row.create_time){
                         time='未知';
                     }else {
                         time=getLocalTime(row.create_time);
                     };
-                    if (row.date_time==''||row.date_time=='null'||row.date_time=='unknown'){
+                    if (row.date_time==''||row.date_time=='null'||row.date_time=='unknown'||!row.date_time){
                         time_2='未知';
                     }else {
                         time_2=row.date_time;
@@ -65,51 +65,93 @@ function calendar(data) {
                         row.weibo_date_warming_content=='unknown'||!row.weibo_date_warming_content){
                         txt = '暂无内容';
                     }else {
-                        $.each(row.weibo_date_warming_content,function (index,item) {
-                            var xnr,type,txt2;
-                            if (!item.text){txt2='无数据'}else {txt2=item.text};
-                            if (!item.tweet_type){type='未知'}else {type=item.tweet_type};
-                            if (!item.xnr_user_no){xnr='未知'}else {xnr=item.xnr_user_no};
-                            txt +=
-                                '<div class="post_short">'+
-                                '    <img src="/static/images/post-11.png" alt="">'+
-                                '    <span class="short_1">虚拟人：'+xnr+'</span>'+
-                                '    <span class="short_2">类型：'+type+'</span>'+
-                                '    <div class="center_rel" style="margin: 10px 0;padding-left: 25px;">'+
-                                '        内容：'+txt2+
-                                '    </div>'+
-                                '</div>';
-                        });
+                        var artical=row.weibo_date_warming_content,ssttr='';
+                        if (artical.length==0||!artical){
+                            str='暂无微博内容';
+                        }else {
+                            $.each(artical,function (index,item) {
+                                var name,txt,img,time;
+                                if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'){
+                                    name='未命名';
+                                }else {
+                                    name=row.nick_name;
+                                };
+                                if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'){
+                                    img='/static/images/unknown.png';
+                                }else {
+                                    img=item.photo_url;
+                                };
+                                if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'){
+                                    time='未知';
+                                }else {
+                                    time=getLocalTime(item.timestamp);
+                                };
+                                if (item.text==''||item.text=='null'||item.text=='unknown'){
+                                    txt='暂无内容';
+                                }else {
+                                    if (item.keywords){
+                                        var keywords=item.keywords[0].split('，');
+                                        console.log(keywords)
+                                        for (var f of keywords){
+                                            txt=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                        }
+                                    };
+                                };
+                                ssttr+=
+                                    '<div class="post_perfect">'+
+                                    '   <div class="post_center-business">'+
+                                    '       <img src="'+img+'" class="center_icon">'+
+                                    '       <div class="center_rel">'+
+                                    '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
+                                    '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                                    '           <i class="mid" style="display: none;">'+item.mid+'</i>'+
+                                    '           <i class="uid" style="display: none;">'+item.uid+'</i>'+
+                                    '           <span class="center_2">'+txt+
+                                    '           </span>'+
+                                    '           <div class="center_3">'+
+                                    '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                                    '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                                    '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                                    '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                                    '           </div>'+
+                                    '           <div class="commentDown" style="width: 100%;display: none;">'+
+                                    '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                                    '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                                    '           </div>'+
+                                    '       </div>'+
+                                    '   </div>'+
+                                    '</div>';
+                            });
+                        }
+                        var str=
+                            '<div class="post_perfect" style="margin:10px auto;width:920px;">'+
+                            '   <div class="post_center-hot">'+
+                            '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                            '       <div class="center_rel">'+
+                            '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                            // '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                            // '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                            // '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;'+time_2+'</span>  '+
+                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  '+
+                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="关键词"><i class="icon icon-bell-alt"></i>&nbsp;&nbsp;'+keywords+'</span>  '+
+                            '           <div class="center_2"><p style="color:#f98077;">敏感微博内容：</p>'+txt+'</div>'+
+                            // '           <div class="center_3">'+
+                            // '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
+                            // '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
+                            // '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                            // '           </div>'+
+                            // '           <div class="commentDown" style="width: 100%;display: none;">'+
+                            // '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                            // '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                            // '           </div>'+
+                            '       </div>'+
+                            '    </div>'+
+                            '</div>';
+                        return str;
                     };
-                    var str=
-                        '<div class="post_perfect" style="margin:10px auto;width:920px;">'+
-                        '   <div class="post_center-hot">'+
-                        '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '       <div class="center_rel">'+
-                        '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                        // '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
-                        // '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        // '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;'+time_2+'</span>  '+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  '+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="关键词"><i class="icon icon-bell-alt"></i>&nbsp;&nbsp;'+keywords+'</span>  '+
-                        '           <div class="center_2"><p style="color:#f98077;">敏感微博内容：</p>'+txt+'</div>'+
-                        // '           <div class="center_3">'+
-                        // '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
-                        // '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
-                        // '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        // '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
-                        // '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        // '           </div>'+
-                        // '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        // '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        // '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                        // '           </div>'+
-                        '       </div>'+
-                        '    </div>'+
-                        '</div>';
-                    return str;
+
                 }
             },
         ],

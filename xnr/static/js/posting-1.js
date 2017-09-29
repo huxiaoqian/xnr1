@@ -845,7 +845,7 @@ function relatedWEIbo(data) {
 }
 
 //======业务发帖=======
-var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?sort_item=timestamp';
+var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
 // public_ajax.call_request('get',busWeiboUrl,businessWeibo);
 function businessWeibo(data) {
     $('#defaultWeibo3').bootstrapTable('load', data);
