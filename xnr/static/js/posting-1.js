@@ -507,6 +507,18 @@ function postYES(data) {
 }
 
 //=========热点跟随===========
+$('#theme-2 .demo-label input').on('click',function () {
+    var the=$(this).val();
+    var theSort=$('#theme-3 .demo-label input:radio[name="theme3"]:checked').val();
+    var the_url='/weibo_xnr_operate/hot_recommend_tweets/?topic_field='+the+'&sort_item='+theSort;
+    public_ajax.call_request('get',the_url,hotWeibo)
+});
+$('#theme-3 .demo-label input').on('click',function () {
+    var the=$(this).val();
+    var theSort=$('#theme-2 .demo-label input:radio[name="theme2"]:checked').val();
+    var the_url='/weibo_xnr_operate/hot_recommend_tweets/?topic_field='+the+'&sort_item='+theSort;
+    public_ajax.call_request('get',the_url,hotWeibo)
+});
 var hotWeiboUrl='/weibo_xnr_operate/hot_recommend_tweets/?topic_field=民生类_法律&sort_item=timestamp';
 // public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
 function hotWeibo(data) {
@@ -770,7 +782,7 @@ function simliar(_this) {
 //事件子观点及相关微博
 function related(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
-    var relatedUrl='/weibo_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
+    var relatedUrl='/weibo_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID;
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
 function relatedWEIbo(data) {
@@ -845,6 +857,11 @@ function relatedWEIbo(data) {
 }
 
 //======业务发帖=======
+$('#theme-4 .demo-label input').on('click',function () {
+    var the=$(this).val();
+    var the_url='/weibo_xnr_operate/bussiness_recomment_tweets/?xnr_user_no='+xnrUser+'&sort_item='+the;
+    public_ajax.call_request('get',the_url,businessWeibo)
+});
 var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
 // public_ajax.call_request('get',busWeiboUrl,businessWeibo);
 function businessWeibo(data) {

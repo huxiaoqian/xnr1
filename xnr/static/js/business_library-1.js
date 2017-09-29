@@ -176,7 +176,6 @@ function creatTYPE() {
     var pl=$('.tit-2 input:radio[name="mine"]:checked').val();
     if (pl){creat_type=pl}else{creat_type=''};
 }
-
 //============时间预警节点-------------------
 var time_url='/weibo_xnr_knowledge_base_management/show_date_remind/';
 public_ajax.call_request('get',time_url,time);
