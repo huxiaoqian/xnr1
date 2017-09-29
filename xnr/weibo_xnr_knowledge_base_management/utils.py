@@ -208,49 +208,58 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
 
     return create_type_new
 
-def domain_create_task(xnr_user_no,domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
+def domain_create_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
     
+    task_id = pinyin.get(domain_name,format='strip',delimiter='_')
+
     try:
-        domain_task_dict = dict()
+        es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id)['_source']
 
-        domain_task_dict['xnr_user_no'] = xnr_user_no
-        domain_task_dict['domain_pinyin'] = pinyin.get(domain_name,format='strip',delimiter='_')
-        domain_task_dict['domain_name'] = domain_name
-        domain_task_dict['create_type'] = json.dumps(create_type)
-        domain_task_dict['create_time'] = create_time
-        domain_task_dict['submitter'] = submitter
-        domain_task_dict['description'] = description
-        domain_task_dict['remark'] = remark
-        domain_task_dict['compute_status'] = compute_status
+        return 'domain name exists!'
 
-        r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
-
-        item_exist = dict()
-        
-        item_exist['xnr_user_no'] = domain_task_dict['xnr_user_no']
-        item_exist['domain_pinyin'] = domain_task_dict['domain_pinyin']
-        item_exist['domain_name'] = domain_task_dict['domain_name']
-        item_exist['create_type'] = domain_task_dict['create_type']
-        item_exist['create_time'] = domain_task_dict['create_time']
-        item_exist['submitter'] = domain_task_dict['submitter']
-        item_exist['description'] = domain_task_dict['description']
-        item_exist['remark'] = domain_task_dict['remark']
-        item_exist['group_size'] = ''
-        
-        item_exist['compute_status'] = 0  # 存入创建信息
-        es.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
-
-
-        mark = True
     except:
-        mark =False
 
-    return mark
+        try:
+            domain_task_dict = dict()
 
-def get_show_domain_group_summary(xnr_user_no):
+            #domain_task_dict['xnr_user_no'] = xnr_user_no
+            domain_task_dict['domain_pinyin'] = pinyin.get(domain_name,format='strip',delimiter='_')
+            domain_task_dict['domain_name'] = domain_name
+            domain_task_dict['create_type'] = json.dumps(create_type)
+            domain_task_dict['create_time'] = create_time
+            domain_task_dict['submitter'] = submitter
+            domain_task_dict['description'] = description
+            domain_task_dict['remark'] = remark
+            domain_task_dict['compute_status'] = compute_status
+
+            r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
+
+            item_exist = dict()
+            
+            #item_exist['xnr_user_no'] = domain_task_dict['xnr_user_no']
+            item_exist['domain_pinyin'] = domain_task_dict['domain_pinyin']
+            item_exist['domain_name'] = domain_task_dict['domain_name']
+            item_exist['create_type'] = domain_task_dict['create_type']
+            item_exist['create_time'] = domain_task_dict['create_time']
+            item_exist['submitter'] = domain_task_dict['submitter']
+            item_exist['description'] = domain_task_dict['description']
+            item_exist['remark'] = domain_task_dict['remark']
+            item_exist['group_size'] = ''
+            
+            item_exist['compute_status'] = 0  # 存入创建信息
+            es.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
+
+
+            mark = True
+        except:
+            mark =False
+
+        return mark
+
+def get_show_domain_group_summary(submitter):
 
     es_result = es.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,\
-                body={'query':{'term':{'xnr_user_no':xnr_user_no}}})['hits']['hits']
+                body={'query':{'term':{'submitter':submitter}}})['hits']['hits']
 
     if es_result:
         result_all = []
@@ -277,13 +286,13 @@ def get_show_domain_group_summary(xnr_user_no):
 
             result_all.append(item)
     else:
-        return '当前虚拟人尚未创建渗透领域'
+        return '当前账户尚未创建渗透领域'
 
     return result_all
 
 
 ## 查看群体画像信息
-def get_show_domain_group_detail_portrait(xnr_user_no,domain_name):
+def get_show_domain_group_detail_portrait(domain_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,\
                 id=domain_pinyin)['_source']
@@ -307,8 +316,8 @@ def get_show_domain_group_detail_portrait(xnr_user_no,domain_name):
             item['friends_num'] = result['friendsnum']
             item['gender'] = result['gender']
             item['home_page'] = 'http://weibo.com/'+result['uid']+'/profile?topnav=1&wvr=6&is_all=1'
-            item['sensor_mark'] = judge_sensing_sensor(xnr_user_no,item['uid'])
-            item['weibo_type'] = judge_follow_type(xnr_user_no,item['uid'])
+            # item['sensor_mark'] = judge_sensing_sensor(xnr_user_no,item['uid'])
+            # item['weibo_type'] = judge_follow_type(xnr_user_no,item['uid'])
             item['influence'] = get_influence_relative(item['uid'],result['influence'])
 
         else:
@@ -322,8 +331,8 @@ def get_show_domain_group_detail_portrait(xnr_user_no,domain_name):
             item['friends_num'] = ''
             item['gender'] = ''
             item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
-            item['sensor_mark'] = judge_sensing_sensor(xnr_user_no,result['_id'])
-            item['weibo_type'] = judge_follow_type(xnr_user_no,result['_id'])
+            # item['sensor_mark'] = judge_sensing_sensor(xnr_user_no,result['_id'])
+            # item['weibo_type'] = judge_follow_type(xnr_user_no,result['_id'])
             item['influence'] = ''
         
         result_all.append(item)
@@ -331,7 +340,7 @@ def get_show_domain_group_detail_portrait(xnr_user_no,domain_name):
     return result_all
 
 
-def get_show_domain_description(xnr_user_no,domain_name):
+def get_show_domain_description(domain_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,\

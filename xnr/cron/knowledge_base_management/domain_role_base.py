@@ -292,17 +292,13 @@ def detect_by_keywords(keywords,datetime_list):
     es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
                 body=query_body)['hits']['hits']
     #'must_not':{'terms':{'uid':white_uid_list}},
-    print 'flow_text_index_name_list::',flow_text_index_name_list
-    print 'query_body::',query_body
-    print 'es_results:::',es_results
+
     for i in range(len(es_results)):
 
         uid = es_results[i]['_source']['uid']
         group_uid_list.add(uid)
     group_uid_list = list(group_uid_list)
     return group_uid_list
-
-
 
 ### 根据种子用户
 # input：种子用户uid，任务创建时间

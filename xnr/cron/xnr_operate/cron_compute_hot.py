@@ -83,6 +83,7 @@ def compute_recommend_subopnion(task_detail):
     for keyword in keywords_list:
         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
     
+    '''
     ## 重点关注当前虚拟人的关注用户
     if S_TYPE == 'test':
         # followers_list = get_result['followers_list']
@@ -93,7 +94,7 @@ def compute_recommend_subopnion(task_detail):
         id=xnr_user_no)['_source']
         followers_list = get_result['followers_list']
         nest_query_list.append({'terms':followers_list})
-
+    '''
 
     if S_TYPE == 'test':
         create_time = datetime2ts(S_DATE)
@@ -119,7 +120,7 @@ def compute_recommend_subopnion(task_detail):
     ## 内容推荐
 
     ## 得到推荐句子列表
-
+    print 'weibo_list::::::',weibo_list
     print '开始内容推荐计算......'
     if weibo_list:
         content_results = summary_main(weibo_list)
