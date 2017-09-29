@@ -17,7 +17,7 @@ from global_utils import es_xnr,weibo_keyword_count_index_name,weibo_keyword_cou
                              weibo_xnr_fans_followers_index_type, flow_text_index_name_pre, flow_text_index_type
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
-test_date = '2016-11-21'
+test_date = '2016-11-27'
 
 
 def extract_keywords(w_text):
@@ -87,10 +87,11 @@ def xnr_keywords_compute(xnr_user_no):
         k_dict = extract_keywords(keywords_string)
 
         for item_item in k_dict:
-            keyword = item_item.word.encode('utf-8')
+            keyword = item_item.word
+            print 'keyword::',type(keyword)
             word_dict_new[keyword] = word_dict[keyword]
-    print 'word_dict_new:::',len(word_dict_new.keys())
-    print 'word_dict:::',len(word_dict.keys())
+        
+
     return word_dict_new
 
 
@@ -98,7 +99,7 @@ def xnr_keywords_compute(xnr_user_no):
 def lookup_xnr_user_list():
     query_body={
         'query':{
-            'match_all':{}
+            'term':{'create_status':2}
         }
     }
     try:
