@@ -33,7 +33,7 @@ def ajax_show_personnal_warming():
 @mod.route('/show_speech_warming/')
 def ajax_show_speech_warming():
 	xnr_user_no=request.args.get('xnr_user_no','')
-	show_type=request.args.get('show_type','')
+	show_type=int(request.args.get('show_type',''))
 	day_time=int(request.args.get('day_time','')) 
 	#day_time=time.time()     
 	results=show_speech_warming(xnr_user_no,show_type,day_time)
