@@ -9,10 +9,11 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.parameter import MAX_VALUE
 from utils import show_group_info,search_by_keyword, search_by_xnr_number,\
                   search_by_speaker_number,search_by_speaker_nickname,\
-                  search_by_period,send_message
+                  search_by_period,send_message,get_my_group
 from xnr.global_config import QQ_S_DATE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 from xnr.qq.getgroup import getgroup_v2
+
 
 mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 
@@ -26,24 +27,26 @@ mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 @mod.route('/search_by_period/')
 def ajax_search_by_period():
     xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份
+    group_qq_number = request.args.get('group_qq_number','')
     startdate = request.args.get('startdate','')
     enddate = request.args.get('enddate','')
-    results = search_by_period(xnr_qq_number,startdate,enddate)
+    results = search_by_period(xnr_qq_number,startdate,enddate,group_qq_number)
     return json.dumps(results)
-
 
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')
+    group_qq_number = request.args.get('group_qq_number','')
     ts = request.args.get('date','')
     ts = float(ts)
     date = ts2datetime(ts)
-    results = search_by_xnr_number(xnr_qq_number, date)
+    results = search_by_xnr_number(xnr_qq_number, date,group_qq_number)
     return json.dumps(results)
 
 @mod.route('/send_qq_group_message/')
 def send_qq_group_message():
     xnr_qq_number = request.args.get('xnr_number','')
+    #group_qq_number = request.args.get('group_qq_number','')
     group = request.args.get('group','')
     text = request.args.get('text','')
     results = send_message(xnr_qq_number,group, text)     #传入群汉字名称
@@ -52,12 +55,11 @@ def send_qq_group_message():
 
 @mod.route('/show_all_groups/')
 def show_all_groups():
-    xnr_qq_number = request.args.get('xnr_number','')
-    # groups = getgroup(xnr_qq_number)
-    groups = getgroup_v2(xnr_qq_number)
-    return json.dumps(groups)
+    xnr_user_no = request.args.get('xnr_user_no','')
+    groups = getgroup_v2(xnr_user_no)
+    my_group = get_my_group(xnr_user_no,groups)
 
-
+    return json.dumps(my_group)
 
 # 暂时用不到的函数
 @mod.route('/search_by_xnr_nickname/')
