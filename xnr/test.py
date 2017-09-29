@@ -109,40 +109,40 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
 
-# query_body={
-#     'query':{
-#         'match_all':{}
-#     },
-#     'aggs':{
-#         'followers_sensitive_num':{
-#             'terms':{'field':'uid','size':100 },
-            
-#         }
-#     },
-#     'sort':{'sensitive':{'order':'desc'}}
-    
-# }
-# flow_text_index_name = ['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25']
-# es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
-
-# with open('./uid_sensitive.txt','w') as f:
-# 	for item in es_result:
-# 		uid = item['key']
-# 		f.write(uid+'\n')
-# 	f.close()
-
-query_body = {
+query_body={
     'query':{
-        'filtered':{
-            'filter':{
-                'terms':{'xnr_user_no':['WXNR0001','WXNR0002','WXNR0004']}
-            }
+        'range':{'sensitive':{'gt':0}}
+    },
+    'aggs':{
+        'followers_sensitive_num':{
+            'terms':{'field':'uid','size':10000 },
+            
         }
     },
-    'size':10
+    'sort':{'sensitive':{'order':'desc'}}
+    
 }
+flow_text_index_name = ['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25']
+es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
 
-es_results = es.search(index='weibo_xnr',doc_type='user',body=query_body)['hits']['hits']
+with open('./uid_sensitive.txt','w') as f:
+	for item in es_result:
+		uid = item['key']
+		f.write(uid+'\n')
+	f.close()
 
-for result in es_results:
-    print result
+# query_body = {
+#     'query':{
+#         'filtered':{
+#             'filter':{
+#                 'terms':{'xnr_user_no':['WXNR0001','WXNR0002','WXNR0004']}
+#             }
+#         }
+#     },
+#     'size':10
+# }
+
+# es_results = es.search(index='weibo_xnr',doc_type='user',body=query_body)['hits']['hits']
+
+# for result in es_results:
+#     print result
