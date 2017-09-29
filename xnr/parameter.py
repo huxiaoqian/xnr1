@@ -121,6 +121,12 @@ MAX_VALUE = 9999
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
 
+daily_ch2en = {u'旅游':'travel',u'美食':'food',u'汽车':'cars',u'游戏':'games',\
+            u'星座':'constellation',u'音乐':'music',u'影视':'movie',\
+            u'健身':'fitness',u'养生':'health',u'体育':'sports',\
+            u'萌宠':'pets',u'动漫':'cartoon',u'时尚':'fashion',\
+            u'鸡汤':'soul'}
+
 topic_value_dict = {"art": 1, "computer":2, "economic":7, "education":7.5, "environment":8.7, "medicine":7.8,"military":7.4, "politics":10, "sports":4, "traffic":6.9, "life":1.8, "anti-corruption":9.5, "employment":6, "fear-of-violence":9.3, "house":6.4, "law":8.6, "peace":5.5, "religion":7.6, "social-security":8.6}
 
 
