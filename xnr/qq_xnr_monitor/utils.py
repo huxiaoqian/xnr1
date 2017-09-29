@@ -12,16 +12,17 @@ from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
 from xnr.time_utils import get_groupmessage_index_list,ts2datetime,datetime2ts,ts2date,date2ts
 
 
-def aggr_sen_users(xnr_qq_number):
+def aggr_sen_users(xnr_qq_number, startdate ,enddate):
+    start_ts = datetime2ts(startdate)
+    end_ts = datetime2ts(enddate)
     query_body = {
         "query":{
-            # "match_all":{}
-            # "terms":{"sensitive_flag": 1}
             "filtered":{
                 "filter":{
                     "bool":{
                         "must":[
-                            {"term":{"sensitive_flag":1}}
+                            {"term":{"sensitive_flag":1}},
+                            {'range':{'timestamp':{'gte': start_ts, 'lt':end_ts}}}
 
                         ]
                     }
@@ -43,8 +44,9 @@ def aggr_sen_users(xnr_qq_number):
     results = []
     for index_name in index_names:    
         try:
-            result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)["aggregations"]["sen_users"]["buckets"]
-        
+            result = es_xnr.search(index=index_name,\
+                    doc_type=group_message_index_type,\
+                    body=query_body)["aggregations"]["sen_users"]["buckets"]
         except:
             result = []
         if result != []:
@@ -82,10 +84,8 @@ def get_speaker_info(qq_number,index_name):
                 "filter":{
                     "bool":{
                         "must":[
-                            {"term":{"speaker_qq_number":qq_number},
-                            # "term":{"sensitive_flag":1}
-                            }
-
+                            {"term":{"speaker_qq_number":qq_number}},
+                            {"term":{"sensitive_flag":1}}
                         ]
                     }
                 }
@@ -95,14 +95,18 @@ def get_speaker_info(qq_number,index_name):
             "sort":{"timestamp":{"order":"desc"}}
         }
 
-    result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)['hits']['hits'][0]['_source']
+    result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)['hits']['hits']
     results = {}
     print result
-    if result != []:
+    source = result[0]['_source']
+    if source != []:
         results['qq_nick'] = result['speaker_nickname']
         results['last_speak_ts'] = result['timestamp']
         results['qq_groups'] = {result['qq_group_number']:result['qq_group_nickname']}
-
+    for item in result:
+        source = item['_source']
+        text_item = [source['text'], source['timestamp']]
+        results['text'].append(text_item)
     return results
 
 
