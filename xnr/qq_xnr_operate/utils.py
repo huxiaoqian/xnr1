@@ -11,7 +11,18 @@ from xnr.time_utils import get_groupmessage_index_list, ts2datetime, datetime2ts
 
 from xnr.qq.sendQQGroupMessage import sendfromweb,sendfromweb_v2
 
-def search_by_xnr_number(xnr_qq_number, current_date):
+def get_my_group(xnr_user_no,groups):
+
+    es_get_results = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+
+    qq_groups = es_get_results['qq_groups']
+    my_group_list = {}
+    for group_number in qq_groups:
+        if group_number:
+            my_group_list[group_number] = groups[group_number].strip()
+    return my_group_list
+
+def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
     # 用于显示操作页面初始的所有群历史信息
     query_body = {
         "query": {
@@ -19,7 +30,8 @@ def search_by_xnr_number(xnr_qq_number, current_date):
                 "filter":{
                     "bool":{
                         "must":[
-                            {"term":{"xnr_qq_number":xnr_qq_number}}
+                            {"term":{"xnr_qq_number":xnr_qq_number}},
+                            {'term':{'qq_group_number':group_qq_number}}
 
                         ]
                     }
@@ -33,22 +45,34 @@ def search_by_xnr_number(xnr_qq_number, current_date):
     enddate = current_date
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
-    print index_names
+    print 'index_names::',index_names
     results = {}
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index=index_name):
         #     continue
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
+            print 'result::',result
             if results != {}:
                 results['hits']['hits'].extend(result['hits']['hits'])
             else:
                 results=result.copy()
         except:
             pass
+    # results_new = []
+    # for index_name in index_names:
+
+    #     try:
+    #         es_results = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)['hits']['hits']
+    #         print 'es_results::',es_results
+    #         for es_result in es_results:
+    #             es_result = es_result['_source']
+    #             results_new.append(es_result)
+    #     except:
+    #         continue
     return results
 
-def search_by_period(xnr_qq_number,startdate,enddate):
+def search_by_period(xnr_qq_number,startdate,enddate,group_qq_number):
     results = {}
     query_body = {
         "query": {
@@ -56,7 +80,8 @@ def search_by_period(xnr_qq_number,startdate,enddate):
                 "filter":{
                     "bool":{
                         "must":[
-                            {"term":{"xnr_qq_number":xnr_qq_number}}
+                            {"term":{"xnr_qq_number":xnr_qq_number}},
+                            {'term':{'qq_group_number':group_qq_number}}
 
                         ]
                     }
@@ -69,6 +94,7 @@ def search_by_period(xnr_qq_number,startdate,enddate):
     # es.search(index=”flow_text_2013-09-02”, doc_type=”text”, body=query_body)
 
     index_names = get_groupmessage_index_list(startdate,enddate)
+    print 'index_names::',index_names
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index_name):
         #     continue

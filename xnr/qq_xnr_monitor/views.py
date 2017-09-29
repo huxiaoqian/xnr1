@@ -60,6 +60,7 @@ def ajax_report_warming_content():
         qq_content_info = []
     
     #test
+    '''
     report_type = 'content'
     report_time = int(time.time())
     xnr_user_no = 'QXNR0003'
@@ -68,7 +69,7 @@ def ajax_report_warming_content():
             "sensitive_words_string": "\u8fbe\u8d56", "text": "\u8fbe\u8d56",\
             "speaker_nickname": "hxq", "timestamp": 1506567359, \
             "qq_group_number": "531811289"}]
-    
+    '''
     results = report_warming_content(report_type, report_time, xnr_user_no,\
             qq_number, qq_content_info)
     return json.dumps(results)
