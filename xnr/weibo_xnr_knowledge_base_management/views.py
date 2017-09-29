@@ -49,7 +49,7 @@ def ajax_export_example_model():
 ## 创建领域
 @mod.route('/create_domain/')
 def ajax_create_domain():
-    xnr_user_no = request.args.get('xnr_user_no','')
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
     create_type = request.args.get('create_type','')  # 按关键词--by_keywords  按种子用户--by_seed_users  按所有用户--by_all_users 
     keywords_string = request.args.get('keywords_string','')  # 按关键词方式，以中文逗号“，”分割。若是不是按关键词，则不传递此参数
@@ -61,34 +61,36 @@ def ajax_create_domain():
     description = request.args.get('description','')
     remark = request.args.get('remark','')
 
-    mark = domain_create_task(xnr_user_no,domain_name,create_type_new,create_time,submitter,description,remark)
+    mark = domain_create_task(domain_name,create_type_new,create_time,submitter,description,remark)
 
     return json.dumps(mark)  # True False
 
 ## 展示群体摘要信息
 @mod.route('/show_domain_group_summary/')
 def ajax_show_domain_group_summary():
-    xnr_user_no = request.args.get('xnr_user_no','')
+    #xnr_user_no = request.args.get('xnr_user_no','')
+    submitter = request.args.get('submitter','admin@qq.com')
 
-    results = get_show_domain_group_summary(xnr_user_no)
+    results = get_show_domain_group_summary(submitter)
 
     return json.dumps(results)
 
 ## 展示群体详细画像信息
 @mod.route('/show_domain_group_detail_portrait/')
 def ajax_show_domain_group_detail_portrait():
-    xnr_user_no = request.args.get('xnr_user_no','')
+   
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
-    results = get_show_domain_group_detail_portrait(xnr_user_no,domain_name)
+    results = get_show_domain_group_detail_portrait(domain_name)
 
     return json.dumps(results)
 
 ## 展示群体描述
 @mod.route('/show_domain_description/')
 def ajax_show_domain_description():
-    xnr_user_no = request.args.get('xnr_user_no','')
+    #xnr_user_no = request.args.get('xnr_user_no','')
     domain_name = request.args.get('domain_name','')
-    results = get_show_domain_description(xnr_user_no,domain_name)
+    results = get_show_domain_description(domain_name)
 
     return json.dumps(results)
 

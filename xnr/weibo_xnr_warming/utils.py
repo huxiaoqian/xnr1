@@ -261,6 +261,7 @@ def get_hashtag():
 def show_event_warming(xnr_user_no):
     now_time=int(time.time())
     hashtag_list = get_hashtag()
+    print 'hashtag_list:::::::',hashtag_list
     if S_TYPE =='test':    
         test_day_date=S_DATE_EVENT_WARMING
         test_day_time=datetime2ts(test_day_date)
