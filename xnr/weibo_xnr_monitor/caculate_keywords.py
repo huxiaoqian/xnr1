@@ -91,6 +91,7 @@ def xnr_keywords_compute(xnr_user_no):
             print 'keyword::',type(keyword)
             word_dict_new[keyword] = word_dict[keyword]
         
+
     return word_dict_new
 
 

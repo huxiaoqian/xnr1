@@ -229,7 +229,7 @@ def get_hashtag():
     uid_list = []
     hashtag_list = {}
 
-    with open(UID_TXT_PATH+'/uid.txt','rb') as f:
+    with open(UID_TXT_PATH+'/uid_sensitive.txt','rb') as f:
         for line in f:
             uid = line.strip()
             uid_list.append(uid)

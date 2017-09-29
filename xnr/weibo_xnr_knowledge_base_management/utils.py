@@ -17,6 +17,7 @@ from xnr.time_utils import ts2datetime
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
+from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
 '''
 领域知识库
@@ -33,6 +34,14 @@ def union_dict(*objs):
     
     return _total
 
+def extract_keywords(w_text):
+
+    tr4w = TextRank4Keyword()
+    tr4w.analyze(text=w_text, lower=True, window=4)
+    k_dict = tr4w.get_keywords(5, word_min_len=2)
+
+    return k_dict
+    
 def get_generate_example_model(domain_name,role_name):
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
@@ -67,28 +76,42 @@ def get_generate_example_model(domain_name,role_name):
 
     mget_results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':role_group_uids})['docs']
 
-    topic_list = []
-    for mget_item in mget_results:
+    # topic_list = []
+    # for mget_item in mget_results:
         
-        if mget_item['found']:
-            keywords_list = json.loads(mget_item['_source']['keywords'])
-            topic_list.extend(keywords_list)
+    #     if mget_item['found']:
+    #         keywords_list = json.loads(mget_item['_source']['keywords'])
+    #         topic_list.extend(keywords_list)
     
-    topic_keywords_dict = {}
-    for topic_item in topic_list:
-        keyword = topic_item[0]
-        keyword_count = topic_item[1]
-        try:
-            topic_keywords_dict[keyword] += keyword_count
-        except:
-            topic_keywords_dict[keyword] = keyword_count
+    # topic_keywords_dict = {}
+    # for topic_item in topic_list:
+    #     keyword = topic_item[0]
+    #     keyword_count = topic_item[1]
+    #     try:
+    #         topic_keywords_dict[keyword] += keyword_count
+    #     except:
+    #         topic_keywords_dict[keyword] = keyword_count
 
-    monitor_keywords_list = []
-    for i in range(3):
+    # monitor_keywords_list = []
+    # for i in range(3):
         
-        keyword_max = max(topic_keywords_dict,key=topic_keywords_dict.get)
-        monitor_keywords_list.append(keyword_max)
-        del topic_keywords_dict[keyword_max]
+    #     keyword_max = max(topic_keywords_dict,key=topic_keywords_dict.get)
+    #     monitor_keywords_list.append(keyword_max)
+    #     del topic_keywords_dict[keyword_max]
+
+    # item['monitor_keywords'] = '&'.join(monitor_keywords_list)
+    keywords_string = ''
+    for mget_item in mget_results:  
+        if mget_item['found']:
+            keywords_string += '&'
+            keywords_string += mget_item['_source']['keywords_string']
+    
+    k_dict = extract_keywords(keywords_string)
+    
+    monitor_keywords_list = []
+
+    for item_item in k_dict:
+        monitor_keywords_list.append(item_item.word.encode('utf-8'))
 
     item['monitor_keywords'] = '&'.join(monitor_keywords_list)
 

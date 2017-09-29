@@ -138,6 +138,35 @@ def weibo_xnr_flow_text_mappings(index_name):
     if not exist_indice:
         es.indices.create(index=index_name, body=index_info, ignore=400)
 
+def daily_inerests_flow_text_mappings(index_name):
+
+    index_info = {
+        'settings':{
+            'number_of_replicas':0,
+            'bumber_of_shards':5
+        },
+        'mappings':{
+            'text':{
+                'properties':{
+                    'timestamp':{
+                        'type':'long'
+                    },
+                    'content':{
+                        'type':'string',
+                        'index':'no'
+                    }
+                }
+            }
+        }
+    }
+
+    exist_indice = es.indices.exists(index=index_name)
+
+    if not exist_indice:
+        es.indices.create(index=index_name, body=index_info, ignore=400)
+
+
 if __name__=='__main__':
     index_name = 'xnr_flow_text_2017-09-05'
     weibo_xnr_flow_text_mappings(index_name)
+    daily_inerests_flow_text_mappings(index_name)
