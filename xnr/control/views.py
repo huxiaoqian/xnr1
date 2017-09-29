@@ -21,7 +21,8 @@ def posting():
 @mod.route('/postingQQ/')
 def postingQQ():
     QQ_id = request.args.get('QQ_id','')
-    return render_template('control/postingQQ.html',QQ_id=QQ_id)
+    QQ_num = request.args.get('QQ_num','')
+    return render_template('control/postingQQ.html',QQ_id=QQ_id,QQ_num=QQ_num)
 
 @mod.route('/socialFeedback/')
 def socialFeedback():

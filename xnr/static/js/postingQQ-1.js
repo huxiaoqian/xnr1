@@ -1,3 +1,56 @@
+//展示QQ群
+var time=Date.parse(new Date());
+var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_user_no='+qqID;
+public_ajax.call_request('get',QQgroup_url,QQgroup);
+function QQgroup(data) {
+    console.log(data)
+    var str = '',poi=0;
+    for (var d in data){
+        var ched='';
+        if (poi==0){
+            ched='checked';
+            var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+d+
+                '&date='+Number(time)/1000;
+            public_ajax.call_request('get',QQ_news_url,personEarly);
+        }
+        str +=
+            '<label class="demo-label" onclick="diff_group_news(this)">'+
+            '    <input class="demo-radio" type="radio" name="demo-radio" value="'+d+'" title="'+data[d]+'" '+ched+'>'+
+            '    <span class="demo-radioInput"></span> '+data[d]+
+            '</label>';
+        poi++;
+    }
+    $('.QQgroup .groupName').html(str);
+
+    var str1='',str2='',b=0;
+    for(var a in data){
+        var n=data[a];
+        if (n==''){n=a};
+        if (b<=5){
+            str1+=
+                '<label class="demo-label" title="'+n+'">'+
+                '   <input class="demo-radio" type="checkbox" name="group" value="'+a+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+n+
+                '</label>';
+        }else {
+            if (b==6){
+                str1+= '<a class="more" href="###" data-toggle="modal" data-target="#moreThing"' +
+                    'style="color:#b0bdd0;font-size: 10px;border: 1px solid silver;float:right;' +
+                    'padding: 2px 6px;margin:10px 0;border-radius: 7px;">更多</a>'
+            };
+            str2+=
+                '<label class="demo-label" title="'+n+'">'+
+                '   <input class="demo-radio" type="checkbox" name="group" value="'+a+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+n+
+                '</label>';
+        }
+        b++;
+    }
+    $('#user_recommend .user_example_list').html(str1);
+    if (str2){
+        $('#moreThing .moreCon ul').html(str2);
+    }
+}
 function personEarly(personEarly_QQ) {
     var QQperson=eval(personEarly_QQ);
     var sourcePER=QQperson.hits.hits;
@@ -54,61 +107,24 @@ function personEarly(personEarly_QQ) {
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 };
-var time=Date.parse(new Date());
-var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&date='+Number(time)/1000;
-public_ajax.call_request('get',QQ_news_url,personEarly);
-
-//展示QQ群
-// var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_number='+qqNumber;
-// public_ajax.call_request('get',QQgroup_url,QQgroup);
-function QQgroup(data) {
-    console.log(data)
-    var str1='',str2='',b=0;
-    for(var a in data){
-        var n=data[a];
-        if (n==''){n=a};
-        if (b<=5){
-            str1+=
-                '<label class="demo-label" title="">'+
-                '   <input class="demo-radio" type="checkbox" name="group" value="">'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+
-                '</label>';
-        }else {
-            if (b==6){
-                str1+= '<a class="more" href="###" data-toggle="modal" data-target="#moreThing"' +
-                    'style="color:#b0bdd0;font-size: 10px;border: 1px solid silver;float:right;' +
-                    'padding: 2px 6px;margin:10px 0;border-radius: 7px;">更多</a>'
-            };
-            str2+=
-                '<label class="demo-label" title="">'+
-                '   <input class="demo-radio" type="checkbox" name="group" value="">'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+
-                '</label>';
-
-        }
-        b++;
-    }
-    $('#user_recommend .user_example_list').html(str1);
-    if (str2){
-        $('#moreThing .moreCon ul').html(str2);
-    }
+//选择群
+function diff_group_news(_this) {
+    var qq_id=$(_this).find('input').val();
+    var chooseGroup_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+qq_id+'&date='+Number(time)/1000;
+    public_ajax.call_request('get',chooseGroup_url,personEarly);
 }
-// public_ajax.call_request('get','/qq_xnr_manage/get_qr_code/',loginQQ);
-// function loginQQ(data) {
-//     console.log(data)
-//     $('#rr').attr('src',data)
-//     $('#myModal-undone').modal('show');
-// }
 
 //选择时间搜索
 $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
     var start=$('.start').val();
     var end=$('.end').val();
+    var $_qqNumber=$('.groupName input:radio[name="demo-radio"]:checked').val();
     if (start==''||end==''){
         $('#pormpt p').text('请检查时间，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&startdate='+start+'&enddate='+end;
+        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&group_qq_number='+$_qqNumber+
+            '&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',search_news_url,personEarly);
     }
 });
