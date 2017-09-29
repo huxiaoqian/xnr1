@@ -195,10 +195,12 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     user_condition_list=[]
     if classify_id == 1:
         user_condition_list=[{'bool':{'must':[{'terms':{'uid':userslist}},range_time_list]}}]
-    elif classify_id == -1:
+    elif classify_id == 2:
         user_condition_list=[{'bool':{'must_not':[{'terms':{'uid':userslist}},range_time_list]}}]
     elif classify_id == 0:
         user_condition_list=[{'match_all':{}}]
+
+    print sort_condition_list,user_condition_list
 
     query_body={
         'query':{
@@ -501,11 +503,11 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     #make sure the users range by classify choice
     userlist = lookup_weiboxnr_concernedusers(weiboxnr_id)
 
-    if classify_id==1:      #concrenedusers
+    if classify_id == 1:      #concrenedusers
         condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
-    elif classify_id==2:    #unconcrenedusers
+    elif classify_id == 2:    #unconcrenedusers
         condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
-    else:
+    elif classify_id == 0:
         condition_list=[{'match_all':{}}]
     #print userlist,classify_id,condition_list
 
