@@ -42,7 +42,8 @@ from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment
 from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TOP_WEIBOS_LIMIT,\
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
-                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME,TOP_WEIBOS_LIMIT_DAILY
+                        FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME,TOP_WEIBOS_LIMIT_DAILY,\
+                        daily_ch2en
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
@@ -87,7 +88,7 @@ def push_keywords_task(task_detail):
 
     try:
         item_dict = {}
-        item_dict['mid'] = task_detail['task_id']
+        item_dict['task_id'] = task_detail['task_id']
         item_dict['xnr_user_no'] = task_detail['xnr_user_no']
         keywords_string = '&'.join(task_detail['keywords_string'].encode('utf-8').split('，'))
         item_dict['keywords_string'] = keywords_string
@@ -277,14 +278,16 @@ def get_daily_recommend_tweets(theme,sort_item):
     else:
         now_ts = int(time.time())
 
-    datetime = ts2datetime(now_ts-24*3600)
+    datetime = ts2datetime(now_ts)
 
     #index_name = flow_text_index_name_pre + datetime
-    index_name = daily_interest_index_name_pre + datetime
+    index_name = daily_interest_index_name_pre +'_'+ datetime
 
     #es_results = es_flow_text.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
-     
-    es_results = es.get(index=index_name,doc_type=daily_interest_index_type,id=theme)['_source']
+    print 'index_name:::',index_name
+    print 'daily_interest_index_type::',daily_interest_index_type
+    theme_en = daily_ch2en[theme]
+    es_results = es.get(index=index_name,doc_type=daily_interest_index_type,id=theme_en)['_source']
     content = json.loads(es_results['content'])
     # if not es_results:
     #     es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
