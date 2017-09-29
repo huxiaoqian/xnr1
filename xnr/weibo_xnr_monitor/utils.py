@@ -185,8 +185,8 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         sort_condition_list=[{'retweeted':{'order':'desc'}}]
     elif order_id==3:       #按敏感度排序
         sort_condition_list=[{'sensitive':{'order':'desc'}}]
-    else:                   #默认设为按时间排序
-        sort_condition_list=[{'timestamp':{'order':'desc'}}]
+    #else:                   #默认设为按时间排序
+    #    sort_condition_list=[{'timestamp':{'order':'desc'}}]
 
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
     #全部用户 0，已关注用户 1，未关注用户-1
@@ -196,11 +196,11 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     if classify_id == 1:
         user_condition_list=[{'bool':{'must':[{'terms':{'uid':userslist}},range_time_list]}}]
     elif classify_id == 2:
-        user_condition_list=[{'bool':{'must_not':[{'terms':{'uid':userslist}},range_time_list]}}]
+        user_condition_list=[{'bool':{'must_not':{'terms':{'uid':userslist}}},'must':range_time_list}]
     elif classify_id == 0:
         user_condition_list=[{'match_all':{}}]
 
-    print sort_condition_list,user_condition_list
+    #print sort_condition_list,user_condition_list
 
     query_body={
         'query':{
