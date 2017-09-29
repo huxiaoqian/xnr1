@@ -1,8 +1,8 @@
-var qqnumber='365217204';
 //敏感消息
-var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+qqnumber+'&date='+(Number(Date.parse(new Date()))/1000);
+var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
+    console.log(data)
     var news=data.hits.hits;
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
@@ -31,11 +31,16 @@ function senNews(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name;
+                    var name,txt;
                     if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
                         name=row._source.qq_group_number;
                     }else {
                         name=row._source.qq_group_nickname;
+                    };
+                    if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
+                        txt='暂无内容';
+                    }else {
+                        txt=row._source.text;
                     };
                     var str=
                         '<div class="everySpeak">'+
@@ -45,9 +50,9 @@ function senNews(data) {
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
                         '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
-                        '               <span class="joinWord" onclick="joinWord()">加入语料库</span>'+
+                        '               <span class="joinWord" onclick="joinWord(this)" tp="content">上报</span>'+
                         '           </a>'+
-                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+'</div>'+
+                        '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b><span>'+txt+'</span></div>'+
                         '       </div>'+
                         '   </div>'+
                         '</div>';
@@ -59,7 +64,7 @@ function senNews(data) {
     $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 }
 //敏感用户
-var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+qqnumber;
+var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
     console.log(data)
@@ -152,16 +157,6 @@ function senUser(data) {
                                 '       <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+k+'</b><span>）</span>' +
                                 '   </a>'+
                                 '</div>';
-                                // '<div class="everySpeak" style="width: auto;background: transparent;">'+
-                                // '   <div class="speak_center">'+
-                                // '       <div class="center_rel">'+
-                                // '           <img src="/static/images/post-6.png" class="center_icon">'+
-                                // '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                                // '               <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+k+'</b><span>）</span>' +
-                                // '           </a>'+
-                                // '       </div>'+
-                                // '   </div>'+
-                                // '</div>';
                         }
                     };
                     return str;
@@ -179,29 +174,41 @@ $('#container .titTime .timeSure').on('click',function () {
         $('#pormpt p').text('请检查时间，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqnumber+'&startdate='+start+'&enddate='+end;
+        var search_news_url='/qq_xnr_monitor/search_by_period/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',search_news_url,senNews);
     }
 });
 //加入语料库
 function joinWord(_this) {
-    var str='';
-    str+=
-        '<label class="demo-label">'+
-        '    <input class="demo-radio" type="checkbox" name="lab" value="" checked>'+
-        '    <span class="demo-checkbox demo-radioInput"></span> '+
-        '</label>';
-    $('#wordbox').html(str);
+    var qq_1=$(_this).parents('.center_1').find('.QQnum').text();
+    var qq_2=$(_this).parents('.center_1').next('.center_2').find('span').text();
+    var reportType=$(_this).attr('tp');
+    var upload_mange_url='/qq_xnr_monitor/report_warming_content/?report_type='+reportType+'&xnr_user_no='+ID_Num+
+        '&qq_number='+qq_1+'&report_content='+qq_2;
+    var uploadData={'report_type':reportType, "xnr_user_no": ID_Num,"qq_number": qq_1, "report_content": qq_2};
+    uploadData=JSON.stringify(uploadData);
+    $.ajax({
+        type:'get',
+        url:'/qq_xnr_monitor/report_warming_content/',
+        async:true,
+        dataType:"json",
+        data:uploadData,
+        success:postYES,
+        error:function (xhr,textStatus,errorThrown) {
+            //请求失败执行的函数
+            console.log("请求失败",textStatus,errorThrown);
+            var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。';
+            if (ISclear=='clear'){
+                errorHtml='登录过期，请清除缓存，重新登录。'
+                ISclear='againSet';
+            }
+            $('#errorInfor p').text(errorHtml);
+            $('#errorInfor').modal('show');
+        },
+    });
+    //public_ajax.call_request('get',upload_mange_url,postYES);
 }
 //确定加入
-function sureInlab() {
-    var wordlablist=[];
-    $("#wordbox input:checkbox:checked").each(function (index,item) {
-        wordlablist.push($(this).val());
-    });
-    var join_lab_url='';
-    public_ajax.call_request('get',join_lab_url,postYES);
-}
 //操作返回结果
 function postYES(data) {
     var f='';
