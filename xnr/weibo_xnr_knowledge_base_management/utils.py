@@ -426,6 +426,7 @@ def show_sensitive_words_default():
     result=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
     results=[]
     for item in result:
+        item['_source']['id']=item['_id']
         results.append(item['_source'])
     return results
 
@@ -460,6 +461,7 @@ def show_sensitive_words_condition(create_type,rank):
         results=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
         result=[]
         for item in results:
+            item['_source']['id']=item['_id']
             result.append(item['_source'])
     else:
         result=show_sensitive_words_default()
