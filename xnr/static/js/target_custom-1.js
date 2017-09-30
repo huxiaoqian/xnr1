@@ -33,6 +33,7 @@ function inModalData(data) {
     modalAllData=data;
     console.log(data)
     var tt=data.domains||data.domain_name;
+    domainName=tt;roleName=data.role_name||data.roleName;
     setTimeout(function () {
         $(".field input[type='radio'][value='"+tt+"']").attr("checked",true);
     },500);
