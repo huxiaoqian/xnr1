@@ -46,7 +46,6 @@ $('.choosetime .demo-label input').on('click',function () {
             }
             his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
         }
-        console.log(his_timing_task_url)
         public_ajax.call_request('get',his_timing_task_url, window[task]);
     }
 });
@@ -72,7 +71,6 @@ $('.sureTime').on('click',function () {
             his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
                 '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
         }
-        console.log(his_timing_task_url)
         public_ajax.call_request('get',his_timing_task_url,window[task]);
     }
 });
@@ -283,6 +281,7 @@ function historyTotalLine(data) {
 }
 function historyTotalTable(dataTable) {
     var data=[dataTable];
+    $('#history-2 p').show();
     $('#history-2').bootstrapTable('load', data);
     $('#history-2').bootstrapTable({
         data:data,
@@ -383,7 +382,7 @@ function historyTotalTable(dataTable) {
             },
         ],
     });
-    $('#history-2 p').hide();
+    $('#history-2 p').hide(700);
 }
 
 //定时发送任务列表
@@ -393,7 +392,7 @@ var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
 }
 function timingTask(data) {
-    console.log(data)
+    $('#time p').show();
     $('#time').bootstrapTable('load', data);
     $('#time').bootstrapTable({
         data:data,
@@ -436,21 +435,21 @@ function timingTask(data) {
                     };
                 }
             },
-            {
-                title: "操作类型",//标题
-                field: "operate_type",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'||!row.operate_type){
-                        return '未知';
-                    }else {
-                        return TYPE[row.operate_type];
-                    };
-                }
-            },
+            // {
+            //     title: "操作类型",//标题
+            //     field: "operate_type",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'||!row.operate_type){
+            //             return '未知';
+            //         }else {
+            //             return TYPE[row.operate_type];
+            //         };
+            //     }
+            // },
             {
                 title: "提交时间",//标题
                 field: "create_time",//键名
@@ -512,7 +511,7 @@ function timingTask(data) {
             },
         ],
     });
-    $('#time p').hide();
+    $('#time p').hide(700);
 }
 
 //操作
@@ -611,7 +610,6 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
         liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
-    console.log(liNews_url)
     public_ajax.call_request('get',liNews_url,historyNews);
 })
 
@@ -645,20 +643,19 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
         againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
-    console.log(againHistoryNews_url)
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
 var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    console.log(data);
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none';
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';
     if (boxShoes=='historyCenter'){showHide1='inline-block'};
     if (boxShoes=='myweibo'){showHide3='inline-block'};
     if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block'};
+    $('#'+boxShoes+' p').show();
     $('#'+boxShoes).bootstrapTable('load', data);
     $('#'+boxShoes).bootstrapTable({
         data:data,
@@ -737,7 +734,7 @@ function historyNews(data) {
             },
         ],
     });
-    $('#'+boxShoes+' p').hide();
+    $('#'+boxShoes+' p').hide(700);
 }
 //=====评论======
 //查看对话
@@ -747,7 +744,6 @@ function dialogue(_this) {
     public_ajax.call_request('get',dialogue_url,dialogue_show)
 };
 function dialogue_show(data) {
-    console.log(data);
     if (data.length!=0){
 
     }else {
@@ -835,6 +831,7 @@ $('.focusSEN .demo-label input').on('click',function () {
 var focusOn_url='/weibo_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type=influence';
 public_ajax.call_request('get',focusOn_url,focusOn);
 function focusOn(data) {
+    $('#focus p').show();
     $('#focus').bootstrapTable('load', data);
     $('#focus').bootstrapTable({
         data:data,
@@ -999,7 +996,7 @@ function focusOn(data) {
             },
         ],
     });
-    $('#focus p').hide();
+    $('#focus p').hide(700);
 }
 //=====粉丝列表====
 $('.fansSEN .demo-label input').on('click',function () {
@@ -1010,6 +1007,7 @@ $('.fansSEN .demo-label input').on('click',function () {
 var fans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
 public_ajax.call_request('get',fans_url,fans);
 function fans(data) {
+    $('#fans p').show();
     $('#fans').bootstrapTable('load', data);
     $('#fans').bootstrapTable({
         data:data,
@@ -1167,7 +1165,7 @@ function fans(data) {
             },
         ],
     });
-    $('#fans p').hide();
+    $('#fans p').hide(700);
 }
 //======查看详情===关注与否====
 

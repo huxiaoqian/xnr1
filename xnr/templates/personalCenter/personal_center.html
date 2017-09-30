@@ -6,6 +6,7 @@
      #nav .nav_bottom .loadingUser{display: none!important;}
      .undonelistbag .fixed-table-toolbar .search {width: 100%;}
     .bootstrap-table .table>thead>tr>th {width: 9%}
+     .table>thead>tr>th {border-top: none!important;}
     .undonelistbag .bootstrap-table .table>thead>tr>th {width: 7%}
     .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
     .demo-radio{display:none}
@@ -53,7 +54,9 @@
                 <!---->
             <!--</button>-->
             <div class="haslistbag">
-                <div id="haslist"></div>
+                <div id="haslist">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -71,7 +74,9 @@
                 <!--<b class="icon icon-plus"></b>&nbsp;添加-->
             <!--</button>-->
             <div class="undonelistbag">
-                <div id="undonelist"></div>
+                <div id="undonelist">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -120,6 +125,26 @@
             <div class="modal-footer">
                 <button type="button" class="btn" data-dismiss="modal">取消</button>
                 <button type="button" class="btn" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除提示-->
+<div class="modal fade" id="delPrompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                    您确定要删除这个虚拟人吗？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal" onclick="sureDelXnr()">确定</button>
             </div>
         </div>
     </div>
