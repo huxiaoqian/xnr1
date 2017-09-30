@@ -61,6 +61,7 @@ $('#container .type_page #myTabs a').on('click',function () {
 var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
 var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
 function flow_faw(data) {
+    $('#follow_forward p').show();
     $('#follow_forward').bootstrapTable('load', data);
     $('#follow_forward').bootstrapTable({
         data:data,
@@ -139,9 +140,11 @@ function flow_faw(data) {
             },
         ],
     });
+    $('#follow_forward p').slideUp(700);
 }
 var mainUserUid=[];
 function focus_main(data) {
+    $('#focus_main p').show();
     $('#focus_main').bootstrapTable('load', data);
     $('#focus_main').bootstrapTable({
         data:data,
@@ -266,6 +269,7 @@ function focus_main(data) {
             mainUserUid.removeByValue(row.uid);_judge()
         },
     });
+    $('#focus_main p').slideUp(700);
 }
 function _judge() {
     if (mainUserUid.length==0){
@@ -385,6 +389,7 @@ $('.everyday-2 .ed-2-2 .demo-radio').on('click',function () {
     public_ajax.call_request('get',TH_url,defalutWords)
 });
 function defalutWords(data) {
+    $('#defaultWeibo p').show();
     $('#defaultWeibo').bootstrapTable('load', data);
     $('#defaultWeibo').bootstrapTable({
         data:data,
@@ -458,7 +463,7 @@ function defalutWords(data) {
             },
         ],
     });
-    $('#defaultWeibo p').hide();
+    $('#defaultWeibo p').slideUp(700);
     $('.defaultWeibo .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //复制内容
@@ -528,6 +533,7 @@ $('#theme-3 .demo-label input').on('click',function () {
 var hotWeiboUrl='/weibo_xnr_operate/hot_recommend_tweets/?topic_field=民生类_法律&sort_item=timestamp';
 // public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
 function hotWeibo(data) {
+    $('#defaultWeibo2 p').show();
     $('#defaultWeibo2').bootstrapTable('load', data);
     $('#defaultWeibo2').bootstrapTable({
         data:data,
@@ -614,7 +620,7 @@ function hotWeibo(data) {
             },
         ],
     });
-    $('#defaultWeibo2 p').hide();
+    $('#defaultWeibo2 p').slideUp(700);
     $('.defaultWeibo2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 
@@ -632,7 +638,6 @@ function submitViews(_this) {
     }
 }
 function conViews(data) {
-    console.log(data)
     var x='';
     if (data){
         x='提交成功';
@@ -698,6 +703,7 @@ function calNot(data) {
         $('#pormpt p').text('正在计算...');
         $('#pormpt').modal('show');
     }else {
+        $('#recommend-2 p').show();
         $('#recommend-2').bootstrapTable('load', data);
         $('#recommend-2').bootstrapTable({
             data:data,
@@ -761,6 +767,7 @@ function calNot(data) {
                 },
             ],
         });
+        $('#recommend-2 p').slideUp(700);
         $('.recommend-2 .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
         $(".form_datetime._timing_recommend").datetimepicker({
             format: "yyyy-mm-dd hh:ii",
@@ -793,12 +800,12 @@ function related(_this) {
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
 function relatedWEIbo(data) {
-    console.log(data)
     var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
     if (reg.test(data)){
         $('#pormpt p').text(data);
         $('#pormpt').modal('show');
     }else {
+        $('#thWeibo p').show();
         var dataNew=[];
         for (var key in data){
             var ls={};
@@ -859,6 +866,7 @@ function relatedWEIbo(data) {
                 },
             ],
         });
+        $('#thWeibo p').slideUp(700);
         $('#thingsweibo').modal('show');
     }
 }
@@ -872,6 +880,7 @@ $('#theme-4 .demo-label input').on('click',function () {
 var busWeiboUrl='/weibo_xnr_operate/bussiness_recomment_tweets/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
 // public_ajax.call_request('get',busWeiboUrl,businessWeibo);
 function businessWeibo(data) {
+    $('#defaultWeibo3 p').show();
     $('#defaultWeibo3').bootstrapTable('load', data);
     $('#defaultWeibo3').bootstrapTable({
         data:data,
@@ -945,7 +954,7 @@ function businessWeibo(data) {
             },
         ],
     });
-    $('#defaultWeibo3 p').hide();
+    $('#defaultWeibo3 p').slideUp(700);
     $('.defaultWeibo3 .search .form-control').attr('placeholder','搜索关键词或子观点相关的微博（回车搜索）');
 }
 
