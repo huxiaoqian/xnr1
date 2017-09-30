@@ -211,6 +211,7 @@ def ajax_get_xnr_info():
 @mod.route('/modify_base_info/')
 def ajax_modify_base_info():
     task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['active_time'] = request.args.get('active_time','')
     task_detail['day_post_average'] = request.args.get('day_post_average','') 
     task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
