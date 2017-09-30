@@ -557,10 +557,10 @@ def show_history_posting(require_detail):
 
 	date_range_start_ts=require_detail['start_time']
 	date_range_end_ts=require_detail['end_time']
-	if S_TYPE == 'test':
-		weibo_xnr_flow_text_listname=['xnr_flow_text_2017-09-05']
-	else:
-		weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+	#if S_TYPE == 'test':
+	#	weibo_xnr_flow_text_listname=['xnr_flow_text_2017-09-05']
+	#else:
+	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
 	#print weibo_xnr_flow_text_listname
 	query_body={
 		'query':{
