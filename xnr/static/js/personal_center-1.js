@@ -154,7 +154,7 @@ function has_table(has_data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     return '<a style="cursor: pointer;color:white;" onclick="comeIn(\''+row.xnr_user_no+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\',\'1\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="deluser(\''+row.xnr_user_no+'\',\'1\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -264,7 +264,7 @@ function not_yet(no_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\')" title="继续"><i class="icon icon-fire"></i></a>'+
+                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\',\'2\')" title="继续"><i class="icon icon-fire"></i></a>'+
                         '<a style="cursor: pointer;color: white;display:inline-block;margin-left:50px;" onclick="deluser(\''+row.xnr_user_no+'\',\'2\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -298,9 +298,9 @@ function sureDelXnr() {
     public_ajax.call_request('GET',del_url,success_fail);
 }
 //继续创建未完成的虚拟人
-function go_on(id) {
-    localStorage.setItem('user',id);
-    window.open('/registered/virtualCreated/?continueUser=1');
+function go_on(id,flag) {
+    localStorage.setItem('go_mod_user',id);
+    window.open('/registered/virtualCreated/?continueUser='+flag);
     // var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+id;
     // public_ajax.call_request('GET',go_url,success_fail);
 }
