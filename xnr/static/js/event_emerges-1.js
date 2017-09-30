@@ -548,6 +548,7 @@ function retComLike(_this) {
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
+
 function comMent(_this){
     var txt = $(_this).prev().val();
     var mid = $(_this).parents('.center_rel').find('.mid').text();
@@ -600,11 +601,7 @@ function oneUP(_this) {
         event_name+'&user_info='+userString+'&weibo_info='+weiboString;
     public_ajax.call_request('get',upload_url,postYES);
 }
-// '/weibo_xnr_warming/report_warming_content/?report_type=事件&xnr_user_no=WXNR0002' +
-// '&event_name=杨振宁95岁生日恢复中国国籍&user_info=5537979196,兰德科特,100,200*3969238480,后会无期25799,88,179*3302557313,' +
-// '东南老曹,600,50&weibo_info=4044828436797896,\'欢迎杨振宁先生恢复中国国籍\',1503450000,1071,250,55*4044828486221158,' +
-// '\'欢迎杨振宁先生恢复中国国籍，转为中科院资深\',' +
-// '1503450000,1071,250,55*4044828503513100,\'欢迎杨振宁先生恢复中国国籍，转为中科院资深\',1503450000,1071,250,55\n'
+
 //操作返回结果
 function postYES(data) {
     var f='';
