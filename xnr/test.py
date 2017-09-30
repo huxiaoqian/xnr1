@@ -88,7 +88,10 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.delete(index='weibo_domain',doc_type='group',id='AV6396lYQIwrAS0usE0H')
 # es.delete(index='weibo_domain',doc_type='group',id='AV64pqMhS8CBAF2ZGzdS')
 # es.delete(index='weibo_domain',doc_type='group',id='AV63955tS8CBAF2ZGzdO')
-# es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
+
+for i in range(5,26):
+    no = str('%02d'%i)
+    es.delete(index='weibo_xnr',doc_type='user',id='WXNR00'+no)
 
 #es.delete(index='weibo_xnr',doc_type='user',id='WXNR0014')
 # print r.sadd('qq_group_set_01',['121567','5674567'])
@@ -109,27 +112,27 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
 
-query_body={
-    'query':{
-        'range':{'sensitive':{'gt':0}}
-    },
-    'aggs':{
-        'followers_sensitive_num':{
-            'terms':{'field':'uid','size':10000 },
+# query_body={
+#     'query':{
+#         'range':{'sensitive':{'gt':0}}
+#     },
+#     'aggs':{
+#         'followers_sensitive_num':{
+#             'terms':{'field':'uid','size':10000 },
             
-        }
-    },
-    'sort':{'sensitive':{'order':'desc'}}
+#         }
+#     },
+#     'sort':{'sensitive':{'order':'desc'}}
     
-}
-flow_text_index_name = ['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25']
-es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+# }
+# flow_text_index_name = ['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25']
+# es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
 
-with open('./uid_sensitive.txt','w') as f:
-	for item in es_result:
-		uid = item['key']
-		f.write(uid+'\n')
-	f.close()
+# with open('./uid_sensitive.txt','w') as f:
+# 	for item in es_result:
+# 		uid = item['key']
+# 		f.write(uid+'\n')
+# 	f.close()
 
 # query_body = {
 #     'query':{
