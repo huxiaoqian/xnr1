@@ -12,7 +12,7 @@ from utils import get_domain_info,get_role_info,get_role_sort_list,\
                 get_role2feature_info,get_recommend_step_two,get_recommend_follows,\
                 get_save_step_one,get_save_step_two,get_save_step_three_1,get_save_step_three_2,\
                 get_xnr_info,get_show_domain,get_show_weibo_xnr,get_nick_name_unique,\
-                get_add_other_info,get_modify_userinfo,get_modify_base_info,get_xnr_info
+                get_add_other_info,get_modify_userinfo,get_modify_base_info,get_xnr_info_new
 #from weibo_publish_func import getUserShow
 from weibo_publish_func import newest_time_func
 #from utils import get_user_data
@@ -203,7 +203,7 @@ def ajax_save_step_three_2():
 def ajax_get_xnr_info():
     xnr_user_no = request.args.get('xnr_user_no','')
 
-    result = get_xnr_info(xnr_user_no)
+    result = get_xnr_info_new(xnr_user_no)
 
     return json.dumps(result)
 

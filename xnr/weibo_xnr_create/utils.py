@@ -40,7 +40,7 @@ from parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,ACTIV
 from time_utils import get_flow_text_index_list
 '''
 
-def get_xnr_info(xnr_user_no):
+def get_xnr_info_new(xnr_user_no):
 
     results = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
 
