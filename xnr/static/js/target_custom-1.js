@@ -31,7 +31,6 @@ if ($one){
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
     modalAllData=data;
-    console.log(data)
     var tt=data.domains||data.domain_name;
     domainName=tt;roleName=data.role_name||data.roleName;
     setTimeout(function () {

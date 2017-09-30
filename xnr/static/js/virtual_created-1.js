@@ -161,6 +161,30 @@ function nameJudgment() {
     //判断昵称是否重复
     var nickName=$('#name').val();
     public_ajax.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
+    if (go_on==2){
+        var timelist=[];
+        $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
+            timelist.push($(this).val());
+        });
+        var actTime=Array.from(new Set(timelist)).join(',');
+        var postNum;
+        if ($('.postNUM').val()){
+            //patch('-',$('.postNUM').val().toString())==1
+            if($('.postNUM').val().toString().indexOf('-')!=-1){
+                postNum=$('.postNUM').val().toString().replace(/\s/g, "");
+            }else {
+                $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
+                $('#prompt').modal('show');
+                return false;
+            }
+        }else {
+            $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
+                postNum = $(this).val().toString();
+            });
+        };
+        var daily=$('#character6').text()
+        var keywords=$('#character7').text();
+    }
 }
 function repeatNot(data) {
     if (data){
@@ -240,7 +264,7 @@ function values() {
         'day_post_average':day_post_average,
         'description':description
     }
-    if (go_on==1){
+    if (go_on==2){
         var first={
             'domain_name':$('#character1').text(),
             'role_name':$('#character2').text(),
