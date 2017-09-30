@@ -55,6 +55,10 @@ def qq_xnr_mappings():
                     'access_id':{
                         'type':'string',
                         'index':'no'
+                    },
+                    'submitter':{
+                        'type':'string',
+                        'index':'not_analyzed'
                     }     
                 }
             }
