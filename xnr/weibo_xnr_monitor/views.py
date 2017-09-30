@@ -34,8 +34,8 @@ def ajax_lookup_hot_posts():
     to_ts=request.args.get('to_ts','')
     print 'from_ts, to_ts:', from_ts, to_ts
     weiboxnr_id=request.args.get('weiboxnr_id','')
-    classify_id=request.args.get('classify_id','')
-    order_id=request.args.get('order_id','')
+    classify_id=int(request.args.get('classify_id',''))
+    order_id=int(request.args.get('order_id',''))
     result=lookup_hot_posts(float(from_ts),float(to_ts),weiboxnr_id,classify_id,order_id)
     return json.dumps(result)
 
@@ -125,7 +125,7 @@ def ajax_attach_fans_batch():
 @mod.route('/lookup_active_weibouser/')
 def ajax_lookup_active_weibouser():
     weiboxnr_id=request.args.get('weiboxnr_id','')
-    classify_id=request.args.get('classify_id','')
+    classify_id=int(request.args.get('classify_id',''))
     start_time=int(request.args.get('start_time',''))
     end_time=int(request.args.get('end_time'))
     result=lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time)

@@ -1,6 +1,7 @@
 var keywords_url='/weibo_xnr_knowledge_base_management/show_sensitive_words_default/';
 public_ajax.call_request('get',keywords_url,keywords);
 function keywords(data) {
+    console.log(data)
     $('#keywords').bootstrapTable('load', data);
     $('#keywords').bootstrapTable({
         data:data,
@@ -66,8 +67,8 @@ function keywords(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="del(\''+row.sensitive_words+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                     '<span style="cursor: pointer;" onclick="modify(\''+row.sensitive_words+'\',\''+row.create_type+
+                    return '<span style="cursor: pointer;" onclick="del(\''+row.id+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                     '<span style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.sensitive_words+'\',\''+row.create_type+
                         '\')"><i title="修改关键词" class="icon icon-edit"></i></span>';
                 }
             },
@@ -131,15 +132,15 @@ $('.addKey').on('click',function () {
 
 })
 //删除敏感词
-function del(word) {
-    var delURL='/weibo_xnr_knowledge_base_management/delete_sensitive_words/?words_id='+word;
+function del(wordID) {
+    var delURL='/weibo_xnr_knowledge_base_management/delete_sensitive_words/?words_id='+wordID;
     public_ajax.call_request('get',delURL,addYES);
 }
 //修改敏感词
-var senW='',word_type='';
-function modify(word,type) {
+var senWID='',word_type='';
+function modify(id,word,type) {
+    senWID=id;
     $('#words .nowd1').val(word);
-    senW=word;
     word_type=type;
     $('#words').modal('show');
 }
@@ -150,7 +151,7 @@ function sureword() {
         $('#pormpt').modal('show');
     }else {
         var rk=$('.rankcon input:radio[name="rank"]:checked').val();
-        var plyURL='/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='+senW+
+        var plyURL='/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='+senWID+
             '&rank='+rk+'&sensitive_words='+newWords+'&create_type='+word_type;
         public_ajax.call_request('get',plyURL,addYES);
     }
@@ -176,7 +177,6 @@ function creatTYPE() {
     var pl=$('.tit-2 input:radio[name="mine"]:checked').val();
     if (pl){creat_type=pl}else{creat_type=''};
 }
-
 //============时间预警节点-------------------
 var time_url='/weibo_xnr_knowledge_base_management/show_date_remind/';
 public_ajax.call_request('get',time_url,time);
@@ -262,7 +262,7 @@ function time(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="delTime(\''+row.create_time+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                    return '<span style="cursor: pointer;" onclick="delTime(\''+row.id+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '<span style="cursor: pointer;" onclick="modifyTime(\''+row.id+'\',\''+row.keywords+'\',\''+row.create_type+'\',\''+row.date_name+
                         '\')"><i title="修改节点" class="icon icon-edit"></i></span>';
                 }
@@ -340,8 +340,8 @@ $('.addNode').on('click',function () {
 
 })
 //删除时间节点
-function delTime(time) {
-    var delURL='/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id='+time;
+function delTime(timeid) {
+    var delURL='/weibo_xnr_knowledge_base_management/delete_date_remind/?task_id='+timeid;
     public_ajax.call_request('get',delURL,addYES_time);
 }
 //修改时间节点敏感词
@@ -457,7 +457,7 @@ function hidden(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor: pointer;" onclick="delHidden(\''+row.origin_word+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
+                    return '<span style="cursor: pointer;" onclick="delHidden(\''+row.id+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '<span style="cursor: pointer;" onclick="modifyHidden(\''+row.id+'\',\''+row.origin_word+'\',\''+row.evolution_words_string+'\',\''+row.create_type+
                         '\')"><i title="修改关键词" class="icon icon-edit"></i></span>';
                 }
@@ -525,8 +525,8 @@ $('.addhid').on('click',function () {
     }
 })
 //删除隐喻式节点
-function delHidden(originWord) {
-    var delURL='/weibo_xnr_knowledge_base_management/delete_hidden_expression/?express_id='+originWord;
+function delHidden(originWordID) {
+    var delURL='/weibo_xnr_knowledge_base_management/delete_hidden_expression/?express_id='+originWordID;
     public_ajax.call_request('get',delURL,addYES_hid);
 }
 //修改隐喻式词语
