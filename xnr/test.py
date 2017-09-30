@@ -87,11 +87,16 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 #es.delete(index='recommend_subopinion_keywords_task',doc_type='keywords_task',id='WXNR0004_4043525244676524')
 # es.delete(index='weibo_domain',doc_type='group',id='AV6396lYQIwrAS0usE0H')
 # es.delete(index='weibo_domain',doc_type='group',id='AV64pqMhS8CBAF2ZGzdS')
-# es.delete(index='weibo_domain',doc_type='group',id='AV63955tS8CBAF2ZGzdO')
+# es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426263_1506204755')
+# es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426265_1506136628')
+# es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426443_1506609382')
+# es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1505984970_1506008456')
+# es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426266_1506167318')
 
-for i in range(5,26):
-    no = str('%02d'%i)
-    es.delete(index='weibo_xnr',doc_type='user',id='WXNR00'+no)
+
+# for i in range(5,26):
+#     no = str('%02d'%i)
+#     es.delete(index='weibo_xnr',doc_type='user',id='WXNR00'+no)
 
 #es.delete(index='weibo_xnr',doc_type='user',id='WXNR0014')
 # print r.sadd('qq_group_set_01',['121567','5674567'])
