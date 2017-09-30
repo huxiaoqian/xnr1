@@ -42,7 +42,6 @@ $('.addBuild').on('click',function () {
         var creat_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
             '&description='+description+'&submitter='+admin+'&remark='+remark+
             '&create_type='+param[0]+'&'+param[1]+'='+word_user;
-        console.log(creat_url);
         public_ajax.call_request('get',creat_url,successFail);
     }else {
         $('#pormpt p').text('检查输入的信息（不能为空）');
@@ -53,10 +52,11 @@ $('.addBuild').on('click',function () {
 function successFail(data) {
     var f='操作成功';
     if(!data){f='操作失败'}else {public_ajax.call_request('get',libGroup_url,group)};
+    if (data=='domain name exists!'){f='该领域名称已经存在了，请换一个。'};
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
-var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary/?xnr_user_no='+ID_Num;
+var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary/?submitter='+admin;
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
     var person=eval(data);
@@ -245,9 +245,9 @@ var g='',$domain='';
 // }
 function seeDesGroup(name,midUrl_1,midUrl_2) {
     $domain=name;
-    var seeDesGroup_url_1='/weibo_xnr_knowledge_base_management/'+midUrl_1+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+    var seeDesGroup_url_1='/weibo_xnr_knowledge_base_management/'+midUrl_1+'/?domain_name='+name;
     public_ajax.call_request('get',seeDesGroup_url_1,DesGroup_1)
-    var seeDesGroup_url_2='/weibo_xnr_knowledge_base_management/'+midUrl_2+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+    var seeDesGroup_url_2='/weibo_xnr_knowledge_base_management/'+midUrl_2+'/?domain_name='+name;
     public_ajax.call_request('get',seeDesGroup_url_2,groupList);
     $('.titleMain').text(name);
 }
@@ -376,6 +376,9 @@ function words(data) {
     myChart.setOption(option);
 }
 //群体成员
+function goPeople($href) {
+    window.open($href);
+}
 function groupList(data) {
     console.log(data)
     $('#grouplist').bootstrapTable('load', data);
@@ -406,9 +409,9 @@ function groupList(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
-                        return '<img src="/static/images/unknown.png" style="width: 30px;height: 30px;"/>';
+                        return '<img src="/static/images/unknown.png" style="width: 30px;height: 30px;cursor: pointer;"  onclick="goPeople(\''+row.home_page+'\')"/>';
                     }else {
-                        return '<img src="'+row.photo_url+'" style="width: 30px;height: 30px;"/>';
+                        return '<img src="'+row.photo_url+'" style="width: 30px;height: 30px;cursor: pointer;" onclick="goPeople(\''+row.home_page+'\')"/>';
                     };
                 }
             },
@@ -510,29 +513,29 @@ function groupList(data) {
                     };
                 }
             },
-            {
-                title: "关系",//标题
-                field: "weibo_type",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.weibo_type==''||row.weibo_type=='null'||row.weibo_type=='unknown'||!row.weibo_type){
-                        return '未知';
-                    }else {
-                        var user='';
-                        if (row.weibo_type=='follow'){
-                            user='已关注用户';
-                        }else if (row.weibo_type=='friend'){
-                            user='相互关注用户';
-                        }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
-                            user='未关注用户';
-                        }
-                        return user;
-                    };
-                },
-            },
+            // {
+            //     title: "关系",//标题
+            //     field: "weibo_type",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         if (row.weibo_type==''||row.weibo_type=='null'||row.weibo_type=='unknown'||!row.weibo_type){
+            //             return '未知';
+            //         }else {
+            //             var user='';
+            //             if (row.weibo_type=='follow'){
+            //                 user='已关注用户';
+            //             }else if (row.weibo_type=='friend'){
+            //                 user='相互关注用户';
+            //             }else if (row.weibo_type=='stranger'||row.weibo_type=='followed'){
+            //                 user='未关注用户';
+            //             }
+            //             return user;
+            //         };
+            //     },
+            // },
         ],
     });
     $('#grouplist p').hide();
@@ -540,7 +543,7 @@ function groupList(data) {
 }
 //更新
 function refresh(domainName,description,remark,create_type,word_user) {
-    var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
+    var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?domain_name='+domainName+
         '&description='+description+'&submitter='+admin+'&remark='+remark+
         '&create_type='+create_type+'&'+labType_list[create_type]+'='+word_user;
     public_ajax.call_request('get',upNew_url,successFail);

@@ -69,7 +69,6 @@ function related(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-
             },
             {
                 title: '操作',//标题
@@ -121,50 +120,60 @@ $('.findSure').on('click',function () {
 var detList={};
 function lookDetails(puid) {
     var person=detList[puid];
-    var name,img,gender,domain,location,topic_string,weibo_type;
-    if (person.uname==''||person.uname=='unknown'||person.uname=='null'){
-        name='未知';
-    }else {
-        name=person.uname;
+    console.log(person)
+    if (person.portrait_status== true){
+        var name,img,gender,domain,location,topic_string,weibo_type;
+        if (person.uname==''||person.uname=='unknown'||person.uname=='null'){
+            name='未知';
+        }else {
+            name=person.uname;
+        }
+        if (person.photo_url==''||person.photo_url=='unknown'||person.photo_url=='null'){
+            img='/static/images/unknown.png';
+        }else {
+            img=person.photo_url;
+        }
+        if (person.domain==''||person.domain=='unknown'||person.domain=='null'){
+            domain='未知';
+        }else {
+            domain=person.domain;
+        }
+        if (person.location==''||person.location=='unknown'||person.location=='null'){
+            location='未知';
+        }else {
+            location=person.location;
+        }
+        if (person.topic_string==''||person.topic_string=='unknown'||person.topic_string=='null'){
+            topic_string='未知';
+        }else {
+            topic_string=person.topic_string.replace(/&/g,'-');
+        }
+        if (person.gender==1){gender='男'}else if (person.gender==2){gender='女'}else{gender='未知'}
+        if (person.weibo_type=='follow'){
+            weibo_type='已关注';
+        }else if (person.weibo_type=='friends'){
+            weibo_type='相互关注';
+        }else {//if (person.weibo_type=='stranger'||person.weibo_type=='followed')
+            weibo_type='未关注';
+        }
+        $('#details .uid').text(person.uid);
+        $('#details .details-name').text(name);
+        $('#details .det11').text(name).attr('title',name);
+        $('#details .det22').text(domain).attr('title',domain);
+        $('#details .det33').text(location).attr('title',location);
+        $('#details .det44').text(gender).attr('title',gender);
+        $('#details .addFOCUS b').text(weibo_type);
+        $('#details .det55').text(topic_string).attr('title',topic_string);
+        $('#details .det-2-num').text(Math.ceil(person.influence));
+        $('#details .headImg').attr('src',img);
+
+    };
+    if (person.portrait_status== false){
+        $('#details .details-name').html('该人物未入库，暂无画像信息');
+        $('#details .details-1').hide();
+        $('#details .details-2').hide();
+        $('#details .addFOCUS').hide();
     }
-    if (person.photo_url==''||person.photo_url=='unknown'||person.photo_url=='null'){
-        img='/static/images/unknown.png';
-    }else {
-        img=person.photo_url;
-    }
-    if (person.domain==''||person.domain=='unknown'||person.domain=='null'){
-        domain='未知';
-    }else {
-        domain=person.domain;
-    }
-    if (person.location==''||person.location=='unknown'||person.location=='null'){
-        location='未知';
-    }else {
-        location=person.location;
-    }
-    if (person.topic_string==''||person.topic_string=='unknown'||person.topic_string=='null'){
-        topic_string='未知';
-    }else {
-        topic_string=person.topic_string.replace(/&/g,'-');
-    }
-    if (person.gender==1){gender='男'}else if (person.gender==2){gender='女'}else{gender='未知'}
-    if (person.weibo_type=='follow'){
-        weibo_type='已关注';
-    }else if (person.weibo_type=='friends'){
-        weibo_type='相互关注';
-    }else {//if (person.weibo_type=='stranger'||person.weibo_type=='followed')
-        weibo_type='未关注';
-    }
-    $('#details .uid').text(person.uid);
-    $('#details .details-name').text(name);
-    $('#details .det11').text(name).attr('title',name);
-    $('#details .det22').text(domain).attr('title',domain);
-    $('#details .det33').text(location).attr('title',location);
-    $('#details .det44').text(gender).attr('title',gender);
-    $('#details .addFOCUS b').text(weibo_type);
-    $('#details .det55').text(topic_string).attr('title',topic_string);
-    $('#details .det-2-num').text(Math.ceil(person.influence));
-    $('#details .headImg').attr('src',img);
     var str='';
     if (person.weibo_list.length==0){
         str='暂无代表微博';
@@ -173,7 +182,8 @@ function lookDetails(puid) {
             str+=
                 '<div><i class="icon icon-tint"></i>&nbsp;<b class="det-3-content">'+item.text+'</b></div>'
         })
-    }
+    };
+
     $('#details .det-3-info').html(str);
     $('#details').modal('show');
 }

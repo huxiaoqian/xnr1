@@ -42,7 +42,7 @@
     }
 
     /**/
-    .demo-label{display:inline-block;cursor: pointer;}
+    .demo-label{display:inline-block;cursor: pointer;margin-right: 10px;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -64,15 +64,15 @@
         <span>内容分类：</span>
         <div id="typelist">
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='2'>
+                <input class="demo-radio" type="radio" name="focus" value='0' checked>
                 <span class="demo-checkbox demo-radioInput"></span> 全部
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='1' checked>
+                <input class="demo-radio" type="radio" name="focus" value='1'>
                 <span class="demo-checkbox demo-radioInput"></span> 已关注
             </label>
             <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='0'>
+                <input class="demo-radio" type="radio" name="focus" value='2'>
                 <span class="demo-checkbox demo-radioInput"></span> 未关注
             </label>
         </div>
