@@ -429,7 +429,20 @@ def ajax_create_group():
 @mod.route('/show_retweet_timing_list/')
 def ajax_show_retweet_timing_list():
     xnr_user_no = request.args.get('xnr_user_no','')
-    results = get_show_retweet_timing_list(xnr_user_no)
+    start_ts = request.args.get('start_ts','')
+    end_ts = request.args.get('end_ts','')
+
+    results = get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts)
+
+    return json.dumps(results)
+
+# 展示跟随转发定时列表（未来）
+@mod.route('/show_retweet_timing_list_future/')
+def ajax_show_retweet_timing_list_future():
+    
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_show_retweet_timing_list_future(xnr_user_no)
 
     return json.dumps(results)
 

@@ -1601,14 +1601,15 @@ def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
 
     return [mark,fail_uids,fail_nick_name_list]
 
-def get_show_retweet_timing_list(xnr_user_no):
+def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'xnr_user_no':xnr_user_no}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'lt':end_ts,'gte':start_ts}}}
+                ]
             }
         },
         'size':MAX_SEARCH_SIZE,
@@ -1616,6 +1617,31 @@ def get_show_retweet_timing_list(xnr_user_no):
             {'compute_status':{'order':'asc'}},   
             {'timestamp_set':{'order':'desc'}}
         ]
+    }
+
+    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
+        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
+
+def get_show_retweet_timing_list_future(xnr_user_no):
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':int(time.time())}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE
     }
 
     results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
