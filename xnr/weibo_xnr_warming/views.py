@@ -28,7 +28,7 @@ def ajax_show_personnal_warming():
 
 
 ###言论内容预警
-#显示预警内容，默认显示已关注用户，未关注用户传值0
+#显示预警内容
 #http://219.224.134.213:9209/weibo_xnr_warming/show_speech_warming/?xnr_user_no=WXNR0003&day_time=1480176000&show_type=0
 @mod.route('/show_speech_warming/')
 def ajax_show_speech_warming():
