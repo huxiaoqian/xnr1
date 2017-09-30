@@ -204,9 +204,15 @@ body {
 #container #content #hot .hot-2 .hot-2-1 #theme-2{
     margin: 10px 0;
 }
-#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label,
-#container #content #hot .hot-2 .hot-2-1 #theme-2 .demo-label {
+#container #content #everyday .everyday-2 .ed-2-1 #theme .demo-label{
     width: 75px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#container #content #hot .hot-2 .hot-2-1 #theme-2 .demo-label {
+    display: block;
+    max-width: 160px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

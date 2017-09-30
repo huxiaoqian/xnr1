@@ -157,14 +157,16 @@ function postYES(data) {
     $('#pormpt').modal('show');
 }
 
-function weibo(idx,data) {
-    console.log(idx,data)
+function weibo(idx,weibodata) {
+    var ele_1=document.createElement('div');
+    ele_1.className='weibo_'+idx;
     var ele=document.createElement('div');
     ele.id='weibo_'+idx;
-    document.body.appendChild(ele);
-    $('weibo_'+idx).bootstrapTable('load', data);
-    $('weibo_'+idx).bootstrapTable({
-        data:data,
+    ele_1.appendChild(ele);
+    document.body.appendChild(ele_1);
+    $('#weibo_'+idx).bootstrapTable('load', weibodata);
+    $('#weibo_'+idx).bootstrapTable({
+        data:weibodata,
         search: true,//是否搜索
         pagination: true,//是否分页
         pageSize: 3,//单页记录数
@@ -189,60 +191,59 @@ function weibo(idx,data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
+                    var item=row;
                     var str_new='';
-                    $.each(data,function (index,item) {
-                        var geo,txt,img,time;
-                        if (item.geo==''||item.geo=='null'||item.geo=='unknown'){
-                            geo='未知';
+                    var geo,txt,img,time;
+                    if (item.geo==''||item.geo=='null'||item.geo=='unknown'){
+                        geo='未知';
+                    }else {
+                        geo=item.geo.toString().replace(/&/g,' ');
+                    };
+                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=item.photo_url;
+                    };
+                    if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'){
+                        time='未知';
+                    }else {
+                        time=getLocalTime(item.timestamp);
+                    };
+                    if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                        txt='暂无内容';
+                    }else {
+                        if (item.sensitive_words_string){
+                            var keywords=item.sensitive_words_string.split('，');
+                            for (var f of keywords){
+                                txt=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
-                            geo=item.geo.toString().replace(/&/g,' ');
+                            txt=item.text;
                         };
-                        if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'){
-                            img='/static/images/unknown.png';
-                        }else {
-                            img=item.photo_url;
-                        };
-                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'){
-                            time='未知';
-                        }else {
-                            time=getLocalTime(item.timestamp);
-                        };
-                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                            txt='暂无内容';
-                        }else {
-                            if (item.sensitive_words_string){
-                                var keywords=item.sensitive_words_string.split('，');
-                                for (var f of keywords){
-                                    txt=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
-                                }
-                            }else {
-                                txt=item.text;
-                            };
-                        };
-                        str_new+=
-                            '<div class="everySpeak" style="margin: 0 auto;">'+
-                            '        <div class="speak_center">'+
-                            '            <div class="center_rel center_rel_weibo">'+
-                            // '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                            '                <a class="center_1" title="地理位置"><i class="icon icon-screenshot"></i> '+geo+'</a>'+
-                            '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                            '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
-                            '                <div class="center_2">'+txt+'</div>'+
-                            '                <div class="center_3">'+
-                            '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
-                            '                </div>'+
-                            '               <div class="commentDown" style="width: 100%;display: none;">'+
-                            '                   <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                            '                   <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                            '               </div>'+
-                            '            </div>'+
-                            '        </div>';
-                    });
+                    };
+                    str_new+=
+                        '<div class="everySpeak" style="margin: 0 auto;">'+
+                        '        <div class="speak_center">'+
+                        '            <div class="center_rel center_rel_weibo">'+
+                        // '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                        '                <a class="center_1" title="地理位置"><i class="icon icon-screenshot"></i> '+geo+'</a>'+
+                        '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                        '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                        '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                        '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                        '                <div class="center_2">'+txt+'</div>'+
+                        '                <div class="center_3">'+
+                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                        '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
+                        '                </div>'+
+                        '               <div class="commentDown" style="width: 100%;display: none;">'+
+                        '                   <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '                   <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '               </div>'+
+                        '            </div>'+
+                        '        </div>';
                     return str_new;
                 }
             },
