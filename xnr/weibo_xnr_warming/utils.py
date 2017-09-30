@@ -374,19 +374,22 @@ def show_event_warming(xnr_user_no):
                 print 'main_userid_list:',main_userid_list
 
                 #主要参与用户信息
+                main_user_info=[]
                 user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
-                '''
                 for item in user_es_result:
+                    #print 'item:',item
+                    #print 'found:',item['found']
+                    #print 'id:',item['_id']
                     if item['found']:
                         item['_source']['_id']=item['_id']
                         main_user_info.append(item['_source'])
                     else:
                         user_dict=dict()
                         user_dict['_id']=item['_id']
-                        main_user_info.append(item['_id'])
+                        main_user_info.append(user_dict)
                 event_warming_content['main_user_info']=main_user_info
                 print 'main_user_info:',main_user_info
-                '''
+                
                 #print user_es_result
                 '''
                 user_query_body={
@@ -414,20 +417,9 @@ def show_event_warming(xnr_user_no):
             event_warming_list.append(event_warming_content)
         else:
             pass
-    main_userid_list=['5536381570','2192435767','1070598590']
-    user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})
-    print 'user_es_result',user_es_result
-    test_user_info=[]
-    for item in user_es_result:
-        if item.has_key('found'):
-            item['_source']['_id']=item['_id']
-            test_user_info.append(item['_source'])
-        else:
-            user_dict=dict()
-            user_dict['_id']=item['_id']
-            test_user_info.append(item['_id'])
-    print 'test_user_info:',test_user_info
-
+    #main_userid_list=['5536381570','2192435767','1070598590']
+    #user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})
+    #print 'user_es_result',user_es_result
     return event_warming_list
 
 #粉丝或关注用户判断
