@@ -40,6 +40,17 @@ from parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,ACTIV
 from time_utils import get_flow_text_index_list
 '''
 
+def get_xnr_info(xnr_user_no):
+
+    results = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+
+    return results
+
+def get_modify_base_info(task_detail):
+
+    return []
+
+
 def get_modify_userinfo(task_detail):
     item_dict = {}
     nick_name = task_detail['nick_name']
@@ -143,11 +154,13 @@ def get_add_other_info(task_detail):
         #now_year = int(time.strftime('%Y',time.localtime(time.time())))
         #age = now_year - int(user['birth'][:4])
         #item_dict['age'] = age
-        item_dict['age'] = 0
+        item_dict['age'] = '0'
         item_dict['description'] = user['description']
         item_dict['career'] = ''
-
-    new_task_detail = union_dict(task_detail,item_dict)
+    # print 'item_dict:::',item_dict
+    # print 'task_detail:::',task_detail
+    #new_task_detail = union_dict(task_detail,item_dict)
+    new_task_detail = dict(task_detail,**item_dict)
     
     return new_task_detail
 
@@ -563,11 +576,14 @@ def get_save_step_three_1(task_detail):
     except:
         return '账户名或密码输入错误，请检查后输入！！'
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
-    query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+    #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
+    query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
+    print 'query_body:::',query_body
     es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
     task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     item_exist['uid'] = uid
+    item_exist['nick_name'] = task_detail['nick_name']
     item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
     item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
     item_exist['password'] = task_detail['password']

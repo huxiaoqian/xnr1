@@ -62,6 +62,7 @@ function wordCloud(data) {
         //         }
         //     )
         // });
+        $('#content-1-word p').show();
         require(
             [
                 'echarts',
@@ -93,7 +94,7 @@ function wordCloud(data) {
                 myChart.setOption(option);
             }
         );
-        $('#content-1-word p').hide();
+        $('#content-1-word p').slideUp(700);
     }
 
 }
@@ -116,6 +117,7 @@ var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts=
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
+    $('#hot_post p').show();
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
@@ -189,7 +191,7 @@ function hotPost(data) {
             },
         ],
     });
-    $('#hot_post p').hide();
+    $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //活跃用户
@@ -204,7 +206,7 @@ var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
-    console.log(persondata)
+    $('#userList p').show();
     $('.userList #userList').bootstrapTable('load', persondata);
     $('.userList #userList').bootstrapTable({
         data:persondata,
@@ -351,7 +353,7 @@ function activeUser(persondata) {
             act_user_list.removeByValue(row.uid);_judge()
         },
     });
-    $('#userList p').hide();
+    $('#userList p').slideUp(700);
 }
 function _judge() {
     if (act_user_list.length==0){
