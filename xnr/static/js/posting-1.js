@@ -441,6 +441,7 @@ function defalutWords(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-5" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -459,6 +460,11 @@ function defalutWords(data) {
     });
     $('#defaultWeibo p').hide();
     $('.defaultWeibo .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
+}
+//复制内容
+function copyPost(_this) {
+    var txt = $(_this).parent().prev().text();
+    $('#post-2-content').append(txt);
 }
 //评论
 function showInput(_this) {
@@ -515,7 +521,7 @@ $('#theme-2 .demo-label input').on('click',function () {
 });
 $('#theme-3 .demo-label input').on('click',function () {
     var the=$(this).val();
-    var theSort=$('#theme-2 .demo-label input:radio[name="theme2"]:checked').val();
+    var theSort=$('#theme-2 .demo-label input:radio[name="theme2h"]:checked').val();
     var the_url='/weibo_xnr_operate/hot_recommend_tweets/?topic_field='+the+'&sort_item='+theSort;
     public_ajax.call_request('get',the_url,hotWeibo)
 });
