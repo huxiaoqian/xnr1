@@ -1158,7 +1158,8 @@ def get_related_recommendation(task_detail):
 
     monitor_keywords = es_result['monitor_keywords']
     monitor_keywords_list = monitor_keywords.encode('utf-8').split('，')
-
+    print 'monitor_keywords_list:::',monitor_keywords_list
+    print '!!!!!sort_item:::',sort_item
     nest_query_list = []
     for monitor_keyword in monitor_keywords_list:
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
@@ -1178,6 +1179,10 @@ def get_related_recommendation(task_detail):
     flow_text_index_name = flow_text_index_name_pre + current_date
     print 'sort_item:::',sort_item
     if sort_item != 'friend':
+        print 'sort_item!!!:::',sort_item
+        if sort_item == 'influence':
+            sort_item = 'user_fansnum'
+        print 'sort_item:::',sort_item
         uid_list = []
         #uid_list = recommend_set_list
         if sort_item == 'influence':
