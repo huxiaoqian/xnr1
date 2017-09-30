@@ -258,9 +258,20 @@ def get_hashtag():
 #（3）根据虚拟人编号查找粉丝和关注人的uid，统计事件名称相关的微博数据中粉丝、关注人出现的频次，如果既是关注人又是粉丝则频次相加。取频次前三用户
 #（4）计算微博数据的转发数、评论数、敏感等级，得到微博影响力的初始值,
 #计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
+def union_dict(*objs):
+    #print 'objs:', objs[0]
+    _keys=set(sum([obj.keys() for obj in objs],[]))
+    _total={}
+
+    for _key in _keys:
+        _total[_key]=sum([int(obj.get(_key,0)) for obj in objs])
+
+    return _total
+
 def show_event_warming(xnr_user_no):
     now_time=int(time.time())
     hashtag_list = get_hashtag()
+    #print 'hashtag_list:::::::',hashtag_list
     if S_TYPE =='test':    
         test_day_date=S_DATE_EVENT_WARMING
         test_day_time=datetime2ts(test_day_date)
@@ -272,7 +283,7 @@ def show_event_warming(xnr_user_no):
         flow_text_index_list=get_flow_text_index_list(now_time)
         #weibo_xnr_flow_text_listname=get_xnr_flow_text_index_list(now_time)
 
-    print flow_text_index_list,hashtag_list
+    #print flow_text_index_list,hashtag_list
     #虚拟人的粉丝列表和关注列表
     try:
         es_xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
@@ -285,6 +296,7 @@ def show_event_warming(xnr_user_no):
     event_warming_list=[]
     for event_item in hashtag_list:
         #print event_item[0]
+        event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
         event_influence_sum=0
@@ -305,6 +317,7 @@ def show_event_warming(xnr_user_no):
             #print event_results
             for item in event_results:
                 if item['_source']['sensitive'] >0:
+                    event_sensitive_count=event_sensitive_count+1
                     #统计用户信息
                     if alluser_num_dict.has_key(str(item['_source']['uid'])):
                         alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
@@ -352,34 +365,43 @@ def show_event_warming(xnr_user_no):
             event_warming_content['event_time']=[]
 
         try:
+            if event_sensitive_count > 0:
             #对用户进行排序
-            temp_userid_dict=dict(fans_num_dict,**followers_num_dict)
-            main_userid_dict=dict(temp_userid_dict,**alluser_num_dict)
-            main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
-            main_userid_list=[]
-            for i in xrange(0,len(main_userid_dict)):
-                main_userid_list.append(main_userid_dict[i][0])
+                temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
+                main_userid_dict=union_dict(temp_userid_dict,**alluser_num_dict)
+                #print 'temp_userid_dict:',temp_userid_dict
+                #print 'fans_num_dict:',fans_num_dict
+                #print 'followers_num_dict:',followers_num_dict
+                main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
+                main_userid_list=[]
+                for i in xrange(0,len(main_userid_dict)):
+                    main_userid_list.append(main_userid_dict[i][0])
 
-            #主要参与用户信息
-            user_query_body={
-                'query':{
-                    'filtered':{
-                        'filter':{
-                            'terms':{'uid':main_userid_list}
+                #主要参与用户信息
+                user_query_body={
+                    'query':{
+                        'filtered':{
+                            'filter':{
+                                'terms':{'uid':main_userid_list}
+                            }
                         }
                     }
                 }
-            }
-            user_es_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=user_query_body)['hits']['hits']
-            #print user_es_result
-            main_user_info=[]
-            for item in user_es_result:
-                main_user_info.append(item['_source'])
-            event_warming_content['main_user_info']=main_user_info
+                user_es_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=user_query_body)['hits']['hits']
+                #print user_es_result
+                main_user_info=[]
+                for item in user_es_result:
+                    main_user_info.append(item['_source'])
+                event_warming_content['main_user_info']=main_user_info
+            else:
+                event_warming_content['main_user_info']=[]
         except:
             event_warming_content['main_user_info']=[]
-
-        event_warming_list.append(event_warming_content)
+        
+        if event_sensitive_count > 0:
+            event_warming_list.append(event_warming_content)
+        else:
+            pass
         #except:
         #    event_warming_list=[]
     return event_warming_list
@@ -457,7 +479,7 @@ def lookup_weibo_date_warming(keywords,today_time):
                 'should':keyword_query_list
             }
         },
-        'size':MAX_VALUE
+        'size':SPEECH_WARMING_NUM
     }
     try:
         temp_result=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
