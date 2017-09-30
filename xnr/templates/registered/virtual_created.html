@@ -424,7 +424,7 @@
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
         }
 
-        var posyNum = (($two.day_post_num.toString().split('-'))[0])||$two.day_post_num;
+        var posyNum = ($two.day_post_average.toString().split('-')[0])||$two.day_post_average||$two.day_post_num||($two.day_post_num.toString().split('-')[0]);
         if (posyNum>5){
             $('.other-2 .customize').hide();
             $('.other-2 .postNUM').show().val(parseInt(Number(posyNum)));
