@@ -532,6 +532,7 @@ def get_save_step_two(task_detail):
     item_exist['day_post_average'] = json.dumps(task_detail['day_post_average'].split('-'))
     item_exist['create_status'] = 1 # 第二步完成
     item_exist['xnr_user_no'] = task_id # 虚拟人编号
+    item_exist['create_time'] = int(time.time())
 
     es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
 
