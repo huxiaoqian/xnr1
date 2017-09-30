@@ -1,8 +1,8 @@
-setTimeout(function () {
-    var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
-        '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
-    public_ajax.call_request('get',chara_url,character);
-},500)
+// setTimeout(function () {
+//     var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
+//         '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
+//     public_ajax.call_request('get',chara_url,character);
+// },500)
 //查看推荐
 var recommendData;
 function character(data) {
@@ -184,6 +184,22 @@ function nameJudgment() {
         };
         var daily=$('#character6').text()
         var keywords=$('#character7').text();
+        if (actTime&&postNum&&daily&&keywords){
+            var modXNR_url='/weibo_xnr_create/modify_base_info/?xnr_user_no='+$id+'&active_time'+actTime+'&day_post_average='+
+                postNum+'&daily_interests'+daily+'&monitor_keywords='+keywords;
+            public_ajax.call_request('get',modXNR_url,success);
+        }else {
+            $('#prompt p').text('请检查您输入的内容（不能为空）');
+            $('#prompt').modal('show');
+        }
+    }
+}
+function success(data) {
+    if (!data){
+        $('#prompt p').text('修改失败。');
+        $('#prompt').modal('show');
+    }else {
+        window.open('/personalCenter/individual/');
     }
 }
 function repeatNot(data) {

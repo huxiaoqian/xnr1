@@ -46,19 +46,19 @@
                 <div class="define" style="position: relative;">
                     <img src="/static/images/icon.png" alt="">
                     日常兴趣：<img src="/static/images/what.png" title="点击编辑日常兴趣" class="MWhat" data-toggle="modal" data-target="#promptXNR"
-                              style="display: none;position: absolute;top: 0;left: 87px;"><span id="character6"></span>
+                              style="display: none;position: absolute;top:-6px;left: 87px;"><span id="character6"></span>
                 </div>
                 <div class="define" style="position: relative;">
                     <img src="/static/images/icon.png" alt="">
                     检测关键词：<img src="/static/images/what.png" title="点击关键词可编辑" class="MWhat"
                                style="display: none;position: absolute;top:-6px;left:104px;"><span id="character7"></span>
                 </div>
-                <div id="role_example" style="margin-top: 20px;">
-                    <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>
-                    <ul class="role_example_list" style="padding: 10px 20px;">
+                <!--<div id="role_example" style="margin-top: 20px;">-->
+                    <!--<p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>-->
+                    <!--<ul class="role_example_list" style="padding: 10px 20px;">-->
 
-                    </ul>
-                </div>
+                    <!--</ul>-->
+                <!--</div>-->
             </div>
 
         </div>
@@ -397,10 +397,9 @@
         $('.page .previous').hide();
         $('.page .next').hide();
     }
-
+    var $id=localStorage.getItem('go_mod_user');
     var basicData;
     if (go_on){
-        var $id=localStorage.getItem('go_mod_user');
         var go_url = '/weibo_xnr_create/get_xnr_info/?xnr_user_no='+$id;
         public_ajax.call_request('GET',go_url,continueData);
     }else {
