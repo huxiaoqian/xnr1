@@ -60,7 +60,7 @@ def getQRCode_v2(qq_number):
     print 'filenames:', filenames
     fileitem = [[filename, os.stat(port_dir+filename).st_mtime] for filename in filenames]
     print 'fileitem:', fileitem
-    new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=True)[0]
+    new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=False)[0]
     new_filepath = new_fileitem[0]
     return port_dir + new_filepath
     
