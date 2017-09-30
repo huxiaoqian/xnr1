@@ -226,7 +226,8 @@ def xnr_today_remind(xnr_user_no,now_time):
     xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     day_post_average_list=json.loads(xnr_result['day_post_average'])
     #最小目标发帖量
-    min_post_num=min(int(day_post_average_list[0].encode('utf-8')),int(day_post_average_list[-1].encode('utf-8')))
+    min_post_num=int(day_post_average_list[0].encode('utf-8'))
+    #min_post_num=min(int(day_post_average_list[0].encode('utf-8')),int(day_post_average_list[-1].encode('utf-8')))
     #目标发帖差额
     post_dvalue=min_post_num-complete_num
 
@@ -1083,7 +1084,7 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
                 }
             }
         },
-        'sort':{'timestamp':{'order':'desc'}} 
+        'sort':{'timestamp':{'order':'asc'}} 
     }
     try:
         xnr_assess_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
