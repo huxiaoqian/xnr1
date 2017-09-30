@@ -48,7 +48,21 @@ def get_xnr_info(xnr_user_no):
 
 def get_modify_base_info(task_detail):
 
-    return []
+    xnr_user_no = task_detail['xnr_user_no']
+
+    item_exists = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,xnr_user_no=xnr_user_no)['_source']
+
+    item_exists['active_time'] = task_detail['active_time']
+    item_exists['day_post_average'] = task_detail['day_post_average']
+    item_exists['daily_interests'] = task_detail['daily_interests']
+    item_exists['monitor_keywords'] = task_detail['monitor_keywords']
+    try:
+        es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'doc':item_exist})
+        mark = True
+    except:
+        mark = False
+        
+    return mark
 
 
 def get_modify_userinfo(task_detail):
