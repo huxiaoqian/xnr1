@@ -54,6 +54,14 @@
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+
+    #div-button input {
+        border:1px solid silver;
+        border-radius: 5px;
+        padding: 3px 5px;
+        font-size: 10px;
+        background: transparent;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -76,20 +84,14 @@
             </table>
         </div>
         <div class='fanye' style="width:100%;text-align:center;margin-top: 20px;">
-                    <span style="display:none;">
-                        每页显示
-                        <input type="text" id="PageNo" size="2" value="2"
-                               style='text-align:center;border:1px solid #ccc;'/>组
-                    </span>
+            <div style="display:none;">
+                每页显示<input type="text" id="PageNo" size="1" value="1" style='text-align:center;border:1px solid #ccc;'/>组
+            </div>
             <div id="div-button" style="display:inline-block;margin-left:5px;">
-                <input type="button" value="首页" id="F-page"
-                       style='border:1px solid silver;border-radius: 5px;padding: 3px 5px;font-size: 10px;background: transparent;'>
-                <input type="button" value="上一页" id="Pre-page"
-                       style='border:1px solid silver;border-radius: 5px;padding: 3px 5px;font-size: 10px;background: transparent;'>
-                <input type="button" value="下一页" id="Nex-page"
-                       style='border:1px solid silver;border-radius: 5px;padding: 3px 5px;font-size: 10px;background: transparent;'>
-                <input type="button" value="尾页" id="L-page"
-                       style='border:1px solid silver;border-radius: 5px;padding: 3px 5px;font-size: 10px;background: transparent;'>
+                <input type="button" value="首页" id="F-page">
+                <input type="button" value="上一页" id="Pre-page">
+                <input type="button" value="下一页" id="Nex-page">
+                <input type="button" value="尾页" id="L-page">
             </div>
             <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
             <span style="display:inline-block;">总共<span id="s1"></span>页</span>

@@ -266,19 +266,17 @@ body {
 }
 #container #content #business .post_perfect .center_3 span {
     display: inline-block;
-    width: 23%;
+    width: 19%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
-#container #content #business .post_perfect .center_3 span:nth-child(2) {
-    border-left:1px solid slategrey;
-    border-right:1px solid slategrey;
-}
+#container #content #business .post_perfect .center_3 span:nth-child(2),
 #container #content #business .post_perfect .center_3 span:nth-child(4){
     border-left:1px solid slategrey;
+    border-right:1px solid slategrey;
 }
 #container #content #business .post_perfect .center_3 span:hover {
     color:#eb7350;
@@ -320,12 +318,11 @@ body {
 }
 #container #content #hot .post_perfect .center_3 span:nth-child(2),
 #container #content #hot .post_perfect .center_3 span:nth-child(4),
-#container #content #hot .post_perfect .center_3 span:nth-child(6),
 #container #content #hot .post_perfect .center_3_top span:nth-child(2){
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container #content #hot .post_perfect .center_3 span:nth-child(4){
+#container #content #hot .post_perfect .center_3 span:nth-child(6){
     /*width: 30%;*/
     border-left:1px solid slategrey;
 }
