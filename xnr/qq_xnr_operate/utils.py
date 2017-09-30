@@ -19,7 +19,10 @@ def get_my_group(xnr_user_no,groups):
     my_group_list = {}
     for group_number in qq_groups:
         if group_number:
-            my_group_list[group_number] = groups[group_number].strip()
+            try:
+                my_group_list[group_number] = groups[group_number].strip()
+            except:
+                continue
     return my_group_list
 
 def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):

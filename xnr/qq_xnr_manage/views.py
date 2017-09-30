@@ -39,6 +39,7 @@ def ajax_add_qq_xnr():
     qq_number = request.args.get('qq_number','')
     qq_groups = request.args.get('qq_groups','')        #所有群号中文逗号分隔
     nickname = request.args.get('qq_nickname','')
+    submitter = request.args.get('submitter','admin@qq.com')
     #qqbot_mc = request.args.get('qqbot_mc', 'sirtgdmgwiivbegf')
     remark = request.args.get('remark','')   # 备注
     access_id = request.args.get('access_id','')
@@ -50,6 +51,7 @@ def ajax_add_qq_xnr():
     xnr_info['create_ts'] = create_time
     #xnr_info['qqbot_mc'] = qqbot_mc
     xnr_info['access_id'] = access_id
+    xnr_info['submitter'] = submitter
     xnr_info['remark'] = remark
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
@@ -63,7 +65,6 @@ def ajax_delete_qq_xnr():
 @mod.route('/show_qq_xnr/')
 def ajax_show_qq_xnr():
     results = {}
-    print '!!!!!'
     results = show_qq_xnr(MAX_VALUE)
     return json.dumps(results)
 
