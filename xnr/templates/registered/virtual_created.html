@@ -43,13 +43,15 @@
                     <img src="/static/images/icon.png" alt="">
                     业务目标：<span id="character5"></span>
                 </div>
-                <div class="define">
+                <div class="define" style="position: relative;">
                     <img src="/static/images/icon.png" alt="">
-                    日常兴趣：<span id="character6"></span>
+                    日常兴趣：<img src="/static/images/what.png" title="点击编辑日常兴趣" class="MWhat" data-toggle="modal" data-target="#promptXNR"
+                              style="display: none;position: absolute;top: 0;left: 87px;"><span id="character6"></span>
                 </div>
-                <div class="define">
+                <div class="define" style="position: relative;">
                     <img src="/static/images/icon.png" alt="">
-                    检测关键词：<span id="character7"></span>
+                    检测关键词：<img src="/static/images/what.png" title="点击关键词可编辑" class="MWhat"
+                               style="display: none;position: absolute;top:-6px;left:104px;"><span id="character7"></span>
                 </div>
                 <div id="role_example" style="margin-top: 20px;">
                     <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>
@@ -290,57 +292,10 @@
         <span class="previous">上一步</span>
         <span class="next" style="margin-left: 50px;">下一步</span>
         <span class="save_return" style="float: right;margin-right: 20px;">保存返回</span>
-        <!--<button type="button" class="btn btn-primary previous">上一步</button>-->
-        <!--<button type="button" class="btn btn-primary next" style="margin-left: 50px;">下一步</button>-->
-        <!--<button type="button" class="btn btn-primary save_return" style="float: right;margin-right: 20px;">保存返回</button>-->
     </div>
 </div>
 
 <!--模态框-->
-<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">系统提示</h4>
-            </div>
-            <div class="modal-body">
-                <div class="coverbody">
-                    <div class="option1">
-                        <span>一、请先选择要进入的虚拟人身份</span>
-                        <div class="identity">
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> ZZ0902
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> SADJ93
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> KVF820
-                            </label>
-                        </div>
-                    </div>
-                    <div class="option2">
-                        <span>二、请先选择虚拟人的显示模式</span>
-                        <div class="showType">
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 隐身
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 昵称可见
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
-                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!--提示-->
 <div class="modal fade" id="prompt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -357,21 +312,96 @@
         </div>
     </div>
 </div>
+<!--编辑虚拟人-->
+<div class="modal fade" id="promptXNR" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择日常兴趣</h4>
+            </div>
+            <div class="modal-body">
+                <div class="dailyLIST">
+                    <label class="demo-label" title="旅游">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="旅游">
+                        <span class="demo-checkbox demo-radioInput"></span> 旅游
+                    </label>
+                    <label class="demo-label" title="美食">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="美食">
+                        <span class="demo-checkbox demo-radioInput"></span> 美食
+                    </label>
+                    <label class="demo-label" title="汽车">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="汽车">
+                        <span class="demo-checkbox demo-radioInput"></span> 汽车
+                    </label>
+                    <label class="demo-label" title="游戏">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="游戏">
+                        <span class="demo-checkbox demo-radioInput"></span> 游戏
+                    </label>
+                    <label class="demo-label" title="星座">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="星座">
+                        <span class="demo-checkbox demo-radioInput"></span> 星座
+                    </label>
+                    <label class="demo-label" title="音乐">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="音乐">
+                        <span class="demo-checkbox demo-radioInput"></span> 音乐
+                    </label>
+                    <label class="demo-label" title="影视">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="影视">
+                        <span class="demo-checkbox demo-radioInput"></span> 影视
+                    </label>
+                    <label class="demo-label" title="健身">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="健身">
+                        <span class="demo-checkbox demo-radioInput"></span> 健身
+                    </label>
+                    <label class="demo-label" title="养生">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="养生">
+                        <span class="demo-checkbox demo-radioInput"></span> 养生
+                    </label>
+                    <label class="demo-label" title="体育">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="体育">
+                        <span class="demo-checkbox demo-radioInput"></span> 体育
+                    </label>
+                    <label class="demo-label" title="萌宠">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="萌宠">
+                        <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                    </label>
+                    <label class="demo-label" title="动漫">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="动漫">
+                        <span class="demo-checkbox demo-radioInput"></span> 动漫
+                    </label>
+                    <label class="demo-label" title="时尚">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="时尚">
+                        <span class="demo-checkbox demo-radioInput"></span> 时尚
+                    </label>
+                    <label class="demo-label" title="鸡汤">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="鸡汤">
+                        <span class="demo-checkbox demo-radioInput"></span> 鸡汤
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureMOday()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
 <script id="load_user">
     judgment('6');
     var go_on='{{continueUser}}';
-    if (go_on==1){
+    if (go_on){
         $('.page .previous').hide();
         $('.page .next').hide();
     }
 
     var basicData;
     if (go_on){
-        var $id=localStorage.getItem('user');
-        var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+$id;
+        var $id=localStorage.getItem('go_mod_user');
+        var go_url = '/weibo_xnr_create/get_xnr_info/?xnr_user_no='+$id;
         public_ajax.call_request('GET',go_url,continueData);
     }else {
         basicData=JSON.parse(localStorage.getItem('firstStep'));
@@ -395,7 +425,7 @@
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
         }
 
-        var posyNum = $two.day_post_num.split('-')[0]||$two.day_post_num;
+        var posyNum = (($two.day_post_num.toString().split('-'))[0])||$two.day_post_num;
         if (posyNum>5){
             $('.other-2 .customize').hide();
             $('.other-2 .postNUM').show().val(parseInt(Number(posyNum)));
@@ -437,6 +467,10 @@
             }
         }
     }
+    if (go_on==1){
+        $('#character7').attr('contentEditable','true');
+        $('.MWhat').show();
+    }
 //    $('.timeRange').append(
 //        '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
 //        txt+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
@@ -445,6 +479,16 @@
         $(this).hide();
         $('.postNUM').show();
     });
+    
+    function sureMOday() {
+        var dailyInterests=[];
+        $("#promptXNR .dailyLIST input[type=checkbox]:checkbox:checked").each(function (index,item) {
+            dailyInterests.push($(this).val());
+        });
+        if (dailyInterests.length!=0){
+            $('#character6').text(dailyInterests.join(','));
+        }
+    }
 </script>
 <script src="/static/js/virtual_created-1.js"></script>
 {% endblock %}
