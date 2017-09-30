@@ -199,6 +199,13 @@ def ajax_save_step_three_2():
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
 
+@mod.route('/modify_base_info/')
+def ajax_modify_base_info():
+    task_detail = dict()
+    task_detail['active_time'] = request.args.get('active_time','')
+    task_detail['day_post_average'] = request.args.get('day_post_average','') 
+    
+
 
 @mod.route('/show_register_info/')
 def ajax_show_register_info():
