@@ -363,6 +363,11 @@
 <script id="load_user">
     judgment('6');
     var go_on='{{continueUser}}';
+    if (go_on==1){
+        $('.page .previous').hide();
+        $('.page .next').hide();
+    }
+
     var basicData;
     if (go_on){
         var $id=localStorage.getItem('user');
@@ -390,14 +395,15 @@
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
         }
 
-        if ($two.day_post_num>5){
+        var posyNum = $two.day_post_num.split('-')[0]||$two.day_post_num;
+        if (posyNum>5){
             $('.other-2 .customize').hide();
-            $('.other-2 .postNUM').show().val(parseInt(Number($two.day_post_num)));
-        }else if ($two.day_post_num==0){
+            $('.other-2 .postNUM').show().val(parseInt(Number(posyNum)));
+        }else if (posyNum==0){
             $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
-        }else if ($two.day_post_num>0&&$two.day_post_num<3){
+        }else if (posyNum>0&&posyNum<3){
             $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
-        }else if ($two.day_post_num>=3&&$two.day_post_num<=5){
+        }else if (posyNum>=3&&posyNum<=5){
             $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
         }
     }
