@@ -33565,3 +33565,39 @@ SMTPAuthenticationError: (535, 'Error: \xc7\xeb\xca\xb9\xd3\xc3\xca\xda\xc8\xa8\
 [2017-09-29 10:00:13] [WARNING] 二维码已失效, 重新获取二维码
 [2017-09-29 10:00:13] [INFO] 已获取二维码
 [2017-09-29 10:00:16] [INFO] 等待二维码扫描及授权...
+qqbot_port, qqbot_num. qqbot_mailauth: 1027
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-09-30 11:36:48] [INFO] QQBot-v2.3.5
+[2017-09-30 11:36:48] [INFO] Python 2.7.3
+[2017-09-30 11:36:48] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1027
+[2017-09-30 11:36:48] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1027/v2.3.conf
+[2017-09-30 11:36:48] [INFO] 用户名：无
+[2017-09-30 11:36:48] [INFO] 登录方式：自动（qq=1965056593）
+[2017-09-30 11:36:48] [INFO] 命令行服务器端口号：1027
+[2017-09-30 11:36:48] [INFO] 二维码服务器 ip ：无
+[2017-09-30 11:36:48] [INFO] 二维码服务器端口号：无
+[2017-09-30 11:36:48] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-09-30 11:36:48] [INFO] 邮箱服务授权码：******
+[2017-09-30 11:36:48] [INFO] 以文本模式显示二维码：否
+[2017-09-30 11:36:48] [INFO] 调试模式：关闭
+[2017-09-30 11:36:48] [INFO] 掉线后自动重启：是
+[2017-09-30 11:36:48] [INFO] 后台模式（daemon 模式）：是
+[2017-09-30 11:36:48] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-09-30 11:36:48] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1027/plugins
+[2017-09-30 11:36:48] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-09-30 11:36:48] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-09-30 11:36:48] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-09-30 11:36:48] [INFO] 开始自动登录...
+[2017-09-30 11:36:48] [INFO] 成功从文件 "/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1027/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-09-30 11:36:51] [WARNING] 自动登录失败，原因：上次保存的登录信息已过期
+[2017-09-30 11:36:51] [INFO] 开始手动登录...
+[2017-09-30 11:36:51] [INFO] 已获取二维码
+[2017-09-30 11:36:52] [INFO] 已将二维码发送至邮箱1965056593@qq.com
+[2017-09-30 11:36:54] [INFO] 等待二维码扫描及授权...
+[2017-09-30 11:38:52] [WARNING] 二维码已失效, 重新获取二维码
+[2017-09-30 11:38:52] [INFO] 已获取二维码
+[2017-09-30 11:38:55] [INFO] 等待二维码扫描及授权...
+[2017-09-30 11:40:52] [WARNING] 二维码已失效, 重新获取二维码
+[2017-09-30 11:40:52] [INFO] 已获取二维码
+[2017-09-30 11:40:55] [INFO] 等待二维码扫描及授权...
