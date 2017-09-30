@@ -6,8 +6,8 @@ function auto() {
 }
 auto();
 function has_table(has_data) {
-    // var person=window.JSON?JSON.parse(has_data):eval("("+has_data+")");
     var person=eval(has_data)
+    $('.has_list #haslist p').show();
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
         data:person,
@@ -155,15 +155,16 @@ function has_table(has_data) {
                 formatter: function (value, row, index) {
                     return '<a style="cursor: pointer;color:white;" onclick="comeIn(\''+row.xnr_user_no+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color:white;" onclick="deluser(\''+row.xnr_user_no+'\')" title="删除"><i class="icon icon-trash"></i></a>';
+                        '<a style="cursor: pointer;color:white;" onclick="deluser(\''+row.xnr_user_no+'\',\'1\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
         ],
     });
+    $('.has_list #haslist p').slideUp(700);
 };
 function not_yet(no_data) {
     var undone_person=eval(no_data);
-    console.log(undone_person)
+    $('.undone_list #undonelist p').show();
     $('.undone_list #undonelist').bootstrapTable('load', undone_person);
     $('.undone_list #undonelist').bootstrapTable({
         data:undone_person,
@@ -264,11 +265,12 @@ function not_yet(no_data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\')" title="继续"><i class="icon icon-fire"></i></a>'+
-                        '<a style="cursor: pointer;color: white;display:inline-block;margin-left:50px;" onclick="deluser(\''+row.xnr_user_no+'\')" title="删除"><i class="icon icon-trash"></i></a>';
+                        '<a style="cursor: pointer;color: white;display:inline-block;margin-left:50px;" onclick="deluser(\''+row.xnr_user_no+'\',\'2\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
         ],
     });
+    $('.undone_list #undonelist p').slideUp(700);
 };
 //今日提醒
 function alarm(id) {
@@ -286,8 +288,13 @@ function clock(data) {
     $('#alarm').modal('show');
 }
 //删除虚拟人
-function deluser(id) {
-    var del_url = '/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no='+id;
+var uploadUser,delID;
+function deluser(id,flag) {
+    uploadUser=flag;
+    delID=id;
+}
+function sureDelXnr() {
+    var del_url = '/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no='+delID;
     public_ajax.call_request('GET',del_url,success_fail);
 }
 //继续创建未完成的虚拟人
@@ -307,6 +314,16 @@ function success_fail(data) {
     var word='';
     if (data){
         word='删除成功。';
+        setTimeout(function () {
+            var has_not_url='';
+            if (uploadUser==1){
+                has_not_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
+                public_ajax.call_request('GET',has_not_url,has_table);
+            }else {
+                has_not_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
+                public_ajax.call_request('GET',notHao_url,not_yet);
+            }
+        },700);
     }else {
         word='删除失败。';
     }
