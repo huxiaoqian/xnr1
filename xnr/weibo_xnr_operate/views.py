@@ -26,36 +26,6 @@ mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 
 '''
 
-# Create app
-# app = Flask(__name__)
-
-# ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-# APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
-# UPLOAD_FOLDER = os.path.join(APP_ROOT, 'xnr/weibo_images/') 
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-# @mod.route('/uploads/<filename>')
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'],
-#                                filename)
-
-# def allowed_file(filename):
-#     return '.' in filename and \
-#            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-
-# @mod.route('/upload/', methods=['GET', 'POST'])
-# def upload_file():
-#     if request.method == 'POST':
-#         file = request.files['file']
-#         if file and allowed_file(file.filename):
-#             filename = secure_filename(file.filename)
-#             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#             # return redirect(url_for('uploaded_file',
-#             #                         filename=filename))
-#             path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-#             return path
-#
-
 # 返回渗透领域
 @mod.route('/show_domain_second/')
 def ajax_show_domain():
