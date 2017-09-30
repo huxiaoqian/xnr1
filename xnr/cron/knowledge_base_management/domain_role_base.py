@@ -847,7 +847,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
         day_hour_counts_all.append(day_hour_counts)
 
     day_hour_counts_all_np = np.array(day_hour_counts_all)
-    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0)  ## 对二维数组按列求和
+    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0).astype(np.int)  ## 对二维数组按列求和
 
     day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
  

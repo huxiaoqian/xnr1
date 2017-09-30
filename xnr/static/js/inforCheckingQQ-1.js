@@ -2,7 +2,6 @@
 var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
-    console.log(data)
     var news=data.hits.hits;
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
@@ -176,6 +175,8 @@ $('#container .titTime .timeSure').on('click',function () {
     }else {
         var search_news_url='/qq_xnr_monitor/search_by_period/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',search_news_url,senNews);
+        var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
+        public_ajax.call_request('get',senUserurl,senUser);
     }
 });
 //加入语料库

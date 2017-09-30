@@ -492,14 +492,18 @@ def uid_lists2weibo_from_flow_text(monitor_keywords_list,uid_list):
     nest_query_list = []
     for monitor_keyword in monitor_keywords_list:
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
-
+    print 'query_body:::',query_body
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
                     'terms':{'uid':uid_list}
                 }
-            }
+            },
+            'bool':{
+                'should':nest_query_list,
+            }  
+            
         },
         'size':TOP_WEIBOS_LIMIT
     }
@@ -599,7 +603,7 @@ def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
         sort_item_new = 'sensitive'
         es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'sensitive_user':
-        sort_item_new = 'influence'
+        sort_item_new = 'sensitive'
         es_results = get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new)  
     elif sort_item == 'influence_info':
         sort_item_new = 'retweeted'
@@ -1146,6 +1150,7 @@ def get_direct_search(task_detail):
 
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
+    print 'task_detail:::::::::::',task_detail
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
@@ -1172,9 +1177,7 @@ def get_related_recommendation(task_detail):
         current_date = int(time.time()-24*3600)
     
     flow_text_index_name = flow_text_index_name_pre + current_date
-    
-    print 'sort_item!!!:::',sort_item
-
+    print 'sort_item:::',sort_item
     if sort_item != 'friend':
         print 'sort_item!!!:::',sort_item
         if sort_item == 'influence':
@@ -1182,11 +1185,26 @@ def get_related_recommendation(task_detail):
         print 'sort_item:::',sort_item
         uid_list = []
         #uid_list = recommend_set_list
+        if sort_item == 'influence':
+            sort_item = 'user_fansnum'
+        # query_body_rec = {
+        #     'query':{
+        #         'bool':{
+        #             'should':nest_query_list
+        #         }
+        #     },
+        #     'aggs':{
+        #         'uid_list':{
+        #             'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL },
+                    
+        #         }
+        #     },
+        #     'sort':{sort_item:{'order':'desc'}}
+        # }
+        print 'sort_item:!!!!!!',sort_item
         query_body_rec = {
             'query':{
-                'bool':{
-                    'should':nest_query_list
-                }
+                'match_all':{}
             },
             'aggs':{
                 'uid_list':{
@@ -1196,7 +1214,6 @@ def get_related_recommendation(task_detail):
             },
             'sort':{sort_item:{'order':'desc'}}
         }
-        
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
         
         for item in es_rec_result:
@@ -1221,6 +1238,8 @@ def get_related_recommendation(task_detail):
 
     results_all = []
 
+    sort_item_new = 'fansnum'
+
     for uid in uid_list:
         query_body = {
             'query':{
@@ -1230,7 +1249,7 @@ def get_related_recommendation(task_detail):
                     }
                 }
             },
-            'sort':{sort_item:{'order':'desc'}},
+            'sort':{sort_item_new:{'order':'desc'}},
             'size':MAX_SEARCH_SIZE
         }
         es_results = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
@@ -1277,9 +1296,16 @@ def get_related_recommendation(task_detail):
             item_else['uid'] = uid
             weibo_type = judge_follow_type(xnr_user_no,uid)
             sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
-            item_dict['weibo_type'] = weibo_type
-            item_dict['sensor_mark'] = sensor_mark
-            item_dict['portrait_status'] = False
+            item_else['weibo_type'] = weibo_type
+            item_else['sensor_mark'] = sensor_mark
+            item_else['portrait_status'] = False
+
+            if S_TYPE == 'test':
+                    current_time = datetime2ts(S_DATE)
+            else:
+                current_time = int(time.time())
+
+            index_name = get_flow_text_index_list(current_time)
 
             query_body = {
                 'query':{
@@ -1292,11 +1318,12 @@ def get_related_recommendation(task_detail):
 
             weibo_list = []
             for weibo in es_weibo_results:
+                item_else['user_fansnum'] = weibo['_source']['user_fansnum']
                 weibo = weibo['_source']
                 weibo_list.append(weibo)
-            item_dict['weibo_list'] = weibo_list
+            item_else['weibo_list'] = weibo_list
 
-            results_all.append(item_dict)
+            results_all.append(item_else)
             
 
     return results_all

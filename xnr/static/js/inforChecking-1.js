@@ -200,7 +200,7 @@ $('#user-1 .demo-radio').on('click',function () {
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
 var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
-    '&start_time='+from_ts+'&end_time='+to_ts+'&classify_id=1';
+    '&start_time='+from_ts+'&end_time='+to_ts+'&classify_id=0';
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
@@ -431,7 +431,6 @@ function thumbs(_this) {
     var txt = $(_this).parent().prev().text();
     var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
         '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
-    console.log(post_r_s_url)
     public_ajax.call_request('get',post_r_s_url,postYES)
 };
 
