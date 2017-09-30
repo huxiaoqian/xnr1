@@ -140,21 +140,20 @@ function publicRecommend(field,className,tit) {
 
 
 //上一步，下一步，保存返回
-var second;
+var second,n=0;
 //  /weibo_xnr_create/save_step_two/?task_id=WXNR0001&nick_name=大大DE律师
 // &age=29&location=北京&career=律师&description=这是简介&active_time=9,10,11,19,20&day_post_average=9-12
 $('.previous').on('click',function () {
     n=0;
     nameJudgment();
 });
-var n=0;
 $('.next').on('click',function () {
     n=1;
     nameJudgment();
     //values();
 });
 $('.save_return').on('click',function () {
-    n=0;
+    n=2;
     nameJudgment();
     //values();
 });
@@ -231,26 +230,38 @@ function values() {
     //     '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
     //     '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
     public_ajax.call_request('get',saveSecond_url,in_three);
-    if (n == 1||n == 0){
-        second={
-            'nick_name':nickName,
-            'age':age,
-            'location':location,
-            'career':career,
-            'sex':sex,
-            'active_time':active_time,
-            'day_post_average':day_post_average,
-            'description':description
-        }
-    };
+    second={
+        'nick_name':nickName,
+        'age':age,
+        'location':location,
+        'career':career,
+        'sex':sex,
+        'active_time':active_time,
+        'day_post_average':day_post_average,
+        'description':description
+    }
+    if (go_on==1){
+        var first={
+            'domain_name':$('#character1').text(),
+            'role_name':$('#character2').text(),
+            'daily_interests':$('#character6').text(),
+            'psy_feature':$('#character3').text(),
+            'political_side':$('#character4').text(),
+            'business_goal':$('#character5').text(),
+            'monitor_keywords':$('#character7').text(),
+        };
+        localStorage.setItem('firstStep',JSON.stringify(first));
+    }
 }
 function in_three(data) {
     if (data||data[0]){
         localStorage.setItem('secondStep',JSON.stringify(second));
         if (n==0){
-            window.open('/personalCenter/individual/');
-        }else {
+            window.open('/registered/targetCustom/');
+        }else if (n==1){
             window.open('/registered/socialAccounts/');
+        }else if (n==2){
+            window.open('/personalCenter/individual/');
         }
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
     }else {
