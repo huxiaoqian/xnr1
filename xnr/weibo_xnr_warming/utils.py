@@ -76,10 +76,14 @@ def show_personnal_warming(xnr_user_no,day_time):
         temp_num=len(first_sum_result)
     #print temp_num
     for i in xrange(0,temp_num):
-        user_dict=dict()
-        user_dict['uid']=first_sum_result[i]['key']
-        user_dict['sensitive']=first_sum_result[i]['sensitive_num']['value']
-        top_userlist.append(user_dict)
+        user_sensitive=first_sum_result[i]['sensitive_num']['value']
+        if user_sensitive >0:
+            user_dict=dict()
+            user_dict['uid']=first_sum_result[i]['key']
+            user_dict['sensitive']=user_sensitive
+            top_userlist.append(user_dict)
+        else:
+            pass
 
     #查询敏感用户的最敏感微博内容
     results=[]
@@ -141,23 +145,20 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
     except:
         followers_list=[]
 
-    un_query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'bool':{'must_not':{'terms':{'uid':followers_list}},'must':{'range':{'sensitive':{'gte':1,'lte':100}}}}
-                }
-            }
-        },
-        'size':SPEECH_WARMING_NUM,
-        'sort':{'sensitive':{'order':'desc'}}
-    }
 
-    in_query_body={
+    show_condition_list=[]
+    if show_type == 0: #全部用户
+        show_condition_list.append({'must':{'range':{'sensitive':{'gte':1,'lte':100}}}})
+    elif show_type == 1: #关注用户
+        show_condition_list.append({'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1,'lte':100}}}]})
+    elif show_type ==2: #未关注用户
+        show_condition_list.append({'must_not':{'terms':{'uid':followers_list}},'must':{'range':{'sensitive':{'gte':1,'lte':100}}}})
+
+    query_body={
         'query':{
             'filtered':{
                 'filter':{
-                    'bool':{'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1,'lte':100}}}]}
+                    'bool':show_condition_list[0]
                 }
             }
         },
@@ -173,16 +174,13 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
     else:
         flow_text_index_list=get_flow_text_index_list(day_time)
 
-    try:
-        if show_type == 0:
-            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=un_query_body)['hits']['hits']
-        else:
-            results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=in_query_body)['hits']['hits']
-        result=[]
-        for item in results:
-            result.append(item['_source'])
-    except:
-        result=[]
+    #try:
+    results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    result=[]
+    for item in results:
+        result.append(item['_source'])
+    #except:
+    #    result=[]
     return result
 
 
@@ -368,16 +366,29 @@ def show_event_warming(xnr_user_no):
             if event_sensitive_count > 0:
             #对用户进行排序
                 temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
-                main_userid_dict=union_dict(temp_userid_dict,**alluser_num_dict)
-                #print 'temp_userid_dict:',temp_userid_dict
-                #print 'fans_num_dict:',fans_num_dict
-                #print 'followers_num_dict:',followers_num_dict
+                main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
                 main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
                 main_userid_list=[]
                 for i in xrange(0,len(main_userid_dict)):
                     main_userid_list.append(main_userid_dict[i][0])
+                print 'main_userid_list:',main_userid_list
 
                 #主要参与用户信息
+                user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
+                '''
+                for item in user_es_result:
+                    if item['found']:
+                        item['_source']['_id']=item['_id']
+                        main_user_info.append(item['_source'])
+                    else:
+                        user_dict=dict()
+                        user_dict['_id']=item['_id']
+                        main_user_info.append(item['_id'])
+                event_warming_content['main_user_info']=main_user_info
+                print 'main_user_info:',main_user_info
+                '''
+                #print user_es_result
+                '''
                 user_query_body={
                     'query':{
                         'filtered':{
@@ -393,6 +404,7 @@ def show_event_warming(xnr_user_no):
                 for item in user_es_result:
                     main_user_info.append(item['_source'])
                 event_warming_content['main_user_info']=main_user_info
+                '''
             else:
                 event_warming_content['main_user_info']=[]
         except:
@@ -402,8 +414,20 @@ def show_event_warming(xnr_user_no):
             event_warming_list.append(event_warming_content)
         else:
             pass
-        #except:
-        #    event_warming_list=[]
+    main_userid_list=['5536381570','2192435767','1070598590']
+    user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})
+    print 'user_es_result',user_es_result
+    test_user_info=[]
+    for item in user_es_result:
+        if item.has_key('found'):
+            item['_source']['_id']=item['_id']
+            test_user_info.append(item['_source'])
+        else:
+            user_dict=dict()
+            user_dict['_id']=item['_id']
+            test_user_info.append(item['_id'])
+    print 'test_user_info:',test_user_info
+
     return event_warming_list
 
 #粉丝或关注用户判断

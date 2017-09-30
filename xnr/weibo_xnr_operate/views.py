@@ -111,7 +111,7 @@ def ajax_submit_timing_post_task():
     task_detail = dict()
     #task_detail['uid'] = request.args.get('uid','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['task_source'] = request.args.get('task_source','')
+    task_detail['tweet_type'] = request.args.get('tweet_type','')
 
     current_ts = int(time.time())
     task_detail['create_time'] = current_ts
