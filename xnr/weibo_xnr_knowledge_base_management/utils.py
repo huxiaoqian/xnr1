@@ -3,9 +3,9 @@
 import json
 import pinyin
 import numpy as np
-from xnr.global_config import S_TYPE
+from xnr.global_config import S_TYPE,S_DATE
 from xnr.global_utils import es_xnr as es
-from xnr.global_utils import es_user_portrait
+from xnr.global_utils import es_user_portrait,es_flow_text,flow_text_index_name_pre,flow_text_index_type
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                             weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
@@ -100,8 +100,30 @@ def get_generate_example_model(domain_name,role_name):
     #     del topic_keywords_dict[keyword_max]
 
     # item['monitor_keywords'] = '&'.join(monitor_keywords_list)
+    if S_TYPE == 'test':
+        current_time  = datetime2ts(S_DATE)
+    else:
+        current_time = int(time.time())
+
+    index_name_list = get_flow_text_index_list(current_time)
+
+    query_body_search = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'terms':{'uid':member_uids}
+                }
+            }
+        },
+        'size':MAX_VALUE,
+        '_source':['keywords_string']
+    }
+    
+    es_keyword_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+                        body=query_body_search)['hits']['hits']
+
     keywords_string = ''
-    for mget_item in mget_results:  
+    for mget_item in es_keyword_results:  
         if mget_item['found']:
             keywords_string += '&'
             keywords_string += mget_item['_source']['keywords_string']
