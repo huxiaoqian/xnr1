@@ -454,7 +454,6 @@ function mainJoin(data,idx) {
     });
 }
 function mainWeibo(_data,idx) {
-    console.log(_data)
     $('.mainWeiboTable'+idx).bootstrapTable('load', _data);
     $('.mainWeiboTable'+idx).bootstrapTable({
         data:_data,
