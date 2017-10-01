@@ -3,6 +3,7 @@ public_ajax.call_request('get',weiboUrl,weibo);
 //文本信息
 var contentList = {};
 function weibo(data){
+    console.log(data)
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item;
     })
@@ -383,7 +384,7 @@ function mainJoin(data,idx) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         return '<img style="width: 30px;height: 30px;" src="/static/images/unknown.png">';
                     }else {
                         return '<img style="width: 30px;height: 30px;" src="'+row.photo_url+'">';

@@ -93,6 +93,7 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1505984970_1506008456')
 # es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426266_1506167318')
 
+# es.update(index='qq_xnr',doc_type='user',id='QXNR0001', body={'doc':{'qq_groups':['576127356','586502775','5339432','513304542'],'qq_group_num':4}})
 
 # for i in range(5,26):
 #     no = str('%02d'%i)
@@ -114,7 +115,7 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.delete(index='qq_xnr',doc_type='user',id='QXNR0005')
 # es.delete(index='qq_xnr',doc_type='user',id='QXNR0006')
 
-# es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
+#es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
 
 # query_body={

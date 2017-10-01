@@ -159,7 +159,14 @@ function hotPost(data) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
+                            var keyword=row.sensitive_words_string.split('&');
+                            for (var f of keyword){
+                                txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                        }else {
+                            txt=row.text;
+                        };
                     };
                     var str=
                         '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+

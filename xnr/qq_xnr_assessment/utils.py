@@ -1,6 +1,8 @@
 # -*-coding:utf-8-*-
 import math
-from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE,QQ_S_DATE_ASSESSMENT
+import time
+from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE,QQ_S_DATE_ASSESSMENT,\
+                    QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT
 from xnr.global_utils import es_xnr,group_message_index_name_pre,group_message_index_type,\
                     qq_xnr_index_name,qq_xnr_index_type
 from xnr.time_utils import datetime2ts,ts2datetime,get_groupmessage_index_list
@@ -19,16 +21,16 @@ def get_influence_at_num(xnr_user_no):
     qq_number = get_result['qq_number']
     nickname = get_result['nickname']
         
-    if S_TYPE == 'test':
-        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
-    else:
-        current_time = int(time.time())
-    
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
+    # else:
+    #     current_time = int(time.time())
+    current_time = int(time.time())
     # #message_sstart_ts = datetime2ts(QQ_GROUP_MESSAGE_START_DATE)
-    if S_TYPE == 'test':
-        group_message_index_list = ['group_message_2017-09-28']
-    else:
-        group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE,ts2datetime(current_time))
+    # if S_TYPE == 'test':
+    #     group_message_index_list = ['group_message_2017-09-28']
+    # else:
+    group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
 
     for i in range(WEEK):
         current_time_new = current_time - i*DAY
@@ -41,22 +43,22 @@ def get_influence_at_num(xnr_user_no):
         print 'group_message_index_name::',group_message_index_name
         print 'nickname:::',nickname.encode('utf-8')
         print 'qq_number:::',qq_number
-        # 虚拟人被@数量
-        # query_body_xnr = {
-        #     'query':{
-        #         'bool':{
-        #             'must':[
-        #                 {'xnr_qq_number':qq_number},
-        #                 {'wildcard':{'text':'*'+'@'+nickname+'*'}}
-        #             ]
-        #         }
-        #     }
-        # }
+        #虚拟人被@数量
         query_body_xnr = {
             'query':{
-                'match_all':{}
+                'bool':{
+                    'must':[
+                        {'term':{'xnr_qq_number':qq_number}},
+                        {'wildcard':{'text':'*'+'@'+nickname+'*'}}
+                    ]
+                }
             }
         }
+        # query_body_xnr = {
+        #     'query':{
+        #         'match_all':{}
+        #     }
+        # }
         print 'query_body_xnr::',query_body_xnr
         try:
             results_xnr = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,\
@@ -70,23 +72,24 @@ def get_influence_at_num(xnr_user_no):
                 at_num_xnr = 0
         except:
             at_num_xnr = 0
+            
         # 截止目前所有被@总数
-        # query_body_total = {
-        #     'query':{
-        #         'bool':{
-        #             'must':[
-        #                 {'xnr_qq_number':qq_number},
-        #                 {'wildcard':{'text':'*'+'@'+'*'}},
-        #                 {'range':{'timestamp':{'lte':end_ts}}}
-        #             ]
-        #         }
-        #     }
-        # }
         query_body_total = {
             'query':{
-                'match_all':{}
+                'bool':{
+                    'must':[
+                        {'term':{'xnr_qq_number':qq_number}},
+                        {'wildcard':{'text':'*'+'@'+nickname+'*'}},
+                        {'range':{'timestamp':{'lte':end_ts}}}
+                    ]
+                }
             }
         }
+        # query_body_total = {
+        #     'query':{
+        #         'match_all':{}
+        #     }
+        # }
         print 'group_message_index_list::86',group_message_index_list
         results_total = es_xnr.count(index=group_message_index_list,doc_type=group_message_index_type,\
                     body=query_body_total)
@@ -105,7 +108,7 @@ def get_influence_at_num(xnr_user_no):
                 'query':{
                     'bool':{
                         'must':[
-                            {'xnr_qq_number':qq_number},
+                            {'term':{'xnr_qq_number':qq_number}},
                             {'wildcard':{'text':'*'+'@'+'*'}}
                         ]
                     }
@@ -123,11 +126,8 @@ def get_influence_at_num(xnr_user_no):
                     at_num_total_day = 0
             except:
                 at_num_total_day = 0
-            print 'at_num_total_day::',at_num_total_day
-            print 'at_num_xnr::',at_num_xnr
-            at_num_xnr = 1
-            at_num_total_day = 5
-            influence = (float(math.log(at_num_xnr))/math.log(at_num_total_day)+1)*100
+
+            influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
 
             influence = round(influence,2)  # 保留两位小数
             
@@ -310,7 +310,7 @@ def get_safe_qq(xnr_user_no):
             except:
                 speaker_max = 0
 
-            safe_active = (float(math.log(speak_num_xnr+1))/(math.log(speaker_max+1)+1)+1)*100
+            safe_active = (float(math.log(speak_num_xnr+1))/(math.log(speaker_max+1)+1))*100
 
             safe_active = round(safe_active,2)  # 保留两位小数
             
