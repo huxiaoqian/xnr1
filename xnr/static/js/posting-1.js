@@ -60,6 +60,46 @@ $('#container .type_page #myTabs a').on('click',function () {
 //=========跟踪转发===========
 var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
 var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
+$('.choosetime .demo-label input[name="time1"]').on('click',function () {
+    var _val=$(this).val();
+    var flow_faw_url;
+    if (_val=='no'){
+        flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num;
+    }else {
+        var end_time=Date.parse(new Date())/1000;
+        var startTime='';
+        if (_val=='mize'){
+            $('#start_1').show();
+            $('#end_1').show();
+            $('#sure_1').show();
+            return false;
+        }else {
+            if (_val==0){
+                startTime=todayTimetamp();
+            }else {
+                startTime=getDaysBefore(_val);
+            }
+            $('#start_1').hide();
+            $('#end_1').hide();
+            $('#sure_1').hide();
+        }
+        flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
+            '&end_ts='+end_time;
+    }
+    public_ajax.call_request('get',flow_faw_url,flow_faw);
+});
+$('.sureTime').on('click',function () {
+    var s=$('#start_1').val();
+    var d=$('#end_1').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var his_timing_task_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+(Date.parse(new Date(s))/1000)+
+            '&end_ts='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',his_timing_task_url,flow_faw);
+    }
+});
 function flow_faw(data) {
     $('#follow_forward p').show();
     $('#follow_forward').bootstrapTable('load', data);
