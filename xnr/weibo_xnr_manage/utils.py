@@ -232,11 +232,11 @@ def xnr_today_remind(xnr_user_no,now_time):
     post_dvalue=min_post_num-complete_num
 
     if post_dvalue>0:
-    	post_remind_content='尚未完成发帖目标，今日请至少再发'+str(post_dvalue)+'条帖子！'
-    	post_remind_flag=1
+        post_remind_content='尚未完成发帖目标，今日请至少再发'+str(post_dvalue)+'条帖子！'
+        post_remind_flag=1
     else:
-    	post_remind_content=''
-    	post_remind_flag=0
+        post_remind_content='恭喜您，发帖目标已完成！'
+        post_remind_flag=0
     post_remind=[post_remind_flag,post_remind_content]
 
     ##日历提醒
@@ -248,6 +248,11 @@ def xnr_today_remind(xnr_user_no,now_time):
             date_remind_flag=date_remind_flag+1
             date_remind_content_temp=str(date_item['countdown_days'])+'天后是'+date_item['date_name'].encode('utf-8')+'纪念日，请注意！'
             date_remind_content.append(date_remind_content_temp)
+    if date_remind_flag == 0:
+        temp_remind='暂无日历提醒。'
+        date_remind_content.append(temp_remind)
+    else:
+        pass
     date_remind=[date_remind_flag,date_remind_content]
 
     #设置提醒内容

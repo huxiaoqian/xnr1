@@ -122,8 +122,14 @@ def show_personnal_warming(xnr_user_no,day_time):
         #else:
         #   second_result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
         s_result=[]
+        tem_word_one = '静坐'
+        tem_word_two = '集合'
         for item in second_result:
-            s_result.append(item['_source'])
+            sensitive_words=item['_source']['sensitive_words_string']
+            if ((sensitive_words==tem_word_one) or (sensitive_words==tem_word_two)):
+                pass
+            else:
+                s_result.append(item['_source'])
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
         user_detail['content']=s_result
         results.append(user_detail)
@@ -268,7 +274,9 @@ def union_dict(*objs):
 
 def show_event_warming(xnr_user_no):
     now_time=int(time.time())
+    #print 'first_time:',time.time()
     hashtag_list = get_hashtag()
+    #print 'hashtag_list_time:',time.time()
     #print 'hashtag_list:::::::',hashtag_list
     if S_TYPE =='test':    
         test_day_date=S_DATE_EVENT_WARMING
@@ -291,6 +299,7 @@ def show_event_warming(xnr_user_no):
         followers_list=[]
         fans_list=[]
 
+    #print 'weibo_xnr_fans_followers_time:',time.time()
     event_warming_list=[]
     for event_item in hashtag_list:
         #print event_item[0]
@@ -361,7 +370,8 @@ def show_event_warming(xnr_user_no):
             event_warming_content['main_weibo_info']=[]
             event_warming_content['event_influence']=[]
             event_warming_content['event_time']=[]
-
+        
+        #print event_item[0],'event_search_time:',time.time()
         try:
             if event_sensitive_count > 0:
             #对用户进行排序
@@ -371,7 +381,7 @@ def show_event_warming(xnr_user_no):
                 main_userid_list=[]
                 for i in xrange(0,len(main_userid_dict)):
                     main_userid_list.append(main_userid_dict[i][0])
-                print 'main_userid_list:',main_userid_list
+                #print 'main_userid_list:',main_userid_list
 
                 #主要参与用户信息
                 main_user_info=[]
@@ -380,15 +390,22 @@ def show_event_warming(xnr_user_no):
                     #print 'item:',item
                     #print 'found:',item['found']
                     #print 'id:',item['_id']
+                    user_dict=dict()
                     if item['found']:
-                        item['_source']['_id']=item['_id']
-                        main_user_info.append(item['_source'])
+                        user_dict['photo_url']=item['_source']['photo_url']
+                        user_dict['uid']=item['_id']
+                        user_dict['nick_name']=item['_source']['nick_name']
+                        user_dict['favoritesnum']=item['_source']['favoritesnum']
+                        user_dict['fansnum']=item['_source']['fansnum']
                     else:
-                        user_dict=dict()
-                        user_dict['_id']=item['_id']
-                        main_user_info.append(user_dict)
+                        user_dict['photo_url']=''
+                        user_dict['uid']=item['_id']
+                        user_dict['nick_name']=''
+                        user_dict['favoritesnum']=''
+                        user_dict['fansnum']=''
+                    main_user_info.append(user_dict)
                 event_warming_content['main_user_info']=main_user_info
-                print 'main_user_info:',main_user_info
+                #print 'main_user_info:',main_user_info
                 
                 #print user_es_result
                 '''
@@ -413,6 +430,7 @@ def show_event_warming(xnr_user_no):
         except:
             event_warming_content['main_user_info']=[]
         
+        print 'user_search_time:',time.time()
         if event_sensitive_count > 0:
             event_warming_list.append(event_warming_content)
         else:
@@ -420,6 +438,7 @@ def show_event_warming(xnr_user_no):
     #main_userid_list=['5536381570','2192435767','1070598590']
     #user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})
     #print 'user_es_result',user_es_result
+    #print 'end_time:',time.time()
     return event_warming_list
 
 #粉丝或关注用户判断
