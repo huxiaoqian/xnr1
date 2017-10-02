@@ -49,6 +49,7 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
     print 'index_names::',index_names
+    index_names.reverse()
     results = {}
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index=index_name):
@@ -58,8 +59,10 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
             print 'result::',result
             if results != {}:
                 results['hits']['hits'].extend(result['hits']['hits'])
+                print 'results:::',results
             else:
-                results=result.copy()
+                results=result #.copy()
+                print 'results::::::',results
         except:
             pass
     # results_new = []
@@ -73,6 +76,7 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
     #             results_new.append(es_result)
     #     except:
     #         continue
+
     return results
 
 def search_by_period(xnr_qq_number,startdate,enddate,group_qq_number):
@@ -97,7 +101,9 @@ def search_by_period(xnr_qq_number,startdate,enddate,group_qq_number):
     # es.search(index=”flow_text_2013-09-02”, doc_type=”text”, body=query_body)
 
     index_names = get_groupmessage_index_list(startdate,enddate)
+    index_names.reverse()
     print 'index_names::',index_names
+
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index_name):
         #     continue
