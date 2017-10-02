@@ -365,8 +365,10 @@ def get_hot_sensitive_recommend_at_user(sort_item):
     return uid_nick_name_dict
 
 def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
-    
+
     topic_field_en = topic_ch2en_dict[topic_field]
+
+
     query_body = {
         'query':{
             'bool':{
@@ -594,7 +596,7 @@ def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
     get_results = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     
     monitor_keywords = get_results['monitor_keywords']
-    monitor_keywords_list = monitor_keywords.encode('utf-8').split('，')
+    monitor_keywords_list = monitor_keywords.split(',')
     
     if sort_item == 'timestamp':
         sort_item_new = 'timestamp'
@@ -665,6 +667,9 @@ def get_reply_total(task_detail):
 def get_show_comment(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
+
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
@@ -673,7 +678,8 @@ def get_show_comment(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'comment_type':'receive'}}
+                    {'term':{'comment_type':'receive'}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
                 ]
             }
         },
@@ -728,15 +734,18 @@ def get_reply_comment(task_detail):
 def get_show_retweet(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'root_uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -786,6 +795,8 @@ def get_reply_retweet(task_detail):
 def get_show_private(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
     # white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
@@ -810,7 +821,8 @@ def get_show_private(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'private_type':'receive'}}
+                    {'term':{'private_type':'receive'}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
                 ],
                 'must_not':{'terms':{'uid':white_uid_list}}
             }
@@ -854,15 +866,18 @@ def get_reply_private(task_detail):
 def get_show_at(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'root_uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -916,15 +931,18 @@ def get_reply_at(task_detail):
 def get_show_fans(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'root_uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -945,15 +963,18 @@ def get_show_fans(task_detail):
 def get_show_follow(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
+    start_ts = task_detail['start_ts']
+    end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'root_uid':uid}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
             }
         },
         'sort':{sort_item:{'order':'desc'}},
@@ -1042,7 +1063,7 @@ def get_like_operate(task_detail):
 # 主动社交-直接搜索
 def get_direct_search(task_detail):
 
-    return_results = {}
+    return_results_all = []
 
     xnr_user_no = task_detail['xnr_user_no']
     #sort_item = task_detail['sort_item']  
@@ -1058,10 +1079,14 @@ def get_direct_search(task_detail):
     # if sort_item != 'friend':
         # if sort_item == 'influence':
         #     sort_item = 'user_fansnum'
-    es_rec_result = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'uids':uid_list})['docs']
+    print 'uid_list::',uid_list
+    es_rec_result = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':uid_list})['docs']
     
+    #print 'es_rec_result::',es_rec_result
     for item in es_rec_result:
+        return_results = {}
         if item['found'] == False:
+            print '!!!!!!!'
             return_results['uid'] = item['_id']
             weibo_type = judge_follow_type(xnr_user_no,item['_id'])
             sensor_mark = judge_sensing_sensor(xnr_user_no,item['_id'])
@@ -1071,6 +1096,7 @@ def get_direct_search(task_detail):
             return_results['friendsnum'] = ''
             return_results['statusnum'] = ''
         else:
+            print '###########'
             return_results['uid'] = item['_id']
             weibo_type = judge_follow_type(xnr_user_no,item['_id'])
             sensor_mark = judge_sensing_sensor(xnr_user_no,item['_id'])
@@ -1080,6 +1106,7 @@ def get_direct_search(task_detail):
             return_results['friendsnum'] = item['_source']['friendsnum']
             return_results['statusnum'] = item['_source']['statusnum']
 
+        return_results_all.append(return_results)
     # else:
     #     if S_TYPE == 'test':
     #         uid_list_new = FRIEND_LIST 
@@ -1177,7 +1204,7 @@ def get_direct_search(task_detail):
 
     #         results_all.append(item_dict)
 
-    return return_results
+    return return_results_all
 
 
 ## 主动社交- 相关推荐
@@ -1189,12 +1216,16 @@ def get_related_recommendation(task_detail):
     uid = es_result['uid']
 
     monitor_keywords = es_result['monitor_keywords']
-    monitor_keywords_list = monitor_keywords.encode('utf-8').split('，')
+    
+    monitor_keywords_list = monitor_keywords.split(',')
 
     nest_query_list = []
+    #print 'monitor_keywords_list::',monitor_keywords_list
     for monitor_keyword in monitor_keywords_list:
+        #print 'monitor_keyword::::',monitor_keyword
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
-
+    #print 'uid::::',uid
+    #print 'nest_query_list:::',nest_query_list
     # if S_TYPE == 'test':
     #     recommend_set_list = FOLLOWERS_LIST
     
@@ -1210,30 +1241,17 @@ def get_related_recommendation(task_detail):
     flow_text_index_name = flow_text_index_name_pre + current_date
 
     if sort_item != 'friend':
-        if sort_item == 'influence':
-            sort_item = 'user_fansnum'
+
         uid_list = []
         #uid_list = recommend_set_list
         if sort_item == 'influence':
-            sort_item = 'user_fansnum'
-        # query_body_rec = {
-        #     'query':{
-        #         'bool':{
-        #             'should':nest_query_list
-        #         }
-        #     },
-        #     'aggs':{
-        #         'uid_list':{
-        #             'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL },
-                    
-        #         }
-        #     },
-        #     'sort':{sort_item:{'order':'desc'}}
-        # }
-
+            sort_item = 'retweeted'
         query_body_rec = {
             'query':{
-                'match_all':{}
+                
+                'bool':{
+                    'should':nest_query_list
+                }
             },
             'aggs':{
                 'uid_list':{
@@ -1243,6 +1261,20 @@ def get_related_recommendation(task_detail):
             },
             'sort':{sort_item:{'order':'desc'}}
         }
+
+        # query_body_rec = {
+        #     'query':{
+        #         'term':{'message_type':1}
+        #     },
+        #     'aggs':{
+        #         'uid_list':{
+        #             'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL },
+                    
+        #         }
+        #     },
+        #     'sort':{sort_item:{'order':'desc'}}
+        # }
+        print 'query_body_rec:::',query_body_rec
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
         
         for item in es_rec_result:

@@ -11,6 +11,7 @@ from optparse import OptionParser
 from xnr import create_app
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
             UserMixin, RoleMixin, login_required
+from flask.ext.login import LoginManager, login_user, login_required, logout_user, session, current_user
 from xnr.extensions import db, user_datastore
 
 optparser = OptionParser()
@@ -20,6 +21,8 @@ optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number'
 # Create app
 app = create_app()
 
+#
+app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 # upload weibo images
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -60,7 +63,7 @@ def upload_file():
     # '''
 
 # Create user role data to test with
-@app.route('/create_user_role_test')
+@app.route('/create_user_role_test/')
 def create_user_roles():
     try:
         db.create_all()
@@ -84,13 +87,13 @@ def after_request(response):
     return response
 
 @app.route('/')
-@login_required
+#@login_required
 def homepage():
-    return render_template('homepage.html')
+    return render_template('index/navigationMain.html')
 
 # logout
 @app.route('/logout/')
-@login_required
+#@login_required
 def logout():
     logout_user()
     #flash(u'You have been signed out')
