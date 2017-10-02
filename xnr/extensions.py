@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import flask_admin as admin
+from flask_admin.contrib import sqla
+from flask import request, redirect, url_for, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
             UserMixin, RoleMixin
@@ -17,6 +19,29 @@ roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
         db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
+class AdminAccessView(sqla.ModelView):
+    def is_accessible(self):
+        if not current_user.is_active or not current_user.is_authenticated:
+            return False
+
+        if current_user.has_role('administration'):
+            return True
+
+        return False
+
+    def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                flash(u"没有权限访问该模块")
+                return redirect("/")
+            else:
+                # login
+                print '========::',request.url
+                return redirect(url_for('security.login', next=request.url))
 
 class Role(db.Model, RoleMixin):
     """用户角色
@@ -51,5 +76,6 @@ user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security()
 
 # Create admin
-admin = admin.Admin(name=u'权限管理', template_mode='bootstrap3')
+#admin = admin.Admin(name=u'权限管理', template_mode='bootstrap3')
+admin = admin.Admin(name=u'权限管理', template_mode='role')
 #admin = admin.Admin(name=u'权限管理', base_template='/portrait/role_manage.html')

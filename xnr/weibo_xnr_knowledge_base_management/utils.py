@@ -135,7 +135,7 @@ def get_generate_example_model(domain_name,role_name):
     for item_item in k_dict:
         monitor_keywords_list.append(item_item.word.encode('utf-8'))
 
-    item['monitor_keywords'] = '&'.join(monitor_keywords_list)
+    item['monitor_keywords'] = ','.join(monitor_keywords_list)
 
     for mget_item in mget_results:
         if mget_item['found']:

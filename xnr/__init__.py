@@ -31,6 +31,7 @@ from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from flask.ext.security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
+from xnr.jinja import gender, tsfmt, Int2string, gender_text, user_email, user_location, user_birth, user_vertify, weibo_source
 
 def create_app():
     app = Flask(__name__)
@@ -92,6 +93,11 @@ def create_app():
     
     # debug toolbar
     # toolbar = DebugToolbarExtension(app)
+    # debug toolbar
+    # toolbar = DebugToolbarExtension(app)
+    app.config['MONGO_HOST'] = '219.224.134.212'    
+    app.config['MONGO_PORT'] = 27017    
+    app.config['MONGO_DBNAME'] = 'mrq'
 
     # init database
     db.init_app(app)
@@ -116,3 +122,14 @@ def register_extensions(app):
     app.config.setdefault('ES_USER_PORTRAIT_URL', 'http://219.224.135.93:9200/')
     app.extensions['es_user_portrait'] = Elasticsearch(app.config['ES_USER_PORTRAIT_URL'])
 
+def register_jinja_funcs(app):
+    funcs = dict(gender=gender,
+                 tsfmt=tsfmt,
+                 int2string=Int2string,
+                 gender_text=gender_text,
+                 user_email=user_email,
+                 user_location=user_location,
+                 user_birth=user_birth,
+                 user_vertify=user_vertify,
+                 weibo_source=weibo_source)
+    app.jinja_env.globals.update(funcs)
