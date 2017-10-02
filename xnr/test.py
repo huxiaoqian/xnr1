@@ -155,3 +155,20 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
 # for result in es_results:
 #     print result
+item = {}
+item['text'] = '想问下各位 银行已经面签完了不过的情况多吗？'
+item['speaker_qq_number'] = '1355581192'
+item['sensitive_flag'] = 0
+item['sensitive_words_string'] = ''
+item['qq_group_nickname'] = '房屋买卖违约维权律师'
+item['sensitive_value'] = 0
+item['xnr_qq_number'] = '1965056593'
+item['xnr_nickname'] = '袁慧茹'
+item['speaker_nickname'] = '[wū] · [ ]'
+item['timestamp'] = 1506860121
+item['qq_group_number'] = '513304542'
+
+id = '1965056593_513304542_1506860121_7536c341631345922d86632b28863e'
+es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
+
+#es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')

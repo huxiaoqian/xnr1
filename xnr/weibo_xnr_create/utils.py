@@ -547,7 +547,7 @@ def get_save_step_two(task_detail):
     item_exist['political_side'] = task_detail['political_side']
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
     item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
-    item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
+    item_exist['monitor_keywords'] = ','.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
     #item_exist['sex'] = task_detail['sex']
 
     # item_exist['nick_name'] = task_detail['nick_name']
