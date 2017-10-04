@@ -93,6 +93,7 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1505984970_1506008456')
 # es.delete(index='tweet_timing_list',doc_type='timing_list',id='WXNR0004_1506426266_1506167318')
 
+# es.update(index='qq_xnr',doc_type='user',id='QXNR0001', body={'doc':{'qq_groups':['576127356','586502775','5339432','513304542'],'qq_group_num':4}})
 
 # for i in range(5,26):
 #     no = str('%02d'%i)
@@ -114,7 +115,7 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # es.delete(index='qq_xnr',doc_type='user',id='QXNR0005')
 # es.delete(index='qq_xnr',doc_type='user',id='QXNR0006')
 
-# es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
+#es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
 
 # query_body={
@@ -154,3 +155,20 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
 # for result in es_results:
 #     print result
+item = {}
+item['text'] = '想问下各位 银行已经面签完了不过的情况多吗？'
+item['speaker_qq_number'] = '1355581192'
+item['sensitive_flag'] = 0
+item['sensitive_words_string'] = ''
+item['qq_group_nickname'] = '房屋买卖违约维权律师'
+item['sensitive_value'] = 0
+item['xnr_qq_number'] = '1965056593'
+item['xnr_nickname'] = '袁慧茹'
+item['speaker_nickname'] = '[wū] · [ ]'
+item['timestamp'] = 1506860121
+item['qq_group_number'] = '513304542'
+
+id = '1965056593_513304542_1506860121_7536c341631345922d86632b28863e'
+es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
+
+#es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')

@@ -122,14 +122,20 @@ def compute_penetration_num(xnr_user_no):
 
     #follow_group_mark = get_pene_follow_group_sensitive(xnr_user_no)['sensitive_info'][timestamp]
     #fans_group_mark = get_pene_fans_group_sensitive(xnr_user_no)['sensitive_info'][timestamp]
-    try:
-        feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at')['sensitive_info'][timestamp]
-        feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet')['sensitive_info'][timestamp]
-        feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment')['sensitive_info'][timestamp]
-    except:
-        feedback_mark_at = 0.0839
-        feedback_mark_retweet = 0.1199
-        feedback_mark_comment = 0.01311
+    if S_TYPE == 'test':
+        current_time = int(time.time())
+        current_date = ts2datetime(current_time)
+        timestamp = datetime2ts(current_date) - DAY
+
+    #try:
+
+    feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at')['sensitive_info'][timestamp]
+    feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet')['sensitive_info'][timestamp]
+    feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment')['sensitive_info'][timestamp]
+    # except:
+    #     feedback_mark_at = 0.0839
+    #     feedback_mark_retweet = 0.1199
+    #     feedback_mark_comment = 0.01311
     # try:
     #   report_management_mark_tweet = get_pene_warning_report_sensitive(xnr_user_no)['tweet'][timestamp]
     #   report_management_mark_event = get_pene_warning_report_sensitive(xnr_user_no)['event'][timestamp]
@@ -142,6 +148,62 @@ def compute_penetration_num(xnr_user_no):
     pene_mark = round(pene_mark,2)
 
     return pene_mark
+
+# def get_pene_feedback_sensitive(xnr_user_no,sort_item):
+    
+#     uid = xnr_user_no2uid(xnr_user_no)
+
+#     if sort_item == 'be_at':
+#         index_name_sort = weibo_feedback_at_index_name
+#         index_type_sort = weibo_feedback_at_index_type
+#     elif sort_item == 'be_retweet':
+#         index_name_sort = weibo_feedback_retweet_index_name
+#         index_type_sort = weibo_feedback_retweet_index_type
+#     elif sort_item == 'be_comment':
+#         index_name_sort = weibo_feedback_comment_index_name
+#         index_type_sort = weibo_feedback_comment_index_type
+
+#     # if S_TYPE == 'test':
+#     #     current_time = datetime2ts(S_DATE)
+#     # else:
+#     #     current_time = time.time()
+#     current_time = int(time.time())
+#     current_date = ts2datetime(current_time)
+#     current_time_new = datetime2ts(current_date)
+    
+#     feedback_sensitive_dict = {}
+#     feedback_sensitive_dict['sensitive_info'] = {}
+#     for i in range(WEEK): # WEEK=7
+#         start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
+#         end_ts = current_time_new - i*DAY 
+
+#         query_body = {
+#             'query':{
+#                 'bool':{
+#                     'must':[
+#                         {'term':{'root_uid':uid}},
+#                         {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+#                     ]
+#                 }
+#             },
+#             'aggs':{
+#                 'avg_sensitive':{
+#                     'avg':{
+#                         'field':'sensitive_info'
+#                     }
+#                 }
+#             }
+#         }
+
+#         es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
+
+#         sensitive_value = es_sensitive_result['avg_sensitive']['value']
+
+#         if sensitive_value == None:
+#             sensitive_value = 0.0
+#         feedback_sensitive_dict['sensitive_info'][start_ts] = sensitive_value
+
+#     return feedback_sensitive_dict
 
 def get_pene_feedback_sensitive(xnr_user_no,sort_item):
     
@@ -167,35 +229,35 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item):
     
     feedback_sensitive_dict = {}
     feedback_sensitive_dict['sensitive_info'] = {}
-    for i in range(WEEK): # WEEK=7
-        start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-        end_ts = current_time_new - i*DAY 
+    #for i in range(WEEK): # WEEK=7
+    start_ts = current_time_new - DAY  # DAY=3600*24
+    end_ts = current_time_new
 
-        query_body = {
-            'query':{
-                'bool':{
-                    'must':[
-                        {'term':{'root_uid':uid}},
-                        {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
-                    ]
-                }
-            },
-            'aggs':{
-                'avg_sensitive':{
-                    'avg':{
-                        'field':'sensitive_info'
-                    }
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'aggs':{
+            'avg_sensitive':{
+                'avg':{
+                    'field':'sensitive_info'
                 }
             }
         }
+    }
 
-        es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
+    es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
 
-        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+    sensitive_value = es_sensitive_result['avg_sensitive']['value']
 
-        if sensitive_value == None:
-            sensitive_value = 0.0
-        feedback_sensitive_dict['sensitive_info'][start_ts] = sensitive_value
+    if sensitive_value == None:
+        sensitive_value = 0.0
+    feedback_sensitive_dict['sensitive_info'][start_ts] = sensitive_value
 
     return feedback_sensitive_dict
 
@@ -275,9 +337,9 @@ def compute_safe_num(xnr_user_no):
 
     topic_mark = topic_distribute_dict['mark']
     domain_mark = domain_distribute_dict['mark']
-    print 'active_mark::',active_mark
-    print 'topic_mark:::',topic_mark
-    print 'domain_mark::',domain_mark
+    # print 'active_mark::',active_mark
+    # print 'topic_mark:::',topic_mark
+    # print 'domain_mark::',domain_mark
 
     safe_mark = float(active_mark+topic_mark+domain_mark)/3
     safe_mark = round(safe_mark*100,2)
