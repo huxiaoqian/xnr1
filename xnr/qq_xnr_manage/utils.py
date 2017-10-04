@@ -73,6 +73,7 @@ def create_qq_xnr(xnr_info):
     nickname = xnr_info['nickname']
     access_id = xnr_info['access_id']
     remark = xnr_info['remark']
+    submitter = xnr_info['submitter']
     # redis 群名
     r_qq_group_set = r_qq_group_set_pre + qq_number
 
@@ -102,13 +103,14 @@ def create_qq_xnr(xnr_info):
 
             exits_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
             body=query_body_qq_group_exist)['hits']['hits']
-
+            print 'exits_result::',exits_result
             if exits_result:
                 qq_group_exist_list.append(group_qq_number)
+
             else:
                 print '!!!!redis',r.sadd(r_qq_group_set,group_qq_number)
                 qq_group_new_list.append(group_qq_number)
-        qqbot_port = exits_result[0]['_source']['qqbot_port']
+        qqbot_port = search_result[0]['_source']['qqbot_port']
         #if not qq_group_new_list:
         #    return ['当前群已经添加',qq_group_exist_list]
         result = True
@@ -156,7 +158,7 @@ def create_qq_xnr(xnr_info):
             es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
             body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'qq_group_num':len(qq_groups),'create_ts':create_ts,\
                     'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no,\
-                    'access_id':access_id,'remark':remark})
+                    'access_id':access_id,'remark':remark,'submitter':submitter})
             
             ## 存入redis
             
@@ -167,7 +169,7 @@ def create_qq_xnr(xnr_info):
             result = False
     print 'before python recieveQQGroupMessage:', result
     if result == True:
-        print 'python receiveQQGroupMessage!!!!!!!!!'
+        
         #qqbot_port = '8199'
         p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
         #qqbot_port = '8190'
@@ -201,6 +203,7 @@ def show_qq_xnr(MAX_VALUE):
         qqnum = item['_source']['qq_number']
         xnr_user_no = item['_source']['xnr_user_no']
         group_dict = getgroup_v2(xnr_user_no)
+        print 'group_dict:::',group_dict
         if group_dict:
             login_status = True
         else:
