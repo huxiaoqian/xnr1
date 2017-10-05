@@ -7,7 +7,8 @@ import sys
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
         qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r
-from xnr.global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type
+from xnr.global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,\
+                        group_message_index_name_pre,group_message_index_type
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
 from xnr.time_utils import ts2datetime,datetime2ts
@@ -219,8 +220,33 @@ def show_qq_xnr(MAX_VALUE):
         except:
             total_post_num = 0
             daily_post_num = 0
-        item_dict['total_post_num'] = total_post_num
-        item_dict['daily_post_num'] = daily_post_num
+        # item_dict['total_post_num'] = total_post_num
+        #item_dict['daily_post_num'] = daily_post_num
+
+        
+        group_message_index_name = group_message_index_name_pre + ts2datetime(time.time())
+
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {'term':{'speaker_qq_number':qqnum}},
+                        {'term':{'xnr_qq_number':qqnum}}
+                    ]
+                }
+            }
+        }
+
+        count_result = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,body=query_body)
+
+        if count_result['_shards']['successful'] != 0:
+            today_count = count_result['count']
+        else:
+            print 'es index rank error'
+            today_count = 0
+
+        item_dict['daily_post_num'] = today_count
+        item_dict['total_post_num'] = total_post_num + today_count
         results.append(item_dict)
 
     return results
