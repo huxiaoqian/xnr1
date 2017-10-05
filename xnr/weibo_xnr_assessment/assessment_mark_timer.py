@@ -543,6 +543,10 @@ def cron_compute_mark():
         safe = compute_safe_num(xnr_user_no)
 
         current_time = int(time.time())
+        if S_TYPE == 'test':
+        	current_time = datetime2ts(S_DATE)
+        else:
+        	current_time = int(time.time()-DAY)
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
