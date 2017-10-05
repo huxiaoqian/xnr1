@@ -160,6 +160,13 @@ xnr_flow_text_index_type = 'text'
 daily_interest_index_name_pre = 'daily_inerest_flow_text_'
 daily_interest_index_type = 'text'
 
+# 安全性评估 发帖内容
+topic_distribute_tweets_index_name_pre = 'topic_distribute_tweets_'
+topic_distribute_tweets_index_type = 'topic'
+
+domain_distribute_tweets_index_name_pre = 'domain_distribute_tweets_'
+domain_distribute_tweets_index_type = 'domain'
+
 # social sensing
 index_sensing = "manage_sensing_task"
 type_sensing = "task"
