@@ -9,9 +9,14 @@ from werkzeug import secure_filename, SharedDataMiddleware
 from flask_security.utils import logout_user
 from optparse import OptionParser
 from xnr import create_app
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+#from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+#            UserMixin, RoleMixin, login_required
+from flask_security import Security, SQLAlchemyUserDatastore, \
             UserMixin, RoleMixin, login_required
-from flask.ext.login import LoginManager, login_user, login_required, logout_user, session, current_user
+#from flask.ext.login import LoginManager, login_user, login_required, logout_user, session, current_user
+from flask_login import LoginManager, login_user, login_required, logout_user
+
+
 from xnr.extensions import db, user_datastore
 
 optparser = OptionParser()
@@ -22,6 +27,7 @@ optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number'
 app = create_app()
 
 #
+app.config['SECURITY_PASSWORD_SALT'] = 'salty'
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 # upload weibo images
 
@@ -68,7 +74,7 @@ def create_user_roles():
     try:
         db.create_all()
         #role_1 = user_datastore.create_role(name='userrank', description=u'用户排行模块权限')
-        user_1 = user_datastore.create_user(email='admin@qq.com', password="Bh123456")
+        user_1 = user_datastore.create_user(email='admin2@qq.com', password="Bh123456")
 
         #user_datastore.add_role_to_user(user_1, role_1)
         #user_datastore.add_role_to_user(user_1, role_2)
@@ -87,7 +93,7 @@ def after_request(response):
     return response
 
 @app.route('/')
-#@login_required
+@login_required
 def homepage():
     return render_template('index/navigationMain.html')
 
