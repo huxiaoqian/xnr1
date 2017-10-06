@@ -103,16 +103,21 @@
 <script src="/static/echarts/china.js"></script>
 <script>
     //几天前的时间戳
-    function getDaysBefore(m){
-        var date = new Date(),
-            timestamp, newDate;
-        if(!(date instanceof Date)){
-            date = new Date(date);
-        }
-        timestamp = date.getTime();
-        newDate = new Date(timestamp - m * 24 * 3600 * 1000);
-        return Number(Date.parse(newDate).toString().substring(0,10));
-    };
+//    function getDaysBefore(m){
+//        var date = new Date(),
+//            timestamp, newDate;
+//        if(!(date instanceof Date)){
+//            date = new Date(date);
+//        }
+//        timestamp = date.getTime();
+//        newDate = new Date(timestamp - m * 24 * 3600 * 1000);
+//        return Number(Date.parse(newDate).toString().substring(0,10));
+//    };
+    function getDaysBefore($time) {
+        var a=new Date(new Date(new Date().setDate(new Date().getDate()-Number($time))).setHours(0,0,0,0));
+        var b=Date.parse(a)/1000;
+        return b;
+    }
     //当天零点的时间戳
     function todayTimetamp() {
         var start=new Date();

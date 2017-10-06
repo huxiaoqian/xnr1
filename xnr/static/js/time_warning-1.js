@@ -76,8 +76,8 @@ function calendar(data) {
                             '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                             '       <div class="center_rel">'+
                             '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;'+time_2+'</span>  '+
-                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                            '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span>  '+
+                            // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                             '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  '+
                             '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="关键词"><i class="icon icon-bell-alt"></i>&nbsp;&nbsp;'+keywords+'</span>  '+
                             '           <div class="center_2 DsAuto"'+index+'><span style="color:#f98077;">敏感微博内容：</span>'+str_2+'</div>'+

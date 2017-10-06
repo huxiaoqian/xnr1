@@ -2,6 +2,7 @@ var time=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
@@ -107,6 +108,7 @@ function weibo(data) {
             },
         ],
     });
+    $('#weiboContent p').slideUp(30);
 };
 
 // 转发===评论===点赞
