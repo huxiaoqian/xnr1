@@ -19,13 +19,13 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
                              portrait_index_name,portrait_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
-                             weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
+                             weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
+                             weibo_date_remind_index_name,weibo_date_remind_index_type
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
 from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
-                           ts2datetime,datetime2ts,ts2datetimestr
+                           ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
-from xnr.weibo_xnr_warming.utils import show_date_warming
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
 from caculate_history_info import create_xnr_history_info_count
 from xnr.global_config import S_TYPE
@@ -33,9 +33,17 @@ from xnr.global_config import S_TYPE
 ##########################################
 #	step 2：show weibo_xnr 	information  #
 ##########################################
+def get_xnr_detail(xnr_user_no):
+	try:
+		results=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+		xnr_info=results
+	except:
+		xnr_info=[]
+	return xnr_info
+
 #step 2.1: show completed weibo_xnr information 
 def show_completed_weiboxnr(account_no,now_time):
-	query_body={
+    query_body={
 		'query':{
 			'filtered':{
 				'filter':{
@@ -50,34 +58,41 @@ def show_completed_weiboxnr(account_no,now_time):
 
 		},
 		'size':MAX_VALUE
-	}
-	results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-	result=[]
-	for item in results:
-		xnr_list=item['_source']
-		xnr_user_no=item['_source']['xnr_user_no']
-		uid=item['_source']['uid']
-		#粉丝数
-		fans_num=count_fans_num(xnr_user_no)
-		#历史发帖量
-		history_post_num=count_history_post_num(xnr_user_no,now_time)
-		#历史评论数
-		history_comment_num=count_history_comment_num(uid)
-		#今日发帖量
-		today_comment_num=count_today_comment_num(xnr_user_no,now_time)
+    }
+    #print 'start_time:',time.time()
+    results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    result=[]
+    #print 'xnr_search_time:',time.time()
+    for item in results:
+        xnr_list=item['_source']
+        xnr_user_no=item['_source']['xnr_user_no']
+        uid=item['_source']['uid']
+        #粉丝数
+        fans_num=count_fans_num(xnr_user_no)
+        #print 'fans_num_time:',time.time()
+        #历史发帖量
+        history_post_num=count_history_post_num(xnr_user_no,now_time)
+        #print 'history_post_num_time:',time.time()
+        #历史评论数
+        history_comment_num=count_history_comment_num(uid)
+        #print 'history_comment_num：',time.time()
+        #今日发帖量
+        today_comment_num=count_today_comment_num(xnr_user_no,now_time)
+        #print 'today_comment_num:',time.time()
 
-		xnr_list['fans_num']=fans_num
-		xnr_list['history_post_num']=history_post_num
-		xnr_list['history_comment_num']=history_comment_num
-		xnr_list['today_comment_num']=today_comment_num
-		#xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
-		#今日提醒
-		today_remind=xnr_today_remind(xnr_user_no,now_time)
-		today_remind_num=today_remind['remind_num']
-		xnr_list['today_remind_num']=today_remind_num
+        xnr_list['fans_num']=fans_num
+        xnr_list['history_post_num']=history_post_num
+        xnr_list['history_comment_num']=history_comment_num
+        xnr_list['today_comment_num']=today_comment_num
+        #xnr_list.extend(fans_num,history_post_num,history_comment_num,today_comment_num)
+        #今日提醒
+        today_remind=xnr_today_remind(xnr_user_no,now_time)
+        #print 'today_remind:',time.time()
+        today_remind_num=today_remind['remind_num']
+        xnr_list['today_remind_num']=today_remind_num
 
-		result.append(xnr_list)
-	return result
+        result.append(xnr_list)
+    return result
 
 
 #计算粉丝数
@@ -242,7 +257,7 @@ def xnr_today_remind(xnr_user_no,now_time):
     ##日历提醒
     date_remind_flag=0
     date_remind_content=[]
-    date_result=show_date_warming(now_time)
+    date_result=show_date_count(now_time)         #修改
     for date_item in date_result:
         if (date_item['countdown_days']>0) and (date_item['countdown_days']<REMIND_DAY):
             date_remind_flag=date_remind_flag+1
@@ -266,7 +281,28 @@ def xnr_today_remind(xnr_user_no,now_time):
     remind_content['date_remind_content']=date_remind_content
     return remind_content
 
+def show_date_count(today_time):
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'date_time':{'order':'asc'}}
+    }
+    result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+    #取出预警时间进行处理
+    date_warming_result=[]
+    for item in result:
+        #计算距离日期
+        date_time=item['_source']['date_time']
+        year=ts2yeartime(today_time)
+        warming_date=year+'-'+date_time
+        today_date=ts2datetime(today_time)
+        countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
 
+        item['_source']['countdown_days']=countdown_num
+        
+    return date_warming_result
 
 #############################################
 #	step 4：operate count (进入，操作统计)  #
@@ -434,7 +470,9 @@ def show_history_count(xnr_user_no,date_range):
     if date_range['type']=='today':
         start_time=datetime2ts(ts2datetime(date_range['end_time']))
         end_time=date_range['end_time']       #当前时间
+        print 'today_time:',start_time,end_time
         xnr_date_info=show_today_history_count(xnr_user_no,start_time,end_time)
+        
     else:
         start_time=date_range['start_time']
         end_time=date_range['end_time']
@@ -442,9 +480,11 @@ def show_history_count(xnr_user_no,date_range):
         system_start_time=FLOW_TEXT_START_DATE
         if end_time > now_time:
             end_time=now_time
-        if start_time > system_start_time:
+        if start_time < system_start_time:
             start_time=system_start_time
+        print 'condition_time:',start_time,end_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
+        
 
     #print xnr_date_info
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
@@ -952,32 +992,42 @@ def wxnr_list_concerns(user_id,order_type):
     except:
         followers_list=[]
 
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':followers_list}
-                }
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
-    concern_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
-
     user_result=[]
-    for item in concern_result:
-        uid=item['_source']['uid']
-        try:
-            temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-            item['_source']['topic_string']=temp_user_result['topic_string']
-            item['_source']['sensitive']=temp_user_result['sensitive']
-        except:
-            item['_source']['topic_string']=''
-            item['_source']['sensitive']=0
-        #计算影响力
-        item['_source']['influence']=count_weibouser_influence(uid)
-        #组合结果
-        user_result.append(item['_source'])
+    if followers_list:
+        followers_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':followers_list})['docs']
+        
+        for item in followers_result:
+            user_dict=dict()
+            uid=item['_id']
+            user_dict['uid']=item['_id']
+            #计算影响力
+            user_dict['influence']=count_weibouser_influence(uid)
+            #敏感度查询,话题领域
+            try:
+                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
+                user_dict['sensitive']=temp_user_result['sensitive']
+                user_dict['topic_string']=temp_user_result['topic_string']
+            except:
+                user_dict['sensitive']=0
+                user_dict['topic_string']=''
+
+            if item['found']:
+                user_dict['photo_url']=item['_source']['photo_url']            
+                user_dict['nick_name']=item['_source']['nick_name']
+                user_dict['sex']=item['_source']['sex']
+                user_dict['user_birth']=item['_source']['user_birth']
+                user_dict['create_at']=item['_source']['create_at']
+                user_dict['user_location']=item['_source']['user_location']
+            else:
+                user_dict['photo_url']=''            
+                user_dict['nick_name']=''
+                user_dict['sex']=''
+                user_dict['user_birth']=''
+                user_dict['create_at']=''
+                user_dict['user_location']=''
+            user_result.append(user_dict)
+    else:
+        user_result=[]
 
     #对结果按要求排序
     user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
@@ -1017,29 +1067,39 @@ def wxnr_list_fans(user_id,order_type):
     except:
         fans_list=[]
 
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':fans_list}
-                }
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
-    fans_result=es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,body=query_body)['hits']['hits']
-    user_result=[]
-    for item in fans_result:
-        uid=item['_source']['uid']
-        try:
-            temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-            item['_source']['sensitive']=temp_user_result['sensitive']
-        except:
-            item['_source']['sensitive']=0
-        #计算影响力
-        item['_source']['influence']=count_weibouser_influence(uid)
-        #组合结果
-        user_result.append(item['_source'])
+    if fans_list:
+        fans_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':fans_list})['docs']
+        user_result=[]
+        for item in fans_result:
+            user_dict=dict()
+            uid=item['_id']
+            user_dict['uid']=item['_id']
+            #计算影响力
+            user_dict['influence']=count_weibouser_influence(uid)
+            #敏感度查询
+            try:
+                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
+                user_dict['sensitive']=temp_user_result['sensitive']
+            except:
+                user_dict['sensitive']=0
+
+            if item['found']:
+                user_dict['photo_url']=item['_source']['photo_url']            
+                user_dict['nick_name']=item['_source']['nick_name']
+                user_dict['sex']=item['_source']['sex']
+                user_dict['user_birth']=item['_source']['user_birth']
+                user_dict['create_at']=item['_source']['create_at']
+                user_dict['user_location']=item['_source']['user_location']
+            else:
+                user_dict['photo_url']=''            
+                user_dict['nick_name']=''
+                user_dict['sex']=''
+                user_dict['user_birth']=''
+                user_dict['create_at']=''
+                user_dict['user_location']=''
+            user_result.append(user_dict)
+    else:
+        user_result=[]
     #对结果按要求排序
     user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
     return user_result
@@ -1102,13 +1162,13 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 
 #create xnr_flow_text example
-def create_xnr_flow_text(task_detail):
-	task_id=task_detail['mid']
-	try:
-		es_xnr.index(index='xnr_flow_text_2017-09-18',doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
-		mark=True
-	except:
-		mark=False
-	return mark
+def create_xnr_flow_text(task_detail,task_id):
+	print task_id,task_detail
+    #try:
+	result=es_xnr.update(index="xnr_flow_text_2017-10-06",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+	#	mark=True
+	#except:
+	#	mark=False
+	return result
 	
 

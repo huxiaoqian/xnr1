@@ -4,7 +4,8 @@ import time
 from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE,QQ_S_DATE_ASSESSMENT,\
                     QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT
 from xnr.global_utils import es_xnr,group_message_index_name_pre,group_message_index_type,\
-                    qq_xnr_index_name,qq_xnr_index_type
+                    qq_xnr_index_name,qq_xnr_index_type,qq_xnr_history_count_index_name,\
+                    qq_xnr_history_count_index_type
 from xnr.time_utils import datetime2ts,ts2datetime,get_groupmessage_index_list
 from xnr.parameter import WEEK,DAY
 
@@ -25,7 +26,9 @@ def get_influence_at_num(xnr_user_no):
     #     current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
     # else:
     #     current_time = int(time.time())
-    current_time = int(time.time())
+    current_timestamp = int(time.time()-DAY)
+    current_date = ts2datetime(current_timestamp)
+    current_time = datetime2ts(current_date)
     # #message_sstart_ts = datetime2ts(QQ_GROUP_MESSAGE_START_DATE)
     # if S_TYPE == 'test':
     #     group_message_index_list = ['group_message_2017-09-28']
@@ -36,13 +39,14 @@ def get_influence_at_num(xnr_user_no):
         current_time_new = current_time - i*DAY
         current_date = ts2datetime(current_time_new)
         
-        start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-        end_ts = current_time_new - i*DAY 
-        
+        #start_ts = current_time_new - i*DAY  # DAY=3600*24
+        end_ts = current_time_new + DAY 
+        print 'current_date::',current_date
+        print 'end_ts::',end_ts
+        print 'end_ts_date::',ts2datetime(end_ts)
         group_message_index_name = group_message_index_name_pre + current_date
-        print 'group_message_index_name::',group_message_index_name
-        print 'nickname:::',nickname.encode('utf-8')
-        print 'qq_number:::',qq_number
+        #group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,current_date)
+        
         #虚拟人被@数量
         query_body_xnr = {
             'query':{
@@ -59,7 +63,7 @@ def get_influence_at_num(xnr_user_no):
         #         'match_all':{}
         #     }
         # }
-        print 'query_body_xnr::',query_body_xnr
+        
         try:
             results_xnr = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,\
                         body=query_body_xnr)
@@ -90,12 +94,12 @@ def get_influence_at_num(xnr_user_no):
         #         'match_all':{}
         #     }
         # }
-        print 'group_message_index_list::86',group_message_index_list
+        
         results_total = es_xnr.count(index=group_message_index_list,doc_type=group_message_index_type,\
                     body=query_body_total)
 
         if results_total['_shards']['successful'] != 0:
-           at_num_total = results_total['count']
+            at_num_total = results_total['count']
         else:
             print 'es index rank error'
             at_num_total = 0
@@ -143,13 +147,17 @@ def get_penetration_qq(xnr_user_no):
     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
     qq_number = get_result['qq_number']
     nickname = get_result['nickname']
-    print 'qqqqqq',get_result['qq_groups']
+    
     group_list = get_result['qq_groups']
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
-    else:
-        current_time = int(time.time())
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
+    # else:
+    #     current_time = int(time.time())
+
+    current_timestamp = int(time.time()-DAY)
+    current_date = ts2datetime(current_timestamp)
+    current_time = datetime2ts(current_date)
 
     for i in range(WEEK):
         current_time_new = current_time - i*DAY
@@ -215,78 +223,31 @@ def get_penetration_qq(xnr_user_no):
     return follow_group_sensitive
 
 def get_safe_qq(xnr_user_no):
-
     speak_dict = {}
     speak_dict['speak_day'] = {}
     speak_dict['speak_total'] = {}
-
     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
     qq_number = get_result['qq_number']
-    if S_TYPE == 'test':
-        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
-    else:
-        current_time = int(time.time())
-    group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE,ts2datetime(current_time))
 
+    current_timestamp = int(time.time()-DAY)
+    current_date = ts2datetime(current_timestamp)
+    current_time = datetime2ts(current_date)
+    #group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
     for i in range(WEEK):
-        current_time_new = current_time - i*DAY
-        current_date = ts2datetime(current_time_new)
+        current_time_new = current_time-i*DAY
+        current_date_new = ts2datetime(current_time_new)
 
-        start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-        end_ts = current_time_new - i*DAY 
+        _id_last = xnr_user_no +'_'+ current_date_new
         
-        group_message_index_name = group_message_index_name_pre + current_date
-        
-        # 虚拟人发言数量
-        query_body_xnr = {
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'term':{'speaker_qq_number':qq_number}
-                    }
-                }
-            }
-        }
-        try:
-            results_xnr = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,\
-                        body=query_body_xnr)
+        get_results = es_xnr.get(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
+            id=_id_last)['_source']
 
-            if results_xnr['_shards']['successful'] != 0:
-                speak_num_xnr = results_xnr['count']
-            else:
-                print 'es index rank error'
-                speak_num_xnr = 0
-        except:
-            speak_num_xnr = 0
+        speak_dict['speak_day'][current_time_new] = get_results['daily_post_num']
+        speak_dict['speak_total'][current_time_new] = get_results['total_post_num']
 
-        # 截止目前所有发言总数
-        query_body_total = {
-            'query':{
-                'bool':{
-                    'must':[
-                        {'speaker_qq_number':qq_number},
-                        {'range':{'timestamp':{'lte':end_ts}}}
-                    ]
-                }
-            }
-        }
-
-        try:
-            results_total = es_xnr.count(index=group_message_index_list,doc_type=group_message_index_type,\
-                        body=query_body_total)
-
-            if results_total['_shards']['successful'] != 0:
-               speak_num_total = results_total['count']
-            else:
-                print 'es index rank error'
-                speak_num_total = 0
-        except:
-            speak_num_total = 0
-
-        speak_dict['speak_day'][current_time_new] = speak_num_xnr
-        speak_dict['speak_total'][current_time_new] = speak_num_total
-
-        if i == (WEEK-1):
+        if i == 0:
+            speak_num_xnr = get_results['daily_post_num']
+            group_message_index_name = group_message_index_name_pre + current_date
             query_body_total_day = {
                 'query':{
                     'filtered':{
@@ -303,12 +264,13 @@ def get_safe_qq(xnr_user_no):
             }
 
             try:
+
                 results_total_day = es_xnr.search(index=group_message_index_name,doc_type=group_message_index_type,\
                             body=query_body_total_day)['aggregations']['all_speakers']['buckets']
 
                 speaker_max = results_total_day[0]['doc_count']
             except:
-                speaker_max = 0
+                speaker_max = speak_num_xnr
 
             safe_active = (float(math.log(speak_num_xnr+1))/(math.log(speaker_max+1)+1))*100
 
@@ -317,6 +279,112 @@ def get_safe_qq(xnr_user_no):
             speak_dict['mark'] = safe_active
 
     return speak_dict
+
+
+# def get_safe_qq(xnr_user_no):
+
+#     speak_dict = {}
+#     speak_dict['speak_day'] = {}
+#     speak_dict['speak_total'] = {}
+
+#     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+#     qq_number = get_result['qq_number']
+#     # if S_TYPE == 'test':
+#     #     current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
+#     # else:
+#     #     current_time = int(time.time())
+#     current_time = int(time.time())
+#     group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
+
+#     for i in range(WEEK):
+#         current_time_new = current_time - i*DAY
+#         current_date = ts2datetime(current_time_new)
+
+#         start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
+#         end_ts = current_time_new - i*DAY 
+        
+#         group_message_index_name = group_message_index_name_pre + current_date
+        
+#         # 虚拟人发言数量
+#         query_body_xnr = {
+#             'query':{
+#                 'filtered':{
+#                     'filter':{
+#                         'term':{'speaker_qq_number':qq_number}
+#                     }
+#                 }
+#             }
+#         }
+#         try:
+#             results_xnr = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,\
+#                         body=query_body_xnr)
+
+#             if results_xnr['_shards']['successful'] != 0:
+#                 speak_num_xnr = results_xnr['count']
+#             else:
+#                 print 'es index rank error'
+#                 speak_num_xnr = 0
+#         except:
+#             speak_num_xnr = 0
+
+#         # 截止目前所有发言总数
+#         query_body_total = {
+#             'query':{
+#                 'bool':{
+#                     'must':[
+#                         {'term':{'speaker_qq_number':qq_number}},
+#                         {'range':{'timestamp':{'lte':end_ts}}}
+#                     ]
+#                 }
+#             }
+#         }
+#         print 'group_message_index_list:::273',group_message_index_list
+#         #try:
+#         results_total = es_xnr.count(index=group_message_index_list,doc_type=group_message_index_type,\
+#                     body=query_body_total)
+
+#         if results_total['_shards']['successful'] != 0:
+#            speak_num_total = results_total['count']
+#         else:
+#             print 'es index rank error'
+#             speak_num_total = 0
+#         # except:
+#         #     speak_num_total = 0
+#         print 'speak_num_total:::285',speak_num_total
+#         speak_dict['speak_day'][current_time_new] = speak_num_xnr
+#         speak_dict['speak_total'][current_time_new] = speak_num_total
+
+#         if i == (WEEK-1):
+#             query_body_total_day = {
+#                 'query':{
+#                     'filtered':{
+#                         'filter':{
+#                             'term':{'xnr_qq_number':qq_number}
+#                         }
+#                     }
+#                 },
+#                 'aggs':{
+#                     'all_speakers':{
+#                         'terms':{'field':'speaker_qq_number',"order" : { "_count" : "desc" }}
+#                     }
+#                 }
+#             }
+
+#             try:
+#                 results_total_day = es_xnr.search(index=group_message_index_name,doc_type=group_message_index_type,\
+#                             body=query_body_total_day)['aggregations']['all_speakers']['buckets']
+
+#                 speaker_max = results_total_day[0]['doc_count']
+#             except:
+#                 speaker_max = 0
+
+#             safe_active = (float(math.log(speak_num_xnr+1))/(math.log(speaker_max+1)+1))*100
+
+#             safe_active = round(safe_active,2)  # 保留两位小数
+            
+#             speak_dict['mark'] = safe_active
+
+#     return speak_dict
 
 # def get_safe_qq(xnr_user_no):
 
