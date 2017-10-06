@@ -13,7 +13,8 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
-                  create_xnr_flow_text,delete_history_count,create_history_count,lookup_xnr_assess_info
+                  create_xnr_flow_text,delete_history_count,create_history_count,lookup_xnr_assess_info,\
+                  get_xnr_detail
 from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
@@ -30,6 +31,14 @@ def ajax_show_completed_weiboxnr():
 	now_time=int(time.time())
 	account_no=request.args.get('account_no','')
 	results=show_completed_weiboxnr(account_no,now_time)
+	return json.dumps(results)
+
+#进入虚拟人中心，返回虚拟人信息
+#http://219.224.134.213:9209/weibo_xnr_manage/get_xnr_detail/?xnr_user_no=WXNR0003
+@mod.route('/get_xnr_detail/')
+def ajax_get_xnr_detail():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=get_xnr_detail(xnr_user_no)
 	return json.dumps(results)
 
 #未完成虚拟人
@@ -327,37 +336,38 @@ def ajax_wxnr_list_fans():
 #http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
 @mod.route('/create_xnr_flow_text/')
 def ajax_create_xnr_flow_text():
+	task_id='WXNR0004_1507262140'
 	task_detail=dict()
-	task_detail['task_source']=request.args.get('task_source','')
-	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
-	task_detail['uid']=request.args.get('uid','')
-	task_detail['text']=request.args.get('text','')
-	task_detail['picture_url']=request.args.get('picture_url','')
-	task_detail['vedio_url']=request.args.get('vedio_url','')
-	task_detail['user_fansnum']=request.args.get('user_fansnum','')
-	task_detail['weibos_sum']=request.args.get('weibos_sum','')
-	task_detail['mid']=request.args.get('mid','')
-	task_detail['ip']=request.args.get('ip')
-	task_detail['directed_uid']=request.args.get('directed_uid','')
-	task_detail['directed_uname']=request.args.get('directed_uname','')
-	task_detail['timestamp']=int(request.args.get('timestamp',''))
-	task_detail['sentiment']=request.args.get('sentiment','')
-	task_detail['geo']=request.args.get('geo','')
-	task_detail['keywords_dict']=request.args.get('keywords_dict','')
-	task_detail['keywords_string']=request.args.get('keywords_string','')
-	task_detail['sensitive_words_dict']=request.args.get('sensitive_words_dict','')
-	task_detail['sensitive_words_string']=request.args.get('sensitive_words_string','')
-	task_detail['message_type']=request.args.get('message_type','')
-	task_detail['root_uid']=request.args.get('root_uid','')
-	task_detail['origin_text']=request.args.get('origin_text','')
-	task_detail['origin_keywords_dict']=request.args.get('origin_keywords_dict','')
-	task_detail['origin_keywords_string']=request.args.get('origin_keywords_string','')
-	task_detail['comment']=int(request.args.get('comment',''))
-	task_detail['sensitive']=int(request.args.get('sensitive',''))
-	task_detail['sensitive_words_dict']=request.args.get('sensitive_words_dict','')
-	task_detail['retweeted']=int(request.args.get('retweeted',''))
+	task_detail['task_source']='热点跟随'
+	task_detail['xnr_user_no']='WXNR0004'
+	task_detail['uid']='6346321407'
+	task_detail['text']='天安门花坛吸引大量游客~故宫门票11点过后售罄~一票难求~'
+	task_detail['picture_url']=''
+	task_detail['vedio_url']=''
+	task_detail['user_fansnum']=8
+	task_detail['weibos_sum']=79
+	task_detail['mid']=''
+	task_detail['ip']=''
+	task_detail['directed_uid']=''
+	task_detail['directed_uname']=''
+	task_detail['timestamp']=1507262100
+	task_detail['sentiment']=''
+	task_detail['geo']=''
+	task_detail['keywords_dict']=''
+	task_detail['keywords_string']=''
+	task_detail['sensitive_words_dict']=''
+	task_detail['sensitive_words_string']=''
+	task_detail['message_type']=''
+	task_detail['root_uid']=''
+	task_detail['origin_text']=''
+	task_detail['origin_keywords_dict']=''
+	task_detail['origin_keywords_string']=''
+	task_detail['comment']=0
+	task_detail['sensitive']=0
+	task_detail['sensitive_words_dict']=''
+	task_detail['retweeted']=0
 
-	results=create_xnr_flow_text(task_detail)
+	results=create_xnr_flow_text(task_detail,task_id)
 	return json.dumps(results)
 
 
