@@ -29,7 +29,8 @@ from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.qq_xnr_report_manage.views import mod as qqxnrreportmanageModule
 from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
-from flask.ext.security import SQLAlchemyUserDatastore
+#from flask.ext.security import SQLAlchemyUserDatastore
+from flask_security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
 from xnr.jinja import gender, tsfmt, Int2string, gender_text, user_email, user_location, user_birth, user_vertify, weibo_source
 

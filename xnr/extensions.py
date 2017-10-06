@@ -3,8 +3,11 @@
 import flask_admin as admin
 from flask_admin.contrib import sqla
 from flask import request, redirect, url_for, flash
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+#from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+# from flask.ext.security import Security, SQLAlchemyUserDatastore, \
+#             UserMixin, RoleMixin
+from flask_security import Security, SQLAlchemyUserDatastore, \
             UserMixin, RoleMixin
 
 

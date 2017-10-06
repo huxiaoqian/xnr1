@@ -211,7 +211,7 @@ def ajax_change_sensitive_words():
 def ajax_create_date_remind():
     date_name=request.args.get('date_name','')
     timestamp = request.args.get('timestamp','')
-    keywords = request.args.get('keywords','').split(',')
+    keywords = request.args.get('keywords','').split('，')
     #keywords_string = '&'.join(keywords.encode('utf-8').split('，'))  # 字符串，以 '&'连接
     create_type = request.args.get('create_type','')
     create_time = int(time.time())
