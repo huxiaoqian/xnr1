@@ -392,17 +392,6 @@ function mainJoin(data,idx) {
                 }
             },
             {
-                title: "用户UID",//标题
-                field: "uid",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[2];
-                // }
-            },
-            {
                 title: "用户昵称",//标题
                 field: "nick_name",//键名
                 sortable: true,//是否可排序
