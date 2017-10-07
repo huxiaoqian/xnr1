@@ -53,7 +53,7 @@ def get_influence_at_num(xnr_user_no):
                 'bool':{
                     'must':[
                         {'term':{'xnr_qq_number':qq_number}},
-                        {'wildcard':{'text':'*'+'@'+nickname+'*'}}
+                        {'wildcard':{'text':'*'+'@ME'+'*'}}
                     ]
                 }
             }
@@ -83,7 +83,7 @@ def get_influence_at_num(xnr_user_no):
                 'bool':{
                     'must':[
                         {'term':{'xnr_qq_number':qq_number}},
-                        {'wildcard':{'text':'*'+'@'+nickname+'*'}},
+                        {'wildcard':{'text':'*'+'@ME'+'*'}},
                         {'range':{'timestamp':{'lte':end_ts}}}
                     ]
                 }
