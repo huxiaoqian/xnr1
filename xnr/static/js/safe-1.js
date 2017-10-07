@@ -195,7 +195,7 @@ function radar(data) {
 }
 // 仪表盘图
 function dashBoard(dashVal) {
-    dashVal=Number(dashVal.toFixed(4))*100;
+    dashVal=(Number(dashVal).toFixed(4))*100;
     var myChart = echarts.init(document.getElementById('pc-2'),'dark');
     var option = {
         backgroundColor:'transparent',
@@ -214,7 +214,7 @@ function dashBoard(dashVal) {
                 type: 'gauge',
                 max:100,
                 detail: {formatter:'{value}'},
-                data: [{value: Number(dashVal), name: '渗透率'}]
+                data: [{value:dashVal, name: '渗透率'}]
             }
         ]
     };
