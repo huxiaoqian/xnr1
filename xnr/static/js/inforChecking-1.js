@@ -275,7 +275,7 @@ function activeUser(persondata) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.uname==''||row.uname=='null'||row.uname=='unknown'){
-                        return row.uid;
+                        return '无昵称';
                     }else {
                         return row.uname;
                     };

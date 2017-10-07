@@ -137,6 +137,7 @@
 <script src="/static/js/behaviorQQ-1.js"></script>
 <script>
     $('.coorName').text('行为评估');
+    weiboORqq('QQ');
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中

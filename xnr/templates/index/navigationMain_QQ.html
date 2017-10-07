@@ -52,11 +52,7 @@
         @media screen and (min-width:1370px) and (max-width:1920px) {
             .bg13 .warning {
                 top: 700px!important;
-                left: 700px!important;
-            }
-            .bg13 .evaluation {
-                top: 700px!important;
-                left: 1100px!important;
+                left: 890px!important;
             }
         }
     </style>
@@ -256,7 +252,7 @@
         $(".bg55-top").removeClass("effeckt-show");
     });
     //登录类型
-    localStorage.setItem('loginType',encodeURI('QQ'));
+//    localStorage.setItem('loginType',encodeURI('QQ'));
 
     //登录方式
     $('.weibo').hover(function () {
@@ -337,7 +333,7 @@
             localStorage.setItem('user',encodeURI(userID));
             localStorage.setItem('userRelName',encodeURI(userName));
             localStorage.setItem('userQQnum',encodeURI(userQQnum));
-            localStorage.setItem('userName',encodeURI(id_or_name));
+            localStorage.setItem('userQQName',encodeURI(id_or_name));
             window.open(htmlUrl);
         }
     });
