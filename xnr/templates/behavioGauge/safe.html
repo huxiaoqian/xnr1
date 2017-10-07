@@ -177,21 +177,8 @@
                             <div class="center-3" style="display: none;">
                                 <span>渗透人群领域：</span>
                                 <div id="userField">
-                                    <label class="demo-label" title="草根">
-                                        <input class="demo-radio" value="草根" type="radio" name="domain">
-                                        <span class="demo-checkbox demo-radioInput"></span> 草根</label>
-                                    <label class="demo-label" title="其他">
-                                        <input class="demo-radio" value="其他" type="radio" name="domain">
-                                        <span class="demo-checkbox demo-radioInput"></span> 其他</label>
-                                    <label class="demo-label" title="媒体">
-                                        <input class="demo-radio" value="媒体" type="radio" name="domain">
-                                        <span class="demo-checkbox demo-radioInput"></span> 媒体</label>
-                                    <label class="demo-label" title="活跃人士">
-                                        <input class="demo-radio" value="活跃人士" type="radio" name="domain">
-                                        <span class="demo-checkbox demo-radioInput"></span> 活跃人士
-                                    </label>
                                     <label class="demo-label" title="法律机构及人士">
-                                        <input class="demo-radio" value="法律机构及人士" type="radio" name="domain">
+                                        <input class="demo-radio" value="法律机构及人士" type="radio" name="domain" checked>
                                         <span class="demo-checkbox demo-radioInput"></span> 法律机构及人士</label>
                                     <label class="demo-label" title="政府机构及人士">
                                         <input class="demo-radio" value="政府机构及人士" type="radio" name="domain">
@@ -208,6 +195,19 @@
                                     <label class="demo-label" title="民间组织">
                                         <input class="demo-radio" value="民间组织" type="radio" name="domain">
                                         <span class="demo-checkbox demo-radioInput"></span> 民间组织
+                                    </label>
+                                    <label class="demo-label" title="草根">
+                                        <input class="demo-radio" value="草根" type="radio" name="domain">
+                                        <span class="demo-checkbox demo-radioInput"></span> 草根</label>
+                                    <label class="demo-label" title="其他">
+                                        <input class="demo-radio" value="其他" type="radio" name="domain">
+                                        <span class="demo-checkbox demo-radioInput"></span> 其他</label>
+                                    <label class="demo-label" title="媒体">
+                                        <input class="demo-radio" value="媒体" type="radio" name="domain">
+                                        <span class="demo-checkbox demo-radioInput"></span> 媒体</label>
+                                    <label class="demo-label" title="活跃人士">
+                                        <input class="demo-radio" value="活跃人士" type="radio" name="domain">
+                                        <span class="demo-checkbox demo-radioInput"></span> 活跃人士
                                     </label>
                                 </div>
                             </div>
@@ -465,6 +465,7 @@
 {% block my_js %}
 <script>
     judgment('5');
+    weiboORqq('weibo');
 </script>
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/safe-1.js"></script>
