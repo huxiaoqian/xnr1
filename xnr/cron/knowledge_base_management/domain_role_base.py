@@ -543,19 +543,19 @@ def group_description_analysis(detect_results,datetime_list):
     
     r_domain = dict()
 
-    if S_TYPE == 'test':
-        domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
-    else:
-        mget_domain_results = es_xnr.mget(index=portrait_index_name,doc_type=portrait_index_name,\
-                        body={'ids':uids_list})['docs']
+    #if S_TYPE == 'test':
+    domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    # else:
+    #     mget_domain_results = es_xnr.mget(index=portrait_index_name,doc_type=portrait_index_name,\
+    #                     body={'ids':uids_list})['docs']
         
         
-        if mget_domain_results:
-            for domain_result in mget_domain_results:
-                domain_result = domain_result['_source']
-                uid = domain_result['uid']
-                role_name = domain_result['domain']
-                r_domain[uid] = role_name
+    #     if mget_domain_results:
+    #         for domain_result in mget_domain_results:
+    #             domain_result = domain_result['_source']
+    #             uid = domain_result['uid']
+    #             role_name = domain_result['domain']
+    #             r_domain[uid] = role_name
 
     role_list = r_domain.values()
     #print 'r_domain::::::',r_domain
