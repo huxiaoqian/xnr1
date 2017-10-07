@@ -12,7 +12,8 @@ def save_xnr_like(like_info):
 	like_detail['uid']=like_info[0]
 	like_detail['photo_url']=like_info[1]
 	like_detail['nick_name']=like_info[2]
-	like_detail['mid']=like_info[3]
+	#like_detail['mid']=like_info[3]
+	like_detail['mid']=''
 	like_detail['timestamp']=like_info[4]
 	like_detail['text']=like_info[5]
 	like_detail['root_mid']=like_info[6]

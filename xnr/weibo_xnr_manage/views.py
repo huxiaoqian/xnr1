@@ -13,8 +13,9 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
-                  create_xnr_flow_text,delete_history_count,create_history_count,lookup_xnr_assess_info,\
-                  get_xnr_detail
+                  delete_history_count,create_history_count,lookup_xnr_assess_info,\
+                  get_xnr_detail,\
+                  create_xnr_flow_text,update_weibo_count,create_send_like
 from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
@@ -330,46 +331,6 @@ def ajax_wxnr_list_fans():
 	results=wxnr_list_fans(user_id,order_type)
 	return json.dumps(results)
 
-#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=daily_post&xnr_user_no=WXNR0004&uid=6346321407&text=下雨了，吼吼\(^o^)/~&user_fansnum=9&weibos_sum=47&mid=4143645403880308&timestamp=1503405480&comment=5&sensitive=1&retweeted=2
-#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=business_post&xnr_user_no=WXNR0004&uid=6346321407&text=国足加油~给力！&user_fansnum=9&weibos_sum=47&mid=4143645403880309&timestamp=1504615080&comment=115&sensitive=3&retweeted=255
-#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=孕妇跳楼案广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880319&timestamp=1504625080&comment=185&sensitive=5&retweeted=255
-#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
-@mod.route('/create_xnr_flow_text/')
-def ajax_create_xnr_flow_text():
-	task_id='WXNR0004_1507262140'
-	task_detail=dict()
-	task_detail['task_source']='热点跟随'
-	task_detail['xnr_user_no']='WXNR0004'
-	task_detail['uid']='6346321407'
-	task_detail['text']='天安门花坛吸引大量游客~故宫门票11点过后售罄~一票难求~'
-	task_detail['picture_url']=''
-	task_detail['vedio_url']=''
-	task_detail['user_fansnum']=8
-	task_detail['weibos_sum']=79
-	task_detail['mid']=''
-	task_detail['ip']=''
-	task_detail['directed_uid']=''
-	task_detail['directed_uname']=''
-	task_detail['timestamp']=1507262100
-	task_detail['sentiment']=''
-	task_detail['geo']=''
-	task_detail['keywords_dict']=''
-	task_detail['keywords_string']=''
-	task_detail['sensitive_words_dict']=''
-	task_detail['sensitive_words_string']=''
-	task_detail['message_type']=''
-	task_detail['root_uid']=''
-	task_detail['origin_text']=''
-	task_detail['origin_keywords_dict']=''
-	task_detail['origin_keywords_string']=''
-	task_detail['comment']=0
-	task_detail['sensitive']=0
-	task_detail['sensitive_words_dict']=''
-	task_detail['retweeted']=0
-
-	results=create_xnr_flow_text(task_detail,task_id)
-	return json.dumps(results)
-
 
 #按指标查询评估信息
 #assess_type=influence,safe,penetration
@@ -381,4 +342,74 @@ def ajax_lookup_xnr_assess_info():
 	end_time=int(request.args.get('end_time',''))
 	assess_type=request.args.get('assess_type','')
 	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
+	return json.dumps(results)
+
+
+
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=daily_post&xnr_user_no=WXNR0004&uid=6346321407&text=下雨了，吼吼\(^o^)/~&user_fansnum=9&weibos_sum=47&mid=4143645403880308&timestamp=1503405480&comment=5&sensitive=1&retweeted=2
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=business_post&xnr_user_no=WXNR0004&uid=6346321407&text=国足加油~给力！&user_fansnum=9&weibos_sum=47&mid=4143645403880309&timestamp=1504615080&comment=115&sensitive=3&retweeted=255
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=孕妇跳楼案广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880319&timestamp=1504625080&comment=185&sensitive=5&retweeted=255
+#http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
+@mod.route('/create_xnr_flow_text/')
+def ajax_create_xnr_flow_text():
+	task_id='WXNR0004_1507356360'
+	task_detail=dict()
+	task_detail['task_source']='daily_post'
+	task_detail['xnr_user_no']='WXNR0004'
+	task_detail['uid']='6346321407'
+	task_detail['text']='【连续32个月稳居世界第一 马龙创纪录！】最近，国际乒联公布了最新一期世界排名，男子乒坛，中国队长马龙以3307分稳居世界第一，并创造32个月稳居世界第一纪录。樊振东第二，许昕第三。此外，张继科跌落至第六，林高远则首次挤进世界前十，位列第九。（视频/@Captain龙博物馆 ）http://t.cn/RO2ydUV！'
+	task_detail['picture_url']=''
+	task_detail['vedio_url']=''
+	task_detail['user_fansnum']=8
+	task_detail['weibos_sum']=81
+	task_detail['mid']=''
+	task_detail['ip']=''
+	task_detail['directed_uid']=''
+	task_detail['directed_uname']=''
+	task_detail['timestamp']=1507356360
+	task_detail['sentiment']=''
+	task_detail['geo']=''
+	task_detail['keywords_dict']=''
+	task_detail['keywords_string']=''
+	task_detail['sensitive_words_dict']=''
+	task_detail['sensitive_words_string']=''
+	task_detail['message_type']=''
+	task_detail['root_uid']=''
+	task_detail['origin_text']=''
+	task_detail['origin_keywords_dict']=''
+	task_detail['origin_keywords_string']=''
+	task_detail['comment']=1
+	task_detail['sensitive']=0
+	task_detail['sensitive_words_dict']=''
+	task_detail['retweeted']=1
+
+	results=create_xnr_flow_text(task_detail,task_id)
+	return json.dumps(results)
+
+
+
+
+
+@mod.route('/update_weibo_count/')
+def ajax_update_weibo_count():
+    task_id='WXNR0004_2017-10-01'
+    task_detail=dict()
+    task_detail['date_time']='2017-10-01'
+    task_detail['safe']=19.22
+    task_detail['daily_post_num']=1
+    task_detail['user_fansnum']=8
+    task_detail['business_post_num']=0
+    task_detail['timestamp']=1506787200
+    task_detail['xnr_user_no']='WXNR0004'
+    task_detail['influence']=1.04
+    task_detail['penetration']=21.69
+    task_detail['total_post_sum']=1
+    task_detail['hot_follower_num']=0
+    results=update_weibo_count(task_detail,task_id)
+    return json.dumps(results)
+
+
+@mod.route('/create_send_like/')
+def ajax_create_send_like():
+	results=create_send_like(task_detail,task_id)
 	return json.dumps(results)

@@ -167,6 +167,6 @@ def daily_inerests_flow_text_mappings(index_name):
 
 
 if __name__=='__main__':
-    index_name = 'xnr_flow_text_2017-09-05'
+    index_name = 'xnr_flow_text_2017-10-07'
     weibo_xnr_flow_text_mappings(index_name)
     daily_inerests_flow_text_mappings(index_name)
