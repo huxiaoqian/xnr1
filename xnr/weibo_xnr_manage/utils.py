@@ -21,7 +21,7 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                              weibo_date_remind_index_name,weibo_date_remind_index_type
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
+from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
 from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
                            ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
@@ -591,23 +591,32 @@ def wxnr_timing_tasks_revoked(task_id):
 #step 4.3: history information
 #step 4.3.1:show history posting
 def show_history_posting(require_detail):
-	xnr_user_no=require_detail['xnr_user_no']	
-	task_source=require_detail['task_source']
-	es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-	uid=es_result['uid']
-	#print uid,task_source
+    xnr_user_no=require_detail['xnr_user_no']	
+    task_source=require_detail['task_source']
+    es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid=es_result['uid']
+    #print uid,task_source
 
-	#date_range_end_ts=require_detail['now_time']
-	#weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,date_range_end_ts)
+    #date_range_end_ts=require_detail['now_time']
+    #weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,date_range_end_ts)
 
-	date_range_start_ts=require_detail['start_time']
-	date_range_end_ts=require_detail['end_time']
-	#if S_TYPE == 'test':
-	#	weibo_xnr_flow_text_listname=['xnr_flow_text_2017-09-05']
-	#else:
-	weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
-	#print weibo_xnr_flow_text_listname
-	query_body={
+    date_range_start_ts=require_detail['start_time']
+    date_range_end_ts=require_detail['end_time']
+    #if S_TYPE == 'test':
+    #	weibo_xnr_flow_text_listname=['xnr_flow_text_2017-09-05']
+    #else:
+    temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+    weibo_xnr_flow_text_listname=[]
+    for index_name in temp_weibo_xnr_flow_text_listname:
+        #print 'index_name:',index_name
+        if es_xnr.indices.exists(index=index_name):
+            weibo_xnr_flow_text_listname.append(index_name)
+
+        else:
+            #print 'not_',index_name
+            pass
+    #print weibo_xnr_flow_text_listname
+    query_body={
 		'query':{
 			'filtered':{
 				'filter':{
@@ -621,36 +630,40 @@ def show_history_posting(require_detail):
 			}
 		},
 		'sort':{'timestamp':{'order':'desc'}},
-		'size':MAX_SEARCH_SIZE
-	}
+		'size':HOT_WEIBO_NUM
+    }
 
-	try:
-		result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-		post_result=[]
-		for item in result:
-			post_result.append(item['_source'])
-	except:
-		post_result=[]
-	return post_result
+    try:
+        #print weibo_xnr_flow_text_listname
+        if weibo_xnr_flow_text_listname:
+            result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            post_result=[]
+            for item in result:
+                post_result.append(item['_source'])
+        else:
+            post_result=[]
+    except:
+        post_result=[]
+    return post_result
 
 #step 4.3.2:show at content
 def show_at_content(require_detail):
-	xnr_user_no=require_detail['xnr_user_no']
-	es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-	uid=es_result['uid']
+    xnr_user_no=require_detail['xnr_user_no']
+    es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    uid=es_result['uid']
 
 	#content_type='weibo'表示@我的微博，='at'表示@我的评论
-	content_type=require_detail['content_type']
-	start_time=require_detail['start_time']
-	end_time=require_detail['end_time']
+    content_type=require_detail['content_type']
+    start_time=require_detail['start_time']
+    end_time=require_detail['end_time']
 
-	query_body={
+    query_body={
 		'query':{
 			'filtered':{
 				'filter':{
 					'bool':{
 						'must':[
-							{'term':{'uid':uid}},
+							{'term':{'root_uid':uid}},
 							{'range':{
 								'timestamp':{
 									'gte':start_time,
@@ -665,30 +678,32 @@ def show_at_content(require_detail):
 		},
 		'sort':{'timestamp':{'order':'desc'}},
 		'size':MAX_SEARCH_SIZE
-	}
+    }
 
 
-	index_name_list=[]
-	index_type_list=[]
-	for i in xrange(0,len(content_type)):
-		if content_type[i]=='weibo':
-			index_name_list.append(weibo_feedback_retweet_index_name)
-			index_type_list.append(weibo_feedback_retweet_index_type)
-		elif content_type[i]=='at':
-			index_name_list.append(weibo_feedback_at_index_name)
-			index_type_list.append(weibo_feedback_at_index_type)
+    index_name_list=[]
+    index_type_list=[]
+    #condition_list=[]
+    for i in xrange(0,len(content_type)):
+        if content_type[i]=='weibo':
+            index_name_list.append(weibo_feedback_retweet_index_name)
+            index_type_list.append(weibo_feedback_retweet_index_type)
+        elif content_type[i]=='at':
+            index_name_list.append(weibo_feedback_at_index_name)
+            index_type_list.append(weibo_feedback_at_index_type)
 
-	result=[]
-	for j in xrange(0,len(index_name_list)):
-		try:
-			r_result=es_xnr.search(index=index_name_list[j],doc_type=index_type_list[j],body=query_body)['hits']['hits']
-			#result=[]
-			for item in r_result:
-				result.append(item['_source'])
-		except:
-			result=[]
+    result=[]
+    for j in xrange(0,len(index_name_list)):
+        try:
+            r_result=es_xnr.search(index=index_name_list[j],doc_type=index_type_list[j],body=query_body)['hits']['hits']
+            #result=[]
+            for item in r_result:
+                result.append(item['_source'])
+        except:
+            result=[]
 		#results.append(result)
-	return result
+    #print index_name_list,start_time,end_time,uid
+    return result
 
 
 #step 4.3.3:show comment content
@@ -707,7 +722,7 @@ def show_comment_content(require_detail):
 				'filter':{
 					'bool':{
 						'must':[
-							{'term':{'uid':uid}},
+							{'term':{'root_uid':uid}},
 							{'terms':{'comment_type':comment_type}},
 							{'range':{
 								'timestamp':{
@@ -764,7 +779,7 @@ def lookup_receive_like(uid,start_time,end_time):
                 'filter':{
                 	'bool':{
                 		'must':[
-                			{'term':{'uid':uid}},
+                			{'term':{'root_uid':uid}},
                 			{'range':{
 								'timestamp':{
 									'gte':start_time,
@@ -1163,12 +1178,16 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail,task_id):
-	print task_id,task_detail
-    #try:
-	result=es_xnr.update(index="xnr_flow_text_2017-10-06",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
-	#	mark=True
-	#except:
-	#	mark=False
+	result=es_xnr.index(index="xnr_flow_text_2017-10-07",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 	return result
 	
 
+
+def update_weibo_count(task_detail,task_id):
+    result=es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body=task_detail)
+    return result
+
+
+def create_send_like(task_detail,task_id):
+    result=es_xnr.index(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,id=task_id,body=task_detail)
+    return result
