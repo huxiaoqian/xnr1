@@ -1,5 +1,43 @@
 var flag='',idbox='comment-1';
 var xnrUser=ID_Num;
+var end_time=Date.parse(new Date())/1000;
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var a=$(this).val();
+    if (a!='mize'){
+        $('#sureChoose').hide();
+        $('#start_1').hide();
+        $('#end_1').hide();
+        var $m=$('#container .type_page #myTabs li.active').attr('tp');
+        idbox=$('#container .type_page #myTabs li.active').attr('idbox');
+        var npp=$('.desc_index input:radio[name="desc"]:checked').val();
+        var _val=$(this).val();
+        var start=getDaysBefore(_val);
+        var allData_url='/weibo_xnr_manage/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+start+'&end_ts='+end_time;
+        public_ajax.call_request('get',allData_url,com);
+    }else {
+        $('#sureChoose').show();
+        $('#start_1').show();
+        $('#end_1').show();
+    }
+});
+$('.sureTime').on('click',function () {
+    var s=$('#start_1').val();
+    var d=$('#end_1').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var $m=$('#container .type_page #myTabs li.active').attr('tp');
+        idbox=$('#container .type_page #myTabs li.active').attr('idbox');
+        var npp=$('.desc_index input:radio[name="desc"]:checked').val();
+        var his_task_url='/weibo_xnr_manage/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
+            '&end_ts='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',his_task_url,com);
+    }
+});
+//======================
+
 $('.copyFinish').on('click',function () {
     flag=$('#myTabs li.active').attr('flag');
     var _name=$(this).parent().prev().prev().find('b').text();
@@ -11,18 +49,46 @@ $('.copyFinish').on('click',function () {
 $('#container .type_page #myTabs a').on('click',function () {
     var mmarrow=$(this).parent().attr('tp');
     idbox=$(this).parent().attr('idbox');
-    var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
-    public_ajax.call_request('get',comURL,com);
+    var not_time=$('.choosetime input:radio[name="time1"]:checked').val();
+    var start,end;
+    if (not_time=='mize'){
+        start=$('#start_1').val();
+        end=$('#end_1').val();
+    }else {
+        start=getDaysBefore(not_time);
+        end=end_time;
+    }
+    if (start&&end){
+        var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
+            '&start_ts='+start+'&end_ts='+end;
+        public_ajax.call_request('get',comURL,com);
+    }else {
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }
 })
 //排序选择
 $('#container .desc_index .demo-label input').on('click',function () {
     var tp1=$(this).val();
     var tp2=$('#myTabs li.active').attr('tp');
-    var comURL='/weibo_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1;
+    var tm=$('.choosetime input:radio[name="time1"]:checked').val();
+    var s,d;
+    if (tm!='mize'){
+        s=getDaysBefore(tm);
+        d=end_time;
+    }else {
+        var a=$('#start_1').val();
+        var b=$('#end_1').val();
+        s=(Date.parse(new Date(a))/1000);
+        d=(Date.parse(new Date(b))/1000);
+    }
+    var comURL='/weibo_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1+
+        '&start_ts='+s+'&end_ts='+d;
     public_ajax.call_request('get',comURL,com);
 })
 //评论回复----转发回复
-var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp';
+var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp'+
+    '&start_ts='+todayTimetamp()+'&end_ts='+end_time;
 public_ajax.call_request('get',comURL,com);
 function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
@@ -161,7 +227,6 @@ function com(data) {
 }
 //====私信回复====
 function letter(data) {
-    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,

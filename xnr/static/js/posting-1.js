@@ -567,7 +567,7 @@ $('#theme-2 .demo-label input').on('click',function () {
 $('#theme-3 .demo-label input').on('click',function () {
     var the=$(this).val();
     var theSort=$('#theme-2 .demo-label input:radio[name="theme2h"]:checked').val();
-    var the_url='/weibo_xnr_operate/hot_recommend_tweets/?topic_field='+the+'&sort_item='+theSort;
+    var the_url='/weibo_xnr_operate/hot_recommend_tweets/?topic_field='+theSort+'&sort_item='+the;
     public_ajax.call_request('get',the_url,hotWeibo)
 });
 var hotWeiboUrl='/weibo_xnr_operate/hot_recommend_tweets/?topic_field=民生类_法律&sort_item=timestamp';

@@ -11,6 +11,7 @@
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    #field .demo-label,#userField .demo-label {display:block;width: auto;}
     /**/
     .bootstrap-table {
         margin: 0 auto;
@@ -89,14 +90,14 @@
                     <div id="postContent-2">
                         <div class="pc-3" style="margin:0 0 20px 0;">
                             <img src="/static/images/icon.png" alt="">
-                            <span style="font-size: 18px;font-weight: 900;color: #fff">相关发帖</span>
+                            <span class="_tit" style="font-size: 18px;font-weight: 900;color: #fff"></span>
                         </div>
                         <div class="pc-4" style="margin-left: 30px;">
                             <div class="center-1">
-                                <span>渗透领域：</span>
+                                <span>渗透话题领域：</span>
                                 <div id="field">
                                     <label class="demo-label" title="民生类_法律">
-                                        <input class="demo-radio" type="radio" name="theme2" value='民生类_法律'>
+                                        <input class="demo-radio" type="radio" name="theme2" value='民生类_法律' checked>
                                         <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
                                     </label>
                                     <label class="demo-label" title="文体类_娱乐">
