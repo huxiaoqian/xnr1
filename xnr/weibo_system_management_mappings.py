@@ -24,19 +24,24 @@ def weibo_log_management_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'login_time':{
+					'login_time':{ #登录时间list[15....,15.....]
+						'type':'string',
+						'index':'no'
+					},
+					'login_ip':{#登录ip list
+						'type':'string',
+						'index':'no'
+					},
+					'operate_time':{  #操作日期时间戳
 						'type':'long'
 					},
-					'login_ip':{
+					'operate_content':{  #操作内容dict
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
-					'operate_time':{
-						'type':'long'
-					},
-					'operate_content':{
-						'type':'string',
-						'index':'not_analyzed'
+					'operate_date':{      #操作日期
+					     'type':'string',
+					     'index':'not_analyzed'
 					}
 				}
 			}
