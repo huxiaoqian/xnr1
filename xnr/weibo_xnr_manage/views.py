@@ -411,5 +411,29 @@ def ajax_update_weibo_count():
 
 @mod.route('/create_send_like/')
 def ajax_create_send_like():
+	task_id='6346321407_1507451940'
+	task_detail=dict()
+	task_detail['update_time']=1507452240      #点赞时间
+	task_detail['uid']=''           #6340301597'       #点赞对象uid
+	task_detail['root_uid']='6346321407'
+	task_detail['nick_name']='巨星大大'
+	task_detail['text']='鹿晗关晓彤\
+关晓彤工作室\
+鹿晗工作室\
+陈翔哭了\
+陈翔 说散就散\
+鹿晗 有了女朋友一定会公开\
+陈赫点赞\
+鹿晗关晓彤踢球\
+鹿晗掉粉\
+关晓彤爸爸\
+关晓彤会解二元一次方程\
+什么乱七八糟滴……微博出问题了吧！\
+我们还在景区 堵着呢…… http://t.cn/RObS6p0'
+	task_detail['mid']=''
+	task_detail['weibo_type']='stranger'
+	task_detail['timestamp']=1507451940       #微博时间
+	task_detail['root_mid']=''
+	task_detail['photo_url']=''
 	results=create_send_like(task_detail,task_id)
 	return json.dumps(results)
