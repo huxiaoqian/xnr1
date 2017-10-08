@@ -258,6 +258,7 @@ def xnr_today_remind(xnr_user_no,now_time):
     date_remind_flag=0
     date_remind_content=[]
     date_result=show_date_count(now_time)         #修改
+    #print date_result
     for date_item in date_result:
         if (date_item['countdown_days']>0) and (date_item['countdown_days']<REMIND_DAY):
             date_remind_flag=date_remind_flag+1
@@ -301,6 +302,7 @@ def show_date_count(today_time):
         countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
 
         item['_source']['countdown_days']=countdown_num
+        date_warming_result.append(item['_source'])
         
     return date_warming_result
 
@@ -878,18 +880,20 @@ def get_weibohistory_like(task_detail):
     root_mid=task_detail['r_mid']
 
     xnr_user_no=task_detail['xnr_user_no']
+    #print 'xnr_user_no:',xnr_user_no
     xnr_es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     account_name=xnr_es_result['weibo_mail_account']
     password=xnr_es_result['password']
     root_uid=xnr_es_result['uid']
 
+    
     xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-    if xnr_result['followers_list']:
+    if xnr_result.get('followers_list',''):
         followers_list=xnr_result['followers_list']
     else:
         followers_list=[]
 
-    if xnr_result['fans_list']:
+    if xnr_result.get('fans_list',''):
         fans_list=xnr_result['fans_list']
     else:
         fans_list=[]
@@ -1145,6 +1149,11 @@ def delete_weibo_xnr(xnr_user_no):
 #   step 7：虚拟人评估信息  #
 ###############################
 def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
+    if S_TYPE == 'test':
+        star_time=1506787200     #10月1日
+        end_time=1507305600      #10月7日
+    else:
+        pass
     query_body={
         'fields':['date_time',assess_type],
         'query':{

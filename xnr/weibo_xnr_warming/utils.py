@@ -291,7 +291,8 @@ def show_event_warming(xnr_user_no):
         test_day_time=datetime2ts(test_day_date)
         flow_text_index_list=get_flow_text_index_list(test_day_time)
         #print flow_text_index_list
-        hashtag_list=[('网络义勇军发布',13),('美国',7),('芒果TV',6),('德国',5),('中国',4),('清真食品',3),('反邪动态',2),('台海观察',2),('每日一药',2),('雷哥微评',2),('PPAP洗脑神曲',1),('中国军队',1)]
+        hashtag_list=[('网络义勇军发布',13),('美国',7),('德国',5),('中国',4),('清真食品',3),('反邪动态',2),('台海观察',2),('雷哥微评',2),('中国军队',1)]
+        #hashtag_list=[('网络义勇军发布',13),('美国',7),('芒果TV',6),('德国',5),('中国',4),('清真食品',3),('反邪动态',2),('台海观察',2),('每日一药',2),('雷哥微评',2),('PPAP洗脑神曲',1),('中国军队',1)]
         #weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
     else:
         flow_text_index_list=get_flow_text_index_list(now_time)
@@ -310,7 +311,7 @@ def show_event_warming(xnr_user_no):
     #print 'weibo_xnr_fans_followers_time:',time.time()
     event_warming_list=[]
     for event_item in hashtag_list:
-        print event_item,event_item[0]
+        #print event_item,event_item[0]
         event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
@@ -554,7 +555,7 @@ def lookup_weibo_date_warming(keywords,today_time):
 #言论内容预警上报report_content=[weibo_dict]
 #事件涌现预警上报report_content=[user_list,weibo_list]
 #user_dict=[uid,nick_name,fansnum,friendsnum]
-#weibo_dict=[mid,text,timestamp,retweeted,like,comment]
+#weibo_dict=[mid,text,timestamp,retweeted,like,comment,sensitive,sensitive_words_string]
 #user_list=[user_dict,user_dict,....]
 #weibo_list=[weibo_dict,weibo_dict,....]
 def report_warming_content(report_info,user_info,weibo_info):
@@ -597,6 +598,8 @@ def report_warming_content(report_info,user_info,weibo_info):
             weibo_dict['retweeted']=weibo_detail[3]
             weibo_dict['like']=weibo_detail[4]
             weibo_dict['comment']=weibo_detail[5]
+            #weibo_dict['sensitive']=weibo_detail[6]
+            #weibo_dict['sensitive_words_string']=weibo_detail[7]
             weibo_list.append(weibo_dict)
 
     report_content=dict()

@@ -91,8 +91,8 @@ def ajax_show_date_warming():
 
 ############公共操作部分#####################
 #一键上报
-#user_dict=[uid,nick_name,fansnum,friendsnum]
-#weibo_dict=[mid,text,timestamp,retweeted,like,comment]
+#user_info=[uid,nick_name,fansnum,friendsnum]
+#weibo_info=[mid,text,timestamp,retweeted,like,comment,sensitive,sensitive_words_string]
 #人物行为预警上报report_content=[weibo_list]
 #test:http://219.224.134.213:9209/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no=WXNR0003&uid=2659684317&weibo_info=4044828436797896,'//@掌管颖的后宫: #赵丽颖# 本夫人在此[哈哈][哈哈]@赵丽颖 //@赵丽颖数据小分队:#赵丽颖# #赵丽颖楚乔传# 总裁夫人集合完毕@赵丽颖 [心][心][心]#特工皇妃楚乔传# #赵丽颖乘风破浪#',1479845711,0,0,0*4044828486221158,'//@掌管颖的后宫: #赵丽颖# 本夫人在此[哈哈][哈哈]@赵丽颖 //@赵丽颖数据小分队:#赵丽颖# #赵丽颖楚乔传# 总裁夫人集合完毕@赵丽颖 [心][心][心]#特工皇妃楚乔传# #赵丽颖乘风破浪#',1479845723,0,0,0*4044828503513100,'//@掌管颖的后宫: #赵丽颖# 本夫人在此[哈哈][哈哈]@赵丽颖 //@赵丽颖数据小分队:#赵丽颖# #赵丽颖楚乔传# 总裁夫人集合完毕@赵丽颖 [心][心][心]#特工皇妃楚乔传# #赵丽颖乘风破浪# n',1479845727,0,0,0	
 #http://219.224.134.213:9209/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no=WXNR0003&uid=2659684317&weibo_info=4044828436797896,'//@掌管颖的后宫本夫人在此',1479845711,0,0,0*4044828486221158,'//@掌管颖的后宫赵丽颖',1479845723,0,0,0*4044828503513100,'//@掌管颖的后宫本夫人在此n',1479845727,0,0,0	
