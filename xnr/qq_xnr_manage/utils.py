@@ -236,13 +236,15 @@ def show_qq_xnr(MAX_VALUE):
                 }
             }
         }
+        try:
+            count_result = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,body=query_body)
 
-        count_result = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,body=query_body)
-
-        if count_result['_shards']['successful'] != 0:
-            today_count = count_result['count']
-        else:
-            print 'es index rank error'
+            if count_result['_shards']['successful'] != 0:
+                today_count = count_result['count']
+            else:
+                print 'es index rank error'
+                today_count = 0
+        except:
             today_count = 0
 
         item_dict['daily_post_num'] = today_count
