@@ -40,7 +40,7 @@ def uid2nick_name_photo(uid):
         nick_name = user['nick_name']
         photo_url = user['photo_url']
     except:
-        nick_name = ''
+        nick_name = uid
         photo_url = ''
         
     return nick_name,photo_url

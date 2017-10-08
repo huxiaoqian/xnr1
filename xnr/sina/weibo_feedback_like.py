@@ -120,6 +120,7 @@ class FeedbackLike:
 
     def execute(self):
         likes = self.likeInbox()
+        
         executeES('weibo_feedback_like', 'text', likes)
 
 
