@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import base64
 import os
+import json
+import sqlite
+import sqlite3
 import flask_security
 from flask_login import current_user
 from flask import g, session, flash, redirect, request, render_template
@@ -18,6 +21,9 @@ from flask_login import LoginManager, login_user, login_required, logout_user
 
 
 from xnr.extensions import db, user_datastore
+from xnr.time_utils import ts2datetime
+from xnr.global_utils import es_xnr,weibo_log_management_index_name,weibo_log_management_index_type
+
 
 optparser = OptionParser()
 optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number', default=9001, type='int')
@@ -95,6 +101,27 @@ def after_request(response):
 @app.route('/')
 @login_required
 def homepage():
+    ip = request.remote_addr
+    timestamp = int(time.time())
+    user_name = ''
+    _id = current_user.get_id()
+    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    #cx = sqlite3.connect("sqlite:///flask-admin.db")
+    cu=cx.cursor()
+    users = cu.execute("select id,email   from user") 
+    for row in users:
+        if row[0] == int(_id):
+            user_name = row[1]
+            break
+    cx.close()
+    
+    log_id = user_name + ts2datetime(timestamp)
+    
+    item_dict = {}
+    item_dict['user_name'] = user_name
+    es.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
+        id=log_id,body=item_dict)
+
     return render_template('index/navigationMain.html')
 
 # logout
@@ -106,6 +133,34 @@ def logout():
     flash(u'登出成功')
 
     return redirect("/login") #redirect(request.args.get('next', None))
+
+
+# get ip
+# @app.route('/get_ip/')
+# def index():
+#     user_name = ''
+#     ip = request.remote_addr
+#     _id = current_user.get_id()
+#     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+#     #cx = sqlite3.connect("sqlite:///flask-admin.db")
+#     cu=cx.cursor()
+#     users = cu.execute("select id,email   from user") 
+#     for row in users:
+#         if row[0] == int(_id):
+#             user_name = row[1]
+#             break
+#     cx.close()
+#     return json.dumps([ip,user_name])
+
+# get user 
+@app.route('/get_user/')
+def get_user():
+    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cu=cx.cursor()
+    cu.execute("select email from user") 
+    user_info = cu.fetchall()
+    cx.close()
+    return json.dumps(user_info)
 
 # app run
 app.run(host='0.0.0.0', port=options.port)
