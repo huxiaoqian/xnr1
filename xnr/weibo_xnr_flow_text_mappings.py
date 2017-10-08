@@ -200,7 +200,9 @@ def user_domain_mappings():
         es.indices.create(index=user_domain_index_name,body=index_info,ignore=400)
 
 if __name__=='__main__':
-    #index_name = 'xnr_flow_text_2017-09-05'
-    #weibo_xnr_flow_text_mappings(index_name)
-    #daily_inerests_flow_text_mappings(index_name)
+
     user_domain_mappings()
+    index_name = 'xnr_flow_text_2017-10-07'
+    weibo_xnr_flow_text_mappings(index_name)
+    daily_inerests_flow_text_mappings(index_name)
+

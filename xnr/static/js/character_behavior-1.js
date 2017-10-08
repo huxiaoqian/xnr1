@@ -2,13 +2,14 @@ var time=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
-        pageList: [15,20,25],//分页步进值
+        pageSize: 1,//单页记录数
+        pageList: [3,7,11],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
         searchOnEnterKey: false,//回车搜索
@@ -107,6 +108,7 @@ function weibo(data) {
             },
         ],
     });
+    $('#weiboContent p').slideUp(30);
 };
 
 // 转发===评论===点赞

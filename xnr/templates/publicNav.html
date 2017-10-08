@@ -103,16 +103,21 @@
 <script src="/static/echarts/china.js"></script>
 <script>
     //几天前的时间戳
-    function getDaysBefore(m){
-        var date = new Date(),
-            timestamp, newDate;
-        if(!(date instanceof Date)){
-            date = new Date(date);
-        }
-        timestamp = date.getTime();
-        newDate = new Date(timestamp - m * 24 * 3600 * 1000);
-        return Number(Date.parse(newDate).toString().substring(0,10));
-    };
+//    function getDaysBefore(m){
+//        var date = new Date(),
+//            timestamp, newDate;
+//        if(!(date instanceof Date)){
+//            date = new Date(date);
+//        }
+//        timestamp = date.getTime();
+//        newDate = new Date(timestamp - m * 24 * 3600 * 1000);
+//        return Number(Date.parse(newDate).toString().substring(0,10));
+//    };
+    function getDaysBefore($time) {
+        var a=new Date(new Date(new Date().setDate(new Date().getDate()-Number($time))).setHours(0,0,0,0));
+        var b=Date.parse(a)/1000;
+        return b;
+    }
     //当天零点的时间戳
     function todayTimetamp() {
         var start=new Date();
@@ -162,11 +167,6 @@
         ISclear='clear';
     },21600000);
 
-//    var not_creat=$('.coorName').text();
-//    if (not_creat!='虚拟人定制'){
-//        localStorage.removeItem('firstStep');
-//        localStorage.removeItem('secondStep');
-//    }
 
     //ajax请求
     var public_ajax={
@@ -197,6 +197,13 @@
     //登录用户名
     var admin='admin@qq.com';
     //登录虚拟人后取出ID或者名字
+    function weiboORqq(type) {
+        if (type=='weibo'){
+            InloginName('微博虚拟人','QQ群虚拟人','（微博）');
+        }else {
+            InloginName('QQ群虚拟人','微博虚拟人','（QQ群）');
+        }
+    }
     var ID_Num=localStorage.getItem('user');
     var REL_name=localStorage.getItem('userRelName');
     var ID_name=localStorage.getItem('userName');
@@ -217,23 +224,21 @@
             window.open('/index/navigationQQ/');
         }
     });
-    var loginType=localStorage.getItem('loginType');
-    if (loginType=='weibo'){
-        InloginName('/index/navigation/','微博虚拟人','QQ群虚拟人','（微博）');
-    }else {
-        InloginName('/index/navigationQQ/','QQ群虚拟人','微博虚拟人','（QQ群）');
-    }
+//    var loginType=localStorage.getItem('loginType');
+//    if (loginType=='weibo'){
+//        InloginName('/index/navigation/','微博虚拟人','QQ群虚拟人','（微博）');
+//    }else {
+//        InloginName('/index/navigationQQ/','QQ群虚拟人','微博虚拟人','（QQ群）');
+//    }
     $('#backHome').on('click',function () {
         var lf=$('.loadingUser').find('.nav_type').text();
-        console.log(lf)
         if (lf=='（QQ群）'){
             $('#backHome .list_one.li_a').attr('href','/index/navigationQQ/');
         }else {
             $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }
     })
-    function InloginName(one,two,three,four) {
-//        $('#backHome .list_one').attr('href',one);
+    function InloginName(two,three,four) {
         $('.current').find('span').text(two);
         $('.old').find('span').text(three);
         $('.loadingUser .nav_name').text(nowUser);
@@ -362,29 +367,6 @@
         $('.behind').html(afterEle);
     };
 
-    //网页缩小放大
-//    function detectZoom (){
-//        var ratio = 0, screen = window.screen, ua = navigator.userAgent.toLowerCase();
-//        if (window.devicePixelRatio !== undefined) {
-//            ratio = window.devicePixelRatio;
-//        } else if (~ua.indexOf('msie')) {
-//            if (screen.deviceXDPI && screen.logicalXDPI) {
-//                ratio = screen.deviceXDPI / screen.logicalXDPI;
-//            }
-//        } else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
-//            ratio = window.outerWidth / window.innerWidth;
-//        };
-//        if (ratio){
-//            ratio = Math.round(ratio * 100);
-//        };
-//        return ratio;
-//    };
-//    $(window).resize(function() {
-//        var a=window.screen.width;
-//        var zoom=detectZoom();
-//		var b=zoom/100;
-//        $('#container').css({transform:'scale('+b+')'});
-//    });
 </script>
 {% endblock %}
 

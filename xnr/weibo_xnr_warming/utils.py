@@ -183,8 +183,12 @@ def show_speech_warming(xnr_user_no,show_type,day_time):
     #try:
     results=es_flow_text.search(index=flow_text_index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
     result=[]
+    un_id_list=['4045093692450438','4045096116622444','4045095374193153','4045095567336676','4045092304116237','4045093297982719','4045178576337277','4044647661388452']
     for item in results:
-        result.append(item['_source'])
+        if item['_id'] in un_id_list:
+            pass
+        else:
+            result.append(item['_source'])
     #except:
     #    result=[]
     return result
@@ -239,7 +243,11 @@ def get_hashtag():
             uid_list.append(uid)
 
     for uid in uid_list:
-        hashtag = r_cluster.hget('hashtag_'+'1480176000',uid)
+        if S_TYPE == 'test':
+            hashtag = r_cluster.hget('hashtag_'+str(datetime2ts(S_DATE)+7*DAY),uid)
+        else:
+            hashtag = r_cluster.hget('hashtag_'+str((time.time()-DAY)),uid)
+
         if hashtag != None:
             hashtag = hashtag.encode('utf8')
             hashtag = json.loads(hashtag)
@@ -251,7 +259,7 @@ def get_hashtag():
                     hashtag_list[k] = v
         #r_cluster.hget('hashtag_'+str(a))
 
-    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:20]
+    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:200]
 
     return hashtag_list
 
@@ -283,7 +291,7 @@ def show_event_warming(xnr_user_no):
         test_day_time=datetime2ts(test_day_date)
         flow_text_index_list=get_flow_text_index_list(test_day_time)
         #print flow_text_index_list
-        #hashtag_list=[['林俊杰',25],['一句心情笔记',15],['转发微博',10]]
+        hashtag_list=[('网络义勇军发布',13),('美国',7),('芒果TV',6),('德国',5),('中国',4),('清真食品',3),('反邪动态',2),('台海观察',2),('每日一药',2),('雷哥微评',2),('PPAP洗脑神曲',1),('中国军队',1)]
         #weibo_xnr_flow_text_listname=['flow_text_2016-11-26','flow_text_2016-11-25','flow_text_2016-11-24']
     else:
         flow_text_index_list=get_flow_text_index_list(now_time)
@@ -302,7 +310,7 @@ def show_event_warming(xnr_user_no):
     #print 'weibo_xnr_fans_followers_time:',time.time()
     event_warming_list=[]
     for event_item in hashtag_list:
-        #print event_item[0]
+        print event_item,event_item[0]
         event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
@@ -401,8 +409,8 @@ def show_event_warming(xnr_user_no):
                         user_dict['photo_url']=''
                         user_dict['uid']=item['_id']
                         user_dict['nick_name']=''
-                        user_dict['favoritesnum']=''
-                        user_dict['fansnum']=''
+                        user_dict['favoritesnum']=0
+                        user_dict['fansnum']=0
                     main_user_info.append(user_dict)
                 event_warming_content['main_user_info']=main_user_info
                 #print 'main_user_info:',main_user_info
@@ -430,8 +438,9 @@ def show_event_warming(xnr_user_no):
         except:
             event_warming_content['main_user_info']=[]
         
-        print 'user_search_time:',time.time()
+        #print 'user_search_time:',time.time()
         if event_sensitive_count > 0:
+            #print event_warming_content['event_name']
             event_warming_list.append(event_warming_content)
         else:
             pass
@@ -462,6 +471,13 @@ def show_date_warming(today_time):
     }
     result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
     #取出预警时间进行处理
+
+    if S_TYPE == 'test':
+        today_time=1480176000
+    else:
+        pass
+
+    #print today_time
     date_warming_result=[]
     for item in result:
         #计算距离日期
@@ -503,6 +519,7 @@ def lookup_weibo_date_warming(keywords,today_time):
         end_time=datetime2ts(S_DATE_BCI)
         start_time=end_time - test_time_gap
         flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,start_time,end_time)
+        #print flow_text_index_name_list
     else:
         start_time=today_time-DAY*WARMING_DAY
         flow_text_index_name_list=get_xnr_flow_text_index_listname(flow_text_index_name_pre,start_time,today_time)

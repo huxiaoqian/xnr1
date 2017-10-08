@@ -162,6 +162,26 @@ function senUser(data) {
                 }
             },
         ],
+        onClickRow: function (row, $element) {
+            $('#QQgroup_weibo .QW-1').text(row.qq_number);
+            var txt=row.text,str='';
+            if (txt.length!=0||txt){
+                $.each(txt,function (index,item) {
+                    str+=
+                        '<div class="center_rel" style="margin-bottom: 10px;">'+
+                        '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
+                        '   <a class="center_1 qq-2" href="###" style="color:blanchedalmond;font-weight: 700;">'+item[0]+'</a>'+
+                        '   <b class="qq-1" style="display: none;">'+item[1]+'</b>'+
+                        '   <span class="joinWord" onclick="joinWord(this)" tp="user">上报</span>'+
+                        '</div>';
+                })
+            }else {
+                str='<p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">暂无任何敏感内容</p>';
+            }
+
+            $('#QQgroup_weibo .QW-2').html(str);
+            $('#QQgroup_weibo').modal('show');
+        }
     });
     $('.hot-2 .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 }
@@ -179,10 +199,10 @@ $('#container .titTime .timeSure').on('click',function () {
         public_ajax.call_request('get',senUserurl,senUser);
     }
 });
-//加入语料库
+//上报
 function joinWord(_this) {
-    var qq_1=$(_this).parents('.center_1').find('.QQnum').text();
-    var qq_2=$(_this).parents('.center_1').next('.center_2').find('span').text();
+    var qq_1=($(_this).parents('.center_1').find('.QQnum').text())||($(_this).prev().text());
+    var qq_2=($(_this).parents('.center_1').next('.center_2').find('span').text())||($(_this).parents('.center_rel').find('qq-2').text());
     var reportType=$(_this).attr('tp');
     var upload_mange_url='/qq_xnr_monitor/report_warming_content/?report_type='+reportType+'&xnr_user_no='+ID_Num+
         '&qq_number='+qq_1+'&report_content='+qq_2;
@@ -207,7 +227,6 @@ function joinWord(_this) {
             $('#errorInfor').modal('show');
         },
     });
-    //public_ajax.call_request('get',upload_mange_url,postYES);
 }
 //确定加入
 //操作返回结果
