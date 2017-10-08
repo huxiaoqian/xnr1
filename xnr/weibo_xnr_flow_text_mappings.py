@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 import sys
 import json
-from global_utils import es_xnr as es
+from global_utils import es_xnr as es,domain_distribute_tweets_index_name_pre,\
+            domain_distribute_tweets_index_type,user_domain_index_name,\
+            user_domain_index_type
 
 def weibo_xnr_flow_text_mappings(index_name):
     index_info = {
@@ -165,8 +167,42 @@ def daily_inerests_flow_text_mappings(index_name):
     if not exist_indice:
         es.indices.create(index=index_name, body=index_info, ignore=400)
 
+def user_domain_mappings():
+
+    index_info = {
+        'settings':{
+            'number_of_replicas':0,
+            'number_of_shards':5
+        },
+        'mappings':{
+            user_domain_index_type:{
+                'properties':{
+                    'uid':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'update_time':{
+                        'type':'long'
+                    },
+                    'domain_name':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    }
+                }
+            }
+        }
+    }
+
+    exist_indice = es.indices.exists(index=user_domain_index_name)
+
+    if not exist_indice:
+
+        es.indices.create(index=user_domain_index_name,body=index_info,ignore=400)
 
 if __name__=='__main__':
+
+    user_domain_mappings()
     index_name = 'xnr_flow_text_2017-10-07'
     weibo_xnr_flow_text_mappings(index_name)
     daily_inerests_flow_text_mappings(index_name)
+
