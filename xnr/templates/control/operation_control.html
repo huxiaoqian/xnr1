@@ -255,11 +255,11 @@
                     <div role="tabpanel" class="tab-pane" id="comment" box="commentCOT">
                         <div class="aa mycom">
                             <label class="demo-label" title="收到的评论">
-                                <input class="demo-radio" type="checkbox" name="mycom" value='make' checked>
+                                <input class="demo-radio" type="checkbox" name="mycom" value='receive' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 收到的评论
                             </label>
                             <label class="demo-label" title="发出的评论">
-                                <input class="demo-radio" type="checkbox" name="mycom" value='receive'>
+                                <input class="demo-radio" type="checkbox" name="mycom" value='make'>
                                 <span class="demo-checkbox demo-radioInput"></span> 发出的评论
                             </label>
                         </div>
@@ -271,13 +271,13 @@
                     </div>
                     <div role="tabpanel" class="tab-pane" id="thumbs" box="likes">
                         <div class="aa favorit">
-                            <label class="demo-label" title="收到的评论">
-                                <input class="demo-radio" type="checkbox" name="likely" value='send' checked>
-                                <span class="demo-checkbox demo-radioInput"></span> 收到的评论
+                            <label class="demo-label" title="收到的赞">
+                                <input class="demo-radio" type="checkbox" name="likely" value='receive' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 收到的赞
                             </label>
-                            <label class="demo-label" title="发出的评论">
-                                <input class="demo-radio" type="checkbox" name="likely" value='receive'>
-                                <span class="demo-checkbox demo-radioInput"></span> 发出的评论
+                            <label class="demo-label" title="发出的赞">
+                                <input class="demo-radio" type="checkbox" name="likely" value='send'>
+                                <span class="demo-checkbox demo-radioInput"></span> 发出的赞
                             </label>
                         </div>
                         <div class="likes">
@@ -657,6 +657,7 @@
 <script>
 //    $('#firstChoose').modal('show');
     judgment('2');
+    weiboORqq('weibo');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
         if (_eq==1){
