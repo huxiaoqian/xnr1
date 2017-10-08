@@ -19,17 +19,18 @@ def create_log_list(log_info):
 	log_detail=dict()
 	log_detail['user_id']=log_info[0]
 	log_detail['user_name']=log_info[1]
-	log_detail['login_time']=log_info[2]
-	log_detail['login_ip']=log_info[3]
+	log_detail['login_time']=log_info[2].split('*')
+	log_detail['login_ip']=log_info[3].split('*')
 	log_detail['operate_time']=log_info[4]
-	log_detail['operate_content']=log_info[5]
-	log_id=log_info[0]+log_info[4]
+	log_detail['operate_content']=log_info[5].split('*')
+	log_detail['operate_date']=log_info[6]
+	log_id=log_info[1]+'_'+log_info[6]
 
-	try:
-		es.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,id=log_id,body=log_detail)
-		result=True
-	except:
-		result=False
+	#try:
+	result=es.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,id=log_id,body=log_detail)
+	#	result=True
+	#except:
+	#	result=False
 	return result
 
 #show log management
