@@ -246,3 +246,6 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
+
+import getpass
+print getpass.getuser()

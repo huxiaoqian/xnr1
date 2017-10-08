@@ -1683,14 +1683,15 @@ def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
 
     return [mark,fail_uids,fail_nick_name_list]
 
-def get_show_retweet_timing_list(xnr_user_no):
+def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
 
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'xnr_user_no':xnr_user_no}
-                }
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts,'lt':end_ts}}}
+                ]
             }
         },
         'size':MAX_SEARCH_SIZE,
