@@ -110,8 +110,7 @@ $('.findSure').on('click',function () {
     }else {
         ids=ids.replace(/,/g,'，');
         idNAME='searchResult';
-        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=influence&uids='+
-            '1249868467，5646533711，2702763965'//+ids;
+        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=influence&uids='+ids;
         public_ajax.call_request('get',searchUrl,related);
         $('.searchResult').slideDown(30);
     }

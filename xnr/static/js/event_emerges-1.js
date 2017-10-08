@@ -392,17 +392,6 @@ function mainJoin(data,idx) {
                 }
             },
             {
-                title: "用户UID",//标题
-                field: "uid",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                // formatter: function (value, row, index) {
-                //     return row[2];
-                // }
-            },
-            {
                 title: "用户昵称",//标题
                 field: "nick_name",//键名
                 sortable: true,//是否可排序
@@ -426,7 +415,7 @@ function mainJoin(data,idx) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.favoritesnum==''||row.favoritesnum=='unknown'||row.favoritesnum=='numm'||!row.favoritesnum){
-                        return 0;
+                        return '-';
                     }else {
                         return row.favoritesnum;
                     }
@@ -439,6 +428,13 @@ function mainJoin(data,idx) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.fansnum==''||row.fansnum=='unknown'||row.fansnum=='numm'||!row.fansnum){
+                        return '-';
+                    }else {
+                        return row.fansnum;
+                    }
+                },
             },
             // {
             //     title: '操作',//标题

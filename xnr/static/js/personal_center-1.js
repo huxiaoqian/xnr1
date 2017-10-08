@@ -6,7 +6,8 @@ function auto() {
 }
 auto();
 function has_table(has_data) {
-    var person=eval(has_data)
+    var person=eval(has_data);
+    console.log(person)
     $('.has_list #haslist p').show();
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
@@ -153,7 +154,7 @@ function has_table(has_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;color:white;" onclick="comeIn(\''+row.xnr_user_no+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
+                    return '<a style="cursor: pointer;color:white;" onclick="comeIn(\''+row.xnr_user_no+'\',\''+row.nick_name+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\',\'1\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="deluser(\''+row.xnr_user_no+'\',\'1\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
@@ -305,8 +306,9 @@ function go_on(id,flag) {
     // public_ajax.call_request('GET',go_url,success_fail);
 }
 //进入操作统计
-function comeIn(id) {
+function comeIn(id,name) {
     localStorage.setItem('user',id);
+    localStorage.setItem('userName',name);
     window.open('/control/operationControl/');
 }
 

@@ -3,7 +3,6 @@ var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Nu
     '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=safe';
 public_ajax.call_request('get',safe_7day_url,safe_7day);
 function safe_7day(data) {
-    console.log(data);
     var nearTime=[],nearData=[];
     $.each(data,function (index,item) {
         nearTime.push(item['date_time'][0]);
@@ -86,9 +85,11 @@ $('#container .type_page #myTabs li').on('click',function () {
         if (t=='area'){
             $('.pc-4 .center-1').show();
             $('.pc-4 .center-3').hide();
+            $('#postContent-2 ._tit').text('虚拟人相关发帖');
         }else {
             $('.pc-4 .center-1').hide();
             $('.pc-4 .center-3').show();
+            $('#postContent-2 ._tit').text('关注人群相关发帖');
         }
     }
 });
@@ -194,7 +195,7 @@ function radar(data) {
 }
 // 仪表盘图
 function dashBoard(dashVal) {
-    dashVal=Number(dashVal.toFixed(4))*100;
+    dashVal=(Number(dashVal).toFixed(4))*100;
     var myChart = echarts.init(document.getElementById('pc-2'),'dark');
     var option = {
         backgroundColor:'transparent',
@@ -213,7 +214,7 @@ function dashBoard(dashVal) {
                 type: 'gauge',
                 max:100,
                 detail: {formatter:'{value}'},
-                data: [{value: Number(dashVal), name: '渗透率'}]
+                data: [{value:dashVal, name: '渗透率'}]
             }
         ]
     };
@@ -248,7 +249,7 @@ function weiboData(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 3,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",

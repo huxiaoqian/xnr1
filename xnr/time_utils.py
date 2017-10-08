@@ -111,9 +111,11 @@ def get_xnr_flow_text_index_listname(index_name_pre,date_range_start_ts,date_ran
         iter_date_ts=date_range_end_ts
         while iter_date_ts >= date_range_start_ts:
             date_range_start_date=ts2datetime(iter_date_ts)
+            #print date_range_start_date,ts2datetime(date_range_start_ts),ts2datetime(date_range_end_ts)
             index_name=index_name_pre+date_range_start_date
             index_name_list.append(index_name)
             iter_date_ts=iter_date_ts-DAY
+            #print ts2datetime(iter_date_ts),iter_date_ts,date_range_start_ts
     else:
         date_range_start_date=ts2datetime(date_range_start_ts)
         index_name=index_name_pre+date_range_start_date
