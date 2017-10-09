@@ -2,6 +2,7 @@
 import base64
 import os
 import json
+import time
 import sqlite
 import sqlite3
 import flask_security
@@ -21,7 +22,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user
 
 
 from xnr.extensions import db, user_datastore
-from xnr.time_utils import ts2datetime
+from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.global_utils import es_xnr,weibo_log_management_index_name,weibo_log_management_index_type
 
 
@@ -114,13 +115,39 @@ def homepage():
             user_name = row[1]
             break
     cx.close()
+
+
+    current_date = ts2datetime(timestamp)
+    current_time_new = datetime2ts(current_date)
+
+    log_id = user_name +'_'+ current_date
     
-    log_id = user_name + ts2datetime(timestamp)
     
-    item_dict = {}
-    item_dict['user_name'] = user_name
-    es.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
-        id=log_id,body=item_dict)
+    exist_item = es_xnr.exists(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
+        id=log_id)
+
+    if exist_item:
+        get_result = es_xnr.get(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
+        id=log_id)['_source']
+
+        login_ip_list = get_result['login_ip']
+        login_time_list = get_result['login_time']
+
+        login_ip_list.append(ip)
+        login_time_list.append(timestamp)
+
+        es_xnr.update(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
+        id=log_id,body={'doc':{'login_ip':login_ip_list,'login_time':login_time_list}})
+    else:
+        item_dict = {}
+        item_dict['user_name'] = user_name
+        item_dict['login_ip'] = [ip]
+        item_dict['login_time'] = [timestamp]
+        item_dict['operate_date'] = current_date
+        item_dict['operate_time'] = current_time_new
+
+        es_xnr.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
+            id=log_id,body=item_dict)
 
     return render_template('index/navigationMain.html')
 
