@@ -24,7 +24,13 @@ def getgroup():
 def getgroup_v2(qq_xnr):
     group_dict = {}
     #step0: get qqbot_port
-    
+    if qq_xnr[:4] != 'QXNR':
+
+        search_result = es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+            body={'query':{'term':{'qq_number':qq_xnr}}})['hits']['hits']
+
+        qq_xnr = search_result[0]['_id']
+
     #try:
     qq_xnr_es_result = es.get(index=qq_xnr_index_name,\
             doc_type=qq_xnr_index_type, id=qq_xnr, _source=True)['_source']
