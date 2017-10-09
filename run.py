@@ -183,6 +183,7 @@ def logout():
 @app.route('/get_user/')
 def get_user():
     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    #cx = sqlite3.connect("/home/user_portrait_0320/revised_user_portrait/user_portrait/user_portrait/flask-admin.db")
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
