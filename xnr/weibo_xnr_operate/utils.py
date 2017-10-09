@@ -43,7 +43,7 @@ from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TO
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
                         FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME,TOP_WEIBOS_LIMIT_DAILY,\
-                        daily_ch2en,TOP_ACTIVE_SOCIAL
+                        daily_ch2en,TOP_ACTIVE_SOCIAL,task_source_ch2en
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
@@ -105,9 +105,9 @@ def push_keywords_task(task_detail):
     return mark
 
 def get_submit_tweet(task_detail):
-    print 'task_detail[p_url]:::',task_detail['p_url']
+    
     text = task_detail['text']
-    tweet_type = task_detail['tweet_type']
+    tweet_type = task_source_ch2en[task_detail['tweet_type']]
     #operate_type = task_detail['operate_type']
     xnr_user_no = task_detail['xnr_user_no']
     p_url = task_detail['p_url'].encode('utf-8')
@@ -1056,7 +1056,7 @@ def get_like_operate(task_detail):
         return False
 
     mark = like_tweet_func(account_name,password,r_mid)
-
+    
     return mark
 
 
@@ -1271,6 +1271,8 @@ def get_direct_search(task_detail):
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     
+    avg_sort_uid_dict = {}
+
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
@@ -1285,10 +1287,6 @@ def get_related_recommendation(task_detail):
     for monitor_keyword in monitor_keywords_list:
         #print 'monitor_keyword::::',monitor_keyword
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
-    #print 'uid::::',uid
-    #print 'nest_query_list:::',nest_query_list
-    # if S_TYPE == 'test':
-    #     recommend_set_list = FOLLOWERS_LIST
     
     # else:
     recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']['followers_list']
@@ -1306,7 +1304,7 @@ def get_related_recommendation(task_detail):
         uid_list = []
         #uid_list = recommend_set_list
         if sort_item == 'influence':
-            sort_item = 'retweeted'
+            sort_item = 'user_fansnum'
         query_body_rec = {
             'query':{
                 
@@ -1316,51 +1314,73 @@ def get_related_recommendation(task_detail):
             },
             'aggs':{
                 'uid_list':{
-                    'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL },
-                    
+                    'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL,'order':{'avg_sort':'desc'} },
+                    'aggs':{'avg_sort':{'avg':{'field':sort_item}}}
+
                 }
-            },
-            'sort':{sort_item:{'order':'desc'}}
+            }
         }
 
-        # query_body_rec = {
-        #     'query':{
-        #         'term':{'message_type':1}
-        #     },
-        #     'aggs':{
-        #         'uid_list':{
-        #             'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL },
-                    
-        #         }
-        #     },
-        #     'sort':{sort_item:{'order':'desc'}}
-        # }
-        print 'query_body_rec:::',query_body_rec
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        
+        print 'es_rec_result::',es_rec_result
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)
+            
+            avg_sort_uid_dict[uid] = {}
+
+            if sort_item == 'user_fansnum':
+                avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
+            else:
+                avg_sort_uid_dict[uid]['sort_item_value'] = round(item['avg_sort']['value'],2)
 
     else:
         if S_TYPE == 'test':
             uid_list = FRIEND_LIST
-            sort_item = 'sensitive'
+            #sort_item = 'sensitive'
         else:
+            uid_list = []
             friends_list_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
             for result in friends_list_results:
                 friends_list = friends_list + result['friend_list']
             friends_set_list = list(set(friends_list))
 
-            uid_list = friends_set_list
+            #uid_list = friends_set_list
 
-            sort_item = 'fansnum'
+            sort_item_new = 'fansnum'
 
+            query_body_rec = {
+                'query':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'uid':friends_set_list}},
+                            {'bool':{
+                                'should':nest_query_list
+                            }}
+                        ]
+                    }
+                },
+                'aggs':{
+                    'uid_list':{
+                        'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL,'order':{'avg_sort':'desc'} },
+                        'aggs':{'avg_sort':{'avg':{'field':sort_item_new}}}
+
+                    }
+                }
+            }
+            es_friend_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
+            
+            for item in es_friend_result:
+                uid = item['key']
+                uid_list.append(uid)
+                
+                avg_sort_uid_dict[uid] = {}
+                avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
+                print 'avg_sort_uid_dict:::',avg_sort_uid_dict
     results_all = []
 
-    sort_item_new = 'fansnum'
-
     for uid in uid_list:
+        #if sort_item == 'friend':
         query_body = {
             'query':{
                 'filtered':{
@@ -1369,9 +1389,9 @@ def get_related_recommendation(task_detail):
                     }
                 }
             },
-            'sort':{sort_item_new:{'order':'desc'}},
             'size':MAX_SEARCH_SIZE
         }
+
         es_results = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
 
     
@@ -1384,9 +1404,24 @@ def get_related_recommendation(task_detail):
                 item['_source']['weibo_type'] = weibo_type
                 item['_source']['sensor_mark'] = sensor_mark
 
-                influence = item['_source']['influence']
-                influence_relative = get_influence_relative(uid,influence)
-                item['_source']['influence'] = influence_relative
+                # influence = item['_source']['influence']
+                # influence_relative = get_influence_relative(uid,influence)
+                # item['_source']['influence'] = influence_relative
+                #if sort_item != 'friend':
+                #item['_source']['sort_item_value'] = avg_sort_uid_dict[uid]['sort_item_value']
+                # else:
+                #     item['_source']['sort_item_value'] = item['_source']['fansnum']
+        
+                if sort_item == 'friend':
+                    if S_TYPE == 'test':
+                        item['_source']['user_fansnum'] = item['_source']['fansnum']
+                    else:
+                        item['_source']['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                elif sort_item == 'influence':
+                    item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
+                    item['_source']['user_fansnum'] = item['_source']['fansnum']
+                else:
+                    item['_source']['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
 
                 if S_TYPE == 'test':
                     current_time = datetime2ts(S_DATE)
@@ -1397,7 +1432,12 @@ def get_related_recommendation(task_detail):
 
                 query_body = {
                     'query':{
-                        'term':{'uid':uid}
+                        'bool':{
+                            'must':[
+                                {'term':{'uid':uid}},
+                                {'terms':{'message_type':[1,3]}}
+                            ]
+                        }
                     },
                     'sort':{'retweeted':{'order':'desc'}}
                 }
@@ -1419,9 +1459,14 @@ def get_related_recommendation(task_detail):
             item_else['weibo_type'] = weibo_type
             item_else['sensor_mark'] = sensor_mark
             item_else['portrait_status'] = False
+            #if sort_item != 'friend':
+            #item_else['sort_item_value'] = avg_sort_uid_dict[uid]['sort_item_value']
+            # else:
+            #     item_else['sort_item_value'] = ''
+            
 
             if S_TYPE == 'test':
-                    current_time = datetime2ts(S_DATE)
+                current_time = datetime2ts(S_DATE)
             else:
                 current_time = int(time.time())
 
@@ -1442,6 +1487,11 @@ def get_related_recommendation(task_detail):
                 weibo = weibo['_source']
                 weibo_list.append(weibo)
             item_else['weibo_list'] = weibo_list
+
+            if sort_item == 'sensitive':
+                item_else['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
+            else:
+                item_else['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
 
             results_all.append(item_else)
             

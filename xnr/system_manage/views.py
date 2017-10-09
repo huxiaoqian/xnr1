@@ -13,16 +13,17 @@ mod = Blueprint('system_manage', __name__, url_prefix='/system_manage')
 
 ####日志管理
 #添加日志内容
-#http://219.224.134.213:9209/system_manage/create_log_list/?user_id=001&user_name=admin01@qq.com&login_time=1504922400&login_ip=127.0.0.1&operate_time=1504922400&operate_content=创建群体
+#http://219.224.134.213:9209/system_manage/create_log_list/?user_id=1&user_name=admin@qq.com&login_time=1507452240*1507452241&login_ip=127.0.0.1*127.0.0.1&operate_date=2017-10-08&operate_content=(创建群体,1)*(添加虚拟人,1)
 @mod.route('/create_log_list/')
 def ajax_create_log_list():
 	user_id=request.args.get('user_id','')
 	user_name=request.args.get('user_name','')
 	login_time=request.args.get('login_time','')
 	login_ip=request.args.get('login_ip','')
-	operate_time=request.args.get('operate_time','')
+	operate_time=int(time.time())
 	operate_content=request.args.get('operate_content','')
-	log_info=[user_id,user_name,login_time,login_ip,operate_time,operate_content]
+	operate_date=request.args.get('operate_date','')
+	log_info=[user_id,user_name,login_time,login_ip,operate_time,operate_content,operate_date]
 	results=create_log_list(log_info)
 	return json.dumps(results)
 

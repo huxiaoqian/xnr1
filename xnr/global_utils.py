@@ -167,6 +167,9 @@ topic_distribute_tweets_index_type = 'topic'
 domain_distribute_tweets_index_name_pre = 'domain_distribute_tweets_'
 domain_distribute_tweets_index_type = 'domain'
 
+user_domain_index_name = 'user_domain'
+user_domain_index_type = 'domain'
+
 # social sensing
 index_sensing = "manage_sensing_task"
 type_sensing = "task"

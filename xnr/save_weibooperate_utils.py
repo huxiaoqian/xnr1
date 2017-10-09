@@ -12,7 +12,8 @@ def save_xnr_like(like_info):
 	like_detail['uid']=like_info[0]
 	like_detail['photo_url']=like_info[1]
 	like_detail['nick_name']=like_info[2]
-	like_detail['mid']=like_info[3]
+	#like_detail['mid']=like_info[3]
+	like_detail['mid']=''
 	like_detail['timestamp']=like_info[4]
 	like_detail['text']=like_info[5]
 	like_detail['root_mid']=like_info[6]
@@ -20,7 +21,7 @@ def save_xnr_like(like_info):
 	like_detail['weibo_type']=like_info[8]
 	like_detail['update_time']=like_info[9]
 
-	like_id=like_info[3]
+	like_id=like_info[7]+'_'+str(like_info[4])
 
 	try:
 		es_xnr.index(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,id=like_id,body=like_detail)

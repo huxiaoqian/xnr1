@@ -202,7 +202,7 @@ class FeedbackFollow:
                 }
 
                 wb_json = json.dumps(wb_item)
-                print 'wb_json:::',wb_json
+                
                 json_list.append(wb_json)
 
         return json_list
@@ -263,7 +263,7 @@ class FeedbackFollow:
 
     def execute(self):
         fans = self.fans()
-        print 'fans:::',fans
+        
         executeES('weibo_feedback_fans', 'text', fans)
 
         follow = self.follow()
