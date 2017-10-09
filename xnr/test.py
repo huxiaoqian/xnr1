@@ -10,7 +10,7 @@ from global_utils import es_user_portrait,portrait_index_name,portrait_index_typ
 from global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-
+from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # icon = open('./weibo_images/zhengyidang.png','rb')
 # iconData = icon.read()
 # iconData = base64.b64encode(iconData)
@@ -51,28 +51,58 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # }
 
 
-# result = es.search(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+# result = es.search(index='xnr_flow_text_2017-10-01',doc_type='text',\
 #     body=query_body)['hits']['hits']
-# print 'result::',result
 
-# with open("./fans_followers.json","w") as dump_f:
-#     for item in result:
-#         json.dump(item,dump_f)
-#         print '@'
+# result_json = {}
+
+# for result_item in result:
+#     _id = result_item['_id']
+#     result_json[_id] = result_item
+# print 'result_json::',result_json
+# with open("./xnr_flow_1001.json","w") as dump_f:
+#     # for item in result:
+#     json.dump(result_json,dump_f)
+#     print '@'
+
+
+# with open("./xnr_flow_1001.json","r") as load_f:
+#     #print 'load_f::',load_f
+#     load_dict = json.load(load_f)
+#     print load_dict
+#     print type(load_dict)
+#     for key,value in load_dict.iteritems():
+        
+#         _id = key
+#         content = value['_source']
+        
+#         #if _id == 'WXNR0004_1507272840':
+#         	#content['topic_field'] = u'文体类&政治类&民生类'
+#         content['topic_field_first'] = u'民生类_法律'
+#         # else:
+#         # 	#content['topic_field'] = u'文体类&政治类&民生类'
+#         # 	content['topic_field_first'] = u'民生类_交通'
+
+#         weibo_xnr_flow_text_mappings('xnr_flow_text_2017-10-01')
+#         es.index(index='xnr_flow_text_2017-10-01',doc_type='text',\
+#             id=_id,body=content)
+
 
 # follow_list = result[0]['_source']['followers_list']
 
 # follow_list = list(set(follow_list))
 
-# es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-#     id='WXNR0004',body={'doc':{'trace_follow_list':follow_list,'followers_list':follow_list}})
 
-# with open("./fans_followers.json","r") as load_f:
-#     #print 'load_f::',load_f
-#     load_dict = json.load(load_f)
-#     print load_dict
-#     es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-#         id='WXNR0004',body=load_dict['_source'])
+# get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+#     id='WXNR0004')['_source']
+# follow_list = get_result['followers_list']
+
+# follow_new_list = ['6051938764', '5099016176', '5713626060', '5927855538', '3684276561', '3769547063', '5876804193', '5625493137', '5720398851', '1926974981']
+# follow_list.extend(follow_new_list)
+# follow_list = list(set(follow_list))
+# es.update(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+#     id='WXNR0004',body={'doc':{'followers_list':follow_list}})
+
 
 # # query_body = {
 # #     'query':{
@@ -103,7 +133,7 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 # print r.sadd('qq_group_set_01',['121567','5674567'])
 # m = r.smembers('qq_group_set_01')
 # if "123123123" in m:
-# 	print '1111'
+#     print '1111'
 
 # es.delete(index='weibo_example_model',doc_type='model',id='min_yun_ren_shi_grassroot')
 # es.delete(index='weibo_example_model',doc_type='model',id='null_min_yun_ren_shi_grassroot')
@@ -122,23 +152,66 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 #     'query':{
 #         'range':{'sensitive':{'gt':0}}
 #     },
-#     'aggs':{
-#         'followers_sensitive_num':{
-#             'terms':{'field':'uid','size':10000 },
-            
-#         }
-#     },
-#     'sort':{'sensitive':{'order':'desc'}}
+    
+#     'sort':{'sensitive':{'order':'desc'}},
+#     'size':30
     
 # }
-# flow_text_index_name = ['flow_text_2016-11-27','flow_text_2016-11-26','flow_text_2016-11-25']
-# es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+# flow_text_index_name = ['flow_text_2016-11-27']
+# # flow_text_index_name = ['flow_text_2016-11-20','flow_text_2016-11-19','flow_text_2016-11-18',\
+# # 'flow_text_2016-11-17','flow_text_2016-11-16','flow_text_2016-11-15']
+# #es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['aggregations']['followers_sensitive_num']['buckets']
+# es_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body)['hits']['hits']
+
+# uid_list = []
+# for result in es_result:
+# 	result = result['_source']
+# 	uid_list.append(result['uid'])
+
+# print 'uid_list::',uid_list
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':18.01,'penetration':20.05}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':18.04,'penetration':14.28}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':0,'penetration':16.33}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':0,'penetration':17.24}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05')['_source']
+# item_dict = {}
+# item_dict = {'influence':1.43,'safe':19.21,'penetration':10.03}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06')['_source']
+# item_dict = {}
+# item_dict = {'influence':3.58,'safe':30.54,'penetration':25.48}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06',body   ={'doc':item_dict})
+
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07')['_source']
+# item_dict = {}
+# item_dict = {'influence':0,'safe':0,'penetration':24.56}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
+
+
 
 # with open('./uid_sensitive.txt','w') as f:
-# 	for item in es_result:
-# 		uid = item['key']
-# 		f.write(uid+'\n')
-# 	f.close()
+#     for item in es_result:
+#         uid = item['key']
+#         f.write(uid+'\n')
+#     f.close()
 
 # query_body = {
 #     'query':{
@@ -155,20 +228,21 @@ from textrank4zh import TextRank4Keyword, TextRank4Sentence
 
 # for result in es_results:
 #     print result
-item = {}
-item['text'] = '想问下各位 银行已经面签完了不过的情况多吗？'
-item['speaker_qq_number'] = '1355581192'
-item['sensitive_flag'] = 0
-item['sensitive_words_string'] = ''
-item['qq_group_nickname'] = '房屋买卖违约维权律师'
-item['sensitive_value'] = 0
-item['xnr_qq_number'] = '1965056593'
-item['xnr_nickname'] = '袁慧茹'
-item['speaker_nickname'] = '[wū] · [ ]'
-item['timestamp'] = 1506860121
-item['qq_group_number'] = '513304542'
 
-id = '1965056593_513304542_1506860121_7536c341631345922d86632b28863e'
-es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
+# item = {}
+# item['text'] = '想问下各位 银行已经面签完了不过的情况多吗？'
+# item['speaker_qq_number'] = '1355581192'
+# item['sensitive_flag'] = 0
+# item['sensitive_words_string'] = ''
+# item['qq_group_nickname'] = '房屋买卖违约维权律师'
+# item['sensitive_value'] = 0
+# item['xnr_qq_number'] = '1965056593'
+# item['xnr_nickname'] = '袁慧茹'
+# item['speaker_nickname'] = '[wū] · [ ]'
+# item['timestamp'] = 1506860121
+# item['qq_group_number'] = '513304542'
+
+# id = '1965056593_513304542_1506860121_7536c341631345922d86632b28863e'
+# es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
