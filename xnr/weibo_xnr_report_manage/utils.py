@@ -104,6 +104,12 @@ def get_weibohistory_like(task_detail):
     root_mid=task_detail['r_mid']
 
     xnr_user_no=task_detail['xnr_user_no']
+    #print 'xnr_user_no',xnr_user_no
+    if not xnr_user_no:
+        mark =False
+        save_mark=False
+        #print mark,save_mark
+        return mark,save_mark
     xnr_es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     account_name=xnr_es_result['weibo_mail_account']
     password=xnr_es_result['password']
