@@ -379,13 +379,6 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
                                 'term':{'topic_field':topic_field_en}
                             }
                         }
-                    },
-                     {
-                        'filtered':{
-                            'filter':{
-                                'term':{'xnr_user_no':xnr_user_no}
-                            }
-                        }
                     }
                 ]
             }
@@ -395,8 +388,18 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         'size':TOP_WEIBOS_LIMIT
     }
 
+    
+    #  {
+    #     'filtered':{
+    #         'filter':{
+    #             'term':{'xnr_user_no':xnr_user_no}
+    #         }
+    #     }
+    # }
 
     es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
+    print 'topic_field_en:::',topic_field_en
+    print 'es_results::',es_results
     if not es_results:    
         es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
@@ -1346,7 +1349,7 @@ def get_related_recommendation(task_detail):
         }
 
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        print 'es_rec_result::',es_rec_result
+        
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)
@@ -1400,7 +1403,7 @@ def get_related_recommendation(task_detail):
                 
                 avg_sort_uid_dict[uid] = {}
                 avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
-                print 'avg_sort_uid_dict:::',avg_sort_uid_dict
+                
     results_all = []
 
     for uid in uid_list:
@@ -1434,17 +1437,21 @@ def get_related_recommendation(task_detail):
                 #item['_source']['sort_item_value'] = avg_sort_uid_dict[uid]['sort_item_value']
                 # else:
                 #     item['_source']['sort_item_value'] = item['_source']['fansnum']
-        
+                # if item['_source']['friendsnum'] == 0:
+                #     item['_source']['friendsnum'] = ''
+                # if item['_source']['statusnum'] == 0:
+                #     item['_source']['statusnum'] = ''
+
                 if sort_item == 'friend':
                     if S_TYPE == 'test':
-                        item['_source']['user_fansnum'] = item['_source']['fansnum']
+                        item['_source']['fansnum'] = item['_source']['fansnum']
                     else:
-                        item['_source']['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
-                elif sort_item == 'influence':
+                        item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                elif sort_item == 'sensitive':
                     item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
-                    item['_source']['user_fansnum'] = item['_source']['fansnum']
+                    item['_source']['fansnum'] = item['_source']['fansnum']
                 else:
-                    item['_source']['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                    item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
 
                 if S_TYPE == 'test':
                     current_time = datetime2ts(S_DATE)
@@ -1506,19 +1513,20 @@ def get_related_recommendation(task_detail):
 
             weibo_list = []
             for weibo in es_weibo_results:
-                item_else['user_fansnum'] = weibo['_source']['user_fansnum']
+                item_else['fansnum'] = weibo['_source']['user_fansnum']
                 weibo = weibo['_source']
                 weibo_list.append(weibo)
             item_else['weibo_list'] = weibo_list
-
+            item_else['friendsnum'] = 0
+            item_else['statusnum'] = 0
             if sort_item == 'sensitive':
                 item_else['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
             else:
-                item_else['user_fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                item_else['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
 
             results_all.append(item_else)
             
-
+    
     return results_all
 
 
