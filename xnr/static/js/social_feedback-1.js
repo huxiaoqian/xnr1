@@ -13,7 +13,7 @@ $('.choosetime .demo-label input').on('click',function () {
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
         var _val=$(this).val();
         var start=getDaysBefore(_val);
-        var allData_url='/weibo_xnr_manage/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+start+'&end_ts='+end_time;
+        var allData_url='/weibo_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+start+'&end_ts='+end_time;
         public_ajax.call_request('get',allData_url,com);
     }else {
         $('#sureChoose').show();
@@ -31,7 +31,7 @@ $('.sureTime').on('click',function () {
         var $m=$('#container .type_page #myTabs li.active').attr('tp');
         idbox=$('#container .type_page #myTabs li.active').attr('idbox');
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
-        var his_task_url='/weibo_xnr_manage/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
+        var his_task_url='/weibo_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
             '&end_ts='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',his_task_url,com);
     }
@@ -94,7 +94,6 @@ function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
         var mid;
         if (idbox=='comment-1'){mid='reply_comment'}else {mid='reply_retweet'}
-        console.log(data)
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
             data:data,
@@ -172,7 +171,7 @@ function com(data) {
                             user='用户自己（'+row.nick_name+'）';
                         }
                         var str=
-                            '<div class="commentAll">'+
+                            '<div class="commentAll" style="text-align: left;">'+
                             '    <div class="commentEvery">'+
                             '        <img src="'+img+'" alt="" class="com-head">'+
                             '        <div class="com com-1">'+
@@ -303,7 +302,7 @@ function letter(data) {
                         user='未关注用户';
                     }
                     var str=
-                        '<div class="letterAll" style="background:rgba(8,23,44,0.35);">'+
+                        '<div class="letterAll" style="background:rgba(8,23,44,0.35);text-align:left;">'+
                         '    <div class="letterEvery">'+
                         '        <img src="'+img+'" alt="" class="let-head">'+
                         '        <div class="let let-1">'+
@@ -419,7 +418,7 @@ function reply(data) {
                     }
 
                     var str=
-                        '<div class="replyAll">'+
+                        '<div class="replyAll" style="text-align:left;">'+
                         '    <div class="replyEvery">'+
                         '        <img src="'+img+'" alt="" class="rep-head">'+
                         '        <span style="display: none;" class="mid">'+row.mid+'</span>'+
@@ -466,7 +465,6 @@ function reply(data) {
 };
 //=====关注回粉--回复======
 function focus(data) {
-    console.log(data)
     $('#'+idbox).bootstrapTable('load', data);
     $('#'+idbox).bootstrapTable({
         data:data,
@@ -572,7 +570,7 @@ function focus(data) {
                         sent='普通用户';
                     }
                     var str=
-                        '<div class="focusAll">'+
+                        '<div class="focusAll" style="text-align: left;">'+
                         '    <div class="focusEvery">'+
                         '        <img src="'+img+'" alt="" class="foc-head">'+
                         '        <div class="foc foc-1">'+

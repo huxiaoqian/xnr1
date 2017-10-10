@@ -1,7 +1,6 @@
 var virtual_url='/system_manage/show_users_account/';
 public_ajax.call_request('get',virtual_url,virtual);
 function virtual(data) {
-    console.log(data);
     $('#virtualtable').bootstrapTable('load', data);
     $('#virtualtable').bootstrapTable({
         data:data,
@@ -126,7 +125,7 @@ function deleteVir(_id,account) {
     $('#delPrompt').modal('show');
 }
 function delVirSure() {
-    var delVir_url='/system_manage/delete_user_xnraccount/?account_id='+del_id+'&xnr_accountid='+del_account;
+    var delVir_url='/system_manage/delete_user_xnraccount/?account_id='+del_id
     public_ajax.call_request('get',delVir_url,successFail);
 }
 //删除指定的虚拟人
@@ -138,7 +137,6 @@ function delXnr(_this) {
     public_ajax.call_request('get',delXne_url,successFail);
 }
 function delThis() {
-    console.log($(thisXnr).parent())
     $(thisXnr).parent().remove();
 }
 //为指定账户下添加虚拟人

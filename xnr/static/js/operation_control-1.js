@@ -1,5 +1,6 @@
 // var start_time='1500108142';
 // var end_time='1500108142';
+
 var end_time=Date.parse(new Date())/1000;
 //=====历史统计====定时任务列表====历史消息===时间段选择===
 $('.choosetime .demo-label input').on('click',function () {
@@ -93,6 +94,7 @@ function historyTotal(data) {
     historyTotalTable(data[0]);
     historyTotalLine(data[1]);
 }
+
 function historyTotalLine(data) {
     var time=[],fansDate=[],totalPostData=[],dailyPost=[],
         hotData=[],businessData=[],influeData=[],pentData=[],safeData=[];
@@ -382,7 +384,7 @@ function historyTotalTable(dataTable) {
             },
         ],
     });
-    $('#history-2 p').hide(700);
+    $('#history-2 p').slideUp(700);
 }
 
 //定时发送任务列表
@@ -649,12 +651,13 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none';
+    var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none',C3='';
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';
     if (boxShoes=='historyCenter'){showHide1='inline-block'};
     if (boxShoes=='myweibo'){showHide3='inline-block'};
     if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block'};
+    if (boxShoes=='likes'){C3='display:none';};
     $('#'+boxShoes+' p').show();
     $('#'+boxShoes).bootstrapTable('load', data);
     $('#'+boxShoes).bootstrapTable({
@@ -715,10 +718,10 @@ function historyNews(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+(row.retweeted||row.retweet)+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+(row.retweeted||row.retweet)+'）</b></span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论<b style="'+C3+'">（'+row.comment+'）</b></span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
+                        // '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
                         '               <span class="cen3-5" onclick="dialogue(this)" style="display:'+showHide4+';"><i class="icon icon-book"></i>&nbsp;&nbsp;查看对话</span>'+
                         '               <span class="cen3-6" onclick="showInput(this)" style="display:'+showHide4+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+
                         '           </div>'+
@@ -734,7 +737,7 @@ function historyNews(data) {
             },
         ],
     });
-    $('#'+boxShoes+' p').hide(700);
+    $('#'+boxShoes+' p').slideUp(700);
 }
 //=====评论======
 //查看对话
@@ -756,7 +759,7 @@ var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
     wordMid = $(_this).parents('.post_perfect').find('.mid').text();
     wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');
     wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
     wordComment = $(_this).parents('.post_perfect').find('.comment').text();
     $('#wordcloud').modal('show');
@@ -778,7 +781,7 @@ function showInput(_this) {
     $(_this).parents('.post_perfect').find('.commentDown').show();
 };
 function comMent(_this){
-    var txt = $(_this).prev().val();
+    var txt = $(_this).prev().val().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
         var post_url_3='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
@@ -800,7 +803,7 @@ function thumbs(_this) {
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
-    var txt = $(_this).parent().prev().text();
+    var txt = $(_this).parent().prev().text().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var post_url_4='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
     '/weibo_xnr_manage/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&nick_name='+REL_name+
     '&text='+txt+'&timestamp='+timestamp;
@@ -996,7 +999,7 @@ function focusOn(data) {
             },
         ],
     });
-    $('#focus p').hide(700);
+    $('#focus p').slideUp(700);
 }
 //=====粉丝列表====
 $('.fansSEN .demo-label input').on('click',function () {
@@ -1165,7 +1168,7 @@ function fans(data) {
             },
         ],
     });
-    $('#fans p').hide(700);
+    $('#fans p').slideUp(700);
 }
 //======查看详情===关注与否====
 
@@ -1174,7 +1177,7 @@ function fans(data) {
 //     public_ajax.call_request('get',details_url,detailsOK);
 // }
 // function detailsOK(data) {
-//     console.log(data)
+
 // }
 
 function focus_ornot(_id,mid) {
