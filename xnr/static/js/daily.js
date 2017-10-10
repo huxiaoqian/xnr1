@@ -1,7 +1,7 @@
 var dailyLOG_Url='/system_manage/show_log_list/';
 public_ajax.call_request('get',dailyLOG_Url,dailyLOG);
 function dailyLOG(data) {
-    console.log(data);
+    console.log(data)
     $('#loglist').bootstrapTable('load', data);
     $('#loglist').bootstrapTable({
         data:data,
@@ -52,10 +52,14 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.login_time==''||row.login_time=='null'||row.login_time=='unknown'){
+                    if (row.login_time==''||row.login_time=='null'||row.login_time=='unknown'||row.login_time.length==0){
                         return '未知';
                     }else {
-                        return getLocalTime(row.login_time);
+                        var y=[];
+                        for(var j of row.login_time){
+                            y.push(getLocalTime(j))
+                        }
+                        return y.join('<br/>');
                     };
                 }
             },
@@ -70,7 +74,7 @@ function dailyLOG(data) {
                     if (row.login_ip==''||row.login_ip=='null'||row.login_ip=='unknown'){
                         return '未知';
                     }else {
-                        return row.login_ip;
+                        return row.login_ip.join('<br/>');
                     };
                 }
             },
@@ -100,7 +104,7 @@ function dailyLOG(data) {
                     if (row.operate_content==''||row.operate_content=='null'||row.operate_content=='unknown'){
                         return '无内容';
                     }else {
-                        return row.operate_content;
+                        return row.operate_content.join('<br/>');
                     };
                 }
             },

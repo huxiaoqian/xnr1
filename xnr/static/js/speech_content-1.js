@@ -71,6 +71,8 @@ function weibo(data) {
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                        '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
+                        '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '                <span class="center_2">'+text+
                         '                </span>'+
@@ -132,10 +134,12 @@ function getInfo(_this) {
     var alldata=[];
     var uid = $(_this).parents('.everySpeak').find('.uid').text();alldata.push(uid);
     var mid = $(_this).parents('.everySpeak').find('.mid').text();alldata.push(mid);
-    var txt=$(_this).parents('.everySpeak').find('.center_2').text();alldata.push(txt);
+    var txt=$(_this).parents('.everySpeak').find('.center_2').text().toString().replace(/#/g,'%23').replace(/&/g,'%26');alldata.push(txt);
     var timestamp = $(_this).parents('.everySpeak').find('.timestamp').text();alldata.push(timestamp);
     var forwarding = $(_this).parents('.everySpeak').find('.forwarding').text();alldata.push(forwarding);
     var comment = $(_this).parents('.everySpeak').find('.comment').text();alldata.push(comment);
+    var sensitive = $(_this).parents('.everySpeak').find('.sensitive').text();alldata.push(sensitive);
+    var sensitiveWords = $(_this).parents('.everySpeak').find('.sensitiveWords').text().toString().replace(/&/g,'%26');alldata.push(sensitiveWords);
     return alldata;
 }
 //加入预警
@@ -148,10 +152,13 @@ function joinPolice(_this) {
 //一键上报
 function oneUP(_this) {
     var info=getInfo(_this);
+    console.log(info)
     var allMent=[];
     allMent.push(info[1]);
     var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);
     allMent.push(info[3]);allMent.push(info[4]);allMent.push(0);allMent.push(info[5]);
+    allMent.push(info[6]);allMent.push(info[7]);
+
 //[mid,text,timestamp,retweeted,like,comment
     var once_url='/weibo_xnr_warming/report_warming_content/?report_type=言论&xnr_user_no='+ID_Num+
     '&uid='+info[0]+'&weibo_info='+allMent.join(',');

@@ -1079,9 +1079,9 @@ def get_direct_search(task_detail):
     # if sort_item != 'friend':
         # if sort_item == 'influence':
         #     sort_item = 'user_fansnum'
-    for uid in uid_list:
-    es_rec_result = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':uid_list})['docs']
-    
+    #for uid in uid_list:
+    es_rec_result = es_user_portrait.mget(index=portrait_index_name,\
+            doc_type=portrait_index_type,body={'ids':uid_list})['docs']
     if es_rec_result:
         for item in es_rec_result:
             uid = item['_source']['uid']

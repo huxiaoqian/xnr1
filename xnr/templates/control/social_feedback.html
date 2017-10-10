@@ -11,8 +11,11 @@
     .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    .bootstrap-table thead,.fixed-table-pagination .page-list {
+    .fixed-table-pagination .page-list {
         display: none!important;
+    }
+    .fixed-table-container thead th .both {
+        background-image: none!important;
     }
     .fixed-table-body {
         height: auto!important;
@@ -35,9 +38,6 @@
         border-radius: 5px;
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
-    }
-    .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
     }
     /*.reply-1 .fixed-table-body {*/
         /*width: 126px!important;*/
@@ -277,7 +277,7 @@
 <script src="/static/js/social_feedback-1.js"></script>
 <script>
     judgment('2');
-
+    weiboORqq('weibo');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,

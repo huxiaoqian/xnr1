@@ -78,7 +78,13 @@ $('#container .type_page #myTabs li').on('click',function () {
         var midTwo=mid.split('&');
         var readyChart_url='/weibo_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num;
         public_ajax.call_request('get',readyChart_url,radar);
-        var readyDoc_url='/weibo_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+
+        var topic;
+        if (midTwo[1]=='safe_tweets_topic'){
+            topic=$('#field input:radio[name="theme2"]:checked').val();
+        }else {
+            topic=$('#userField input:radio[name="domain"]:checked').val();
+        }
+        var readyDoc_url='/weibo_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
             '&sort_item=timestamp';
         public_ajax.call_request('get',readyDoc_url,weiboData);
         t=$(this).attr('linktype');
@@ -293,7 +299,7 @@ function weiboData(data) {
                         txt=row.text;
                     };
                     var str=
-                        '<div class="post_center-every">'+
+                        '<div class="post_center-every" style="text-align: left;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
@@ -330,7 +336,7 @@ function showInput(_this) {
     $(_this).parents('.post_center-every').find('.commentDown').show();
 };
 function comMent(_this){
-    var txt = $(_this).prev().val();
+    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_center-every').find('.mid').text();
     if (txt!=''){
         var post_url_1='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
@@ -342,7 +348,7 @@ function comMent(_this){
 }
 //转发
 function retweet(_this) {
-    var txt = $(_this).parent().prev().text();
+    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_center-every').find('.mid').text();
     var uid = $(_this).parents('.post_center-every').find('.uid').text();
     var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type=行为评估'+'&xnr_user_no='+ID_Num+
@@ -359,7 +365,7 @@ var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
     wordMid = $(_this).parents('.post_perfect').find('.mid').text();
     wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
     wordComment = $(_this).parents('.post_perfect').find('.comment').text();
     $('#wordcloud').modal('show');

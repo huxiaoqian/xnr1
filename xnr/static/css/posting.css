@@ -319,10 +319,6 @@ body {
     text-align: center;
     font-size: 12px;
 }
-#container #content #hot .post_perfect .center_3_top span,
-#container #content #hot .post_perfect .center_3 span:nth-child(2) {
-    width: 31%;
-}
 #container #content #hot .post_perfect .center_3 span:nth-child(2),
 #container #content #hot .post_perfect .center_3 span:nth-child(4),
 #container #content #hot .post_perfect .center_3_top span:nth-child(2){
