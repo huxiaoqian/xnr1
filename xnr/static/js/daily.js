@@ -7,7 +7,7 @@ function dailyLOG(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 8,//单页记录数
+        pageSize: 3,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -37,7 +37,7 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'){
+                    if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'||!row.user_name){
                         return row.user_id;
                     }else {
                         return row.user_name;
@@ -52,7 +52,8 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.login_time==''||row.login_time=='null'||row.login_time=='unknown'||row.login_time.length==0){
+                    if (row.login_time==''||row.login_time=='null'||
+                        row.login_time=='unknown'||row.login_time.length==0||!row.login_time){
                         return '未知';
                     }else {
                         var y=[];
@@ -71,7 +72,7 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.login_ip==''||row.login_ip=='null'||row.login_ip=='unknown'){
+                    if (row.login_ip==''||row.login_ip=='null'||row.login_ip=='unknown'||!row.login_ip){
                         return '未知';
                     }else {
                         return row.login_ip.join('<br/>');
@@ -86,7 +87,7 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_time==''||row.operate_time=='null'||row.operate_time=='unknown'){
+                    if (row.operate_time==''||row.operate_time=='null'||row.operate_time=='unknown'||!row.operate_time){
                         return '无内容';
                     }else {
                         return getLocalTime(row.operate_time);
@@ -101,7 +102,7 @@ function dailyLOG(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_content==''||row.operate_content=='null'||row.operate_content=='unknown'){
+                    if (row.operate_content==''||row.operate_content=='null'||row.operate_content=='unknown'||!row.operate_content){
                         return '无内容';
                     }else {
                         return row.operate_content.join('<br/>');
