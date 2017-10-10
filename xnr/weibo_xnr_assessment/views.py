@@ -178,18 +178,18 @@ def ajax_safe_active():
 def ajax_tweets_distribute():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	results = get_tweets_distribute(xnr_user_no)
-
+	print 'results:::',results
 	return json.dumps(results)
 
 # 发帖内容 --话题
 @mod.route('/safe_tweets_topic/')
 def ajax_safe_tweets_topic():
 	xnr_user_no = request.args.get('xnr_user_no','')
-	topic = request.args.get('topic','')
+	topic = request.args.get('topic',u'民生类_法律')
 	sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
-
+	print 'topic::::',topic
 	results = get_safe_tweets(xnr_user_no,topic,sort_item)
-
+	
 	return json.dumps(results)
 
 # 关注人群分布
@@ -197,15 +197,16 @@ def ajax_safe_tweets_topic():
 def ajax_follow_group_distribute():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	results = get_follow_group_distribute(xnr_user_no)
-
+	
 	return json.dumps(results)
 
 # 关注人群领域 -- 发帖内容
 @mod.route('/follow_group_tweets/')
 def ajax_follow_group_tweets():
 	xnr_user_no = request.args.get('xnr_user_no','')
-	domain = request.args.get('domain','')
+	#domain = request.args.get('domain','')
+	domain = request.args.get('domain',u'法律机构及人士')
 	sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
 	results = get_follow_group_tweets(xnr_user_no,domain,sort_item)
-
+	#print 'domain:::',domain
 	return json.dumps(results)

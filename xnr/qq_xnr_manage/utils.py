@@ -75,6 +75,7 @@ def create_qq_xnr(xnr_info):
     access_id = xnr_info['access_id']
     remark = xnr_info['remark']
     submitter = xnr_info['submitter']
+
     # redis 群名
     r_qq_group_set = r_qq_group_set_pre + qq_number
 
@@ -177,12 +178,28 @@ def create_qq_xnr(xnr_info):
         qqbot_num = qq_number
         qqbot_port = str(qqbot_port)
         qqbot_mc = access_id #'sirtgdmgwiivbegf'
+        #qqbot_mc = 'worunhzbzyipdagc'
         p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
         #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
+        command_str = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
         print 'p_str1:', p_str1
+        p_str2 = 'pgrep -f ' + '"' + command_str + '"'
+        print 'p_str2::',p_str2
+        process_ids = subprocess.Popen(p_str2, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process_id_list = process_ids.stdout.readlines()
+        
+        for process_id in process_id_list:
+            process_id = process_id.strip()
+            kill_str = 'kill -9 ' + process_id
+            print 'kill_str::',kill_str
+            p2 = subprocess.Popen(kill_str, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
         p2 = subprocess.Popen(p_str1, \
                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         #print 'output:', p2.stdout.readlines()
+        
     return [result,qq_group_exist_list]
 
 def show_qq_xnr(MAX_VALUE):
@@ -204,7 +221,7 @@ def show_qq_xnr(MAX_VALUE):
         qqnum = item['_source']['qq_number']
         xnr_user_no = item['_source']['xnr_user_no']
         group_dict = getgroup_v2(xnr_user_no)
-        print 'group_dict:::',group_dict
+        #print 'group_dict:::',group_dict
         if group_dict:
             login_status = True
         else:

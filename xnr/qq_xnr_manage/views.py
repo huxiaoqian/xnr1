@@ -26,9 +26,14 @@ def ajax_history_speak_count():
 def ajax_get_qr_code():
     qq_number = request.args.get('qq_number', '')
     if qq_number:
+        print 'qq_number::',qq_number
         path = getQRCode_v2(qq_number)
-        new_path = '/'.join(path.split('/')[-2:])
-        return json.dumps(new_path)
+        if path != None:
+            new_path = '/'.join(path.split('/')[-2:])
+            print 'new_path::',new_path
+            return json.dumps(new_path)
+        else:
+            return 'try later'
     else:
         return False
 
@@ -53,6 +58,7 @@ def ajax_add_qq_xnr():
     xnr_info['access_id'] = access_id
     xnr_info['submitter'] = submitter
     xnr_info['remark'] = remark
+
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)
 

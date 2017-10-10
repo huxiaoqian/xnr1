@@ -246,3 +246,24 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
+
+#es.delete(index='weibo_log',doc_type='log',id='admin@qq.com2017-10-08')
+
+import psutil
+import re
+import sys
+
+# def processinfo(x):
+
+# 	process_list = psutil.get_process_list() #获取进程列表
+# 	for r in process_list:
+# 	    aa = str(r)
+# 	    f = re.compile(x,re.I)
+# 	    print 'aa::',aa
+# 	    print 'f::',f
+# 	    if f.search(aa):
+# 	        print aa.split('pid=')[1].split(',')[0]  
+# 	        print aa.split('pid=')
+
+# processinfo(sys.argv[1])
+
