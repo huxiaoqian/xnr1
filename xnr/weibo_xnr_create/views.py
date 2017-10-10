@@ -173,7 +173,7 @@ def ajax_save_step_three_1():
     task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
-    print 'nick_name::',task_detail['nick_name']
+    #print 'nick_name::',task_detail['nick_name']
     #step2 info
     new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
 
