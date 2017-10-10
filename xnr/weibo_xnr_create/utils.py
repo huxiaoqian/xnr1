@@ -222,7 +222,7 @@ def get_show_weibo_xnr(submitter):
     if es_results:
         for result in es_results:
             #try:
-            print 'result!!!',result
+            #print 'result!!!',result
             result = result['_source']
             weibo_xnr_dict[result['xnr_user_no']] = result['nick_name']
             # except:
