@@ -241,7 +241,6 @@ def xnr_today_remind(xnr_user_no,now_time):
     xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     day_post_average_list=json.loads(xnr_result['day_post_average'])
     #最小目标发帖量
-    #print 'day_post_average_list',day_post_average_list
     if day_post_average_list[0].encode('utf-8'):
         min_post_num=int(day_post_average_list[0].encode('utf-8'))
     else:
