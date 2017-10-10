@@ -3,6 +3,9 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/active_socialization.css">
 <style>
+    .fixed-table-pagination .page-list {
+        display: none;
+    }
     #container .suggestion #myTabs a {
         color: white;
     }
@@ -105,7 +108,7 @@
         <div class="suggestion" style="margin: 20px 0 30px;">
             <ul id="myTabs" class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active" tp="influence">
-                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-info-sign"></b>&nbsp;按影响力</a>
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-info-sign"></b>&nbsp;按粉丝数</a>
                 </li>
                 <li role="presentation" tp="sensitive">
                     <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-dashboard"></b>&nbsp;按敏感度</a>
@@ -268,9 +271,9 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/active_socialization-1.js"></script>
 <script>
     judgment('2');
     weiboORqq('weibo');
 </script>
+<script src="/static/js/active_socialization-1.js"></script>
 {% endblock %}

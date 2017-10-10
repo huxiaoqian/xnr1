@@ -13367,3 +13367,143 @@ qq_group_number: 473755421
 [2017-10-06 22:32:20] [INFO] 最后发言时间.. 1507257722
 [2017-10-06 22:32:20] [INFO] 消息.. 
 [2017-10-06 22:32:20] [INFO] 您发了一张图片或假消息... 
+qqbot_port, qqbot_num. qqbot_mailauth: 1025
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-10-10 10:25:44] [INFO] QQBot-v2.3.5
+[2017-10-10 10:25:44] [INFO] Python 2.7.3
+[2017-10-10 10:25:44] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025
+[2017-10-10 10:25:44] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3.conf
+[2017-10-10 10:25:44] [INFO] 用户名：无
+[2017-10-10 10:25:44] [INFO] 登录方式：自动（qq=1965056593）
+[2017-10-10 10:25:44] [INFO] 命令行服务器端口号：1025
+[2017-10-10 10:25:44] [INFO] 二维码服务器 ip ：无
+[2017-10-10 10:25:44] [INFO] 二维码服务器端口号：无
+[2017-10-10 10:25:44] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-10-10 10:25:44] [INFO] 邮箱服务授权码：******
+[2017-10-10 10:25:44] [INFO] 以文本模式显示二维码：否
+[2017-10-10 10:25:44] [INFO] 调试模式：关闭
+[2017-10-10 10:25:44] [INFO] 掉线后自动重启：是
+[2017-10-10 10:25:44] [INFO] 后台模式（daemon 模式）：是
+[2017-10-10 10:25:44] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-10-10 10:25:44] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/plugins
+[2017-10-10 10:25:44] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-10-10 10:25:44] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-10-10 10:25:44] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-10-10 10:25:44] [INFO] 开始自动登录...
+[2017-10-10 10:25:44] [INFO] 成功从文件 "/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-10-10 10:25:47] [WARNING] 自动登录失败，原因：上次保存的登录信息已过期
+[2017-10-10 10:25:47] [INFO] 开始手动登录...
+[2017-10-10 10:25:48] [INFO] 已获取二维码
+[2017-10-10 10:25:49] [INFO] 已将二维码发送至邮箱1965056593@qq.com
+[2017-10-10 10:25:51] [INFO] 等待二维码扫描及授权...
+qqbot_port, qqbot_num. qqbot_mailauth: 1025
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-10-10 10:39:12] [INFO] QQBot-v2.3.5
+[2017-10-10 10:39:12] [INFO] Python 2.7.3
+[2017-10-10 10:39:12] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025
+[2017-10-10 10:39:12] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3.conf
+[2017-10-10 10:39:12] [INFO] 用户名：无
+[2017-10-10 10:39:12] [INFO] 登录方式：自动（qq=1965056593）
+[2017-10-10 10:39:12] [INFO] 命令行服务器端口号：1025
+[2017-10-10 10:39:12] [INFO] 二维码服务器 ip ：无
+[2017-10-10 10:39:12] [INFO] 二维码服务器端口号：无
+[2017-10-10 10:39:12] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-10-10 10:39:12] [INFO] 邮箱服务授权码：******
+[2017-10-10 10:39:12] [INFO] 以文本模式显示二维码：否
+[2017-10-10 10:39:12] [INFO] 调试模式：关闭
+[2017-10-10 10:39:12] [INFO] 掉线后自动重启：是
+[2017-10-10 10:39:12] [INFO] 后台模式（daemon 模式）：是
+[2017-10-10 10:39:12] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-10-10 10:39:12] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/plugins
+[2017-10-10 10:39:12] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-10-10 10:39:12] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-10-10 10:39:12] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-10-10 10:39:12] [INFO] 开始自动登录...
+[2017-10-10 10:39:12] [INFO] 成功从文件 "/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-10-10 10:39:15] [WARNING] 自动登录失败，原因：上次保存的登录信息已过期
+[2017-10-10 10:39:15] [INFO] 开始手动登录...
+qqbot_port, qqbot_num. qqbot_mailauth: 1025
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-10-10 10:39:18] [INFO] QQBot-v2.3.5
+[2017-10-10 10:39:18] [INFO] Python 2.7.3
+[2017-10-10 10:39:18] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025
+[2017-10-10 10:39:18] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3.conf
+[2017-10-10 10:39:18] [INFO] 用户名：无
+[2017-10-10 10:39:18] [INFO] 登录方式：自动（qq=1965056593）
+[2017-10-10 10:39:18] [INFO] 命令行服务器端口号：1025
+[2017-10-10 10:39:18] [INFO] 二维码服务器 ip ：无
+[2017-10-10 10:39:18] [INFO] 二维码服务器端口号：无
+[2017-10-10 10:39:18] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-10-10 10:39:18] [INFO] 邮箱服务授权码：******
+[2017-10-10 10:39:18] [INFO] 以文本模式显示二维码：否
+[2017-10-10 10:39:18] [INFO] 调试模式：关闭
+[2017-10-10 10:39:18] [INFO] 掉线后自动重启：是
+[2017-10-10 10:39:18] [INFO] 后台模式（daemon 模式）：是
+[2017-10-10 10:39:18] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-10-10 10:39:18] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/plugins
+[2017-10-10 10:39:18] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-10-10 10:39:18] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-10-10 10:39:18] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-10-10 10:39:18] [INFO] 开始自动登录...
+[2017-10-10 10:39:18] [INFO] 成功从文件 "/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-10-10 10:39:21] [WARNING] 自动登录失败，原因：上次保存的登录信息已过期
+[2017-10-10 10:39:21] [INFO] 开始手动登录...
+[2017-10-10 10:39:24] [INFO] 已获取二维码
+[2017-10-10 10:39:25] [INFO] 已将二维码发送至邮箱1965056593@qq.com
+[2017-10-10 10:39:27] [INFO] 等待二维码扫描及授权...
+qqbot_port, qqbot_num. qqbot_mailauth: 1025
+qqbot_mailauth: kwnrymiokjemiicb
+qqbot_num: 1965056593
+[2017-10-10 10:39:43] [INFO] QQBot-v2.3.5
+[2017-10-10 10:39:43] [INFO] Python 2.7.3
+[2017-10-10 10:39:43] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025
+[2017-10-10 10:39:43] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3.conf
+[2017-10-10 10:39:43] [INFO] 用户名：无
+[2017-10-10 10:39:43] [INFO] 登录方式：自动（qq=1965056593）
+[2017-10-10 10:39:43] [INFO] 命令行服务器端口号：1025
+[2017-10-10 10:39:43] [INFO] 二维码服务器 ip ：无
+[2017-10-10 10:39:43] [INFO] 二维码服务器端口号：无
+[2017-10-10 10:39:43] [INFO] 用于接收二维码的邮箱账号：1965056593@qq.com
+[2017-10-10 10:39:43] [INFO] 邮箱服务授权码：******
+[2017-10-10 10:39:43] [INFO] 以文本模式显示二维码：否
+[2017-10-10 10:39:43] [INFO] 调试模式：关闭
+[2017-10-10 10:39:43] [INFO] 掉线后自动重启：是
+[2017-10-10 10:39:43] [INFO] 后台模式（daemon 模式）：是
+[2017-10-10 10:39:43] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2017-10-10 10:39:43] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/plugins
+[2017-10-10 10:39:43] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2017-10-10 10:39:43] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2017-10-10 10:39:43] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2017-10-10 10:39:43] [INFO] 开始自动登录...
+[2017-10-10 10:39:43] [INFO] 成功从文件 "/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1025/v2.3-py2-1965056593.pickle" 中恢复登录信息
+[2017-10-10 10:39:47] [WARNING] 自动登录失败，原因：上次保存的登录信息已过期
+[2017-10-10 10:39:47] [INFO] 开始手动登录...
+[2017-10-10 10:39:47] [INFO] 已获取二维码
+[2017-10-10 10:39:48] [INFO] 已将二维码发送至邮箱1965056593@qq.com
+[2017-10-10 10:39:50] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:41:49] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:41:49] [INFO] 已获取二维码
+[2017-10-10 10:41:52] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:43:51] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:43:51] [INFO] 已获取二维码
+[2017-10-10 10:43:54] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:45:54] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:45:54] [INFO] 已获取二维码
+[2017-10-10 10:45:57] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:47:56] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:47:56] [INFO] 已获取二维码
+[2017-10-10 10:47:59] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:49:58] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:49:58] [INFO] 已获取二维码
+[2017-10-10 10:50:01] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:52:00] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:52:00] [INFO] 已获取二维码
+[2017-10-10 10:52:03] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:54:03] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:54:03] [INFO] 已获取二维码
+[2017-10-10 10:54:06] [INFO] 等待二维码扫描及授权...
+[2017-10-10 10:56:05] [WARNING] 二维码已失效, 重新获取二维码
+[2017-10-10 10:56:05] [INFO] 已获取二维码
