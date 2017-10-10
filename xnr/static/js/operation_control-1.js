@@ -1,6 +1,3 @@
-// var start_time='1500108142';
-// var end_time='1500108142';
-
 var end_time=Date.parse(new Date())/1000;
 //=====历史统计====定时任务列表====历史消息===时间段选择===
 $('.choosetime .demo-label input').on('click',function () {
@@ -772,7 +769,8 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+wordTxt+
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num+
+        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+wordTxt+
         '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+'&like=0&create_type='+create_type;
     public_ajax.call_request('get',corpus_url,postYES)
 }
@@ -1004,7 +1002,7 @@ function focusOn(data) {
 //=====粉丝列表====
 $('.fansSEN .demo-label input').on('click',function () {
     var orderType=$(this).val();
-    var clikcFans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
+    var clikcFans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type='+orderType;
     public_ajax.call_request('get',clikcFans_url,fans);
 })
 var fans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';

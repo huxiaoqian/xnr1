@@ -1,0 +1,52 @@
+#three .title {
+    width: 100%;
+    position: relative;
+}
+#three .title .tit-1 b {
+    display: inline-block;
+    position: relative;
+    top: -3px;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#three .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #fff;
+}
+#three .options {
+    width: 90%;
+    margin:0 auto 20px;
+}
+#three .options .op-2-down,#three .options .op-4-down {
+    display: inline-block;
+}
+#three .options #opt-1-2,#three .options #opt-2-2,#three .options #opt-2-4,
+#three .options #opt-3-2,#three .options #opt-4-2,#three .options #opt-4-4 {
+    width: 800px;
+    height: 300px;
+    margin: 20px auto;
+}
+#three .options #opt-2-2,#three .options #opt-2-4,
+#three .options #opt-4-2,#three .options #opt-4-4 {
+    width: 400px;
+}
+#three .title #buildModal {
+    display: inline-block;
+    color: white;
+    font-weight: 700;
+    position: relative;
+    top:-2px;
+    left: 5px;
+    cursor: pointer;
+    padding: 2px 10px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: transparent;
+}
+#three .title #buildModal:hover {
+    background:rgba(3, 8, 16, 0.61);
+}

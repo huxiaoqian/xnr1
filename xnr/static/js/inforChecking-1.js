@@ -48,7 +48,7 @@ function wordCloud(data) {
             wordSeries.push(
                 {
                     name: k,
-                    value: data[k],
+                    value: data[k]*200,
                     itemStyle: createRandomItemStyle()
                 }
             )
@@ -77,7 +77,7 @@ function wordCloud(data) {
                         text: '',
                     },
                     tooltip: {
-                        show: true
+                        show: true,
                     },
                     series: [{
                         type: 'wordCloud',
@@ -378,9 +378,9 @@ function createRandomItemStyle() {
     return {
         normal: {
             color: 'rgb(' + [
-                Math.round(Math.random() * 260),
-                Math.round(Math.random() * 260),
-                Math.round(Math.random() * 260)
+                Math.round(Math.random() * 128+127),
+                Math.round(Math.random() * 128+127),
+                Math.round(Math.random() * 128+127)
             ].join(',') + ')'
         }
     };
@@ -468,7 +468,8 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num +
+        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
         '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
         '&like=0&create_type='+create_type;
     public_ajax.call_request('get',corpus_url,postYES);
