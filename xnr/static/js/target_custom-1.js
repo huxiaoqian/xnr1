@@ -1,6 +1,5 @@
 //加载
 var domainName='',roleName='';
-
 //渗透领域
 var field_url='/weibo_xnr_create/show_domain/';
 public_ajax.call_request('get',field_url,field);
