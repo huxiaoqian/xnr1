@@ -393,7 +393,7 @@
 <script id="load_user">
     judgment('6');
     var go_on='{{continueUser}}';
-    if (go_on){
+    if (go_on=='2'){
         $('.page .previous').hide();
         //$('.page .next').hide();
 //        $('#name').attr('readonly','readonly');
@@ -402,6 +402,17 @@
 //        $('#career').attr('readonly','readonly');
 //        $('#description').attr('readonly','readonly');
 //        $('#gender input').attr('disabled','disabled')
+    }else {
+//        $("input[readonly='readonly']").removeProp("readonly");
+//        $("aa").removeAttr("readOnly")
+        $('#name').removeAttr('readonly');
+        $('#age').removeAttr('readonly');
+        $('#place').removeAttr('readonly');
+        $('#career').removeAttr('readonly');
+        $('#description').removeAttr('disabled');
+        $('#gender input').removeAttr('disabled');
+        $('.page .previous').hide();
+        $('.page .next').hide();
     }
     var $id=localStorage.getItem('go_mod_user');
     var basicData;
@@ -430,10 +441,11 @@
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
         }
 
-        var posyNum = ($two.day_post_average.toString().split('-')[0])||$two.day_post_average||$two.day_post_num||($two.day_post_num.toString().split('-')[0]);
+        //var posyNum = ($two.day_post_average.toString().split('-')[0])||$two.day_post_average||$two.day_post_num||($two.day_post_num.toString().split('-')[0]);
+        var posyNum = ($two.day_post_average)||($two.day_post_num);
         if (posyNum>5){
             $('.other-2 .customize').hide();
-            $('.other-2 .postNUM').show().val(parseInt(Number(posyNum)));
+            $('.other-2 .postNUM').show().val('0-'+parseInt(Number(posyNum)));
         }else if (posyNum==0){
             $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
         }else if (posyNum>0&&posyNum<3){

@@ -79,7 +79,7 @@ def upload_file():
 @app.route('/create_user_role_test/')
 def create_user_roles():
     
-    db.drop_all()
+    #db.drop_all()
 
     try:
         db.create_all()
@@ -160,7 +160,7 @@ def homepage():
 
 # logout
 @app.route('/logout/')
-#@login_required
+@login_required
 def logout():
     logout_user()
     #flash(u'You have been signed out')
