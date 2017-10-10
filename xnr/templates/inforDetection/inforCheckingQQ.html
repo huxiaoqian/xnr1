@@ -162,7 +162,6 @@
 {% endblock %}
 
 {% block my_js %}
-<script src="/static/js/inforCheckingQQ-1.js"></script>
 <script>
     $('.coorName').text('预警监控');
     weiboORqq('QQ');
@@ -179,6 +178,6 @@
     $('.end').on('changeDate', function(ev){
         $('.start').datetimepicker('setEndDate',ev.date);
     });
-
 </script>
+<script src="/static/js/inforCheckingQQ-1.js"></script>
 {% endblock %}

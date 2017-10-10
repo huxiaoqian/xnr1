@@ -1195,7 +1195,6 @@ def get_direct_search(task_detail):
     #         return_results['statusnum'] = item['_source']['statusnum']
 
         #return_results_all.append(return_results)
->>>>>>> 61c62cac8286bd2c55a175b5a85a3cfac7497562
     # else:
     #     if S_TYPE == 'test':
     #         uid_list_new = FRIEND_LIST 
