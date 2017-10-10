@@ -28,7 +28,8 @@ from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
 from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.qq_xnr_report_manage.views import mod as qqxnrreportmanageModule
 from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
-from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
+#from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
+from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
 #from flask.ext.security import SQLAlchemyUserDatastore
 from flask_security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
@@ -96,9 +97,9 @@ def create_app():
     # toolbar = DebugToolbarExtension(app)
     # debug toolbar
     # toolbar = DebugToolbarExtension(app)
-    app.config['MONGO_HOST'] = '219.224.134.212'    
-    app.config['MONGO_PORT'] = 27017    
-    app.config['MONGO_DBNAME'] = 'mrq'
+    # app.config['MONGO_HOST'] = '219.224.134.212'    
+    # app.config['MONGO_PORT'] = 27017    
+    # app.config['MONGO_DBNAME'] = 'mrq'
 
     # init database
     db.init_app(app)
@@ -110,13 +111,13 @@ def create_app():
 
     # init admin
     admin.init_app(app)
-    admin.add_view(sqla.ModelView(User, db.session))
-    admin.add_view(sqla.ModelView(Role, db.session))
+    admin.add_view(AdminAccessView_user(User, db.session))
+    admin.add_view(AdminAccessView_role(Role, db.session))
+    # admin.add_view(sqla.ModelView(User, db.session))
+    # admin.add_view(sqla.ModelView(Role, db.session))
     
     return app
    
-
-
 def register_extensions(app):
     app.config.setdefault('ES_USER_PROFILE_URL', 'http://219.224.135.97:9208/')
     app.extensions['es_user_profile'] = Elasticsearch(app.config['ES_USER_PROFILE_URL'])
