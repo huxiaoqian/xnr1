@@ -247,11 +247,17 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
 
-#es.delete(index='weibo_log',doc_type='log',id='admin@qq.com2017-10-08')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0016')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0017')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0018')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0019')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0020')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0021')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0022')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0023')
+es.delete(index='weibo_xnr',doc_type='user',id='WXNR0024')
 
-import psutil
-import re
-import sys
+
 
 # def processinfo(x):
 
