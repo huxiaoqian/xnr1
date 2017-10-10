@@ -213,9 +213,14 @@ function login_QR_code(data) {
             $('#succee_fail #words').text('您的QQ号码已经在线。');
             $('#succee_fail').modal('show');
         }else {
-            var _src='/static/images/QQ/'+data;
-            $('#QR_code #QQ_picture .imageqq').attr('src',_src);
-            $('#QR_code').modal('show');
+            if(data=='try later'){
+                $('#succee_fail #words').text('系统繁忙，稍后再试。');
+                $('#succee_fail').modal('show');
+            }else {
+                var _src='/static/images/QQ/'+data;
+                $('#QR_code #QQ_picture .imageqq').attr('src',_src);
+                $('#QR_code').modal('show');
+            }
         }
         if (document.getElementsByClassName('imageqq')[0].complete){
             var inout=$($this_QQ).attr('in_out');

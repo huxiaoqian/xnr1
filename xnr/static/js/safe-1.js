@@ -201,7 +201,7 @@ function radar(data) {
 }
 // 仪表盘图
 function dashBoard(dashVal) {
-    dashVal=(Number(dashVal).toFixed(4))*100;
+    dashVal=(dashVal*100).toFixed(4);
     var myChart = echarts.init(document.getElementById('pc-2'),'dark');
     var option = {
         backgroundColor:'transparent',
