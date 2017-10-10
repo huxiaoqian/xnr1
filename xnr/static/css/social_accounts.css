@@ -42,7 +42,7 @@ body {
     margin-bottom: 50px;
 }
 #container .info_sure .info_list {
-    padding: 15px;
+    padding: 30px 15px;
     border: 1px solid silver;
 }
 #container .info_sure .info_left .list-2 p,
