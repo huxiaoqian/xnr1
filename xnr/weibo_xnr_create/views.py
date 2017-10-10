@@ -93,7 +93,6 @@ def ajax_modify_userinfo():
     task_detail['location'] = request.args.get('location','')
     task_detail['gender'] = request.args.get('gender','')
 
-
     results = get_modify_userinfo(task_detail)
 
     return json.dumps(results)
