@@ -2,6 +2,7 @@ var time=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    console.log(data)
     $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
@@ -66,6 +67,8 @@ function weibo(data) {
                                 '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                                 '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
+                                '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                                 '   <span class="center_2">'+text+'</span>'+
                                 '   <div class="center_3">'+
                                 '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
@@ -153,10 +156,12 @@ function oneUP(_this) {
         for (var i=0;i<len.length;i++){
             var alldata=[];
             var mid = $(len[i]).find('.mid').text();alldata.push(mid);
-            var txt=$(len[i]).find('.center_2').text().toString().replace(/#/g,'%23');alldata.push(txt);
+            var txt=$(len[i]).find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');alldata.push(txt);
             var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
             var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
             var comment = $(len[i]).find('.comment').text();alldata.push(comment);
+            var sensitive = $(len[i]).find('.sensitive').text();alldata.push(sensitive);
+            var sensitiveWords = $(len[i]).find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
             dataStr+=alldata.join(',').toString();
             if (i!=len.length-1){dataStr+='*'}
         }

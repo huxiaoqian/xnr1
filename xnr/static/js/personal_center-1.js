@@ -7,7 +7,6 @@ function auto() {
 auto();
 function has_table(has_data) {
     var person=eval(has_data);
-    console.log(person)
     $('.has_list #haslist p').show();
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
@@ -293,6 +292,7 @@ var uploadUser,delID;
 function deluser(id,flag) {
     uploadUser=flag;
     delID=id;
+    $('#delPrompt').modal('show');
 }
 function sureDelXnr() {
     var del_url = '/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no='+delID;
@@ -316,16 +316,17 @@ function success_fail(data) {
     var word='';
     if (data){
         word='删除成功。';
+        console.log(uploadUser)
         setTimeout(function () {
             var has_not_url='';
-            if (uploadUser==1){
+            if (uploadUser=='1'){
                 has_not_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
                 public_ajax.call_request('GET',has_not_url,has_table);
             }else {
                 has_not_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
-                public_ajax.call_request('GET',notHao_url,not_yet);
+                public_ajax.call_request('GET',has_not_url,not_yet);
             }
-        },700);
+        },1000);
     }else {
         word='删除失败。';
     }

@@ -404,7 +404,7 @@ function networkPeo(_id) {
     public_ajax.call_request('get',detail_url,networkPeoDetail);
 }
 function networkPeoDetail(data) {
-    console.log(data)
+
 }
 
 //评论
@@ -412,7 +412,7 @@ function showInput(_this) {
     $(_this).parents('.post_perfect').find('.commentDown').show();
 };
 function comMent(_this){
-    var txt = $(_this).prev().val();
+    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     if (txt!=''){
         var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
@@ -425,7 +425,7 @@ function comMent(_this){
 
 //转发
 function retweet(_this) {
-    var txt = $(_this).parent().prev().text();
+    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?&xnr_user_no='+ID_Num+
         '&text='+txt+'&r_mid='+mid;
@@ -437,7 +437,7 @@ function thumbs(_this) {
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
-    var txt = $(_this).parent().prev().text();
+    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
         '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
     public_ajax.call_request('get',post_r_s_url,postYES)
@@ -455,7 +455,7 @@ var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
     wordMid = $(_this).parents('.post_perfect').find('.mid').text();
     wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
     wordComment = $(_this).parents('.post_perfect').find('.comment').text();
     $('#wordcloud').modal('show');
