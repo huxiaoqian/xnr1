@@ -7,6 +7,7 @@
         color: white;
     }
     .demo-label{display:inline-block;margin:10px 0 0 0;cursor:pointer;width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    #wordcloud .demo-label{width: 130px;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -448,6 +449,17 @@
 <script>
     judgment('5');
     weiboORqq('weibo');
+
+    $('#wordcloud .word-1 input').on('click',function () {
+        var s=$(this).val();
+        if (s=='日常语料'){
+            $('#wordcloud #cloud-1').show();
+            $('#wordcloud #cloud-2').hide();
+        }else {
+            $('#wordcloud #cloud-2').show();
+            $('#wordcloud #cloud-1').hide();
+        }
+    })
 </script>
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/safe-1.js"></script>

@@ -38,7 +38,7 @@ def compare(x, y):
 
 def getQRCode_v2(qq_number):
     #read qq_xnr es to get qqbot_port
-    
+    time.sleep(30)
     try:
         # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
         #             id=qq_xnr,_source=True)['_source']
@@ -56,16 +56,16 @@ def getQRCode_v2(qq_number):
     #qqbot_port = '8199'
     #get login png
     port_dir = QRCODE_PATH+str(qqbot_port)+'/'
-    print 'port_dir:', port_dir
+    
     filenames = os.listdir(port_dir)
-    print 'filenames:', filenames
+    
     fileitem = [[filename, os.stat(port_dir+filename).st_mtime] for filename in filenames]
-    print 'fileitem:', fileitem
+    
     file_item_new = []
     for file_name_time in fileitem:
         file_name_new = file_name_time[0]
         file_time = file_name_time[1]
-        print 'file_name_new:::',file_name_new
+        
         if '.png' in file_name_new:
             file_item_new.append(file_name_time)
     print 'file_item_new:::',file_item_new
