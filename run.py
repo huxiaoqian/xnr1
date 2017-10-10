@@ -82,6 +82,7 @@ def create_user_roles():
         db.create_all()
         #role_1 = user_datastore.create_role(name='userrank', description=u'用户排行模块权限')
         user_1 = user_datastore.create_user(email='admin2@qq.com', password="Bh123456")
+        #user_2 = user_datastore.create_user(email='admin2@qq.com', password="Bh123456")
 
         #user_datastore.add_role_to_user(user_1, role_1)
         #user_datastore.add_role_to_user(user_1, role_2)
@@ -109,7 +110,7 @@ def homepage():
     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
     #cx = sqlite3.connect("sqlite:///flask-admin.db")
     cu=cx.cursor()
-    users = cu.execute("select id,email   from user") 
+    users = cu.execute("select id,email from user") 
     for row in users:
         if row[0] == int(_id):
             user_name = row[1]
@@ -185,7 +186,7 @@ def get_user():
     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
     #cx = sqlite3.connect("/home/user_portrait_0320/revised_user_portrait/user_portrait/user_portrait/flask-admin.db")
     cu=cx.cursor()
-    cu.execute("select email from user") 
+    cu.execute("select * from user") 
     user_info = cu.fetchall()
     cx.close()
     return json.dumps(user_info)
