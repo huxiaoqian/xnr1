@@ -11,6 +11,7 @@ from xnr.global_utils import es_xnr as es,qq_xnr_index_name,qq_xnr_index_type,QR
 #QRCODE_PATH = '/root/.qqbot-tmp/'
 
 def getQRCode():
+    #time.sleep(30)
     filenames = os.listdir(QRCODE_PATH)
     filenames.sort(compare)
 
@@ -60,9 +61,22 @@ def getQRCode_v2(qq_number):
     print 'filenames:', filenames
     fileitem = [[filename, os.stat(port_dir+filename).st_mtime] for filename in filenames]
     print 'fileitem:', fileitem
-    new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=False)[0]
-    new_filepath = new_fileitem[0]
-    return port_dir + new_filepath
+    file_item_new = []
+    for file_name_time in fileitem:
+        file_name_new = file_name_time[0]
+        file_time = file_name_time[1]
+        print 'file_name_new:::',file_name_new
+        if '.png' in file_name_new:
+            file_item_new.append(file_name_time)
+    print 'file_item_new:::',file_item_new
+    new_fileitem = sorted(file_item_new, key=lambda x:x[1], reverse=True)[0]
+    print 'new_fileitem:::',new_fileitem
+    if new_fileitem[1] > (int(time.time()) - 60):
+        return port_dir + new_fileitem[0]
+    # new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=False)[0]
+    # new_filepath = new_fileitem[0]
+
+    # return port_dir + new_filepath
     
 
 if __name__ == '__main__':
