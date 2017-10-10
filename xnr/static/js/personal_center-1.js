@@ -316,7 +316,6 @@ function success_fail(data) {
     var word='';
     if (data){
         word='删除成功。';
-        console.log(uploadUser)
         setTimeout(function () {
             var has_not_url='';
             if (uploadUser=='1'){

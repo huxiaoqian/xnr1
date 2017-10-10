@@ -136,8 +136,6 @@ function publicRecommend(field,className,tit) {
 
 //上一步，下一步，保存返回
 var second,n=0;
-//  /weibo_xnr_create/save_step_two/?task_id=WXNR0001&nick_name=大大DE律师
-// &age=29&location=北京&career=律师&description=这是简介&active_time=9,10,11,19,20&day_post_average=9-12
 $('.previous').on('click',function () {
     n=0;
     nameJudgment();
@@ -145,12 +143,10 @@ $('.previous').on('click',function () {
 $('.next').on('click',function () {
     n=1;
     nameJudgment();
-    //values();
 });
 $('.save_return').on('click',function () {
     n=2;
     nameJudgment();
-    //values();
 });
 function nameJudgment() {
     //判断昵称是否重复
@@ -200,7 +196,6 @@ function success(data) {
 function repeatNot(data) {
     if (data){
         values();
-        //save();
     }else {
         $('#prompt p').text('您输入的昵称与系统数据重复，请重新输入。');
         $('#prompt').modal('show');
