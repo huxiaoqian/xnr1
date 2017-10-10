@@ -154,7 +154,7 @@ def homepage():
 
 # logout
 @app.route('/logout/')
-#@login_required
+@login_required
 def logout():
     logout_user()
     #flash(u'You have been signed out')
