@@ -250,6 +250,7 @@ $('.pc-4 input').on('click',function () {
     public_ajax.call_request('get',the_url,weiboData)
 });
 function weiboData(data) {
+    console.log(data)
     $('#postRelease').bootstrapTable('load', data);
     $('#postRelease').bootstrapTable({
         data:data,
@@ -373,8 +374,8 @@ function joinlab(_this) {
 function joinWord() {
     var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
     var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='11';
-    if (corpus_type=='主题语料'){tt=22};
+    var theme_daily_name=[],tt='';
+    if (corpus_type=='主题语料'){tt=2};
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
