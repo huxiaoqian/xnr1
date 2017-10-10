@@ -70,45 +70,45 @@
                 <div class="options name">
                     <img src="/static/images/icon.png" alt="">
                     <span>昵称：</span>
-                    <input type="text" id="name" placeholder="昵称"/>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <input type="text" id="name" placeholder="昵称" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options age">
                     <img src="/static/images/icon.png" alt="">
                     <span>年龄：</span>
-                    <input type="text" id="age" placeholder="年龄"/>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <input type="text" id="age" placeholder="年龄" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options gender">
                     <img src="/static/images/icon.png" alt="">
                     <span>性别：</span>
                     <div id="gender">
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="男">
+                            <input class="demo-radio" type="radio" name="demo" value="男" disabled>
                             <span class="demo-checkbox demo-radioInput"></span> 男
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="女">
+                            <input class="demo-radio" type="radio" name="demo" value="女" disabled>
                             <span class="demo-checkbox demo-radioInput"></span> 女
                         </label>
                         <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="demo" value="未知">
+                            <input class="demo-radio" type="radio" name="demo" value="未知" disabled>
                             <span class="demo-checkbox demo-radioInput"></span> 未知
                         </label>
                     </div>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options place">
                     <img src="/static/images/icon.png" alt="">
                     <span>所在地：</span>
-                    <input type="text" id="place" placeholder="地区"/>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <input type="text" id="place" placeholder="地区" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options career">
                     <img src="/static/images/icon.png" alt="">
                     <span>职业：</span>
-                    <input type="text" id="career" placeholder="职业"/>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <input type="text" id="career" placeholder="职业" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options description">
                     <div style="display: inline-block;position: relative;top: -55px;">
@@ -116,8 +116,8 @@
                         <span>个人描述：</span>
                     </div>
 
-                    <textarea id="description" rows="3" style="resize: none;"></textarea>
-                    <a class="recommend" href="###">查看推荐</a>
+                    <textarea id="description" rows="3" disabled style="resize: none;"></textarea>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
             </div>
             <!--<div class="account-2" style="margin: 20px 0;">-->
@@ -238,7 +238,7 @@
                             </label>
                         </div>
                     </div>
-                    <a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>
+                    <!--<a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>-->
                     <!--<div class="hadChoose" style="color: white;display: none;">-->
                         <!--<span>选择的活跃时间段：</span>-->
                         <!--<div class="timeRange" style="display: inline-block;"></div>-->
@@ -272,7 +272,7 @@
                         </label>
                         <input type="text" class="postNUM" name="pos" placeholder="如：6-8" style="display: none;"/>
                     </div>
-                    <a class="other_recommend dayPost" href="###">查看推荐</a>
+                    <!--<a class="other_recommend dayPost" href="###">查看推荐</a>-->
                 </div>
             </div>
             <!--<div class="other-3" style="margin: 15px 0;">-->
@@ -396,13 +396,12 @@
     if (go_on){
         $('.page .previous').hide();
         //$('.page .next').hide();
-        console.log(22)
-        $('#name').attr('readonly','readonly');
-        $('#age').attr('readonly','readonly');
-        $('#place').attr('readonly','readonly');
-        $('#career').attr('readonly','readonly');
-        $('#description').attr('readonly','readonly');
-        $('#gender input').attr('disabled','disabled')
+//        $('#name').attr('readonly','readonly');
+//        $('#age').attr('readonly','readonly');
+//        $('#place').attr('readonly','readonly');
+//        $('#career').attr('readonly','readonly');
+//        $('#description').attr('readonly','readonly');
+//        $('#gender input').attr('disabled','disabled')
     }
     var $id=localStorage.getItem('go_mod_user');
     var basicData;
@@ -420,13 +419,12 @@
     //
     var $two=JSON.parse(localStorage.getItem('secondStep'));
     if ($two){
-        $('#name').val($two.nick_name).attr('readonly','readonly');
-        $('#age').val($two.age).attr('readonly','readonly');
-        $(".gender input[type='radio']").attr('disabled','disabled');
+        $('#name').val($two.nick_name);
+        $('#age').val($two.age);
         $(".gender input[type='radio'][value='"+$two.sex+"']").attr("checked",true);
-        $('#place').val($two.location).attr('readonly','readonly');
-        $('#career').val($two.career).attr('readonly','readonly');
-        $('#description').val($two.description).attr('readonly','readonly');
+        $('#place').val($two.location);
+        $('#career').val($two.career);
+        $('#description').val($two.description);
 
         for (var t of $two.active_time){
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);

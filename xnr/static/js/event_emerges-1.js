@@ -3,7 +3,6 @@ public_ajax.call_request('get',weiboUrl,weibo);
 //文本信息
 var contentList = {};
 function weibo(data){
-    console.log(data)
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item;
     })
@@ -509,8 +508,8 @@ function mainWeibo(_data,idx) {
                         '   <a class="mid" style="display: none;">'+row.mid+'</a>'+
                         '   <a class="uid" style="display: none;">'+row.uid+'</a>'+
                         '   <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
-                        '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
-                        '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
+                        '   <a class="sensitive" style="display: none;">'+row.sensitive+'</a>'+
+                        '   <a class="sensitiveWords" style="display: none;">'+row.sensitive_words_string+'</a>'+
                         '   <span class="center_2" style="display:block;text-align:left;">'+text+'</span>'+
                         '   <div class="center_3">'+
                         '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+

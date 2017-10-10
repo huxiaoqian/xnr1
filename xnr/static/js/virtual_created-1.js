@@ -1,7 +1,44 @@
 //查看推荐
+var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
+    $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
+public_ajax.call_request('GET',recommendURL,recommendTwo);
+function recommendTwo(data) {
+    console.log(data)
+    var name,age,sex,location,career,description;
+    if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
+    if (data.age){age=data.age}else {age='无年龄推荐'}
+    if (data.sex==1){sex='男'}else if (data.sex==2) {sex='女'}else {sex='未知'}
+    if (data.user_location){location=data.user_location}else {location='无地理位置推荐'}
+    if (data.career){career=data.career}else {career='无职业推荐'}
+    if (data.description){description=data.description}else {description='无描述推荐'}
+    $('#name').val(name);
+    $('#age').val(age);
+    $(".gender input[type='radio'][value='"+sex+"']").attr("checked",true);
+    $('#place').val(location);
+    $('#career').val(career);
+    $('#description').val(description);
+    for (var t of data.active_time){
+        $(".task_time input[name='timetampe'][type='checkbox'][value='"+parseInt(t)+"']").attr("checked",true);
+    }
+
+    var posyNum = parseInt(data.day_post_num_average);
+    if (posyNum>5){
+        $('.other-2 .customize').hide();
+        $('.other-2 .postNUM').show().val(parseInt(Number(posyNum)));
+    }else if (posyNum==0){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
+    }else if (posyNum>0&&posyNum<3){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
+    }else if (posyNum>=3&&posyNum<=5){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
+    }
+}
+
+
 var recommendData;
 function character(data) {
     recommendData=data;
+    console.log(recommendData)
     publicRecommend('role_example','#role_example .role_example_list');
     //其他信息推荐
     $('#container .other_basic .others a').on('click',function () {
