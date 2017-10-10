@@ -14,6 +14,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 __all__ = ['admin']
 
 
+
 # Create database connection object
 db = SQLAlchemy()
 
