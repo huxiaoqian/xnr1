@@ -14,6 +14,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 __all__ = ['admin']
 
 
+
 # Create database connection object
 db = SQLAlchemy()
 
@@ -31,7 +32,7 @@ class AdminAccessView(sqla.ModelView):
             return True
 
         return False
-        
+
     # def scaffold_form(self):
     #     # Start with the standard form as provided by Flask-Admin. We've already told Flask-Admin to exclude the
     #     # password field from this form.
@@ -59,7 +60,7 @@ class Role(db.Model, RoleMixin):
     id = db.Column(db.Integer(), primary_key=True)
     # 该用户角色名称
     name = db.Column(db.String(80), unique=True)
-    chname = db.Column(db.String(80), unique=True)
+    #chname = db.Column(db.String(80), unique=True)
     description = db.Column(db.String(255))
 
     def __unicode__(self):
@@ -68,41 +69,41 @@ class Role(db.Model, RoleMixin):
     def __name__(self):
         return u'角色管理'
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(255), unique=True)
-    password = db.Column(db.String(255))
-    active = db.Column(db.Boolean())
-    confirmedat = db.Column(db.DateTime())
-    roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
-    usernum = db.Column(db.Integer)
-    moodnum = db.Column(db.Integer)
-    netnum = db.Column(db.Integer)
-    findnum = db.Column(db.Integer)
-    analysisnum = db.Column(db.Integer)
-    sensingnum = db.Column(db.Integer)
-    department = db.Column(db.String(255))
-    # Required for administrative interface. For python 3 please use __str__ instead.
-    def __unicode__(self):
-        return self.email
-
-    def __name__(self):
-        return u'用户管理'
-
 # class User(db.Model, UserMixin):
 #     id = db.Column(db.Integer, primary_key=True)
 #     email = db.Column(db.String(255), unique=True)
 #     password = db.Column(db.String(255))
 #     active = db.Column(db.Boolean())
-#     confirmed_at = db.Column(db.DateTime())
-#     roles = db.relationship('Role', secondary=roles_users,
-#                             backref=db.backref('users', lazy='dynamic'))
+#     user_confirmedat  = db.Column(db.DateTime())
+#     roles = db.relationship('Role', secondary=roles_users, backref=db.backref('users', lazy='dynamic'))
+#     usernum = db.Column(db.Integer)
+#     moodnum = db.Column(db.Integer)
+#     netnum = db.Column(db.Integer)
+#     findnum = db.Column(db.Integer)
+#     analysisnum = db.Column(db.Integer)
+#     sensingnum = db.Column(db.Integer)
+#     department = db.Column(db.String(255))
 #     # Required for administrative interface. For python 3 please use __str__ instead.
 #     def __unicode__(self):
 #         return self.email
 
 #     def __name__(self):
 #         return u'用户管理'
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
+    # Required for administrative interface. For python 3 please use __str__ instead.
+    def __unicode__(self):
+        return self.email
+
+    def __name__(self):
+        return u'用户管理'
 
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security()
