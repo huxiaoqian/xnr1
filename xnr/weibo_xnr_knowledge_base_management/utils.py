@@ -429,12 +429,13 @@ def get_delete_domain(domain_name):
 ###########functional module 1: sensitive words manage  ###########
 
 #step 1:    create sensitive words
-def get_create_sensitive_words(rank,sensitive_words,create_type,create_time):
+def get_create_sensitive_words(rank,sensitive_words,create_type,create_time,submitter):
     task_detail = dict()
     task_detail['rank'] = rank
     task_detail['sensitive_words'] = sensitive_words
     task_detail['create_type'] = create_type
     task_detail['create_time'] = create_time
+    task_detail['submitter'] = submitter
     task_id = sensitive_words
     try:
         es.index(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=task_id,body=task_detail)
@@ -516,10 +517,11 @@ def change_sensitive_words(words_id,change_info):
     sensitive_words=change_info[1]
     create_type=change_info[2]
     create_time=change_info[3]
+    submitter=change_info[4]
 
     try:
         es.update(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id,\
-            body={"doc":{'rank':rank,'sensitive_words':sensitive_words,'create_type':create_type,'create_time':create_time}})
+            body={"doc":{'rank':rank,'sensitive_words':sensitive_words,'create_type':create_type,'create_time':create_time,'submitter':submitter}})
         result=True
     except:
         result=False
@@ -529,7 +531,7 @@ def change_sensitive_words(words_id,change_info):
 ###########  functional module 2: time alert node manage #########
 
 #step 1:    add time alert node 
-def get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend):
+def get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend,submitter):
     task_detail = dict()
     #task_detail['date_time'] = ts2datetime(int(timestamp))[5:10]
     task_detail['date_name']=date_name
@@ -538,6 +540,7 @@ def get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,
     task_detail['create_type'] = create_type
     task_detail['create_time'] = create_time
     task_detail['content_recommend']=content_recommend
+    task_detail['submitter']=submitter
 
     task_id = create_time
     try:
@@ -596,6 +599,7 @@ def change_date_remind(task_id,date_name,keywords,create_type,create_time):
     date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
     content_recommend=date_result['content_recommend']
     date_time=date_result['date_time']
+    submitter=date_result['submitter']
     #create_type=create_type
     #keywords=keywords
     #create_time=create_time
@@ -603,7 +607,7 @@ def change_date_remind(task_id,date_name,keywords,create_type,create_time):
     try:
         es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
             body={"doc":{'date_name':date_name,'date_time':date_time,'keywords':keywords,'create_type':create_type,\
-            'create_time':create_time,'content_recommend':content_recommend}})
+            'create_time':create_time,'content_recommend':content_recommend,'submitter':submitter}})
         result=True
     except:
         result=False
@@ -622,12 +626,13 @@ def delete_date_remind(task_id):
 ###########        functional module 3: metaphorical expression     ###########
 
 #step 1:    add metaphorical expression 
-def get_create_hidden_expression(origin_word,evolution_words_string,create_type,create_time):
+def get_create_hidden_expression(origin_word,evolution_words_string,create_type,create_time,submitter):
     task_detail = dict()
     task_detail['origin_word'] = origin_word
     task_detail['evolution_words_string'] = evolution_words_string
     task_detail['create_type'] = create_type
     task_detail['create_time'] = create_time
+    task_detail['submitter']=submitter
     task_id = origin_word
     try:
         es.index(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=task_id,body=task_detail)
@@ -685,10 +690,11 @@ def change_hidden_expression(express_id,change_info):
     evolution_words_string=change_info[1]
     create_type=change_info[2]
     create_time=change_info[3]
+    submitter=change_info[4]
 
     try:
         es.update(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id,\
-            body={"doc":{'origin_word':origin_word,'evolution_words_string':evolution_words_string,'create_type':create_type,'create_time':create_time}})
+            body={"doc":{'origin_word':origin_word,'evolution_words_string':evolution_words_string,'create_type':create_type,'create_time':create_time,'submitter':submitter}})
         result=True
     except:
         result=False
@@ -727,7 +733,7 @@ def create_corpus(corpus_info):
     corpus_detail['like']=corpus_info[8]
     corpus_detail['create_type']=corpus_info[9]
     corpus_id=corpus_info[4]  #mid
-    print corpus_info
+    #print corpus_info
     try:
         es.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,body=corpus_detail)
         mark=True

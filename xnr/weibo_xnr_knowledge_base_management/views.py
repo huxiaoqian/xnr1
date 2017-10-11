@@ -143,7 +143,9 @@ def ajax_create_sensitive_words():
     sensitive_words = request.args.get('sensitive_words','')
     create_type = request.args.get('create_type','')
     create_time = int(time.time())
-    mark = get_create_sensitive_words(rank,sensitive_words,create_type,create_time)
+    #添加用户
+    submitter=request.args.get('submitter','')
+    mark = get_create_sensitive_words(rank,sensitive_words,create_type,create_time,submitter)
 
     return json.dumps(mark)
 
@@ -155,10 +157,12 @@ def ajax_create_sensitive_words_batch():
     sensitive_words_string = request.args.get('sensitive_words_string','')
     sensitive_words=sensitive_words_string.encode('utf-8').split('，')
     create_type = request.args.get('create_type','')
+    #添加用户
+    submitter=request.args.get('submitter','')
     create_time = int(time.time())
     mark_result=[]
     for item in sensitive_words:
-        mark=get_create_sensitive_words(rank,item,create_type,create_time)
+        mark=get_create_sensitive_words(rank,item,create_type,create_time,submitter)
         mark_result.append(mark)
     return json.dumps(mark_result)
 
@@ -198,8 +202,10 @@ def ajax_change_sensitive_words():
     rank=request.args.get('rank','')
     sensitive_words=request.args.get('sensitive_words','')
     create_type=request.args.get('create_type','')
+    #添加用户
+    submitter=request.args.get('submitter','')
     create_time=int(time.time())
-    change_info=[rank,sensitive_words,create_type,create_time]
+    change_info=[rank,sensitive_words,create_type,create_time,submitter]
     results=change_sensitive_words(words_id,change_info)
     return json.dumps(results)
 
@@ -216,8 +222,10 @@ def ajax_create_date_remind():
     create_type = request.args.get('create_type','')
     create_time = int(time.time())
     content_recommend = request.args.get('content_recommend','')
+    #添加用户
+    submitter=request.args.get('submitter','')
     
-    mark = get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend)
+    mark = get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend,submitter)
 
     return json.dumps(mark)
 
@@ -278,8 +286,10 @@ def ajax_create_hidden_expression():
     evolution_words_string = '&'.join(evolution_words.encode('utf-8').split('，'))  # 字符串，以 '&'连接
     create_type = request.args.get('create_type','')
     create_time = int(time.time())
+        #添加用户
+    submitter=request.args.get('submitter','')
 
-    mark = get_create_hidden_expression(origin_word,evolution_words_string,create_type,create_time)
+    mark = get_create_hidden_expression(origin_word,evolution_words_string,create_type,create_time,submitter)
 
     return json.dumps(mark)
 
@@ -315,7 +325,10 @@ def ajax_change_hidden_expression():
     evolution_words_string='&'.join(evolution_words.encode('utf-8').split('，'))
     create_type=request.args.get('create_type','')
     create_time=int(time.time())
-    change_info=[origin_word,evolution_words_string,create_type,create_time]
+            #添加用户
+    submitter=request.args.get('submitter','')
+
+    change_info=[origin_word,evolution_words_string,create_type,create_time,submitter]
     results=change_hidden_expression(express_id,change_info)
     return json.dumps(results)
 
