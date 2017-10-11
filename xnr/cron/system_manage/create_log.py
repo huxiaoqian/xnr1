@@ -15,7 +15,13 @@ from time_utils import ts2datetime,datetime2ts
 form global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type
 from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
-                         weibo_xnr_retweet_timing_list_index_name,weibo_xnr_retweet_timing_list_index_type
+                         weibo_xnr_retweet_timing_list_index_name,weibo_xnr_retweet_timing_list_index_type,\
+                         weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
+                         weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
+                         weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
+                         weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
+                         weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type,\
+                         weibo_domain_index_name,weibo_domain_index_type
 
 
 
@@ -206,6 +212,181 @@ def count_retweet_comment_operate(operate_type,operate_date,uid_list):
     return number
 
 
+#点赞
+def count_like_operate(start_time,end_time,uid_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'root_uid':uid_list}},
+                            {'range':{'update_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
+#私信
+def count_private_message(start_time,end_time,uid_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'root_uid':uid_list}},
+                            {'term':{'private_type':'make'}},
+                            {'range':{'timestamp':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+#加入语料库
+def count_add_corpus(start_time,end_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'xnr_user_no':xnr_user_no_list}},
+                            {'range':{'create_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
+#加入预警库
+def count_add_warming_speech(start_time,end_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'xnr_user_no':xnr_user_no_list}},
+                            {'range':{'create_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
+#添加定时任务
+def count_add_timing_task(start_time,end_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'xnr_user_no':xnr_user_no_list}},
+                            {'range':{'create_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
+#领域创建
+def count_create_domain(user_account,start_time,end_time):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'submitter':user_account}},
+                            {'range':{'create_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
+#业务知识库
+def count_create_business(user_account,start_time,end_time,index_name,index_type):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'submitter':user_account}},
+                            {'range':{'create_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=index_name,doc_type=index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
 #日志生成文件组织
 def create_user_log():
     now_time=int(time.time())
@@ -271,7 +452,7 @@ def create_user_log():
         retweet_type='3'
         retweet_num=count_retweet_comment_operate(retweet_type,operate_date,uid_list)
         if retweet_num > 0:
-            log_content_dict[u'转发微博']=retweet_num
+            log_content_dict[u'转发']=retweet_num
         else:
             pass
 
@@ -279,20 +460,75 @@ def create_user_log():
         comment_type='2'
         comment_num=count_retweet_comment_operate(comment_type,operate_date,uid_list)
         if comment_num > 0:
-            log_content_dict[u'评论微博']=comment_num
+            log_content_dict[u'评论']=comment_num
         else:
             pass
 
         #点赞
-        
+        like_num=count_like_operate(start_time,end_time,uid_list)
+        if like_num > 0:
+            log_content_dict[u'点赞']=like_num
+        else:
+            pass
 
+        #私信
+        private_message_num=count_private_message(start_time,end_time,uid_list)
+        if private_message_num > 0:
+            log_content_dict[u'私信']=private_message_num
+        else:
+            pass
+
+        ##################加入语料#################
+        add_corpus_num=count_add_corpus(start_time,end_time,xnr_user_no_list)
+        if add_corpus_num > 0:
+            log_content_dict[u'加入语料']=add_corpus_num
+        else:
+            pass
 
         ##################上报操作#################
         report_num=count_report_type(start_time,end_time,xnr_user_no_list)
         if report_num > 0:
-            log_content_dict[u'上报操作']=report_num
+            log_content_dict[u'上报']=report_num
         else:
             pass
+
+        ##################加入预警库#################
+        add_warming_num=count_add_warming_speech(start_time,end_time,xnr_user_no_list)
+        if add_warming_num > 0:
+            log_content_dict[u'加入预警库']=add_warming_num
+        else:
+            pass
+
+        ##################定时任务#################
+        timing_task_num=count_add_timing_task(start_time,end_time,xnr_user_no_list)
+        if timing_task_num > 0:
+            log_content_dict[u'创建定时任务']=timing_task_num
+        else:
+            pass
+
+        ##################领域创建#################
+        create_domain_num=count_create_domain(user_account,start_time,end_time)
+        if create_domain_num > 0:
+            log_content_dict[u'领域创建']=create_domain_num
+        else:
+            pass
+
+        ##################业务知识库#################
+        #敏感词创建
+        weibo_sensitive_words_index_name = 'weibo_sensitive_words'
+        weibo_sensitive_words_index_type = 'sensitive_words'
+        count_create_business(user_account,start_time,end_time,index_name,index_type)
+
+        #时间节点创建
+        weibo_date_remind_index_name = 'weibo_date_remind'
+        weibo_date_remind_index_type = 'remind'
+
+        #隐喻式表达创建
+        weibo_hidden_expression_index_name = 'weibo_hidden_expression'
+        weibo_hidden_expression_index_type = 'hidden_expression'
+
+
+
 
 
 

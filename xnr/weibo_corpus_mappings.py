@@ -14,6 +14,10 @@ def weibo_xnr_corpus_mappings():
 		'mappings':{
 			weibo_xnr_corpus_index_type:{
 				'properties':{
+				    'xnr_user_no':{
+				       'type':'string',
+				       'index':'not_analyzed'
+				    },
 					'corpus_type':{  # 两类：主题语料，日常语料 
 						'type':'string',
 						'index':'not_analyzed'
@@ -49,6 +53,9 @@ def weibo_xnr_corpus_mappings():
 					'create_type':{  # all_xnrs - 所有虚拟人  my_xnrs -我管理的虚拟人
 						'type':'string',  
 						'index':'not_analyzed'
+					},
+					'create_time':{ #加入语料时间
+					    'type':'long'
 					}
 				}
 			}
