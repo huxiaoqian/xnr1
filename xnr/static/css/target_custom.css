@@ -32,7 +32,8 @@ body {
     padding: 10px 30px;
 }
 #container .title .tit-2 .buildNew {
-    color:#03a9f4;
+    color:#f4c203;
+    /*color:#03a9f4;*/
     cursor: pointer;
     font-weight: 900;
 }

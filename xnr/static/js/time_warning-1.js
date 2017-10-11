@@ -2,7 +2,6 @@ var timeUrl='/weibo_xnr_warming/show_date_warming/'//?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',timeUrl,calendar);
 var contentList = {};
 function calendar(data){
-    console.log(data)
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item['weibo_date_warming_content'];
     })
@@ -94,7 +93,7 @@ function calendar(data){
                     '</div>';
                 oTBody.rows[i].insertCell(0);
                 oTBody.rows[i].cells[0].innerHTML = html_c;
-                startTable(i);
+                startTable(i,keywords);
             }
         }
     }
@@ -175,7 +174,7 @@ function calendar(data){
                         '</div>';
                     oTBody.rows[i].insertCell(0);
                     oTBody.rows[i].cells[0].innerHTML = html_c;
-                    startTable(i);
+                    startTable(i,keywords);
                 }
             }
         }
@@ -263,7 +262,7 @@ function calendar(data){
                     '</div>';
                 oTBody.rows[i].cells[0].innerHTML = html_c;
                 //数组从第i+a开始取值
-                startTable(a+i);
+                startTable(a+i,keywords);
             }
         }
     }
@@ -340,7 +339,7 @@ function calendar(data){
                     '    </div>'+
                     '</div>';
                 oTBody.rows[i].cells[0].innerHTML = html_c;
-                startTable(a+i);
+                startTable(a+i,keywords);
             }
         }
     }
@@ -424,14 +423,14 @@ function calendar(data){
                 '    </div>'+
                 '</div>';
             oTBody.rows[i].cells[0].innerHTML = html_c;
-            startTable(a);
+            startTable(a,keywords);
         }
     }
 
 }
 
-function startTable(index) {
-    weibo(index,contentList['exo_'+index]);
+function startTable(index,key) {
+    weibo(index,contentList['exo_'+index],key);
 }
 
 // 转发===评论===点赞
@@ -445,9 +444,8 @@ function retComLike(_this) {
     }else if (middle=='get_weibohistory_comment'){
         $(_this).parents('.center_rel_weibo').find('.commentDown').show();
     }else {
-        var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text();
+        var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');
         if (txt=='暂无内容'){txt=''};
-        console.log(txt)
         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
         public_ajax.call_request('get',opreat_url,postYES);
     }
@@ -472,15 +470,18 @@ function oneUP(_this) {
     var info=[];
     var uid = $(_this).parents('.center_rel_weibo').find('.uid').text();info.push(uid);
     var mid = $(_this).parents('.center_rel_weibo').find('.mid').text();info.push(mid);
-    var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text();info.push(txt);
+    var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');info.push(txt);
     var timestamp = $(_this).parents('.center_rel_weibo').find('.timestamp').text();info.push(timestamp);
     var forwarding = $(_this).parents('.center_rel_weibo').find('.forwarding').text();info.push(forwarding);
     var comment = $(_this).parents('.center_rel_weibo').find('.comment').text();info.push(comment);
+    var sensitive = $(_this).parents('.center_rel_weibo').find('.sensitive').text();alldata.push(sensitive);
+    var sensitiveWords = $(_this).parents('.center_rel_weibo').find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
     //=======URL======
     var allMent=[];
     allMent.push(info[1]);
     var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);
     allMent.push(info[3]);allMent.push(info[4]);allMent.push(0);allMent.push(info[5]);
+    allMent.push(info[6]);allMent.push(info[7]);
     var once_url='/weibo_xnr_warming/report_warming_content/?report_type=言论&xnr_user_no='+ID_Num+
         '&uid='+info[0]+'&weibo_info='+allMent.join(',');
     public_ajax.call_request('get',once_url,postYES);
@@ -498,7 +499,7 @@ function postYES(data) {
     $('#pormpt').modal('show');
 }
 
-function weibo(idx,data) {
+function weibo(idx,data,words) {
     $('.DsAuto'+idx).bootstrapTable('load', data);
     $('.DsAuto'+idx).bootstrapTable({
         data:data,
@@ -547,11 +548,13 @@ function weibo(idx,data) {
                     if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                         txt='暂无内容';
                     }else {
-                        if (item.sensitive_words_string){
-                            var keywords=item.sensitive_words_string.split('，');
-                            for (var f of keywords){
-                                txt=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                        if (words){
+                            var keywords=words.split('，');
+                            var s=item.text;
+                            for (var f=0;f<keywords.length;f++){
+                                s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
+                            txt=s;
                         }else {
                             txt=item.text;
                         };
@@ -565,6 +568,8 @@ function weibo(idx,data) {
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                        '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
+                        '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '                <div class="center_2">'+txt+'</div>'+
                         '                <div class="center_3">'+

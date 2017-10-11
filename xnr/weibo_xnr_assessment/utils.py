@@ -103,7 +103,11 @@ def get_influ_fans_num(xnr_user_no):
     #     current_time = datetime2ts(S_DATE)
     # else:
     #     current_time = int(time.time())
-    current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts('2017-10-07')
+    else:
+        current_time = int(time.time())
+    
     current_time_new = datetime2ts(ts2datetime(current_time))
 
     for i in range(WEEK+1):
@@ -250,7 +254,12 @@ def get_influ_retweeted_num(xnr_user_no):
         #     current_time = es_results[0]['_source']['timestamp']
         # else:
         #     current_time = time.time()
-        current_time = time.time()
+
+        if S_TYPE == 'test':
+            current_time = datetime2ts('2017-10-07')
+        else:
+            current_time = int(time.time())
+
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -329,7 +338,12 @@ def get_influ_commented_num(xnr_user_no):
         #     current_time = es_results[0]['_source']['timestamp']
         # else:
         #     current_time = time.time()
-        current_time = time.time()
+
+        if S_TYPE == 'test':
+            current_time = datetime2ts('2017-10-07')
+        else:
+            current_time = int(time.time())
+
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -411,7 +425,12 @@ def get_influ_like_num(xnr_user_no):
         #     current_time = es_results[0]['_source']['timestamp']
         # else:
         #     current_time = time.time()
-        current_time = time.time()
+        
+        if S_TYPE == 'test':
+            current_time = datetime2ts('2017-10-07')
+        else:
+            current_time = int(time.time())
+
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -492,7 +511,12 @@ def get_influ_at_num(xnr_user_no):
         #     current_time = es_results[0]['_source']['timestamp']
         # else:
         #     current_time = time.time()
-        current_time = time.time()
+        
+        if S_TYPE == 'test':
+            current_time = datetime2ts('2017-10-07')
+        else:
+            current_time = int(time.time())
+
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -571,7 +595,11 @@ def get_influ_private_num(xnr_user_no):
         #     current_time = es_results[0]['_source']['timestamp']
         # else:
         #     current_time = time.time()
-        current_time = time.time()
+        if S_TYPE == 'test':
+            current_time = datetime2ts('2017-10-07')
+        else:
+            current_time = int(time.time())
+
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -1240,7 +1268,7 @@ def get_tweets_distribute(xnr_user_no):
         for topic, value in topic_list_followers_count.iteritems():
             topic_xnr_count[topic] = min([topic_xnr_count[topic],value])
             try:
-                topic_value = float(topic_xnr_count[topic])/value
+                topic_value = round(float(topic_xnr_count[topic])/value,2)
             except:
                 continue
             topic_distribute_dict['radar'][topic] = topic_value
@@ -1337,7 +1365,11 @@ def get_follow_group_distribute(xnr_user_no):
     followers_list = es_results['followers_list']
 
     # 获取今日关注者
-    current_time = int(time.time()-DAY)
+    if S_TYPE == 'test':
+        current_time = datetime2ts('2017-10-02')  # 10月7日
+
+    else:
+        current_time = int(time.time())
     current_date = ts2datetime(current_time)
     r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
     followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
@@ -1369,7 +1401,7 @@ def get_follow_group_distribute(xnr_user_no):
     try:
         today_results = es.mget(index=user_domain_index_name,doc_type=user_domain_index_type,\
             body={'ids':followers_list_today})['docs']
-
+        #print 'today_results:::',today_results
         domain_list_followers_today = []
 
         for result in today_results:
@@ -1395,9 +1427,11 @@ def get_follow_group_distribute(xnr_user_no):
 
     
     for domain, value in domain_list_followers_count.iteritems():
-        if not domain_list_followers_today_count:
+        
+        if domain_list_followers_today_count:
             try:
-                domain_value = float(domain_list_followers_today_count[domain])/value
+            
+                domain_value = round(float(domain_list_followers_today_count[domain])/value,2)
             except:
                 domain_value = 0
         else:
@@ -1406,7 +1440,7 @@ def get_follow_group_distribute(xnr_user_no):
             #     domain_value = float(domain_list_followers_today_count[domain])/value
             # except:
             #     continue
-        #domain_value = min([domain_value,value])
+        domain_value = min([domain_value,value])
         domain_distribute_dict['radar'][domain] = domain_value
 
     # 整理仪表盘数据
@@ -1419,7 +1453,7 @@ def get_follow_group_distribute(xnr_user_no):
                 mark += float(value)/(domain_list_followers_count[domain]*n_domain)
             except:
                 continue
-    domain_distribute_dict['mark'] = mark
+    domain_distribute_dict['mark'] = round(mark,4)
 
     return domain_distribute_dict
 

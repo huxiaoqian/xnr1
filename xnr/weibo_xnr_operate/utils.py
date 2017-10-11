@@ -1792,7 +1792,7 @@ def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
             {'timestamp_set':{'order':'desc'}}
         ]
     }
-
+    print 'query_body::',query_body
     results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
         doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
 
@@ -1804,6 +1804,36 @@ def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
 
     return result_all
 
+def get_show_retweet_timing_list_future(xnr_user_no):
+
+    start_ts = int(time.time())
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+    print 'query_body!!',query_body
+    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
+        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
 
 def get_show_trace_followers(xnr_user_no):
     

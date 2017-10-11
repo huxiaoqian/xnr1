@@ -58,7 +58,8 @@ $('#container .type_page #myTabs a').on('click',function () {
     }
 })
 //=========跟踪转发===========
-var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num;
+var flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+todayTimetamp()+
+    '&end_ts='+(Date.parse(new Date())/1000);
 var focus_main_url='/weibo_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
 $('.choosetime .demo-label input[name="time1"]').on('click',function () {
     var _val=$(this).val();
@@ -71,8 +72,7 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
         if (_val=='mize'){
             $('#start_1').show();
             $('#end_1').show();
-            $('#sure_1').show();
-            return false;
+            $('.sureTime').show();
         }else {
             if (_val==0){
                 startTime=todayTimetamp();
@@ -81,12 +81,13 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
             }
             $('#start_1').hide();
             $('#end_1').hide();
-            $('#sure_1').hide();
+            $('.sureTime').hide();
+            flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
+                '&end_ts='+end_time;
+            public_ajax.call_request('get',flow_faw_url,flow_faw);
         }
-        flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
-            '&end_ts='+end_time;
+
     }
-    public_ajax.call_request('get',flow_faw_url,flow_faw);
 });
 $('.sureTime').on('click',function () {
     var s=$('#start_1').val();
@@ -95,7 +96,7 @@ $('.sureTime').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var his_timing_task_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+(Date.parse(new Date(s))/1000)+
+        var his_timing_task_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+(Date.parse(new Date(s))/1000)+
             '&end_ts='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',his_timing_task_url,flow_faw);
     }
@@ -692,7 +693,7 @@ var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
     wordMid = $(_this).parents('.post_perfect').find('.mid').text();
     wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text();
+    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
     wordComment = $(_this).parents('.post_perfect').find('.comment').text();
     $('#wordcloud').modal('show');
@@ -705,7 +706,8 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
+    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num +
+        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
         '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
         '&like=0&create_type='+create_type;
     public_ajax.call_request('get',corpus_url,postYES);
@@ -713,7 +715,7 @@ function joinWord() {
 //内容推荐
 function contantREM(_this) {
     var taskID=$(_this).parents('.post_perfect').find('.mid').text();
-    var calNot_url='/weibo_xnr_operate/hot_content_recommend/?xnr_user_no='+xnrUser+'&task_id='+taskID//4043450590377035;
+    var calNot_url='/weibo_xnr_operate/hot_content_recommend/?xnr_user_no='+xnrUser+'&task_id='+taskID;
     public_ajax.call_request('get',calNot_url,calNot);
 }
 //内容推荐中的微博直接发布还是定时发布

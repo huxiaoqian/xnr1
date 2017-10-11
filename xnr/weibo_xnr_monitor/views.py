@@ -105,7 +105,8 @@ def ajax_addto_weibo_corpus():
     comment=request.args.get('comment','')
     like=request.args.get('like','')
     create_type=request.args.get('create_type','')
-    task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
+    xnr_user_no=request.args.get('xnr_user_no','')
+    task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type,xnr_user_no]
     results=addto_weibo_corpus(task_detail)
     return json.dumps(results)
 

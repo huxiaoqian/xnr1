@@ -1,12 +1,47 @@
-// setTimeout(function () {
-//     var chara_url='/weibo_xnr_create/recommend_step_two/?domain_name='+basicData.domain_name+
-//         '&role_name='+basicData.role_name+'&daily_interests='+basicData.daily_interests;
-//     public_ajax.call_request('get',chara_url,character);
-// },500)
 //查看推荐
+if (!$two||(go_on=='2')){
+    var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
+        $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
+    public_ajax.call_request('GET',recommendURL,recommendTwo);
+}
+
+function recommendTwo(data) {
+    console.log(data)
+    var name,age,sex,location,career,description;
+    if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
+    if (data.age){age=data.age}else {age='无年龄推荐'}
+    if (data.sex==1){sex='男'}else if (data.sex==2) {sex='女'}else {sex='未知'}
+    if (data.user_location){location=data.user_location}else {location='无地理位置推荐'}
+    if (data.career){career=data.career}else {career='无职业推荐'}
+    if (data.description){description=data.description}else {description='无描述推荐'}
+    $('#name').val(name);
+    $('#age').val(age);
+    $(".gender input[type='radio'][value='"+sex+"']").attr("checked",true);
+    $('#place').val(location);
+    $('#career').val(career);
+    $('#description').val(description);
+    for (var t of data.active_time){
+        $(".task_time input[name='timetampe'][type='checkbox'][value='"+parseInt(t)+"']").attr("checked",true);
+    }
+
+    var posyNum = parseInt(data.day_post_num_average);
+    if (posyNum>5){
+        $('.other-2 .customize').hide();
+        $('.other-2 .postNUM').show().val('0-'+parseInt(Number(posyNum)));
+    }else if (posyNum==0){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
+    }else if (posyNum>0&&posyNum<3){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
+    }else if (posyNum>=3&&posyNum<=5){
+        $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
+    }
+}
+
+
 var recommendData;
 function character(data) {
     recommendData=data;
+    console.log(recommendData)
     publicRecommend('role_example','#role_example .role_example_list');
     //其他信息推荐
     $('#container .other_basic .others a').on('click',function () {
@@ -141,8 +176,6 @@ function publicRecommend(field,className,tit) {
 
 //上一步，下一步，保存返回
 var second,n=0;
-//  /weibo_xnr_create/save_step_two/?task_id=WXNR0001&nick_name=大大DE律师
-// &age=29&location=北京&career=律师&description=这是简介&active_time=9,10,11,19,20&day_post_average=9-12
 $('.previous').on('click',function () {
     n=0;
     nameJudgment();
@@ -150,12 +183,10 @@ $('.previous').on('click',function () {
 $('.next').on('click',function () {
     n=1;
     nameJudgment();
-    //values();
 });
 $('.save_return').on('click',function () {
     n=2;
     nameJudgment();
-    //values();
 });
 function nameJudgment() {
     //判断昵称是否重复
@@ -205,7 +236,6 @@ function success(data) {
 function repeatNot(data) {
     if (data){
         values();
-        //save();
     }else {
         $('#prompt p').text('您输入的昵称与系统数据重复，请重新输入。');
         $('#prompt').modal('show');
@@ -254,12 +284,12 @@ function values() {
             day_post_average = $(this).val().toString();
         });
     }
+    var saveSecond_url;
     if (active_time||day_post_average){
-        var saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&task_id='+
+        saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&task_id='+
             '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
             '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
-            '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+
-            '&active_time='+active_time+'&day_post_average='+day_post_average;
+            '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests;
     }else {
         $('#prompt p').text('请检查您的活跃时间和日发帖量。');
         $('#prompt').modal('show');
@@ -269,7 +299,9 @@ function values() {
     //     '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
     //     '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
     //     '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
-    public_ajax.call_request('get',saveSecond_url,in_three);
+    if (n==1||n==2){
+        public_ajax.call_request('get',saveSecond_url,in_three);
+    }
     second={
         'nick_name':nickName,
         'age':age,
@@ -291,6 +323,16 @@ function values() {
             'monitor_keywords':$('#character7').text(),
         };
         localStorage.setItem('firstStep',JSON.stringify(first));
+    }else if (go_on==1){
+        var a=$('#name').val();
+        var b=$('#age').val();
+        var c=$('.gender input:radio[name="demo"]:checked').val();
+        var d=$('#place').val();
+        var ee=$('#career').val();
+        var f=$('#description').val();
+        var modSecond_ur='/weibo_xnr_create/modify_userinfo/?nick_name='+a+'&age='+b+'&gender='+c+
+            '&location='+d+'&career='+ee+'&description='+f;
+        public_ajax.call_request('get',modSecond_ur,modSecondSuccess);
     }
 }
 function in_three(data) {
@@ -306,6 +348,14 @@ function in_three(data) {
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
+        $('#prompt').modal('show');
+    }
+}
+function modSecondSuccess(data) {
+    if (data){
+        window.location.href='/personalCenter/individual/';
+    }else {
+        $('#prompt p').text('修改内容失败，请稍后再试。');
         $('#prompt').modal('show');
     }
 }
