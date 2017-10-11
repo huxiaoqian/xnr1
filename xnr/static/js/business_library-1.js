@@ -1,7 +1,6 @@
 var keywords_url='/weibo_xnr_knowledge_base_management/show_sensitive_words_default/';
 public_ajax.call_request('get',keywords_url,keywords);
 function keywords(data) {
-    console.log(data)
     $('#keywords').bootstrapTable('load', data);
     $('#keywords').bootstrapTable({
         data:data,
