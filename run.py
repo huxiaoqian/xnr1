@@ -78,13 +78,16 @@ def upload_file():
 # Create user role data to test with
 @app.route('/create_user_role_test/')
 def create_user_roles():
+    
+    #db.drop_all()
+
     try:
         db.create_all()
-        #role_1 = user_datastore.create_role(name='userrank', description=u'用户排行模块权限')
-        user_1 = user_datastore.create_user(email='admin2@qq.com', password="Bh123456")
+        role_1 = user_datastore.create_role(name='administration', description=u'超级管理员模块')
+        user_1 = user_datastore.create_user(email='admin@qq.com', password="Bh123456",department=u'部门')
         #user_2 = user_datastore.create_user(email='admin2@qq.com', password="Bh123456")
 
-        #user_datastore.add_role_to_user(user_1, role_1)
+        user_datastore.add_role_to_user(user_1, role_1)
         #user_datastore.add_role_to_user(user_1, role_2)
         db.session.commit()
         return "success"
@@ -146,7 +149,10 @@ def homepage():
         item_dict['login_time'] = [timestamp]
         item_dict['operate_date'] = current_date
         item_dict['operate_time'] = current_time_new
-
+        item_dict['user_id'] = ''
+        item_dict['user_name'] = ''
+        item_dict['operate_content'] = ''
+        
         es_xnr.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
             id=log_id,body=item_dict)
 
