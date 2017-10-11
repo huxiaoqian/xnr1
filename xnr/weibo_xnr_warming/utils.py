@@ -216,6 +216,8 @@ def addto_speech_warming(xnr_user_no,speech_info):
     speech_dict['comment']=int(speech_info[5])
     speech_dict['like']=int(speech_info[6])
 
+    speech_dict['create_time']=int(time.time())
+
 
     uid_list=speech_info[7].encode('utf-8').split(',')
     speech_dict['uid_list']=uid_list
