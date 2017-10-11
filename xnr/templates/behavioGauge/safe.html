@@ -7,6 +7,7 @@
         color: white;
     }
     .demo-label{display:inline-block;margin:10px 0 0 0;cursor:pointer;width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    #wordcloud .demo-label{width: 130px;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -21,7 +22,7 @@
     .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    .bootstrap-table thead,.fixed-table-pagination .page-list {
+    .fixed-table-pagination .page-list {
         display: none!important;
     }
     .fixed-table-body {
@@ -46,8 +47,8 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
-    .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
+    .fixed-table-container thead th .both {
+        background-image: none!important;
     }
     /**/
 </style>
@@ -237,25 +238,7 @@
 
 </div>
 <!--模态框-->
-<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加提示</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #5e5e5e;font-weight: 900;">
-                    创建新的虚拟人还是继续已有的虚拟人？
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary first_created" data-dismiss="modal">首次创建</button>
-                <button type="button" class="btn btn-primary continue_already_created" data-dismiss="modal">继续已有创建</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <!--提示弹框-->
 <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -466,6 +449,17 @@
 <script>
     judgment('5');
     weiboORqq('weibo');
+
+    $('#wordcloud .word-1 input').on('click',function () {
+        var s=$(this).val();
+        if (s=='日常语料'){
+            $('#wordcloud #cloud-1').show();
+            $('#wordcloud #cloud-2').hide();
+        }else {
+            $('#wordcloud #cloud-2').show();
+            $('#wordcloud #cloud-1').hide();
+        }
+    })
 </script>
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/safe-1.js"></script>

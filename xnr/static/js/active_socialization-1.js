@@ -1,13 +1,11 @@
 var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=influence';
 public_ajax.call_request('get',relatedUrl,related);
-var idNAME='influence';
 function related(data) {
-    console.log(data)
     $.each(data,function (index,item) {
         detList[item.uid]=item;
-    })
-    $('#'+idNAME).bootstrapTable('load', data);
-    $('#'+idNAME).bootstrapTable({
+    });
+    $('#influence').bootstrapTable('load', data);
+    $('#influence').bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
@@ -45,8 +43,17 @@ function related(data) {
                 valign: "middle",//垂直
             },
             {
-                title: "好友数",//标题
-                field: "friendsnum",//键名
+                title: "敏感度",//标题
+                field: "sensitive",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:false
+            },
+            {
+                title: "粉丝数",//标题
+                field: "fansnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -54,8 +61,8 @@ function related(data) {
 
             },
             {
-                title: "粉丝数",//标题
-                field: "fansnum",//键名
+                title: "好友数",//标题
+                field: "friendsnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -92,14 +99,22 @@ function related(data) {
             },
         ],
     });
-    $('.'+idNAME+' .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.influence .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
-
+$('#influence').bootstrapTable('hideColumn', 'sensitive');
+function showHide(_tp$) {
+    if (_tp$=='sensitive'){
+        $('#influence').bootstrapTable('showColumn', 'sensitive');
+    }else {
+        $('#influence').bootstrapTable('hideColumn', 'sensitive');
+    }
+}
 $('#container .suggestion #myTabs li').on('click',function () {
-    idNAME='influence';
     var ty=$(this).attr('tp');
+    //idNAME=ty;
     var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
     public_ajax.call_request('get',relatedUrl,related);
+    showHide(ty);
 })
 //直接搜索
 $('.findSure').on('click',function () {
@@ -119,7 +134,6 @@ $('.findSure').on('click',function () {
 var detList={};
 function lookDetails(puid) {
     var person=detList[puid];
-    console.log(person)
     if (person.portrait_status== true){
         var name,img,gender,domain,location,topic_string,weibo_type;
         if (person.uname==''||person.uname=='unknown'||person.uname=='null'){

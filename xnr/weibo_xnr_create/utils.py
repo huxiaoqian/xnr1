@@ -9,6 +9,7 @@ import time
 import os
 import pandas as pd
 from collections import Counter
+import numpy as np
 
 from xnr.global_config import S_TYPE,S_DATE
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_domain_index_name,weibo_domain_index_type,\
@@ -222,7 +223,7 @@ def get_show_weibo_xnr(submitter):
     if es_results:
         for result in es_results:
             #try:
-            print 'result!!!',result
+            #print 'result!!!',result
             result = result['_source']
             weibo_xnr_dict[result['xnr_user_no']] = result['nick_name']
             # except:
@@ -312,7 +313,10 @@ def get_recommend_step_two(task_detail):
     except:
         recommend_results['role_example'] = []
     
-    recommend_results['active_time'] = json.loads(es_result['active_time'])[:ACTIVE_TIME_TOP]
+    active_time_list_np = np.array(json.loads(es_result['active_time']))
+    active_time_list_np_sort = list(np.argsort(-active_time_list_np)[:ACTIVE_TIME_TOP])
+    
+    recommend_results['active_time'] = active_time_list_np_sort
     
     day_post_num = json.loads(es_result['day_post_num'])
     day_post_num_new = pd.Series(day_post_num)

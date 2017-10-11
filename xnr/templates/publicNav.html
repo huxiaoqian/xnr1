@@ -197,21 +197,28 @@
     //登录用户名
     var admin='admin@qq.com';
     //登录虚拟人后取出ID或者名字
+    var ID_Num,REL_name,ID_name,userQQnum,nowUser;
     function weiboORqq(type) {
         if (type=='weibo'){
+            ID_Num=localStorage.getItem('user');
+            REL_name=localStorage.getItem('userRelName');
+            ID_name=localStorage.getItem('userName');
+            if (ID_name){
+                nowUser=decodeURI(ID_name);
+            }
             InloginName('微博虚拟人','QQ群虚拟人','（微博）');
         }else {
+            ID_Num=localStorage.getItem('userQQ');
+            REL_name=localStorage.getItem('userQQRelName');
+            ID_name=localStorage.getItem('userQQName');
+            userQQnum=localStorage.getItem('userQQnum');
+            if (ID_name){
+                nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
+            }
             InloginName('QQ群虚拟人','微博虚拟人','（QQ群）');
         }
     }
-    var ID_Num=localStorage.getItem('user');
-    var REL_name=localStorage.getItem('userRelName');
-    var ID_name=localStorage.getItem('userName');
-    var userQQnum=localStorage.getItem('userQQnum');
-    var nowUser='';
-    if (ID_name){
-        nowUser=decodeURI(ID_name);
-    }
+
     $('.old').on('click',function(e) {
         var txt=$(this).find('span').text();
         var curtxt=$('.current').find('span').text();
@@ -237,7 +244,7 @@
         }else {
             $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }
-    })
+    });
     function InloginName(two,three,four) {
         $('.current').find('span').text(two);
         $('.old').find('span').text(three);
