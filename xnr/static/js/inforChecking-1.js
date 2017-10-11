@@ -76,9 +76,9 @@ function wordCloud(data) {
                     title: {
                         text: '',
                     },
-                    tooltip: {
-                        show: true,
-                    },
+                    // tooltip: {
+                    //     show: true,
+                    // },
                     series: [{
                         type: 'wordCloud',
                         size: ['100%', '100%'],
