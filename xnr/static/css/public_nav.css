@@ -85,6 +85,11 @@ a,a:link,a:hover,a:visited,a:active {
     background: #041b29!important;
     color: white!important;
 }
+.modal-body,.modal-footer span {
+    background: #041b29!important;
+    color: white!important;
+}
+
 .table-hover>tbody>tr:hover {
     background-color: #2a556f!important;
 }
