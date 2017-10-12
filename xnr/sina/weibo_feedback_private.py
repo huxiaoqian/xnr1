@@ -3,7 +3,7 @@
 import json
 import time
 import urllib2
-
+#from bs4 import BeautifulSoup
 from sina.weibo_feedback_follow import FeedbackFollow
 from tools.ElasticsearchJson import executeES
 from tools.TimeChange import getTimeStamp
@@ -45,22 +45,22 @@ class FeedbackPrivate:
                 html = response.read().decode('string_escape').replace('\\/', '/')
             except Exception, e:
                 print "Network Exception!!! ", e
+                #print 'html:', html
+            
             finally:
                 datas = getMatchList(html, '<div class="private_list SW_fun_bg S_line2 clearfix".*?<!-- 下拉列表 -->')
-                # print len(datas)
 
                 for data in datas:
                     photo_url = "http:" + getMatch(data, '<img.*?src="(*)"')
                     uid = getMatch(data, 'usercard="id=(*)"')
                     nickname = getMatch(data, '<img.*?alt="(*)"')
                     r_uid = self.uid
-
+                    
                     counts = getMatch(data, '<em class="W_new_count S_spetxt_bg">(*)</em>')
                     if counts and counts.isdigit():
                         counts = long(counts)
                     else:
                         counts = 0
-
                     _type = 'stranger'
                     type1 = ''
                     type2 = ''
@@ -85,12 +85,12 @@ class FeedbackPrivate:
 
                     try:
                         detailUrl = de_url % (uid, int(time.time() * 1000))
-                        print detailUrl
+                        print 'detail_url:', detailUrl
                         request = urllib2.Request(detailUrl)
                         response = urllib2.urlopen(request, timeout=60)
 
                         ms_content = json.loads(response.read())
-                        # print type(ms_content["data"])
+                        
                     except Exception, e:
                         print "Network Exception!!! ", e
                     else:
@@ -102,6 +102,8 @@ class FeedbackPrivate:
                             mid_uid = getMatch(ms_data, 'usercard="id=(*)"')
                             mid = getMatch(ms_data, 'mid="(*)"')
                             timestamp = getMatch(ms_data, 'prompt_font S_txt2 S_bg1">(*)</legend>')
+                            #soup = BeautifulSoup(ms_data)
+                            #timestamp_bs4 = soup.find_all('legend', class_=["prompt_font", "S_txt2", "S_bg1"])
                             if timestamp:
                                 timestamp = long(getTimeStamp(timestamp))
                                 last_time = timestamp
@@ -110,7 +112,9 @@ class FeedbackPrivate:
                             
                             if timestamp < self.lasttime:
                                 tags = True
-                                break
+                                print 'timestamp<lasttime, timestamp, lasttime:', timestamp, self.lasttime
+                                #break
+                                next
 
                             text = getMatch(ms_data, u'<div class="cont">.*?<!--／附件信息-->')
                             if text:
@@ -139,9 +143,9 @@ class FeedbackPrivate:
                             }
 
                             wb_json = json.dumps(wb_item)
-                            # print wb_json
+                            print wb_json
                             json_list.append(wb_json)
-
+            
                 # 分页
                 next_pageUrl = getUrlToPattern(html, comment_url, pattern='page', text_pattern='下一页')
                 # print next_pageUrl
@@ -149,14 +153,19 @@ class FeedbackPrivate:
                     comment_url = next_pageUrl[0]
                 elif not next_pageUrl or tags:
                     break
+            
+        json_list = []
         return json_list
 
     def execute(self):
         mess = self.messages()
         executeES('weibo_feedback_private', 'text', mess)
+        print 'mess::::',mess
 
 
 if __name__ == '__main__':
-    xnr = SinaLauncher('', '')
+    user = 'weiboxnr04@126.com'
+    pwd = 'xnr123456'
+    xnr = SinaLauncher(user, pwd)
     xnr.login()
     FeedbackPrivate(xnr.uid).execute()

@@ -1,7 +1,6 @@
 var keywords_url='/weibo_xnr_knowledge_base_management/show_sensitive_words_default/';
 public_ajax.call_request('get',keywords_url,keywords);
 function keywords(data) {
-    console.log(data)
     $('#keywords').bootstrapTable('load', data);
     $('#keywords').bootstrapTable({
         data:data,
@@ -77,12 +76,16 @@ function keywords(data) {
     });
     $('.keywords .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
 }
-//点击选择全部还是我的
-$('#container .title .tit-2 .allMY').on('click',function () {
-    var tp=$(this).attr('value');
+//点击选择全部还是
+$('#container .title .tit-2 input').on('click',function () {
+    var tp=$(this).val();
     var rk=$('.rankcon input:radio[name="rank"]:checked').val();
-    var rankUrl='/weibo_xnr_knowledge_base_management/show_sensitive_words_condition/?create_type='+tp+'&rank='+rk;
-    public_ajax.call_request('get',rankUrl,keywords);
+    var rankUrl_1='/weibo_xnr_knowledge_base_management/show_sensitive_words_condition/?create_type='+tp+'&rank='+rk;
+    public_ajax.call_request('get',rankUrl_1,keywords);
+    var rankUrl_2='/weibo_xnr_knowledge_base_management/show_date_remind_condition/?create_type='+tp+'&rank='+rk;
+    public_ajax.call_request('get',rankUrl_2,time);
+    var rankUrl_3='/weibo_xnr_knowledge_base_management/show_hidden_expression_condition/?create_type='+tp+'&rank='+rk;
+    public_ajax.call_request('get',rankUrl_3,hidden);
 });
 //按指定等级显示
 $('#container .options-1 .opt-1-1 .rankcon .demo-label').on('click',function () {
@@ -124,7 +127,7 @@ $('.addKey').on('click',function () {
         }else {
             creatTYPE();
             var addUrl='/weibo_xnr_knowledge_base_management/create_sensitive_words_batch/?rank='+rank+
-                '&sensitive_words_string='+word+'&create_type='+creat_type;
+                '&sensitive_words_string='+word+'&create_type='+creat_type+'&submitter='+admin;
             public_ajax.call_request('get',addUrl,addYES);
         }
     }
@@ -152,7 +155,7 @@ function sureword() {
     }else {
         var rk=$('.rankcon input:radio[name="rank"]:checked').val();
         var plyURL='/weibo_xnr_knowledge_base_management/change_sensitive_words/?words_id='+senWID+
-            '&rank='+rk+'&sensitive_words='+newWords+'&create_type='+word_type;
+            '&rank='+rk+'&sensitive_words='+newWords+'&create_type='+word_type+'&submitter='+admin;
         public_ajax.call_request('get',plyURL,addYES);
     }
 
@@ -181,7 +184,6 @@ function creatTYPE() {
 var time_url='/weibo_xnr_knowledge_base_management/show_date_remind/';
 public_ajax.call_request('get',time_url,time);
 function time(data) {
-    console.log(data)
     $('#timeWarn').bootstrapTable('load', data);
     $('#timeWarn').bootstrapTable({
         data:data,
@@ -332,7 +334,7 @@ $('.addNode').on('click',function () {
         }else {
             creatTYPE();
             var addUrl='/weibo_xnr_knowledge_base_management/create_date_remind/?date_name='+name+'&timestamp='+time+
-                '&keywords='+word+'&create_type='+creat_type;
+                '&keywords='+word+'&create_type='+creat_type+'&submitter='+admin;
             public_ajax.call_request('get',addUrl,addYES_time);
         }
     }
@@ -361,7 +363,7 @@ function sureTime() {
         $('#pormpt').modal('show');
     }else {
         var plyURL='/weibo_xnr_knowledge_base_management/change_date_remind/?task_id='+taskID+'&keywords='+newWords
-        +'&create_type='+timetype+'&date_name='+newNames;
+        +'&create_type='+timetype+'&date_name='+newNames+'&submitter='+admin;
         public_ajax.call_request('get',plyURL,addYES_time);
     }
 }
@@ -384,7 +386,6 @@ function addYES_time(data) {
 var hidden_url='/weibo_xnr_knowledge_base_management/show_hidden_expression/';
 public_ajax.call_request('get',hidden_url,hidden);
 function hidden(data) {
-    console.log(data);
     $('#expression').bootstrapTable('load', data);
     $('#expression').bootstrapTable({
         data:data,
@@ -514,7 +515,7 @@ $('.addhid').on('click',function () {
             if (reg.test(word1)){
                 creatTYPE();
                 var addUrl='/weibo_xnr_knowledge_base_management/create_hidden_expression/?origin_word='+word1+
-                    '&evolution_words='+word2.replace(/,/g,'，')+'&create_type='+creat_type;
+                    '&evolution_words='+word2.replace(/,/g,'，')+'&create_type='+creat_type+'&submitter='+admin;
                 public_ajax.call_request('get',addUrl,addYES_hid);
             }else {
                 $('#pormpt p').text('原词不能含有标点符号及其它特殊符号，只能是汉字、数字、英文。');
@@ -546,7 +547,8 @@ function sureHide() {
         $('#pormpt').modal('show');
     }else {
         var plyURL='/weibo_xnr_knowledge_base_management/change_hidden_expression/?express_id='+hideID+
-        '&origin_word='+newWords1+'&evolution_words='+newWords2.replace(/,/g,'，')+'&create_type='+hidetype;
+        '&origin_word='+newWords1+'&evolution_words='+newWords2.replace(/,/g,'，')+'&create_type='+hidetype
+            +'&submitter='+admin;
         public_ajax.call_request('get',plyURL,addYES_hid);
     }
 }

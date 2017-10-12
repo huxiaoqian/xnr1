@@ -247,15 +247,17 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
 
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0016')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0017')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0018')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0019')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0020')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0021')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0022')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0023')
-es.delete(index='weibo_xnr',doc_type='user',id='WXNR0024')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0016')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0017')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0018')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0019')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0020')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0021')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0022')
+# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0023')
+# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730626')
+# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730700')
+# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730628')
 
 
 
@@ -272,4 +274,6 @@ es.delete(index='weibo_xnr',doc_type='user',id='WXNR0024')
 # 	        print aa.split('pid=')
 
 # processinfo(sys.argv[1])
+
+#es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':[1264080891,1715330060,1082347151]}})
 
