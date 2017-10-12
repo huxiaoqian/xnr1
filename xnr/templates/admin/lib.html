@@ -118,7 +118,7 @@
 {% macro render_field(form, field, kwargs={}, caller=None) %}
   {% set direct_error = h.is_field_error(field.errors) %}
   <div class="form-group{{ ' has-error' if direct_error else '' }}">
-    <label for="{{ field.id }}" class="col-md-2 control-label">{{ field.label.text }}
+    <label for="{{ field.id }}" class="col-md-2 control-label" id="{{ field.id }}">{{ field.label.text }}
         {% if h.is_required_form_field(field) %}
           <strong style="color: red">&#42;</strong>
         {%- else -%}
@@ -187,12 +187,12 @@
     <hr>
     <div class="form-group">
       <div class="col-md-offset-2 col-md-10 submit-row">
-        <input type="submit" class="btn btn-primary" value="{{ _gettext('Save') }}" />
+        <input type="submit" id="save" class="btn btn-primary" value="{{ _gettext('Save') }}" />
         {% if extra %}
         {{ extra }}
         {% endif %}
         {% if cancel_url %}
-          <a href="{{ cancel_url }}" class="btn btn-danger" role="button" {% if is_modal %}data-dismiss="modal"{% endif %}>{{ _gettext('Cancel') }}</a>
+          <a href="{{ cancel_url }}" id="cancel" class="btn btn-danger" role="button" {% if is_modal %}data-dismiss="modal"{% endif %}>{{ _gettext('Cancel') }}</a>
         {% endif %}
       </div>
     </div>
@@ -240,13 +240,53 @@
   <script src="{{ admin_static.url(filename='vendor/x-editable/js/bootstrap3-editable.min.js', v='1.5.1.1') }}"></script>
   {% endif %}
   <script src="{{ admin_static.url(filename='admin/js/form.js', v='1.0.1') }}"></script>
+    <script type="text/javascript">
+    $('#name').empty();
+    $('#name').append('权限标识');
+    $('#chname').empty('权限名称');
+    $('#chname').append('权限名称');
+    $('#description').empty();
+    $('#description').append('权限描述');
+    $('#users').empty();
+    $('#users').append('相关用户');
+    $('#roles').empty();
+    $('#roles').append('权限标识');
+    $('#email').empty();
+    $('#email').append('用户名');
+    $('#password').empty();
+    $('#password').append('密码');
+    //$('.col-md-10 #password').attr('type', 'password');
+    $('#active').empty();
+    $('#active').append('是否活跃');
+    $('#confirmedat').empty();
+    $('#confirmedat').append('更新时间');
+    $('#usernum').empty();
+    $('#usernum').append('用户排行任务最大值')
+    $('#moodnum').empty();
+    $('#moodnum').append('情绪监测任务最大值')
+    $('#netnum').empty();
+    $('#netnum').append('网络分析任务最大值')
+    $('#findnum').empty();
+    $('#findnum').append('群体发现任务最大值')
+    $('#analysisnum').empty();
+    $('#analysisnum').append('群体分析任务最大值')
+    $('#sensingnum').empty();
+    $('#sensingnum').append('社会感知任务最大值')
+    $('#cancel').empty();
+    $('#cancel').append('取消');
+    $('#save').attr('value','保存')
+  </script>
 {% endmacro %}
 
 {% macro extra() %}
   {% if admin_view.can_create %}
-  <input name="_add_another" type="submit" class="btn btn-default" value="{{ _gettext('Save and Add Another') }}" />
+  <!-- <input name="_add_another" type="submit" class="btn btn-default" value="{{ _gettext('Save and Add Another') }}" /> -->
+  <input name="_add_another" type="submit" class="btn btn-default" value="{{ _gettext('保存并添加另一个') }}" />
   {% endif %}
   {% if admin_view.can_edit %}
-  <input name="_continue_editing" type="submit" class="btn btn-default" value="{{ _gettext('Save and Continue Editing') }}" />
+  <!-- <input name="_continue_editing" type="submit" class="btn btn-default" value="{{ _gettext('Save and Continue Editing') }}" /> -->
+  <input name="_continue_editing" type="submit" class="btn btn-default" value="{{ _gettext('保存并继续编辑') }}" />
   {% endif %}
+
+
 {% endmacro %}

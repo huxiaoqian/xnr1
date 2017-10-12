@@ -68,7 +68,8 @@ class AdminAccessView_user(sqla.ModelView):
         if len(model.password2):
             # ... then encrypt the new password prior to storing it in the database. If the password field is blank,
             # the existing password in the database will be retained.
-            model.password = generate_password_hash(model.password2)
+            #model.password = generate_password_hash(model.password2)
+            model.password = model.password2
     # def on_model_change(self, form, User, is_created):
     #     User.password = form.password_hash.data
 
@@ -156,7 +157,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
+    confirmedat = db.Column(db.DateTime())
     department = db.Column(db.String(255))
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
