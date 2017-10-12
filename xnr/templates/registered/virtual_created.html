@@ -3,6 +3,7 @@
 {% block my_css %}
     <link rel="stylesheet" href="/static/css/virtual_created.css">
     <style>
+        .xnrShowHide {display: none;}
         .datetimepicker thead tr:first-child th {visibility: hidden;}
         .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
         .demo-radio{display:none}
@@ -393,9 +394,7 @@
 <script id="load_user">
     judgment('6');
     var go_on='{{continueUser}}';
-    if (go_on=='2'){
-        $('.page .previous').hide();
-    }else if (go_on=='1'){
+    if (go_on=='1'){
         $('#name').removeAttr('readonly');
         $('#age').removeAttr('readonly');
         $('#place').removeAttr('readonly');

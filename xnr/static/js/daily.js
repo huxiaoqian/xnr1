@@ -1,6 +1,7 @@
 var dailyLOG_Url='/system_manage/show_log_list/';
 public_ajax.call_request('get',dailyLOG_Url,dailyLOG);
 function dailyLOG(data) {
+    console.log(data)
     $('#loglist').bootstrapTable('load', data);
     $('#loglist').bootstrapTable({
         data:data,
@@ -104,7 +105,12 @@ function dailyLOG(data) {
                     if (row.operate_content==''||row.operate_content=='null'||row.operate_content=='unknown'||!row.operate_content){
                         return '无内容';
                     }else {
-                        return row.operate_content.join('<br/>');
+                        var con=JSON.parse(row.operate_content);
+                        var str='';
+                        for (var s in con){
+                            str+= s +'：' +con[s]+'次<br/>';
+                        }
+                        return str;
                     };
                 }
             },
