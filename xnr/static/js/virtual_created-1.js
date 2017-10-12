@@ -36,142 +36,6 @@ function recommendTwo(data) {
     }
 }
 
-
-var recommendData;
-function character(data) {
-    recommendData=data;
-    console.log(recommendData)
-    publicRecommend('role_example','#role_example .role_example_list');
-    //其他信息推荐
-    $('#container .other_basic .others a').on('click',function () {
-        let _classname=$(this).parent().attr('class'),word='',tit='';
-        if (_classname.includes('time')){
-            //$('.other-3-example span').text('活跃时间推荐');
-            //publicRecommend('active_time','.other_basic .other-3-list');
-            word='active_time';tit='活跃时间推荐';_classname='other-1';
-        }else if (_classname.includes('choose')){
-            //$('.other-3-example span').text('发帖量推荐');
-            //publicRecommend('day_post_num_average','.other_basic .other-3-list');
-            word='day_post_num_average';tit='发帖量推荐';_classname='other-2';
-        }
-        _classname+='&other-3&other-3-example&other-3-list';
-        publicRecommend(word,_classname,tit);
-        $('.other-3').css({display:'block'});
-    });
-    //账户创建信息
-    $('#container .account .account-1 a').on('click',function () {
-        let _classname=$(this).parent().attr('class'),word='',tit='';
-        if (_classname.includes('name')){
-            //$('.account-2-example span').text('昵称推荐');
-            word='nick_name';tit='昵称推荐';_classname='name';
-        }else if (_classname.includes('age')){
-            //$('.account-2-example span').text('年龄推荐');
-            word='age';tit='年龄推荐';_classname='age';
-        }else if (_classname.includes('gender')){
-            //$('.account-2-example span').text('性别推荐');
-            word='sex';tit='性别推荐';_classname='gender';
-        }else if (_classname.includes('place')){
-            //$('.account-2-example span').text('所在地推荐');
-            word='user_location';tit='所在地推荐';_classname='place';
-        }else if (_classname.includes('career')){
-            //$('.account-2-example span').text('职业推荐');
-            word='career';tit='职业推荐';_classname='career';
-        }else if (_classname.includes('description')){
-            //$('.account-2-example span').text('个人描述推荐');
-            word='description';tit='个人描述推荐';_classname='description';
-        }
-        _classname+='&account-2&account-2-example&account-2-list';
-        publicRecommend(word,_classname,tit);
-    });
-
-    var addRR=[
-        {'word':'nick_name','_classname':'name'},
-        {'word':'age','_classname':'age'},
-        {'word':'sex','_classname':'gender'},
-        {'word':'user_location','_classname':'place'},
-        {'word':'career','_classname':'career'},
-        {'word':'description','_classname':'description'},
-    ];
-    $.each(addRR,function (index,item) {
-        var field=item.word;
-        var className=item._classname;
-        if (field=='sex'){
-            var s = '';
-            if (recommendData[field]==1){s='男'}else if(recommendData[field]==2){s='女'}else{s='未知'};
-            $("#gender input[type='radio'][value='"+s+"']").attr("checked",true);
-        }else {
-            if (!recommendData[field]||recommendData[field]==''||recommendData==0||isEmptyObject(recommendData[field])){
-                $('#container #'+className).val('暂无推荐');
-            }else {
-                var r=recommendData[field].toString().replace(/&/g,'，');
-                $('#container #'+className).val(r);
-            }
-        }
-
-    })
-}
-function publicRecommend(field,className,tit) {
-    var str='';
-    if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||
-        isEmptyObject(recommendData[field])){
-        str='<p style="text-align: center;">抱歉，暂无数据。</p>';
-    }else {
-        if (field=='day_post_num_average'){
-            str+='<li><a href="###">'+parseInt(recommendData[field])+'条</a></li>';
-        }else {
-            var rd=[];
-            if (typeof recommendData[field]=='string'){
-                rd=recommendData[field].split('&');
-            }else if (typeof recommendData[field]=='object'){
-                for (var k in recommendData[field]){
-                    if (recommendData[field][k]){
-                        rd.push(recommendData[field][k])
-                    }else {
-                        rd.push(k);
-                    }
-                }
-            }
-            for(var a=0;a<rd.length;a++){
-                var at=rd[a],time;
-                if (field=='active_time'){
-                    //time=at+':00-'+at+':59';
-                    time='<label class="demo-label">'+
-                    '        <input class="demo-radio" type="checkbox" name="timetampe">'+
-                    '        <span class="demo-checkbox demo-radioInput"></span> '+at+':00-'+at+':59'+
-                    '    </label>';
-                    str+='<li>'+time+'</li>';
-                }else {
-                    time=at;
-                    str+='<li><a href="###" title="'+time+'">'+time+'</a></li>';
-                }
-                //str+='<li><a href="###" title="'+time+'">'+time+'</a></li>';
-            };
-        }
-    };
-
-    if (tit){
-        var big=className.split('&');
-        var afterStr=
-            '<div class="'+big[1]+'" style="margin:15px 0;">'+
-            '   <p class="'+big[2]+'" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">'+
-            '       <span style="padding: 3px 6px;color: white;">'+tit+'</span>'+
-            '       <b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>'+
-            '   </p>'+
-            '   <ul class="'+big[3]+'" style="padding: 10px 20px;">'+str+
-            '   </ul>'+
-            '</div>';
-        $('.'+big[1]).remove();
-        $('#container .'+big[0]).after(afterStr);
-        $('.'+big[1]).css({display:'block'});
-        $('.close').on('click',function () {
-            $('.'+big[1]).remove();
-        });
-    }else {
-        $('#container '+className).empty().html(str);
-    }
-};
-
-
 //上一步，下一步，保存返回
 var second,n=0;
 $('.previous').on('click',function () {
@@ -190,45 +54,51 @@ function nameJudgment() {
     //判断昵称是否重复
     var nickName=$('#name').val();
     public_ajax.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
-    if (go_on==2){
-        var timelist=[];
-        $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
-            timelist.push($(this).val());
-        });
-        var actTime=Array.from(new Set(timelist)).join(',');
-        var postNum;
-        if ($('.postNUM').val()){
-            //patch('-',$('.postNUM').val().toString())==1
-            if($('.postNUM').val().toString().indexOf('-')!=-1){
-                postNum=$('.postNUM').val().toString().replace(/\s/g, "");
-            }else {
-                $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
-                $('#prompt').modal('show');
-                return false;
-            }
-        }else {
-            $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
-                postNum = $(this).val().toString();
-            });
-        };
-        var daily=$('#character6').text()
-        var keywords=$('#character7').text();
-        if (actTime&&postNum&&daily&&keywords){
-            var modXNR_url='/weibo_xnr_create/modify_base_info/?xnr_user_no='+$id+'&active_time'+actTime+'&day_post_average='+
-                postNum+'&daily_interests'+daily+'&monitor_keywords='+keywords;
-            public_ajax.call_request('get',modXNR_url,success);
-        }else {
-            $('#prompt p').text('请检查您输入的内容（不能为空）');
-            $('#prompt').modal('show');
-        }
-    }
+    // if (go_on==2){
+    //     var timelist=[];
+    //     $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
+    //         timelist.push($(this).val());
+    //     });
+    //     var actTime=Array.from(new Set(timelist)).join(',');
+    //     var postNum;
+    //     if ($('.postNUM').val()){
+    //         //patch('-',$('.postNUM').val().toString())==1
+    //         if($('.postNUM').val().toString().indexOf('-')!=-1){
+    //             postNum=$('.postNUM').val().toString().replace(/\s/g, "");
+    //         }else {
+    //             $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
+    //             $('#prompt').modal('show');
+    //             return false;
+    //         }
+    //     }else {
+    //         $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
+    //             postNum = $(this).val().toString();
+    //         });
+    //     };
+    //     var daily=$('#character6').text()
+    //     var keywords=$('#character7').text();
+    //     if (actTime&&postNum&&daily&&keywords){
+    //         var modXNR_url='/weibo_xnr_create/modify_base_info/?xnr_user_no='+$id+'&active_time'+actTime+'&day_post_average='+
+    //             postNum+'&daily_interests'+daily+'&monitor_keywords='+keywords;
+    //         public_ajax.call_request('get',modXNR_url,success);
+    //     }else {
+    //         $('#prompt p').text('请检查您输入的内容（不能为空）');
+    //         $('#prompt').modal('show');
+    //     }
+    // }
 }
 function success(data) {
     if (!data){
         $('#prompt p').text('修改失败。');
         $('#prompt').modal('show');
     }else {
-        window.open('/personalCenter/individual/');
+        if (n==0){
+            window.open('/registered/targetCustom/');
+        }else if (n==1){
+            window.open('/registered/socialAccounts/');
+        }else if (n==2){
+            window.open('/personalCenter/individual/');
+        }
     }
 }
 function repeatNot(data) {
