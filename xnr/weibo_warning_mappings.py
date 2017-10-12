@@ -158,6 +158,9 @@ def weibo_speech_warning_mappings():
 					'uid_list':{  # 参与用户
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'create_time':{  #加入预警库时间
+					    'type':'long'
 					}
 				}
 			}

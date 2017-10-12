@@ -66,6 +66,7 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
     var flow_faw_url;
     if (_val=='no'){
         flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num;
+        public_ajax.call_request('get',flow_faw_url,flow_faw);
     }else {
         var end_time=Date.parse(new Date())/1000;
         var startTime='';
@@ -82,11 +83,10 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
             $('#start_1').hide();
             $('#end_1').hide();
             $('.sureTime').hide();
-            flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
+            flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
                 '&end_ts='+end_time;
             public_ajax.call_request('get',flow_faw_url,flow_faw);
         }
-
     }
 });
 $('.sureTime').on('click',function () {
@@ -96,7 +96,7 @@ $('.sureTime').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var his_timing_task_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+(Date.parse(new Date(s))/1000)+
+        var his_timing_task_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+(Date.parse(new Date(s))/1000)+
             '&end_ts='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',his_timing_task_url,flow_faw);
     }
@@ -842,6 +842,11 @@ function related(_this) {
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
 function relatedWEIbo(data) {
+    if (isEmptyObject(data)){
+        $('#pormpt p').text('当前输入关键词暂无分析结果，请尝试输入新的关键词。');
+        $('#pormpt').modal('show');
+        return false;
+    }
     var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
     if (reg.test(data)){
         $('#pormpt p').text(data);
@@ -860,8 +865,8 @@ function relatedWEIbo(data) {
             data:dataNew,
             search: true,//是否搜索
             pagination: true,//是否分页
-            pageSize: 2,//单页记录数
-            pageList: [15,20,25],//分页步进值
+            pageSize: 1,//单页记录数
+            pageList: [5,10],//分页步进值
             sidePagination: "client",//服务端分页
             searchAlign: "left",
             searchOnEnterKey: false,//回车搜索
@@ -893,7 +898,7 @@ function relatedWEIbo(data) {
                         var str='';
                         for (var r=0;r<row.weibo.length;r++){
                             str+=
-                                '<div class="post_perfect">'+
+                                '<div class="post_perfect" style="text-align: left;">'+
                                 '   <div class="post_center-hot">'+
                                 '       <img src="/static/images/post-6.png" class="center_icon">'+
                                 '       <div class="center_rel">'+

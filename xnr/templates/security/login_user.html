@@ -4,12 +4,50 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />
 		<title>用户登陆</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
 
 		<style type="text/css">
+			/* --- */
+			html, body, div, img, h1, h2, h3, h4, h5, h6, input, button, span, p, b, strong, em, li, ul, ol, dl, dt, dd, th, textarea, select, table, form {
+				margin: 0;
+				padding: 0;
+				font-family: '微软雅黑';
+			}
 			html,body {
+                background-color: #30303d;
 				width: 100%;
 				height: 100%;
 			}
+			#box_body {
+				position: relative;
+				z-index:10;
+				padding: 100px 0;
+				margin: 0 auto;
+			}
+			/* 大标题 */
+			#fonts {
+				height: 100px;
+				background:url('/static/images/font.png') center center no-repeat;
+			}
+			/* 浅蓝底色 */
+			#linear {
+				position: absolute;
+				width: 100%;
+				bottom:0;
+				height: 77%;
+				background: linear-gradient(-180deg, rgba(55,60,65,0.00) 18%, #00DEFF 100%);
+			}
+			#box_body #box {
+			    position: relative;
+			    z-index: 200;
+			    margin:7% auto;
+			    width:25%;
+			    padding:20px;
+			    border-radius: 10px;
+			    /* height:270px; */
+			    background-color: rgba(21, 21, 21, 0.56);
+			}
+			/* --- */
 			a {
 				text-decoration: none;
 			}
@@ -22,7 +60,7 @@
 			}
 
 			ul li {
-				list-style-type:none; 
+				list-style-type:none;
 			}
 			.shadow{
 				-webkit-box-shadow:5px 6px 3px #ABA8A8;
@@ -31,7 +69,21 @@
 				border: 2px solid #cccccc;
 
 			}
-			#email{
+			/* 用户名  密码*/
+			#email,#password {
+				vertical-align:middle;
+			    width: 80%;
+			    height: 25px;
+			    padding: 5px 5px 5px 10px;
+			    border-radius: 10px;
+			    margin-bottom: 5px;
+			    font-size: 12px;
+			    background: transparent;
+			    border: 1px solid white;
+			    transition: all linear .7s;
+			}
+
+			/* #email{
 				width: 200px;
 				height: 15px;
 				padding: 5px 5px 5px 10px;
@@ -42,8 +94,27 @@
 				height: 15px;
 				padding:5px 5px 5px 10px;
 				border-radius: 10px;
+			} */
+
+			/* 登录 */
+			#submit {
+			    text-align: center;
+			    background: transparent;
+			    color: rgb(255, 255, 255);
+			    font-size: 14px;
+			    width: 100%;
+			    height: 32px;
+			    border: 1px solid #fff;
+			    border-radius: 5px;
+			    font-weight: bold;
+			    cursor: pointer;
+			    transition: all linear .5s;
 			}
-			#submit{
+			#submit:hover {
+			    background: #fff;
+			    color: #000;
+			}
+			/* #submit{
 				display: inline-block;
 				color: #FFF;
 				border: 1px solid #334EE3;
@@ -51,79 +122,290 @@
 				background-color:#6699FF;
 				width:80px;
 				height:40px;
+			} */
+
+			/* 图片 */
+			#img_list_1,#img_list_2 {
+			    position: absolute;
 			}
-			
+			#img_list_1 {
+			    top: 60%;
+			    left:4%;
+			}
+			#img_list_1 img  {
+			    width: 600px;
+			    height: 400px;
+			    position: absolute;
+			    transition: all linear 0.2s;
+			    -webkit-transform-style: preserve-3d;
+			    -moz-transform-style: preserve-3d;
+			    -ms-transform-style: preserve-3d;
+			    transform-style: preserve-3d;
+			}
+			#img_list_2 {
+			    top:4%;
+			    left:65%;
+			}
+			#img_list_2 img {
+			    width: 600px;
+			    height: 400px;
+			    position: absolute;
+			    transform-style: preserve-3d;
+			    transition: all linear 0.2s;
+			}
+
+			/* 雪花 */
+			#box img.img-7,#box img.img-8 {
+			    position: absolute;
+			    bottom: -30%;
+			    right: -36%;
+			    -webkit-animation:change 11s linear infinite both;
+			    -o-animation:change 11s linear infinite  both;
+			    animation:change 11s linear infinite  both;
+			}
+			#box img.img-8 {
+			    bottom: -38%;
+			    right: -46%;
+			}
+			@keyframes change {
+			    from{
+			        -webkit-transform:  rotate(0deg);
+			        -moz-transform:  rotate(0deg);
+			        -ms-transform:  rotate(0deg);
+			        -o-transform:  rotate(0deg);
+			        transform:  rotate(0deg);
+			    }
+			    to{
+			        -webkit-transform:  rotate(360deg);
+			        -moz-transform:  rotate(360deg);
+			        -ms-transform:  rotate(360deg);
+			        -o-transform:  rotate(360deg);
+			        transform:  rotate(360deg);
+			    }
+			}
+			@-webkit-keyframes change {
+			    from{
+			        -webkit-transform:  rotate(0deg);
+			        -moz-transform:  rotate(0deg);
+			        -ms-transform:  rotate(0deg);
+			        -o-transform:  rotate(0deg);
+			        transform:  rotate(0deg);
+			    }
+			    to{
+			        -webkit-transform:  rotate(360deg);
+			        -moz-transform:  rotate(360deg);
+			        -ms-transform:  rotate(360deg);
+			        -o-transform:  rotate(360deg);
+			        transform:  rotate(360deg);
+			    }
+			}
+
+			/* 选择框 */
+			/* .demo-radio{display:none} */
+			#remember{display:none}
+			.demo-radioInput{
+				float:left;
+				cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;margin-top: 2px;}
+			#remember:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+
+			/* 警示框 */
+/* 			#al-pass {
+				position:fixed;
+				z-index:99;
+				top:40%;
+				right:45%;
+				display:none;
+			} */
+
 		</style>
 		<!-- 引入js -->
 	    {% block head_js %}
-	   		<script src="/static/js/jquery-1.8.2.min.js"></script>
+	   		<!-- <script src="/static/js/jquery-1.8.2.min.js"></script> -->
+	   		<script src="/static/js/jquery-3.1.1.min.js"></script>
 	    	<script src="/static/js/jquery-ui.min.js"></script>
-			<script src='/static/js/jquery.dataTables.min.js'></script>
-			<script src='/static/js/jquery.showLoading.min.js'></script>
-			<script src='/static/js/portrait/time_for_test.js'></script>
-	    {% endblock %}		
+			<!-- <script src='/static/js/jquery.dataTables.min.js'></script> -->
+			<!-- <script src='/static/js/jquery.showLoading.min.js'></script> -->
+			<!-- <script src='/static/js/portrait/time_for_test.js'></script> -->
+	    {% endblock %}
 	</head>
 
 
-	<body  style="background:url(/static/img/pineapple-1704338.jpg) no-repeat;background-size:100% 120%;padding-top:30px;">
-      <div style="height:60px;margin-top: 40px;color:white;font-size:32px;line-height: 50px;"><center><b style="color:orange;">微世界</b></center></div>
+	<!-- <body  style="background:url(/static/img/pineapple-1704338.jpg) no-repeat;background-size:100% 120%;padding-top:30px;"> -->
+	<body>
+      <!-- <div style="height:60px;margin-top: 40px;color:white;font-size:32px;line-height: 50px;"><center><b style="color:orange;">微世界</b></center></div> -->
+		<div id="box_body">
+			<h1 id="fonts"></h1>
 
-        <div style="margin:40px auto 0 auto;width:400px;padding:20px;border-radius: 10px;height:270px;background-color: rgba(21, 21, 21, 0.56);">
-			{% from "security/_macros.html" import render_field_with_errors, render_field %}
-			{% include "security/_messages.html" %}
-			<h2 style="color:#fff;margin-left:37%">用户登录 </h2>
-			<hr style="width:100%;">
-			<form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
-			  {{ login_user_form.hidden_tag() }}
-			  {{ render_field_with_errors(login_user_form.email) }}
-			  {{ render_field_with_errors(login_user_form.password) }}
-			  {{ render_field_with_errors(login_user_form.remember) }}
-			  {{ render_field(login_user_form.next) }}
-			  <div>
-			  	{{ render_field(login_user_form.submit) }}
-			  </div>
-			</form>
-			{% include "security/_menu.html" %}
+			<div id="img_list_1">
+				<img src="/static/images/login-1.png" class="img-1">
+				<img src="/static/images/login-2.png" class="img-2">
+				<img src="/static/images/login-3.png" class="img-3">
+			</div>
+			<div id="img_list_2">
+				<img src="/static/images/login-4.png" class="img-4">
+				<img src="/static/images/login-5.png" class="img-5">
+				<img src="/static/images/login-6.png" class="img-6">
+			</div>
+
+	        <div id="box">
+				<!-- <div id="al-pass" class="alert alert-warning" role="alert">密码不能为空</div> -->
+
+				<img src="/static/images/login-7.png" alt="" class="img-7">
+				<img src="/static/images/login-8.png" alt="" class="img-8">
+
+				{% from "security/_macros.html" import render_field_with_errors, render_field %}
+				{% include "security/_messages.html" %}
+				<h2 style="color:#fff;">用户登录 </h2>
+				<hr style="width:100%;display:block;margin:10px 0;">
+				<div style='padding:20px 0 0 50px;'>
+					<form action="{{ url_for_security('login') }}" method="POST" name="login_user_form">
+						{{ login_user_form.hidden_tag() }}
+						{{ render_field_with_errors(login_user_form.email) }}
+						{{ render_field_with_errors(login_user_form.password) }}
+						{{ render_field_with_errors(login_user_form.remember) }}
+						{{ render_field(login_user_form.next) }}
+						<div>
+							{{ render_field(login_user_form.submit) }}
+						</div>
+					</form>
+				</div>
+
+				{% include "security/_menu.html" %}
+			</div>
 		</div>
+
+		<div id="linear"></div>
+
+
+
 	</body>
 </html>
 
-
-
   <script>
-	  $('#email').attr('placeholder','请输入您的账号');
-	  $('#email').prev().empty();
-	  $('#email').prev().append('<div style="float: left;line-height:25px;width:60px;font-size:14px;color:#fff;">用户名</div>');
-	  $("#email").parent().css({paddingLeft:'55px'});
-	  $("#password").parent().css({paddingLeft:'55px'});
-	  $('#password').prev().empty();
-	  $('#password').prev().append('<div style="float: left;line-height:25px;width:60px;font-size:14px;color:#fff;">密码</div>');
-	  $('#password').attr('placeholder','请输入您的密码');
-	  $('#remember').prev().empty();
-	  $('#remember').prev().append('<div style="display:inline-block;color:#fff;">记住密码</div>');
-	  $("#remember").css('float','left');
-	  $("#remember").parent().css({
-	  	paddingLeft:'55px',
-	  	fontSize:'12px',
-	  })
-	  $('#submit').attr('value','登       录').css({
-	  	background: '#fcb616',
-	    color:'#fff',
-	    fontSize: '14px',
-	    textShadow: '1px 1px 1px #ad3c25',
-	    width: '288px',
-	    height: '32px',
-	    lineHight: '25px',
-	    border: '1px solid #dba658',
-	    borderRadius: '5px',
-	    fontWeight:'bold',
-	    cursor: 'pointer'
-	  })
-	  $('#submit').hover(function(){
-	  	this.style.backgroundColor="#ffc031";
-	  },function(){
-	  	this.style.backgroundColor="#fcb616";
-	  });
-	  $('#submit').css('fontWeight','bold');
-	  $('#submit').parent().css('textAlign','center')
+
+	$(function(){
+		// 账号
+		$('#email').attr('placeholder','请输入您的账号');
+		$('#email').prev().empty();
+		$('#email').prev().append('<div style="float: left;line-height:25px;width:60px;font-size:14px;color:#fff;font-weight:normal;">用户名</div>');
+		$('#email').prev().css({'vertical-align':'middle','margin-bottom':'10px','width':'18%'});
+		$("#email").parent().css({'padding-right':'10%'});
+		// $("#email").parent().next().css({display:'none'});
+
+		// 密码
+		// $("#password").parent().css({paddingLeft:'55px'});
+		$('#password').prev().empty();
+		$('#password').prev().append('<div style="float: left;line-height:25px;font-size:14px;color:#fff;">密&nbsp;&nbsp;码</div>');
+		$('#password').attr('placeholder','请输入您的密码');
+		$('#password').prev().css({'vertical-align':'middle','width':'18%'});
+		$("#password").parent().css({'padding-right':'10%'});
+
+		// 记住密码
+		$('#remember').prev().empty();
+		$('#remember').prev().append('<div style="display:inline-block;color:#fff;">记住密码</div>');
+		$('#remember').prev().css({'cursor':'pointer','user-select':'none'})
+		$('#remember').parent().css({'margin':'10px 5px 20px 0','padding-right':'10%'})
+		// $("#remember").css('marginLeft','5px');
+		$("#remember").css({'float':'left','margin-right':'5px'});
+		// $("#remember").parent().css({paddingLeft:'55px',fontSize:'12px',})
+		$('#remember').parent().append('<span class="demo-radioInput" id="remember-demo-radioInput"></span><a href="###" style="color:white;float: right;">注册</a>')
+		$('#remember-demo-radioInput').on('click',function(){
+			if($('#remember').prop('checked') == true){
+				$('#remember').prop('checked',false)
+			}else{
+				$('#remember').prop('checked',true)
+			}
+		})
+
+		// 登录
+		$('#submit').attr('value','登       录')
+		// .css({
+		// 	background: '#fcb616',
+		// 	color:'#fff',
+		// 	fontSize: '14px',
+		// 	textShadow: '1px 1px 1px #ad3c25',
+		// 	width: '288px',
+		// 	height: '32px',
+		// 	lineHight: '25px',
+		// 	border: '1px solid #dba658',
+		// 	borderRadius: '5px',
+		// 	fontWeight:'bold',
+		// 	cursor: 'pointer'
+		// })
+		// $('#submit').hover(function(){
+		// 	this.style.backgroundColor="#ffc031";
+		// },function(){
+		// 	this.style.backgroundColor="#fcb616";
+		// });
+		// $('#submit').css('fontWeight','bold');
+		$('#submit').parent().css('textAlign','center');
+		$('#submit').parent().parent('div').css('padding-right','10%');
+		var li = $('#email').parent('p').siblings('ul').children('li');
+		li.css({'color':'#fff','margin-bottom':'5px'})
+		li.html('账号、密码不能为空');
+		// li.css('display','none');
+		// $(li[0]).html('账号不能为空')
+		// $(li[1]).html('密码不能为空啊！')
+		// Email not provided
+		// Password not provided
+		// $('#submit').on('click',function(){
+		// 	// event.stopImmediatePropagation();
+		// 	// event.stopPropagation()
+		// 	if($('#email').val() =='' && $('#password').val() == ''){
+		// 		// $(li[0]).html('账号不能为空')
+		// 		// $(li[1]).html('密码不能为空')
+		// 		$('#al-pass').css('display','block');
+		// 		// $('#al-pass').fadeIn(500);
+		// 	}else if($('#email').val() !=='' && $('#password').val() == ''){
+		// 		// $(li[0]).html('密码不能为空')
+		// 	}else if($('#email').val() =='' && $('#password').val() !== ''){
+		// 		// $(li[0]).html('账号不能为空')
+		// 	}
+		// })
+
+
+		// 输入框
+	    $('#box input[type=text]').on('focus',function () {
+			$(this).css({backgroundColor:'#fff'})
+	    });
+	    $('#box input[type=password]').on('focus',function () {
+	        $(this).css({backgroundColor:'#fff'})
+	    });
+	    $('#box input[type=text]').on('blur',function () {
+	        $(this).css({backgroundColor:''})
+	    });
+	    $('#box input[type=password]').on('blur',function () {
+	        $(this).css({backgroundColor:''})
+	    })
+
+	    // 图片移动
+        var items$2 = $('#box_body img');
+	    document.addEventListener('mousemove', function (evt){
+	        var x = evt.clientX;
+	        var y = evt.clientY;
+	        //console.log(x);
+	        var winWidth = window.innerWidth;
+	        var winHeight = window.innerHeight;
+	        var halfWidth = winWidth / 2;
+	        var halfHeight = winHeight / 2;
+
+	        var rx = x - halfWidth;
+	        var ry = halfHeight - y;
+	        var length = items$2.length;
+	        var max = 20;
+
+	        for (var i = 0 ; i < length ; i++) {
+	            var dx = (items$2[i].getBoundingClientRect().width/max)*(rx / -halfWidth);
+	            var dy = (items$2[i].getBoundingClientRect().height/max)*(ry / halfHeight);
+				dx+=10;dy+=10;
+				if (i<3){
+	                items$2[i].style['transform'] = items$2[i].style['-webkit-transform'] = 'translate(-'+dx+'px,-'+dy+'px)';
+	            }else {
+	                items$2[i].style['transform'] = items$2[i].style['-webkit-transform'] = 'translate('+dx+'px,'+dy+'px)';
+	            }
+	        }
+
+	    }, false);
+	})
+
   </script>

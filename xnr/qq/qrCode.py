@@ -38,7 +38,7 @@ def compare(x, y):
 
 def getQRCode_v2(qq_number):
     #read qq_xnr es to get qqbot_port
-    time.sleep(30)
+    time.sleep(10)
     try:
         # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
         #             id=qq_xnr,_source=True)['_source']

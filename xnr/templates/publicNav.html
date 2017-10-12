@@ -44,10 +44,11 @@
             <div class="behind" style="float: left;"></div>
         </ul>
         <div class="btn-group loadingUser">
-            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a class="nav_name"></a>
-                <span class="nav_type"></span>
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" title="登录用户"
+                    aria-expanded="false" style="background:transparent;color: black;">
+                <span class="icon icon-user"></span> <a id="login_user">admin@qq.com</a>&nbsp;&nbsp;
             </button>
+            <span class="xnrShowHide"><b style="color:#333;">虚拟人：</b> <a class="nav_name"></a> <a class="nav_type"></a></span>
             <ul class="dropdown-menu">
                 <!-- <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
                 <li><a href="#"><i class="icon-trash"></i> 删除</a></li> -->
@@ -102,6 +103,12 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    //判断浏览器关闭
+//    window.onbeforeunload = onbeforeunload_handler;
+//    window.onunload = onunload_handler;
+//    function onbeforeunload_handler() {}
+//    function onunload_handler() {localStorage.clear();ISclear='clear';}
+
     //几天前的时间戳
 //    function getDaysBefore(m){
 //        var date = new Date(),

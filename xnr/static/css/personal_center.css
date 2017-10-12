@@ -9,8 +9,8 @@ body {
     width: 1100px;
     height: 100%;
     padding: 20px;
-    margin: 0 auto;
-    background: rgba(8,23,44,0.5);
+    margin: 0 auto 30px;
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
