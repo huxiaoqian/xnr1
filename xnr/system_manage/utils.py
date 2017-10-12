@@ -197,14 +197,15 @@ def show_users_account():
     account_info=[]
     for account_name in account_list:
         account_dict=dict()
+        account_name=list(account_name)[0]
         account_dict['user_name']=account_name
-        #已完成虚拟人
+        #未完成虚拟人
         status_zero=0
         status_second=2
         status_three=3
-        account_dict['complete_xnr']=get_user_xnr_list(account_name,status_zero,status_second)
-        #未完成虚拟人
-        account_dict['uncomplete_xnr']=get_user_xnr_list(account_name,status_second,status_three)
+        account_dict['uncomplete_xnr']=get_user_xnr_list(account_name,status_zero,status_second)
+        #已完成虚拟人
+        account_dict['complete_xnr']=get_user_xnr_list(account_name,status_second,status_three)
         account_info.append(account_dict)
     return account_info
 
