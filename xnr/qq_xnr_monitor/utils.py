@@ -107,7 +107,7 @@ def get_speaker_info(qq_number,index_name):
         results['qq_groups'] = {source['qq_group_number']:source['qq_group_nickname']}
     for item in result:
         source = item['_source']
-        text_item = [source['text'], source['timestamp']]
+        text_item = [source['text'], source['timestamp'], source['sensitive_words_string']]
         #print 'text_item:', text_item
         try:
             results['text'].append(text_item)
