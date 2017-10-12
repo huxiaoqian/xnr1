@@ -352,21 +352,21 @@ def ajax_lookup_xnr_assess_info():
 #http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
 @mod.route('/create_xnr_flow_text/')
 def ajax_create_xnr_flow_text():
-	task_id='WXNR0004_1507356360'
+	task_id='WXNR0004_1507383960'
 	task_detail=dict()
-	task_detail['task_source']='daily_post'
+	task_detail['task_source']='business_post'
 	task_detail['xnr_user_no']='WXNR0004'
 	task_detail['uid']='6346321407'
-	task_detail['text']='【连续32个月稳居世界第一 马龙创纪录！】最近，国际乒联公布了最新一期世界排名，男子乒坛，中国队长马龙以3307分稳居世界第一，并创造32个月稳居世界第一纪录。樊振东第二，许昕第三。此外，张继科跌落至第六，林高远则首次挤进世界前十，位列第九。（视频/@Captain龙博物馆 ）http://t.cn/RO2ydUV！'
+	task_detail['text']='//@重庆消费维权网:把上访说成无理取闹，嗯，这是对残酷现实的掩盖。总之，这部电影太矫情了。'
 	task_detail['picture_url']=''
 	task_detail['vedio_url']=''
 	task_detail['user_fansnum']=8
-	task_detail['weibos_sum']=81
+	task_detail['weibos_sum']=83
 	task_detail['mid']=''
 	task_detail['ip']=''
 	task_detail['directed_uid']=''
 	task_detail['directed_uname']=''
-	task_detail['timestamp']=1507356360
+	task_detail['timestamp']=1507383979
 	task_detail['sentiment']=''
 	task_detail['geo']=''
 	task_detail['keywords_dict']=''
@@ -378,10 +378,10 @@ def ajax_create_xnr_flow_text():
 	task_detail['origin_text']=''
 	task_detail['origin_keywords_dict']=''
 	task_detail['origin_keywords_string']=''
-	task_detail['comment']=1
-	task_detail['sensitive']=0
-	task_detail['sensitive_words_dict']=''
-	task_detail['retweeted']=1
+	task_detail['comment']=0
+	task_detail['sensitive']=1
+	task_detail['sensitive_words_dict']='上访'
+	task_detail['retweeted']=0
 
 	results=create_xnr_flow_text(task_detail,task_id)
 	return json.dumps(results)
