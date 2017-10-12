@@ -37,12 +37,96 @@ a,a:link,a:hover,a:visited,a:active {
     display: inline-block;
     background: url("/static/images/ID.png") no-repeat left center;
     background-size:50px 50px ;
+
+    position: relative;
 }
 #nav .nav_top h3 {
     margin-left: 6px;
     font-size: 27px;
     margin-top: -5px;
 }
+/*10-12 LL向下展开的盒子*/
+#nav .nav_top:hover {
+    cursor: pointer;
+}
+#nav .nav_top #LL {
+    width:100%;
+    display: none;
+    position:absolute;
+    left: 0;
+    background-color: #fff;
+    margin-top: 10px !important;
+    padding-bottom: 10px;
+}
+#nav .nav_top #LL li {
+    text-align:justify;
+    padding: 10px 5px;
+    padding-left:60px;
+}
+#nav .nav_top #LL li:hover {
+    background-color: #2a556f;
+    color:#fff;
+}
+#nav .nav_top #LL li i {
+    margin-right: 10px;
+}
+
+/*<style> navigationMain.html页面内样式*/
+.demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+.demo-radio{display:none!important;}
+.demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+.modal-header {
+    background: #09344e!important;
+    color: white!important;
+}
+.modal-body,.modal-footer {
+    background: #041b29!important;
+    color: white!important;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.modal-header .close {
+    color:white!important;
+    opacity: 1!important;
+}
+.modal-footer .btn {
+    background-color: transparent;
+    border-color: silver;
+    color: white;
+}
+.modal-footer .btn:hover {
+    background-color: rgba(3, 8, 16, 0.61);
+    color: white;
+}
+.weiboQQ {
+    position: absolute;
+    width: 554px;
+    height: 176px;
+    left: 50%;
+    top: 22%;
+    margin: 0 0 0 -277px;
+    text-align: center;
+}
+.weiboQQ img {
+    margin:0 30px;
+    cursor: pointer;
+}
+@media screen and (min-width:1370px) and (max-width:1920px) {
+    .bg13 .monitor {
+        top: 700px!important;
+        left: 1100px!important;
+    }
+    .bg13 .info {
+        top: 700px!important;
+        left:700px!important;
+    }
+}
+/*</style>*/
+/*---------*/
+
 #nav .nav_bottom {
     display: inline-block;
 }
