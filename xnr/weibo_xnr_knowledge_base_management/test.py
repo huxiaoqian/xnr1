@@ -50,18 +50,18 @@ def rechange_date_remind():
 
 #批量添加
 def bulk_add_subbmitter(index_name,index_type):
-    s_re = scan(es_xnr, query={'query':{'match_all':{}}, 'size':102},index=index_name, doc_type=index_type)
+    s_re = scan(es_xnr, query={'query':{'match_all':{}}, 'size':2},index=index_name, doc_type=index_type)
     bulk_action=[]
     count=0
     while  True:
         try:
             scan_re=s_re.next()
             _id=scan_re['_id']
-            source={'doc':{'create_type':'all_xnrs'}}
+            source={'doc':{'user_name':'admin@qq.com'}}
             action={'update':{'_id':_id}}
             bulk_action.extend([action,source])
             count += 1
-            if count % 102 == 0:
+            if count % 2 == 0:
                 es_xnr.bulk(bulk_action,index=index_name,doc_type=index_type,timeout=100)
                 bulk_action = []
             else:
@@ -81,6 +81,6 @@ def bulk_add_subbmitter(index_name,index_type):
 
 if __name__ == '__main__':
     #rechange_date_remind()
-    index_name='weibo_date_remind'
-    index_type='remind'
+    index_name='weibo_log'
+    index_type='log'
     bulk_add_subbmitter(index_name,index_type)

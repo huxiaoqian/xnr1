@@ -200,7 +200,8 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     elif classify_id == 0:
         user_condition_list=[{'match_all':{}}]
 
-    #print sort_condition_list,user_condition_list
+    print 'sort_condition_list',sort_condition_list
+    print 'user_condition_list',user_condition_list
 
     query_body={
         'query':{

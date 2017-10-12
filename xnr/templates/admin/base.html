@@ -1,299 +1,327 @@
 {% import 'admin/layout.html' as layout with context -%}
 {% import 'admin/static.html' as admin_static with context %}
-<head>
-  <title>{% block title %}{% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - {{ admin_view.admin.name }}{% endblock %}</title>
-  {% block head_meta %}
-      <meta charset="UTF-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="">
-      <meta name="author" content="">
-  {% endblock %}
-  {% block head_css %}
-      <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='3.3.5') }}" rel="stylesheet">
-      {%if config.get('FLASK_ADMIN_SWATCH', 'default') == 'default' %}
-      <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/css/bootstrap-theme.min.css', v='3.3.5') }}" rel="stylesheet">
-      {%endif%}
-      <link href="{{ admin_static.url(filename='admin/css/bootstrap3/admin.css', v='1.1.1') }}" rel="stylesheet">
-      {% if admin_view.extra_css %}
-        {% for css_url in admin_view.extra_css %}
-          <link href="{{ css_url }}" rel="stylesheet">
-        {% endfor %}
-      {% endif %}
-      <style>
-          /*10-11 LL修改样式*/
-          body {
-              padding-top: 4px;
-              background: url(/static/images/everybody_bg.jpg) no-repeat #0d3b6c;
-          }
-          .container {
-              width: 1000px;
-              margin: 0 auto 50px;
-              height: 100%;
-              padding: 25px;
-              background: rgba(8,23,44,0.8);
-              position: relative;
-              top: 80px;
-          }
-          /* 顶tab--- */
-          .container nav {
-              background: transparent;
-          }
-          .navbar-brand {
-              color:#fff !important;
-            display: none!important;
-          }
-          #admin-navbar-collapse {
-              background: transparent;
-          }
-          #admin-navbar-collapse>ul>li>a {
-              color:#fff;
-          }
-          #admin-navbar-collapse>ul>.active>a {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          #admin-navbar-collapse>ul>li>a:hover {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          /* tab2--- */
-          .container>ul>li>a {
-              color:#fff;
-          }
-          .container>ul>.active>a {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .container>ul>.active>a:hover {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .container>ul>.active>a:focus {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% if admin_view.category %}{{ admin_view.category }} - {% endif %}{{ admin_view.name }} - {{ admin_view.admin.name }}{% endblock %}</title>
+    {% block head_meta %}
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+    {% endblock %}
+    {% block head_css %}
+        <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/swatch/{swatch}/bootstrap.min.css'.format(swatch=config.get('FLASK_ADMIN_SWATCH', 'default')), v='3.3.5') }}" rel="stylesheet">
+        {%if config.get('FLASK_ADMIN_SWATCH', 'default') == 'default' %}
+        <link href="{{ admin_static.url(filename='bootstrap/bootstrap3/css/bootstrap-theme.min.css', v='3.3.5') }}" rel="stylesheet">
+        {%endif%}
+        <link href="{{ admin_static.url(filename='admin/css/bootstrap3/admin.css', v='1.1.1') }}" rel="stylesheet">
+        {% if admin_view.extra_css %}
+          {% for css_url in admin_view.extra_css %}
+            <link href="{{ css_url }}" rel="stylesheet">
+          {% endfor %}
+        {% endif %}
+        <style>
+            /*10-11 LL修改样式*/
+            body {
+                padding-top: 4px;
+                background: url(/static/images/everybody_bg.jpg) no-repeat #0d3b6c;
+            }
+            .container {
+                width: 1000px;
+                margin: 0 auto 50px;
+                height: 100%;
+                padding: 25px;
+                background: rgba(8,23,44,0.8);
+                position: relative;
+                top: 80px;
+            }
+            /* 顶tab--- */
+            .container nav {
+                background: transparent;
+            }
+            .navbar-brand {
+                color:#fff !important;
+            }
+            #admin-navbar-collapse {
+                background: transparent;
+                padding:0;
+            }
+            #admin-navbar-collapse>ul>li>a {
+                color:#fff;
+            }
+            #admin-navbar-collapse>ul>.active>a {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            #admin-navbar-collapse>ul>li>a:hover {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .navbar-brand {
+                display: none;
+            }
 
-          .container>ul>li>a:hover,.container>ul>li>a:focus {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .container>ul>.active>a:hover {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .nav .open>a {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .nav .open>a:focus {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .nav .open>a:hover {
-              background: #31708f;
-              border-color: silver;
-              color:#fff;
-          }
-          .dropdown-menu {
-              background: rgba(8,23,44,0.8);
-          }
-          .dropdown-menu:hover {
-              background: #31708f;
-          }
-          .dropdown-menu>li>a {
-              color:#fff;
-          }
-          .dropdown-menu>li>a:hover {
-              background: #31708f;
-              color:#fff;
-          }
+            /* tab2--- */
+            .container>ul>li>a {
+                color:#fff;
+            }
+            .container>ul>.active>a {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .container>ul>.active>a:hover {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .container>ul>.active>a:focus {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
 
-              /* 搜索 */
-          .navbar-form {padding: 0!important;}
-          .container>ul .form-group input {
-              background: transparent;
-              width: 800px;
-          }
+            .container>ul>li>a:hover,.container>ul>li>a:focus {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .container>ul>.active>a:hover {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .nav .open>a {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .nav .open>a:focus {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .nav .open>a:hover {
+                background: #31708f;
+                border-color: silver;
+                color:#fff;
+            }
+            .dropdown-menu {
+                background: rgba(8,23,44,0.8);
+            }
+            .dropdown-menu:hover {
+                background: #31708f;
+            }
+            .dropdown-menu>li>a {
+                color:#fff;
+            }
+            .dropdown-menu>li>a:hover {
+                background: #31708f;
+                color:#fff;
+            }
 
-          /* 表格--- */
-          .table-responsive table {
-              text-align:center;
-          }
-          .table-responsive table thead th {
-              text-align:center;
-          }
-          .table-responsive table thead a{
-              color:#fff;
-          }
-          .table-responsive table tbody tr {
-              background-color: transparent !important;
-              color:#fff;
-          }
+                /* 搜索 */
+            .container>ul .form-group input {
+                background: transparent;
+                width: 776px;
+            }
+            .navbar-form {
+                padding:0;
+            }
+            /* 表格--- */
+            .table-responsive table {
+                text-align:center;
+            }
+            .table-responsive table thead th {
+                text-align:center;
+            }
+            .table-responsive table thead a{
+                color:#fff;
+            }
+            .table-responsive table tbody tr {
+                background-color: transparent !important;
+                color:#fff;
+            }
 
-          /* create表单--- */
-          .container form {
-              color:#fff;
-          }
-          .container form input {
-              background: transparent;
-              color:#fff;
-              width: 800px;
-          }
-          .container form .select2-container .select2-choices {
-              background: transparent;
-          }
-          .container form .select2-container .select2-choices>li input {
-              color:#fff;
-          }
-          .container form input[value="Save"]:hover {
-              /* background: rgba(3, 8, 16, 0.61); */
-              color:#fff;
-          }
-          .container form input[name="_add_another"]:hover {
-              background: rgba(3, 8, 16, 0.61);
-              color:#fff;
-          }
-          .container form input[name="_continue_editing"]:hover {
-              background: rgba(3, 8, 16, 0.61);
-              color:#fff;
-          }
-          /**/
+            /* create表单--- */
+            .container form {
+                color:#fff;
+            }
+            .container form input {
+                background: transparent;
+                color:#fff;
+            }
+            .container form .select2-container .select2-choices {
+                background: transparent;
+            }
+            .container form .select2-container .select2-choices>li input {
+                color:#fff;
+            }
+            .container form input[value="Save"]:hover {
+                /* background: rgba(3, 8, 16, 0.61); */
+                color:#fff;
+            }
+            .container form input[name="_add_another"]:hover {
+                background: rgba(3, 8, 16, 0.61);
+                color:#fff;
+            }
+            .container form input[name="_continue_editing"]:hover {
+                background: rgba(3, 8, 16, 0.61);
+                color:#fff;
+            }
+            .container .title .account_icon {
+                display: inline-block;
+                margin-right: 5px;
+                width: 35px;
+                height: 35px;
+            }
+            .container .title .tit-1 b {
+                display: inline-block;
+                position: relative;
+                top: 3px;
+                margin-left: 10px;
+                font-size: 18px;
+                color: white;
+                /* font-weight: 900; */
+            }
 
-      </style>
-  {% endblock %}
-  {% block head %}
-  {% endblock %}
-  {% block head_tail %}
-  {% endblock %}
-</head>
-<body>
-  {% block page_body %}
-  <div class="container">
-    <nav class="navbar navbar-default" role="navigation">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        {% block brand %}
-        <!--<a class="navbar-brand" href="###">{{ admin_view.admin.name }}</a>-->
-        {% endblock %}
-      </div>
-      <!-- navbar content -->
-      <div class="collapse navbar-collapse" id="admin-navbar-collapse">
-        {% block main_menu %}
-        <ul class="nav navbar-nav" id="submenu">
-          {{ layout.menu() }}
-        </ul>
-        {% endblock %}
+        </style>
+    {% endblock %}
+    {% block head %}
+    {% endblock %}
+    {% block head_tail %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block page_body %}
 
-        {% block menu_links %}
-        <ul class="nav navbar-nav navbar-right">
-          {{ layout.menu_links() }}
-        </ul>
-        {% endblock %}
-        {% block access_control %}
-        {% endblock %}
-      </div>
-    </nav>
+    <div class="container">
+        <div class="title" style="margin: 10px 0 20px;">
+            <div class="tit-1">
+                <img class="account_icon" src="/static/images/purvw.png">
+                <b>权限管理</b>
+            </div>
+        </div>
+      <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#admin-navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% block brand %}
+          <!-- <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a> -->
+          <a class="navbar-brand" href="#"><b style="font-size:18px;">{{ admin_view.admin.name }}</b></a>
+          {% endblock %}
+        </div>
+        <!-- navbar content -->
+        <div class="collapse navbar-collapse" id="admin-navbar-collapse">
+          {% block main_menu %}
+          <ul class="nav navbar-nav" id="submenu">
+            {{ layout.menu() }}
+          </ul>
+          {% endblock %}
 
-    {% block messages %}
-    {{ layout.messages() }}
+          {% block menu_links %}
+          <ul class="nav navbar-nav navbar-right">
+            {{ layout.menu_links() }}
+          </ul>
+          {% endblock %}
+          {% block access_control %}
+          {% endblock %}
+        </div>
+      </nav>
+
+      {% block messages %}
+      {{ layout.messages() }}
+      {% endblock %}
+
+      {# store the jinja2 context for form_rules rendering logic #}
+      {% set render_ctx = h.resolve_ctx() %}
+
+      {% block body %}{% endblock %}
+    </div>
     {% endblock %}
 
-    {# store the jinja2 context for form_rules rendering logic #}
-    {% set render_ctx = h.resolve_ctx() %}
+    {% block tail_js %}
+    <script src="{{ admin_static.url(filename='vendor/jquery.min.js', v='2.1.4') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='bootstrap/bootstrap3/js/bootstrap.min.js', v='3.3.5') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='vendor/moment.min.js', v='2.9.0') }}" type="text/javascript"></script>
+    <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>
 
-    {% block body %}{% endblock %}
-  </div>
-  {% endblock %}
+    <script type="text/javascript">
+        $(function(){
+            // alert(1)
+            $('.container form input[name=email]').on('focus',function () {
+                $(this).css({'background':'#fff','color':'#000',})
+            });
+            $('.container form input[name=email]').on('blur',function () {
+                $(this).css({'background':'transparent','color':'#fff',})
+            });
+            $('.container form input[name=department]').on('focus',function () {
+                $(this).css({'background':'#fff','color':'#000',})
+            });
+            $('.container form input[name=department]').on('blur',function () {
+                $(this).css({'background':'transparent','color':'#fff',})
+            });
 
-  {% block tail_js %}
-  <script src="{{ admin_static.url(filename='vendor/jquery.min.js', v='2.1.4') }}" type="text/javascript"></script>
-  <script src="{{ admin_static.url(filename='bootstrap/bootstrap3/js/bootstrap.min.js', v='3.3.5') }}" type="text/javascript"></script>
-  <script src="{{ admin_static.url(filename='vendor/moment.min.js', v='2.9.0') }}" type="text/javascript"></script>
-  <script src="{{ admin_static.url(filename='vendor/select2/select2.min.js', v='3.5.2') }}" type="text/javascript"></script>
+            $('.container form input[name=password2]').on('focus',function () {
+                $(this).css({'background':'#fff','color':'#000',})
+            });
+            $('.container form input[name=password2]').on('blur',function () {
+                $(this).css({'background':'transparent','color':'#fff',})
+            });
 
-  <script type="text/javascript">
-      $(function(){
-          // alert(1)
-          $('.container form input[name=email]').on('focus',function () {
-              $(this).css({'background':'#fff','color':'#000',})
-          });
-          $('.container form input[name=email]').on('blur',function () {
-              $(this).css({'background':'transparent','color':'#fff',})
-          });
-          $('.container form input[name=department]').on('focus',function () {
-              $(this).css({'background':'#fff','color':'#000',})
-          });
-          $('.container form input[name=department]').on('blur',function () {
-              $(this).css({'background':'transparent','color':'#fff',})
-          });
+            // 编辑删除保存后的提示信息汉化
+            // console.log($.trim($('.alert-success').html()))
+            // console.log($.trim($('.alert-success').html()).slice(-8))
+            var str = $.trim($('.alert-success').html()).slice(-8);
+            // <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            if(str == 'deleted.'){
+                $('.alert-success').empty();
+                $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'删除成功！');
+            }else if(str == 'created.'){
+                $('.alert-success').empty();
+                $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'创建成功！');
+            }else{
+                str = $.trim($('.alert-success').html()).slice(-6);
+                // console.log(str)
+                $('.alert-success').empty();
+                $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'保存成功！');
+            }
+            // Record was successfully created.
+            // Record was successfully deleted.
+            // Record was successfully saved.
+        })
+    </script>
 
-          $('.container form input[name=password2]').on('focus',function () {
-              $(this).css({'background':'#fff','color':'#000',})
-          });
-          $('.container form input[name=password2]').on('blur',function () {
-              $(this).css({'background':'transparent','color':'#fff',})
-          });
+    {% if admin_view.extra_js %}
+      {% for js_url in admin_view.extra_js %}
+        <script src="{{ js_url }}" type="text/javascript"></script>
+      {% endfor %}
+    {% endif %}
+    {% endblock %}
 
-          // 编辑删除保存后的提示信息汉化
-          // console.log($.trim($('.alert-success').html()))
-          // console.log($.trim($('.alert-success').html()).slice(-8))
-          var str = $.trim($('.alert-success').html()).slice(-8);
-          // <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-          if(str == 'deleted.'){
-              $('.alert-success').empty();
-              $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'删除成功！');
-          }else if(str == 'created.'){
-              $('.alert-success').empty();
-              $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'创建成功！');
-          }else{
-              str = $.trim($('.alert-success').html()).slice(-6);
-              // console.log(str)
-              $('.alert-success').empty();
-              $('.alert-success').append('<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+'保存成功！');
-          }
-          // Record was successfully created.
-          // Record was successfully deleted.
-          // Record was successfully saved.
-      })
-  </script>
+    {% block tail %}
+    {% endblock %}
+  </body>
 
-  {% if admin_view.extra_js %}
-    {% for js_url in admin_view.extra_js %}
-      <script src="{{ js_url }}" type="text/javascript"></script>
-    {% endfor %}
-  {% endif %}
-  {% endblock %}
-
-  {% block tail %}
-  {% endblock %}
-</body>
-
-<script>
-    $('#submenu').find('li:first').css('display', 'none');
-    //$('#submenu').find('li:first').append('主页');
-    $('#submenu li').eq(1).empty();
-    $('#submenu li').eq(1).append('<a href="/admin/user/">用户管理</a>');
-    //$('#submenu li').eq(1).css('padding', '15px');
-    $('#submenu li').eq(1).css('color', '#777777');
-    $('#submenu li').eq(2).empty();
-    $('#submenu li').eq(2).append('<a href="/admin/role/">权限设置</a>');
-    //$('#submenu li').eq(2).css('padding', '15px');
-    $('#submenu li').eq(2).css('color', '#777777');
-</script>
-
+    <script>
+        $('#submenu').find('li:first').css('display', 'none');
+        //$('#submenu').find('li:first').append('主页');
+        $('#submenu li').eq(1).empty();
+        $('#submenu li').eq(1).append('<a href="/admin/user/">用户管理</a>');
+        //$('#submenu li').eq(1).css('padding', '15px');
+        $('#submenu li').eq(1).css('color', '#777777');
+        $('#submenu li').eq(2).empty();
+        $('#submenu li').eq(2).append('<a href="/admin/role/">权限设置</a>');
+        //$('#submenu li').eq(2).css('padding', '15px');
+        $('#submenu li').eq(2).css('color', '#777777');
+    </script>
+</html>
