@@ -150,7 +150,7 @@ def homepage():
         item_dict['operate_date'] = current_date
         item_dict['operate_time'] = current_time_new
         item_dict['user_id'] = ''
-        item_dict['user_name'] = ''
+        #item_dict['user_name'] = ''
         item_dict['operate_content'] = ''
         
         es_xnr.index(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,\
