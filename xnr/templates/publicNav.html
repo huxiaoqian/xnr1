@@ -33,6 +33,20 @@
 <div id="nav">
     <div class="nav_top">
         <h4 style="color:#373737;">虚拟人指挥管理系统</h4>
+        <div id="LL">
+            <ul>
+                <li id="personal"><i class="icon icon-github-alt"></i>我的虚拟人</li>
+                <li id="control"><i class="icon icon-cogs"></i>操作控制</li>
+                <li id="info"><i class="icon icon-eye-open"></i>信息监测</li>
+                <li id="monitor"><i class="icon icon-warning-sign"></i>预警监控</li>
+                <li id="knowledge"><i class="icon icon-user-md"></i>虚拟人定制</li>
+                <li id="reported"><i class="icon icon-sitemap"></i>行为评估</li>
+                <li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>
+                <li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>
+                <li id="system"><i class="icon icon-inbox"></i>系统管理</li>
+            </ul>
+        </div>
+        
     </div>
     <div class="nav_bottom">
         <ul class="list">
@@ -81,6 +95,62 @@
         </div>
     </div>
 </div>
+
+<!-- 10-12 LL-->
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity" style="padding: 10px 25px;">
+
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType" style="padding: 10px 25px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                <span class="demo-checkbox demo-radioInput"></span> 隐身
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 <!-- 导航结束 -->
 
@@ -102,6 +172,7 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+
     //几天前的时间戳
 //    function getDaysBefore(m){
 //        var date = new Date(),
@@ -372,6 +443,102 @@
                 '</li>';
         };
         $('.behind').html(afterEle);
+
+        // ---------10-12 LL向下展开盒子js
+        var L_nav = $('.nav_top');
+        L_nav.mouseover(function () {
+            $(this).find("#LL").stop().slideDown(200);
+        })
+        L_nav.mouseleave(function(){
+            $(this).find("#LL").stop().slideUp(200);
+        })
+        //页面跳转
+        var htmlUrl='';
+        $('#personal').on('click',function () {
+            window.open('/personalCenter/individual/');
+        });
+        $('#control').on('click',function () {
+            htmlUrl='/control/operationControl/';
+            $('#choosePerson').modal('show');
+        });
+        $('#info').on('click',function () {
+            htmlUrl='/inforDetection/inforChecking/';
+            $('#choosePerson').modal('show');
+        });
+        $('#monitor').on('click',function () {
+            htmlUrl='/monitor/characterBehavior/';
+            $('#choosePerson').modal('show');
+        });
+        $('#reported').on('click',function () {
+            htmlUrl='/behavioGauge/influeAssess/';
+            $('#choosePerson').modal('show');
+        });
+        $('#knowledge').on('click',function () {
+            window.open('/registered/targetCustom/')
+        });
+        $('#reportedmange').on('click',function () {
+            window.open('/reportManage/management/');
+            //htmlUrl='/reportManage/management/';
+            //$('#choosePerson').modal('show');
+        });
+        $('#knowledgebase').on('click',function () {
+            window.open('/knowledge/domainLibrary/');
+            //htmlUrl='/knowledge/domainLibrary/';
+            //$('#choosePerson').modal('show');
+        });
+        $('#system').on('click',function () {
+            window.open('/systemManage/daily/');
+            //htmlUrl='/systemManage/daily/';
+            //$('#choosePerson').modal('show');
+        });
+
+        //选择虚拟人确定进入
+        $('.sure_in').on('click',function () {
+            var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+            var userName=$('input:radio[name="ID"]:checked').attr('valueName');
+            var userType=$('input:radio[name="choose"]:checked').val();
+            if (!userID||!userName||!userType){
+                $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+                $('#pormpt').modal('show');
+            }else {
+                var id_or_name='';
+                if (userType=='隐身'){
+                    id_or_name=userID;
+                }else {
+                    id_or_name=userName;
+                }
+                localStorage.setItem('user',encodeURI(userID));
+                localStorage.setItem('userRelName',encodeURI(userName));
+                localStorage.setItem('userName',encodeURI(id_or_name));
+                window.open(htmlUrl);
+            }
+        });
+
+        //登录类型
+        //localStorage.setItem('loginType',encodeURI('weibo'));
+        var admin='admin@qq.com';
+        //虚拟人列表
+        $.ajax({
+            type: 'GET',
+            url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                var str='';
+                for (var k in data){
+                    if (data[k]==''||data[k]=='unknown'){
+                        data[k]='无昵称';
+                    }
+                    str+=
+                        '<label class="demo-label" title="'+data[k]+'">'+
+                        '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                        '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                        '</label>';
+                }
+                $('#choosePerson .identity').html(str);
+            }
+        });
+
     };
 
 </script>

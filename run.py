@@ -79,7 +79,7 @@ def upload_file():
 @app.route('/create_user_role_test/')
 def create_user_roles():
     
-    #db.drop_all()
+    db.drop_all()
 
     try:
         db.create_all()
