@@ -75,7 +75,7 @@ body {
 }
 #container .rightWindow .oli {
     padding: 20px;
-    background-color: rgba(8,23,44,0.35);
+    /*background-color: rgba(8,23,44,0.35);*/
     margin-bottom: 30px;
 }
 #container .rightWindow .oli #content .hisnews,
@@ -126,7 +126,8 @@ body {
 #container #content .post_perfect {
     /*position: relative;*/
     padding-left: 10px ;
-    background: rgba(12, 39, 80, 0.92);
+    /*background: rgba(12, 39, 80, 0.92);*/
+    background: #06162d;
     margin-bottom: 10px;
     /*width: 700px;*/
 }
