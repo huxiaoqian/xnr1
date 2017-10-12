@@ -1,9 +1,12 @@
 //查看推荐
-if (!$two||(go_on=='2')){
-    var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
-        $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
-    public_ajax.call_request('GET',recommendURL,recommendTwo);
-}
+setTimeout(function () {
+    if (!$two||(go_on=='2')){
+        var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
+            $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
+        public_ajax.call_request('GET',recommendURL,recommendTwo);
+    }
+},800)
+
 
 function recommendTwo(data) {
     var name,age,sex,location,career,description;
@@ -39,8 +42,16 @@ function recommendTwo(data) {
 //上一步，下一步，保存返回
 var second,n=0;
 $('.previous').on('click',function () {
-    n=0;
-    nameJudgment();
+    // n=0;
+    // nameJudgment();
+    if (go_on=='2'){
+        var goUSER={
+            'domain_name':$('#character1').text(),
+            'role_name':$('#character2').text(),
+        }
+        localStorage.setItem('goONuser',JSON.stringify(goUSER));
+    }
+    window.open('/registered/targetCustom/');
 });
 $('.next').on('click',function () {
     n=1;
@@ -87,20 +98,20 @@ function nameJudgment() {
     //     }
     // }
 }
-function success(data) {
-    if (!data){
-        $('#prompt p').text('修改失败。');
-        $('#prompt').modal('show');
-    }else {
-        if (n==0){
-            window.open('/registered/targetCustom/');
-        }else if (n==1){
-            window.open('/registered/socialAccounts/');
-        }else if (n==2){
-            window.open('/personalCenter/individual/');
-        }
-    }
-}
+// function success(data) {
+//     if (!data){
+//         $('#prompt p').text('修改失败。');
+//         $('#prompt').modal('show');
+//     }else {
+//         if (n==0){
+//             window.open('/registered/targetCustom/');
+//         }else if (n==1){
+//             window.open('/registered/socialAccounts/');
+//         }else if (n==2){
+//             window.open('/personalCenter/individual/');
+//         }
+//     }
+// }
 function repeatNot(data) {
     if (data){
         values();
@@ -167,7 +178,7 @@ function values() {
     //     '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
     //     '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
     //     '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
-    if (n==1||n==2){
+    if (n==1){
         public_ajax.call_request('get',saveSecond_url,in_three);
     }
     second={
@@ -206,14 +217,8 @@ function values() {
 function in_three(data) {
     if (data||data[0]){
         localStorage.setItem('secondStep',JSON.stringify(second));
-        if (n==0){
-            window.open('/registered/targetCustom/');
-        }else if (n==1){
-            window.open('/registered/socialAccounts/');
-        }else if (n==2){
-            window.open('/personalCenter/individual/');
-        }
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
+        window.open('/registered/socialAccounts/');
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
