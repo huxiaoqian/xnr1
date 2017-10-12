@@ -652,8 +652,8 @@ function historyNews(data) {
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';
     if (boxShoes=='historyCenter'){showHide1='inline-block'};
-    if (boxShoes=='myweibo'){showHide3='inline-block'};
-    if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block'};
+    if (boxShoes=='myweibo'){showHide3='inline-block';C3='display:none';};
+    if (boxShoes=='commentCOT'){showHide2='none';showHide4='inline-block';};
     if (boxShoes=='likes'){C3='display:none';};
     $('#'+boxShoes+' p').show();
     $('#'+boxShoes).bootstrapTable('load', data);
@@ -1044,7 +1044,7 @@ function fans(data) {
                 }
             },
             {
-                title: "编号",//标题
+                title: "UID",//标题
                 field: "uid",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式

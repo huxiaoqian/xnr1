@@ -64,8 +64,7 @@ def executeES(indexName, typeName, listData):
         data = {}
         jsonData = json.loads(list_data)
         for key, val in jsonData.items():
-            print key, '====', val
-            # print type(val)
+            # print key, '====', val
             data[key] = val
             # data['update_time'] = current_time
 

@@ -1,7 +1,6 @@
 var dailyLOG_Url='/system_manage/show_log_list/';
 public_ajax.call_request('get',dailyLOG_Url,dailyLOG);
 function dailyLOG(data) {
-    console.log(data)
     $('#loglist').bootstrapTable('load', data);
     $('#loglist').bootstrapTable({
         data:data,
@@ -21,14 +20,14 @@ function dailyLOG(data) {
         sortName:'bci',
         sortOrder:"desc",
         columns: [
-            {
-                title: "用户ID",//标题
-                field: "user_id",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
+            // {
+            //     title: "用户ID",//标题
+            //     field: "user_id",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            // },
             {
                 title: "用户名",//标题
                 field: "user_name",//键名
