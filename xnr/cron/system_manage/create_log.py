@@ -10,9 +10,9 @@ reload(sys)
 sys.path.append('../../')
 import sqlite
 import sqlite3
-from parameter import USER_XNR_NUM,DAY
+from parameter import USER_XNR_NUM,DAY,MAX_VALUE
 from time_utils import ts2datetime,datetime2ts
-form global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type
+from global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type
 from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
                          weibo_xnr_retweet_timing_list_index_name,weibo_xnr_retweet_timing_list_index_type,\
@@ -21,8 +21,11 @@ from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                          weibo_speech_warning_index_name,weibo_speech_warning_index_type,\
                          weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type,\
-                         weibo_domain_index_name,weibo_domain_index_type
-
+                         weibo_domain_index_name,weibo_domain_index_type,\
+                         weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
+                         weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                         weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
+                         weibo_log_management_index_name,weibo_log_management_index_type
 
 
 #连接数据库,获取账户列表
@@ -398,16 +401,20 @@ def create_user_log():
     #查询账户列表
     user_name_list=get_user_account_list()
 
+    mark_list=[]
     #查询账户所管理的虚拟人
     for user_account in user_name_list:
         #对应账户的日志ID
-        log_id=user_account+'_'+operate_date
+        #print 'user_account',user_account,type(user_account)
+        #print 'operate_date',operate_date,type(operate_date)
+        user_account=list(user_account)[0]
+        log_id=str(user_account)+'_'+operate_date
         log_content_dict=dict()
 
         #账户是否创建虚拟人
-        create_xnr_number=create_xnr_number(user_account,start_time,end_time)
-        if create_xnr_number > 0:
-            log_content_dict[u'创建虚拟人']=create_xnr_number
+        xnr_number=create_xnr_number(user_account,start_time,end_time)
+        if xnr_number > 0:
+            log_content_dict[u'创建虚拟人']=xnr_number
         else:
             pass
 
@@ -450,7 +457,7 @@ def create_user_log():
         ##################社交操作：转发、评论、点赞#################
         #转发
         retweet_type='3'
-        retweet_num=count_retweet_comment_operate(retweet_type,operate_date,uid_list)
+        retweet_num=count_retweet_comment_operate(retweet_type,operate_date,xnr_uid_list)
         if retweet_num > 0:
             log_content_dict[u'转发']=retweet_num
         else:
@@ -458,21 +465,21 @@ def create_user_log():
 
         #评论
         comment_type='2'
-        comment_num=count_retweet_comment_operate(comment_type,operate_date,uid_list)
+        comment_num=count_retweet_comment_operate(comment_type,operate_date,xnr_uid_list)
         if comment_num > 0:
             log_content_dict[u'评论']=comment_num
         else:
             pass
 
         #点赞
-        like_num=count_like_operate(start_time,end_time,uid_list)
+        like_num=count_like_operate(start_time,end_time,xnr_uid_list)
         if like_num > 0:
             log_content_dict[u'点赞']=like_num
         else:
             pass
 
         #私信
-        private_message_num=count_private_message(start_time,end_time,uid_list)
+        private_message_num=count_private_message(start_time,end_time,xnr_uid_list)
         if private_message_num > 0:
             log_content_dict[u'私信']=private_message_num
         else:
@@ -515,43 +522,38 @@ def create_user_log():
 
         ##################业务知识库#################
         #敏感词创建
-        weibo_sensitive_words_index_name = 'weibo_sensitive_words'
-        weibo_sensitive_words_index_type = 'sensitive_words'
-        count_create_business(user_account,start_time,end_time,index_name,index_type)
+        create_sensitive_words_num=count_create_business(user_account,start_time,end_time,weibo_sensitive_words_index_name,weibo_sensitive_words_index_type)
+        if create_sensitive_words_num > 0:
+            log_content_dict[u'创建敏感词']=create_sensitive_words_num
+        else:
+            pass
 
         #时间节点创建
-        weibo_date_remind_index_name = 'weibo_date_remind'
-        weibo_date_remind_index_type = 'remind'
+        create_date_remind_num=count_create_business(user_account,start_time,end_time,weibo_date_remind_index_name,weibo_date_remind_index_type)
+        if create_date_remind_num > 0:
+            log_content_dict[u'创建时间节点']=create_date_remind_num
+        else:
+            pass
 
         #隐喻式表达创建
-        weibo_hidden_expression_index_name = 'weibo_hidden_expression'
-        weibo_hidden_expression_index_type = 'hidden_expression'
+        create_hidden_expression_num=count_create_business(user_account,start_time,end_time,weibo_hidden_expression_index_name,weibo_hidden_expression_index_type)
+        if create_hidden_expression_num > 0:
+            log_content_dict[u'创建隐喻式表达']=create_hidden_expression_num
+        else:
+            pass
 
-
-
-
-
-
-
-
-
+        log_content=json.dumps(log_content_dict)
 
        #写入日志
        #日志ID存在判断
-    return True
+        mark=es_xnr.update(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,id=log_id,body={'doc':{'operate_content':log_content}})
+        mark_list.append(mark)
+    return mark_list
 
 
 if __name__ == '__main__':
-    #create_user_log()
-    user_account='admin@qq.com'
-    now_time=int(time.time())
-    today_datetime=datetime2ts(ts2datetime(now_time))
-    start_time=today_datetime
-    end_time=now_time
-    operate_date=ts2datetime(start_time)
-    xnr_user_no_list=get_user_xnr_list(user_account)
-    xnr=create_xnr_mark(user_account,start_time,end_time)
-    print xnr
+    create_user_log()
+
 
 
 
