@@ -6,7 +6,6 @@ if (!$two||(go_on=='2')){
 }
 
 function recommendTwo(data) {
-    console.log(data)
     var name,age,sex,location,career,description;
     if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
     if (data.age){age=data.age}else {age='无年龄推荐'}
@@ -111,7 +110,6 @@ function character(data) {
 
     })
 }
-
 function publicRecommend(field,className,tit) {
     var str='';
     if (!recommendData[field]||recommendData[field]==''||recommendData.length==0||recommendData[field].length==0||
@@ -327,7 +325,7 @@ function values() {
         var a=$('#name').val();
         var b=$('#age').val();
         var c=$('.gender input:radio[name="demo"]:checked').val();
-        var d=$('#place').val();
+        var d=$('#place').val().toString().replace(/,/g,'，');
         var ee=$('#career').val();
         var f=$('#description').val();
         var modSecond_ur='/weibo_xnr_create/modify_userinfo/?nick_name='+a+'&age='+b+'&gender='+c+

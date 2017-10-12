@@ -83,6 +83,7 @@ def ajax_add_other_info():
 
     return json.dumps(results)
 
+
 # 修改第二步信息
 @mod.route('/modify_userinfo/')
 def ajax_modify_userinfo():
