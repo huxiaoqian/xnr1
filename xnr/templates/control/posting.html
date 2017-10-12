@@ -44,6 +44,11 @@
     .weiboTable .bootstrap-table thead,.weiboTable .fixed-table-pagination .page-list {
         display: none!important;
     }
+    .follow_forward.weiboTable .bootstrap-table thead {
+        display: table-header-group!important;
+    }
+
+    .follow_forward.weiboTable .fixed-table-container thead th .both {background-image: none!important;}
     .weiboTable .fixed-table-body {
         height: auto!important;
         overflow-y: hidden;
@@ -75,6 +80,7 @@
     .weiboTable .table:not(.table-condensed)>tbody>tr>td {
         text-align: left!important;
     }
+    .follow_forward.weiboTable .table:not(.table-condensed)>tbody>tr>td {text-align: center!important;}
     /**/
     .datetimepicker {color:black;}
     #user_recommend .user_example_list .more:hover,sureADD:hover {
@@ -456,7 +462,7 @@
                         <span class="demo-checkbox demo-radioInput"></span> 未发布
                     </label>
                     <label class="demo-label">
-                        <input class="demo-radio" type="radio" name="time1" value='0'>
+                        <input class="demo-radio" type="radio" name="time1" value='0' checked>
                         <span class="demo-checkbox demo-radioInput"></span> 今天
                     </label>
                     <label class="demo-label">

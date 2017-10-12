@@ -160,6 +160,7 @@ class FeedbackPrivate:
     def execute(self):
         mess = self.messages()
         executeES('weibo_feedback_private', 'text', mess)
+        print 'mess::::',mess
 
 
 if __name__ == '__main__':

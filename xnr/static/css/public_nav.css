@@ -64,14 +64,11 @@ a,a:link,a:hover,a:visited,a:active {
     font-size: 20px;
     color:#1296db;
 }
-#nav .nav_bottom .loadingUser:hover button,
-#nav .nav_bottom .loadingUser:hover button span {
-    color:#fa7d3c;
-}
-#nav .nav_bottom .loadingUser a.nav_name {
+#nav .nav_bottom .loadingUser .xnrShowHide a,
+#nav .nav_bottom .loadingUser a#login_user {
     color:#333;
 }
-#nav .nav_bottom .loadingUser:hover a.nav_name {
+#nav .nav_bottom .loadingUser:hover button #login_user{
     color:#fa7d3c;
 }
 #nav .nav_bottom .list .main_li {
