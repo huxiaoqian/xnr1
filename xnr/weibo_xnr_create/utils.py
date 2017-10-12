@@ -10,6 +10,7 @@ import os
 import pandas as pd
 from collections import Counter
 import numpy as np
+import random
 
 from xnr.global_config import S_TYPE,S_DATE
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_domain_index_name,weibo_domain_index_type,\
@@ -70,6 +71,7 @@ def get_modify_userinfo(task_detail):
     item_dict = {}
     nick_name = task_detail['nick_name']
     location_list = task_detail['location'].encode('utf-8').split('，')
+    print 'location_list:::',location_list
     item_dict['location_province'] = location_list[0]
     item_dict['location_city'] = location_list[1]
     item_dict['description'] = task_detail['description']
@@ -80,7 +82,7 @@ def get_modify_userinfo(task_detail):
         item_dict['gender'] = 'woman'
 
     age = task_detail['age']
-    birth_year = time.localtime().tm_year - age
+    birth_year = time.localtime().tm_year - int(age)
     month = '%02d'%random.randint(0,13)
     day = '%02d'%random.randint(0,29)
 
@@ -97,20 +99,31 @@ def get_modify_userinfo(task_detail):
     }
     es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
 
-    xnr_result = es_results[0]
+    xnr_result = es_results[0]['_source']
+    #print 'xnr_result:::',xnr_result.keys()
 
-    weibo_mail_account = xnr_result['weibo_mail_account']
-    weibo_phone_account = xnr_result['weibo_phone_account']
+    try:
+        weibo_mail_account = xnr_result['weibo_mail_account']
+    except:
+        weibo_mail_account = ''
+    try:
+        weibo_phone_account = xnr_result['weibo_phone_account']
+    except:
+        weibo_phone_account = ''
 
     if weibo_mail_account:
+
         account_name = weibo_mail_account
     else:
         account_name = weibo_phone_account
 
     password = xnr_result['password']
+    uid = xnr_result['uid']
 
-
-    result = change_userinfo(account_name, password, item_dict)
+    try:
+        result = change_userinfo(account_name, password,uid, item_dict)
+    except:
+        result = False
 
     return result
 
