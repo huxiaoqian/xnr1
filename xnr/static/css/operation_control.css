@@ -29,7 +29,7 @@ body {
     height: 100%;
     padding: 20px 20px 20px 150px;
     margin: 0 auto;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     /*background: rgba(8,23,44,0.25);*/
     position: relative;
     top: 80px;
@@ -75,7 +75,7 @@ body {
 }
 #container .rightWindow .oli {
     padding: 20px;
-    background-color: rgba(8,23,44,0.35);
+    /*background-color: rgba(8,23,44,0.35);*/
     margin-bottom: 30px;
 }
 #container .rightWindow .oli #content .hisnews,
@@ -126,7 +126,8 @@ body {
 #container #content .post_perfect {
     /*position: relative;*/
     padding-left: 10px ;
-    background: rgba(12, 39, 80, 0.92);
+    /*background: rgba(12, 39, 80, 0.92);*/
+    background: #06162d;
     margin-bottom: 10px;
     /*width: 700px;*/
 }

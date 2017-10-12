@@ -196,6 +196,7 @@ body {
 #container #content #hot .hot-2 .hot-2-1 {
     width: 200px;
     height: auto;
+    min-height: 430px;
     padding: 15px 5px 5px 30px;
     background: #0c2542;
     float: left;

@@ -48,10 +48,10 @@
                     日常兴趣：<img src="/static/images/what.png" title="点击编辑日常兴趣" class="MWhat" data-toggle="modal" data-target="#promptXNR"
                               style="display: none;position: absolute;top:-6px;left: 87px;"><span id="character6"></span>
                 </div>
-                <div class="define" style="position: relative;">
+                <div class="define" style="position: relative;width:90%;">
                     <img src="/static/images/icon.png" alt="">
                     检测关键词：<img src="/static/images/what.png" title="点击关键词可编辑" class="MWhat"
-                               style="display: none;position: absolute;top:-6px;left:104px;"><span id="character7"></span>
+                               style="display: none;position: absolute;top:-6px;left:104px;"><span id="character7" style="width:80%;"></span>
                 </div>
                 <!--<div id="role_example" style="margin-top: 20px;">-->
                     <!--<p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>-->
@@ -101,7 +101,7 @@
                 <div class="options place">
                     <img src="/static/images/icon.png" alt="">
                     <span>所在地：</span>
-                    <input type="text" id="place" placeholder="地区" readonly/>
+                    <input type="text" id="place" placeholder="（省份，城市）如：广东，广州" readonly/>
                     <!--<a class="recommend" href="###">查看推荐</a>-->
                 </div>
                 <div class="options career">
@@ -395,16 +395,7 @@
     var go_on='{{continueUser}}';
     if (go_on=='2'){
         $('.page .previous').hide();
-        //$('.page .next').hide();
-//        $('#name').attr('readonly','readonly');
-//        $('#age').attr('readonly','readonly');
-//        $('#place').attr('readonly','readonly');
-//        $('#career').attr('readonly','readonly');
-//        $('#description').attr('readonly','readonly');
-//        $('#gender input').attr('disabled','disabled')
-    }else {
-//        $("input[readonly='readonly']").removeProp("readonly");
-//        $("aa").removeAttr("readOnly")
+    }else if (go_on=='1'){
         $('#name').removeAttr('readonly');
         $('#age').removeAttr('readonly');
         $('#place').removeAttr('readonly');

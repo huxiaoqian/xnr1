@@ -2,6 +2,7 @@
 #-*- coding:utf-8 -*-
 import json
 import sys
+from elasticsearch.helpers import scan
 reload(sys)
 sys.setdefaultencoding('utf-8')
 weibo_date_remind_index_name = 'weibo_date_remind'
@@ -42,41 +43,44 @@ def rechange_date_remind():
 
 
 
-#step 3:    change the time alert node
-#explain: Carry out show_select_date_remind before change,carry out step 3.1 & 3.2
-#step 3.1: show the selected time alert node
-def show_select_date_remind(task_id):
-    result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-    return result
-
-#step 3.2: change the selected time alert node
-def change_date_remind(task_id,date_name,keywords,create_type,create_time):
-    date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
-    content_recommend=date_result['content_recommend']
-    date_time=date_result['date_time']
-    #create_type=create_type
-    #keywords=keywords
-    #create_time=create_time
-
-    try:
-        es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
-            body={"doc":{'date_name':date_name,'date_time':date_time,'keywords':keywords,'create_type':create_type,\
-            'create_time':create_time,'content_recommend':content_recommend}})
-        result=True
-    except:
-        result=False
-    return result
 
 
-#step 4:    delete the time alert node
-def delete_date_remind(task_id):
-    try:
-        es.delete(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-        result=True
-    except:
-        result=False
-    return result
+
+
+
+#批量添加
+def bulk_add_subbmitter(index_name,index_type):
+    s_re = scan(es_xnr, query={'query':{'match_all':{}}, 'size':102},index=index_name, doc_type=index_type)
+    bulk_action=[]
+    count=0
+    while  True:
+        try:
+            scan_re=s_re.next()
+            _id=scan_re['_id']
+            source={'doc':{'create_type':'all_xnrs'}}
+            action={'update':{'_id':_id}}
+            bulk_action.extend([action,source])
+            count += 1
+            if count % 102 == 0:
+                es_xnr.bulk(bulk_action,index=index_name,doc_type=index_type,timeout=100)
+                bulk_action = []
+            else:
+                pass
+        except:
+            if bulk_action:
+               es_xnr.bulk(bulk_action,index=index_name,doc_type=index_type,timeout=100)
+            else:
+               break
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
-    rechange_date_remind()
+    #rechange_date_remind()
+    index_name='weibo_date_remind'
+    index_type='remind'
+    bulk_add_subbmitter(index_name,index_type)

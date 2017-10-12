@@ -442,13 +442,16 @@ def addto_weibo_corpus(task_detail):
     comment=task_detail[7]
     like=task_detail[8]
     create_type=task_detail[9]
+    xnr_user_no=task_detail[10]
+    create_time=int(time.time())
 
     corpus_id=task_detail[4]    #mid
 
     try:
         es_xnr.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\
             body={'corpus_type':corpus_type,'theme_daily_name':theme_daily_name,'text':text,'uid':uid,'mid':mid,\
-            'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like,'create_type':create_type})
+            'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like,'create_type':create_type,\
+            'create_time':create_time,'xnr_user_no':xnr_user_no})
         result=True
     except:
         result=False
