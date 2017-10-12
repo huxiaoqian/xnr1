@@ -46,6 +46,7 @@
             }
             #admin-navbar-collapse {
                 background: transparent;
+                padding:0;
             }
             #admin-navbar-collapse>ul>li>a {
                 color:#fff;
@@ -60,6 +61,10 @@
                 border-color: silver;
                 color:#fff;
             }
+            .navbar-brand {
+                display: none;
+            }
+
             /* tab2--- */
             .container>ul>li>a {
                 color:#fff;
@@ -122,6 +127,10 @@
                 /* 搜索 */
             .container>ul .form-group input {
                 background: transparent;
+                width: 776px;
+            }
+            .navbar-form {
+                padding:0;
             }
             /* 表格--- */
             .table-responsive table {
@@ -164,6 +173,21 @@
                 background: rgba(3, 8, 16, 0.61);
                 color:#fff;
             }
+            .container .title .account_icon {
+                display: inline-block;
+                margin-right: 5px;
+                width: 35px;
+                height: 35px;
+            }
+            .container .title .tit-1 b {
+                display: inline-block;
+                position: relative;
+                top: 3px;
+                margin-left: 10px;
+                font-size: 18px;
+                color: white;
+                /* font-weight: 900; */
+            }
 
         </style>
     {% endblock %}
@@ -174,7 +198,14 @@
   </head>
   <body>
     {% block page_body %}
+
     <div class="container">
+        <div class="title" style="margin: 10px 0 20px;">
+            <div class="tit-1">
+                <img class="account_icon" src="/static/images/purvw.png">
+                <b>权限管理</b>
+            </div>
+        </div>
       <nav class="navbar navbar-default" role="navigation">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -185,7 +216,8 @@
             <span class="icon-bar"></span>
           </button>
           {% block brand %}
-          <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
+          <!-- <a class="navbar-brand" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a> -->
+          <a class="navbar-brand" href="#"><b style="font-size:18px;">{{ admin_view.admin.name }}</b></a>
           {% endblock %}
         </div>
         <!-- navbar content -->
