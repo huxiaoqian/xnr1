@@ -14,7 +14,7 @@
     {% block model_menu_bar %}
     <ul class="nav nav-tabs actions-nav">
         <li class="active">
-            <a href="javascript:void(0)">{{ _gettext('List') }}{% if count %} ({{ count }}){% endif %}</a>
+            <a href="javascript:void(0)"><span id="list_title">{{ _gettext('List') }}</span>{% if count %} ({{ count }}){% endif %}</a>
         </li>
 
         {% if admin_view.can_create %}
@@ -22,7 +22,7 @@
           {%- if admin_view.create_modal -%}
             {{ lib.add_modal_button(url=get_url('.create_view', url=return_url, modal=True), title=_gettext('Create New Record'), content=_gettext('Create')) }}
           {% else %}
-            <a href="{{ get_url('.create_view', url=return_url) }}" title="{{ _gettext('Create New Record') }}">{{ _gettext('Create') }}</a>
+            <a href="{{ get_url('.create_view', url=return_url) }}" title="{{ _gettext('Create New Record') }}"><span id="create_title">{{ _gettext('Create') }}</span></a>
           {%- endif -%}
         </li>
         {% endif %}
@@ -33,7 +33,7 @@
 
         {% block model_menu_bar_before_filters %}{% endblock %}
 
-        {% if filters %}
+        <!-- {% if filters %}
         <li class="dropdown">
             {{ model_layout.filter_options() }}
         </li>
@@ -49,7 +49,7 @@
         <li class="dropdown">
             {{ actionlib.dropdown(actions) }}
         </li>
-        {% endif %}
+        {% endif %} -->
 
         {% if search_supported %}
         <li>
@@ -71,11 +71,11 @@
         <thead>
             <tr>
                 {% block list_header scoped %}
-                    {% if actions %}
+<!--                     {% if actions %}
                     <th class="list-checkbox-column">
                         <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="{{ _gettext('Select all records') }}" />
                     </th>
-                    {% endif %}
+                    {% endif %} -->
                     {% block list_row_actions_header %}
                         {% if admin_view.column_display_actions %}
                         <th class="col-md-1">&nbsp;</th>
@@ -87,7 +87,7 @@
                         {% if admin_view.is_sortable(c) %}
                             {% if sort_column == column %}
                                 <a href="{{ sort_url(column, True) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}">
-                                    {{ name }}
+                                    <span id="{{ name }}">{{ name }}</span>
                                     {% if sort_desc %}
                                         <span class="fa fa-chevron-up glyphicon glyphicon-chevron-up"></span>
                                     {% else %}
@@ -95,7 +95,7 @@
                                     {% endif %}
                                 </a>
                             {% else %}
-                                <a href="{{ sort_url(column) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}">{{ name }}</a>
+                                <a href="{{ sort_url(column) }}" title="{{ _gettext('Sort by %(name)s', name=name) }}"><span id="{{ name }}">{{ name }}</span></a>
                             {% endif %}
                         {% else %}
                             {{ name }}
@@ -114,18 +114,50 @@
         {% for row in data %}
         <tr>
             {% block list_row scoped %}
-                {% if actions %}
+                <!-- {% if actions %}
                 <td>
                     <input type="checkbox" name="rowid" class="action-checkbox" value="{{ get_pk_value(row) }}" title="{{ _gettext('Select record') }}" />
                 </td>
-                {% endif %}
+                {% endif %} -->
                 {% block list_row_actions_column scoped %}
                     {% if admin_view.column_display_actions %}
                     <td class="list-buttons-column">
                         {% block list_row_actions scoped %}
-                          {% for action in list_row_actions %}
+                          <!-- {% for action in list_row_actions %}
                           {{ action.render_ctx(get_pk_value(row), row) }}
-                          {% endfor %}
+                          {% endfor %} -->
+                            {%- if admin_view.can_view_details -%}
+                                {%- if admin_view.details_modal -%}
+                                    {{ lib.add_modal_button(url=get_url('.details_view', id=get_pk_value(row), url=return_url, modal=True), title=_gettext('View Record'), content='<span class="fa fa-eye glyphicon glyphicon-eye-open"></span>') }}
+                                {% else %}
+                                    <a class="icon" href="{{ get_url('.details_view', id=get_pk_value(row), url=return_url) }}" title="{{ _gettext('View Record') }}">
+                                        <span class="fa fa-eye glyphicon glyphicon-eye-open"></span>
+                                    </a>
+                                {%- endif -%}
+                            {%- endif -%}
+                            {%- if admin_view.can_edit -%}
+                                {%- if admin_view.edit_modal -%}
+                                    {{ lib.add_modal_button(url=get_url('.edit_view', id=get_pk_value(row), url=return_url, modal=True), title=_gettext('Edit record'), content='<span class="fa fa-pencil glyphicon glyphicon-pencil"></span>') }}
+                                {% else %}
+                                    <a class="icon" href="{{ get_url('.edit_view', id=get_pk_value(row), url=return_url) }}" title="{{ _gettext('Edit record') }}">
+                                        <span class="fa fa-pencil glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                {%- endif -%}
+                            {%- endif -%}
+                            {%- if admin_view.can_delete -%}
+                            <form class="icon" method="POST" action="{{ get_url('.delete_view') }}">
+                                {{ delete_form.id(value=get_pk_value(row)) }}
+                                {{ delete_form.url(value=return_url) }}
+                                {% if delete_form.csrf_token %}
+                                {{ delete_form.csrf_token }}
+                                {% elif csrf_token %}
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                {% endif %}
+                                <button onclick="return confirm('{{ _gettext('确定要删除吗？') }}');" title="Delete record">
+                                    <span class="fa fa-trash glyphicon glyphicon-trash"></span>
+                                </button>
+                            </form>
+                            {%- endif -%}    
                         {% endblock %}
                     </td>
                     {%- endif -%}
@@ -218,5 +250,45 @@
             return false;
           }
         }
+    </script>
+    
+    <!-- 10-11 -->
+    <script>
+        // console.log('sdg')
+        $('#list_title').empty();
+        $('#list_title').append('管理列表');
+        $('#create_title').empty();
+        $('#create_title').append('新建');
+        $('#operate_title').empty();
+        $('#operate_title').append('新建');
+        $('#Active').empty();
+        $('#Active').append('是否活跃')
+        $('#Email').empty();
+        $('#Email').append('用户名')
+        $('#Password').empty();
+        $('#Password').append('密码')
+        //$('#Password').css('display', 'none')
+        //$('.model-list .col-password').css('display', 'none');
+        $('#Confirmedat').empty();
+        $('#Confirmedat').append('更新时间')
+        $('#Usernum').empty();
+        $('#Usernum').append('用户排行任务最大值')
+        $('#Moodnum').empty();
+        $('#Moodnum').append('情绪监测任务最大值')
+        $('#Netnum').empty();
+        $('#Netnum').append('网络分析任务最大值')
+        $('#Findnum').empty();
+        $('#Findnum').append('群体发现任务最大值')
+        $('#Analysisnum').empty();
+        $('#Analysisnum').append('群体分析任务最大值')
+        $('#Sensingnum').empty();
+        $('#Sensingnum').append('社会感知任务最大值')
+        
+        $('#Name').empty();
+        $('#Name').append('权限标识')
+        $('#Chname').empty();
+        $('#Chname').append('权限名称')
+        $('#Description').empty();
+        $('#Description').append('权限描述')
     </script>
 {% endblock %}
