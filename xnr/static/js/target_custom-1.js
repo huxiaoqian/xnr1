@@ -26,6 +26,10 @@ if ($one){
     roleName=$one.role_name;
     inModalData($one);
 }
+var goUSER=JSON.parse(localStorage.getItem('goONuser'));
+if (goUSER){
+    inModalData(goUSER);
+}
 //模板导入
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
@@ -46,7 +50,7 @@ function inModalData(data) {
         $$psy_feature=data.psy_feature.split('&');
     }
 
-    var bus=data.business_goal.split('&');
+    var bus=data.business_goal.toString().indexOf('&')==-1?data.business_goal.split(',|，'):data.business_goal.split('&');
     for (var f of bus){
         $(".build-4 input[name='demo66'][type='checkbox'][value='"+f+"']").attr("checked",true);
     }
@@ -56,6 +60,8 @@ function inModalData(data) {
     }
     if (data.monitor_keywords){
         $('.build-6 .keywords').val(data.monitor_keywords.toString().replace(/&/g,'，'))
+    }else {
+        $('.build-6 .keywords').val('暂无关键词');
     }
     var active_time,day_post_num;
     if (data.active_time=='unknown'||data.active_time=='null'||data.active_time==''||!data.active_time){active_time='未知'}else{active_time=data.active_time};

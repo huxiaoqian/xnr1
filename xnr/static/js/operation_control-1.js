@@ -648,6 +648,7 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
+    console.log(data)
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none',C3='';
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';
@@ -701,6 +702,9 @@ function historyNews(data) {
                     }else {
                         txt=row.text;
                     };
+                    var a=Number(row.retweeted).toString();
+                    var b=Number(row.retweet).toString();
+                    var retNum=(a||b);
                     var str=
                         '<div class="post_perfect">'+
                         '   <div class="post_center-hot">'+
@@ -715,7 +719,7 @@ function historyNews(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+(row.retweeted||row.retweet)+'）</b></span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+retNum+'）</b></span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论<b style="'+C3+'">（'+row.comment+'）</b></span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         // '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
@@ -893,52 +897,22 @@ function focusOn(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男'}else if (row.sex==2){return '女'}else{return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "关注来源",//标题
+                field: "follow_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.follow_source==''||row.follow_source=='null'||row.follow_source=='unknown'||!row.follow_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "post_time",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.post_time==''||row.post_time=='null'||row.post_time=='unknown'||!row.post_time){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.post_time);
-                    };
-                }
-            },
-            {
-                title: "所在地",//标题
-                field: "user_location",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
-                        return '未知';
-                    }else {
-                        return row.user_location;
+                        return row.follow_source;
                     };
                 }
             },
@@ -1077,37 +1051,22 @@ function fans(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男';}else if (row.sex==2){return '女'}else {return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "粉丝来源",//标题
+                field: "fan_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.fan_source==''||row.fan_source=='null'||row.fan_source=='unknown'||!row.fan_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "create_at",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.create_at==''||row.create_at=='null'||row.create_at=='unknown'||!row.create_at){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.create_at);
+                        return row.fan_source;
                     };
                 }
             },
