@@ -7,10 +7,11 @@ from global_config import S_TYPE,S_DATE
 from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                     es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                     weibo_xnr_retweet_timing_list_index_name,weibo_xnr_retweet_timing_list_index_type,\
-                    weibo_xnr_index_name,weibo_xnr_index_type
-from parameter import MAX_SEARCH_SIZE,RETWEET_START_TS,RETWEET_END_TS,TRACE_FOLLOW_LIST
+                    weibo_xnr_index_name,weibo_xnr_index_type,weibo_xnr_timing_list_index_name,\
+                    weibo_xnr_timing_list_index_type
+from parameter import MAX_SEARCH_SIZE,RETWEET_START_TS,RETWEET_END_TS,TRACE_FOLLOW_LIST,task_source_ch2en
 from utils import uid2nick_name_photo
-from weibo_publish_func import retweet_tweet_func
+from weibo_publish_func import retweet_tweet_func,publish_tweet_func
 from time_utils import datetime2ts,ts2datetime
 
 # 从流数据中扫描跟踪人物的发帖
@@ -119,7 +120,7 @@ def retweet_operate_timing():
 
             if timestamp_set <= int(time.time()):
 
-                text = result['text']
+                text = result['text'].encode('utf-8')
                 tweet_type = 'trace_follow_tweet'
                 xnr_user_no = result['xnr_user_no']
                 r_mid = result['mid']
@@ -138,32 +139,117 @@ def retweet_operate_timing():
                     return False
                 print 'text::',text
                 print 'r_mid:::',r_mid
-                mark = retweet_tweet_func(account_name,password,text,r_mid)
+                mark = retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
                 print 'mark::',mark[0]
                 if mark[0]:
                     task_id = xnr_user_no + '_' + r_mid
                     # item_exist = es_xnr.get(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
                  #        weibo_xnr_retweet_timing_list_index_type,id=task_id)['_source']
                     item_exist = {}
-                    item_exist['compute_status'] = 0
+                    item_exist['compute_status'] = 1
                     #item_exist['timstamp_post'] = int(time.time())
 
                     es_xnr.update(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
                         weibo_xnr_retweet_timing_list_index_type,id=task_id,body={'doc':item_exist})
 
-                    # 保存微博
-                    try:
-                        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-                    except:
-                        print '保存微博过程遇到错误！'
-                        save_mark = False
+                    # # 保存微博
+                    # try:
+                    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+                    # except:
+                    #     print '保存微博过程遇到错误！'
+                    #     save_mark = False
             else:
                 continue
         #return mark
 
+# 扫描定时发布列表
+def publish_operate_timing():
+
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'task_status':0}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+
+    results = es_xnr.search(index=weibo_xnr_timing_list_index_name,doc_type=\
+                    weibo_xnr_timing_list_index_type,body=query_body)['hits']['hits']
+    print 'results::',results
+    if results:
+        for result in results:
+            _id = result['_id']
+            result = result['_source']
+            timestamp_set = result['post_time']
+            print timestamp_set
+            if timestamp_set <= int(time.time()):
+                print '!!'
+                text = result['text'].encode('utf-8')
+                tweet_type = task_source_ch2en[result['task_source']]
+                xnr_user_no = result['xnr_user_no']
+
+                try:
+                    p_url = result['p_url']
+                except:
+                    p_url = ''
+                try:
+                    rank = result['rank']
+                except:
+                    rank = u'0'
+                try:
+                    rankid = result['rankid']
+                except:
+                    rankid = ''
+                #r_mid = result['mid']
+
+                es_get_result = es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+
+                weibo_mail_account = es_get_result['weibo_mail_account']
+                weibo_phone_account = es_get_result['weibo_phone_account']
+                password = es_get_result['password']
+                
+                if weibo_mail_account:
+                    account_name = weibo_mail_account
+                elif weibo_phone_account:
+                    account_name = weibo_phone_account
+                else:
+                    return False
+
+                mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
+
+                if mark[0]:
+                    #task_id = xnr_user_no + '_' + r_mid
+                    task_id = _id
+                    # item_exist = es_xnr.get(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
+                 #        weibo_xnr_retweet_timing_list_index_type,id=task_id)['_source']
+                    item_exist = {}
+                    item_exist['task_status'] = 1
+                    #item_exist['timstamp_post'] = int(time.time())
+
+                    es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=\
+                        weibo_xnr_timing_list_index_type,id=task_id,body={'doc':item_exist})
+
+                    # # 保存微博
+                    # try:
+                    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+                    # except:
+                    #     print '保存微博过程遇到错误！'
+                    #     save_mark = False
+            else:
+                continue
+        #return mark
+
+
 if __name__ == '__main__':
 
+    # 定时发帖
+    publish_operate_timing()
+
+    # 定时跟踪转发
     #read_tracing_followers_tweet()
-    retweet_operate_timing()
+    #retweet_operate_timing()
 
 
