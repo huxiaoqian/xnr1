@@ -118,6 +118,7 @@ class SinaOperateAPI:
             "text": self.text,
             "tid": ""
         }
+        # print 'post_data::::',post_data
         return self.__getPostURL(w_url, post_data)
 
     def retweet(self):
