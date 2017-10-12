@@ -66,6 +66,7 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
     var flow_faw_url;
     if (_val=='no'){
         flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num;
+        public_ajax.call_request('get',flow_faw_url,flow_faw);
     }else {
         var end_time=Date.parse(new Date())/1000;
         var startTime='';
@@ -82,12 +83,11 @@ $('.choosetime .demo-label input[name="time1"]').on('click',function () {
             $('#start_1').hide();
             $('#end_1').hide();
             $('.sureTime').hide();
-            flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
+            flow_faw_url='/weibo_xnr_operate/show_retweet_timing_list/?xnr_user_no='+ID_Num+'&start_ts='+startTime+
                 '&end_ts='+end_time;
-
+            public_ajax.call_request('get',flow_faw_url,flow_faw);
         }
     }
-    public_ajax.call_request('get',flow_faw_url,flow_faw);
 });
 $('.sureTime').on('click',function () {
     var s=$('#start_1').val();
