@@ -214,6 +214,8 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    //登录用户名
+    var admin='admin@qq.com';
     var loginType=localStorage.getItem('loginType');
     //
     if(loginType=='QQ'){
@@ -500,8 +502,7 @@
             });
         },
     };
-    //登录用户名
-    var admin='admin@qq.com';
+    
     //登录虚拟人后取出ID或者名字
     var ID_Num,REL_name,ID_name,userQQnum,nowUser;
     function weiboORqq(type) {

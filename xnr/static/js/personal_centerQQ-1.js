@@ -1,5 +1,6 @@
 function has_table_QQ(has_data_QQ) {
     let sourcePER=eval(has_data_QQ);
+    console.log(sourcePER)
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -255,7 +256,7 @@ function success_fail(data) {
 
 //进入虚拟人的具体操作
 function enterIn(QQ_id,QQ_num,status) {
-    if (!status){
+    if (status=='true'){
         window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
     }else {
         $('#succee_fail #words').text('请先登录在进行其他操作。');

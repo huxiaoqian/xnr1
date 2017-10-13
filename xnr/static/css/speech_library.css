@@ -9,7 +9,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -89,7 +89,7 @@ body {
     margin: 10px auto;
     text-align: left;
     padding: 10px 10px 10px 40px;
-    background-color: rgba(24, 59, 99, 0.78);
+    background-color: #06162d;
 }
 #container .post_perfect .center_icon {
     position: absolute;
