@@ -18,8 +18,8 @@
         margin: 0 auto;
         height: auto!important;
     }
-    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
-    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+    .type_page .table-no-bordered,.type_page .table>tbody>tr>td,.type_page .fixed-table-container,
+    .type_page .bootstrap-table .table>thead>tr>th,.type_page .bootstrap-table .table,.type_page .table>tbody>tr>td{
         border: none;
     }
     .fixed-table-pagination .page-list {
@@ -51,12 +51,16 @@
         background-image: none!important;
     }
     /*-----------*/
-    .history .fixed-table-pagination {display: none;}
-    .history .fixed-table-toolbar {display: none;}
-    .history .table>thead>tr>th {border-top: none;}
-    .history .bootstrap-table .table>thead>tr>th {width: 8%;}
-    .history .bootstrap-table .table:not(.table-condensed) {padding:0;}
-    #start_1,#end_1,.sureTime{display: none;}
+    .history .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,.history .table>tbody>tr>td{
+        padding: 8px!important;
+    }
+    .choosetime .demo-label{width: 65px;}
+    .history .fixed-table-pagination {display: none!important;}
+    .history .fixed-table-toolbar {display: none!important;}
+    .history .table>thead>tr>th {border-top: none!important;}
+    .history .bootstrap-table .table>thead>tr>th {width: 8%!important;}
+    .history .bootstrap-table .table:not(.table-condensed) {padding:0!important;}
+    #start_1,#end_1,.sureTime{display: none!important;}
     .sureTime {
         padding:1px 6px;
         color: white;
@@ -109,7 +113,7 @@
             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
         </div>
     </div>
-    <div class="title">
+    <div class="title" style="margin-top: 40px;">
         <div class="tit-1" style="display: inline-block;">
             <span class="icon icon-glass note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">安全性评估</b>

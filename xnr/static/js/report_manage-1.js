@@ -51,7 +51,7 @@ function reportDefaul(data) {
                             sye_2='color: yellow';
                         }
                         str+=
-                            '<div class="center_rel" style="margin-top: 10px;">'+
+                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
                             '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                             // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                             '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
@@ -214,7 +214,6 @@ function postYES(data) {
 }
 //导出excel
 $('#output1').click(function(){
-    console.log(currentData)
     var all=[];
     for (var k in currentData){
         var name='',time='',type='',user='',uid='',txt='';

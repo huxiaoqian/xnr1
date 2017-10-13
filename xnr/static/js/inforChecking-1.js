@@ -40,6 +40,7 @@ require.config({
     }
 });
 function wordCloud(data) {
+    $('#content-1-word p').show();
     if (data.length==0){
        $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'22px'}).text('暂无数据');
     }else {
@@ -62,7 +63,6 @@ function wordCloud(data) {
         //         }
         //     )
         // });
-        $('#content-1-word p').show();
         require(
             [
                 'echarts',
@@ -94,9 +94,8 @@ function wordCloud(data) {
                 myChart.setOption(option);
             }
         );
-        $('#content-1-word p').slideUp(700);
     }
-
+    $('#content-1-word p').slideUp(700);
 }
 //热门帖子
 $('#theme-2 .demo-radio').on('click',function () {
