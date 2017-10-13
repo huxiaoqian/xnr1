@@ -34,11 +34,13 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID
 
 def get_influence_total_trend(xnr_user_no):
 
-    query_body = {
-        'query':{
-            
-        }
-    }
+    fans_dict = get_influ_fans_num(xnr_user_no)
+    retweet_dict = get_influ_retweeted_num(xnr_user_no)
+    comment_dict = get_influ_commented_num(xnr_user_no)
+    like_dict = get_influ_like_num(xnr_user_no)
+    at_dict = get_influ_at_num(xnr_user_no)
+    private_dict = get_influ_private_num(xnr_user_no)
+
     total_dict = {}
     total_dict['total_trend'] = {}
     total_dict['day_num'] = {}

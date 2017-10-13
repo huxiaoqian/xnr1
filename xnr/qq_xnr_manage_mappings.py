@@ -198,9 +198,12 @@ if __name__ == '__main__':
 
     qq_xnr_mappings()
     qq_xnr_history_count_mappings()
-    qq_xnr_history_sensitive_mappings()
-    qq_xnr_history_be_at_mappings()
+    #qq_xnr_history_sensitive_mappings()
+    #qq_xnr_history_be_at_mappings()
 
-    # es_xnr.indices.put_mapping(index=qq_xnr_index_name, doc_type='user', \
-    #         body={'properties':{'qqbot_port': {'type': 'string', 'index':'not_analyzed'}}}, ignore=400)
+    # es_xnr.indices.put_mapping(index=qq_xnr_history_count_index_name, doc_type='count', \
+    #         body={'properties':{'total_sensitive_num': {'type': 'long'},'daily_sensitive_num': {'type': 'long'},\
+    #         'daily_be_at_num': {'type': 'long'},'total_be_at_num': {'type': 'long'},\
+    #         'influence': {'type': 'long'},'penetration': {'type': 'long'},\
+    #         'safe': {'type': 'long'}}}, ignore=400)
 
