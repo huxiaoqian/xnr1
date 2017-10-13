@@ -324,7 +324,7 @@ function historyTotalTable(dataTable) {
                 valign: "middle",//垂直
             },
             {
-                title: "总发帖量",//标题
+                title: "总微博量",//标题
                 field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -350,6 +350,14 @@ function historyTotalTable(dataTable) {
             {
                 title: "业务发帖",//标题
                 field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "跟踪转发",//标题
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -648,7 +656,6 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    console.log(data)
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none',C3='';
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';
