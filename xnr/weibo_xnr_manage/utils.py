@@ -321,11 +321,13 @@ def xnr_cumulative_statistics(xnr_date_info):
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     if xnr_date_info: 
-        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[0]['user_fansnum']
+        print xnr_date_info[0]
+        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
         total_post_sum=0
         daily_post_num=0
         business_post_num=0
         hot_follower_num=0
+        trace_follow_tweet_num=0
         #influence_sum=0
         #penetration_sum=0
         #safe_sum=0
@@ -335,6 +337,7 @@ def xnr_cumulative_statistics(xnr_date_info):
             daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
             business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
             hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
+            trace_follow_tweet_num=trace_follow_tweet_num+xnr_date_info[i]['trace_follow_tweet_num']
             #influence_sum=influence_sum+xnr_date_info[i]['influence']
             #penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
             #safe_sum=safe_sum+xnr_date_info[i]['safe']
@@ -344,6 +347,7 @@ def xnr_cumulative_statistics(xnr_date_info):
         Cumulative_statistics_dict['daily_post_num']=daily_post_num
         Cumulative_statistics_dict['business_post_num']=business_post_num
         Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
+        Cumulative_statistics_dict['trace_follow_tweet_num']=trace_follow_tweet_num
         #Cumulative_statistics_dict['influence']=influence_sum/number
         #Cumulative_statistics_dict['penetration']=penetration_sum/number
         #Cumulative_statistics_dict['safe']=safe_sum/number
@@ -356,6 +360,7 @@ def xnr_cumulative_statistics(xnr_date_info):
         Cumulative_statistics_dict['daily_post_num']=0
         Cumulative_statistics_dict['business_post_num']=0
         Cumulative_statistics_dict['hot_follower_num']=0
+        Cumulative_statistics_dict['trace_follow_tweet_num']=0
         Cumulative_statistics_dict['influence']=0
         Cumulative_statistics_dict['penetration']=0
         Cumulative_statistics_dict['safe']=0
@@ -411,19 +416,49 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
                 xnr_user_detail['business_post_num']=item['doc_count']
             elif item['key'] == 'hot_post':
                 xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
         #总发帖量
-        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
+        
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
+        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
+
     except:
     	xnr_user_detail['user_fansnum']=0
     	xnr_user_detail['daily_post_num']=0
     	xnr_user_detail['business_post_num']=0
     	xnr_user_detail['hot_follower_num']=0
     	xnr_user_detail['total_post_sum']=0
+        xnr_user_detail['trace_follow_tweet_num']=0
 
     #评估信息
     #昨日信息
     yesterday_date=ts2datetime(datetime2ts(date_time)-DAY)
     xnr_assessment_id=xnr_user_no+'_'+yesterday_date
+    if xnr_user_detail['user_fansnum'] == 0:
+        count_id=xnr_user_no+'_'+yesterday_date
+        xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+        xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+    else:
+        pass
     try:
         xnr_assess_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
         xnr_user_detail['influence']=xnr_assess_result['influence']
@@ -490,7 +525,7 @@ def show_history_count(xnr_user_no,date_range):
     if date_range['type']=='today':
         start_time=datetime2ts(ts2datetime(date_range['end_time']))
         end_time=date_range['end_time']       #当前时间
-        print 'today_time:',start_time,end_time
+        #print 'today_time:',start_time,end_time
         xnr_date_info=show_today_history_count(xnr_user_no,start_time,end_time)
         
     else:
@@ -502,7 +537,7 @@ def show_history_count(xnr_user_no,date_range):
             end_time=now_time
         if start_time < system_start_time:
             start_time=system_start_time
-        print 'condition_time:',start_time,end_time
+        #print 'condition_time:',start_time,end_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
         
     #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
