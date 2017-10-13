@@ -14,7 +14,7 @@ from collections import Counter
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from word_cut import word_net
-from text_classify import text_net
+from text_classify import text_net,get_s
 from config import TopkHeap,index_list,K1,B,K3,es_flow_text,flow_text_index_type,\
                      cut_by_textrank,MAX_SIZE,OPINION_CLUSTER,summary_text
 
@@ -73,14 +73,14 @@ def get_text_word_by_id(uidlist):#根据uid列表获取对应的文本
         keywords_list.append({'term':{'uid':key}})
 
     query_body = {'query':{'bool':{'should':keywords_list}},'size':MAX_SIZE}
-
+    
     result = es_flow_text.search(index=index_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
     text_list = []
     word_list = []
     for i in range(0,len(result)):
         source = result[i]['_source']
         text = source['text'].encode('utf-8')
-        keywords_string = source['keywords_string'].encode('utf-8').split('&')
+        keywords_string = cut_by_textrank(text)#source['keywords_string'].encode('utf-8').split('&')
         text_list.append(text)
         word_list.append(keywords_string)
 
@@ -141,7 +141,7 @@ def search_weibo_from_word(uidlist,keywords):#第四种策略：先根据BM25检
     w_n = int(0.5*len(keywords))
     if w_n < 1:
         w_n = 1
-    
+
     for i in range(0,len(word_dict)):
         words = word_dict[i]
         len_n = len(set(words)&set(keywords))
@@ -153,14 +153,18 @@ def search_weibo_from_word(uidlist,keywords):#第四种策略：先根据BM25检
     for i in range(0,len(result)):
         if result[i][1] not in text_list:
             text_list.append(result[i][1])
-
-    if len(text_list) >= 100:
-        word_result,word_weight = word_net(weibo_data,OPINION_CLUSTER)
-        text_list = text_net(word_result,word_weight,weibo_data)
+    
+    if len(text_list) >= 10:
+        word_result,word_weight = word_net(text_list,OPINION_CLUSTER)
+        text_list = text_net(word_result,word_weight,text_list)
         result = []
         for text in text_list:
             s = summary_text(text)
-            result.append(s)
+            max_r,n = get_s(result,s)
+            if max_r >= 0.5:
+                continue
+            else:
+                result.append(s)
     else:
         result = [summary_text(text_list)]
 
@@ -175,13 +179,14 @@ def follower_analysis(uidlist,text):#关注id讨论内容的分析
         输出数据：
         summary_list：子观点列表，每个元素表示一个子观点的摘要
     '''
-
+    if len(uidlist) == 0 or len(text) == 0:
+        return []
+    
     keywords = cut_by_textrank(text)
 
     summary_list = search_weibo_from_word(uidlist,keywords)
 
     return summary_list
-
 
 if __name__ == '__main__':
 
