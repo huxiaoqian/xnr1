@@ -51,7 +51,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # }
 
 
-# result = es.search(index='xnr_flow_text_2017-10-01',doc_type='text',\
+# result = es.search(index='tweet_retweet_timing_list',doc_type='timing_list',\
 #     body=query_body)['hits']['hits']
 
 # result_json = {}
@@ -59,14 +59,14 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # for result_item in result:
 #     _id = result_item['_id']
 #     result_json[_id] = result_item
-# print 'result_json::',result_json
-# with open("./xnr_flow_1001.json","w") as dump_f:
+# #print 'result_json::',result_json
+# with open("./retweet_tweet_timing.json","w") as dump_f:
 #     # for item in result:
 #     json.dump(result_json,dump_f)
 #     print '@'
 
 
-# with open("./xnr_flow_1001.json","r") as load_f:
+# with open("./retweet_tweet_timing.json","r") as load_f:
 #     #print 'load_f::',load_f
 #     load_dict = json.load(load_f)
 #     print load_dict
@@ -75,16 +75,9 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
         
 #         _id = key
 #         content = value['_source']
-        
-#         #if _id == 'WXNR0004_1507272840':
-#         	#content['topic_field'] = u'文体类&政治类&民生类'
-#         content['topic_field_first'] = u'民生类_法律'
-#         # else:
-#         # 	#content['topic_field'] = u'文体类&政治类&民生类'
-#         # 	content['topic_field_first'] = u'民生类_交通'
 
-#         weibo_xnr_flow_text_mappings('xnr_flow_text_2017-10-01')
-#         es.index(index='xnr_flow_text_2017-10-01',doc_type='text',\
+#         #weibo_xnr_flow_text_mappings('xnr_flow_text_2017-10-01')
+#         es.index(index='tweet_retweet_timing_list',doc_type='timing_list',\
 #             id=_id,body=content)
 
 
