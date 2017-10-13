@@ -237,8 +237,8 @@ def get_influ_fans_num(xnr_user_no,current_time):
     else:
         datetime_total = len(json.loads(fans_uid_list))
 
-    fans_dict['total_num'] = datetime_count
-    fans_dict['day_num'] = datetime_total
+    fans_dict['day_num'] = datetime_count
+    fans_dict['total_num'] = datetime_total
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -248,7 +248,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
     if not fans_total_num_last:
         fans_total_num_last = 1
 
-    fans_dict['growth_rate'] = round(float(day_num)/fans_total_num_last,2)
+    fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
 
     #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
 
