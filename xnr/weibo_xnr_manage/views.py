@@ -352,21 +352,21 @@ def ajax_lookup_xnr_assess_info():
 #http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
 @mod.route('/create_xnr_flow_text/')
 def ajax_create_xnr_flow_text():
-	task_id='WXNR0004_1507383960'
+	task_id='WXNR0004_1507730704'
 	task_detail=dict()
-	task_detail['task_source']='business_post'
+	task_detail['task_source']='trace_follow_tweet'
 	task_detail['xnr_user_no']='WXNR0004'
 	task_detail['uid']='6346321407'
-	task_detail['text']='//@重庆消费维权网:把上访说成无理取闹，嗯，这是对残酷现实的掩盖。总之，这部电影太矫情了。'
+	task_detail['text']='放过他老人家吧//@传媒老王:今天一整天要在当年毛泽东领导秋收起义的出发地，现在的国家生态县，中国红豆杉之乡铜鼓采风。铜鼓县，位于湘鄂赣三省交界处，是赣西门户。'
 	task_detail['picture_url']=''
 	task_detail['vedio_url']=''
-	task_detail['user_fansnum']=8
-	task_detail['weibos_sum']=83
+	task_detail['user_fansnum']=10
+	task_detail['weibos_sum']=88
 	task_detail['mid']=''
 	task_detail['ip']=''
 	task_detail['directed_uid']=''
 	task_detail['directed_uname']=''
-	task_detail['timestamp']=1507383979
+	task_detail['timestamp']=1507730727
 	task_detail['sentiment']=''
 	task_detail['geo']=''
 	task_detail['keywords_dict']=''
@@ -379,8 +379,8 @@ def ajax_create_xnr_flow_text():
 	task_detail['origin_keywords_dict']=''
 	task_detail['origin_keywords_string']=''
 	task_detail['comment']=0
-	task_detail['sensitive']=1
-	task_detail['sensitive_words_dict']='上访'
+	task_detail['sensitive']=0
+	task_detail['sensitive_words_dict']=''
 	task_detail['retweeted']=0
 
 	results=create_xnr_flow_text(task_detail,task_id)

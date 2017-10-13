@@ -202,7 +202,7 @@ def user_domain_mappings():
 if __name__=='__main__':
 
     user_domain_mappings()
-    index_name = 'xnr_flow_text_2017-10-07'
+    index_name = 'xnr_flow_text_2017-10-10'
     weibo_xnr_flow_text_mappings(index_name)
     daily_inerests_flow_text_mappings(index_name)
 

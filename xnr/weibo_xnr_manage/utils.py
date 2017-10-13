@@ -539,6 +539,7 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
         start_time=datetime2ts(ts2datetime(end_time-DAY*test_datetime_gap))
     else:
         pass
+    print start_time,end_time
     #print start_time,end_time
     #获取虚拟人编号
     #user_no_str=xnr_user_no[4:8]
@@ -1314,11 +1315,6 @@ def delete_weibo_xnr(xnr_user_no):
 #   step 7：虚拟人评估信息  #
 ###############################
 def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
-    if S_TYPE == 'test':
-        start_time=1506787200     #10月1日
-        end_time=1507305600      #10月7日
-    else:
-        pass
     query_body={
         'fields':['date_time',assess_type],
         'query':{
@@ -1352,7 +1348,7 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail,task_id):
-	result=es_xnr.index(index="xnr_flow_text_2017-10-07",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+	result=es_xnr.index(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 	return result
 	
 
