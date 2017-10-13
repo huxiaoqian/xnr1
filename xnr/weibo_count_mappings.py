@@ -96,4 +96,15 @@ def weibo_keyword_count_mappings():
 
 if __name__=='__main__':
 	#weibo_xnr_count_info_mappings()
-    weibo_keyword_count_mappings()
+    #weibo_keyword_count_mappings()
+    
+    # es.indices.put_mapping(index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type, \
+    #         body={'properties':{'fans_total_num': {'type': 'long'},'fans_day_num': {'type': 'long'},'fans_growth_rate': {'type': 'long'},\
+    #         'retweet_total_num': {'type': 'long'},'retweet_day_num': {'type': 'long'},'retweet_growth_rate': {'type': 'long'},\
+    #         'comment_total_num': {'type': 'long'},'comment_day_num': {'type': 'long'},'comment_growth_rate': {'type': 'long'},\
+    #         'like_total_num': {'type': 'long'},'like_day_num': {'type': 'long'},'like_growth_rate': {'type': 'long'},\
+    #         'at_total_num': {'type': 'long'},'at_day_num': {'type': 'long'},'at_growth_rate': {'type': 'long'},\
+    #         'private_total_num': {'type': 'long'},'private_day_num': {'type': 'long'},'private_growth_rate': {'type': 'long'},\
+    #         'follow_group_sensitive_info': {'type': 'long'},'fans_group_sensitive_info': {'type': 'long'},'self_info_sensitive_info': {'type': 'long'},\
+    #         'warning_report_total_sensitive_info': {'type': 'long'},'feedback_total_sensitive_info': {'type': 'long'},\
+    #         }}, ignore=400)
