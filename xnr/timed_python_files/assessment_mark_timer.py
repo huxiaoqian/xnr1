@@ -2,6 +2,7 @@
 
 import json
 import time
+import random
 from collections import Counter
 from elasticsearch.helpers import scan
 
@@ -13,9 +14,12 @@ from global_utils import R_WEIBO_XNR_FANS_FOLLOWERS as r_fans_followers
 from global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
                         weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
                         weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
+                        weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                         flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                         flow_text_index_name_pre,\
+                        weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
+                        weibo_report_management_index_name,weibo_report_management_index_type,\
                         portrait_index_name,portrait_index_type,\
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_index_name,weibo_xnr_index_type,xnr_flow_text_index_name_pre,\
@@ -689,8 +693,8 @@ def get_influ_fans_num(xnr_user_no,current_time):
     else:
         datetime_total = len(json.loads(fans_uid_list))
 
-    fans_dict['total_num'] = datetime_count
-    fans_dict['day_num'] = datetime_total
+    fans_dict['day_num'] = datetime_count
+    fans_dict['total_num'] = datetime_total
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -700,7 +704,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
     if not fans_total_num_last:
         fans_total_num_last = 1
 
-    fans_dict['growth_rate'] = round(float(day_num)/fans_total_num_last,2)
+    fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
 
     #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
 
@@ -1672,46 +1676,48 @@ def cron_compute_mark(current_time):
         return mark
 
 
-def bulk_add():
-    s_re = scan(es, query={'query':{'match_all':{}}, 'size':20},index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type)
-    bulk_action=[]
-    count=0
-    while  True:
-        try:
-            scan_re=s_re.next()
-            _id=scan_re['_id']
-            update_dict = {'fans_total_num':0,'fans_day_num':0,'fans_growth_rate':0,\
-                        'retweet_total_num':0,'retweet_day_num':0,'retweet_growth_rate':0,\
-                        'comment_total_num':0,'comment_day_num':0,'comment_growth_rate':0,\
-                        'like_total_num':0,'like_day_num':0,'like_growth_rate':0,\
-                        'at_total_num':0,'at_day_num':0,'at_growth_rate':0,\
-                        'private_total_num':0,'private_day_num':0,'private_growth_rate':0,\
-                        'follow_group_sensitive_info':0,'fans_group_sensitive_info':0,'self_info_sensitive_info':0,\
-                        'warning_report_total_sensitive_info':0,'feedback_total_sensitive_info':0}
+# def bulk_add():
+#     s_re = scan(es, query={'query':{'match_all':{}}, 'size':20},index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type)
+#     bulk_action=[]
+#     count=0
+#     while  True:
+#         try:
+#             scan_re=s_re.next()
+#             _id=scan_re['_id']
+#             update_dict = {'fans_total_num':0,'fans_day_num':0,'fans_growth_rate':0,\
+#                         'retweet_total_num':0,'retweet_day_num':0,'retweet_growth_rate':0,\
+#                         'comment_total_num':0,'comment_day_num':0,'comment_growth_rate':0,\
+#                         'like_total_num':0,'like_day_num':0,'like_growth_rate':0,\
+#                         'at_total_num':0,'at_day_num':0,'at_growth_rate':0,\
+#                         'private_total_num':0,'private_day_num':0,'private_growth_rate':0,\
+#                         'follow_group_sensitive_info':0,'fans_group_sensitive_info':0,'self_info_sensitive_info':0,\
+#                         'warning_report_total_sensitive_info':0,'feedback_total_sensitive_info':0}
 
-            source={'doc':update_dict}
-            action={'update':{'_id':_id}}
-            bulk_action.extend([action,source])
-            count += 1
-            if count % 10 == 0:
-                print 'count:::',count
-                es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
-                bulk_action = []
+#             source={'doc':update_dict}
+#             action={'update':{'_id':_id}}
+#             bulk_action.extend([action,source])
+#             count += 1
+#             if count % 10 == 0:
+#                 print 'count:::',count
+#                 es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
+#                 bulk_action = []
 
-        except StopIteration:
-            if bulk_action:
-                es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
+#         except StopIteration:
+#             if bulk_action:
+#                 es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
 
-            break
+#             break
 
 
     
 if __name__ == '__main__':
 
-    # for i in range(11,-1,-1):
-    #     current_time = int(time.time()-i*DAY)
+    for i in range(12,-1,-1):
+        current_time = int(time.time()-i*DAY)
 
-    #     cron_compute_mark(current_time)
+        print 'date...',ts2datetime(current_time)
+
+
+        cron_compute_mark(current_time)
     # bulk_add()
-    current_time=1507737540
-    cron_compute_mark(current_time)
+
