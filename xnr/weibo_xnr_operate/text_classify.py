@@ -119,7 +119,7 @@ def text_net(word_result,word_weight,weibo):#提取代表性微博_词网
         row_list = []
         for text in text_list:
             if text not in row_list:
-                row_list.add(text)
+                row_list.append(text)
         text_total.append(row_list)
 
     return text_total

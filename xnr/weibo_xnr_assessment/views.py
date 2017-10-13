@@ -30,8 +30,12 @@ def ajax_influ_mark_compute():
 # 影响力各指标
 @mod.route('/influence_total/')
 def ajax_influence_total_trend():
+
 	xnr_user_no = request.args.get('xnr_user_no','')
-	results = get_influence_total_trend(xnr_user_no)
+	start_time = request.args.get('start_time','')
+	end_time = request.args.get('end_time','')
+
+	results = get_influence_total_trend(xnr_user_no,start_time,end_time)
 
 	return json.dumps(results)
 
@@ -98,7 +102,9 @@ def ajax_influence_total_trend():
 # 渗透力分数计算
 @mod.route('/penetration_mark/')
 def ajax_penetration_mark_compute():
+
 	xnr_user_no = request.args.get('xnr_user_no','')
+
 	results = compute_penetration_num(xnr_user_no)
 
 	return json.dumps(results)
@@ -106,8 +112,12 @@ def ajax_penetration_mark_compute():
 # 渗透力各指标
 @mod.route('/penetration_total/')
 def ajax_penetration_total():
+	
 	xnr_user_no = request.args.get('xnr_user_no','')
-	results = penetration_total(xnr_user_no)
+	start_time = request.args.get('start_time','')
+	end_time = request.args.get('end_time','')
+
+	results = penetration_total(xnr_user_no,start_time,end_time)
 
 	return json.dumps(results)
 

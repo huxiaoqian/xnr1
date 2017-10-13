@@ -1,15 +1,19 @@
 # -*-coding:utf-8-*-
+import math
 import time
 import json
 import os
 import sys
+from elasticsearch.helpers import scan
 sys.path.append('../')
+from global_config import S_TYPE,QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT
 from global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,es_xnr as es,\
                 group_message_index_name_pre,group_message_index_type,qq_xnr_index_name,\
-                qq_xnr_index_type,qq_xnr_history_be_at_index_type,qq_xnr_history_sensitive_index_type
+                qq_xnr_index_type,qq_xnr_history_be_at_index_type,qq_xnr_history_sensitive_index_type,\
+                weibo_xnr_index_name,weibo_xnr_index_type,es_xnr
 
-from time_utils import ts2datetime,datetime2ts
-from parameter import DAY,MAX_VALUE
+from time_utils import ts2datetime,datetime2ts,get_groupmessage_index_list
+from parameter import DAY,MAX_VALUE,MAX_SEARCH_SIZE
 
 def qq_history_count(xnr_user_no,qq_number,current_time):
 
@@ -69,13 +73,6 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
                     {'wildcard':{'text':'*'+'@'+'*'}}
                 ]
             }
-        },
-        'aggs':{
-                'uid_list':{
-                    'terms':{'field':'uid','size':MAX_VALUE,'order':{'avg_sort':'desc'} },
-                    'aggs':{'avg_sort':{'avg':{'field':sort_item}}}
-
-            }
         }
     }
 
@@ -91,7 +88,7 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
     except:
         at_num_total_day = 0
 
-    influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
+    influence = (float(math.log(today_count+1))/(math.log(at_num_total_day+1)+1))*100
 
     influence = round(influence,2)  # 保留两位小数
     
@@ -181,8 +178,7 @@ def get_influence_at_num(xnr_user_no):
             'bool':{
                 'must':[
                     {'term':{'xnr_qq_number':qq_number}},
-                    {'wildcard':{'text':'*'+'@ME'+'*'}},
-                    {'range':{'timestamp':{'lte':end_ts}}}
+                    {'wildcard':{'text':'*'+'@ME'+'*'}}
                 ]
             }
         }
@@ -322,14 +318,6 @@ def get_penetration_num(xnr_user_no):
     return follow_group_sensitive
 
 
-def qq_assessment_save_to_es():
-
-    penetration = get_penetration_num(xnr_user_no)
-    influence = get_influence_at_num(xnr_user_no)
-    safe = 
-
-    #  一起存三个分值
-
 def cron_compute_mark_qq():
 
     current_time = int(time.time()-DAY)
@@ -340,34 +328,40 @@ def cron_compute_mark_qq():
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
-        xnr_results = [{'_source':{'xnr_user_no':'WXNR0004','qq_number':'1965056593'}}]
+        xnr_results = [{'_source':{'xnr_user_no':'QXNR0001','qq_number':'1965056593'}}]
 
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
         qq_number = result['_source']['qq_number']
         #xnr_user_no = 'WXNR0004'
-        influence = get_influence_at_num(xnr_user_no)
-        penetration = get_penetration_num(xnr_user_no)
-        safe = qq_history_count(xnr_user_no,qq_number,current_time)
+        influence_dict = get_influence_at_num(xnr_user_no)
+        penetration_dict = get_penetration_num(xnr_user_no)
+        safe_dict = qq_history_count(xnr_user_no,qq_number,current_time_new)
 
         _id = xnr_user_no + '_' + current_date
 
-        #xnr_user_detail = create_xnr_history_info_count(xnr_user_no,current_date)
+        xnr_user_detail = {}
+        xnr_user_detail['influence'] = influence_dict['mark']
+        xnr_user_detail['penetration'] = penetration_dict['mark']
+        xnr_user_detail['safe'] = safe_dict['mark']
 
-        #item = {}
-        #xnr_user_detail['xnr_user_no'] = xnr_user_no
-        xnr_user_detail['influence'] = influence
-        xnr_user_detail['penetration'] = penetration
-        xnr_user_detail['safe'] = safe
-        #xnr_user_detail['date'] = current_date
+        xnr_user_detail['daily_be_at_num'] = influence_dict['daily_be_at_num']
+        xnr_user_detail['total_be_at_num'] = influence_dict['total_be_at_num']
+        
+        xnr_user_detail['daily_sensitive_num'] = penetration_dict['sensitive_info']
+        #xnr_user_detail['daily_sensitive_num'] = penetration_dict['daily_sensitive_num']
+
+        xnr_user_detail['total_post_num'] = safe_dict['total_post_num']
+        xnr_user_detail['daily_post_num'] = safe_dict['daily_post_num']
+        
+        xnr_user_detail['date_time'] = current_date
         xnr_user_detail['timestamp'] = current_time_new
-
-        # es.index(index=weibo_xnr_assessment_index_name,doc_type=weibo_xnr_assessment_index_type,\
-        #     id=_id,body=item)
+        xnr_user_detail['xnr_user_no'] = xnr_user_no
+        xnr_user_detail['qq_number'] = qq_number
 
         try:
 
-            es.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+            es.index(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
                 id=_id,body=xnr_user_detail)
             
             mark = True
@@ -377,6 +371,29 @@ def cron_compute_mark_qq():
 
         return mark
 
+# def bulk_add():
+#     s_re = scan(es, query={'query':{'match_all':{}}, 'size':20},index=qq_xnr_history_count_index_name, doc_type=qq_xnr_history_count_index_type)
+#     bulk_action=[]
+#     count=0
+#     while  True:
+
+#         scan_re=s_re.next()
+#         _id=scan_re['_id']
+#         update_dict = {'total_sensitive_num':0,'daily_sensitive_num':0,'daily_be_at_num':0,'total_be_at_num':0,\
+#                         'influence':0,'penetration':0,'safe':0}
+#         source={'doc':update_dict}
+#         action={'update':{'_id':_id}}
+#         bulk_action.extend([action,source])
+#         count += 1
+#         if count % 10 == 0:
+#             print 'count:::',count
+#             es.bulk(bulk_action,index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,timeout=100)
+#             bulk_action = []
+#         else:
+#             pass
+
+#     if bulk_action:
+#        es.bulk(bulk_action,index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,timeout=100)
 
 if __name__ == '__main__':
 
@@ -387,7 +404,7 @@ if __name__ == '__main__':
 
     #main_qq_count()
     cron_compute_mark_qq()
-
+    #bulk_add()
 
 
 

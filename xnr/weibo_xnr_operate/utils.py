@@ -129,15 +129,15 @@ def get_submit_tweet(task_detail):
 
     # 发布微博
 
-    mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid)
+    mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
 
-    # 保存微博
-    try:
-        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # # 保存微博
+    # try:
+    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
@@ -212,28 +212,28 @@ def get_recommend_at_user(xnr_user_no):
 
     #print 'es_results_len::',len(es_results)
     #if not es_results:
-    if S_TYPE != 'test':
-        query_body = {
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'terms':{'daily_interests':daily_interests_list}
-                    }
-                }
-            },
-            'size':MAX_SEARCH_SIZE
-        }
-        #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
-        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                            body=query_body)['hits']['hits']
-        # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-        #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
-        #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
-    else:
+    # if S_TYPE != 'test':
+    #     query_body = {
+    #         'query':{
+    #             'filtered':{
+    #                 'filter':{
+    #                     'terms':{'daily_interests':daily_interests_list}
+    #                 }
+    #             }
+    #         },
+    #         'size':MAX_SEARCH_SIZE
+    #     }
+    #     #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    #     es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                         body=query_body)['hits']['hits']
+    #     # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #     #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+    #     #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    # else:
 
-        es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-                            body={'query':{'match_all':{}},'size':1000,\
-                            'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                        body={'query':{'match_all':{}},'size':1000,\
+                        'sort':{'retweeted':{'order':'desc'}}})['hits']['hits']
 
     uid_list = []
     if es_results_daily:
@@ -464,7 +464,7 @@ def get_tweets_from_flow(monitor_keywords_list,sort_item_new):
                 'should':nest_query_list
             }  
         },
-        'sort':{sort_item_new:{'order':'desc'}},
+        'sort':[{sort_item_new:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':TOP_WEIBOS_LIMIT
     }
 
@@ -498,19 +498,32 @@ def uid_lists2weibo_from_flow_text(monitor_keywords_list,uid_list):
     for monitor_keyword in monitor_keywords_list:
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
 
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'uid':uid_list}
+    #             }
+    #         },
+    #         'bool':{
+    #             'should':nest_query_list,
+    #         }  
+            
+    #     },
+    #     'size':TOP_WEIBOS_LIMIT
+    # }
     query_body = {
         'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':uid_list}
-                }
-            },
             'bool':{
                 'should':nest_query_list,
+                'must':[
+                    {'terms':{'uid':uid_list}}
+                ]
             }  
             
         },
-        'size':TOP_WEIBOS_LIMIT
+        'size':TOP_WEIBOS_LIMIT,
+        'sort':{'timestamp':{'order':'desc'}}
     }
 
     if S_TYPE == 'test':
@@ -578,7 +591,7 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
         'sort':{sort_item_new:{'order':'desc'}},
         'size':USER_POETRAIT_NUMBER
     }
-
+    print 'query_body:::',query_body
     es_results_portrait = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
 
     uid_set = set()
@@ -655,14 +668,14 @@ def get_reply_total(task_detail):
 
     if retweet_option == 'true':
 
-        mark_retweet = retweet_tweet_func(account_name,password,text,r_mid)
+        mark_retweet = retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
 
-    # 保存微博
-    try:
-        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # # 保存微博
+    # try:
+    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark_reply,mark_retweet
 
@@ -686,7 +699,7 @@ def get_show_comment(task_detail):
                 ]
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
 
@@ -723,14 +736,14 @@ def get_reply_comment(task_detail):
 
     # 发布微博
 
-    mark = comment_tweet_func(account_name,password,text,r_mid)
+    mark = comment_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
 
     # 保存微博
-    try:
-        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # try:
+    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
@@ -751,7 +764,7 @@ def get_show_retweet(task_detail):
                 ]
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
 
@@ -784,14 +797,14 @@ def get_reply_retweet(task_detail):
     else:
         return False
 
-    mark = retweet_tweet_func(account_name,password,text,r_mid)
+    mark = retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
 
-    # 保存微博
-    try:
-        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # # 保存微博
+    # try:
+    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
@@ -830,7 +843,7 @@ def get_show_private(task_detail):
                 'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
 
@@ -883,7 +896,7 @@ def get_show_at(task_detail):
                 ]
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
     	
@@ -948,7 +961,7 @@ def get_show_fans(task_detail):
                 ]
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
 
@@ -980,7 +993,7 @@ def get_show_follow(task_detail):
                 ]
             }
         },
-        'sort':{sort_item:{'order':'desc'}},
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
 
@@ -1099,6 +1112,9 @@ def get_direct_search(task_detail):
         if es_results:
             for item in es_results:
                 uid = item['_source']['uid']
+                nick_name,photo_url = uid2nick_name_photo(uid)
+                item['_source']['nick_name'] = nick_name
+                item['_source']['photo_url'] = photo_url
                 weibo_type = judge_follow_type(xnr_user_no,uid)
                 sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
 
@@ -1137,6 +1153,9 @@ def get_direct_search(task_detail):
         else:
             item_else = dict()
             item_else['uid'] = uid
+            nick_name,photo_url = uid2nick_name_photo(uid)
+            item_else['nick_name'] = nick_name
+            item_else['photo_url'] = photo_url
             weibo_type = judge_follow_type(xnr_user_no,uid)
             sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
             item_else['weibo_type'] = weibo_type
@@ -1424,6 +1443,9 @@ def get_related_recommendation(task_detail):
         if es_results:
             for item in es_results:
                 uid = item['_source']['uid']
+                nick_name,photo_url = uid2nick_name_photo(uid)
+                item['_source']['nick_name'] = nick_name
+                item['_source']['photo_url'] = photo_url
                 weibo_type = judge_follow_type(xnr_user_no,uid)
                 sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
 
@@ -1484,6 +1506,9 @@ def get_related_recommendation(task_detail):
         else:
             item_else = dict()
             item_else['uid'] = uid
+            nick_name,photo_url = uid2nick_name_photo(uid)
+            item_else['nick_name'] = nick_name
+            item_else['photo_url'] = photo_url
             weibo_type = judge_follow_type(xnr_user_no,uid)
             sensor_mark = judge_sensing_sensor(xnr_user_no,uid)
             item_else['weibo_type'] = weibo_type
@@ -1858,13 +1883,19 @@ def get_show_trace_followers(xnr_user_no):
 
     # results = es_user_profile.search(index=profile_index_name,doc_type=profile_index_type,\
     #                 body=query_body)['hits']['hits']
-
-    mget_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+    if trace_follow_list:
+        mget_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
                             body={'ids':trace_follow_list})['docs']
-    print 'mget_results::',mget_results
-    for result in mget_results:
-        if result['found']:
-            weibo_user_info.append(result['_source'])
+        print 'mget_results::',mget_results
+        for result in mget_results:
+            if result['found']:
+                weibo_user_info.append(result['_source'])
+            else:
+                uid = result['_id']
+
+                weibo_user_info.append({'uid':uid,'statusnum':0,'fansnum':0,'friendsnum':0,'photo_url':'','sex':'','nick_name':'','user_location':''})
+    else:
+        weibo_user_info = []
 
     return weibo_user_info
 
