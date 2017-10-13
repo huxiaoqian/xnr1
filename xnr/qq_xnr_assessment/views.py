@@ -25,7 +25,7 @@ def ajax_influence_mark():
 
 # 影响力评估 -- 今日
 @mod.route('/influence_qq_today/')
-def ajax_influence_mark():
+def ajax_influence_mark_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
 
 	results = get_influence_at_num_today(xnr_user_no)
@@ -46,7 +46,7 @@ def ajax_penetration_qq():
 
 # 渗透力评估 -- 今日
 @mod.route('/penetration_qq_today/') 
-def ajax_penetration_qq():
+def ajax_penetration_qq_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
 
 	results = get_penetration_qq_today(xnr_user_no)
@@ -67,7 +67,7 @@ def ajax_safe_qq():
 
 # 安全性评估 -- 今日
 @mod.route('/safe_qq_today/')
-def ajax_safe_qq():
+def ajax_safe_qq_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
 
 	results = get_safe_qq_today(xnr_user_no)

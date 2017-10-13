@@ -34,11 +34,13 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID
 
 def get_influence_total_trend(xnr_user_no):
 
-    query_body = {
-        'query':{
-            
-        }
-    }
+    fans_dict = get_influ_fans_num(xnr_user_no)
+    retweet_dict = get_influ_retweeted_num(xnr_user_no)
+    comment_dict = get_influ_commented_num(xnr_user_no)
+    like_dict = get_influ_like_num(xnr_user_no)
+    at_dict = get_influ_at_num(xnr_user_no)
+    private_dict = get_influ_private_num(xnr_user_no)
+
     total_dict = {}
     total_dict['total_trend'] = {}
     total_dict['day_num'] = {}
@@ -102,7 +104,7 @@ def get_influ_fans_num(xnr_user_no):
     # else:
     #     current_time = int(time.time())
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-7')
+        current_time = datetime2ts('2017-10-07')
     else:
         current_time = int(time.time())
     
@@ -703,7 +705,7 @@ def compute_penetration_num(xnr_user_no):
     return pene_mark
 
 
-def penetration_total(xnr_user_no,start_time,end_time):
+def penetration_total(xnr_user_no):
     
     total_dict = {}
     total_dict['follow_group'] = {}
@@ -712,14 +714,34 @@ def penetration_total(xnr_user_no,start_time,end_time):
     total_dict['self_info'] = {}
     total_dict['warning_report_total'] = {}
 
-    query_body = {
-        'query':{
-            'term':{
-                'range':{'gte':start_time,'lt':end_time}
-            }
-        },
-        'size':MAX_SEARCH_SIZE
-    }
+    follow_group = get_pene_follow_group_sensitive(xnr_user_no)
+    fans_group = get_pene_fans_group_sensitive(xnr_user_no)
+    self_info = get_pene_infor_sensitive(xnr_user_no)
+    
+    feedback_at = get_pene_feedback_sensitive(xnr_user_no,'be_at')
+    feedback_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet')
+    feedback_commet = get_pene_feedback_sensitive(xnr_user_no,'be_comment')
+
+    feedback_total = {}
+    feedback_total['sensitive_info'] = {}
+
+    for timestamp in feedback_at['sensitive_info']:
+        feedback_total['sensitive_info'][timestamp] = float(feedback_at['sensitive_info'][timestamp] + \
+            feedback_retweet['sensitive_info'][timestamp] + feedback_commet['sensitive_info'][timestamp])/3
+    
+    warning_report = get_pene_warning_report_sensitive(xnr_user_no)
+
+    warning_report_total = {}
+
+    for timestamp in warning_report['event']:
+        warning_report_total[timestamp] = round(float(warning_report['event'][timestamp] + \
+            warning_report['user'][timestamp] + warning_report['tweet'][timestamp])/3,2)
+
+    # total_dict['follow_group'] = round(follow_group['sensitive_info'],2)
+    # total_dict['fans_group'] = round(fans_group['sensitive_info'],2)
+    # total_dict['self_info'] = round(self_info['sensitive_info'],2)
+    # total_dict['warning_report_total'] = round(warning_report_total,2)
+    # total_dict['feedback_total'] = round(feedback_total['sensitive_info'],2)
 
     total_dict['follow_group'] = follow_group['sensitive_info']
     total_dict['fans_group'] = fans_group['sensitive_info']
@@ -729,6 +751,389 @@ def penetration_total(xnr_user_no,start_time,end_time):
 
     return total_dict
 
+def get_pene_follow_group_sensitive(xnr_user_no):
+
+    if xnr_user_no:
+        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no)["_source"]
+        followers_list = es_results['followers_list']
+
+    
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE_BCI)
+    else:
+        current_time = time.time()
+    
+    current_date = ts2datetime(current_time)
+    current_time_new = datetime2ts(current_date)
+
+    #current_time_new_8 = current_time_new - 8*DAY # 统计8天，计算增长率要用
+    #current_date_new_8 = ts2datetime(current_time_new_8)
+
+    index_name_list = get_flow_text_index_list(current_time_new)
+    #index_name_8 = flow_text_index_name_pre + current_date_new_8
+    #index_name_list.append(index_name_8)
+
+    follow_group_sensitive = {}
+    follow_group_sensitive['sensitive_info'] = {}
+    #follow_group_sensitive['sensitive_user'] = {}
+
+    for index_name in index_name_list:
+        datetime = index_name[-10:]
+        timestamp = datetime2ts(datetime)
+        query_body_info = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'uid':followers_list}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+        es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+            body=query_body_info)['aggregations']
+        sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
+        print 'followers_list:::',followers_list
+        print 'es_sensitive_result::',es_sensitive_result
+        if sensitive_value == None:
+            sensitive_value = 0.0
+        follow_group_sensitive['sensitive_info'][timestamp] = sensitive_value
+
+    return follow_group_sensitive
+
+def get_pene_fans_group_sensitive(xnr_user_no):
+
+    if xnr_user_no:
+        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                                id=xnr_user_no)["_source"]
+        fans_list = es_results['fans_list']
+
+    
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE_BCI)
+    else:
+        current_time = time.time()
+    
+    current_date = ts2datetime(current_time)
+    current_time_new = datetime2ts(current_date)
+    index_name_list = get_flow_text_index_list(current_time_new)
+
+    fans_group_sensitive = {}
+    fans_group_sensitive['sensitive_info'] = {}
+
+    for index_name in index_name_list:
+        datetime = index_name[-10:]
+        timestamp = datetime2ts(datetime)
+        query_body_info = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'uid':fans_list}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+        es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+            body=query_body_info)['aggregations']
+        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+
+        if sensitive_value == None:
+            sensitive_value = 0.0
+        fans_group_sensitive['sensitive_info'][timestamp] = sensitive_value
+
+    return fans_group_sensitive
+
+def get_pene_infor_sensitive(xnr_user_no):
+    
+    uid = xnr_user_no2uid(xnr_user_no)
+
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE_BCI)
+        uid = S_UID
+    else:
+        current_time = time.time()
+    
+    current_date = ts2datetime(current_time)
+    current_time_new = datetime2ts(current_date)
+    index_name_list = get_flow_text_index_list(current_time_new)
+
+    my_info_sensitive = {}
+    my_info_sensitive['sensitive_info'] = {}
+
+    for index_name in index_name_list:
+        datetime = index_name[-10:]
+        timestamp = datetime2ts(datetime)
+        query_body_info = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'term':{'uid':uid}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+        es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+            body=query_body_info)['aggregations']
+        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+        print 'sensitive_value::',sensitive_value
+        if sensitive_value == None:
+            sensitive_value = 0.0
+        my_info_sensitive['sensitive_info'][timestamp] = sensitive_value
+
+    return my_info_sensitive
+
+def get_pene_feedback_sensitive(xnr_user_no,sort_item):
+    
+    uid = xnr_user_no2uid(xnr_user_no)
+
+    if sort_item == 'be_at':
+        index_name_sort = weibo_feedback_at_index_name
+        index_type_sort = weibo_feedback_at_index_type
+    elif sort_item == 'be_retweet':
+        index_name_sort = weibo_feedback_retweet_index_name
+        index_type_sort = weibo_feedback_retweet_index_type
+    elif sort_item == 'be_comment':
+        index_name_sort = weibo_feedback_comment_index_name
+        index_type_sort = weibo_feedback_comment_index_type
+
+    if S_TYPE == 'test':
+        current_time = int(time.time())
+        current_time_test = datetime2ts(S_DATE_BCI)
+    else:
+        current_time = int(time.time())
+        current_time_test = current_time
+    #current_time = int(time.time())
+    current_date = ts2datetime(current_time)
+    current_time_new = datetime2ts(current_date)
+    
+    current_date_test = ts2datetime(current_time_test)
+    current_time_new_test = datetime2ts(current_date_test)
+
+    feedback_sensitive_dict = {}
+    feedback_sensitive_dict['sensitive_info'] = {}
+    for i in range(WEEK): # WEEK=7
+        start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
+        end_ts = current_time_new - i*DAY 
+        if S_TYPE == 'test':
+            start_ts_test = current_time_new_test - (i+1)*DAY
+        else:
+            start_ts_test = start_ts
+
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {'term':{'root_uid':uid}},
+                        {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    ]
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive_info'
+                    }
+                }
+            }
+        }
+
+        es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
+
+        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+
+        if sensitive_value == None:
+            sensitive_value = 0.0
+        feedback_sensitive_dict['sensitive_info'][start_ts_test] = sensitive_value
+
+    return feedback_sensitive_dict
+
+def get_pene_warning_report_sensitive(xnr_user_no):
+
+    sensitive_report_dict = {}
+    sensitive_report_dict['event'] = {}
+    sensitive_report_dict['user'] = {}
+    sensitive_report_dict['tweet'] = {}
+
+    report_type_list = [u'人物',u'事件',u'言论']
+    
+
+    # if S_TYPE == 'test':
+    #     es_time_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+    #                     body={'query':{'match_all':{}},'sort':{'report_time':{'order':'desc'}}})['hits']['hits']
+
+    #     current_time = es_time_result[0]['_source']['report_time']
+    # else:
+    #     current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE)
+    else:
+        current_time = time.time()
+
+    current_date = ts2datetime(current_time)
+    current_time_new = datetime2ts(current_date)
+
+    for i in range(WEEK): # WEEK=7
+        start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
+        end_ts = current_time_new - i*DAY
+
+        mid_event_list = []
+        mid_tweet_list = []
+        uid_list = []
+
+        for report_type in report_type_list:
+            query_body = {
+                'query':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no}},
+                            {'term':{'report_type':report_type}},
+                            {'range':{'report_time':{'gte':start_ts,'lt':end_ts}}}
+                        ]
+                    }
+                },
+                'size':MAX_SEARCH_SIZE
+                
+            }
+
+            es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+                body=query_body)['hits']['hits']
+
+            if es_sensitive_result:    
+                if report_type == u'事件':
+                    for result in es_sensitive_result:
+                        result = result['_source']
+                        report_content = json.loads(result['report_content'])
+                        weibo_list = report_content['weibo_list']
+                        for weibo in weibo_list:
+                            mid_event_list.append(weibo['mid'])
+                elif report_type == u'人物':
+                    for result in es_sensitive_result:
+                        result = result['_source']
+                        report_content = json.loads(result['report_content'])
+                        user_list = report_content['user_list']
+                        for user in user_list:
+                            uid_list.append(user['uid'])
+                elif report_type == u'言论':
+                    for result in es_sensitive_result:
+                        result = result['_source']
+                        report_content = json.loads(result['report_content'])
+                        weibo_list = report_content['weibo_list']
+                        for weibo in weibo_list:
+                            mid_tweet_list.append(weibo['mid'])
+
+        ## 事件平均敏感度
+        query_body_event = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'mid':mid_event_list}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+
+        if S_TYPE == 'test':
+            current_time = datetime2ts(S_DATE)
+        index_name_list = get_flow_text_index_list(current_time)
+
+        es_result_event = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+            body=query_body_event)['aggregations']
+        event_sensitive_avg = es_result_event['avg_sensitive']['value']
+
+        if event_sensitive_avg == None:
+            event_sensitive_avg = 0.0
+
+        ## 人物平均敏感度
+        query_body_user = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'uid':uid_list}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+
+        es_result_user = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,\
+            body=query_body_user)['aggregations']
+        user_sensitive_avg = es_result_user['avg_sensitive']['value']
+
+        if user_sensitive_avg == None:
+            user_sensitive_avg = 0.0
+
+        ## 言论平均敏感度
+        query_body_tweet = {
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'terms':{'mid':mid_tweet_list}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive'
+                    }
+                }
+            }
+        }
+
+        if S_TYPE == 'test':
+            current_time = datetime2ts(S_DATE)
+        index_name_list = get_flow_text_index_list(current_time)
+
+        es_result_tweet = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+            body=query_body_tweet)['aggregations']
+        tweet_sensitive_avg = es_result_tweet['avg_sensitive']['value']
+        if tweet_sensitive_avg == None:
+            tweet_sensitive_avg = 0.0
+
+        if S_TYPE == 'test':
+            event_sensitive_avg = round(random.random(),2)
+            user_sensitive_avg = round(random.random(),2)
+            tweet_sensitive_avg = round(random.random(),2)
+        print 'tweet_sensitive_avg:::',tweet_sensitive_avg
+        sensitive_report_dict['event'][start_ts] = event_sensitive_avg
+        sensitive_report_dict['user'][start_ts] = user_sensitive_avg
+        sensitive_report_dict['tweet'][start_ts] = tweet_sensitive_avg
+
+    return sensitive_report_dict
 
 def compute_safe_num(xnr_user_no):
     
@@ -824,4 +1229,294 @@ def get_tweets_distribute(xnr_user_no):
     for index_name_day in index_name_list:
 
         query_body = {
- 
+            'query':{
+                'bool':{
+                    'must':[
+                        
+                        {'term':{'xnr_user_no':xnr_user_no}}
+                    ]
+                }
+            },
+            'size':TOP_WEIBOS_LIMIT,
+            'sort':{'timestamp':{'order':'desc'}}
+        }
+        try:
+            es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            for topic_result in es_results:
+                #print 'topic_result::',topic_result
+                topic_result = topic_result['_source']
+                topic_field = topic_result['topic_field_first'][:3]
+            topic_string.append(topic_field)
+
+        except:
+            continue
+
+    topic_xnr_count = Counter(topic_string)
+    #print 'topic_xnr_count:::',topic_xnr_count
+    #except:
+        #topic_xnr_count = {}
+        
+    # 整理雷达图数据
+    # if topic_xnr_count:
+    #     for topic, value in topic_xnr_count.iteritems():
+    #         try:
+    #             topic_value = float(value)/(topic_list_followers_count[topic])
+    #         except:
+    #             continue
+    #         topic_distribute_dict['radar'][topic] = topic_value
+    if topic_xnr_count:
+        for topic, value in topic_list_followers_count.iteritems():
+            topic_xnr_count[topic] = min([topic_xnr_count[topic],value])
+            try:
+                topic_value = round(float(topic_xnr_count[topic])/value,2)
+            except:
+                continue
+            topic_distribute_dict['radar'][topic] = topic_value
+            
+    # 整理仪表盘数据
+    mark = 0
+    
+    if topic_xnr_count:
+        n_topic = len(topic_list_followers_count.keys())
+        for topic,value in topic_xnr_count.iteritems():
+
+            try:
+                mark += float(value)/(topic_list_followers_count[topic]*n_topic)
+                print topic 
+                print mark
+            except:
+                continue
+    print 'mark::',mark
+    topic_distribute_dict['mark'] = round(mark,4)
+
+    return topic_distribute_dict
+
+
+def get_safe_tweets(xnr_user_no,topic,sort_item):
+
+    # if S_TYPE == 'test':
+
+    #     current_time = datetime2ts(S_DATE)
+    #     index_name_list = get_flow_text_index_list(current_time)
+    #     query_body = {
+    #         'query':{
+    #             'match_all':{}
+    #         },
+    #         'size':TOP_WEIBOS_LIMIT,
+    #         'sort':{sort_item:{'order':'desc'}}
+    #     }
+
+    #     es_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+    
+    # else:
+    if S_TYPE == 'test':
+        current_time = 1507362127  # 10月7日
+
+    else:
+        current_time = int(time.time())
+
+    index_name_list = get_xnr_flow_text_index_list(current_time)
+    es_results_all = []
+    
+    for index_name_day in index_name_list:
+
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {'term':{'topic_field_first':topic}},
+                        {'term':{'xnr_user_no':xnr_user_no}}
+                    ]
+                }
+            },
+            'size':TOP_WEIBOS_LIMIT,
+            'sort':{sort_item:{'order':'desc'}}
+        }
+        try:
+            es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            es_results_all.extend(es_results)
+
+        except:
+            continue
+
+    
+    results_all = []
+    for result in es_results_all:
+        result = result['_source']
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
+
+def get_follow_group_distribute(xnr_user_no):
+    
+    domain_distribute_dict = {}
+    domain_distribute_dict['radar'] = {}
+
+    # if S_TYPE == 'test':
+    #     followers_list=PORTRAIT_UID_LIST
+    #     followers_list_today = FOLLOWERS_TODAY
+    # else:
+    # 获取所有关注者
+    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)["_source"]
+    followers_list = es_results['followers_list']
+
+    # 获取今日关注者
+    if S_TYPE == 'test':
+        current_time = datetime2ts('2017-10-02')  # 10月7日
+
+    else:
+        current_time = int(time.time())
+    current_date = ts2datetime(current_time)
+    r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
+    followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
+    print 'followers_results::',followers_results
+    if followers_results != None:
+        followers_list_today = json.loads(followers_results)
+    else:
+        followers_list_today = []
+
+    # 所有关注者领域分布
+
+    results = es.mget(index=user_domain_index_name,doc_type=user_domain_index_type,\
+        body={'ids':followers_list})['docs']
+    
+    domain_list_followers = []
+
+    for result in results:
+        if result['found'] == True:
+            result = result['_source']
+            domain_name = result['domain_name']
+            domain_list_followers.append(domain_name)
+
+    domain_list_followers_count = Counter(domain_list_followers)
+
+    #domain_distribute_dict['domain_follower'] = domain_list_followers_count
+    
+    # 今日关注者
+    #followers_list_today = FOLLOWERS_TODAY
+    try:
+        today_results = es.mget(index=user_domain_index_name,doc_type=user_domain_index_type,\
+            body={'ids':followers_list_today})['docs']
+        #print 'today_results:::',today_results
+        domain_list_followers_today = []
+
+        for result in today_results:
+            if result['found'] == True:
+                result = result['_source']
+                domain_name = result['domain_name']
+                domain_list_followers_today.append(domain_name)
+
+        domain_list_followers_today_count = Counter(domain_list_followers_today)
+
+    except:
+        domain_list_followers_today_count = {}
+
+
+    # 整理雷达图数据
+    # if domain_list_followers_today_count:
+    #     for domain, value in domain_list_followers_today_count.iteritems():
+    #         try:
+    #             domain_value = float(value)/(domain_list_followers_count[domain])
+    #         except:
+    #             continue
+    #         domain_distribute_dict['radar'][domain] = domain_value
+
+    
+    for domain, value in domain_list_followers_count.iteritems():
+        
+        if domain_list_followers_today_count:
+            try:
+            
+                domain_value = round(float(domain_list_followers_today_count[domain])/value,2)
+            except:
+                domain_value = 0
+        else:
+            domain_value = 0
+            # try:
+            #     domain_value = float(domain_list_followers_today_count[domain])/value
+            # except:
+            #     continue
+        domain_value = min([domain_value,value])
+        domain_distribute_dict['radar'][domain] = domain_value
+
+    # 整理仪表盘数据
+    mark = 0
+
+    if domain_list_followers_today_count:
+        n_domain = len(domain_list_followers_count.keys())
+        for domain,value in domain_list_followers_today_count.iteritems():
+            try:
+                mark += float(value)/(domain_list_followers_count[domain]*n_domain)
+            except:
+                continue
+    domain_distribute_dict['mark'] = round(mark,4)
+
+    return domain_distribute_dict
+
+def get_follow_group_tweets(xnr_user_no,domain,sort_item):
+
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE)
+    else:
+        current_time = int(time.time())
+
+    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)["_source"]
+    followers_list = es_results['followers_list']
+
+    domain_query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'terms':{'uid':followers_list}},
+                    {'term':{'domain_name':domain}}
+                ]
+            }
+        }
+    }
+
+    domain_search_results = es.search(index=user_domain_index_name,\
+        doc_type=user_domain_index_type,body=domain_query_body)['hits']['hits']
+
+    domain_uid_list = []
+
+    for domain_result in domain_search_results:
+        domain_result = domain_result['_source']
+        domain_uid_list.append(domain_result['uid'])
+
+    results_all = []
+
+    index_name_list = get_flow_text_index_list(current_time)
+
+    query_body_flow_text = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'terms':{'uid':domain_uid_list}},
+                    {'terms':{'message_type':[1,3]}}
+                ]
+            }
+        },
+        'size':TOP_WEIBOS_LIMIT,
+        'sort':{sort_item:{'order':'desc'}}
+    }
+
+    flow_text_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+                        body=query_body_flow_text)['hits']['hits']
+
+    results_all = []
+    for result in flow_text_results:
+        result = result['_source']
+        uid = result['uid']
+        nick_name,photo_url = uid2nick_name_photo(uid)
+        result['nick_name'] = nick_name
+        result['photo_url'] = photo_url
+        results_all.append(result)
+    return results_all
+
+
+
