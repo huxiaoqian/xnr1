@@ -1,8 +1,151 @@
+var end_time=Date.parse(new Date())/1000;
+var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+public_ajax.call_request('get',historyTotal_url,historyTotal);
+function historyTotal(dataTable) {
+    var data=[dataTable[0]];
+    $('#history p').show();
+    $('#history').bootstrapTable('load', data);
+    $('#history').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 3,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "名称",//标题
+                field: "date_time",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.date_time==''||row.date_time=='null'||row.date_time=='unknown'||!row.date_time){
+                        return '未知';
+                    }else {
+                        return row.date_time;
+                    };
+                }
+            },
+            {
+                title: "总粉丝数",//标题
+                field: "user_fansnum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "总发帖量",//标题
+                field: "total_post_sum",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "日常发帖",//标题
+                field: "daily_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "热点跟随",//标题
+                field: "hot_follower_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "业务发帖",//标题
+                field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "影响力",//标题
+                field: "influence",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "渗透力",//标题
+                field: "penetration",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "安全性",//标题
+                field: "safe",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+        ],
+    });
+    $('#history p').slideUp(700);
+};
+$('.choosetime .demo-label input').on('click',function () {
+    var _val=$(this).val();
+    if (_val=='mize'){
+        $('#start_1').show();
+        $('#end_1').show();
+        $('.sureTime').show();
+    }else {
+        $('#start_1').hide();
+        $('#end_1').hide();
+        $('.sureTime').hide();
+        var startTime='';
+        if (_val==0){
+            startTime=todayTimetamp();
+        }else {
+            startTime=getDaysBefore(_val);
+        }
+        his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
+        public_ajax.call_request('get',his_timing_task_url, window[task]);
+    }
+});
+$('.sureTime').on('click',function () {
+    var s=$('#start_1').val();
+    var d=$('#end_1').val();
+    if (s==''||d==''){
+        $('#successfail p').text('时间不能为空。');
+        $('#successfail').modal('show');
+    }else {
+        var start =(Date.parse(new Date(s))/1000);
+        var end = (Date.parse(new Date(d))/1000);
+
+        public_ajax.call_request('get',his_timing_task_url,window[task]);
+    }
+});
+//==============
 var end=Date.parse(new Date())/1000;
 var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=safe';
 public_ajax.call_request('get',safe_7day_url,safe_7day);
 function safe_7day(data) {
+    $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     $.each(data,function (index,item) {
         nearTime.push(item['date_time'][0]);
@@ -12,7 +155,7 @@ function safe_7day(data) {
     var option = {
         backgroundColor:'transparent',
         title : {
-            text: '安全性一周变化趋势图',
+            text: '安全性变化趋势图',
             left: 'center'
         },
         tooltip: {
@@ -61,6 +204,7 @@ function safe_7day(data) {
         ]
     };
     myChart.setOption(option);
+    $('#near_7_day p').slideUp(700);
 };
 var scoreUrl='/weibo_xnr_assessment/safe_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
@@ -102,6 +246,7 @@ $('#container .type_page #myTabs li').on('click',function () {
 //--活跃安全性
 function safe(data) {
     //total_num、day_num、growth_rate
+    $('#safeContent p').show();
     if (isEmptyObject(data)){
         $('#safeContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
@@ -163,6 +308,7 @@ function safe(data) {
         };
         myChart.setOption(option);
     }
+    $('#safeContent p').slideUp(700);
 };
 // 雷达图
 function radar(data) {

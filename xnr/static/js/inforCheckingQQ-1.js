@@ -3,6 +3,7 @@ var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
     var news=data.hits.hits;
+    console.log(news)
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
         data:news,
@@ -39,7 +40,12 @@ function senNews(data) {
                     if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row._source.text;
+                        var keyword=row._source.sensitive_words_string.split('&');
+                        var s=row._source.text;
+                        for (var f=0;f<keyword.length;f++){
+                            s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+                        }
+                        txt=s;
                     };
                     var str=
                         '<div class="everySpeak">'+
@@ -167,10 +173,16 @@ function senUser(data) {
             var txt=row.text,str='';
             if (txt.length!=0||txt){
                 $.each(txt,function (index,item) {
+                    var keyword=item[2].split('&');
+                    var s=item[0];
+                    for (var f=0;f<keyword.length;f++){
+                        s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+                    }
+
                     str+=
                         '<div class="center_rel" style="margin-bottom: 10px;">'+
                         '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
-                        '   <a class="center_1 qq-2" href="###" style="color:blanchedalmond;font-weight: 700;">'+item[0]+'</a>'+
+                        '   <a class="center_1 qq-2" href="###" style="font-weight: 700;color: white;">'+s+'</a>'+
                         '   <b class="qq-1" style="display: none;">'+item[1]+'</b>'+
                         '   <span class="joinWord" onclick="joinWord(this)" tp="user">上报</span>'+
                         '</div>';
