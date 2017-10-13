@@ -3,6 +3,7 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/safe.css">
 <style>
+    .datetimepicker td, .datetimepicker th {color: black;}
     #container .type_page #myTabs a {
         color: white;
     }
@@ -60,7 +61,8 @@
     .history .table>thead>tr>th {border-top: none!important;}
     .history .bootstrap-table .table>thead>tr>th {width: 8%!important;}
     .history .bootstrap-table .table:not(.table-condensed) {padding:0!important;}
-    #start_1,#end_1,.sureTime{display: none!important;}
+    #start_1,#end_1,.sureTime{display: none;position: relative;
+        top: -5px;left: 5px;}
     .sureTime {
         padding:1px 6px;
         color: white;
@@ -80,7 +82,7 @@
 <div id="container">
     <div class="choosetime" style="margin: 10px 0;">
         <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time1" value='0' checked>
+            <input class="demo-radio" type="radio" name="time1" value='0'>
             <span class="demo-checkbox demo-radioInput"></span> 今天
         </label>
         <label class="demo-label">
@@ -88,7 +90,7 @@
             <span class="demo-checkbox demo-radioInput"></span> 昨天
         </label>
         <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time1" value='7'>
+            <input class="demo-radio" type="radio" name="time1" value='7' checked>
             <span class="demo-checkbox demo-radioInput"></span> 7天
         </label>
         <label class="demo-label">

@@ -1,6 +1,5 @@
 function has_table_QQ(has_data_QQ) {
     let sourcePER=eval(has_data_QQ);
-    console.log(sourcePER)
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,

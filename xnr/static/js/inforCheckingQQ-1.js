@@ -3,7 +3,6 @@ var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
     var news=data.hits.hits;
-    console.log(news)
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
         data:news,
@@ -72,7 +71,6 @@ function senNews(data) {
 var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
-    console.log(data)
     $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
         data:data,

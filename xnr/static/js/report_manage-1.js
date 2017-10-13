@@ -38,7 +38,16 @@ function reportDefaul(data) {
                         if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                             text='暂无内容';
                         }else {
-                            text=item.text;
+                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                var s=item.text;
+                                var keywords=item.sensitive_words_string.split('&');
+                                for (var f=0;f<keywords.length;f++){
+                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                }
+                                text=s;
+                            }else {
+                                text=item.text;
+                            };
                         };
                         if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
                             time='未知';
