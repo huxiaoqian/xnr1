@@ -19,9 +19,11 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
                         weibo_xnr_index_name,weibo_xnr_index_type,weibo_report_management_index_name,\
                         weibo_report_management_index_type,weibo_xnr_fans_followers_index_name,\
                         weibo_xnr_fans_followers_index_type,weibo_hot_keyword_task_index_name,\
-                        weibo_hot_keyword_task_index_type,index_sensing,type_sensing
-from utils import save_to_fans_follow_ES
-
+                        weibo_hot_keyword_task_index_type,index_sensing,type_sensing,\
+                        xnr_flow_text_index_name_pre,xnr_flow_text_index_type
+from utils import save_to_fans_follow_ES,xnr_user_no2uid
+from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
+from time_utils import ts2datetime
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
     
@@ -117,26 +119,33 @@ def newest_time_func(uid):
         timestamp_private, timestamp_comment_receive, timestamp_comment_make
 
 ## 发布微博
-def publish_tweet_func(account_name,password,text,p_url,rank,rankid):
-    print 'account_name::',account_name
-    print 'password:::',password
+def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no):
+    
     xnr = SinaLauncher(account_name,password)
     xnr.login()
     user = SinaOperateAPI(xnr.uid)
     user.text = text
     user.rank = rank
-    print 'p_url::',p_url
+    
     new_p_url = user.request_image_url(p_url)
-    print 'new_p_url::',new_p_url
+    
     user.pic_ids = ' '.join(new_p_url)
     user.rankid = rankid
     #print 'user.pic_ids::',user.pic_ids
     mark = user.publish()
 
+    # 保存微博
+    if mark:
+        try:
+            save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+        except:
+            print '保存微博过程遇到错误！'
+            save_mark = False
+
     return mark
 
 ## 转发微博
-def retweet_tweet_func(account_name,password,text,r_mid):
+def retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -144,6 +153,14 @@ def retweet_tweet_func(account_name,password,text,r_mid):
     user.text = text
     user.r_mid = r_mid
     mark = user.retweet()
+
+    # 保存微博
+    if mark:
+        try:
+            save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+        except:
+            print '保存微博过程遇到错误！'
+            save_mark = False
     
     return mark
 
@@ -161,7 +178,7 @@ def reply_tweet_func(account_name,password,text,r_mid,mid,uid):
     return mark
 
 ## 评论微博
-def comment_tweet_func(account_name,password,text,r_mid):
+def comment_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no):
 
     xnr = SinaLauncher(account_name,password)
     xnr.login()
@@ -170,6 +187,14 @@ def comment_tweet_func(account_name,password,text,r_mid):
     user.r_mid = r_mid
     mark = user.comment()
     #mark = user.receive()
+
+    # 保存微博
+    if mark:
+        try:
+            save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+        except:
+            print '保存微博过程遇到错误！'
+            save_mark = False
 
     return mark
 
@@ -260,6 +285,38 @@ def getUserShow(uid=None, screen_name=None):
     except Exception, e:
         print "download page error!!! ", e
         return 'error'
+
+
+def save_to_xnr_flow_text(tweet_type,xnr_user_no,text):
+    current_time = int(time.time())
+    current_date = ts2datetime(current_time)
+    xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
+
+    item_detail = {}
+    item_detail['uid'] = xnr_user_no2uid(xnr_user_no)
+    item_detail['xnr_user_no'] = xnr_user_no
+    item_detail['text'] = text
+    item_detail['task_source'] = tweet_type
+    #item_detail['topic_field'] = ''
+    item_detail['mid'] = ''
+    task_id = xnr_user_no + '_' + str(current_time)
+    
+    #classify_results = topic_classfiy(classify_mid_list, classify_text_dict)
+
+    try:
+        print 'xnr_flow_text_index_name:::',xnr_flow_text_index_name
+        result = weibo_xnr_flow_text_mappings(xnr_flow_text_index_name)
+        print 'result::',result
+        index_result = es.index(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,\
+                id=task_id,body=item_detail)
+        print 'index_result:::',index_result
+        mark = True
+
+    except:
+        mark = False
+
+    return mark
+
 
 if __name__ == '__main__':
 
