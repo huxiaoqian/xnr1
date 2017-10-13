@@ -26,13 +26,16 @@ if ($one){
     roleName=$one.role_name;
     inModalData($one);
 }
-var goUSER=JSON.parse(localStorage.getItem('goONuser'));
-if (goUSER){
-    inModalData(goUSER);
-}
+console.log(domainName)
+console.log(roleName)
+// var goUSER=JSON.parse(localStorage.getItem('goONuser'));
+// if (goUSER){
+//     inModalData(goUSER);
+// }
 //模板导入
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
+    console.log(data)
     modalAllData=data;
     var tt=data.domains||data.domain_name;
     domainName=tt;roleName=data.role_name||data.roleName;
@@ -44,17 +47,17 @@ function inModalData(data) {
     var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
     public_ajax.call_request('get',creat_url_2,creat_2);
     $$political_side=data.political_side;
-    if(data.psy_feature.toString().indexOf('&')==-1){
-        $$psy_feature=data.psy_feature.split(',');
-    }else {
+    if(data.psy_feature.indexOf('&')>0){
         $$psy_feature=data.psy_feature.split('&');
+    }else {
+        $$psy_feature=data.psy_feature.split(',');
     }
 
     var bus=data.business_goal.toString().indexOf('&')==-1?data.business_goal.split(',|，'):data.business_goal.split('&');
     for (var f of bus){
         $(".build-4 input[name='demo66'][type='checkbox'][value='"+f+"']").attr("checked",true);
     }
-    var day=data.daily_interests.split('&');
+    var day=data.daily_interests.toString().indexOf('&')==-1?data.daily_interests.split(',|，'):data.daily_interests.split('&');;
     for (var f of day){
         $(".build-5 input[name='demo6'][type='checkbox'][value='"+f+"']").attr("checked",true);
     }
@@ -170,6 +173,7 @@ function labelSTR(data,name,radioCheckbox='radio') {
 // &psy_feature=积极，中立，悲伤&political_side=中立&business_goal=扩大影响，渗透&monitor_keywords=维权，律师&daily_interests=旅游，美食
 var daily='';
 $('.nextButton').on('click',function () {
+    domainName=$('.field input:radio[name="demo1"]:checked').val();
     var psyFeature=[],dailyInterests=[],politicalSide='',business=[];
     $(".opt-3 input[type=checkbox]:checkbox:checked").each(function (index,item) {
         psyFeature.push($(this).val());
@@ -205,6 +209,7 @@ $('.nextButton').on('click',function () {
             'business_goal':businessGoal,
             'monitor_keywords':monitorKeywords,
         };
+        console.log(first)
         localStorage.setItem('firstStep',JSON.stringify(first));
         //public_ajax.call_request('get',saveFirst_url,in_second);
         window.open('/registered/virtualCreated/');

@@ -20,7 +20,8 @@ from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                         user_domain_index_name,user_domain_index_type,\
-                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
+                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
+                        xnr_flow_text_index_name_pre,xnr_flow_text_index_type
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -236,9 +237,11 @@ def get_influ_fans_num(xnr_user_no,current_time):
         datetime_total = 0
     else:
         datetime_total = len(json.loads(fans_uid_list))
-
-    fans_dict['day_num'] = datetime_count
-    fans_dict['total_num'] = datetime_total
+    fans_dict['day_num'] = {}
+    fans_dict['total_num'] = {}
+    fans_dict['growth_rate'] = {}
+    fans_dict['day_num'][current_time_new] = datetime_count
+    fans_dict['total_num'][current_time_new] = datetime_total
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -248,7 +251,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
     if not fans_total_num_last:
         fans_total_num_last = 1
 
-    fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
+    fans_dict['growth_rate'][current_time_new] = round(float(datetime_count)/fans_total_num_last,2)
 
     #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
 
@@ -322,8 +325,12 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     else:
         return 'es_total_count_found_error'
 
-    retweet_dict['day_num'] = es_day_count
-    retweet_dict['total_num'] = es_total_count
+    retweet_dict['day_num'] = {}
+    retweet_dict['total_num'] = {}
+    retweet_dict['growth_rate'] = {}
+
+    retweet_dict['day_num'][current_time_new] = es_day_count
+    retweet_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -334,7 +341,7 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     if not retweet_total_num_last:
         retweet_total_num_last = 1
 
-    retweet_dict['growth_rate'] = round(float(es_day_count)/retweet_total_num_last,2)
+    retweet_dict['growth_rate'][current_time_new] = round(float(es_day_count)/retweet_total_num_last,2)
 
     
     return retweet_dict
@@ -413,8 +420,12 @@ def get_influ_commented_num(xnr_user_no,current_time):
     else:
         return 'es_total_count_found_error'
 
-    comment_dict['day_num'] = es_day_count
-    comment_dict['total_num'] = es_total_count
+    comment_dict['day_num'] = {}
+    comment_dict['total_num'] = {}
+    comment_dict['growth_rate'] = {}
+
+    comment_dict['day_num'][current_time_new] = es_day_count
+    comment_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -425,7 +436,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
     if not comment_total_num_last:
         comment_total_num_last = 1
 
-    comment_dict['growth_rate'] = round(float(es_day_count)/comment_total_num_last,2)
+    comment_dict['growth_rate'][current_time_new] = round(float(es_day_count)/comment_total_num_last,2)
 
     return comment_dict
 
@@ -501,8 +512,13 @@ def get_influ_like_num(xnr_user_no,current_time):
     else:
         return 'es_total_count_found_error'
 
-    like_dict['day_num'] = es_day_count
-    like_dict['total_num'] = es_total_count
+    like_dict['day_num'] = {}
+    like_dict['total_num'] = {}
+    like_dict['growth_rate'] = {}
+
+
+    like_dict['day_num'][current_time_new] = es_day_count
+    like_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -513,7 +529,7 @@ def get_influ_like_num(xnr_user_no,current_time):
     if not like_total_num_last:
         like_total_num_last = 1
 
-    like_dict['growth_rate'] = round(float(es_day_count)/like_total_num_last,2)
+    like_dict['growth_rate'][current_time_new] = round(float(es_day_count)/like_total_num_last,2)
 
     return like_dict
 
@@ -588,8 +604,12 @@ def get_influ_at_num(xnr_user_no,current_time):
     else:
         return 'es_total_count_found_error'
 
-    at_dict['day_num'] = es_day_count
-    at_dict['total_num'] = es_total_count
+    at_dict['day_num'] = {}
+    at_dict['total_num'] = {}
+    at_dict['growth_rate'] = {}
+
+    at_dict['day_num'][current_time_new] = es_day_count
+    at_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -600,7 +620,7 @@ def get_influ_at_num(xnr_user_no,current_time):
     if not at_total_num_last:
         at_total_num_last = 1
 
-    at_dict['growth_rate'] = round(float(es_day_count)/at_total_num_last,2)
+    at_dict['growth_rate'][current_time_new] = round(float(es_day_count)/at_total_num_last,2)
 
 
     return at_dict
@@ -680,8 +700,12 @@ def get_influ_private_num(xnr_user_no,current_time):
     else:
         return 'es_total_count_found_error'
 
-    private_dict['day_num'] = es_day_count
-    private_dict['total_num'] = es_total_count
+    private_dict['day_num'] = {}
+    private_dict['total_num'] = {}
+    private_dict['growth_rate'] = {}
+    
+    private_dict['day_num'][current_time_new] = es_day_count
+    private_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -692,7 +716,7 @@ def get_influ_private_num(xnr_user_no,current_time):
     if not private_total_num_last:
         private_total_num_last = 1
 
-    private_dict['growth_rate'] = round(float(es_day_count)/private_total_num_last,2)
+    private_dict['growth_rate'][current_time_new] = round(float(es_day_count)/private_total_num_last,2)
 
     return private_dict
 
@@ -792,6 +816,7 @@ def penetration_total_today(xnr_user_no):
 
     total_dict = {}
 
+    current_time = int(time.time())
 
     follow_group = get_pene_follow_group_sensitive(xnr_user_no,current_time)
     fans_group = get_pene_fans_group_sensitive(xnr_user_no,current_time)
@@ -802,6 +827,11 @@ def penetration_total_today(xnr_user_no):
     feedback_commet = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)
 
     feedback_total = {}
+    total_dict['follow_group'] = {}
+    total_dict['fans_group'] = {}
+    total_dict['self_info'] = {}
+    total_dict['warning_report_total'] = {}
+    total_dict['feedback_total'] = {}
     #feedback_total['sensitive_info'] = {}
 
     #for timestamp in feedback_at['sensitive_info']:
@@ -819,11 +849,11 @@ def penetration_total_today(xnr_user_no):
     # total_dict['warning_report_total'] = round(warning_report_total,2)
     # total_dict['feedback_total'] = round(feedback_total['sensitive_info'],2)
 
-    total_dict['follow_group'] = follow_group['sensitive_info']
-    total_dict['fans_group'] = fans_group['sensitive_info']
-    total_dict['self_info'] = self_info['sensitive_info']
-    total_dict['warning_report_total'] = warning_report_total
-    total_dict['feedback_total'] = feedback_total['sensitive_info']
+    total_dict['follow_group'][current_time] = follow_group['sensitive_info']
+    total_dict['fans_group'][current_time] = fans_group['sensitive_info']
+    total_dict['self_info'][current_time] = self_info['sensitive_info']
+    total_dict['warning_report_total'][current_time] = warning_report_total
+    total_dict['feedback_total'][current_time] = feedback_total['sensitive_info']
 
     return total_dict
 
@@ -1269,17 +1299,17 @@ def get_safe_active_today(xnr_user_no):
         }
     }
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-11')
-    else:
-        current_time = int(time.time())
-
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts('2017-10-11')
+    # else:
+    #     current_time = int(time.time())
+    current_time = int(time.time()-3*DAY)
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
     xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
 
-    search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+    search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
 
     safe_active_dict = {}
 

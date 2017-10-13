@@ -116,14 +116,28 @@ $('.choosetime .demo-label input').on('click',function () {
         $('#start_1').hide();
         $('#end_1').hide();
         $('.sureTime').hide();
-        var startTime='';
+        var startTime='',today='',startTime_2,midURL='safe_active',lastURL='';
         if (_val==0){
             startTime=todayTimetamp();
+            startTime_2=0;
+            today='today';
+            midURL='safe_active_today';
         }else {
             startTime=getDaysBefore(_val);
+            startTime_2=getDaysBefore(_val);
+            lastURL='&start_time='+startTime+'&end_time='+end_time+'&assess_type=safe';
         }
-        his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
-        public_ajax.call_request('get',his_timing_task_url, window[task]);
+        //表格
+        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
+            '&start_time='+startTime_2+'&end_time='+end_time;
+        public_ajax.call_request('get',historyTotal_url,historyTotal);
+        //曲线图 1
+        var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+            '&start_time='+startTime+'&end_time='+end_time+'&assess_type=safe';
+        public_ajax.call_request('get',safe_7day_url,safe_7day);
+        //曲线图 2
+        var safe_url='/weibo_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
+        public_ajax.call_request('get',safe_url,safe);
     }
 });
 $('.sureTime').on('click',function () {
@@ -135,8 +149,18 @@ $('.sureTime').on('click',function () {
     }else {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
-
-        public_ajax.call_request('get',his_timing_task_url,window[task]);
+        //表格
+        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
+            '&start_time='+start+'&end_time='+end;
+        public_ajax.call_request('get',historyTotal_url,historyTotal);
+        //曲线图 1
+        var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+            '&start_time='+start+'&end_time='+end+'&assess_type=safe';
+        public_ajax.call_request('get',safe_7day_url,safe_7day);
+        //曲线图 2
+        var safe_url='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
+            '&start_time='+start+'&end_time='+end+'&assess_type=safe';
+        public_ajax.call_request('get',safe_url,safe);
     }
 });
 //==============
@@ -211,7 +235,8 @@ public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
     $('.title .tit-2 .score').text(data);
 }
-var defaultUrl='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num;
+var defaultUrl='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=safe';
 public_ajax.call_request('get',defaultUrl,safe);
 var t;
 $('#container .type_page #myTabs li').on('click',function () {
@@ -396,7 +421,6 @@ $('.pc-4 input').on('click',function () {
     public_ajax.call_request('get',the_url,weiboData)
 });
 function weiboData(data) {
-    console.log(data)
     $('#postRelease').bootstrapTable('load', data);
     $('#postRelease').bootstrapTable({
         data:data,

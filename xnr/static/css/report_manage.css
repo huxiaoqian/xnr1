@@ -15,7 +15,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -56,7 +56,7 @@ body {
 #container .post_center-every {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background:rgba(16, 33, 51, 0.42);
+    /*background:#06162d;*/
     margin-bottom: 5px;
     text-align: left;
 }

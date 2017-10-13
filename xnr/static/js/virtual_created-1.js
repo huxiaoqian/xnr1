@@ -5,10 +5,9 @@ setTimeout(function () {
             $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
         public_ajax.call_request('GET',recommendURL,recommendTwo);
     }
-},800)
-
-
+},2000)
 function recommendTwo(data) {
+    console.log(data)
     var name,age,sex,location,career,description;
     if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
     if (data.age){age=data.age}else {age='无年龄推荐'}
@@ -218,7 +217,7 @@ function in_three(data) {
     if (data||data[0]){
         localStorage.setItem('secondStep',JSON.stringify(second));
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
-        window.open('/registered/socialAccounts/');
+        window.location.href='/registered/socialAccounts/';
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
