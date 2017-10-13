@@ -38,7 +38,16 @@ function reportDefaul(data) {
                         if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                             text='暂无内容';
                         }else {
-                            text=item.text;
+                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                var s=item.text;
+                                var keywords=item.sensitive_words_string.split('&');
+                                for (var f=0;f<keywords.length;f++){
+                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                }
+                                text=s;
+                            }else {
+                                text=item.text;
+                            };
                         };
                         if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
                             time='未知';
@@ -51,7 +60,7 @@ function reportDefaul(data) {
                             sye_2='color: yellow';
                         }
                         str+=
-                            '<div class="center_rel" style="margin-top: 10px;">'+
+                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
                             '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                             // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                             '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
@@ -214,7 +223,6 @@ function postYES(data) {
 }
 //导出excel
 $('#output1').click(function(){
-    console.log(currentData)
     var all=[];
     for (var k in currentData){
         var name='',time='',type='',user='',uid='',txt='';

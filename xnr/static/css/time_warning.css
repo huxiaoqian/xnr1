@@ -9,7 +9,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -55,8 +55,8 @@ body {
 #container .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
-    margin-bottom: 10px;
+    /*background: #06162d;*/
+    /*margin-bottom: 10px;*/
 }
 #container .post_perfect .time {
     display: inline-block;
@@ -77,7 +77,8 @@ body {
 #container .everySpeak .speak_center {
     position: relative;
     /*padding: 10px;*/
-    /*background:rgba(8,23,44,0.35);*/
+    background:#06162d;
+    margin-bottom: 10px;
 }
 #container .everySpeak .speak_center .center_icon {
     /*position: absolute;*/
@@ -89,7 +90,7 @@ body {
 #container .everySpeak .speak_center .center_rel {
     position: relative;
     padding:10px 20px;
-    background: rgba(16, 33, 51, 0.42);
+    /*background: rgba(16, 33, 51, 0.42);*/
 }
 #container .everySpeak .speak_center .center_1 {
     color: #00bcd4;

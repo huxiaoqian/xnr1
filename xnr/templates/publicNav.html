@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/public_nav.css">
+    <style>
+        #choosePerson .demo-label{width: auto!important;}
+    </style>
     {% endblock %}
     <!-- css结束 -->
 
@@ -173,11 +176,11 @@
                             <span>二、请先选择QQ的显示模式</span>
                             <div class="showType" style="padding: 10px 25px;">
                                 <label class="demo-label">
-                                    <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                    <input class="demo-radio" type="radio" name="choose_2" value='隐身'>
                                     <span class="demo-checkbox demo-radioInput"></span> 隐身
                                 </label>
                                 <label class="demo-label">
-                                    <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                    <input class="demo-radio" type="radio" name="choose_2" value='昵称可见'>
                                     <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                                 </label>
                             </div>
@@ -214,6 +217,8 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
+    //登录用户名
+    var admin='admin@qq.com';
     var loginType=localStorage.getItem('loginType');
     //
     if(loginType=='QQ'){
@@ -230,10 +235,10 @@
 
         L_nav.mouseover(function () {
             $(this).find("#LL").stop().slideDown(200);
-        })
+        });
         L_nav.mouseleave(function(){
             $(this).find("#LL").stop().slideUp(200);
-        })
+        });
         //页面跳转
         var htmlUrl='';
         $('#control').on('click',function () {
@@ -274,7 +279,7 @@
                     }
                     str+=
                         '<label class="demo-label" title="'+name+'">'+
-                        '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
+                        '   <input class="demo-radio" type="radio" name="ID_2" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
                         '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
                         '</label>';
                 });
@@ -283,10 +288,10 @@
         });
         //选择虚拟人确定进入
         $('#choosePerson_2 .sure_in').on('click',function () {
-            var userQQID=$('#choosePerson_2 input:radio[name="ID"]:checked').attr('valueID');
-            var userQQName=$('#choosePerson_2 input:radio[name="ID"]:checked').attr('valueName');
-            var userQQnum=$('#choosePerson_2 input:radio[name="ID"]:checked').attr('valueNum');
-            var userType=$('#choosePerson_2 input:radio[name="choose"]:checked').val();
+            var userQQID=$('#choosePerson_2 input:radio[name="ID_2"]:checked').attr('valueID');
+            var userQQName=$('#choosePerson_2 input:radio[name="ID_2"]:checked').attr('valueName');
+            var userQQnum=$('#choosePerson_2 input:radio[name="ID_2"]:checked').attr('valueNum');
+            var userType=$('#choosePerson_2 input:radio[name="choose_2"]:checked').val();
             if (!userQQID||!userQQName||!userType){
                 $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
                 $('#pormpt').modal('show');
@@ -500,8 +505,7 @@
             });
         },
     };
-    //登录用户名
-    var admin='admin@qq.com';
+    
     //登录虚拟人后取出ID或者名字
     var ID_Num,REL_name,ID_name,userQQnum,nowUser;
     function weiboORqq(type) {

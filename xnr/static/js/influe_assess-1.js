@@ -116,14 +116,16 @@ $('.choosetime .demo-label input').on('click',function () {
         $('#start_1').hide();
         $('#end_1').hide();
         $('.sureTime').hide();
-        var startTime='',today='',startTime_2;
+        var startTime='',today='',startTime_2,midURL='influence_total',lastURL='';
         if (_val==0){
             startTime=todayTimetamp();
             startTime_2=0;
             today='today';
+            midURL='influence_total_today';
         }else {
             startTime=getDaysBefore(_val);
             startTime_2=getDaysBefore(_val);
+            lastURL='&start_time='+startTime+'&end_time='+end_time+'&assess_type=influence';
         }
         //表格
         var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
@@ -134,8 +136,7 @@ $('.choosetime .demo-label input').on('click',function () {
             '&start_time='+startTime+'&end_time='+end_time+'&assess_type=influence';
         public_ajax.call_request('get',influe_7day_url,influe_7day);
         //曲线图 2
-        var influe_url='/weibo_xnr_assessment/influence_total/?xnr_user_no='+ID_Num+
-            '&start_time='+startTime+'&end_time='+end_time+'&assess_type=influence';
+        var influe_url='/weibo_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
         public_ajax.call_request('get',influe_url,influe);
     }
 });
@@ -149,7 +150,7 @@ $('.sureTime').on('click',function () {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
+        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
@@ -251,7 +252,8 @@ $('#container .quota .quota-opt .demo-label input').on('click',function () {
         $('#quota-3').hide();
     }
 })
-var influe_url='/weibo_xnr_assessment/influence_total/?xnr_user_no='+ID_Num;
+var influe_url='/weibo_xnr_assessment/influence_total/?xnr_user_no='+ID_Num+
+    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=influence';
 public_ajax.call_request('get',influe_url,influe);
 //总数量
 function publicData(data) {
@@ -266,6 +268,10 @@ var time=[],growLEG=[],
     growthlikeData=[], growthprivateData=[],growthretweetData=[],
     legend2=[],totalAt2=[],totalFans2=[],totalComment2=[],totallike2=[],totalPrivate2=[],totalRetweet2=[];
 function influe(data) {
+    time=[],growLEG=[],
+    growthatData=[],growthfansData=[],growthcommentData=[],
+    growthlikeData=[], growthprivateData=[],growthretweetData=[],
+    legend2=[],totalAt2=[],totalFans2=[],totalComment2=[],totallike2=[],totalPrivate2=[],totalRetweet2=[];
     //total_num、day_num、growth_rate
     //粉丝数   被转发   被评论   被点赞   被@  被私信
     $('#quota-1 p').show();
@@ -437,9 +443,9 @@ function influe(data) {
         total();
         increase();
     }
-    $('#quota-1 p').sildeUp(700);
-    $('#quota-2 p').sildeUp(700);
-    $('#quota-3 p').sildeUp(700);
+    $('#quota-1 p').slideUp(700);
+    $('#quota-2 p').slideUp(700);
+    $('#quota-3 p').slideUp(700);
 }
 //累计值
 function total() {

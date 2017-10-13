@@ -40,8 +40,9 @@ require.config({
     }
 });
 function wordCloud(data) {
-    if (data.length==0){
-       $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'22px'}).text('暂无数据');
+    $('#content-1-word p').show();
+    if (data.length==0||isEmptyObject(data)){
+       $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'24px'}).text('暂无数据');
     }else {
         var wordSeries=[];
         for (var k in data){
@@ -53,16 +54,6 @@ function wordCloud(data) {
                 }
             )
         }
-        // $.each(data,function (index,item) {
-        //     wordSeries.push(
-        //         {
-        //             name: item['key'],
-        //             value: item['doc_count'],
-        //             itemStyle: createRandomItemStyle()
-        //         }
-        //     )
-        // });
-        $('#content-1-word p').show();
         require(
             [
                 'echarts',
@@ -94,9 +85,8 @@ function wordCloud(data) {
                 myChart.setOption(option);
             }
         );
-        $('#content-1-word p').slideUp(700);
     }
-
+    $('#content-1-word p').slideUp(700);
 }
 //热门帖子
 $('#theme-2 .demo-radio').on('click',function () {

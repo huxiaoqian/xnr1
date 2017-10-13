@@ -1,6 +1,7 @@
 var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=influence';
 public_ajax.call_request('get',relatedUrl,related);
 function related(data) {
+    $('#influence p').show();
     $.each(data,function (index,item) {
         detList[item.uid]=item;
     });
@@ -100,6 +101,7 @@ function related(data) {
         ],
     });
     $('.influence .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('#influence p').slideUp(700);
 }
 $('#influence').bootstrapTable('hideColumn', 'sensitive');
 function showHide(_tp$) {
