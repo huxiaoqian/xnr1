@@ -89,6 +89,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
         user = user['_source']
         top_sensitive_uid_list.append(user['uid'])
 
+
     # 计算top敏感用户的微博敏感度均值
     query_body_count = {
         'query':{
