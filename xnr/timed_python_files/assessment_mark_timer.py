@@ -560,7 +560,7 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     #时间
     xnr_user_detail['date_time']=current_date
     try:
-        xnr_result=es_xnr.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+        xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
         #今日总粉丝数
         for item in xnr_result['hits']['hits']:
             xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
@@ -575,6 +575,26 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
             elif item['key'] =='trace_follow_tweet':
                 xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
         #总发帖量
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
+        
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
         xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
     except:
         xnr_user_detail['user_fansnum']=0
@@ -1692,3 +1712,5 @@ if __name__ == '__main__':
 
     #     cron_compute_mark(current_time)
     # bulk_add()
+    current_time=1507737540
+    cron_compute_mark(current_time)
