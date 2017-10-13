@@ -1564,7 +1564,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
 
 # main 函数
-def cron_compute_mark():
+def cron_compute_mark(current_time):
 
     xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
@@ -1576,9 +1576,10 @@ def cron_compute_mark():
         xnr_user_no = result['_source']['xnr_user_no']
         #xnr_user_no = 'WXNR0004'
 
-        current_time = int(time.time()-DAY)
+        # current_time = int(time.time()-DAY)
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
+
         print 'start assessment....'
         influence = compute_influence_num(xnr_user_no,current_time)
         penetration = compute_penetration_num(xnr_user_no,current_time)
@@ -1650,7 +1651,44 @@ def cron_compute_mark():
         return mark
 
 
+def bulk_add():
+    s_re = scan(es, query={'query':{'match_all':{}}, 'size':20},index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type)
+    bulk_action=[]
+    count=0
+    while  True:
+        try:
+            scan_re=s_re.next()
+            _id=scan_re['_id']
+            update_dict = {'fans_total_num':0,'fans_day_num':0,'fans_growth_rate':0,\
+                        'retweet_total_num':0,'retweet_day_num':0,'retweet_growth_rate':0,\
+                        'comment_total_num':0,'comment_day_num':0,'comment_growth_rate':0,\
+                        'like_total_num':0,'like_day_num':0,'like_growth_rate':0,\
+                        'at_total_num':0,'at_day_num':0,'at_growth_rate':0,\
+                        'private_total_num':0,'private_day_num':0,'private_growth_rate':0,\
+                        'follow_group_sensitive_info':0,'fans_group_sensitive_info':0,'self_info_sensitive_info':0,\
+                        'warning_report_total_sensitive_info':0,'feedback_total_sensitive_info':0}
+
+            source={'doc':update_dict}
+            action={'update':{'_id':_id}}
+            bulk_action.extend([action,source])
+            count += 1
+            if count % 10 == 0:
+                print 'count:::',count
+                es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
+                bulk_action = []
+
+        except StopIteration:
+            if bulk_action:
+                es.bulk(bulk_action,index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,timeout=100)
+
+            break
+
+
     
 if __name__ == '__main__':
 
-    cron_compute_mark()
+    # for i in range(11,-1,-1):
+    #     current_time = int(time.time()-i*DAY)
+
+    #     cron_compute_mark(current_time)
+    # bulk_add()
