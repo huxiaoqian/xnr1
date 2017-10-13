@@ -68,52 +68,22 @@ function focusOn(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男'}else if (row.sex==2){return '女'}else{return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "关注来源",//标题
+                field: "follow_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.follow_source==''||row.follow_source=='null'||row.follow_source=='unknown'||!row.follow_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "post_time",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.post_time==''||row.post_time=='null'||row.post_time=='unknown'||!row.post_time){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.post_time);
-                    };
-                }
-            },
-            {
-                title: "所在地",//标题
-                field: "user_location",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
-                        return '未知';
-                    }else {
-                        return row.user_location;
+                        return row.follow_source;
                     };
                 }
             },
@@ -219,7 +189,7 @@ function fans(data) {
                 }
             },
             {
-                title: "编号",//标题
+                title: "UID",//标题
                 field: "uid",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -252,37 +222,22 @@ function fans(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男';}else if (row.sex==2){return '女'}else {return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "粉丝来源",//标题
+                field: "fan_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.fan_source==''||row.fan_source=='null'||row.fan_source=='unknown'||!row.fan_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "create_at",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.create_at==''||row.create_at=='null'||row.create_at=='unknown'||!row.create_at){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.create_at);
+                        return row.fan_source;
                     };
                 }
             },
