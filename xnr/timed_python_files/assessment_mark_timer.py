@@ -609,9 +609,15 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
         xnr_user_detail['total_post_sum']=0
         xnr_user_detail['trace_follow_tweet_num']=0
 
-    count_id=xnr_user_no+'_'+current_date
-    xnr_user_detail['xnr_user_no']=xnr_user_no
+    if xnr_user_detail['user_fansnum'] == 0:
+        yesterday_date=ts2datetime(datetime2ts(current_date)-DAY)
+        count_id=xnr_user_no+'_'+yesterday_date
+        xnr_count_result=es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+        xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+    else:
+        pass
 
+    xnr_user_detail['xnr_user_no']=xnr_user_no
     # try:
     #     es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=xnr_user_detail,id=count_id)
     #     mark=xnr_user_detail
@@ -1712,12 +1718,14 @@ def cron_compute_mark(current_time):
     
 if __name__ == '__main__':
 
-    for i in range(12,-1,-1):
-        current_time = int(time.time()-i*DAY)
+ #   for i in range(12,-1,-1):
+#        current_time = int(time.time()-i*DAY)
 
-        print 'date...',ts2datetime(current_time)
+ #       print 'date...',ts2datetime(current_time)
 
 
-        cron_compute_mark(current_time)
+ #       cron_compute_mark(current_time)
     # bulk_add()
+    current_time=1507564740
+    cron_compute_mark(current_time)
 
