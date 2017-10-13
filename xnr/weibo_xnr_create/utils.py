@@ -292,39 +292,43 @@ def get_recommend_step_two(task_detail):
     role_name_en = domain_ch2en_dict[role_name]
     _id = domain_pinyin + '_' + role_name_en
 
-    try:
-        recommend_results = dict()
+    #try:
+    recommend_results = dict()
 
-        ## 根据角色信息
-        es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=_id)['_source']
-        
-        #### 角色实例
-        nick_name_list = []
-        user_location_top_list = []
-        description_list = []
-        sex_list = []
-        #try:
-        role_example_dict = {}
-        member_uids = json.loads(es_result['member_uids'])
-        member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
-                                                body={'ids':member_uids})['docs']
-        count = 0
-        for result in member_uids_results:
-            if result['found'] == True:
-                result = result['_source'] 
-                person_url = 'http://weibo.com/u/'+str(result['uid'])+'/home'
-                nick_name = result['nick_name']
-                nick_name_list.append(nick_name)
-                sex_list.append(result['sex'])
-                description_list.append(result['description'])
-                role_example_dict[result['uid']] = [nick_name,person_url]
-                count += 1
-                if count > NICK_NAME_TOP:
-                    break
+    ## 根据角色信息
+    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=_id)['_source']
+    
+    #### 角色实例
+    nick_name_list = []
+    user_location_top_list = []
+    description_list = []
+    sex_list = []
+    #try:
+    role_example_dict = {}
+    print 'es_result:::',es_result
+    member_uids = json.loads(es_result['member_uids'])
+    member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
+                                            body={'ids':member_uids})['docs']
+    count = 0
+    print 'member_uids_results:::',member_uids_results
+    for result in member_uids_results:
+        if result['found'] == True:
+            result = result['_source'] 
+            person_url = 'http://weibo.com/u/'+str(result['uid'])+'/home'
+            nick_name = result['nick_name']
+            nick_name_list.append(nick_name)
+            print 'result:::',result
+            print 'result_sex:::',result[sex]
+            sex_list.append(result['sex'])
+            description_list.append(result['description'])
+            role_example_dict[result['uid']] = [nick_name,person_url]
+            count += 1
+            if count > NICK_NAME_TOP:
+                break
 
-        recommend_results['role_example'] = role_example_dict
-    except:
-        recommend_results['role_example'] = []
+    recommend_results['role_example'] = role_example_dict
+    # except:
+    #     recommend_results['role_example'] = []
     
     active_time_list_np = np.array(json.loads(es_result['active_time']))
     active_time_list_np_sort = list(np.argsort(-active_time_list_np)[:ACTIVE_TIME_TOP])

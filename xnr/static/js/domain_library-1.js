@@ -52,7 +52,11 @@ $('.addBuild').on('click',function () {
 function successFail(data) {
     var f='操作成功';
     if(!data){f='操作失败'}else {public_ajax.call_request('get',libGroup_url,group)};
-    if (data=='domain name exists!'){f='该领域名称已经存在了，请换一个。'};
+    if ($$new=='0'&&data=='domain name exists!'){
+        f='该领域名称已经存在了，请换一个。';
+    }else {
+        $$new='0';
+    }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
@@ -60,7 +64,6 @@ var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
     var person=eval(data);
-    console.log(person)
     $('#group-2').bootstrapTable('load', person);
     $('#group-2').bootstrapTable({
         data:person,
@@ -252,7 +255,6 @@ function seeDesGroup(name,midUrl_1,midUrl_2) {
     $('.titleMain').text(name);
 }
 function DesGroup_1(data) {
-    console.log(data);
     var desc=data['description'],des='';
     if (desc==''||desc=='null'||desc=='unknown'||!desc){
         des='无描述';
@@ -542,7 +544,9 @@ function groupList(data) {
     // $('.groupDepict_div').show();
 }
 //更新
+var $$new='0';
 function refresh(domainName,description,remark,create_type,word_user) {
+    $$new='1';
     var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?domain_name='+domainName+
         '&description='+description+'&submitter='+admin+'&remark='+remark+
         '&create_type='+create_type+'&'+labType_list[create_type]+'='+word_user;
