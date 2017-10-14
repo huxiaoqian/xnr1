@@ -101,7 +101,7 @@ def show_completed_weiboxnr(account_no,now_time):
 def count_fans_num(xnr_user_no):
     try:
         result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-        followers_list=result['followers_list']
+        followers_list=result['fans_list']
         number=len(followers_list)
     except:
         number=0
@@ -110,7 +110,14 @@ def count_fans_num(xnr_user_no):
 #计算历史发帖量
 def count_history_post_num(xnr_user_no,now_time):
     #获取检索列表
-    weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    temp_weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    weibo_xnr_flow_text_listname=[]
+    for index_name in temp_weibo_xnr_flow_text_listname:
+        if es_xnr.indices.exists(index=index_name):
+            weibo_xnr_flow_text_listname.append(index_name)
+        else:
+            pass
+    #print 'weibo_xnr_flow_text_listname',weibo_xnr_flow_text_listname
     #定义检索规则
     query_body={
         'query':{
@@ -131,7 +138,9 @@ def count_history_post_num(xnr_user_no,now_time):
     try:
         results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
             body=query_body)['aggregations']['history_post_num']['buckets']
-        number=result[0]['doc_count']
+        number=0
+        for item in results:
+            number=item['doc_count']
     except:
         number=0
     return number
@@ -180,7 +189,9 @@ def count_history_comment_num(uid):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'bool':{
+                        'must':[{'term':{'uid':uid}},{'term':{'comment_type':'make'}}]
+                    }
                 }
             }
         },
@@ -198,6 +209,7 @@ def count_history_comment_num(uid):
         number=result[0]['doc_count']
     except:
     	number=0
+    #print 'comment_number',number
     return number
 
 #step 2.2: show uncompleted weibo_xnr information 
@@ -321,7 +333,7 @@ def xnr_cumulative_statistics(xnr_date_info):
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     if xnr_date_info: 
-        print xnr_date_info[0]
+        #print xnr_date_info[0]
         Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
         total_post_sum=0
         daily_post_num=0
@@ -333,7 +345,8 @@ def xnr_cumulative_statistics(xnr_date_info):
         #safe_sum=0
         number=len(xnr_date_info)
         for i in xrange(0,len(xnr_date_info)):
-            total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
+            #print xnr_date_info[i]['date_time']
+            #total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
             daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
             business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
             hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
@@ -343,7 +356,7 @@ def xnr_cumulative_statistics(xnr_date_info):
             #safe_sum=safe_sum+xnr_date_info[i]['safe']
             #print total_post_sum,daily_post_num
 
-        Cumulative_statistics_dict['total_post_sum']=total_post_sum
+        Cumulative_statistics_dict['total_post_sum']=daily_post_num+business_post_num+hot_follower_num+trace_follow_tweet_num
         Cumulative_statistics_dict['daily_post_num']=daily_post_num
         Cumulative_statistics_dict['business_post_num']=business_post_num
         Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
@@ -455,8 +468,11 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
     xnr_assessment_id=xnr_user_no+'_'+yesterday_date
     if xnr_user_detail['user_fansnum'] == 0:
         count_id=xnr_user_no+'_'+yesterday_date
-        xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-        xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        try:
+            xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        except:
+            xnr_user_detail['user_fansnum']=0
     else:
         pass
     try:
@@ -495,7 +511,8 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
                 }
             }
         },
-        'sort':{'timestamp':{'order':'asc'}} 
+        'sort':{'timestamp':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
     }
     
     try:
@@ -512,7 +529,7 @@ def show_history_count(xnr_user_no,date_range):
     if S_TYPE == 'test':
         test_time_gap=date_range['end_time']-date_range['start_time']
         test_datetime_gap=int(test_time_gap/DAY)
-        print 'test_datetime_gap',test_datetime_gap
+        #print 'test_datetime_gap',test_datetime_gap
         date_range['end_time']=XNR_CENTER_DATE_TIME
         if date_range['type'] == 'today':
             date_range['start_time']=datetime2ts(ts2datetime(date_range['end_time']))
@@ -541,7 +558,7 @@ def show_history_count(xnr_user_no,date_range):
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
         
     #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
-    #print xnr_date_info
+    #print 'xnr_date_info',xnr_date_info
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
 
 
@@ -1389,10 +1406,37 @@ def create_xnr_flow_text(task_detail,task_id):
 
 
 def update_weibo_count(task_detail,task_id):
-    result=es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body=task_detail)
+    #result=es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body=task_detail)
+    result=es_xnr.update(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body={"doc":{'user_fansnum':task_detail['user_fansnum']}})
+    return result
+
+def delete_weibo_count(task_id):
+    result=es_xnr.delete(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id)
     return result
 
 
 def create_send_like(task_detail,task_id):
     result=es_xnr.index(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,id=task_id,body=task_detail)
     return result
+
+
+def delete_receive_like():
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':{'range':{'timestamp':{'gte':0,'lte':1506787140}}}
+                    }
+                }
+            }
+        }    
+    }
+    id_result=es_xnr.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
+    result_list=[]
+    for item in id_result:
+        t_id=item['_id']
+        result=es_xnr.delete(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,id=t_id)
+        result_list.append(result)
+
+    return result_list

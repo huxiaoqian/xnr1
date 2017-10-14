@@ -15,7 +15,7 @@ from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohis
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
                   delete_history_count,create_history_count,lookup_xnr_assess_info,\
                   get_xnr_detail,\
-                  create_xnr_flow_text,update_weibo_count,create_send_like
+                  create_xnr_flow_text,update_weibo_count,create_send_like,delete_weibo_count,delete_receive_like
 from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
@@ -392,21 +392,28 @@ def ajax_create_xnr_flow_text():
 
 @mod.route('/update_weibo_count/')
 def ajax_update_weibo_count():
-    task_id='WXNR0004_2017-10-01'
+    task_id='WXNR0004_2017-10-14'
     task_detail=dict()
-    task_detail['date_time']='2017-10-01'
-    task_detail['safe']=19.22
-    task_detail['daily_post_num']=1
-    task_detail['user_fansnum']=8
-    task_detail['business_post_num']=0
-    task_detail['timestamp']=1506787200
-    task_detail['xnr_user_no']='WXNR0004'
-    task_detail['influence']=1.04
-    task_detail['penetration']=21.69
-    task_detail['total_post_sum']=1
-    task_detail['hot_follower_num']=0
+    #task_detail['date_time']='2017-10-01'
+    #task_detail['safe']=19.22
+    #task_detail['daily_post_num']=1
+    task_detail['user_fansnum']=11
+    #task_detail['business_post_num']=0
+    #task_detail['timestamp']=1506787200
+    #task_detail['xnr_user_no']='WXNR0004'
+    #task_detail['influence']=1.04
+    #task_detail['penetration']=21.69
+    #task_detail['total_post_sum']=1
+    #task_detail['hot_follower_num']=0
     results=update_weibo_count(task_detail,task_id)
     return json.dumps(results)
+
+
+@mod.route('/delete_weibo_count/')
+def ajax_delete_weibo_count():
+	task_id=request.args.get('task_id','')
+	results=delete_weibo_count(task_id)
+	return json.dumps(results)
 
 
 @mod.route('/create_send_like/')
@@ -436,4 +443,11 @@ def ajax_create_send_like():
 	task_detail['root_mid']=''
 	task_detail['photo_url']=''
 	results=create_send_like(task_detail,task_id)
+	return json.dumps(results)
+
+
+
+@mod.route('/delete_receive_like/')
+def ajax_delete_receive_like():
+	results=delete_receive_like()
 	return json.dumps(results)
