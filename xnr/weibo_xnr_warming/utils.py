@@ -600,8 +600,8 @@ def report_warming_content(report_info,user_info,weibo_info):
             weibo_dict['retweeted']=weibo_detail[3]
             weibo_dict['like']=weibo_detail[4]
             weibo_dict['comment']=weibo_detail[5]
-            #weibo_dict['sensitive']=weibo_detail[6]
-            #weibo_dict['sensitive_words_string']=weibo_detail[7]
+            weibo_dict['sensitive']=weibo_detail[6]
+            weibo_dict['sensitive_words_string']=weibo_detail[7]
             weibo_list.append(weibo_dict)
 
     report_content=dict()
