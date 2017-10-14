@@ -177,7 +177,13 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         index_name=flow_text_index_name_pre+ts2datetime(from_date_ts)
         xnr_flow_text_index_name_list.append(index_name)
 
-    #print 'flow_text_index_name_list:', xnr_flow_text_index_name_list
+    print 'flow_text_index_name_list:', xnr_flow_text_index_name_list
+    flow_text_index_name_list=[]
+    for index_name in xnr_flow_text_index_name_list:
+        if es_flow_text.indices.exists(index=index_name):
+            flow_text_index_name_list.append(index_name)
+        else:
+            pass
 
     if order_id==1:         #按时间排序
         sort_condition_list=[{'timestamp':{'order':'desc'}}]         
@@ -190,13 +196,13 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
 
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
     #全部用户 0，已关注用户 1，未关注用户-1
-    range_time_list={'range':{'timestamp':{'gte':from_ts,'lt':to_ts}}}
+    range_time_list={'range':{'timestamp':{'gte':int(from_ts),'lt':int(to_ts)}}}
 
     user_condition_list=[]
     if classify_id == 1:
         user_condition_list=[{'bool':{'must':[{'terms':{'uid':userslist}},range_time_list]}}]
     elif classify_id == 2:
-        user_condition_list=[{'bool':{'must_not':{'terms':{'uid':userslist}}},'must':range_time_list}]
+        user_condition_list=[{'bool':{'must':[range_time_list],'must_not':[{'terms':{'uid':userslist}}]}}]
     elif classify_id == 0:
         user_condition_list=[{'match_all':{}}]
 
@@ -228,7 +234,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     else:
     '''
     try:
-        es_result=es_flow_text.search(index=xnr_flow_text_index_name_list,doc_type=xnr_flow_text_index_type,\
+        es_result=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
             body=query_body)['hits']['hits']
         hot_result=[]
         for item in es_result:
@@ -510,10 +516,10 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     if classify_id == 1:      #concrenedusers
         condition_list=[{'bool':{'must':{'terms':{'uid':userlist}}}}]
     elif classify_id == 2:    #unconcrenedusers
-        condition_list=[{'bool':{'must_not':{'terms':{'uid':userlist}}}}] 
+        condition_list=[{'bool':{'must_not':[{'terms':{'uid':userlist}}]}}] 
     elif classify_id == 0:
         condition_list=[{'match_all':{}}]
-    #print userlist,classify_id,condition_list
+    print userlist,classify_id,condition_list
 
     #step 2:lookup users 
     user_max_index=count_maxweibouser_influence(end_time)
