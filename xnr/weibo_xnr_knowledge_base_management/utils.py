@@ -288,7 +288,7 @@ def get_show_domain_group_summary(submitter):
         for result in es_result:
             item = {}
             result = result['_source']
-            print 'result::',result
+            # print 'result::',result
             item['group_size'] = result['group_size']
             item['domain_name'] = result['domain_name']
             item['create_time'] = result['create_time']
@@ -580,7 +580,7 @@ def show_date_remind_condition(create_type):
         'sort':{'create_time':{'order':'desc'}}
     }
     result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-    print result
+    # print result
     results=[]
     for item in result:
         item['_source']['id']=item['_id']

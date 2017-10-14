@@ -116,7 +116,7 @@ function historyTotalLine(data) {
             trigger: 'axis'
         },
         legend: {
-            data:['总粉丝数','总发帖量','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
+            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
             width:'400',
             left:'center'
         },
@@ -163,7 +163,7 @@ function historyTotalLine(data) {
                 }
             },
             {
-                name:'总发帖量',
+                name:'总微博数',
                 type:'line',
                 data:totalPostData,
                 markPoint: {

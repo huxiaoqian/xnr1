@@ -185,14 +185,14 @@ def compute_growth_rate_total(day8_dict,total8_dict):
     total_dict['growth_rate'] = {}
     total_dict['day_num'] = {}
     total_dict['total_num'] = {}
-    print 'day8_dict::',day8_dict
-    print 'total8_dict:::',total8_dict
+    # print 'day8_dict::',day8_dict
+    # print 'total8_dict:::',total8_dict
     for timestamp, num in day8_dict.iteritems():
         total_timestamp = timestamp - DAY
         day_num = day8_dict[timestamp]
         try:
             total_num_lastday = total8_dict[total_timestamp]
-            print 'total_num_lastday:::',total_num_lastday
+            # print 'total_num_lastday:::',total_num_lastday
             if not total_num_lastday:
                 total_num_lastday = 1
             total_dict['growth_rate'][timestamp] = round(float(day_num)/total_num_lastday,2)
@@ -1424,11 +1424,11 @@ def get_tweets_distribute(xnr_user_no):
 
             try:
                 mark += float(value)/(topic_list_followers_count[topic]*n_topic)
-                print topic 
-                print mark
+                # print topic 
+                # print mark
             except:
                 continue
-    print 'mark::',mark
+    # print 'mark::',mark
     topic_distribute_dict['mark'] = round(mark,4)
 
     return topic_distribute_dict
@@ -1515,7 +1515,7 @@ def get_follow_group_distribute(xnr_user_no):
     current_date = ts2datetime(current_time)
     r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
     followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
-    print 'followers_results::',followers_results
+    # print 'followers_results::',followers_results
     if followers_results != None:
         followers_list_today = json.loads(followers_results)
     else:

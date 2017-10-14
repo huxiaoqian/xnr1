@@ -270,3 +270,4 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':[1264080891,1715330060,1082347151]}})
 
+es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
