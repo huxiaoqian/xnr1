@@ -44,7 +44,7 @@ def weibo_report_management_mappings():
 	}
 
 	if not es.indices.exists(index=weibo_report_management_index_name):
-		es.indices.create(index=weibo_report_management_index_name,body=weibo_report_management_index_type,ignore=400)
+		es.indices.create(index=weibo_report_management_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
 	weibo_report_management_mappings()
