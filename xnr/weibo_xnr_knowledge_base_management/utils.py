@@ -13,7 +13,7 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type,weibo_example_model_index_name,\
                             weibo_example_model_index_type,profile_index_name,profile_index_type
-from xnr.time_utils import ts2datetime
+from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
 from xnr.utils import uid2nick_name_photo,judge_sensing_sensor,judge_follow_type,get_influence_relative
@@ -51,7 +51,7 @@ def get_generate_example_model(domain_name,role_name):
 
     es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
     item = es_result
-
+    print 'es_result:::',es_result
     # 政治倾向
     political_side = json.loads(item['political_side'])[0][0]
 
@@ -111,7 +111,7 @@ def get_generate_example_model(domain_name,role_name):
         'query':{
             'filtered':{
                 'filter':{
-                    'terms':{'uid':member_uids}
+                    'terms':{'uid':role_group_uids}
                 }
             }
         },
@@ -123,10 +123,11 @@ def get_generate_example_model(domain_name,role_name):
                         body=query_body_search)['hits']['hits']
 
     keywords_string = ''
-    for mget_item in es_keyword_results:  
-        if mget_item['found']:
-            keywords_string += '&'
-            keywords_string += mget_item['_source']['keywords_string']
+    for mget_item in es_keyword_results:
+        #print 'mget_item:::',mget_item
+        #if mget_item['found']:
+        keywords_string += '&'
+        keywords_string += mget_item['_source']['keywords_string']
     
     k_dict = extract_keywords(keywords_string)
     
@@ -137,11 +138,14 @@ def get_generate_example_model(domain_name,role_name):
 
     item['monitor_keywords'] = ','.join(monitor_keywords_list)
 
-    for mget_item in mget_results:
+    mget_results_user = es_user_portrait.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
+    item['nick_name'] = []
+    for mget_item in mget_results_user:
+        #print 'mget_item:::',mget_item
         if mget_item['found']:
-            item['nick_name'] = mget_item['_source']['uname']
-            item['location'] = mget_item['_source']['location']
-            item['gender'] = mget_item['_source']['gender']
+            item['nick_name'] = mget_item['_source']['nick_name']
+            item['location'] = mget_item['_source']['user_location']
+            item['gender'] = mget_item['_source']['sex']
             uid = mget_item['_source']['uid']
             try:
                 profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
@@ -150,6 +154,7 @@ def get_generate_example_model(domain_name,role_name):
                     break
             except:
                 pass
+
 
     item['business_goal'] = u'渗透'
     item['daily_interests'] = u'旅游'
