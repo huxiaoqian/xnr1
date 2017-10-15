@@ -94,7 +94,7 @@ function historyTotal(data) {
 
 function historyTotalLine(data) {
     var time=[],fansDate=[],totalPostData=[],dailyPost=[],
-        hotData=[],businessData=[],influeData=[],pentData=[],safeData=[];
+        hotData=[],businessData=[],traceData=[],influeData=[],pentData=[],safeData=[];
     $.each(data,function (index,item) {
         time.push(item.date_time);
         fansDate.push(item.user_fansnum)
@@ -102,6 +102,7 @@ function historyTotalLine(data) {
         dailyPost.push(item.daily_post_num)
         hotData.push(item.hot_follower_num)
         businessData.push(item.business_post_num)
+        traceData.push(item.trace_follow_tweet_num)
         influeData.push(item.influence)
         pentData.push(item.penetration)
         safeData.push(item.safe)
@@ -116,7 +117,7 @@ function historyTotalLine(data) {
             trigger: 'axis'
         },
         legend: {
-            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
+            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','跟踪转发','影响力','渗透力','安全性'],
             width:'400',
             left:'center'
         },
@@ -214,6 +215,22 @@ function historyTotalLine(data) {
                 name:'业务发帖',
                 type:'line',
                 data:businessData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'跟踪转发',
+                type:'line',
+                data:traceData,
                 markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
