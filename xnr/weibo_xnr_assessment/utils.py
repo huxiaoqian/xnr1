@@ -185,14 +185,14 @@ def compute_growth_rate_total(day8_dict,total8_dict):
     total_dict['growth_rate'] = {}
     total_dict['day_num'] = {}
     total_dict['total_num'] = {}
-    print 'day8_dict::',day8_dict
-    print 'total8_dict:::',total8_dict
+    # print 'day8_dict::',day8_dict
+    # print 'total8_dict:::',total8_dict
     for timestamp, num in day8_dict.iteritems():
         total_timestamp = timestamp - DAY
         day_num = day8_dict[timestamp]
         try:
             total_num_lastday = total8_dict[total_timestamp]
-            print 'total_num_lastday:::',total_num_lastday
+            # print 'total_num_lastday:::',total_num_lastday
             if not total_num_lastday:
                 total_num_lastday = 1
             total_dict['growth_rate'][timestamp] = round(float(day_num)/total_num_lastday,2)
@@ -1287,7 +1287,7 @@ def get_safe_active(xnr_user_no,start_time,end_time):
     for result in search_results:
         result = result['_source']
         timestamp = result['timestamp']
-        safe_active_dict[timestamp] = result['daily_post_num']
+        safe_active_dict[timestamp] = result['total_post_sum']
     
     return safe_active_dict
 
@@ -1303,22 +1303,24 @@ def get_safe_active_today(xnr_user_no):
     #     current_time = datetime2ts('2017-10-11')
     # else:
     #     current_time = int(time.time())
-    current_time = int(time.time()-3*DAY)
+    current_time = int(time.time())
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
-
+    safe_active_dict = {} 
     xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
+    try:
+        search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
 
-    search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
 
-    safe_active_dict = {}
+        
 
-    if search_result['_shards']['successful'] != 0:
-        result = search_result['count']
-    else:
-        print 'es index rank error'
+        if search_result['_shards']['successful'] != 0:
+            result = search_result['count']
+        else:
+            print 'es index rank error'
+            result = 0
+    except:
         result = 0
-
     safe_active_dict[current_time_new] = result
 
     return safe_active_dict
@@ -1362,12 +1364,17 @@ def get_tweets_distribute(xnr_user_no):
         #     id=uid)['_source']
         # topic_string = xnr_results['topic_string'].split('&')
         # topic_xnr_count = Counter(topic_string)
+    print 'topic_list_followers_count:::',topic_list_followers_count
 
-    current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts('2017-10-08')
+    else:
+        current_time = int(time.time())
+
 
     index_name_list = get_xnr_flow_text_index_list(current_time)
     topic_string = []
-    
+
     for index_name_day in index_name_list:
 
         query_body = {
@@ -1383,7 +1390,10 @@ def get_tweets_distribute(xnr_user_no):
             'sort':{'timestamp':{'order':'desc'}}
         }
         try:
+            #print 'index_name_day:::',index_name_day
+
             es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            #print 'es_results::',es_results
             for topic_result in es_results:
                 #print 'topic_result::',topic_result
                 topic_result = topic_result['_source']
@@ -1406,6 +1416,8 @@ def get_tweets_distribute(xnr_user_no):
     #         except:
     #             continue
     #         topic_distribute_dict['radar'][topic] = topic_value
+    print 'topic_distribute_dict:::',topic_distribute_dict
+    print 'topic_xnr_count:::',topic_xnr_count
     if topic_xnr_count:
         for topic, value in topic_list_followers_count.iteritems():
             topic_xnr_count[topic] = min([topic_xnr_count[topic],value])
@@ -1424,11 +1436,11 @@ def get_tweets_distribute(xnr_user_no):
 
             try:
                 mark += float(value)/(topic_list_followers_count[topic]*n_topic)
-                print topic 
-                print mark
+                # print topic 
+                # print mark
             except:
                 continue
-    print 'mark::',mark
+    # print 'mark::',mark
     topic_distribute_dict['mark'] = round(mark,4)
 
     return topic_distribute_dict
@@ -1515,7 +1527,7 @@ def get_follow_group_distribute(xnr_user_no):
     current_date = ts2datetime(current_time)
     r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
     followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
-    print 'followers_results::',followers_results
+    # print 'followers_results::',followers_results
     if followers_results != None:
         followers_list_today = json.loads(followers_results)
     else:

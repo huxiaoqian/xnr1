@@ -72,7 +72,7 @@
                 <li class="current"><a href="#"><i class="icon-map-marker"></i> <span>微博虚拟人</span></a></li>
                 <li class="divider"></li>
                 <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
-                <li><a href="#"><i class="i"></i> 登出 </a></li>
+                <li><a id="logout"><i class="i"></i> 登出 </a></li>
             </ul>
         </div>
     </div>
@@ -220,7 +220,18 @@
     //登录用户名
     var admin='admin@qq.com';
     var loginType=localStorage.getItem('loginType');
-    //
+    //登出
+    $('#logout').on('click',function () {
+        $.ajax({
+            type: 'GET',
+            url: "/logout/",
+            async: true,
+            dataType: "json",
+            success: function (data) {}
+        });
+    });
+
+
     if(loginType=='QQ'){
         // ---------10-12 LL向下展开盒子js--QQ
         var L_nav = $('.nav_top');

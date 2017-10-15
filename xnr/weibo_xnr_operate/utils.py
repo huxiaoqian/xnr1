@@ -65,8 +65,8 @@ def get_image_path(image_code):
     for image in image_code_list:
         image_new = image.replace(' ','+')
         #print 'image_new:::::',image_new
-        print 'image_new::::',image_new
-        print '123123'
+        #print 'image_new::::',image_new
+        #print '123123'
         imgData = base64.decodestring(image_new)
         #imgData = base64.b64encode(image_new)
         time_name = time.strftime('%Y%m%d%H%M%S')
@@ -76,7 +76,7 @@ def get_image_path(image_code):
         leniyimg.close()
 
         image_path_join = os.path.join(IMAGE_PATH,image_path+'.jpg')
-        print 'image_path_join:::',image_path_join
+        #print 'image_path_join:::',image_path_join
         image_path_list.append(image_path_join)
     
     return image_path_list
@@ -84,7 +84,7 @@ def get_image_path(image_code):
 
 def push_keywords_task(task_detail):
 
-    print 'task_detail::',task_detail
+    #print 'task_detail::',task_detail
 
     try:
         item_dict = {}
@@ -172,7 +172,7 @@ def save_to_tweet_timing_list(task_detail):
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-    print 'es_result:::',es_result
+    #print 'es_result:::',es_result
     if es_result:
         uid = es_result['uid']
         daily_interests = es_result['daily_interests']
@@ -284,8 +284,8 @@ def get_daily_recommend_tweets(theme,sort_item):
     index_name = daily_interest_index_name_pre +'_'+ datetime
 
     #es_results = es_flow_text.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
-    print 'index_name:::',index_name
-    print 'daily_interest_index_type::',daily_interest_index_type
+    #print 'index_name:::',index_name
+    #print 'daily_interest_index_type::',daily_interest_index_type
     theme_en = daily_ch2en[theme]
     es_results = es.get(index=index_name,doc_type=daily_interest_index_type,id=theme_en)['_source']
     content = json.loads(es_results['content'])
@@ -398,8 +398,8 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
     # }
 
     es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
-    print 'topic_field_en:::',topic_field_en
-    print 'es_results::',es_results
+    #print 'topic_field_en:::',topic_field_en
+    #print 'es_results::',es_results
     if not es_results:    
         es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
@@ -568,7 +568,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
 
     es_results_bci = es_user_portrait.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
     #print 'es_results_bci::',es_results_bci
-    print 'index_name::',index_name
+    #print 'index_name::',index_name
     #print ''
     uid_set = set()
 
@@ -591,7 +591,7 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
         'sort':{sort_item_new:{'order':'desc'}},
         'size':USER_POETRAIT_NUMBER
     }
-    print 'query_body:::',query_body
+    #print 'query_body:::',query_body
     es_results_portrait = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,body=query_body)['hits']['hits']
 
     uid_set = set()
@@ -1578,22 +1578,22 @@ def get_create_group(task_detail):
 
 def get_show_group(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
-    print 'uid::',uid
+    # print 'uid::',uid
     query_body = {
         'query':{
             'term':{'uid':uid}
         },
         'size':MAX_SEARCH_SIZE
     }
-    print 'weibo_feedback_group_index_name::',weibo_feedback_group_index_name
-    print 'weibo_feedback_group_index_type::',weibo_feedback_group_index_type
+    # print 'weibo_feedback_group_index_name::',weibo_feedback_group_index_name
+    # print 'weibo_feedback_group_index_type::',weibo_feedback_group_index_type
 
     es_results = es.search(index=weibo_feedback_group_index_name,doc_type=weibo_feedback_group_index_type,body=query_body)['hits']['hits']
-    print 'es_results:::',es_results
+    # print 'es_results:::',es_results
     group_dict = {}
     if es_results:
         for result in es_results:
-            print 'result_keys::',result.keys()
+            # print 'result_keys::',result.keys()
             gid = result['_source']['gid']
             gname = result['_source']['gname']
             group_dict[gid] = gname
@@ -1603,7 +1603,7 @@ def get_show_group(xnr_user_no):
 ## 展示粉丝
 def get_create_group_show_fans(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
-    print 'xnr_user_no:::',xnr_user_no
+    # print 'xnr_user_no:::',xnr_user_no
     es_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
             id=xnr_user_no)['_source']
 
@@ -1817,12 +1817,12 @@ def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
             {'timestamp_set':{'order':'desc'}}
         ]
     }
-    print 'query_body::',query_body
+    
     results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
         doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
 
     result_all = []
-
+    # print 'results:::',results
     for result in results:
         result = result['_source']
         result_all.append(result)
@@ -1848,7 +1848,7 @@ def get_show_retweet_timing_list_future(xnr_user_no):
             {'timestamp_set':{'order':'desc'}}
         ]
     }
-    print 'query_body!!',query_body
+    # print 'query_body!!',query_body
     results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
         doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
 
@@ -1886,7 +1886,7 @@ def get_show_trace_followers(xnr_user_no):
     if trace_follow_list:
         mget_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
                             body={'ids':trace_follow_list})['docs']
-        print 'mget_results::',mget_results
+        # print 'mget_results::',mget_results
         for result in mget_results:
             if result['found']:
                 weibo_user_info.append(result['_source'])
