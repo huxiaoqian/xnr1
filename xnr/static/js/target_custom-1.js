@@ -73,6 +73,7 @@ function inModalData(data) {
     //第二步
     if(!$one){
         var nickName,age,location,sex,career,description;
+
         if (data.nick_name=='unknown'||data.nick_name=='null'||data.nick_name==''||!data.nick_name){nickName='无昵称'}else{nickName=data.nick_name};
         if (data.age=='unknown'||data.age=='null'||data.age==''||!data.age){age=0}else{age=data.age};
         if (data.location=='unknown'||data.location=='null'||data.location==''||!data.location){location='未知'}else{location=data.location};

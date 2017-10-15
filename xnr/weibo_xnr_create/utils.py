@@ -71,9 +71,14 @@ def get_modify_userinfo(task_detail):
     item_dict = {}
     nick_name = task_detail['nick_name']
     location_list = task_detail['location'].encode('utf-8').split('，')
-    print 'location_list:::',location_list
-    item_dict['location_province'] = location_list[0]
-    item_dict['location_city'] = location_list[1]
+    # print 'location_list:::',location_list
+    try:
+        item_dict['location_province'] = location_list[0]
+        item_dict['location_city'] = location_list[1]
+    except:
+        item_dict['location_province'] = location_list[0]
+        item_dict['location_city'] = location_list[0]
+
     item_dict['description'] = task_detail['description']
     gender = task_detail['gender']
     if gender == u'男':
@@ -149,7 +154,7 @@ def get_add_other_info(task_detail):
     password = task_detail['password']
     
     nick_name = str(task_detail['nick_name'])
-    print 'nick_name:', nick_name, type(nick_name)
+    # print 'nick_name:', nick_name, type(nick_name)
     #print 'account_name:',account_name
     #print 'password::',password
     try:
@@ -167,27 +172,20 @@ def get_add_other_info(task_detail):
         return 'nick_name error'
     
     #user = get_userinfo(account_name, password)
-    print 'user:::',user
+    # print 'user:::',user
     item_dict = {}
     
     if user:
-        print 'user::',user
         item_dict['nick_name'] = user['screen_name']
         item_dict['location'] = user['location']
         if user['gender']=='m':
             item_dict['gender'] = u'男'
         elif user['gender']=='f':
             item_dict['gender'] = u'女'
-        #item_dict['gender'] = user['gender']
-        #now_year = int(time.strftime('%Y',time.localtime(time.time())))
-        #age = now_year - int(user['birth'][:4])
-        #item_dict['age'] = age
         item_dict['age'] = '0'
         item_dict['description'] = user['description']
         item_dict['career'] = ''
-    # print 'item_dict:::',item_dict
-    # print 'task_detail:::',task_detail
-    #new_task_detail = union_dict(task_detail,item_dict)
+
     new_task_detail = dict(task_detail,**item_dict)
     
     return new_task_detail
@@ -283,7 +281,7 @@ def get_role2feature_info(domain_name,role_name):
         return []
 
 def get_recommend_step_two(task_detail):
-    print 'task_detail:::',task_detail
+    # print 'task_detail:::',task_detail
     domain_name = task_detail['domain_name']
     role_name = task_detail['role_name']
     daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
@@ -305,20 +303,18 @@ def get_recommend_step_two(task_detail):
     sex_list = []
     #try:
     role_example_dict = {}
-    print 'es_result:::',es_result
+    # print 'es_result:::',es_result
     member_uids = json.loads(es_result['member_uids'])
     member_uids_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,\
                                             body={'ids':member_uids})['docs']
     count = 0
-    print 'member_uids_results:::',member_uids_results
+    # print 'member_uids_results:::',member_uids_results
     for result in member_uids_results:
         if result['found'] == True:
             result = result['_source'] 
             person_url = 'http://weibo.com/u/'+str(result['uid'])+'/home'
             nick_name = result['nick_name']
             nick_name_list.append(nick_name)
-            print 'result:::',result
-            print 'result_sex:::',result[sex]
             sex_list.append(result['sex'])
             description_list.append(result['description'])
             role_example_dict[result['uid']] = [nick_name,person_url]
@@ -386,7 +382,7 @@ def get_recommend_step_two(task_detail):
     #         if result['description']:
     #             description_list.append(result['description'])
     sex_list_count = Counter(sex_list)
-    print 'sex_list_count:::',sex_list_count
+    # print 'sex_list_count:::',sex_list_count
     sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]
   
     # user_location_list_count = Counter(user_location_list)
@@ -506,7 +502,7 @@ def get_recommend_follows(task_detail):
         print '没有找到监测词相符的用户'
         recommend_results['monitor_keywords'] = {}
 
-    print 'recommend_results::',recommend_results
+    # print 'recommend_results::',recommend_results
     return recommend_results
 
 def get_save_step_one(task_detail):
@@ -559,7 +555,7 @@ def get_save_step_two(task_detail):
     #try:    
     #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     item_exist = dict()
-    print 'task_detail::',task_detail
+    # print 'task_detail::',task_detail
     item_exist['submitter'] = task_detail['submitter']
     item_exist['user_no'] = task_detail['user_no']
     item_exist['domain_name'] = task_detail['domain_name']
@@ -595,7 +591,7 @@ def get_save_step_three_1(task_detail):
     #task_id = task_detail['task_id']
     #try:
     #print 'task_detail:::',task_detail
-    print 'nick_name:::',task_detail['nick_name']
+    # print 'nick_name:::',task_detail['nick_name']
     nick_name = task_detail['nick_name'].encode('utf-8')
     operate = SinaOperateAPI()
     user_info = operate.getUserShow(screen_name=nick_name)
@@ -613,7 +609,7 @@ def get_save_step_three_1(task_detail):
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
     #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
     query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
-    print 'query_body:::',query_body
+    # print 'query_body:::',query_body
     es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
     task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
@@ -649,10 +645,10 @@ def get_save_step_three_2(task_detail):
         #followers_list = nickname2uid(followers_nickname_list)
         #print 'followers_list::',followers_list
         followers_uids = list(set(task_detail['followers_uids'].split('，')))
-        print 'followers_uids::',followers_uids
+        # print 'followers_uids::',followers_uids
         item_fans_followers['followers_list'] = followers_uids
         item_fans_followers['xnr_user_no'] = task_id
-        print 'item_fans_followers::',item_fans_followers
+        # print 'item_fans_followers::',item_fans_followers
         es.index(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=task_id,body=item_fans_followers)
         mark = True
     except:        

@@ -196,7 +196,7 @@ def ajax_save_step_three_2():
     task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编码，如：WXNR0001
     task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称
     task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
-    print 'task_detail::',task_detail
+    # print 'task_detail::',task_detail
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
 

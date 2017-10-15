@@ -409,6 +409,7 @@ def create_user_log():
         #print 'operate_date',operate_date,type(operate_date)
         user_account=list(user_account)[0]
         log_id=str(user_account)+'_'+operate_date
+        print log_id
         log_content_dict=dict()
 
         #账户是否创建虚拟人
@@ -546,7 +547,11 @@ def create_user_log():
 
        #写入日志
        #日志ID存在判断
-        mark=es_xnr.update(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,id=log_id,body={'doc':{'operate_content':log_content}})
+        try:
+            es_xnr.update(index=weibo_log_management_index_name,doc_type=weibo_log_management_index_type,id=log_id,body={'doc':{'operate_content':log_content}})
+            mark=True
+        except:
+            mark=False
         mark_list.append(mark)
     return mark_list
 

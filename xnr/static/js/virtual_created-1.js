@@ -7,7 +7,6 @@ setTimeout(function () {
     }
 },2000)
 function recommendTwo(data) {
-    console.log(data)
     var name,age,sex,location,career,description;
     if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
     if (data.age){age=data.age}else {age='无年龄推荐'}
@@ -201,6 +200,7 @@ function values() {
             'monitor_keywords':$('#character7').text(),
         };
         localStorage.setItem('firstStep',JSON.stringify(first));
+        public_ajax.call_request('get',saveSecond_url,modSecondSuccess);
     }else if (go_on==1){
         var a=$('#name').val();
         var b=$('#age').val();
