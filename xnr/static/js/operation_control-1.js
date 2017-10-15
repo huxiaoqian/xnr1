@@ -341,7 +341,7 @@ function historyTotalTable(dataTable) {
                 valign: "middle",//垂直
             },
             {
-                title: "总微博量",//标题
+                title: "总微博数",//标题
                 field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式

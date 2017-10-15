@@ -1287,7 +1287,7 @@ def get_safe_active(xnr_user_no,start_time,end_time):
     for result in search_results:
         result = result['_source']
         timestamp = result['timestamp']
-        safe_active_dict[timestamp] = result['daily_post_num']
+        safe_active_dict[timestamp] = result['total_post_sum']
     
     return safe_active_dict
 
@@ -1303,22 +1303,24 @@ def get_safe_active_today(xnr_user_no):
     #     current_time = datetime2ts('2017-10-11')
     # else:
     #     current_time = int(time.time())
-    current_time = int(time.time()-3*DAY)
+    current_time = int(time.time())
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
-
+    safe_active_dict = {} 
     xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
+    try:
+        search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
 
-    search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
 
-    safe_active_dict = {}
+        
 
-    if search_result['_shards']['successful'] != 0:
-        result = search_result['count']
-    else:
-        print 'es index rank error'
+        if search_result['_shards']['successful'] != 0:
+            result = search_result['count']
+        else:
+            print 'es index rank error'
+            result = 0
+    except:
         result = 0
-
     safe_active_dict[current_time_new] = result
 
     return safe_active_dict
