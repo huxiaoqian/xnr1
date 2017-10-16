@@ -94,7 +94,7 @@ function historyTotal(data) {
 
 function historyTotalLine(data) {
     var time=[],fansDate=[],totalPostData=[],dailyPost=[],
-        hotData=[],businessData=[],influeData=[],pentData=[],safeData=[];
+        hotData=[],businessData=[],traceData=[],influeData=[],pentData=[],safeData=[];
     $.each(data,function (index,item) {
         time.push(item.date_time);
         fansDate.push(item.user_fansnum)
@@ -102,6 +102,7 @@ function historyTotalLine(data) {
         dailyPost.push(item.daily_post_num)
         hotData.push(item.hot_follower_num)
         businessData.push(item.business_post_num)
+        traceData.push(item.trace_follow_tweet_num)
         influeData.push(item.influence)
         pentData.push(item.penetration)
         safeData.push(item.safe)
@@ -116,7 +117,7 @@ function historyTotalLine(data) {
             trigger: 'axis'
         },
         legend: {
-            data:['总粉丝数','总发帖量','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
+            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','跟踪转发','影响力','渗透力','安全性'],
             width:'400',
             left:'center'
         },
@@ -163,7 +164,7 @@ function historyTotalLine(data) {
                 }
             },
             {
-                name:'总发帖量',
+                name:'总微博数',
                 type:'line',
                 data:totalPostData,
                 markPoint: {
@@ -214,6 +215,22 @@ function historyTotalLine(data) {
                 name:'业务发帖',
                 type:'line',
                 data:businessData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'跟踪转发',
+                type:'line',
+                data:traceData,
                 markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
@@ -324,7 +341,7 @@ function historyTotalTable(dataTable) {
                 valign: "middle",//垂直
             },
             {
-                title: "总发帖量",//标题
+                title: "总微博数",//标题
                 field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -350,6 +367,14 @@ function historyTotalTable(dataTable) {
             {
                 title: "业务发帖",//标题
                 field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "跟踪转发",//标题
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -648,7 +673,6 @@ var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Nu
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
-    console.log(data)
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none',C3='';
     // border_1='border-left:1px solid slategrey;border-right:1px solid slategrey;';
     // border_2='border-left:1px solid slategrey;';

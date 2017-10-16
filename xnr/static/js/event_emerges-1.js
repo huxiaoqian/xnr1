@@ -482,10 +482,12 @@ function mainWeibo(_data,idx) {
                         text='暂无内容';
                     }else {
                         if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
-                            var keyword=row.sensitive_words_string.split('&');
-                            for (var f of keyword){
-                                text=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            var keywords=row.sensitive_words_string.split('&');;
+                            var s=row.text;
+                            for (var f=0;f<keywords.length;f++){
+                                s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
+                            text=s;
                         }else {
                             text=row.text;
                         };

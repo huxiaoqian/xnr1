@@ -84,7 +84,7 @@ def get_xnr_flow_text_index_list(date_range_end_ts):
         date_range_start_datetime = ts2datetime(date_range_start_ts)
         index_name = xnr_flow_text_index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
-
+    print 'index_name_list!!!',index_name_list
     return index_name_list
 
 def get_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):

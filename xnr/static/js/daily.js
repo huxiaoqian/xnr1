@@ -1,7 +1,6 @@
 var dailyLOG_Url='/system_manage/show_log_list/';
 public_ajax.call_request('get',dailyLOG_Url,dailyLOG);
 function dailyLOG(data) {
-    console.log(data)
     $('#loglist').bootstrapTable('load', data);
     $('#loglist').bootstrapTable({
         data:data,
@@ -80,17 +79,17 @@ function dailyLOG(data) {
                 }
             },
             {
-                title: "操作时间",//标题
-                field: "operate_time",//键名
+                title: "操作日期",//标题
+                field: "operate_date",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_time==''||row.operate_time=='null'||row.operate_time=='unknown'||!row.operate_time){
-                        return '无内容';
+                    if (row.operate_date==''||row.operate_date=='null'||row.operate_date=='unknown'||!row.operate_date){
+                        return '未知';
                     }else {
-                        return getLocalTime(row.operate_time);
+                        return row.operate_date;
                     };
                 }
             },
