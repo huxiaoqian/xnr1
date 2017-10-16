@@ -18,7 +18,9 @@ QQ_S_DATE_ASSESSMENT = '2017-09-28'
 QQ_GROUP_MESSAGE_START_DATE = '2017-08-23'
 QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-09-28'
 
-XNR_CENTER_DATE_TIME=int(time.time())
+
+XNR_CENTER_DATE_TIME=int(time.time())      #当前时间
+
 
 PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
 
