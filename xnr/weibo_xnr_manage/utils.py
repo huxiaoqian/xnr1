@@ -1419,9 +1419,12 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail,task_id):
-	result=es_xnr.index(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+	result=es_xnr.index(index="xnr_flow_text_2017-10-14",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 	return result
-	
+
+def delete_xnr_flow_text(task_id):
+	result=es_xnr.delete(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id)
+	return result	
 
 
 def update_weibo_count(task_detail,task_id):

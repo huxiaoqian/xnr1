@@ -15,7 +15,7 @@ from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohis
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
                   delete_history_count,create_history_count,lookup_xnr_assess_info,\
                   get_xnr_detail,\
-                  create_xnr_flow_text,update_weibo_count,create_send_like,delete_weibo_count,delete_receive_like
+                  create_xnr_flow_text,update_weibo_count,create_send_like,delete_weibo_count,delete_receive_like,delete_xnr_flow_text
 from xnr.time_utils import datetime2ts
 
 mod = Blueprint('weibo_xnr_manage', __name__, url_prefix='/weibo_xnr_manage')
@@ -352,21 +352,21 @@ def ajax_lookup_xnr_assess_info():
 #http://219.224.134.213:9209/weibo_xnr_manage/create_xnr_flow_text/?task_source=hot_post&xnr_user_no=WXNR0004&uid=6346321407&text=918事件广受关注！&user_fansnum=9&weibos_sum=47&mid=4143645403880320&timestamp=1505685600&comment=1185&sensitive=10&retweeted=1255
 @mod.route('/create_xnr_flow_text/')
 def ajax_create_xnr_flow_text():
-	task_id='WXNR0004_1507730704'
+	task_id='WXNR0004_1507982672'
 	task_detail=dict()
-	task_detail['task_source']='trace_follow_tweet'
+	task_detail['task_source']='business_post'
 	task_detail['xnr_user_no']='WXNR0004'
 	task_detail['uid']='6346321407'
-	task_detail['text']='放过他老人家吧//@传媒老王:今天一整天要在当年毛泽东领导秋收起义的出发地，现在的国家生态县，中国红豆杉之乡铜鼓采风。铜鼓县，位于湘鄂赣三省交界处，是赣西门户。'
+	task_detail['text']='//@老王只为初心:回复@北方斑竹:拜读先生微博，你是义士！关于泛亚和E租宝的处置，很多很好的政策法律都不落实，唯见“非法集资”罩住一切，涉案一切均在罩内，受害百姓隔在罩外，一无所知，一切听天由命，无可奈何！[作揖][握手]'
 	task_detail['picture_url']=''
 	task_detail['vedio_url']=''
-	task_detail['user_fansnum']=10
-	task_detail['weibos_sum']=88
+	task_detail['user_fansnum']=11
+	task_detail['weibos_sum']=91
 	task_detail['mid']=''
 	task_detail['ip']=''
 	task_detail['directed_uid']=''
 	task_detail['directed_uname']=''
-	task_detail['timestamp']=1507730727
+	task_detail['timestamp']=1507982672
 	task_detail['sentiment']=''
 	task_detail['geo']=''
 	task_detail['keywords_dict']=''
@@ -386,13 +386,17 @@ def ajax_create_xnr_flow_text():
 	results=create_xnr_flow_text(task_detail,task_id)
 	return json.dumps(results)
 
-
+@mod.route('/delete_xnr_flow_text/')
+def ajax_delete_xnr_flow_text():
+	task_id=request.args.get('task_id','')
+	results=delete_xnr_flow_text(task_id)
+	return json.dumps(results)
 
 
 
 @mod.route('/update_weibo_count/')
 def ajax_update_weibo_count():
-    task_id='WXNR0004_2017-10-14'
+    task_id='WXNR0004_2017-10-15'
     task_detail=dict()
     #task_detail['date_time']='2017-10-01'
     #task_detail['safe']=19.22
