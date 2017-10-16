@@ -340,9 +340,9 @@ def xnr_cumulative_statistics(xnr_date_info):
         business_post_num=0
         hot_follower_num=0
         trace_follow_tweet_num=0
-        #influence_sum=0
-        #penetration_sum=0
-        #safe_sum=0
+        influence_sum=0
+        penetration_sum=0
+        safe_sum=0
         number=len(xnr_date_info)
         for i in xrange(0,len(xnr_date_info)):
             #print xnr_date_info[i]['date_time']
@@ -351,9 +351,9 @@ def xnr_cumulative_statistics(xnr_date_info):
             business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
             hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
             trace_follow_tweet_num=trace_follow_tweet_num+xnr_date_info[i]['trace_follow_tweet_num']
-            #influence_sum=influence_sum+xnr_date_info[i]['influence']
-            #penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
-            #safe_sum=safe_sum+xnr_date_info[i]['safe']
+            influence_sum=influence_sum+xnr_date_info[i]['influence']
+            penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
+            safe_sum=safe_sum+xnr_date_info[i]['safe']
             #print total_post_sum,daily_post_num
 
         Cumulative_statistics_dict['total_post_sum']=daily_post_num+business_post_num+hot_follower_num+trace_follow_tweet_num
@@ -361,12 +361,12 @@ def xnr_cumulative_statistics(xnr_date_info):
         Cumulative_statistics_dict['business_post_num']=business_post_num
         Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
         Cumulative_statistics_dict['trace_follow_tweet_num']=trace_follow_tweet_num
-        #Cumulative_statistics_dict['influence']=influence_sum/number
-        #Cumulative_statistics_dict['penetration']=penetration_sum/number
-        #Cumulative_statistics_dict['safe']=safe_sum/number
-        Cumulative_statistics_dict['influence']=xnr_date_info[0]['influence']
-        Cumulative_statistics_dict['penetration']=xnr_date_info[0]['penetration']
-        Cumulative_statistics_dict['safe']=xnr_date_info[0]['safe']
+        Cumulative_statistics_dict['influence']=round(influence_sum/number,2)
+        Cumulative_statistics_dict['penetration']=round(penetration_sum/number,2)
+        Cumulative_statistics_dict['safe']=round(safe_sum/number,2)
+        #Cumulative_statistics_dict['influence']=xnr_date_info[0]['influence']
+        #Cumulative_statistics_dict['penetration']=xnr_date_info[0]['penetration']
+        #Cumulative_statistics_dict['safe']=xnr_date_info[0]['safe']
     else:
     	Cumulative_statistics_dict['user_fansnum']=0
     	Cumulative_statistics_dict['total_post_sum']=0
@@ -1400,9 +1400,12 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail,task_id):
-	result=es_xnr.index(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+	result=es_xnr.index(index="xnr_flow_text_2017-10-14",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 	return result
-	
+
+def delete_xnr_flow_text(task_id):
+	result=es_xnr.delete(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id)
+	return result	
 
 
 def update_weibo_count(task_detail,task_id):

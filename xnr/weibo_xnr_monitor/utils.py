@@ -7,7 +7,7 @@ import sys
 import json
 import time,datetime
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,\
-        ts2datetimestr,get_xnr_flow_text_index_listname
+        ts2datetimestr,get_xnr_flow_text_index_listname,get_xnr_feedback_index_listname
 from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
@@ -17,7 +17,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
                              weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_keyword_count_index_name,weibo_keyword_count_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
-from xnr.parameter import MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN
+from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
 from xnr.global_config import S_TYPE, S_DATE,S_DATE_BCI
 
@@ -50,7 +50,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     now_time=int(time.time())
     time_gap = to_ts - from_ts
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE)
-    print 'from, to:', ts2date(from_ts), ts2date(to_ts)
+    #print 'from, to:', ts2date(from_ts), ts2date(to_ts)
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE)
         from_ts = from_ts - test_time_gap
@@ -58,7 +58,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     else:
         today_date_time= datetime2ts(ts2datetime(now_time))
     
-    print 'from, to:', ts2date(from_ts), ts2date(to_ts)
+    #print 'from, to:', ts2date(from_ts), ts2date(to_ts)
     xnr_user_no=weiboxnr_id
 
     keywords_dict=dict()
@@ -87,8 +87,8 @@ def lookup_history_keywords(from_ts,to_ts,xnr_user_no):
             }
         }
     }
-    print 'from_ts:', ts2date(from_ts)
-    print 'to_ts:', ts2date(to_ts)
+    #print 'from_ts:', ts2date(from_ts)
+    #print 'to_ts:', ts2date(to_ts)
     es_result=es_xnr.search(index=weibo_keyword_count_index_name,\
             doc_type=weibo_keyword_count_index_type,body=query_body)['hits']['hits']
     if not es_result:
@@ -127,7 +127,7 @@ def lookup_today_keywords(from_ts,to_ts,xnr_user_no):
             }
         }
     flow_text_index_name = flow_text_index_name_pre + ts2datetime(to_ts)
-    print 'flow_text_index_name:', flow_text_index_name
+    #print 'flow_text_index_name:', flow_text_index_name
     #try:
         #if S_TYPE == 'test':
         #    temp_flow_text_index_name='flow_text_2016-11-19'
@@ -154,32 +154,24 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     time_gap = to_ts - from_ts
     now_time = time.time()
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE)
-    print 'from, to:', ts2date(from_ts), ts2date(to_ts)
+    #print 'from, to:', from_ts, to_ts
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE)
         from_ts = from_ts - test_time_gap
-        to_ts = to_ts - test_time_gap
+        #to_ts = to_ts - test_time_gap
+        to_ts=from_ts + MAX_FLOW_TEXT_DAYS * DAY
 
     from_date_ts=datetime2ts(ts2datetime(from_ts))
     to_date_ts=datetime2ts(ts2datetime(to_ts))
-    print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
+    #print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
+    #print from_date_ts,to_date_ts
 
-    xnr_flow_text_index_name_list=[]
-    if from_date_ts != to_date_ts:
-        iter_date_ts=from_date_ts
-        while iter_date_ts < to_date_ts:            
-            index_name=flow_text_index_name_pre+ts2datetime(iter_date_ts)
-            xnr_flow_text_index_name_list.append(index_name)
-            iter_next_date_ts=iter_date_ts+DAY
-            iter_date_ts=iter_next_date_ts
-    else:
-        # lookup from_ts and to_ts ranges in the same index
-        index_name=flow_text_index_name_pre+ts2datetime(from_date_ts)
-        xnr_flow_text_index_name_list.append(index_name)
-
-    print 'flow_text_index_name_list:', xnr_flow_text_index_name_list
     flow_text_index_name_list=[]
-    for index_name in xnr_flow_text_index_name_list:
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(0,(days_num+1)):
+        date_range_start_ts = to_date_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = flow_text_index_name_pre + date_range_start_datetime
         if es_flow_text.indices.exists(index=index_name):
             flow_text_index_name_list.append(index_name)
         else:
@@ -197,6 +189,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
     #全部用户 0，已关注用户 1，未关注用户-1
     range_time_list={'range':{'timestamp':{'gte':int(from_ts),'lt':int(to_ts)}}}
+    print range_time_list
 
     user_condition_list=[]
     if classify_id == 1:
@@ -204,10 +197,10 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     elif classify_id == 2:
         user_condition_list=[{'bool':{'must':[range_time_list],'must_not':[{'terms':{'uid':userslist}}]}}]
     elif classify_id == 0:
-        user_condition_list=[{'match_all':{}}]
+        user_condition_list=[{'bool':{'must':[range_time_list]}}]
 
-    print 'sort_condition_list',sort_condition_list
-    print 'user_condition_list',user_condition_list
+    #print 'sort_condition_list',sort_condition_list
+    #print 'user_condition_list',user_condition_list
 
     query_body={
         'query':{
@@ -220,19 +213,6 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         'sort':sort_condition_list
         }
 
-    '''
-    if S_TYPE == 'test':
-        try:
-            flow_text_index_name=['flow_text_2016-11-22','flow_text_2016-11-23','flow_text_2016-11-24']
-            es_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                body=query_body)['hits']['hits']
-            hot_result=[]
-            for item in es_result:
-                hot_result.append(item['_source'])
-        except:
-            hot_result=[]
-    else:
-    '''
     try:
         es_result=es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
             body=query_body)['hits']['hits']
@@ -246,89 +226,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
 
 
 
-'''
-def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
-    #step 1 :adjust the time condition for time
-    from_date_ts=datetime2ts(ts2datetime(from_ts))
-    to_date_ts=datetime2ts(ts2datetime(to_ts))
-    range_time_list=[]
-    if from_date_ts != to_date_ts:
-        iter_date_ts=from_date_ts
-        while iter_date_ts <= to_date_ts:
-            iter_next_date_ts=iter_date_ts+DAY
-            range_time_list.append({'range':{'timestamp':{'gte':iter_date_ts,'lt':iter_next_date_ts}}})
-            iter_date_ts=iter_next_date_ts
-        if range_time_list[0]['range']['timestamp']['gte']<from_ts:
-            range_time_list[0]['range']['timestamp']['gte']=from_ts
-        if range_time_list[-1]['range']['timestamp']['lt']>to_ts:
-            range_time_list[-1]['range']['timestamp']['lt']=to_ts
 
-    else:
-        # lookup from_ts and to_ts ranges in the same index
-        range_time_list=[{'range':{'timestamp':{'gte':from_ts,'lt':to_ts}}}]
-
-    #step2: users condition
-    #make sure the users range by classify choice
-    userslist=lookup_weiboxnr_concernedusers(weiboxnr_id)
-    #userslist = json.loads(userslist)
-
-    user_condition_list=[{'terms':{'uid':userslist}}]
-
-    #step 4:sort order condition set
-    if order_id==1:         #按时间排序
-        sort_condition_list=[{'timestamp':{'order':'desc'}}]         
-    elif order_id==2:       #按热度排序
-        sort_condition_list=[{'hot':{'order':'desc'}}]
-    elif order_id==3:       #按敏感度排序
-        sort_condition_list=[{'sensitive':{'order':'desc'}}]
-    else:                   #默认设为按时间排序
-        sort_condition_list=[{'timestamp':{'order':'desc'}}]
-
-    #step 5:lookup the content
-    flow_text_index_name_list=[]
-    hot_result=[]
-    print range_time_list
-    for range_item in range_time_list:
-    	iter_condition_list=[]
-        if classify_id==1:             #当类别选择为所关注用户时
-            iter_condition_list=[item for item in user_condition_list]
- 		#当类别选择为全部用户时，不设置用户这一限制条件
-        #if keyword_condition_list:
-        #    iter_condition_list.append(keyword_condition_list)
-        iter_condition_list.append(range_item)
-
-        range_from_ts=range_item['range']['timestamp']['gte']
-        range_from_date=ts2datetime(range_from_ts)
-        flow_text_index_name=flow_text_index_name_pre+range_from_date
-        #flow_text_index_name_list.append(flow_text_index_name)
-        #print flow_text_index_name
-        #print iter_condition_list
-        print sort_condition_list
-    #print flow_text_index_name_list
-        query_body={
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'bool':{
-                            'must':iter_condition_list
-                            }
-                        }
-                    }
-                },
-            'size':100,		
-            'sort':sort_condition_list
-            }
-        try:
-            flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
-                body=query_body)['hits']['hits']
-            result=[]
-            for item in flow_text_exist:
-                result.append(item['_source'])            
-        except:
-            result=[]
-        hot_result.append(result)
-    return hot_result
-'''
 
 #################微博操作##########
 #转发微博
@@ -494,7 +392,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     time_gap = end_time - start_time
     now_time = time.time()
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE_BCI)
-    print 'from, to:', ts2date(start_time), ts2date(end_time)
+    #print 'from, to:', ts2date(start_time), ts2date(end_time)
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE_BCI)
         start_time = start_time - test_time_gap
@@ -502,12 +400,12 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
 
     from_date_ts=datetime2ts(ts2datetime(start_time))
     to_date_ts=datetime2ts(ts2datetime(end_time))
-    print 's_date_bci:', S_DATE_BCI
-    print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
+    #print 's_date_bci:', S_DATE_BCI
+    #print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
     
     bci_index_name = weibo_bci_index_name_pre + ''.join(ts2datetime(today_date_time).split('-'))
-    print 'bci_index_name:', bci_index_name
-    print 'end_time:', ts2date(end_time)
+    #print 'bci_index_name:', bci_index_name
+    #print 'end_time:', ts2date(end_time)
 
     #step1: users condition
     #make sure the users range by classify choice
