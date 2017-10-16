@@ -1691,10 +1691,13 @@ def cron_compute_mark(current_time):
     
 if __name__ == '__main__':
 
-    for i in range(12,-1,-1):
-        current_time = int(time.time()-i*DAY)
+    # for i in range(13,0,-1):
+    #     current_time = int(time.time()-i*DAY)
 
-        print 'date...',ts2datetime(current_time)
+    #     print 'date...',ts2datetime(current_time)
 
-        cron_compute_mark(current_time)
+    #     cron_compute_mark(current_time)
     # bulk_add()
+
+    current_time = int(time.time()-DAY)
+    cron_compute_mark(current_time)
