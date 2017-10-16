@@ -474,8 +474,8 @@ function oneUP(_this) {
     var timestamp = $(_this).parents('.center_rel_weibo').find('.timestamp').text();info.push(timestamp);
     var forwarding = $(_this).parents('.center_rel_weibo').find('.forwarding').text();info.push(forwarding);
     var comment = $(_this).parents('.center_rel_weibo').find('.comment').text();info.push(comment);
-    var sensitive = $(_this).parents('.center_rel_weibo').find('.sensitive').text();alldata.push(sensitive);
-    var sensitiveWords = $(_this).parents('.center_rel_weibo').find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
+    var sensitive = $(_this).parents('.center_rel_weibo').find('.sensitive').text();info.push(sensitive);
+    var sensitiveWords = $(_this).parents('.center_rel_weibo').find('.sensitiveWords').text().toString().replace(/\&/g,'%26');info.push(sensitiveWords);
     //=======URL======
     var allMent=[];
     allMent.push(info[1]);

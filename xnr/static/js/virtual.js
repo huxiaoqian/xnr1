@@ -1,6 +1,7 @@
 var virtual_url='/system_manage/show_users_account/';
 public_ajax.call_request('get',virtual_url,virtual);
 function virtual(data) {
+    console.log(data)
     $('#virtualtable').bootstrapTable('load', data);
     $('#virtualtable').bootstrapTable({
         data:data,
@@ -55,7 +56,7 @@ function virtual(data) {
                         ||row.complete_xnr=='unknown'||row.complete_xnr.length==0){
                         return '无任何虚拟人';
                     }else {
-                        return row.my_xnrs.join('，');
+                        return row.complete_xnr.join('，');
                     };
                 }
             },
@@ -71,7 +72,7 @@ function virtual(data) {
                         ||row.uncomplete_xnr=='unknown'||row.uncomplete_xnr.length==0){
                         return '无任何虚拟人';
                     }else {
-                        return row.my_xnrs.join('，');
+                        return row.uncomplete_xnr.join('，');
                     };
                 }
             },

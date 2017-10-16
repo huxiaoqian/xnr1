@@ -306,11 +306,29 @@ function go_on(id,flag) {
     // public_ajax.call_request('GET',go_url,success_fail);
 }
 //进入操作统计
+var comingID,comingNAME;
 function comeIn(id,name) {
-    localStorage.setItem('user',id);
-    localStorage.setItem('userName',name);
-    window.open('/control/operationControl/');
+    comingID=id;comingNAME=name;
+    $('#choosePerson_3').modal('show');
 }
+$('#choosePerson_3 .sure_in').on('click',function () {
+    var userType=$('#choosePerson_3 input:radio[name="choose_3"]:checked').val();
+    if (userType){
+        var id_or_name='';
+        if (userType=='隐身'){
+            id_or_name=comingID;
+        }else {
+            id_or_name=comingNAME;
+        }
+        localStorage.setItem('user',comingID);
+        localStorage.setItem('userName',id_or_name);
+        window.open('/control/operationControl/');
+    }else {
+        $('#succee_fail #words').text('请选择登录方式');
+        $('#succee_fail').modal('show');
+    }
+
+});
 
 function success_fail(data) {
     var word='';

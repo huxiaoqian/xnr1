@@ -360,14 +360,14 @@ def get_safe_qq_today(xnr_user_no):
         }
     }
 
-    count_result = es.count(index=group_message_index_name,doc_type=group_message_index_type,body=query_body)
+    count_result = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,body=query_body)
 
     if count_result['_shards']['successful'] != 0:
         today_count = count_result['count']
     else:
         print 'es index rank error'
         today_count = 0
-
+    last_date = ts2datetime(current_time-DAY)
     _id_last = xnr_user_no +'_'+ last_date
 
     try:
@@ -384,6 +384,8 @@ def get_safe_qq_today(xnr_user_no):
     item_dict = dict()
     #item_dict['date_time'] = current_date
     #item_dict['xnr_user_no'] = xnr_user_no
+    item_dict['speak_today'] = {}
+    item_dict['speak_total'] = {}
     item_dict['speak_today'][current_time] = today_count
     item_dict['speak_total'][current_time] = total_count_totay
 
