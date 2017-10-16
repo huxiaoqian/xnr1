@@ -29,13 +29,47 @@ def execute(uname, upasswd):
        timestamp_private, timestamp_comment_receive, timestamp_comment_make
 
     try:
-        print 'start run weibo_feedback_private.py ...'
-        print 'timestamp_private:::',timestamp_private
-        print 'current_ts::::::',current_ts
-        FeedbackPrivate(xnr.uid, current_ts, fans, follow, groups, timestamp_private).execute()
-        print 'run weibo_feedback_private.py done!'
+        print 'start run weibo_feedback_follow.py ...'
+        fans, follow, groups = FeedbackFollow(xnr.uid, current_ts).execute()
+        print 'run weibo_feedback_follow.py done!'
     except:
         print 'Except Abort'
+    try:
+        print 'start run weibo_feedback_at.py ...'
+        FeedbackAt(xnr.uid, current_ts, fans, follow, groups, timestamp_at).execute()
+        print 'run weibo_feedback_at.py done!'
+    except:
+        print 'Except Abort'
+
+    try:
+        print 'start run weibo_feedback_comment.py ...'
+        FeedbackComment(xnr.uid, current_ts, fans, follow, groups, timestamp_comment_make, timestamp_comment_receive).execute()
+        print 'run weibo_feedback_comment.py done!'
+    except:
+        print 'Except Abort'
+
+    try:
+        print 'start run weibo_feedback_like.py ...'
+        FeedbackLike(xnr.uid, current_ts, fans, follow, groups, timestamp_like).execute()
+        print 'run weibo_feedback_like.py done!'
+    except:
+        print 'Except Abort'
+
+    # try:
+    #     print 'start run weibo_feedback_private.py ...'
+    #     print 'timestamp_private:::',timestamp_private
+    #     print 'current_ts::::::',current_ts
+    #     FeedbackPrivate(xnr.uid, current_ts, fans, follow, groups, timestamp_private).execute()
+    #     print 'run weibo_feedback_private.py done!'
+    # except:
+    #     print 'Except Abort'
+
+    # try:
+    #     print 'start run weibo_feedback_retweet.py ...'
+    #     FeedbackRetweet(xnr.uid, current_ts, fans, follow, groups, timestamp_retweet).execute()
+    #     print 'run weibo_feedback_retweet.py done!'
+    # except:
+    #     print 'Except Abort'
 
 if __name__ == '__main__':
 
