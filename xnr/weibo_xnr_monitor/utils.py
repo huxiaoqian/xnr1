@@ -226,8 +226,6 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
 
 
 
-
-
 #################微博操作##########
 #转发微博
 def get_weibohistory_retweet(task_detail):
