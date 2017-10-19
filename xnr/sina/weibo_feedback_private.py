@@ -85,7 +85,7 @@ class FeedbackPrivate:
 
                     try:
                         detailUrl = de_url % (uid, int(time.time() * 1000))
-                        print 'detail_url:', detailUrl
+                        #print 'detail_url:', detailUrl
                         request = urllib2.Request(detailUrl)
                         response = urllib2.urlopen(request, timeout=60)
 
@@ -143,7 +143,7 @@ class FeedbackPrivate:
                             }
 
                             wb_json = json.dumps(wb_item)
-                            print wb_json
+                            #print 'wb_json:::',wb_json
                             json_list.append(wb_json)
             
                 # 分页
@@ -154,7 +154,7 @@ class FeedbackPrivate:
                 elif not next_pageUrl or tags:
                     break
             
-        json_list = []
+        #json_list = []
         return json_list
 
     def execute(self):

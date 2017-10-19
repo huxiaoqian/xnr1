@@ -7,7 +7,7 @@ import sys
 import json
 import time,datetime
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,\
-        ts2datetimestr,get_xnr_flow_text_index_listname
+        ts2datetimestr,get_xnr_flow_text_index_listname,get_xnr_feedback_index_listname
 from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
@@ -50,7 +50,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     now_time=int(time.time())
     time_gap = to_ts - from_ts
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE)
-    print 'from, to:', ts2date(from_ts), ts2date(to_ts)
+    #print 'from, to:', ts2date(from_ts), ts2date(to_ts)
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE)
         from_ts = from_ts - test_time_gap
@@ -58,7 +58,7 @@ def lookup_weibo_keywordstring(from_ts,to_ts,weiboxnr_id):
     else:
         today_date_time= datetime2ts(ts2datetime(now_time))
     
-    print 'from, to:', ts2date(from_ts), ts2date(to_ts)
+    #print 'from, to:', ts2date(from_ts), ts2date(to_ts)
     xnr_user_no=weiboxnr_id
 
     keywords_dict=dict()
@@ -87,8 +87,8 @@ def lookup_history_keywords(from_ts,to_ts,xnr_user_no):
             }
         }
     }
-    print 'from_ts:', ts2date(from_ts)
-    print 'to_ts:', ts2date(to_ts)
+    #print 'from_ts:', ts2date(from_ts)
+    #print 'to_ts:', ts2date(to_ts)
     es_result=es_xnr.search(index=weibo_keyword_count_index_name,\
             doc_type=weibo_keyword_count_index_type,body=query_body)['hits']['hits']
     if not es_result:
@@ -127,7 +127,7 @@ def lookup_today_keywords(from_ts,to_ts,xnr_user_no):
             }
         }
     flow_text_index_name = flow_text_index_name_pre + ts2datetime(to_ts)
-    print 'flow_text_index_name:', flow_text_index_name
+    #print 'flow_text_index_name:', flow_text_index_name
     #try:
         #if S_TYPE == 'test':
         #    temp_flow_text_index_name='flow_text_2016-11-19'
@@ -223,6 +223,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
         hot_result=[]
     #print 'hot_result:', hot_result
     return hot_result
+
 
 
 #################微博操作##########
@@ -389,7 +390,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     time_gap = end_time - start_time
     now_time = time.time()
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE_BCI)
-    print 'from, to:', ts2date(start_time), ts2date(end_time)
+    #print 'from, to:', ts2date(start_time), ts2date(end_time)
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE_BCI)
         start_time = start_time - test_time_gap
@@ -397,12 +398,12 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
 
     from_date_ts=datetime2ts(ts2datetime(start_time))
     to_date_ts=datetime2ts(ts2datetime(end_time))
-    print 's_date_bci:', S_DATE_BCI
-    print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
+    #print 's_date_bci:', S_DATE_BCI
+    #print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
     
     bci_index_name = weibo_bci_index_name_pre + ''.join(ts2datetime(today_date_time).split('-'))
-    print 'bci_index_name:', bci_index_name
-    print 'end_time:', ts2date(end_time)
+    #print 'bci_index_name:', bci_index_name
+    #print 'end_time:', ts2date(end_time)
 
     #step1: users condition
     #make sure the users range by classify choice

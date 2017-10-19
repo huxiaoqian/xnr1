@@ -199,6 +199,11 @@ item_dict = {'influence':0,'safe':0,'penetration':24.56}
 es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
 
 
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15')['_source']
+item_dict = {}
+item_dict = {'influence':0,'penetration':0,'safe':0}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body   ={'doc':item_dict})
+
 
 # with open('./uid_sensitive.txt','w') as f:
 #     for item in es_result:
