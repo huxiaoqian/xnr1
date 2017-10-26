@@ -1719,6 +1719,6 @@ def cron_compute_mark(current_time):
 if __name__ == '__main__':
 
 
-    current_time = int(time.time()-DAY)
+    current_time = int(time.time())
     cron_compute_mark(current_time)
 
