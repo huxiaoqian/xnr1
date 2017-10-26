@@ -1416,7 +1416,8 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
                 }
             }
         },
-        'sort':{'timestamp':{'order':'asc'}} 
+        'sort':{'timestamp':{'order':'asc'}},
+        'size':MAX_SEARCH_SIZE
     }
     try:
         xnr_assess_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
