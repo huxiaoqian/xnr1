@@ -125,6 +125,7 @@
     <div class="weiboQQ">
         <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
     </div>
     <p class="p11" style="font-size: 16px;">
         <!--社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。-->
@@ -291,6 +292,13 @@
         $(this).attr('src','/static/images/QQload.png');
     }).on('click',function () {
         window.location.href='/index/navigationQQ/';
+    });
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationWX/';
     });
 
     localStorage.setItem('loginType','weibo');
