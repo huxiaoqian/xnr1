@@ -17,3 +17,7 @@ def inforChecking():
 @mod.route('/inforCheckingQQ/')
 def inforCheckingQQ():
     return render_template('inforDetection/inforCheckingQQ.html')
+
+@mod.route('/inforCheckingWX/')
+def inforCheckingWX():
+    return render_template('inforDetection/inforCheckingWX.html')
