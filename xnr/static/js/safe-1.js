@@ -191,10 +191,11 @@ function safe_7day(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -295,10 +296,11 @@ function safe(data) {
                     dataZoom: {
                         yAxisIndex: 'none'
                     },
-                    dataView: {readOnly: false},
                     magicType: {type: ['line', 'bar']},
                     restore: {},
-                    saveAsImage: {}
+                    saveAsImage: {
+                        backgroundColor: 'rgba(8,23,44,0.8)',
+                    }
                 }
             },
             xAxis:  {
@@ -382,7 +384,9 @@ function dashBoard(dashVal) {
         toolbox: {
             feature: {
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         series: [

@@ -417,7 +417,7 @@ function comMent(_this){
 function retweet(_this) {
     var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?&xnr_user_no='+ID_Num+
+    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?xnr_user_no='+ID_Num+
         '&text='+txt+'&r_mid='+mid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
