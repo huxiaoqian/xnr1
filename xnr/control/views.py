@@ -24,6 +24,13 @@ def postingQQ():
     QQ_num = request.args.get('QQ_num','')
     return render_template('control/postingQQ.html',QQ_id=QQ_id,QQ_num=QQ_num)
 
+@mod.route('/postingWX/')
+def postingWX():
+    WXbot_id = request.args.get('WXbot_id','')
+    # QQ_num = request.args.get('QQ_num','')
+    # return render_template('control/postingWX.html',QQ_id=QQ_id,QQ_num=QQ_num)
+    return render_template('control/postingWX.html',WXbot_id=WXbot_id)
+
 @mod.route('/socialFeedback/')
 def socialFeedback():
     return render_template('control/social_feedback.html')

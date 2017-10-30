@@ -49,7 +49,7 @@
                 <li id="system"><i class="icon icon-inbox"></i>系统管理</li>
             </ul>
         </div>
-        
+
     </div>
     <div class="nav_bottom">
         <ul class="list">
@@ -73,7 +73,9 @@
                 <li class="change"><a href="#"><i class="icon-random"></i> <span>切换虚拟人</span></a></li>
                 <li class="divider"></li>
                 <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
-                <li><a id="logout"><i class="i"></i> 登出 </a></li>
+                <li class="old_2"><a href="#"><i class="icon-exchange"></i> <span>微信虚拟人</span></a></li>
+
+                <li><a id="logout"><i class="i"></i> 登出 </a></li>f
             </ul>
         </div>
     </div>
@@ -319,7 +321,7 @@
             }, 0);
         });
     });
-    
+
     //几天前的时间戳
 //    function getDaysBefore(m){
 //        var date = new Date(),
@@ -489,11 +491,32 @@
                 localStorage.setItem('userRelName',encodeURI(userName));
                 localStorage.setItem('userName',encodeURI(id_or_name));
             }
+        }else if (loginType=='WX'){
+            var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
+            var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
+
+            var userType=$('input:radio[name="choose"]:checked').val();
+            if (!userWXID||!userWXName||!userType){
+                $('#pormpt p').text('请检查选择登陆的微信显示模式。');
+                $('#pormpt').modal('show');
+            }else {
+                var id_or_name='';
+                if (userType=='隐身'){
+                    id_or_name=userWXID;
+                }else {
+                    id_or_name=userWXName;
+                }
+                localStorage.setItem('userWX',encodeURI(userWXID));
+                localStorage.setItem('userWXRelName',encodeURI(userWXName));
+                // localStorage.setItem('userQQnum',encodeURI(userQQnum));
+                localStorage.setItem('userWXName',encodeURI(id_or_name));
+            }
         }
         location.reload();
     });
     //登录虚拟人后取出ID或者名字
     var ID_Num,REL_name,ID_name,userQQnum,nowUser;
+
     function weiboORqq(type) {
         if (type=='weibo'){
             ID_Num=localStorage.getItem('user');
@@ -503,7 +526,7 @@
                 nowUser=decodeURI(ID_name);
             }
             InloginName('微博虚拟人','QQ群虚拟人','（微博）');
-        }else {
+        }else if(type=="QQ") {
             ID_Num=localStorage.getItem('userQQ');
             REL_name=localStorage.getItem('userQQRelName');
             ID_name=localStorage.getItem('userQQName');
@@ -512,40 +535,77 @@
                 nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
             }
             InloginName('QQ群虚拟人','微博虚拟人','（QQ群）');
+        }else if(type=="WX") {
+            ID_Num=localStorage.getItem('userWX');
+            REL_name=localStorage.getItem('userWXRelName');
+            ID_name=localStorage.getItem('userWXName');
+            // userQQnum=localStorage.getItem('userQQnum');
+            if (ID_name){
+                // nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
+                nowUser=decodeURI(ID_name);
+            }
+            InloginName('微信虚拟人','微博虚拟人','QQ群虚拟人','（微信）');
         }
     }
 
-    $('.old').on('click',function(e) {
+    // ===切换虚拟人类型===
+    // $('.old').on('click',function(e) {
+    //     var txt=$(this).find('span').text();
+    //     var curtxt=$('.current').find('span').text();
+    //     $(this).find('span').text(curtxt);
+    //     $('.current').find('span').text(txt);
+    //     $('.nav_type').text('（'+txt+'）');
+    //     if (txt=='微博虚拟人'){
+    //         window.open('/index/navigation/');
+    //     }else if(txt=='QQ群虚拟人') {
+    //         window.open('/index/navigationQQ/');
+    //     }else if(txt=='微信虚拟人'){
+    //         window.open('/index/navigationWX/');
+    //     }
+    // });
+    $('.old').on('click',Change)
+    $('.old_2').on('click',Change)
+    function Change(){
         var txt=$(this).find('span').text();
-        var curtxt=$('.current').find('span').text();
-        $(this).find('span').text(curtxt);
-        $('.current').find('span').text(txt);
-        $('.nav_type').text('（'+txt+'）');
+        // var curtxt=$('.current').find('span').text();
+        // $(this).find('span').text(curtxt);
+        // $('.current').find('span').text(txt);
+        // $('.nav_type').text('（'+txt+'）');
         if (txt=='微博虚拟人'){
             window.open('/index/navigation/');
-        }else {
+        }else if(txt=='QQ群虚拟人') {
             window.open('/index/navigationQQ/');
+        }else if(txt=='微信虚拟人'){
+            window.open('/index/navigationWX/');
         }
-    });
+    }
+
+
+
 //    var loginType=localStorage.getItem('loginType');
 //    if (loginType=='weibo'){
 //        InloginName('/index/navigation/','微博虚拟人','QQ群虚拟人','（微博）');
 //    }else {
 //        InloginName('/index/navigationQQ/','QQ群虚拟人','微博虚拟人','（QQ群）');
 //    }
+
+    //点击首页
     $('#backHome').on('click',function () {
         var lf=$('.loadingUser').find('.nav_type').text();
         if (lf=='（QQ群）'){
             $('#backHome .list_one.li_a').attr('href','/index/navigationQQ/');
-        }else {
+        }else if(lf=='（微博）') {
             $('#backHome .list_one.li_a').attr('href','/index/navigation/');
+        }else if(lf=='（微信）') {
+            $('#backHome .list_one.li_a').attr('href','/index/navigationWX/');
         }
     });
-    function InloginName(two,three,four) {
+    function InloginName(two,three,four,five) {
         $('.current').find('span').text(two);
         $('.old').find('span').text(three);
+        $('.old_2').find('span').text(four);
         $('.loadingUser .nav_name').text(nowUser);
-        $('.loadingUser .nav_type').text(four);
+        $('.loadingUser .nav_type').text(five);
     }
     //存  localStorage.setItem('TYPE','1');
     //取  var typeNum=localStorage.getItem('TYPE');
@@ -681,7 +741,7 @@
 
 {% block write_js %}
 <script>
-    
+
 </script>
 {% endblock %}
 
