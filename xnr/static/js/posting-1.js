@@ -322,7 +322,7 @@ function _judge() {
 }
 $('.reportNote-2 span.del_user').on('click',function () {
     var del_url='/weibo_xnr_operate/un_trace_follow/?xnr_user_no='+ID_Num+'&uid_string='+mainUserUid.join('，');
-    public_ajax.call_request('get',del_url,postYES())
+    public_ajax.call_request('get',del_url,postYES)
 });
 //添加
 $('#addHeavyUser .demo-label input').on('click',function () {
@@ -354,8 +354,17 @@ function addHeavySure() {
         }else {
             useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
         }
-
-        public_ajax.call_request('get',useradd_url,postYES)
+        public_ajax.call_request('get',useradd_url,addSuccess)
+    }
+}
+function addSuccess(data) {
+    if (data[0]||data){
+        public_ajax.call_request('get',focus_main_url,focus_main);
+        $('#pormpt p').text('添加成功。');
+        $('#pormpt').modal('show');
+    }else {
+        $('#pormpt p').text('添加失败，请检查输入的UID或昵称要统一。');
+        $('#pormpt').modal('show');
     }
 }
 //=========跟踪转发==完=========

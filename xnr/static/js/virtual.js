@@ -6,7 +6,7 @@ function virtual(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 8,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -20,14 +20,14 @@ function virtual(data) {
         sortName:'bci',
         sortOrder:"desc",
         columns: [
-            {
-                title: "用户ID",//标题
-                field: "user_id",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
+            // {
+            //     title: "用户ID",//标题
+            //     field: "user_id",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            // },
             {
                 title: "用户名",//标题
                 field: "user_name",//键名
@@ -37,39 +37,56 @@ function virtual(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'){
-                        return row.user_id;
+                        return '未知';
                     }else {
                         return row.user_name;
                     };
                 }
             },
             {
-                title: "虚拟人管理",//标题
-                field: "my_xnrs",//键名
+                title: "已完成虚拟人",//标题
+                field: "complete_xnr",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.my_xnrs==''||row.my_xnrs=='null'||row.my_xnrs=='unknown'||row.my_xnrs.length==0){
+                    if (row.complete_xnr==''||row.complete_xnr=='null'||!row.complete_xnr
+                        ||row.complete_xnr=='unknown'||row.complete_xnr.length==0){
                         return '无任何虚拟人';
                     }else {
-                        return row.my_xnrs.join('，');
+                        return row.complete_xnr.join('，');
                     };
                 }
             },
             {
-                title: "操作",//标题
-                field: "",//键名
+                title: "未完成虚拟人",//标题
+                field: "uncomplete_xnr",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor:pointer;color:white;" onclick="addVirModify(\''+row.user_id+'\',\''+row.user_name+'\',\''+row.my_xnrs+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor:pointer;color:white;" onclick="deleteVir(\''+row.user_id+'\',\''+row.my_xnrs+'\')" title="删除"><i class="icon icon-trash"></i></span>';
+                    if (row.uncomplete_xnr==''||row.uncomplete_xnr=='null'||!row.uncomplete_xnr
+                        ||row.uncomplete_xnr=='unknown'||row.uncomplete_xnr.length==0){
+                        return '无任何虚拟人';
+                    }else {
+                        return row.uncomplete_xnr.join('，');
+                    };
                 }
             },
+            // {
+            //     title: "操作",//标题
+            //     field: "",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter: function (value, row, index) {
+            //         return '<span style="cursor:pointer;color:white;" onclick="addVirModify(\''+row.user_id+'\',\''+row.user_name+'\',\''+row.my_xnrs+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+            //             '<span style="cursor:pointer;color:white;" onclick="deleteVir(\''+row.user_id+'\',\''+row.my_xnrs+'\')" title="删除"><i class="icon icon-trash"></i></span>';
+            //     }
+            // },
         ],
     });
 };

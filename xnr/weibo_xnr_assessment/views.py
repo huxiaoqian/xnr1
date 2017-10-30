@@ -11,7 +11,8 @@ from utils import get_influ_fans_num,get_influ_retweeted_num,\
 				get_pene_infor_sensitive,get_pene_feedback_sensitive,get_pene_warning_report_sensitive,\
 				compute_penetration_num,compute_safe_num,get_safe_active,get_tweets_distribute,\
 				get_follow_group_distribute,get_safe_tweets,get_follow_group_tweets,\
-				get_influence_total_trend,penetration_total
+				get_influence_total_trend,penetration_total,get_influence_total_trend_today,\
+				penetration_total_today,get_safe_active_today
 
 mod = Blueprint('weibo_xnr_assessment', __name__, url_prefix='/weibo_xnr_assessment')
 
@@ -31,7 +32,20 @@ def ajax_influ_mark_compute():
 @mod.route('/influence_total/')
 def ajax_influence_total_trend():
 	xnr_user_no = request.args.get('xnr_user_no','')
-	results = get_influence_total_trend(xnr_user_no)
+	start_time = request.args.get('start_time','')
+	end_time = request.args.get('end_time','')
+
+	results = get_influence_total_trend(xnr_user_no,start_time,end_time)
+
+	return json.dumps(results)
+
+
+# 影响力各指标 -- 今日
+@mod.route('/influence_total_today/')
+def ajax_influence_total_trend_today():
+	xnr_user_no = request.args.get('xnr_user_no','')
+
+	results = get_influence_total_trend_today(xnr_user_no)
 
 	return json.dumps(results)
 
@@ -107,10 +121,21 @@ def ajax_penetration_mark_compute():
 @mod.route('/penetration_total/')
 def ajax_penetration_total():
 	xnr_user_no = request.args.get('xnr_user_no','')
-	results = penetration_total(xnr_user_no)
+	start_time = request.args.get('start_time','')
+	end_time = request.args.get('end_time','')
+
+	results = penetration_total(xnr_user_no,start_time,end_time)
 
 	return json.dumps(results)
 
+# 渗透力各指标 -- 今日
+@mod.route('/penetration_total_today/')
+def ajax_penetration_total_today():
+	xnr_user_no = request.args.get('xnr_user_no','')
+
+	results = penetration_total_today(xnr_user_no)
+
+	return json.dumps(results)
 
 # 关注群体敏感度
 @mod.route('/pene_follow_group_sensitive/')
@@ -168,8 +193,19 @@ def ajax_safe_mark_compute():
 @mod.route('/safe_active/')
 def ajax_safe_active():
 	xnr_user_no = request.args.get('xnr_user_no','')
+	start_time = request.args.get('start_time','')
+	end_time = request.args.get('end_time','')
 
-	results = get_safe_active(xnr_user_no)
+	results = get_safe_active(xnr_user_no,start_time,end_time)
+
+	return json.dumps(results)
+
+# 活跃安全性 -- 今日
+@mod.route('/safe_active_today/')
+def ajax_safe_active_today():
+	xnr_user_no = request.args.get('xnr_user_no','')
+
+	results = get_safe_active_today(xnr_user_no)
 
 	return json.dumps(results)
 
@@ -178,7 +214,7 @@ def ajax_safe_active():
 def ajax_tweets_distribute():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	results = get_tweets_distribute(xnr_user_no)
-	print 'results:::',results
+	# print 'results:::',results
 	return json.dumps(results)
 
 # 发帖内容 --话题
@@ -187,7 +223,7 @@ def ajax_safe_tweets_topic():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	topic = request.args.get('topic',u'民生类_法律')
 	sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
-	print 'topic::::',topic
+	# print 'topic::::',topic
 	results = get_safe_tweets(xnr_user_no,topic,sort_item)
 	
 	return json.dumps(results)

@@ -3,6 +3,7 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/safe.css">
 <style>
+    .datetimepicker td, .datetimepicker th {color: black;}
     #container .type_page #myTabs a {
         color: white;
     }
@@ -18,8 +19,8 @@
         margin: 0 auto;
         height: auto!important;
     }
-    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
-    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+    .type_page .table-no-bordered,.type_page .table>tbody>tr>td,.type_page .fixed-table-container,
+    .type_page .bootstrap-table .table>thead>tr>th,.type_page .bootstrap-table .table,.type_page .table>tbody>tr>td{
         border: none;
     }
     .fixed-table-pagination .page-list {
@@ -50,12 +51,71 @@
     .fixed-table-container thead th .both {
         background-image: none!important;
     }
+    /*-----------*/
+    .history .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,.history .table>tbody>tr>td{
+        padding: 8px!important;
+    }
+    .choosetime .demo-label{width: 65px;}
+    .history .fixed-table-pagination {display: none!important;}
+    .history .fixed-table-toolbar {display: none!important;}
+    .history .table>thead>tr>th {border-top: none!important;}
+    .history .bootstrap-table .table>thead>tr>th {width: 8%!important;}
+    .history .bootstrap-table .table:not(.table-condensed) {padding:0!important;}
+    #start_1,#end_1,.sureTime{display: none;position: relative;
+        top: -5px;left: 5px;}
+    .sureTime {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    .sureTime:hover {
+        background: rgba(8,23,44,0.65);
+    }
     /**/
 </style>
 {% endblock %}
 {% block main %}
 <div id="container">
-    <div class="title">
+    <div class="choosetime" style="margin: 10px 0;">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='0'>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='7' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"
+               style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"
+               style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sure" class="sureTime">确定</span>
+        <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
+    </div>
+    <div class="history">
+        <div id="history">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+    </div>
+    <div class="title" style="margin-top: 40px;">
         <div class="tit-1" style="display: inline-block;">
             <span class="icon icon-glass note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">安全性评估</b>
@@ -65,7 +125,9 @@
             <b class="score" style="color:#f44336;"></b>
         </div>
     </div>
-    <div id="near_7_day" style="width: 950px;height:400px;margin:20px auto 0;"></div>
+    <div id="near_7_day" style="width: 950px;height:400px;margin:20px auto 0;">
+        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+    </div>
     <div class="type_page" style="margin: 20px auto 30px;">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active" midurl="safe_active">
@@ -443,13 +505,40 @@
         </div>
     </div>
 </div>
+<!--模态框-->
+<div class="modal fade" id="successfail" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
 <script>
     judgment('5');
     weiboORqq('weibo');
-
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start_1').on('changeDate', function(ev){
+        $('#end_1').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end_1').on('changeDate', function(ev){
+        $('#start_1').datetimepicker('setEndDate',ev.date);
+    });
     $('#wordcloud .word-1 input').on('click',function () {
         var s=$(this).val();
         if (s=='日常语料'){

@@ -94,7 +94,7 @@ function historyTotal(data) {
 
 function historyTotalLine(data) {
     var time=[],fansDate=[],totalPostData=[],dailyPost=[],
-        hotData=[],businessData=[],influeData=[],pentData=[],safeData=[];
+        hotData=[],businessData=[],traceData=[],influeData=[],pentData=[],safeData=[];
     $.each(data,function (index,item) {
         time.push(item.date_time);
         fansDate.push(item.user_fansnum)
@@ -102,6 +102,7 @@ function historyTotalLine(data) {
         dailyPost.push(item.daily_post_num)
         hotData.push(item.hot_follower_num)
         businessData.push(item.business_post_num)
+        traceData.push(item.trace_follow_tweet_num)
         influeData.push(item.influence)
         pentData.push(item.penetration)
         safeData.push(item.safe)
@@ -116,7 +117,7 @@ function historyTotalLine(data) {
             trigger: 'axis'
         },
         legend: {
-            data:['总粉丝数','总发帖量','日常发帖','热点跟随','业务发帖','影响力','渗透力','安全性'],
+            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','跟踪转发','影响力','渗透力','安全性'],
             width:'400',
             left:'center'
         },
@@ -126,10 +127,11 @@ function historyTotalLine(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -163,7 +165,7 @@ function historyTotalLine(data) {
                 }
             },
             {
-                name:'总发帖量',
+                name:'总微博数',
                 type:'line',
                 data:totalPostData,
                 markPoint: {
@@ -214,6 +216,22 @@ function historyTotalLine(data) {
                 name:'业务发帖',
                 type:'line',
                 data:businessData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'跟踪转发',
+                type:'line',
+                data:traceData,
                 markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
@@ -324,7 +342,7 @@ function historyTotalTable(dataTable) {
                 valign: "middle",//垂直
             },
             {
-                title: "总发帖量",//标题
+                title: "总微博数",//标题
                 field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -350,6 +368,14 @@ function historyTotalTable(dataTable) {
             {
                 title: "业务发帖",//标题
                 field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "跟踪转发",//标题
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -701,6 +727,9 @@ function historyNews(data) {
                     }else {
                         txt=row.text;
                     };
+                    var a=Number(row.retweeted).toString();
+                    var b=Number(row.retweet).toString();
+                    var retNum=(a||b);
                     var str=
                         '<div class="post_perfect">'+
                         '   <div class="post_center-hot">'+
@@ -715,7 +744,7 @@ function historyNews(data) {
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+(row.retweeted||row.retweet)+'）</b></span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+retNum+'）</b></span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论<b style="'+C3+'">（'+row.comment+'）</b></span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         // '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
@@ -814,7 +843,7 @@ function collect(_this) {
 //操作返回结果
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
         f='操作失败';
@@ -893,52 +922,22 @@ function focusOn(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男'}else if (row.sex==2){return '女'}else{return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "关注来源",//标题
+                field: "follow_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.follow_source==''||row.follow_source=='null'||row.follow_source=='unknown'||!row.follow_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "post_time",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.post_time==''||row.post_time=='null'||row.post_time=='unknown'||!row.post_time){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.post_time);
-                    };
-                }
-            },
-            {
-                title: "所在地",//标题
-                field: "user_location",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
-                        return '未知';
-                    }else {
-                        return row.user_location;
+                        return row.follow_source;
                     };
                 }
             },
@@ -1077,37 +1076,22 @@ function fans(data) {
                     if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
                         return '未知';
                     }else {
-                        if (row.sex==1){return '男';}else if (row.sex==2){return '女'}else {return '未知'}
+                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
                     };
                 }
             },
             {
-                title: "年龄",//标题
-                field: "age",//键名
+                title: "粉丝来源",//标题
+                field: "fan_source",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.age==''||row.age=='null'||row.age=='unknown'||!row.age){
+                    if (row.fan_source==''||row.fan_source=='null'||row.fan_source=='unknown'||!row.fan_source){
                         return '未知';
                     }else {
-                        return row.age;
-                    };
-                }
-            },
-            {
-                title: "注册时间",//标题
-                field: "create_at",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.create_at==''||row.create_at=='null'||row.create_at=='unknown'||!row.create_at){
-                        return '未知';
-                    }else {
-                        return getLocalTime(row.create_at);
+                        return row.fan_source;
                     };
                 }
             },

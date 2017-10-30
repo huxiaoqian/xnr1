@@ -13,6 +13,7 @@
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-pagination .page-list {display: none;}
 </style>
 {% endblock %}
 {% block main %}
@@ -81,7 +82,35 @@
         </div>
     </div>
 </div>
-
+<!---->
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson_3" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>请先选择虚拟人的显示模式</span>
+                <div class="showType" style="padding: 10px 25px;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="choose_3" value='隐身'>
+                        <span class="demo-checkbox demo-radioInput"></span> 隐身
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="choose_3" value='昵称可见'>
+                        <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--模态框-->
 <div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

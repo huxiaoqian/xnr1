@@ -1,6 +1,5 @@
 function has_table_QQ(has_data_QQ) {
     let sourcePER=eval(has_data_QQ);
-    console.log(sourcePER)
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -177,7 +176,7 @@ function has_table_QQ(has_data_QQ) {
                     var ld;
                     if (row.login_status){ld = '在线中'}else{ld = '登录'}
                     return '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this,\''+row.qq_number+'\',\''+row.qq_groups.join('，')+'\',\''+row.nickname+'\',\''+row.access_id+'\')" title="'+ld+'"><i class="icon icon-key"></i></a>'+
-                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\')" title="进入"><i class="icon icon-link"></i></a>'+
+                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\',\''+row.login_status+'\')" title="进入"><i class="icon icon-link"></i></a>'+
                         '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row.qq_number+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -255,9 +254,13 @@ function success_fail(data) {
 }
 
 //进入虚拟人的具体操作
-function enterIn(QQ_id,QQ_num) {
-    // var if_in=encodeURI($(_this).parent().prev().text());
-    window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
+function enterIn(QQ_id,QQ_num,status) {
+    if (status=='true'){
+        window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
+    }else {
+        $('#succee_fail #words').text('请先登录在进行其他操作。');
+        $('#succee_fail').modal('show');
+    }
 }
 
 //添加虚拟人

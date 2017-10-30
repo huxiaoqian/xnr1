@@ -36,8 +36,7 @@ a,a:link,a:hover,a:visited,a:active {
     color: black;
     display: inline-block;
     background: url("/static/images/ID.png") no-repeat left center;
-    background-size:50px 50px ;
-
+    background-size:50px 50px;
     position: relative;
 }
 #nav .nav_top h3 {
@@ -46,7 +45,7 @@ a,a:link,a:hover,a:visited,a:active {
     margin-top: -5px;
 }
 /*10-12 LL向下展开的盒子*/
-#nav .nav_top:hover {
+#nav .nav_top {
     cursor: pointer;
 }
 #nav .nav_top #LL {
@@ -72,10 +71,10 @@ a,a:link,a:hover,a:visited,a:active {
 }
 
 /*<style> navigationMain.html页面内样式*/
-.demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+.demo-label{display:inline-block;cursor:pointer;font-weight: normal;margin: 5px 10px;}
 .demo-radio{display:none!important;}
-.demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+.demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
 .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
 .modal-header {
     background: #09344e!important;
@@ -157,7 +156,7 @@ a,a:link,a:hover,a:visited,a:active {
 #nav .nav_bottom .loadingUser a#login_user {
     color:#333;
 }
-#nav .nav_bottom .loadingUser:hover button #login_user{
+#nav .nav_bottom .loadingUser button #login_user:hover{
     color:#fa7d3c;
 }
 #nav .nav_bottom .list .main_li {

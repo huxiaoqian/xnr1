@@ -51,7 +51,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # }
 
 
-# result = es.search(index='xnr_flow_text_2017-10-01',doc_type='text',\
+# result = es.search(index='tweet_retweet_timing_list',doc_type='timing_list',\
 #     body=query_body)['hits']['hits']
 
 # result_json = {}
@@ -59,14 +59,14 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # for result_item in result:
 #     _id = result_item['_id']
 #     result_json[_id] = result_item
-# print 'result_json::',result_json
-# with open("./xnr_flow_1001.json","w") as dump_f:
+# #print 'result_json::',result_json
+# with open("./retweet_tweet_timing.json","w") as dump_f:
 #     # for item in result:
 #     json.dump(result_json,dump_f)
 #     print '@'
 
 
-# with open("./xnr_flow_1001.json","r") as load_f:
+# with open("./retweet_tweet_timing.json","r") as load_f:
 #     #print 'load_f::',load_f
 #     load_dict = json.load(load_f)
 #     print load_dict
@@ -75,16 +75,9 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
         
 #         _id = key
 #         content = value['_source']
-        
-#         #if _id == 'WXNR0004_1507272840':
-#         	#content['topic_field'] = u'文体类&政治类&民生类'
-#         content['topic_field_first'] = u'民生类_法律'
-#         # else:
-#         # 	#content['topic_field'] = u'文体类&政治类&民生类'
-#         # 	content['topic_field_first'] = u'民生类_交通'
 
-#         weibo_xnr_flow_text_mappings('xnr_flow_text_2017-10-01')
-#         es.index(index='xnr_flow_text_2017-10-01',doc_type='text',\
+#         #weibo_xnr_flow_text_mappings('xnr_flow_text_2017-10-01')
+#         es.index(index='tweet_retweet_timing_list',doc_type='timing_list',\
 #             id=_id,body=content)
 
 
@@ -170,41 +163,46 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # print 'uid_list::',uid_list
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01')['_source']
-# item_dict = {}
-# item_dict = {'influence':0.50,'safe':18.01,'penetration':20.05}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01')['_source']
+item_dict = {}
+item_dict = {'influence':0.50,'safe':18.01,'penetration':20.05}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02')['_source']
-# item_dict = {}
-# item_dict = {'influence':0.50,'safe':18.04,'penetration':14.28}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02')['_source']
+item_dict = {}
+item_dict = {'influence':0.50,'safe':18.04,'penetration':14.28}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03')['_source']
-# item_dict = {}
-# item_dict = {'influence':0.50,'safe':0,'penetration':16.33}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03')['_source']
+item_dict = {}
+item_dict = {'influence':0.50,'safe':0,'penetration':16.33}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04')['_source']
-# item_dict = {}
-# item_dict = {'influence':0.50,'safe':0,'penetration':17.24}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04')['_source']
+item_dict = {}
+item_dict = {'influence':0.50,'safe':0,'penetration':17.24}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05')['_source']
-# item_dict = {}
-# item_dict = {'influence':1.43,'safe':19.21,'penetration':10.03}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05')['_source']
+item_dict = {}
+item_dict = {'influence':1.43,'safe':19.21,'penetration':10.03}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06')['_source']
-# item_dict = {}
-# item_dict = {'influence':3.58,'safe':30.54,'penetration':25.48}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06')['_source']
+item_dict = {}
+item_dict = {'influence':3.58,'safe':30.54,'penetration':25.48}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06',body   ={'doc':item_dict})
 
-# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07')['_source']
-# item_dict = {}
-# item_dict = {'influence':0,'safe':0,'penetration':24.56}
-# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07')['_source']
+item_dict = {}
+item_dict = {'influence':0,'safe':0,'penetration':24.56}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
 
+
+get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15')['_source']
+item_dict = {}
+item_dict = {'influence':0,'penetration':0,'safe':0}
+es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body   ={'doc':item_dict})
 
 
 # with open('./uid_sensitive.txt','w') as f:
@@ -277,3 +275,4 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':[1264080891,1715330060,1082347151]}})
 
+# es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')

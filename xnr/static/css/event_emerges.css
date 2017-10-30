@@ -12,7 +12,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -63,7 +63,8 @@ body {
 #container .everyEvent .event_center {
     position: relative;
     /*padding: 10px 10px 10px 30px;*/
-    /*background:rgba(8,23,44,0.35);*/
+    /*background:#06162d;*/
+    margin-bottom: 10px;
 }
 #container .everyEvent .event_center .center_icon {
     width: 20px;
@@ -73,7 +74,8 @@ body {
     width: 910px;
     position: relative;
     padding:10px 10px 10px 70px;
-    background: rgba(16, 33, 51, 0.42);
+    margin-bottom: 10px;
+    background: #06162d;
 }
 #container .everyEvent .event_center .center_rel .icons {
     position: absolute;
