@@ -89,10 +89,11 @@ function influe(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -172,10 +173,11 @@ function penetration(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -246,10 +248,11 @@ function safe(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {

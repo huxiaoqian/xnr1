@@ -3,7 +3,6 @@ var time=Date.parse(new Date());
 var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_user_no='+qqID;
 public_ajax.call_request('get',QQgroup_url,QQgroup);
 function QQgroup(data) {
-    console.log(data)
     var str = '',poi=0;
     for (var d in data){
         var ched='';
