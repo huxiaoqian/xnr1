@@ -79,17 +79,17 @@ function dailyLOG(data) {
                 }
             },
             {
-                title: "操作时间",//标题
-                field: "operate_time",//键名
+                title: "操作日期",//标题
+                field: "operate_date",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.operate_time==''||row.operate_time=='null'||row.operate_time=='unknown'||!row.operate_time){
-                        return '无内容';
+                    if (row.operate_date==''||row.operate_date=='null'||row.operate_date=='unknown'||!row.operate_date){
+                        return '未知';
                     }else {
-                        return getLocalTime(row.operate_time);
+                        return row.operate_date;
                     };
                 }
             },
@@ -104,7 +104,12 @@ function dailyLOG(data) {
                     if (row.operate_content==''||row.operate_content=='null'||row.operate_content=='unknown'||!row.operate_content){
                         return '无内容';
                     }else {
-                        return row.operate_content.join('<br/>');
+                        var con=JSON.parse(row.operate_content);
+                        var str='';
+                        for (var s in con){
+                            str+= s +'：' +con[s]+'次<br/>';
+                        }
+                        return str;
                     };
                 }
             },
