@@ -102,6 +102,7 @@
     <div class="weiboQQ">
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/clickQQ.png" title="正在使用QQ登录中" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
     </div>
 
     <p class="p11">
@@ -264,6 +265,13 @@
     });
     $('.qq').on('click',function () {
         window.location.href='/index/navigationQQ/';
+    });
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationWX/';
     });
 
     //页面跳转
