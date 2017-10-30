@@ -271,7 +271,6 @@
         $('#system').on('click',function () {
             window.open('/systemManage/daily/');
         });
-
     }else if (loginType=='weibo'){
         // ---------10-12 LL向下展开盒子js--微博
         var L_nav = $('.nav_top');
@@ -300,6 +299,48 @@
         $('#knowledge').on('click',function () {
             window.open('/registered/targetCustom/')
         });
+        $('#reportedmange').on('click',function () {
+            window.open('/reportManage/management/');
+        });
+        $('#knowledgebase').on('click',function () {
+            window.open('/knowledge/domainLibrary/');
+        });
+        $('#system').on('click',function () {
+            window.open('/systemManage/daily/');
+        });
+    }else if (loginType=='WX'){
+        // ---------10-30 LL向下展开盒子js--WX
+        var L_nav = $('.nav_top');
+        $('#LL').empty();
+        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
+        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
+        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
+        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
+        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
+        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
+        $('#LL').append(LL_html);
+
+        L_nav.mouseover(function () {
+            $(this).find("#LL").stop().slideDown(200);
+        });
+        L_nav.mouseleave(function(){
+            $(this).find("#LL").stop().slideUp(200);
+        });
+        //页面跳转
+        var htmlUrl='';
+        // 操作控制
+        $('#control').on('click',function () {
+            window.open('/personalCenter/individualWX/');
+        });
+        // 预警监控
+        $('#warning').on('click',function () {
+            window.open('/inforDetection/inforCheckingWX/');
+        });
+        // 行为评估
+        $('#evaluation').on('click',function () {
+            window.open('/behavioGauge/behaviorWX/');
+        });
+
         $('#reportedmange').on('click',function () {
             window.open('/reportManage/management/');
         });
