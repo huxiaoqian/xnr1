@@ -191,10 +191,11 @@ function influe_7day(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -306,10 +307,11 @@ function influe(data) {
             toolbox: {
                 show : true,
                 feature : {
-                    dataView : {show: true, readOnly: false},
                     magicType : {show: true, type: ['line', 'bar']},
                     restore : {show: true},
-                    saveAsImage : {show: true}
+                    saveAsImage: {
+                        backgroundColor: 'rgba(8,23,44,0.8)',
+                    }
                 }
             },
             calculable : true,
@@ -470,10 +472,11 @@ function total() {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -610,10 +613,11 @@ function increase() {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {

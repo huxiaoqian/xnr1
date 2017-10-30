@@ -127,10 +127,11 @@ function historyTotalLine(data) {
                 dataZoom: {
                     yAxisIndex: 'none'
                 },
-                dataView: {readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
-                saveAsImage: {}
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
             }
         },
         xAxis:  {
@@ -842,7 +843,7 @@ function collect(_this) {
 //操作返回结果
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
         f='操作失败';

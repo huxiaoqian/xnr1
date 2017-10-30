@@ -1,7 +1,6 @@
 var virtual_url='/system_manage/show_users_account/';
 public_ajax.call_request('get',virtual_url,virtual);
 function virtual(data) {
-    console.log(data)
     $('#virtualtable').bootstrapTable('load', data);
     $('#virtualtable').bootstrapTable({
         data:data,
