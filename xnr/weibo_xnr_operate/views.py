@@ -38,7 +38,7 @@ def ajax_show_domain():
 @mod.route('/get_image_path/')
 def ajax_get_image_path():
     image_code = request.args.get('image_code','') # 以中文逗号隔开
-    print 'image_code::',image_code
+    # print 'image_code::',image_code
     results = get_image_path(image_code)
     return json.dumps(results)
 

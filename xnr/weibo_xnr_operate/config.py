@@ -147,6 +147,8 @@ def summary_text(text_list):#利用textrank获取文本摘要
         re_t = re_cut(text)
         if not len(re_t):
             continue
+        re_t.replace('【','')
+        re_t.replace('】','。')
         if re_t[-1] != '。':
             text_str = text_str + re_t + '。'
         else:

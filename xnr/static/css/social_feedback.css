@@ -10,7 +10,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -37,7 +37,7 @@ body {
 #container .type_page #content .focusEvery{
     position: relative;
     padding:10px 10px 10px 80px;
-    background:rgba(8,23,44,0.35);
+    background:#06162d;
     margin-bottom: 10px;
     width: 950px;
 }

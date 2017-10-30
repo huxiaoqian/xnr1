@@ -2,7 +2,6 @@ var time=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
-    console.log(data)
     $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
@@ -41,10 +40,12 @@ function weibo(data) {
                                 text='暂无内容';
                             }else {
                                 if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                    var keyword=item.sensitive_words_string.split('&');
-                                    for (var f of keyword){
-                                        text=item.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                    var s=item.text;
+                                    var keywords=item.sensitive_words_string.split('&');
+                                    for (var f=0;f<keywords.length;f++){
+                                        s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                                     }
+                                    text=s;
                                 }else {
                                     text=item.text;
                                 };

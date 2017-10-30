@@ -10,7 +10,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -46,7 +46,7 @@ body {
 }
 #container .post_post .post-2 .add_thing div {
     display:inline-block;
-    margin-right: 3px;
+    /*margin-right: 3px;*/
     cursor: pointer;
 }
 #container .post_post .post-2 .add_thing div img {
@@ -94,7 +94,7 @@ body {
     color: #b0bdd0;
     /* border-radius: 10px; */
     /* border: 1px solid silver; */
-    background: rgba(8,23,44,0.35);
+    background:#06162d;
 }
 #container .post_post #user_recommend li {
     list-style-type:disc;
@@ -127,7 +127,7 @@ body {
 #container .type_page #content #everyday .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
+    background: #06162d;
     margin-bottom: 10px;
     width: 700px;
 }
@@ -198,7 +198,7 @@ body {
     height: auto;
     min-height: 430px;
     padding: 15px 5px 5px 30px;
-    background: #0c2542;
+    background: #06162d;
     float: left;
 }
 #container #content #everyday .everyday-2 .ed-2-1 #theme,
@@ -225,7 +225,7 @@ body {
     margin-left: 20px;
     float: left;
 }
-.everyday-2 .ed-2-1 .demo-label{width: 80px;margin-bottom: 10px;}
+.everyday-2 .ed-2-1 .demo-label{width: 80px;margin: 3px 10px;}
 .hot-2 .hot-2-1 .demo-label {width: 150px;}
 .everyday-2 .ed-2-2 .demo-label{width:100px;}
 .hot-2 .hot-2-2 .demo-label{width: 120px;}
@@ -255,7 +255,7 @@ body {
 #container .type_page #content #business .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
+    background: #06162d;
     margin-bottom: 10px;
     width: 920px;
 }
@@ -293,7 +293,7 @@ body {
 #container #content #hot .post_perfect {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
+    background: #06162d;
     margin-bottom: 10px;
 }
 #container #content #hot .post_perfect .center_3,
@@ -345,7 +345,7 @@ body {
 #content_recommend #post_center-recommend {
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
+    background: #06162d;
 }
 #content_recommend #post_center-recommend .center_icon {
     position: absolute;
@@ -390,7 +390,7 @@ body {
 #thingsweibo .post_perfect,#follow_forward .post_perfect{
     position: relative;
     padding: 10px 10px 10px 30px;
-    background: rgba(8,23,44,0.35);
+    background:#06162d;
 }
 #thingsweibo .post_perfect .center_icon,#follow_forward .post_perfect .center_icon{
     position: absolute;
@@ -440,11 +440,7 @@ body {
     background: rgba(0, 0, 0, 0.74);
 }
 span.disableCss{
-
     pointer-events:none;
-
     color:#afafaf!important;
-
     cursor:default!important;
-
 }

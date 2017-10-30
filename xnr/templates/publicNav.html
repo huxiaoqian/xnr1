@@ -19,6 +19,9 @@
     <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="/static/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/public_nav.css">
+    <style>
+        #choosePerson .demo-label{width: auto!important;}
+    </style>
     {% endblock %}
     <!-- css结束 -->
 
@@ -67,10 +70,12 @@
                 <!-- <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
                 <li><a href="#"><i class="icon-trash"></i> 删除</a></li> -->
                 <li class="current"><a href="#"><i class="icon-map-marker"></i> <span>微博虚拟人</span></a></li>
+                <li class="change"><a href="#"><i class="icon-random"></i> <span>切换虚拟人</span></a></li>
                 <li class="divider"></li>
                 <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
                 <li class="old_2"><a href="#"><i class="icon-exchange"></i> <span>微信虚拟人</span></a></li>
-                <li><a href="#"><i class="i"></i> 登出 </a></li>
+
+                <li><a id="logout"><i class="i"></i> 登出 </a></li>f
             </ul>
         </div>
     </div>
@@ -155,7 +160,7 @@
 
 <!-- 10-12 LL===QQ -->
     <!--选择虚拟人 模态框-->
-    <div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal fade" id="choosePerson_2" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -174,11 +179,11 @@
                             <span>二、请先选择QQ的显示模式</span>
                             <div class="showType" style="padding: 10px 25px;">
                                 <label class="demo-label">
-                                    <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                    <input class="demo-radio" type="radio" name="choose_2" value='隐身'>
                                     <span class="demo-checkbox demo-radioInput"></span> 隐身
                                 </label>
                                 <label class="demo-label">
-                                    <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                    <input class="demo-radio" type="radio" name="choose_2" value='昵称可见'>
                                     <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                                 </label>
                             </div>
@@ -192,20 +197,7 @@
             </div>
         </div>
     </div>
-    <!--提示-->
-    <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">温馨提示</h4>
-                </div>
-                <div class="modal-body">
-                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 {% endblock %}
 <!-- 导航结束 -->
@@ -228,12 +220,107 @@
 <script src="/static/echarts/echarts.min.js"></script>
 <script src="/static/echarts/china.js"></script>
 <script>
-    //判断浏览器关闭
-//    window.onbeforeunload = onbeforeunload_handler;
-//    window.onunload = onunload_handler;
-//    function onbeforeunload_handler() {}
-//    function onunload_handler() {localStorage.clear();ISclear='clear';}
+    //登录用户名
+    var admin='admin@qq.com';
+    var loginType=localStorage.getItem('loginType');
+    //登出
+    $('#logout').on('click',function () {
+        $.ajax({
+            type: 'GET',
+            url: "/logout/",
+            async: true,
+            dataType: "json",
+            success: function (data) {}
+        });
+    });
+    if(loginType=='QQ'){
+        // ---------10-12 LL向下展开盒子js--QQ
+        var L_nav = $('.nav_top');
+        $('#LL').empty();
+        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
+        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
+        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
+        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
+        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
+        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
+        $('#LL').append(LL_html);
 
+        L_nav.mouseover(function () {
+            $(this).find("#LL").stop().slideDown(200);
+        });
+        L_nav.mouseleave(function(){
+            $(this).find("#LL").stop().slideUp(200);
+        });
+        //页面跳转
+        var htmlUrl='';
+        $('#control').on('click',function () {
+            window.open('/personalCenter/individualQQ/');
+        });
+        $('#warning').on('click',function () {
+            window.open('/inforDetection/inforCheckingQQ/');
+        });
+        $('#evaluation').on('click',function () {
+            window.open('/behavioGauge/behaviorQQ/')
+        });
+        $('#reportedmange').on('click',function () {
+            window.open('/reportManage/management/');
+        });
+        $('#knowledgebase').on('click',function () {
+            window.open('/knowledge/domainLibrary/');
+        });
+        $('#system').on('click',function () {
+            window.open('/systemManage/daily/');
+        });
+
+    }else if (loginType=='weibo'){
+        // ---------10-12 LL向下展开盒子js--微博
+        var L_nav = $('.nav_top');
+        L_nav.mouseover(function () {
+            $(this).find("#LL").stop().slideDown(200);
+        })
+        L_nav.mouseleave(function(){
+            $(this).find("#LL").stop().slideUp(200);
+        });
+        //页面跳转
+        $('#personal').on('click',function () {
+            window.open('/personalCenter/individual/');
+        });
+        $('#control').on('click',function () {
+            window.open('/control/operationControl/');
+        });
+        $('#info').on('click',function () {
+            window.open('/inforDetection/inforChecking/');
+        });
+        $('#monitor').on('click',function () {
+            window.open('/monitor/characterBehavior/');
+        });
+        $('#reported').on('click',function () {
+            window.open('/behavioGauge/influeAssess/');
+        });
+        $('#knowledge').on('click',function () {
+            window.open('/registered/targetCustom/')
+        });
+        $('#reportedmange').on('click',function () {
+            window.open('/reportManage/management/');
+        });
+        $('#knowledgebase').on('click',function () {
+            window.open('/knowledge/domainLibrary/');
+        });
+        $('#system').on('click',function () {
+            window.open('/systemManage/daily/');
+        });
+    }
+
+    $(document).ready(function() {
+        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
+        $(document).on('show.bs.modal', '.modal', function() {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+    });
 
     //几天前的时间戳
 //    function getDaysBefore(m){
@@ -327,10 +414,109 @@
             });
         },
     };
-    //登录用户名
-    var admin='admin@qq.com';
+    //切换虚拟人
+    $('.change').on('click',function () {
+        var THEmid='/weibo_xnr_create/show_weibo_xnr/';
+        if (loginType=='QQ'){THEmid='/qq_xnr_manage/show_qq_xnr/'}
+        var THEurl=THEmid+"?submitter="+admin;
+        public_ajax.call_request('GET',THEurl,addXnr)
+        $('#choosePerson').modal('show');
+    });
+    function addXnr(data) {
+        var str='';
+        if (loginType=='QQ'){
+            $.each(data,function (index,item) {
+                var name;
+                if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
+                    name='无昵称';
+                }else {
+                    name=item.nickname;
+                }
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
+                    '</label>';
+            });
+        }else if(loginType=='weibo'){
+            for (var k in data){
+                if (data[k]==''||data[k]=='unknown'){
+                    data[k]='无昵称';
+                }
+                str+=
+                    '<label class="demo-label" title="'+data[k]+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                    '</label>';
+            }
+        }
+        $('#choosePerson .identity').html(str);
+    }
+    $('#choosePerson .sure_in').on('click',function () {
+        if (loginType=='QQ'){
+            var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
+            var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
+            var userQQnum=$('input:radio[name="ID"]:checked').attr('valueNum');
+            var userType=$('input:radio[name="choose"]:checked').val();
+            if (!userQQID||!userQQName||!userType){
+                $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
+                $('#pormpt').modal('show');
+            }else {
+                var id_or_name='';
+                if (userType=='隐身'){
+                    id_or_name=userQQID;
+                }else {
+                    id_or_name=userQQName;
+                }
+                localStorage.setItem('userQQ',encodeURI(userQQID));
+                localStorage.setItem('userQQRelName',encodeURI(userQQName));
+                localStorage.setItem('userQQnum',encodeURI(userQQnum));
+                localStorage.setItem('userQQName',encodeURI(id_or_name));
+            }
+        }else if (loginType=='weibo'){
+            var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+            var userName=$('input:radio[name="ID"]:checked').attr('valueName');
+            var userType=$('input:radio[name="choose"]:checked').val();
+            if (!userID||!userName||!userType){
+                $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+                $('#pormpt').modal('show');
+            }else {
+                var id_or_name='';
+                if (userType=='隐身'){
+                    id_or_name=userID;
+                }else {
+                    id_or_name=userName;
+                }
+                localStorage.setItem('user',encodeURI(userID));
+                localStorage.setItem('userRelName',encodeURI(userName));
+                localStorage.setItem('userName',encodeURI(id_or_name));
+            }
+        }else if (loginType=='WX'){
+            var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
+            var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
+
+            var userType=$('input:radio[name="choose"]:checked').val();
+            if (!userWXID||!userWXName||!userType){
+                $('#pormpt p').text('请检查选择登陆的微信显示模式。');
+                $('#pormpt').modal('show');
+            }else {
+                var id_or_name='';
+                if (userType=='隐身'){
+                    id_or_name=userWXID;
+                }else {
+                    id_or_name=userWXName;
+                }
+                localStorage.setItem('userWX',encodeURI(userWXID));
+                localStorage.setItem('userWXRelName',encodeURI(userWXName));
+                // localStorage.setItem('userQQnum',encodeURI(userQQnum));
+                localStorage.setItem('userWXName',encodeURI(id_or_name));
+            }
+        }
+        location.reload();
+    });
     //登录虚拟人后取出ID或者名字
     var ID_Num,REL_name,ID_name,userQQnum,nowUser;
+
     function weiboORqq(type) {
         if (type=='weibo'){
             ID_Num=localStorage.getItem('user');
@@ -339,103 +525,7 @@
             if (ID_name){
                 nowUser=decodeURI(ID_name);
             }
-            InloginName('微博虚拟人','QQ群虚拟人','微信虚拟人','（微博）');
-
-            // ---------10-12 LL向下展开盒子js--微博
-                var L_nav = $('.nav_top');
-                L_nav.mouseover(function () {
-                    $(this).find("#LL").stop().slideDown(200);
-                })
-                L_nav.mouseleave(function(){
-                    $(this).find("#LL").stop().slideUp(200);
-                })
-                //页面跳转
-                var htmlUrl='';
-                $('#personal').on('click',function () {
-                    window.open('/personalCenter/individual/');
-                });
-                $('#control').on('click',function () {
-                    htmlUrl='/control/operationControl/';
-                    $('#choosePerson').modal('show');
-                });
-                $('#info').on('click',function () {
-                    htmlUrl='/inforDetection/inforChecking/';
-                    $('#choosePerson').modal('show');
-                });
-                $('#monitor').on('click',function () {
-                    htmlUrl='/monitor/characterBehavior/';
-                    $('#choosePerson').modal('show');
-                });
-                $('#reported').on('click',function () {
-                    htmlUrl='/behavioGauge/influeAssess/';
-                    $('#choosePerson').modal('show');
-                });
-                $('#knowledge').on('click',function () {
-                    window.open('/registered/targetCustom/')
-                });
-                $('#reportedmange').on('click',function () {
-                    window.open('/reportManage/management/');
-                    //htmlUrl='/reportManage/management/';
-                    //$('#choosePerson').modal('show');
-                });
-                $('#knowledgebase').on('click',function () {
-                    window.open('/knowledge/domainLibrary/');
-                    //htmlUrl='/knowledge/domainLibrary/';
-                    //$('#choosePerson').modal('show');
-                });
-                $('#system').on('click',function () {
-                    window.open('/systemManage/daily/');
-                    //htmlUrl='/systemManage/daily/';
-                    //$('#choosePerson').modal('show');
-                });
-
-                //选择虚拟人确定进入
-                $('.sure_in').on('click',function () {
-                    var userID=$('input:radio[name="ID"]:checked').attr('valueID');
-                    var userName=$('input:radio[name="ID"]:checked').attr('valueName');
-                    var userType=$('input:radio[name="choose"]:checked').val();
-                    if (!userID||!userName||!userType){
-                        $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
-                        $('#pormpt').modal('show');
-                    }else {
-                        var id_or_name='';
-                        if (userType=='隐身'){
-                            id_or_name=userID;
-                        }else {
-                            id_or_name=userName;
-                        }
-                        localStorage.setItem('user',encodeURI(userID));
-                        localStorage.setItem('userRelName',encodeURI(userName));
-                        localStorage.setItem('userName',encodeURI(id_or_name));
-                        window.open(htmlUrl);
-                    }
-                });
-
-                //登录类型
-                //localStorage.setItem('loginType',encodeURI('weibo'));
-                var admin='admin@qq.com';
-                //虚拟人列表
-                $.ajax({
-                    type: 'GET',
-                    url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
-                    async: true,
-                    dataType: "json",
-                    success: function (data) {
-                        var str='';
-                        for (var k in data){
-                            if (data[k]==''||data[k]=='unknown'){
-                                data[k]='无昵称';
-                            }
-                            str+=
-                                '<label class="demo-label" title="'+data[k]+'">'+
-                                '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
-                                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
-                                '</label>';
-                        }
-                        $('#choosePerson .identity').html(str);
-                    }
-                });
-
+            InloginName('微博虚拟人','QQ群虚拟人','（微博）');
         }else if(type=="QQ") {
             ID_Num=localStorage.getItem('userQQ');
             REL_name=localStorage.getItem('userQQRelName');
@@ -444,97 +534,7 @@
             if (ID_name){
                 nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
             }
-            InloginName('QQ群虚拟人','微博虚拟人','微信虚拟人','（QQ群）');
-
-            // ---------10-12 LL向下展开盒子js--QQ
-                var L_nav = $('.nav_top');
-                $('#LL').empty();
-                var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-                LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-                LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-                LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-                LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-                LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-                $('#LL').append(LL_html);
-
-                L_nav.mouseover(function () {
-                    $(this).find("#LL").stop().slideDown(200);
-                })
-                L_nav.mouseleave(function(){
-                    $(this).find("#LL").stop().slideUp(200);
-                })
-                //页面跳转
-                var htmlUrl='';
-                $('#control').on('click',function () {
-                    window.open('/personalCenter/individualQQ/');
-                });
-                $('#warning').on('click',function () {
-                    htmlUrl='/inforDetection/inforCheckingQQ/';
-                    $('#choosePerson').modal('show');
-                });
-                $('#evaluation').on('click',function () {
-                    htmlUrl='/behavioGauge/behaviorQQ/';
-                    $('#choosePerson').modal('show');
-                });
-
-                $('#reportedmange').on('click',function () {
-                    window.open('/reportManage/management/');
-                });
-                $('#knowledgebase').on('click',function () {
-                    window.open('/knowledge/domainLibrary/');
-                });
-                $('#system').on('click',function () {
-                    window.open('/systemManage/daily/');
-                });
-
-                //虚拟人列表
-                $.ajax({
-                    type: 'GET',
-                    url: "/qq_xnr_manage/show_qq_xnr/",
-                    async: true,
-                    dataType: "json",
-                    success: function (data) {
-                        var str='';
-                        $.each(data,function (index,item) {
-                            var name;
-                            if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
-                                name='无昵称';
-                            }else {
-                                name=item.nickname;
-                            }
-                            str+=
-                                '<label class="demo-label" title="'+name+'">'+
-                                '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
-                                '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
-                                '</label>';
-                        });
-                        $('#choosePerson .identity').html(str);
-                    }
-                });
-                //选择虚拟人确定进入
-                $('.sure_in').on('click',function () {
-                    var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
-                    var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
-                    var userQQnum=$('input:radio[name="ID"]:checked').attr('valueNum');
-                    var userType=$('input:radio[name="choose"]:checked').val();
-                    if (!userQQID||!userQQName||!userType){
-                        $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
-                        $('#pormpt').modal('show');
-                    }else {
-                        var id_or_name='';
-                        if (userType=='隐身'){
-                            id_or_name=userQQID;
-                        }else {
-                            id_or_name=userQQName;
-                        }
-                        localStorage.setItem('userQQ',encodeURI(userQQID));
-                        localStorage.setItem('userQQRelName',encodeURI(userQQName));
-                        localStorage.setItem('userQQnum',encodeURI(userQQnum));
-                        localStorage.setItem('userQQName',encodeURI(id_or_name));
-                        window.open(htmlUrl);
-                    }
-                });
-
+            InloginName('QQ群虚拟人','微博虚拟人','（QQ群）');
         }else if(type=="WX") {
             ID_Num=localStorage.getItem('userWX');
             REL_name=localStorage.getItem('userWXRelName');
@@ -545,99 +545,9 @@
                 nowUser=decodeURI(ID_name);
             }
             InloginName('微信虚拟人','微博虚拟人','QQ群虚拟人','（微信）');
-
-            // ---------10-30 LL向下展开盒子js--WX
-                var L_nav = $('.nav_top');
-                $('#LL').empty();
-                var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-                LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-                LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-                LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-                LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-                LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-                $('#LL').append(LL_html);
-
-                L_nav.mouseover(function () {
-                    $(this).find("#LL").stop().slideDown(200);
-                })
-                L_nav.mouseleave(function(){
-                    $(this).find("#LL").stop().slideUp(200);
-                })
-                //页面跳转
-                var htmlUrl='';
-                // 操作控制
-                $('#control').on('click',function () {
-                    window.open('/personalCenter/individualWX/');
-                });
-                // 预警监控
-                $('#warning').on('click',function () {
-                    htmlUrl='/inforDetection/inforCheckingWX/';
-                    $('#choosePerson').modal('show');
-                });
-                // 行为评估
-                $('#evaluation').on('click',function () {
-                    htmlUrl='/behavioGauge/behaviorWX/';
-                    $('#choosePerson').modal('show');
-                });
-
-                $('#reportedmange').on('click',function () {
-                    window.open('/reportManage/management/');
-                });
-                $('#knowledgebase').on('click',function () {
-                    window.open('/knowledge/domainLibrary/');
-                });
-                $('#system').on('click',function () {
-                    window.open('/systemManage/daily/');
-                });
-                //虚拟人列表--更改为微信
-                $.ajax({
-                    type: 'GET',
-                    url: "/wx_xnr_manage/show/",
-                    async: true,
-                    dataType: "json",
-                    success: function (data) {
-                        var str='';
-                        $.each(data,function (index,item) {
-                            var name;
-                            if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
-                                name='无昵称';
-                            }else {
-                                name=item.wx_id;
-                            }
-                            str+=
-                                '<label class="demo-label" title="'+name+'">'+
-                                '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.wxbot_id+'" valueID='+item.wxbot_id+' valueName='+name+'>'+
-                                '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.wxbot_id+'）'+
-                                '</label>';
-                        });
-                        $('#choosePerson .identity').html(str);
-                    }
-                });
-                //选择虚拟人确定进入
-                $('.sure_in').on('click',function () {
-                    var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
-                    var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
-
-                    var userType=$('input:radio[name="choose"]:checked').val();
-                    if (!userWXID||!userWXName||!userType){
-                        $('#pormpt p').text('请检查选择登陆的微信显示模式。');
-                        $('#pormpt').modal('show');
-                    }else {
-                        var id_or_name='';
-                        if (userType=='隐身'){
-                            id_or_name=userWXID;
-                        }else {
-                            id_or_name=userWXName;
-                        }
-                        localStorage.setItem('userWX',encodeURI(userWXID));
-                        localStorage.setItem('userWXRelName',encodeURI(userWXName));
-                        // localStorage.setItem('userQQnum',encodeURI(userQQnum));
-                        localStorage.setItem('userWXName',encodeURI(id_or_name));
-                        window.open(htmlUrl);
-                    }
-                });
         }
     }
+
     // ===切换虚拟人类型===
     // $('.old').on('click',function(e) {
     //     var txt=$(this).find('span').text();
@@ -705,6 +615,7 @@
         var afterEle='';
         if (typeNum==1){
             $('.coorName').text('个人中心');
+            $('.xnrShowHide').hide();
         }else if (typeNum==2){
             $('.coorName').text('操作控制');
             afterEle=
@@ -773,10 +684,13 @@
                 '</li>';
         }else if (typeNum==6){
             $('.coorName').text('虚拟人定制');
+            $('.xnrShowHide').hide();
         }else if (typeNum==7){
             $('.coorName').text('上报管理');
+            $('.xnrShowHide').hide();
         }else if (typeNum==8){
             $('.coorName').text('知识库管理');
+            $('.xnrShowHide').hide();
             afterEle=
                 '<li class="main_li">'+
                 '    <a class="li_a" href="/knowledge/domainLibrary/">' +
@@ -800,6 +714,7 @@
                 '</li>';
         }else if (typeNum==9){
             $('.coorName').text('系统管理');
+            $('.xnrShowHide').hide();
             afterEle=
                 '<li class="main_li">'+
                 '    <a class="li_a" href="/systemManage/daily/">' +
@@ -819,8 +734,6 @@
         };
         $('.behind').html(afterEle);
     };
-
-
 
 </script>
 {% endblock %}

@@ -25,7 +25,7 @@ function domain(data) {
         for(var i=0;i<data.length;i++){
             str+=
                 '<label class="demo-label" title="'+data[i]+'">'+
-                '   <input class="demo-radio" value="'+data[i]+'" type="radio" name="'+name+'" onclick="allDataFun(this)">'+
+                '   <input class="demo-radio" value="'+data[i]+'" type="radio" name="chararcter_two" onclick="allDataFun(this)">'+
                 '   <span class="demo-checkbox demo-radioInput"></span> '+data[i]+
                 '</label>';
         }

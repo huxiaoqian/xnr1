@@ -9,7 +9,7 @@ body {
     margin: 0 auto 50px;
     height: 100%;
     padding: 25px;
-    background: rgba(8,23,44,0.5);
+    background: rgba(8,23,44,0.8);
     position: relative;
     top: 80px;
 }
@@ -68,7 +68,7 @@ body {
 #container .info_sure .info_right .bind_info {
     width: 300px;
     padding: 20px 30px;
-    background: rgba(29, 28, 28, 0.36);
+    background: #06162d;
     border-radius: 10px;
 }
 #container .info_sure .info_right .bind_info input {
