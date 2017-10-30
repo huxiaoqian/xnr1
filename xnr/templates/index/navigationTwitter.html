@@ -1,63 +1,63 @@
 {% block title %}<title>网络虚拟人系统</title>{% endblock %}
 {% block my_css %}
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
-    <link rel="stylesheet" href="/static/css/navigationMain.css">
-    <style>
-        .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
-        .demo-radio{display:none!important;}
-        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-        .modal-header {
-            background: #09344e!important;
-            color: white!important;
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+<link rel="stylesheet" href="/static/css/navigationMain.css">
+<style>
+    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+    .demo-radio{display:none!important;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .modal-header {
+        background: #09344e!important;
+        color: white!important;
+    }
+    .modal-body,.modal-footer {
+        background: #041b29!important;
+        color: white!important;
+    }
+    .table-hover>tbody>tr:hover {
+        background-color: #2a556f!important;
+    }
+    .modal-header .close {
+        color:white!important;
+        opacity: 1!important;
+    }
+    .modal-footer .btn {
+        background-color: transparent;
+        border-color: silver;
+        color: white;
+    }
+    .modal-footer .btn:hover {
+        background-color: rgba(3, 8, 16, 0.61);
+        color: white;
+    }
+    .weiboQQ {
+        position: absolute;
+        width: 554px;
+        height: 176px;
+        left: 50%;
+        top: 22%;
+        margin: 0 0 0 -277px;
+        text-align: center;
+    }
+    .weiboQQ img {
+        margin:0 30px;
+        cursor: pointer;
+    }
+    @media screen and (min-width:1370px) and (max-width:1920px) {
+        .bg13 .monitor {
+            top: 700px!important;
+            left: 1100px!important;
         }
-        .modal-body,.modal-footer {
-            background: #041b29!important;
-            color: white!important;
+        .bg13 .info {
+            top: 700px!important;
+            left:700px!important;
         }
-        .table-hover>tbody>tr:hover {
-            background-color: #2a556f!important;
-        }
-        .modal-header .close {
-            color:white!important;
-            opacity: 1!important;
-        }
-        .modal-footer .btn {
-            background-color: transparent;
-            border-color: silver;
-            color: white;
-        }
-        .modal-footer .btn:hover {
-            background-color: rgba(3, 8, 16, 0.61);
-            color: white;
-        }
-        .weiboQQ {
-            position: absolute;
-            width: 554px;
-            height: 176px;
-            left: 50%;
-            top: 22%;
-            margin: 0 0 0 -277px;
-            text-align: center;
-        }
-        .weiboQQ img {
-            margin:0 30px;
-            cursor: pointer;
-        }
-        @media screen and (min-width:1370px) and (max-width:1920px) {
-            .bg13 .monitor {
-                top: 700px!important;
-                left: 1100px!important;
-            }
-            .bg13 .info {
-                top: 700px!important;
-                left:700px!important;
-            }
-        }
-    </style>
+    }
+</style>
 {% endblock %}
 {% block main %}
 <div class="section section1">
@@ -116,17 +116,17 @@
 
     <div class="hgroup">
 
-        <h1><a href="/personalCenter/individual/">个人中心</a></h1>
+        <h1></h1>
 
         <h2>发生，不止所见。</h2>
 
     </div>
 
     <div class="weiboQQ">
-        <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
+        <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
         <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
-        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
+        <img src="/static/images/twitterclick.png" title="正在使用twitter登录中" class="twitter">
     </div>
     <p class="p11" style="font-size: 16px;">
         <!--社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。-->
@@ -284,7 +284,11 @@
         $(".bg55-top").removeClass("effeckt-show");
     });
     //登录方式
-    $('.weibo').on('click',function () {
+    $('.weibo').hover(function () {
+        $(this).attr('src','/static/images/clickweibo.png');
+    },function () {
+        $(this).attr('src','/static/images/weiboload.png');
+    }).on('click',function () {
         window.location.href='/index/navigation/';
     });
     $('.qq').hover(function () {
@@ -301,19 +305,12 @@
     }).on('click',function () {
         window.location.href='/index/navigationFaceBook/';
     });
-    $('.twitter').hover(function () {
-        $(this).attr('src','/static/images/twitterclick.png');
-    },function () {
-        $(this).attr('src','/static/images/twitterload.png');
-    }).on('click',function () {
-        window.location.href='/index/navigationTwitter/';
-    });
 
-    localStorage.setItem('loginType','weibo');
+    localStorage.setItem('loginType','twitter');
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
-        window.open('/personalCenter/individual/');
+        window.open('/personalCenter/individualTwitter/');
     });
     $('#control').on('click',function () {
         htmlUrl='/control/operationControl/';
@@ -336,18 +333,12 @@
     });
     $('#reportedmange').on('click',function () {
         window.open('/reportManage/management/');
-        //htmlUrl='/reportManage/management/';
-        //$('#choosePerson').modal('show');
     });
     $('#knowledgebase').on('click',function () {
         window.open('/knowledge/domainLibrary/');
-        //htmlUrl='/knowledge/domainLibrary/';
-        //$('#choosePerson').modal('show');
     });
     $('#system').on('click',function () {
         window.open('/systemManage/daily/');
-        //htmlUrl='/systemManage/daily/';
-        //$('#choosePerson').modal('show');
     });
 
     //选择虚拟人确定进入
@@ -373,7 +364,6 @@
     });
 
     //登录类型
-    //localStorage.setItem('loginType',encodeURI('weibo'));
     var admin='admin@qq.com';
     //虚拟人列表
     $.ajax({

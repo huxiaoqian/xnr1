@@ -17,3 +17,7 @@ def personal_center():
 @mod.route('/individualQQ/')
 def personal_centeQQ():
     return render_template('personalCenter/personal_centerQQ.html')
+
+@mod.route('/individualTwitter/')
+def individualTwitter():
+    return render_template('personalCenter/personal_centerTwitter.html')

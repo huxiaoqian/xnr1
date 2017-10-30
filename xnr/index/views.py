@@ -23,6 +23,14 @@ def navigation():
 def navigationQQ():
     return render_template('index/navigationMain_QQ.html')
 
+@mod.route('/navigationFaceBook/')
+def navigationFaceBook():
+    return render_template('index/navigationFaceBook.html')
+
+@mod.route('/navigationTwitter/')
+def navigationTwitter():
+    return render_template('index/navigationTwitter.html')
+
 @mod.route('/create_account/')
 def ajax_create_account():
 
