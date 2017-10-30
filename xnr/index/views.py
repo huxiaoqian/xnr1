@@ -31,6 +31,11 @@ def navigationFaceBook():
 def navigationTwitter():
     return render_template('index/navigationTwitter.html')
 
+@mod.route('/navigationWX/')
+def navigationWX():
+    return render_template('index/navigationMain_WX.html')
+
+
 @mod.route('/create_account/')
 def ajax_create_account():
 

@@ -125,6 +125,7 @@
     <div class="weiboQQ">
         <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
         <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
         <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
     </div>
@@ -307,6 +308,13 @@
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
         window.location.href='/index/navigationTwitter/';
+
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationWX/';
     });
 
     localStorage.setItem('loginType','weibo');
