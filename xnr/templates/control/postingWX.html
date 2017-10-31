@@ -115,8 +115,9 @@
         </div>
     </div>
 
-    <div class="dialogue clearfix" style="position: relative;margin-top: 30px;">
-        <div class="dialogue-1" style="width: 70%; float:left;">
+    <div class="dialogue" style="position: relative;margin-top: 30px;">
+        <div class="dialogue-1" style="width: 70%;">
+            <form class="publish">
             <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
             <div class="add_thing">
                 <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
@@ -124,9 +125,10 @@
                 <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
                 <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
             </div>
+            </form>
         </div>
         <div id="user_recommend">
-            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">消息推送QQ群名称</p>
+            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">消息推送微信群名称</p>
             <div class="user_example_list" style="padding:5px;">
 
             </div>
@@ -159,7 +161,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">QQ群</h4>
+                <h4 class="modal-title">微信群</h4>
             </div>
             <div class="modal-body moreCon">
                 <ul></ul>
@@ -172,12 +174,16 @@
 {% block my_js %}
 
 <script>
+    var loadingType = 'WX';
+
     $('.coorName').text('操作控制');
     // weiboORqq('QQ');
     weiboORqq('WX');
     // var qqID='{{QQ_id}}';
-    var wxbot_id='{{WXbot_id}}';
-    var qqNumber='{{QQ_num}}';
+    // var wxbot_id='{{WXbot_id}}';
+    var wxbot_id=localStorage.getItem('userWX');
+    console.log(wxbot_id)
+    // var qqNumber='{{QQ_num}}';
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中

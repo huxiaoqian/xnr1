@@ -75,7 +75,7 @@
                 <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
                 <li class="old_2"><a href="#"><i class="icon-exchange"></i> <span>微信虚拟人</span></a></li>
 
-                <li><a id="logout"><i class="i"></i> 登出 </a></li>f
+                <li><a id="logout"><i class="i"></i> 登出 </a></li>
             </ul>
         </div>
     </div>
@@ -233,124 +233,127 @@
             success: function (data) {}
         });
     });
-    if(loginType=='QQ'){
-        // ---------10-12 LL向下展开盒子js--QQ
-        var L_nav = $('.nav_top');
-        $('#LL').empty();
-        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-        $('#LL').append(LL_html);
+    setTimeout(function(){
+        if(loadingType=='QQ'){
+            // ---------10-12 LL向下展开盒子js--QQ
+            var L_nav = $('.nav_top');
+            $('#LL').empty();
+            var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
+            LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
+            LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
+            LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
+            LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
+            LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
+            $('#LL').append(LL_html);
 
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        //页面跳转
-        var htmlUrl='';
-        $('#control').on('click',function () {
-            window.open('/personalCenter/individualQQ/');
-        });
-        $('#warning').on('click',function () {
-            window.open('/inforDetection/inforCheckingQQ/');
-        });
-        $('#evaluation').on('click',function () {
-            window.open('/behavioGauge/behaviorQQ/')
-        });
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }else if (loginType=='weibo'){
-        // ---------10-12 LL向下展开盒子js--微博
-        var L_nav = $('.nav_top');
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        })
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        //页面跳转
-        $('#personal').on('click',function () {
-            window.open('/personalCenter/individual/');
-        });
-        $('#control').on('click',function () {
-            window.open('/control/operationControl/');
-        });
-        $('#info').on('click',function () {
-            window.open('/inforDetection/inforChecking/');
-        });
-        $('#monitor').on('click',function () {
-            window.open('/monitor/characterBehavior/');
-        });
-        $('#reported').on('click',function () {
-            window.open('/behavioGauge/influeAssess/');
-        });
-        $('#knowledge').on('click',function () {
-            window.open('/registered/targetCustom/')
-        });
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }else if (loginType=='WX'){
-        // ---------10-30 LL向下展开盒子js--WX
-        var L_nav = $('.nav_top');
-        $('#LL').empty();
-        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-        $('#LL').append(LL_html);
+            L_nav.mouseover(function () {
+                $(this).find("#LL").stop().slideDown(200);
+            });
+            L_nav.mouseleave(function(){
+                $(this).find("#LL").stop().slideUp(200);
+            });
+            //页面跳转
+            var htmlUrl='';
+            $('#control').on('click',function () {
+                window.open('/personalCenter/individualQQ/');
+            });
+            $('#warning').on('click',function () {
+                window.open('/inforDetection/inforCheckingQQ/');
+            });
+            $('#evaluation').on('click',function () {
+                window.open('/behavioGauge/behaviorQQ/')
+            });
+            $('#reportedmange').on('click',function () {
+                window.open('/reportManage/management/');
+            });
+            $('#knowledgebase').on('click',function () {
+                window.open('/knowledge/domainLibrary/');
+            });
+            $('#system').on('click',function () {
+                window.open('/systemManage/daily/');
+            });
+        }else if (loadingType=='weibo'){
+            // ---------10-12 LL向下展开盒子js--微博
+            var L_nav = $('.nav_top');
+            L_nav.mouseover(function () {
+                $(this).find("#LL").stop().slideDown(200);
+            })
+            L_nav.mouseleave(function(){
+                $(this).find("#LL").stop().slideUp(200);
+            });
+            //页面跳转
+            $('#personal').on('click',function () {
+                window.open('/personalCenter/individual/');
+            });
+            $('#control').on('click',function () {
+                window.open('/control/operationControl/');
+            });
+            $('#info').on('click',function () {
+                window.open('/inforDetection/inforChecking/');
+            });
+            $('#monitor').on('click',function () {
+                window.open('/monitor/characterBehavior/');
+            });
+            $('#reported').on('click',function () {
+                window.open('/behavioGauge/influeAssess/');
+            });
+            $('#knowledge').on('click',function () {
+                window.open('/registered/targetCustom/')
+            });
+            $('#reportedmange').on('click',function () {
+                window.open('/reportManage/management/');
+            });
+            $('#knowledgebase').on('click',function () {
+                window.open('/knowledge/domainLibrary/');
+            });
+            $('#system').on('click',function () {
+                window.open('/systemManage/daily/');
+            });
+        }else if (loadingType=='WX'){
+            // ---------10-30 LL向下展开盒子js--WX
+            var L_nav = $('.nav_top');
+            $('#LL').empty();
+            var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
+            LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
+            LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
+            LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
+            LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
+            LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
+            $('#LL').append(LL_html);
 
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        //页面跳转
-        var htmlUrl='';
-        // 操作控制
-        $('#control').on('click',function () {
-            window.open('/personalCenter/individualWX/');
-        });
-        // 预警监控
-        $('#warning').on('click',function () {
-            window.open('/inforDetection/inforCheckingWX/');
-        });
-        // 行为评估
-        $('#evaluation').on('click',function () {
-            window.open('/behavioGauge/behaviorWX/');
-        });
+            L_nav.mouseover(function () {
+                $(this).find("#LL").stop().slideDown(200);
+            });
+            L_nav.mouseleave(function(){
+                $(this).find("#LL").stop().slideUp(200);
+            });
+            //页面跳转
+            var htmlUrl='';
+            // 操作控制
+            $('#control').on('click',function () {
+                window.open('/personalCenter/individualWX/');
+            });
+            // 预警监控
+            $('#warning').on('click',function () {
+                window.open('/inforDetection/inforCheckingWX/');
+            });
+            // 行为评估
+            $('#evaluation').on('click',function () {
+                window.open('/behavioGauge/behaviorWX/');
+            });
 
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }
+            $('#reportedmange').on('click',function () {
+                window.open('/reportManage/management/');
+            });
+            $('#knowledgebase').on('click',function () {
+                window.open('/knowledge/domainLibrary/');
+            });
+            $('#system').on('click',function () {
+                window.open('/systemManage/daily/');
+            });
+        }
+    },2000)
+
 
     $(document).ready(function() {
         // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
@@ -458,14 +461,21 @@
     //切换虚拟人
     $('.change').on('click',function () {
         var THEmid='/weibo_xnr_create/show_weibo_xnr/';
-        if (loginType=='QQ'){THEmid='/qq_xnr_manage/show_qq_xnr/'}
+        // var THEmid;
+        if (loadingType=='weibo'){
+            THEmid='/weibo_xnr_create/show_weibo_xnr/';
+        }else if (loadingType=='QQ'){
+            THEmid='/qq_xnr_manage/show_qq_xnr/';
+        }else if(loadingType=='WX'){
+            THEmid='/wx_xnr_manage/show/';
+        }
         var THEurl=THEmid+"?submitter="+admin;
         public_ajax.call_request('GET',THEurl,addXnr)
         $('#choosePerson').modal('show');
     });
     function addXnr(data) {
         var str='';
-        if (loginType=='QQ'){
+        if (loadingType=='QQ'){
             $.each(data,function (index,item) {
                 var name;
                 if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
@@ -479,7 +489,7 @@
                     '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
                     '</label>';
             });
-        }else if(loginType=='weibo'){
+        }else if(loadingType=='weibo'){
             for (var k in data){
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
@@ -490,11 +500,25 @@
                     '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
                     '</label>';
             }
+        }else if(loadingType=='WX'){
+            $.each(data,function (index,item) {
+                var name;
+                if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
+                    name='无昵称';
+                }else {
+                    name=item.wx_id;
+                }
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.wxbot_id+'" valueID='+item.wxbot_id+' valueName='+name+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.wxbot_id+'）'+
+                    '</label>';
+            });
         }
         $('#choosePerson .identity').html(str);
     }
     $('#choosePerson .sure_in').on('click',function () {
-        if (loginType=='QQ'){
+        if (loadingType=='QQ'){
             var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
             var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
             var userQQnum=$('input:radio[name="ID"]:checked').attr('valueNum');
@@ -514,7 +538,7 @@
                 localStorage.setItem('userQQnum',encodeURI(userQQnum));
                 localStorage.setItem('userQQName',encodeURI(id_or_name));
             }
-        }else if (loginType=='weibo'){
+        }else if (loadingType=='weibo'){
             var userID=$('input:radio[name="ID"]:checked').attr('valueID');
             var userName=$('input:radio[name="ID"]:checked').attr('valueName');
             var userType=$('input:radio[name="choose"]:checked').val();
@@ -532,7 +556,7 @@
                 localStorage.setItem('userRelName',encodeURI(userName));
                 localStorage.setItem('userName',encodeURI(id_or_name));
             }
-        }else if (loginType=='WX'){
+        }else if (loadingType=='WX'){
             var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
             var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
 
@@ -639,6 +663,8 @@
             $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }else if(lf=='（微信）') {
             $('#backHome .list_one.li_a').attr('href','/index/navigationWX/');
+        }else{
+            $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }
     });
     function InloginName(two,three,four,five) {
