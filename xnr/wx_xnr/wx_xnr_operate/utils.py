@@ -29,12 +29,12 @@ def utils_search_by_group_puid(wxbot_id, group_puid, startdate='', enddate=''):
     if enddate == '':
         end = ts2datetime(time.time())
     else:
-        end = datetime.datetime.strptime(enddate,'%Y-%m-%d')
+        end = enddate
     #start date 
     if startdate == '': 
         start = ts2datetime(datetime2ts(end) - group_message_windowsize*DAY)
     else:
-        start = datetime.datetime.strptime(startdate,'%Y-%m-%d') 
+        start = startdate
     index_names = get_wx_groupmessage_index_list(start, end)
     index_names.reverse()
     xnr_puid = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid'])['puid']

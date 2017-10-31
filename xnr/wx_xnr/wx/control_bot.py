@@ -132,31 +132,32 @@ def login_wx_xnr(wxbot_id):
         return 0
 
 def create_wx_xnr(xnr_info):
-    #create and login, xnr_info = [wx_id,remark,submitter]
+    #create and login, xnr_info = [wx_id,remark,submitter,access_id]
     wx_id = xnr_info['wx_id']
     submitter = xnr_info['submitter']
+    access_id = xnr_info['access_id']
     remark = xnr_info.get('remark')
-    if not remark:
-        remark = ''
     search_result = check_wx_xnr(wx_id) #check if wxxnr exist
     if search_result:   #如果虚拟人已经存在，则进行登陆。并可考虑用于更新wxxnr的信息，先不管
         wxbot_id = search_result['wxbot_id']
         wxbot_port = search_result['wxbot_port']
         groups_list = search_result['groups_list']
         #可进一步做出判断，如果wxbot_port被占用了，则更改wxbot_port，并更新es表。也先不管。
-        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, remark=remark)
+        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, access_id=access_id, remark=remark)
     else:   #如果虚拟人还没有存在，那么就创建此虚拟人
         wxbot_port = find_port(get_all_ports())
         user_no_current = load_user_no_current()
         wxbot_id = user_no2wxbot_id(user_no_current)
-        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, submitter=submitter, remark=remark, create_flag=1)
+        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, submitter=submitter, access_id=access_id, remark=remark, create_flag=1)
     return qr_path
 
-def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, remark=None, init_groups_list='', create_flag=0):
+def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, access_id=None, remark=None, init_groups_list='', create_flag=0):
     #在logout完善之前，在登录之前先手动把status数据更改成logout，并执行logout
     change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout','qr_path':'', 'wx_id':wx_id, 'wxbot_port':wxbot_port})
     if submitter != None:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'submitter':submitter})
+    if access_id != None:
+        change_wxxnr_redis_data(wxbot_id, xnr_data={'access_id':access_id})
     if remark != None:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'remark':remark})
     if create_flag:

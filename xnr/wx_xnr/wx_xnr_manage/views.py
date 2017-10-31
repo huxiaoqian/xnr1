@@ -13,8 +13,10 @@ mod = Blueprint('wx_xnr_manage', __name__, url_prefix='/wx_xnr_manage')
 def create_xnr():
     wx_id = request.args.get('wx_id', '')
     submitter = request.args.get('submitter', '')
-    if wx_id and submitter:
-        res = utils_create_xnr({'wx_id':wx_id, 'submitter':submitter})
+    access_id = request.args.get('access_id', '')
+    remark = request.args.get('remark', '')
+    if wx_id and submitter and access_id:
+        res = utils_create_xnr({'wx_id':wx_id, 'submitter':submitter, 'access_id':access_id, 'remark':remark})
         if res:
             return json.dumps(res)
     return None   

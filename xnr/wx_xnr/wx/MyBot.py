@@ -137,6 +137,7 @@ class MyBot(Bot):
                     wx_id = eval(d)['wx_id']
                     wxbot_port = eval(d)['wxbot_port']
                     submitter = eval(d)['submitter']
+                    access_id = eval(d)['access_id']
                     remark = eval(d)['remark']
                     break
                 except Exception,e:
@@ -159,6 +160,7 @@ class MyBot(Bot):
                 'nickname': self.self.name,
                 'remark': remark,
                 'submitter': submitter,
+                'access_id': access_id
             }
             es_xnr.index(index=wx_xnr_index_name, doc_type=wx_xnr_index_type, id=self.wxbot_id, body=wxxnr_data)
 
@@ -205,18 +207,22 @@ class MyBot(Bot):
         group_puid = msg.sender.puid
         if group_puid in self.groups_list:
             msg_type = msg.type
-            data = {
-                'xnr_id': self.self.puid, 
-                'xnr_name': self.self.name, 
-                'group_id': group_puid, 
-                'group_name': msg.sender.name,
-                'timestamp': msg.raw['CreateTime'],
-                'speaker_id': msg.member.puid,
-                'speaker_name': msg.member.name,
-                'msg_type': msg_type
-            }
-            nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-            index_name = wx_group_message_index_name_pre + str(nowDate)
+            save_flag = 0
+            data = {}
+            if msg_type in ['Text','Picture']:
+                save_flag = 1
+                data = {
+                    'xnr_id': self.self.puid, 
+                    'xnr_name': self.self.name, 
+                    'group_id': group_puid, 
+                    'group_name': msg.sender.name,
+                    'timestamp': msg.raw['CreateTime'],
+                    'speaker_id': msg.member.puid,
+                    'speaker_name': msg.member.name,
+                    'msg_type': msg_type
+                }
+                nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+                index_name = wx_group_message_index_name_pre + str(nowDate)
             if msg_type == 'Text':
                 text = msg.text
                 data['text'] = text
@@ -250,10 +256,11 @@ class MyBot(Bot):
                 except Exception,e:
                     print e
             #存储msg到es中
-            if not es_xnr.indices.exists(index=index_name):
-                print 'get mapping'
-                print wx_group_message_mappings(nowDate)
-            print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
+            if save_flag : 
+                if not es_xnr.indices.exists(index=index_name):
+                    print 'get mapping'
+                    print wx_group_message_mappings(nowDate)
+                print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
             #自动回复监听的群组中@自己的消息
             if msg.is_at:
                 time.sleep(random.random())
