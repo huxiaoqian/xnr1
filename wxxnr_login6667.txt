@@ -1,6 +1,0 @@
-██start_bot:  WXXNR0006 6667 
-starting WXXNR0006 ...
-global name 'FileNotFoundError' is not defined
-██start_bot:  WXXNR0006 6667 
-starting WXXNR0006 ...
-global name 'FileNotFoundError' is not defined

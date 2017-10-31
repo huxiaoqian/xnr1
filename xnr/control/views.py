@@ -14,6 +14,10 @@ mod = Blueprint('control', __name__, url_prefix='/control')
 def operationControl():
     return render_template('control/operation_control.html')
 
+@mod.route('/operationTwitter/')
+def operationTwitter():
+    return render_template('control/operationTwitter.html')
+
 @mod.route('/posting/')
 def posting():
     return render_template('control/posting.html')
@@ -31,11 +35,22 @@ def postingWX():
     # return render_template('control/postingWX.html',QQ_id=QQ_id,QQ_num=QQ_num)
     return render_template('control/postingWX.html',WXbot_id=WXbot_id)
 
+@mod.route('/postingTwitter/')
+def postingTwitter():
+    return render_template('control/postingTwitter.html')
+
 @mod.route('/socialFeedback/')
 def socialFeedback():
     return render_template('control/social_feedback.html')
+
+@mod.route('/socialFeedbackTwitter/')
+def socialFeedbackTwitter():
+    return render_template('control/social_feedbackTwitter.html')
 
 @mod.route('/activeSocialization/')
 def activeSocialization():
     return render_template('control/active_socialization.html')
 
+@mod.route('/activeSocializationTwitter/')
+def activeSocializationTwitter():
+    return render_template('control/active_socializationTwitter.html')
