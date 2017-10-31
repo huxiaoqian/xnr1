@@ -25,3 +25,19 @@ def eventEmerges():
 @mod.route('/timeWarning/')
 def timeWarning():
     return render_template('monitor/time_warning.html')
+
+@mod.route('/characterBehaviorTwitter/')
+def characterBehaviorTwitter():
+    return render_template('monitor/character_behaviorTwitter.html')
+
+@mod.route('/speechContentTwitter/')
+def speechContentTwitter():
+    return render_template('monitor/speech_contentTwitter.html')
+
+@mod.route('/eventEmergesTwitter/')
+def eventEmergesTwitter():
+    return render_template('monitor/event_emergesTwitter.html')
+
+@mod.route('/timeWarningTwitter/')
+def timeWarningTwitter():
+    return render_template('monitor/time_warningTwitter.html')

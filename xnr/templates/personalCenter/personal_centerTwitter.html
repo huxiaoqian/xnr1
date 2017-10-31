@@ -8,7 +8,7 @@
     .bootstrap-table .table>thead>tr>th {width: 9%}
     .table>thead>tr>th {border-top: none!important;}
     .undonelistbag .bootstrap-table .table>thead>tr>th {width: 7%}
-    .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
+    .demo-label{display:inline-block;margin:15px 0 0 10px;width:150px;cursor: pointer;}
     .demo-radio{display:none}
     .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
@@ -191,10 +191,7 @@
 {% block my_js %}
 
 <script>
-    judgment('1');
-    $('.first_created').on('click',function () {
-        window.open('/registered/targetCustom/');
-    });
+    judgmentTwitter('1');
 </script>
-<script src="/static/js/personal_center-1.js"></script>
+<script src="/static/js/personalCenterTwitter-1.js"></script>
 {% endblock %}
