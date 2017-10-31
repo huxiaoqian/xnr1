@@ -44,7 +44,7 @@
         text-align: center;
     }
     .weiboQQ img {
-        margin:0 30px;
+        margin:0 15px;
         cursor: pointer;
     }
     @media screen and (min-width:1370px) and (max-width:1920px) {
@@ -125,6 +125,7 @@
     <div class="weiboQQ">
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
         <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
         <img src="/static/images/twitterclick.png" title="正在使用twitter登录中" class="twitter">
     </div>
@@ -298,6 +299,13 @@
     }).on('click',function () {
         window.location.href='/index/navigationQQ/';
     });
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
     $('.facebook').hover(function () {
         $(this).attr('src','/static/images/facebookclick.png');
     },function () {
@@ -306,26 +314,25 @@
         window.location.href='/index/navigationFaceBook/';
     });
 
-    localStorage.setItem('loginType','twitter');
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
         window.open('/personalCenter/individualTwitter/');
     });
     $('#control').on('click',function () {
-        htmlUrl='/control/operationControl/';
+        htmlUrl='/control/operationTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#info').on('click',function () {
-        htmlUrl='/inforDetection/inforChecking/';
+        htmlUrl='/inforDetection/inforCheckingTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#monitor').on('click',function () {
-        htmlUrl='/monitor/characterBehavior/';
+        htmlUrl='/monitor/characterBehaviorTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#reported').on('click',function () {
-        htmlUrl='/behavioGauge/influeAssess/';
+        htmlUrl='/behavioGauge/influeAssessTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#knowledge').on('click',function () {

@@ -1,17 +1,3 @@
-/*!*内容样式*!*/
-/*.coverbody .option1, .coverbody .option2{*/
-    /*margin-top:20px;*/
-/*}*/
-/*.coverbody .option1 span, .coverbody .option2 span {*/
-    /*font-weight: 800;*/
-    /*font-size: 18px;*/
-/*}*/
-/*.coverbody .option1 .identity, .coverbody .option2 .showType {*/
-    /*padding: 20px 0 0 32px;*/
-/*}*/
-/*.coverbody .option1 .radio-inline, .coverbody .option2 .radio-inline {*/
-    /*width: 120px;*/
-/*}*/
 /*=====*/
 body.modal-open {
     /*overflow-y: auto !important;*/
