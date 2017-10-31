@@ -1,3 +1,17 @@
+/*!*内容样式*!*/
+/*.coverbody .option1, .coverbody .option2{*/
+/*margin-top:20px;*/
+/*}*/
+/*.coverbody .option1 span, .coverbody .option2 span {*/
+/*font-weight: 800;*/
+/*font-size: 18px;*/
+/*}*/
+/*.coverbody .option1 .identity, .coverbody .option2 .showType {*/
+/*padding: 20px 0 0 32px;*/
+/*}*/
+/*.coverbody .option1 .radio-inline, .coverbody .option2 .radio-inline {*/
+/*width: 120px;*/
+/*}*/
 /*=====*/
 body.modal-open {
     /*overflow-y: auto !important;*/
@@ -91,10 +105,10 @@ body {
     margin-top: 10px;
 }
 /*#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover i {*/
-    /*color: #eb7350;*/
+/*color: #eb7350;*/
 /*}*/
 /*#container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span:hover b {*/
-    /*color:#257cde;*/
+/*color:#257cde;*/
 /*}*/
 #container .rightWindow .historyCenter .post_perfect .post_center-hot .center_3 p span.line {
     border-left: 1px solid #38547b;

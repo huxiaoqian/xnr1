@@ -4,7 +4,7 @@ setTimeout(function () {
     var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
         $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
     public_ajax.call_request('GET',recommendURL,recommendTwo);
-},2000);
+},3000);
 function recommendTwo(data) {
     if (isEmptyObject(data.role_example)){
         $('#role_example .role_example_list').html('<p style="text-align: center;">抱歉，暂无数据。</p>')

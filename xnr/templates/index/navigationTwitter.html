@@ -116,18 +116,18 @@
 
     <div class="hgroup">
 
-        <h1><a href='###'>个人中心</a></h1>
+        <h1></h1>
 
         <h2>发生，不止所见。</h2>
 
     </div>
 
     <div class="weiboQQ">
-        <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
+        <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
         <img src="/static/images/WXload.png" title="微信登录" class="wx">
         <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
-        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
+        <img src="/static/images/twitterclick.png" title="正在使用twitter登录中" class="twitter">
     </div>
     <p class="p11" style="font-size: 16px;">
         <!--社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。-->
@@ -285,13 +285,24 @@
         $(".bg55-top").removeClass("effeckt-show");
     });
     //登录方式
-    $('.weibo').on('click',function () {
+    $('.weibo').hover(function () {
+        $(this).attr('src','/static/images/clickweibo.png');
+    },function () {
+        $(this).attr('src','/static/images/weiboload.png');
+    }).on('click',function () {
         window.location.href='/index/navigation/';
     });
     $('.qq').hover(function () {
         $(this).attr('src','/static/images/clickQQ.png');
     },function () {
         $(this).attr('src','/static/images/QQload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
         window.location.href='/index/navigationQQ/';
     });
@@ -302,42 +313,26 @@
     }).on('click',function () {
         window.location.href='/index/navigationFaceBook/';
     });
-    $('.twitter').hover(function () {
-        $(this).attr('src','/static/images/twitterclick.png');
-    },function () {
-        $(this).attr('src','/static/images/twitterload.png');
-    }).on('click',function () {
-        window.location.href = '/index/navigationTwitter/';
-    });
 
-    $('.wx').hover(function () {
-        $(this).attr('src','/static/images/clickWX.png');
-    },function () {
-        $(this).attr('src','/static/images/WXload.png');
-    }).on('click',function () {
-        window.location.href='/index/navigationWX/';
-    });
-    //登录类型
-    localStorage.setItem('loginType','weibo');
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
-        window.open('/personalCenter/individual/');
+        window.open('/personalCenter/individualTwitter/');
     });
     $('#control').on('click',function () {
-        htmlUrl='/control/operationControl/';
+        htmlUrl='/control/operationTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#info').on('click',function () {
-        htmlUrl='/inforDetection/inforChecking/';
+        htmlUrl='/inforDetection/inforCheckingTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#monitor').on('click',function () {
-        htmlUrl='/monitor/characterBehavior/';
+        htmlUrl='/monitor/characterBehaviorTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#reported').on('click',function () {
-        htmlUrl='/behavioGauge/influeAssess/';
+        htmlUrl='/behavioGauge/influeAssessTwitter/';
         $('#choosePerson').modal('show');
     });
     $('#knowledge').on('click',function () {
@@ -376,10 +371,8 @@
     });
 
     //登录类型
-    //localStorage.setItem('loginType',encodeURI('weibo'));
     var admin='admin@qq.com';
     //虚拟人列表
-
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
