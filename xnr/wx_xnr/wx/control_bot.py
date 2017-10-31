@@ -80,7 +80,7 @@ def change_wxxnr_redis_data(wxbot_id, xnr_data={}):
     for key,value in xnr_data.items():
         data[key] = value   #如果存在key则更改数据为value,不存在key则增加数据value
     return r.set(wxbot_id, data)
-        
+
 def load_user_no_current():
     #返回将要新创建的wxbot的user_no
     query_body = {
@@ -95,9 +95,9 @@ def load_user_no_current():
     }
     es_results = es_xnr.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type,body=query_body)['hits']['hits']
     if es_results:
-        user_no_current = es_results[0]['_source']['user_no'] + 1 
+        user_no_current = es_results[0]['_source']['user_no'] + 1
     else:
-        user_no_current = 1 
+        user_no_current = 1
     return user_no_current
 
 def check_wx_xnr(wx_id):
@@ -250,7 +250,7 @@ def xnr_logout(wxbot_id):
     start_time = time.time()
     if not result:  #说明端口没有打开，只需要更改状态就行了
         if change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout'}):
-            return 1 
+            return 1
     while True:
         end_time = time.time()
         d = r.get(wxbot_id)
@@ -267,7 +267,7 @@ def xnr_logout(wxbot_id):
     return 0
 
 def check_status(wxbot_id):
-    d = r.get(wxbot_id) 
+    d = r.get(wxbot_id)
     if d:
         try:
             status = eval(d)['status']

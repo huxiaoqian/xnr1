@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-10-26 11:22:02
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-10-31 17:12:26
+* @Last Modified time: 2017-10-31 18:51:13
 */
 
 console.log('===微信预警监控页面js===')
@@ -211,7 +211,6 @@ $('#container .titTime .timeSure').on('click',function () {
         var search_news_url='/wx_xnr_monitor/search/?wxbot_id='+wxbot_id+'&startdate='+start+'&enddate='+end;
         console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,senNews);
-
 
         var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',senUserurl,senUser);

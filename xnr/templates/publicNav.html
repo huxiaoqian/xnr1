@@ -74,12 +74,8 @@
                 <li class="divider"></li>
                 <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
                 <li class="old_2"><a href="#"><i class="icon-exchange"></i> <span>微信虚拟人</span></a></li>
-<<<<<<< HEAD
-
-=======
                 <li class="old_3"><a href="#"><i class="icon-exchange"></i> <span>FaceBook虚拟人</span></a></li>
                 <li class="old_4"><a href="#"><i class="icon-exchange"></i> <span>Twitter虚拟人</span></a></li>
->>>>>>> 0eb5ca8751f3a29b4cc8a299775324f425824a9f
                 <li><a id="logout"><i class="i"></i> 登出 </a></li>
             </ul>
         </div>
@@ -238,7 +234,6 @@
             success: function (data) {}
         });
     });
-<<<<<<< HEAD
     setTimeout(function(){
         if(loadingType=='QQ'){
             // ---------10-12 LL向下展开盒子js--QQ
@@ -357,151 +352,30 @@
             $('#system').on('click',function () {
                 window.open('/systemManage/daily/');
             });
-        }
+        }else if(loadingType=='twitter'){
+            var L_nav = $('.nav_top');
+            $('#LL').empty();
+            var LL_html =
+                '<ul><li id="personal"><i class="icon icon-github-alt"></i>我的虚拟人</li>'+
+                '<li id="control"><i class="icon icon-cogs"></i>操作控制</li>'+
+                '<li id="info"><i class="icon icon-eye-open"></i>信息监测</li>'+
+                '<li id="monitor"><i class="icon icon-warning-sign"></i>预警监控</li>'+
+                '<li id="knowledge"><i class="icon icon-user-md"></i>虚拟人定制</li>'+
+                '<li id="reported"><i class="icon icon-sitemap"></i>行为评估</li>'+
+                '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>'+
+                '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>'+
+                '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>'
+            $('#LL').append(LL_html);
+            L_nav.mouseover(function () {
+                $(this).find("#LL").stop().slideDown(200);
+            });
+            L_nav.mouseleave(function(){
+                $(this).find("#LL").stop().slideUp(200);
+            });
+            $('#personal').on('click',function () {
+                window.open('/personalCenter/individualTwitter/');
+            });
     },2000)
-
-=======
-    if(loginType=='QQ'){
-        // ---------10-12 LL向下展开盒子js--QQ
-        var L_nav = $('.nav_top');
-        $('#LL').empty();
-        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-        $('#LL').append(LL_html);
-
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        //页面跳转
-        var htmlUrl='';
-        $('#control').on('click',function () {
-            window.open('/personalCenter/individualQQ/');
-        });
-        $('#warning').on('click',function () {
-            window.open('/inforDetection/inforCheckingQQ/');
-        });
-        $('#evaluation').on('click',function () {
-            window.open('/behavioGauge/behaviorQQ/')
-        });
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }else if (loginType=='weibo'){
-        // ---------10-12 LL向下展开盒子js--微博
-        var L_nav = $('.nav_top');
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        //页面跳转
-        $('#personal').on('click',function () {
-            window.open('/personalCenter/individual/');
-        });
-        $('#control').on('click',function () {
-            window.open('/control/operationControl/');
-        });
-        $('#info').on('click',function () {
-            window.open('/inforDetection/inforChecking/');
-        });
-        $('#monitor').on('click',function () {
-            window.open('/monitor/characterBehavior/');
-        });
-        $('#reported').on('click',function () {
-            window.open('/behavioGauge/influeAssess/');
-        });
-        $('#knowledge').on('click',function () {
-            window.open('/registered/targetCustom/')
-        });
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }else if (loginType=='WX'){
-        // ---------10-30 LL向下展开盒子js--WX
-        var L_nav = $('.nav_top');
-        $('#LL').empty();
-        var LL_html = '<ul><li id="control"><i class="icon icon-cogs"></i>操作控制</li>';
-        LL_html += '<li id="warning"><i class="icon icon-eye-open"></i>预警监控</li>';
-        LL_html += '<li id="evaluation"><i class="icon icon-sitemap"></i></i>行为评估</li>';
-        LL_html += '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>';
-        LL_html += '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>';
-        LL_html += '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>';
-        $('#LL').append(LL_html);
-
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        // 操作控制
-        $('#control').on('click',function () {
-            window.open('/personalCenter/individualWX/');
-        });
-        // 预警监控
-        $('#warning').on('click',function () {
-            window.open('/inforDetection/inforCheckingWX/');
-        });
-        // 行为评估
-        $('#evaluation').on('click',function () {
-            window.open('/behavioGauge/behaviorWX/');
-        });
-
-        $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
-        });
-        $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
-        });
-        $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
-        });
-    }else if(loginType=='twitter'){
-        var L_nav = $('.nav_top');
-        $('#LL').empty();
-        var LL_html =
-            '<ul><li id="personal"><i class="icon icon-github-alt"></i>我的虚拟人</li>'+
-            '<li id="control"><i class="icon icon-cogs"></i>操作控制</li>'+
-            '<li id="info"><i class="icon icon-eye-open"></i>信息监测</li>'+
-            '<li id="monitor"><i class="icon icon-warning-sign"></i>预警监控</li>'+
-            '<li id="knowledge"><i class="icon icon-user-md"></i>虚拟人定制</li>'+
-            '<li id="reported"><i class="icon icon-sitemap"></i>行为评估</li>'+
-            '<li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>'+
-            '<li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>'+
-            '<li id="system"><i class="icon icon-inbox"></i>系统管理</li></ul>'
-        $('#LL').append(LL_html);
-        L_nav.mouseover(function () {
-            $(this).find("#LL").stop().slideDown(200);
-        });
-        L_nav.mouseleave(function(){
-            $(this).find("#LL").stop().slideUp(200);
-        });
-        $('#personal').on('click',function () {
-            window.open('/personalCenter/individualTwitter/');
-        });
-    }
->>>>>>> 0eb5ca8751f3a29b4cc8a299775324f425824a9f
-
     $(document).ready(function() {
         // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
         $(document).on('show.bs.modal', '.modal', function() {
@@ -821,15 +695,12 @@
             $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }else if(txt=='（微信）'){
             $('#backHome .list_one.li_a').attr('href','/index/navigationWX/');
-<<<<<<< HEAD
-        }else{
-            $('#backHome .list_one.li_a').attr('href','/index/navigation/');
-=======
         }else if(lf=='（Twitter）') {
             $('#backHome .list_one.li_a').attr('href','/index/navigationTwitter/');
         }else if(lf=='（FaceBook）') {
             $('#backHome .list_one.li_a').attr('href','/index/navigationFaceBook/');
->>>>>>> 0eb5ca8751f3a29b4cc8a299775324f425824a9f
+        }else{
+            $('#backHome .list_one.li_a').attr('href','/index/navigation/');
         }
     });
     var _$xnrList=['微博虚拟人', 'QQ群虚拟人', '微信虚拟人', 'FaceBook虚拟人', 'Twitter虚拟人'];
