@@ -348,7 +348,7 @@ function enterIn(WXbot_id) {
             // 进入虚拟人
             window.open('/control/postingWX/?WXbot_id='+_WXbot_id);
         }else{
-            $('#succee_fail #words').text('请先登录！');
+            $('#succee_fail #words').text('请先登录再进行其他操作！');
             $('#succee_fail').modal('show');
             $('#succee_fail').on('hidden.bs.modal', function (e) {
                 // 模态框关闭之后重新画表
@@ -457,7 +457,7 @@ function L_checkStatus (data){
         var groups_url='/wx_xnr_manage/loadallgroups/?wxbot_id='+_wxbot_id;
         public_ajax.call_request('GET',groups_url,loadallGroups_1);
     }else{
-        $('#succee_fail #words').text('请先登录！');
+        $('#succee_fail #words').text('请先登录在进行其他操作！');
         $('#succee_fail').modal('show');
         $('#succee_fail').on('hidden.bs.modal', function (e) {
             // 模态框关闭之后重新画表

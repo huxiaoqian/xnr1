@@ -123,7 +123,7 @@
         <h4>上报管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对微博关注对象发布信息、已加入微信群对话信息的实时监测、关键字检索、高频词云图统计显示。
         </p>
         <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
@@ -135,7 +135,7 @@
         <h4>知识库管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对微博关注对象发布信息、已加入微信群对话信息的实时监测、关键字检索、高频词云图统计显示。
         </p>
         <div class="bg55-top" id="knowledgebase">
             <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
@@ -251,7 +251,8 @@
         $(".bg55-top").removeClass("effeckt-show");
     });
     //登录类型
-//    localStorage.setItem('loginType',encodeURI('QQ'));
+
+    localStorage.setItem('loginType','WX');
 
     //登录方式
     $('.weibo').hover(function () {

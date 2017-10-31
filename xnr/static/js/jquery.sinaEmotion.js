@@ -193,7 +193,7 @@
 
 	/**
 	 * 为某个元素设置点击事件，点击弹出表情选择窗口
-	 * 
+	 *
 	 * @param {[type]}
 	 *            target [description]
 	 * @return {[type]} [description]

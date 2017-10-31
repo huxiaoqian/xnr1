@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-10-26 14:26:10
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-10-26 14:26:59
+* @Last Modified time: 2017-10-31 18:52:37
 */
 /*内容样式*/
 table.table-condensed {
@@ -152,9 +152,7 @@ body {
     color: #eb7350;
 }
 #container #user_recommend {
-    // 10-26 修改LL
-    // position: absolute;
-    float:right;
+    position: absolute;
     top:0;
     right:0;
     color: #b0bdd0;

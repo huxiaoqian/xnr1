@@ -152,6 +152,10 @@ $('#sure_post').on('click',function () {
     $(".user_example_list input:checkbox:checked").each(function(index,item) {
         group.push($(this).val());
     });
+    //模态框中的群组
+    $("#moreThing input:checkbox:checked").each(function(index,item) {
+        group.push($(this).val());
+    });
     // if (value==''||group.length==0){
     //     $('#pormpt p').text('请检查消息内容，不能为空。');
     //     $('#pormpt').modal('show');
@@ -175,9 +179,5 @@ function postYES(data) {
     if (data){f='操作成功'}else {f='操作失败'};
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
-    // 模态框关闭之后输入框清空
-    $('#pormpt').on('hidden.bs.modal', function (e) {
-        $('#post-2-content').val('');
-    })
 }
 
