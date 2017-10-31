@@ -135,6 +135,10 @@ $('#sure_post').on('click',function () {
     $(".user_example_list input:checkbox:checked").each(function(index,item) {
         group.push($(this).val());
     });
+    //模态框中的群组
+    $("#moreThing input:checkbox:checked").each(function(index,item) {
+        group.push($(this).val());
+    });
     if (value==''||group.length==0){
         $('#pormpt p').text('请检查消息内容，不能为空。');
         $('#pormpt').modal('show');

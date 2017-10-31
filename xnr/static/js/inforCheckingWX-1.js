@@ -2,16 +2,19 @@
 * @Author: Marte
 * @Date:   2017-10-26 11:22:02
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-10-26 11:25:17
+* @Last Modified time: 2017-10-31 18:51:13
 */
 
 console.log('===微信预警监控页面js===')
 
-//===============敏感消息===============
-var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
+//===============敏感消息======已完成10-31=========
+// var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
+var senNews_url='/wx_xnr_monitor/search/?wxbot_id='+wxbot_id;
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
-    var news=data.hits.hits;
+    console.log(data)
+    // var news=data.hits.hits;
+    var news=data;
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
         data:news,
@@ -40,10 +43,10 @@ function senNews(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
+                    if (row._source.group_name==''||row._source.group_name=='null'||row._source.group_name=='unknown'){
+                        name=row._source.group_id;
                     }else {
-                        name=row._source.qq_group_nickname;
+                        name=row._source.group_name;
                     };
                     if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
                         txt='暂无内容';
@@ -56,7 +59,7 @@ function senNews(data) {
                         '       <div class="center_rel" style="text-align: left;">'+
                         '           <img src="/static/images/post-6.png" class="center_icon">'+
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
+                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.group_id+'</b><span>）</span>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
                         '               <span class="joinWord" onclick="joinWord(this)" tp="content">上报</span>'+
                         '           </a>'+
@@ -69,14 +72,14 @@ function senNews(data) {
             },
         ],
     });
-    $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
+    $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信id（回车搜索）');
 }
 
 //===============敏感用户===============
 var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
-    console.log(data)
+    // console.log(data)
     $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
         data:data,
@@ -204,8 +207,11 @@ $('#container .titTime .timeSure').on('click',function () {
         $('#pormpt p').text('请检查时间，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var search_news_url='/qq_xnr_monitor/search_by_period/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
+        // ===============敏感消息完成=================
+        var search_news_url='/wx_xnr_monitor/search/?wxbot_id='+wxbot_id+'&startdate='+start+'&enddate='+end;
+        console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,senNews);
+
         var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum+'&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',senUserurl,senUser);
     }
