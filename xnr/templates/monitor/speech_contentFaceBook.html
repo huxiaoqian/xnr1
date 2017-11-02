@@ -1,0 +1,154 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 言论内容预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/speech_contentTwitter.css">
+<style>
+    /**/
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+
+    /**/
+    .demo-label{display:inline-block;cursor: pointer;margin-right: 10px;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-toolbar .fixed-table-toolbar .search {width:96%;margin: 0 auto;float: none!important;}
+    #weiboContent .demo-label{display: none;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-book note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">言论内容预警</b>
+        </div>
+        <!-- <div class="output1">导出至Excel文件</div>
+        <div class="output2">导出至Word文件</div> -->
+    </div>
+    <div class="speakType">
+        <span>内容分类：</span>
+        <div id="typelist">
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="focus" value='0' checked>
+                <span class="demo-checkbox demo-radioInput"></span> 全部
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="focus" value='1'>
+                <span class="demo-checkbox demo-radioInput"></span> 已关注
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="focus" value='2'>
+                <span class="demo-checkbox demo-radioInput"></span> 未关注
+            </label>
+        </div>
+    </div>
+    <div class="weiboContent" style="">
+        <div id="weiboContent"></div>
+    </div>
+</div>
+
+<!--模态框-->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity">
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> ZZ0902
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> SADJ93
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="idcard" value=""> KVF820
+                            </label>
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType">
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 隐身
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="show" value=""> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType='faceBook';
+    judgmentFaceBook('4');
+</script>
+<script src="/static/js/speech_contentFaceBook-1.js"></script>
+{% endblock %}

@@ -37,15 +37,25 @@
     .weiboQQ {
         position: absolute;
         width: 554px;
-        height: 176px;
         left: 50%;
-        top: 22%;
+        top: 24%;
         margin: 0 0 0 -277px;
         text-align: center;
     }
     .weiboQQ img {
         margin:0 15px;
         cursor: pointer;
+    }
+    #xnrName {
+        color:white;
+        max-width:237px;
+        min-width:237px;
+        display: inline-block;
+        vertical-align: middle;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        text-align: center;
     }
     @media screen and (min-width:1370px) and (max-width:1920px) {
         .bg13 .monitor {
@@ -121,7 +131,10 @@
         <h2>发生，不止所见。</h2>
 
     </div>
-
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
     <div class="weiboQQ">
         <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
@@ -209,7 +222,7 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 隐身
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                             </label>
                         </div>
@@ -217,7 +230,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
                 <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
             </div>
         </div>
@@ -252,19 +265,12 @@
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
     }
     $(function(){
-
         $.fn.fullpage({
-
             verticalCentered: false,
-
             anchors: ['page1', 'page2'],
-
             navigation: true,
-
             navigationTooltips: ['', '']
-
         });
-
     });
     $('.bg51').hover(function () {
         $(".bg51-top").show().addClass("from-below");
@@ -318,29 +324,22 @@
         window.location.href='/index/navigationWX/';
     });
 
-    //登录类型
-
-    localStorage.setItem('loginType','weibo');
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
-        htmlUrl='/control/operationControl/';
-        $('#choosePerson').modal('show');
+        window.open('/control/operationControl/');
     });
     $('#info').on('click',function () {
-        htmlUrl='/inforDetection/inforChecking/';
-        $('#choosePerson').modal('show');
+        window.open('/inforDetection/inforChecking/');
     });
     $('#monitor').on('click',function () {
-        htmlUrl='/monitor/characterBehavior/';
-        $('#choosePerson').modal('show');
+        window.open('/monitor/characterBehavior/');
     });
     $('#reported').on('click',function () {
-        htmlUrl='/behavioGauge/influeAssess/';
-        $('#choosePerson').modal('show');
+        window.open('/behavioGauge/influeAssess/');
     });
     $('#knowledge').on('click',function () {
         window.open('/registered/targetCustom/')
@@ -373,15 +372,14 @@
             localStorage.setItem('user',encodeURI(userID));
             localStorage.setItem('userRelName',encodeURI(userName));
             localStorage.setItem('userName',encodeURI(id_or_name));
-            window.open(htmlUrl);
+            $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     });
 
     //登录类型
-    //localStorage.setItem('loginType',encodeURI('weibo'));
     var admin='admin@qq.com';
     //虚拟人列表
-
+    var oneTrue=1;
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
@@ -393,11 +391,20 @@
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
                 }
+                var isChecked='';
+                if (oneTrue=='1'){
+                    isChecked='checked';
+                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
+                    localStorage.setItem('user',encodeURI(k));
+                    localStorage.setItem('userRelName',encodeURI(data[k]));
+                    localStorage.setItem('userName',encodeURI(data[k]));
+                };
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
-                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
                     '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
                     '</label>';
+                oneTrue++;
             }
             $('#choosePerson .identity').html(str);
         }

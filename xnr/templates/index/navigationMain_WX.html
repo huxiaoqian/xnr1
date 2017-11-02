@@ -35,13 +35,23 @@
             background-color: rgba(3, 8, 16, 0.61);
             color: white;
         }
+        #xnrName {
+            color:white;
+            max-width:237px;
+            min-width:237px;
+            display: inline-block;
+            vertical-align: middle;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: center;
+        }
         <!---->
         .weiboQQ {
             position: absolute;
             width: 554px;
-            /*height: 176px;*/
             left: 50%;
-            top: 19%;
+            top: 24%;
             margin: 0 0 0 -277px;
             text-align: center;
         }
@@ -93,12 +103,15 @@
 
     <div class="hgroup">
 
-        <h1><a href="/personalCenter/individual/">个人中心</a></h1>
+        <h1><a href="###">个人中心</a></h1>
 
         <h2>发生，不止所见。</h2>
 
     </div>
-
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
     <div class="weiboQQ">
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
@@ -107,8 +120,9 @@
         <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
     </div>
 
-    <p class="p11">
-        这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。这里是微信登录页面。
+    <p class="p11" style="font-size: 16px;">
+        虚拟人指挥管理系统通过微博和QQ群两个渠道，以虚拟人定制培养、统一管理、实时控制和联合指挥为目标，
+        实现了不同领域虚拟人身份画像定制、舆情信息实时监测浏览、网络社交行为半自动化辅助及模拟，使监管手段更具主动性和智能化。
     </p>
 
 </div>
@@ -182,7 +196,7 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 隐身
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                             </label>
                         </div>
@@ -190,7 +204,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
                 <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
             </div>
         </div>
@@ -252,9 +266,6 @@
     },function () {
         $(".bg55-top").removeClass("effeckt-show");
     });
-    //登录类型
-
-    localStorage.setItem('loginType','WX');
 
     //登录方式
     $('.weibo').hover(function () {
@@ -274,7 +285,6 @@
     $('.wx').on('click',function () {
         window.location.href='/index/navigationWX/';
     });
-
     $('.facebook').hover(function () {
         $(this).attr('src','/static/images/facebookclick.png');
     },function () {
@@ -290,9 +300,7 @@
         window.location.href = '/index/navigationTwitter/';
     });
 
-
     //页面跳转
-    var htmlUrl='';
     // 操作控制
     $('#control').on('click',function () {
         window.open('/personalCenter/individualWX/');
@@ -300,15 +308,12 @@
     // 10-26--修改
     // 预警监控
     $('#warning').on('click',function () {
-        htmlUrl='/inforDetection/inforCheckingWX/';
-        $('#choosePerson').modal('show');
+        window.open('/inforDetection/inforCheckingWX/');
     });
     // 行为评估
     $('#evaluation').on('click',function () {
-        htmlUrl='/behavioGauge/behaviorWX/';
-        $('#choosePerson').modal('show');
+        window.open('/behavioGauge/behaviorWX/');
     });
-
     $('#reportedmange').on('click',function () {
         window.open('/reportManage/management/');
     });
@@ -320,45 +325,44 @@
     });
 
     //虚拟人列表--更改为微信
+    var oneTrue=1;
     $.ajax({
         type: 'GET',
-        // url: "/qq_xnr_manage/show_qq_xnr/",
         url: "/wx_xnr_manage/show/",
         async: true,
         dataType: "json",
         success: function (data) {
+            console.log(data)
             var str='';
             $.each(data,function (index,item) {
+                var isChecked='';
                 var name;
-                // if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
                 if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
                     name='无昵称';
                 }else {
                     name=item.wx_id;
                 }
-                // str+=
-                //     '<label class="demo-label" title="'+name+'">'+
-                //     '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
-                //     '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
-                //     '</label>';
+                if (oneTrue=='1'){
+                    isChecked='checked';
+                    $('#xnrName').text(name+'（'+item.wxbot_id+'）').attr('title',name+'（'+item.wxbot_id+'）');
+                    localStorage.setItem('userWX',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXRelName',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXName',encodeURI(item.wx_id));
+                };
                 str+=
                     '<label class="demo-label" title="'+name+'">'+
                     '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.wxbot_id+'" valueID='+item.wxbot_id+' valueName='+name+'>'+
                     '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.wxbot_id+'）'+
                     '</label>';
+                oneTrue++;
             });
             $('#choosePerson .identity').html(str);
         }
     });
     //选择虚拟人确定进入
     $('.sure_in').on('click',function () {
-        // var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
-        // var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
-        // var userQQnum=$('input:radio[name="ID"]:checked').attr('valueNum');
-        // var userType=$('input:radio[name="choose"]:checked').val();
         var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
-
         var userType=$('input:radio[name="choose"]:checked').val();
         if (!userWXID||!userWXName||!userType){
             $('#pormpt p').text('请检查选择登陆的微信显示模式。');
@@ -370,16 +374,10 @@
             }else {
                 id_or_name=userWXName;
             }
-            // localStorage.setItem('userQQ',encodeURI(userQQID));
-            // localStorage.setItem('userQQRelName',encodeURI(userQQName));
-            // localStorage.setItem('userQQnum',encodeURI(userQQnum));
-            // localStorage.setItem('userQQName',encodeURI(id_or_name));
-
             localStorage.setItem('userWX',encodeURI(userWXID));
             localStorage.setItem('userWXRelName',encodeURI(userWXName));
-            // localStorage.setItem('userQQnum',encodeURI(userQQnum));
             localStorage.setItem('userWXName',encodeURI(id_or_name));
-            window.open(htmlUrl);
+            $('#xnrName').text(id_or_name+'（'+userWXID+'）').attr('title',id_or_name+'（'+userWXID+'）');
         }
     });
 </script>

@@ -18,6 +18,10 @@ def operationControl():
 def operationTwitter():
     return render_template('control/operationTwitter.html')
 
+@mod.route('/operationFaceBook/')
+def operationFaceBook():
+    return render_template('control/operationFaceBook.html')
+
 @mod.route('/posting/')
 def posting():
     return render_template('control/posting.html')
@@ -39,6 +43,10 @@ def postingWX():
 def postingTwitter():
     return render_template('control/postingTwitter.html')
 
+@mod.route('/postingFaceBook/')
+def postingFaceBook():
+    return render_template('control/postFaceBook.html')
+
 @mod.route('/socialFeedback/')
 def socialFeedback():
     return render_template('control/social_feedback.html')
@@ -47,6 +55,10 @@ def socialFeedback():
 def socialFeedbackTwitter():
     return render_template('control/social_feedbackTwitter.html')
 
+@mod.route('/socialFeedbackFaceBook/')
+def socialFeedbackFaceBook():
+    return render_template('control/social_feedbackFaceBook.html')
+
 @mod.route('/activeSocialization/')
 def activeSocialization():
     return render_template('control/active_socialization.html')
@@ -54,3 +66,7 @@ def activeSocialization():
 @mod.route('/activeSocializationTwitter/')
 def activeSocializationTwitter():
     return render_template('control/active_socializationTwitter.html')
+
+@mod.route('/activeSocializationFaceBook/')
+def activeSocializationFaceBook():
+    return render_template('control/active_socializationFaceBook.html')
