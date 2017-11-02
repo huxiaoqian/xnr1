@@ -61,6 +61,10 @@ def wx_xnr_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
+                    'mail':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
                     'access_id':{
                         'type':'string',
                         'index':'not_analyzed'

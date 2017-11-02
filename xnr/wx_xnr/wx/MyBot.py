@@ -46,10 +46,10 @@ class MyBot(Bot):
         if self.if_cache_path:
             self.cache_path = os.path.join(self.data_path, self.wxbot_id + '.pkl')
         #登录方式
-        if self.if_console_qr:
+        if self.if_console_qr:  
             #使用控制台二维码登陆
             self.console_qr = True
-        else:
+        else:   
             #使用二维码图片登陆
             self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
@@ -96,7 +96,7 @@ class MyBot(Bot):
         with open(self.qr_path, 'wb') as fp:
             fp.write(kwargs['qrcode'])
         #可以将二维码图片发送到邮箱之类的, 但是登陆也可能会使用缓存登陆，不一定会产生新的二维码图片
-
+    
     def my_login_callback(self, **kwargs):
         d = r.get(self.wxbot_id)
         if d:
@@ -108,7 +108,7 @@ class MyBot(Bot):
 
     def my_logout_callback(self, **kwargs):
         self.change_status('logout')    #设置self.status字段，以便别处自动判断是否应该关闭socket端口
-
+        
     def enable_logger(self, group_name):
         try:
             group_receiver = ensure_one(self.groups(update=True).search(group_name))
@@ -137,6 +137,7 @@ class MyBot(Bot):
                     wx_id = eval(d)['wx_id']
                     wxbot_port = eval(d)['wxbot_port']
                     submitter = eval(d)['submitter']
+                    mail = eval(d)['mail']
                     access_id = eval(d)['access_id']
                     remark = eval(d)['remark']
                     break
@@ -160,6 +161,7 @@ class MyBot(Bot):
                 'nickname': self.self.name,
                 'remark': remark,
                 'submitter': submitter,
+                'mail': mail,
                 'access_id': access_id
             }
             es_xnr.index(index=wx_xnr_index_name, doc_type=wx_xnr_index_type, id=self.wxbot_id, body=wxxnr_data)
@@ -189,11 +191,11 @@ class MyBot(Bot):
             'msg_type': m.type,
             'text': m.text,
             'timestamp': int(time.mktime(m.create_time.timetuple())),
-            'xnr_id': self.self.puid,
-            'xnr_name': self.self.name,
-            'group_id': to_puid,
+            'xnr_id': self.self.puid, 
+            'xnr_name': self.self.name, 
+            'group_id': to_puid, 
             'group_name': to_name,
-            'speaker_id': self.self.puid,
+            'speaker_id': self.self.puid, 
             'speaker_name': self.self.name
         }
         nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -212,9 +214,9 @@ class MyBot(Bot):
             if msg_type in ['Text','Picture']:
                 save_flag = 1
                 data = {
-                    'xnr_id': self.self.puid,
-                    'xnr_name': self.self.name,
-                    'group_id': group_puid,
+                    'xnr_id': self.self.puid, 
+                    'xnr_name': self.self.name, 
+                    'group_id': group_puid, 
                     'group_name': msg.sender.name,
                     'timestamp': msg.raw['CreateTime'],
                     'speaker_id': msg.member.puid,
@@ -227,7 +229,7 @@ class MyBot(Bot):
                 text = msg.text
                 data['text'] = text
                 try:
-                    sen_value, sen_words = sensitive_check(text.encode('utf8'))
+                    sen_value, sen_words = sensitive_check(text.encode('utf8')) 
                     if sen_value !=0:
                         sen_flag = 1    #该条信息是敏感信息
                     else:
@@ -251,12 +253,12 @@ class MyBot(Bot):
                     #upload picture to qiniu.com
                     token = self.qiniu.upload_token(qiniu_bucket_name, filename, 3600)
                     ret, info = put_file(token, filename, filepath,)
-                    data['text'] = qiniu_bucket_domain + '/' + filename
+                    data['text'] = qiniu_bucket_domain + '/' + filename 
                     os.remove(filepath)
                 except Exception,e:
                     print e
             #存储msg到es中
-            if save_flag :
+            if save_flag : 
                 if not es_xnr.indices.exists(index=index_name):
                     print 'get mapping'
                     print wx_group_message_mappings(nowDate)
@@ -274,7 +276,7 @@ class MyBot(Bot):
             data.append((group.puid, group.name))
         return data
 
-    def set_groups(self, group_list):
+    def set_groups(self, group_list):        
         #注册监听群消息的函数, group_list是需要监听消息的群组的puid列表
         if group_list:  #['']也是True
             #判断下传过来的groups_list是否有误
@@ -343,27 +345,19 @@ class MyBot(Bot):
             if opt == 'loadallgroups':
                 result = self.load_all_groups()
             elif opt == 'setgroups':
-                result = self.set_groups(group_list=data['group_list'])
+                result = self.set_groups(group_list=data['group_list']) 
             elif opt == 'sendmsgbypuid':
                 result = self.send_msg_by_puid(puids=data['puids'], msg=data['msg'])
-
-
-
-
-            elif opt == 'loadgroupmembers':
-                result = self.load_group_members(puid=data['group_puid'])
-            elif opt == 'restartbot':
-                result = self.restart_bot()
             #发送结果给客户端
             conn.send(json.dumps(result))
-            #logout时会关闭socket所以，不用server端回传
+            #logout时会关闭socket所以，不用server端回传。checkstatus也不需要回传
             if opt == 'logout':
                 self.bot_logout()
             elif opt == 'checkstatus':
                 pass
-        conn.close()
+        conn.close()  
         print 'Connection from %s:%s closed.' % addr
-
+    
     def listen(self):
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.bind((LOCALHOST_IP, self.wxbot_port))
@@ -379,3 +373,4 @@ class MyBot(Bot):
             conn, addr = server.accept()
             t = threading.Thread(target=self.tcplink, args=(conn, addr))
             t.start()
+        
