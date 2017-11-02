@@ -46,7 +46,7 @@
             text-align: center;
         }
         .weiboQQ img {
-            margin:0 30px;
+            margin:0 15px;
             cursor: pointer;
         }
         @media screen and (min-width:1370px) and (max-width:1920px) {
@@ -103,6 +103,8 @@
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
         <img src="/static/images/clickWX.png" title="正在使用微信登录中" class="wx">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
     </div>
 
     <p class="p11">
@@ -273,6 +275,21 @@
         window.location.href='/index/navigationWX/';
     });
 
+    $('.facebook').hover(function () {
+        $(this).attr('src','/static/images/facebookclick.png');
+    },function () {
+        $(this).attr('src','/static/images/facebookload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationFaceBook/';
+    });
+    $('.twitter').hover(function () {
+        $(this).attr('src','/static/images/twitterclick.png');
+    },function () {
+        $(this).attr('src','/static/images/twitterload.png');
+    }).on('click',function () {
+        window.location.href = '/index/navigationTwitter/';
+    });
+
 
     //页面跳转
     var htmlUrl='';
@@ -280,7 +297,6 @@
     $('#control').on('click',function () {
         window.open('/personalCenter/individualWX/');
     });
-    // 未修改
     // 10-26--修改
     // 预警监控
     $('#warning').on('click',function () {
