@@ -657,9 +657,8 @@
 
 {% block my_js %}
 <script>
-    //    $('#firstChoose').modal('show');
+    var loadingType='twitter';
     judgmentTwitter('2');
-    weiboORqq('twitter');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
         if (_eq==1){
