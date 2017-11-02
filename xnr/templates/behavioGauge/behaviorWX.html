@@ -134,11 +134,8 @@
 
 {% block my_js %}
 <script>
-
-var loadingType = 'WX';
-
+    var loadingType = 'WX';
     $('.coorName').text('行为评估');
-    weiboORqq('WX');
     document.onkeydown = function(e) {
         var ev = (typeof event!= 'undefined') ? window.event : e;
         if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中
