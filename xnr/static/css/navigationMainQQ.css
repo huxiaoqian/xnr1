@@ -124,7 +124,7 @@ body { font: 16px/1.8 "Microsoft Yahei",verdana;min-width: 1366px;margin: 0 auto
 
 .hgroup { position: absolute; width: 554px; height: 176px; left: 50%; top: 1%; margin: 0 0 0 -277px; text-indent: -9999px; background-image: url('/static/images/slogan.png'); opacity: 0; -webkit-transform:scale(0.5, 0.5); transform:scale(0.5, 0.5); transition: all 1s;}
 
-.p11 { position: absolute; left: 50%; top: 27%; width: 600px; margin: 0 0 0 -280px; font-size: 14px; color: #94a7c6; opacity: 1; transition: all 0.5s;}
+.p11 { position: absolute; left: 50%; top: 30%; width: 600px; margin: 0 0 0 -280px; font-size: 14px; color: #94a7c6; opacity: 1; transition: all 0.5s;}
 
 
 .bg51, .bg55, .bg54 {position: relative;top:50px;z-index: 1111;display:inline-block;

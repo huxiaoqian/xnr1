@@ -41,3 +41,19 @@ def eventEmergesTwitter():
 @mod.route('/timeWarningTwitter/')
 def timeWarningTwitter():
     return render_template('monitor/time_warningTwitter.html')
+
+@mod.route('/characterBehaviorFaceBook/')
+def characterBehaviorFaceBook():
+    return render_template('monitor/character_behaviorFaceBook.html')
+
+@mod.route('/speechContentFaceBook/')
+def speechContentFaceBook():
+    return render_template('monitor/speech_contentFaceBook.html')
+
+@mod.route('/eventEmergesFaceBook/')
+def eventEmergesFaceBook():
+    return render_template('monitor/event_emergesFaceBook.html')
+
+@mod.route('/timeWarningFaceBook/')
+def timeWarningFaceBook():
+    return render_template('monitor/time_warningFaceBook.html')
