@@ -14,8 +14,8 @@ def utils_search(wxbot_id, startdate='', enddate=''):
         end = ts2datetime(time.time())
     else:
         end = enddate
-    #start date
-    if startdate == '':
+    #start date 
+    if startdate == '': 
         start = ts2datetime(datetime2ts(end) - group_message_windowsize*DAY)
     else:
         start = startdate

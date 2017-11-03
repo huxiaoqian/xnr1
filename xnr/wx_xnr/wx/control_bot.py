@@ -80,7 +80,7 @@ def change_wxxnr_redis_data(wxbot_id, xnr_data={}):
     for key,value in xnr_data.items():
         data[key] = value   #如果存在key则更改数据为value,不存在key则增加数据value
     return r.set(wxbot_id, data)
-
+        
 def load_user_no_current():
     #返回将要新创建的wxbot的user_no
     query_body = {
@@ -95,9 +95,9 @@ def load_user_no_current():
     }
     es_results = es_xnr.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type,body=query_body)['hits']['hits']
     if es_results:
-        user_no_current = es_results[0]['_source']['user_no'] + 1
+        user_no_current = es_results[0]['_source']['user_no'] + 1 
     else:
-        user_no_current = 1
+        user_no_current = 1 
     return user_no_current
 
 def check_wx_xnr(wx_id):
@@ -135,6 +135,7 @@ def create_wx_xnr(xnr_info):
     #create and login, xnr_info = [wx_id,remark,submitter,access_id]
     wx_id = xnr_info['wx_id']
     submitter = xnr_info['submitter']
+    mail = xnr_info['mail']
     access_id = xnr_info['access_id']
     remark = xnr_info.get('remark')
     search_result = check_wx_xnr(wx_id) #check if wxxnr exist
@@ -143,19 +144,21 @@ def create_wx_xnr(xnr_info):
         wxbot_port = search_result['wxbot_port']
         groups_list = search_result['groups_list']
         #可进一步做出判断，如果wxbot_port被占用了，则更改wxbot_port，并更新es表。也先不管。
-        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, access_id=access_id, remark=remark)
+        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, mail=mail, access_id=access_id, remark=remark)
     else:   #如果虚拟人还没有存在，那么就创建此虚拟人
         wxbot_port = find_port(get_all_ports())
         user_no_current = load_user_no_current()
         wxbot_id = user_no2wxbot_id(user_no_current)
-        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, submitter=submitter, access_id=access_id, remark=remark, create_flag=1)
+        qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, submitter=submitter, mail=mail, access_id=access_id, remark=remark, create_flag=1)
     return qr_path
 
-def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, access_id=None, remark=None, init_groups_list='', create_flag=0):
+def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=None, remark=None, init_groups_list='', create_flag=0):
     #在logout完善之前，在登录之前先手动把status数据更改成logout，并执行logout
     change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout','qr_path':'', 'wx_id':wx_id, 'wxbot_port':wxbot_port})
     if submitter != None:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'submitter':submitter})
+    if mail != None:
+        change_wxxnr_redis_data(wxbot_id, xnr_data={'mail':mail})
     if access_id != None:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'access_id':access_id})
     if remark != None:
@@ -250,7 +253,7 @@ def xnr_logout(wxbot_id):
     start_time = time.time()
     if not result:  #说明端口没有打开，只需要更改状态就行了
         if change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout'}):
-            return 1
+            return 1 
     while True:
         end_time = time.time()
         d = r.get(wxbot_id)
@@ -267,7 +270,7 @@ def xnr_logout(wxbot_id):
     return 0
 
 def check_status(wxbot_id):
-    d = r.get(wxbot_id)
+    d = r.get(wxbot_id) 
     if d:
         try:
             status = eval(d)['status']

@@ -13,6 +13,5 @@ es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 body={'doc':{'access_id': 'xxxxxx'}}
 
 
-id = 'WXXNR0002'
+id = 'WXXNR0004'
 print es_xnr.update(index=wx_xnr_index_name, doc_type=wx_xnr_index_type, body=body, id=id)
-
