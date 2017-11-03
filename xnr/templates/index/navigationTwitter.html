@@ -164,7 +164,7 @@
         <h4>上报管理</h4>
 
         <p>
-            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。。
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
         </p>
         <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
@@ -345,13 +345,13 @@
         window.open('/registered/targetCustom/')
     });
     $('#reportedmange').on('click',function () {
-        window.open('/reportManage/management/');
+        window.open('/reportManage/management/?flag=5');
     });
     $('#knowledgebase').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
+        window.open('/knowledge/domainLibrary/?flag=5');
     });
     $('#system').on('click',function () {
-        window.open('/systemManage/daily/');
+        window.open('/systemManage/daily/?flag=5');
     });
 
     //选择虚拟人确定进入

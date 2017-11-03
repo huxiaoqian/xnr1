@@ -87,6 +87,8 @@
 {% block my_js %}
 <script>
     var loadingType='twitter';
+    weiboORqq('twitter');
+    $('.nav_type').text('(twitter)');
     judgmentTwitter('4');
     $('.demo-radio').on('click',function () {
         console.log(!!$(this).is(':checked'))

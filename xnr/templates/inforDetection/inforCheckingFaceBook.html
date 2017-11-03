@@ -410,6 +410,8 @@
 {% block my_js %}
 <script>
     var loadingType='faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
     judgmentFaceBook('3');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",

@@ -63,7 +63,7 @@
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" title="登录用户"
                     aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a id="login_user">admin@qq.com</a>&nbsp;&nbsp;
+                <span class="icon icon-user"></span> <a id="login_user">admin@qq.com</a>&nbsp;&nbsp;<span class="down3page"></span>
             </button>
             <span class="xnrShowHide"><b style="color:#333;">虚拟人：</b> <a class="nav_name"></a> <a class="nav_type"></a></span>
             <ul class="dropdown-menu">
@@ -313,6 +313,26 @@
         localStorage.clear();
         ISclear='clear';
     },21600000);
+    //
+    var flagType='{{flag}}',loadingType;
+    if (flagType){
+        if (flagType=='1'){
+            $('.down3page').text('(微博)');
+            loadingType='weibo';
+        }else if (flagType=='2'){
+            $('.down3page').text('(QQ群)');
+            loadingType='QQ';
+        }else if (flagType=='3'){
+            $('.down3page').text('(微信)');
+            loadingType='WX';
+        }else if (flagType=='4'){
+            $('.down3page').text('(FaceBook)');
+            loadingType='faceBook';
+        }else if (flagType=='5'){
+            $('.down3page').text('(twitter)');
+            loadingType='twitter';
+        }
+    }
 </script>
 <script src="/static/js/publicNav.js"></script>
 {% endblock %}

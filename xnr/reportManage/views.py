@@ -12,5 +12,5 @@ mod = Blueprint('reportManage', __name__, url_prefix='/reportManage')
 
 @mod.route('/management/')
 def management():
-    return render_template('reportManage/report_manage.html')
-
+    flag = request.args.get('flag','')
+    return render_template('reportManage/report_manage.html',flag=flag)

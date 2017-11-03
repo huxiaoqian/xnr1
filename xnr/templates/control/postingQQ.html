@@ -116,7 +116,7 @@
     </div>
 
     <div class="dialogue" style="position: relative;margin-top: 30px;">
-        <div class="dialogue-1" style="width: 70%;">
+        <form class="dialogue-1" style="width: 70%;">
             <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
             <div class="add_thing">
                 <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
@@ -124,7 +124,7 @@
                 <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
                 <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
             </div>
-        </div>
+        </form>
         <div id="user_recommend">
             <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">消息推送QQ群名称</p>
             <div class="user_example_list" style="padding:5px;">
@@ -173,6 +173,8 @@
 
 <script>
     var loadingType = 'QQ';
+    weiboORqq('QQ');
+    $('.nav_type').text('(QQ群)');
     $('.coorName').text('操作控制');
     var qqID='{{QQ_id}}';
     var qqNumber='{{QQ_num}}';
@@ -199,9 +201,8 @@
         $('.start').datetimepicker('setEndDate',ev.date);
     });
 
-
 </script>
-<script src="/static/js/jquery.sinaEmotion.js"></script>
+<script src="/static/js/LL_jquery.sinaEmotion.js"></script>
 <script src="/static/js/postingQQ-1.js"></script>
 <script>
     //表情
