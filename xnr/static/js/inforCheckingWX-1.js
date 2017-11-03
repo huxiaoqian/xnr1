@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-10-26 11:22:02
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-10-31 18:51:13
+* @Last Modified time: 2017-11-01 18:25:19
 */
 
 console.log('===微信预警监控页面js===')
@@ -51,7 +51,12 @@ function senNews(data) {
                     if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row._source.text;
+                        var keyword=row._source.sensitive_words_string.split('&');
+                        var s=row._source.text;
+                        for (var f=0;f<keyword.length;f++){
+                            s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+                        }
+                        txt=s;
                     };
                     var str=
                         '<div class="everySpeak">'+
@@ -72,7 +77,7 @@ function senNews(data) {
             },
         ],
     });
-    $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信id（回车搜索）');
+    $('.content-1-word .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信ID（回车搜索）');
 }
 
 //===============敏感用户===============
