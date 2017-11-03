@@ -1,13 +1,10 @@
 
-//展示WX群
 var time=Date.parse(new Date());
-// var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_user_no='+qqID;
 
+//展示WX群
 // ========监听的群组===========
 var WXgroup_url='/wx_xnr_operate/loadgroups/?wxbot_id='+wxbot_id;
-// public_ajax.call_request('get',QQgroup_url,QQgroup);
 public_ajax.call_request('get',WXgroup_url,WXgroup);
-// function QQgroup(data) {
 function WXgroup(data) {
     console.log(data)
     var str = '',poi=0;
@@ -15,9 +12,7 @@ function WXgroup(data) {
         var ched='';
         if (poi==0){
             ched='checked';
-            // var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+d+'&date='+Number(time)/1000;
             var WX_news_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+d;
-            // public_ajax.call_request('get',QQ_news_url,personEarly);
             public_ajax.call_request('get',WX_news_url,personEarly);
         }
         str +=
@@ -54,14 +49,17 @@ function WXgroup(data) {
         }
         b++;
     }
+    // ======消息推送微信群名称=======
     $('#user_recommend .user_example_list').html(str1);
     if (str2){
         $('#moreThing .moreCon ul').html(str2);
     }
 }
+
+// =======群消息历史==========
 function personEarly(personEarly_QQ) {
     var QQperson=eval(personEarly_QQ);
-    console.log(QQperson)
+    // console.log(QQperson)
     // var sourcePER=QQperson.hits.hits;
     var sourcePER=QQperson;
     $('#historyNews').bootstrapTable('load', sourcePER);
@@ -118,12 +116,12 @@ function personEarly(personEarly_QQ) {
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信号码（回车搜索）');
 };
+
 //========选择群========
 var _group_puid;
 function diff_group_news(_this) {
     var group_puid=$(_this).find('input').val();
     _group_puid = group_puid;
-    // var chooseGroup_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+wx_id+'&date='+Number(time)/1000;
     var chooseGroup_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid;
     public_ajax.call_request('get',chooseGroup_url,personEarly);
 }
@@ -137,8 +135,6 @@ $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
         $('#pormpt p').text('请检查时间，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        // var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&group_qq_number='+$_qqNumber+
-        //     '&startdate='+start+'&enddate='+end;
         var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&startdate='+start+'&enddate='+end;
         console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,personEarly);
@@ -156,9 +152,6 @@ $('#sure_post').on('click',function () {
     $("#moreThing input:checkbox:checked").each(function(index,item) {
         group.push($(this).val());
     });
-    // if (value==''||group.length==0){
-    //     $('#pormpt p').text('请检查消息内容，不能为空。');
-    //     $('#pormpt').modal('show');
     if (value==''){
         $('#pormpt p').text('请检查消息内容，不能为空。');
         $('#pormpt').modal('show');
@@ -166,10 +159,7 @@ $('#sure_post').on('click',function () {
         $('#pormpt p').text('请选择要发送的群组。');
         $('#pormpt').modal('show');
     }else {
-        // var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+value+'&group='+group.join(',')
-        //  +'&xnr_number='+qqNumber;
         var post_news_url='/wx_xnr_operate/sendmsg/?wxbot_id='+wxbot_id+'&group_list='+group.join(',')+'&msg='+value;
-        // /wx_xnr_operate/sendmsg/?wxbot_id=WXXNR0001&group_list=fcf59f51,62f576ad&msg=test
         public_ajax.call_request('get',post_news_url,postYES);
     }
 })
@@ -179,5 +169,9 @@ function postYES(data) {
     if (data){f='操作成功'}else {f='操作失败'};
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
+    $('#pormpt').on('hidden.bs.modal', function (e) {
+        // 模态框关闭之后清空输入框
+        $('#post-2-content').val('');
+    })
 }
 

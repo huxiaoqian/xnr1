@@ -60,7 +60,8 @@ function has_table_QQ(has_data_QQ) {
                     if (row.qq_groups == '' || row.qq_groups == 'null' || row.qq_groups == 'unknown'||!row.qq_groups||row.qq_groups.length==0) {
                         return '未知';
                     } else {
-                        return row.qq_groups.join('\n');
+                        // return row.qq_groups.join('\n');
+                        return row.qq_groups.join('<br/>');
                     };
                 }
             },
@@ -219,6 +220,30 @@ function login_QR_code(data) {
                 var _src='/static/images/QQ/'+data;
                 $('#QR_code #QQ_picture .imageqq').attr('src',_src);
                 $('#QR_code').modal('show');
+                // LL_11-3 模态框显示之后一直获取所有虚拟人数据,判断登录状态以关闭模态框
+                var timer1 = setInterval(function(){
+                    public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',getXnr);
+                    function getXnr(data){
+                        // console.log(data)
+                        for(var i=0;i<data.length;i++){
+                            if(data[i].qq_number == $this_QQ_id){
+                                // 获取当前虚拟人的wxbot_id
+                                console.log(data[i].login_status)
+                                // 查询此wxbot_id的登录状态  listening时关闭二维码框
+                                if(data[i].login_status == true){
+                                    $('#QR_code').modal('hide');
+                                    window.clearInterval(timer1)
+                                }
+                            }
+                        }
+                    }
+                }, 500)
+                // LL_11-3 模态框关闭之后重新画表
+                $('#QR_code').on('hidden.bs.modal', function (e) {
+                    // 停止请求
+                    window.clearInterval(timer1)
+                    public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
+                })
             }
         }
         if (document.getElementsByClassName('imageqq')[0].complete){
@@ -297,7 +322,7 @@ $('.optSureadd').on('click',function () {
 });
 function addOR(data) {
     var Iadd='添加失败。';
-    if (flag){
+    if (data){
         Iadd='添加成功。';
     }
     $('#succee_fail #words').text(Iadd);
