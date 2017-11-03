@@ -659,6 +659,8 @@
 <script>
 
     var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
     judgment('2');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
