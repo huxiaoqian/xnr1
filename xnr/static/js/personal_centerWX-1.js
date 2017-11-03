@@ -1,3 +1,5 @@
+//登录用户名
+var admin='admin@qq.com';
 
 // 表格生成
 function has_table_WX(has_data_QQ) {
@@ -194,7 +196,7 @@ var url_WX = '/wx_xnr_manage/show/';
 // =========展示所有虚拟人=========
 public_ajax.call_request('GET',url_WX,has_table_WX);
 
-//=========登陆一个微信虚拟人=========
+//=========登录一个微信虚拟人=========
 var $this_WX,$this_WXbot_id,$this_wx_id;
 function loginIN(_this, wxbot_id, wx_id) {
     $this_WX=_this;
@@ -233,24 +235,24 @@ function login_QR_code(data) {
             $('#QR_code #L-points').empty().append('<center>请使用'+$this_wx_id+'微信扫码登录</center>')
             $('#QR_code #QQ_picture .imagewx').attr('src',data.slice(start));
             // 模态框显示之后一直获取所有虚拟人数据
-            setInterval(function(){
+            var timer1 = setInterval(function(){
                 public_ajax.call_request('GET','/wx_xnr_manage/show/',getXnr);
                 function getXnr(data){
                     // console.log(data)
                     for(var i=0;i<data.length;i++){
                         if(data[i].wxbot_id == $this_WXbot_id){
                             // 获取当前虚拟人的wxbot_id
-                            // console.log(data[i].login_status)
+                            console.log(data[i].login_status)
                             // 查询此wxbot_id的登录状态  listening时关闭二维码框
                             if(data[i].login_status == "listening"){
                                 $('#QR_code').modal('hide');
-                                return
+
+                                window.clearInterval(timer1)
                             }
-                            return
                         }
                     }
                 }
-            }, 1000)
+            }, 500)
 
             $('#QR_code').on('hidden.bs.modal', function (e) {
                 // window.location.reload();
@@ -280,13 +282,27 @@ function login_QR_code(data) {
 // =========退出登录=========
 function logoutPerson(wxbot_id) {
     var _wxbot_id = wxbot_id;
-    //弹出退出确认框
-    $('#L-delete #L-title').text('确认退出登录吗？');
-    $('#L-delete').modal('show');
-    $('#L-del-sure').on('click',function(){
-        var out_url='/wx_xnr_manage/logout/?wxbot_id='+wxbot_id;
-        public_ajax.call_request('get',out_url,logout_success_fail);
-    })
+    // 判断登录状态
+    var checkstatus_url='/wx_xnr_manage/checkstatus/?wxbot_id='+wxbot_id;
+    public_ajax.call_request('get',checkstatus_url,LL_checkStatus);
+    function LL_checkStatus(data){
+        if(data=='listening'){
+            //弹出退出确认框
+            $('#L-delete #L-title').text('确认退出登录吗？');
+            $('#L-delete').modal('show');
+            $('#L-del-sure').on('click',function(){
+                var out_url='/wx_xnr_manage/logout/?wxbot_id='+_wxbot_id;
+                public_ajax.call_request('get',out_url,logout_success_fail);
+            })
+        }else{
+            $('#succee_fail #words').text('请先登录再进行其他操作！');
+            $('#succee_fail').modal('show');
+            $('#succee_fail').on('hidden.bs.modal', function (e) {
+                // 模态框关闭之后重新画表
+                public_ajax.call_request('GET','/wx_xnr_manage/show/',has_table_WX);
+            })
+        }
+    }
 }
 function logout_success_fail(data) {
     // console.log(data)
@@ -372,10 +388,9 @@ $('.hasAddQQ').on('click',function () {
 // 重填按钮
 $('.optClear').on('click',function () {
     $('.QQoptions .wx_id').val('');
-    // $('.QQoptions .QQgroup').val('');
-    // $('.QQoptions .QQname').val('');
-    // $('.QQoptions .QQtime').val('');
-    // $('.QQoptions .QQpower').val('');
+    $('.QQoptions .wxRemark').val('');
+    $('.QQoptions .email').val('');
+    $('.QQoptions .wxPower').val('');
 });
 // 确定按钮
 var new_wx_id;
@@ -386,14 +401,23 @@ $('.optSureadd').on('click',function () {
     // var qgp=$('.QQoptions .QQgroup').val().toString().replace(/,/g,'，');
     // var qname=$('.QQoptions .QQname').val();
     // var qpower=$('.QQoptions .QQpower').val();
+    var wxPower=$('.QQoptions .wxPower').val();
+    var wxremark=$('.QQoptions .wxRemark').val();
+    var email=$('.QQoptions .email').val();
     // if (!(qnum||qgp||qname||qpower)){
-    if (!wx_id){
+    if (!(wx_id||wxPower)){
         $('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
         $('#succee_fail').modal('show');
-    }else {
+    }else if(wxremark){
         // var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&qq_groups='+qgp+
         //     '&qq_nickname='+qname+'&access_id='+qpower;
-        var wxAdd_url='/wx_xnr_manage/create/?wx_id='+wx_id+'&submitter=asdafdssaf';
+        // var wxAdd_url='/wx_xnr_manage/create/?wx_id='+wx_id+'&submitter=asdafdssaf';
+        var wxAdd_url='/wx_xnr_manage/create/?wx_id='+wx_id+'&submitter='+admin+'&mail='+email+'&access_id='+wxPower+'&remark='+wxremark;
+        // console.log(wxAdd_url)
+        public_ajax.call_request('get',wxAdd_url,addOR);
+    }else {
+        var wxAdd_url='/wx_xnr_manage/create/?wx_id='+wx_id+'&submitter='+admin+'&mail='+email+'&access_id='+wxPower;
+        // console.log(wxAdd_url)
         public_ajax.call_request('get',wxAdd_url,addOR);
     }
 });
@@ -411,7 +435,7 @@ function addOR(data) {
         $('#QR_code #L-points').empty().append('<center>请使用'+new_wx_id+'微信扫码登录</center>')
         $('#QR_code').modal('show');
         // 模态框显示之后一直获取所有虚拟人数据
-        setInterval(function(){
+        var L_timer = setInterval(function(){
             public_ajax.call_request('GET','/wx_xnr_manage/show/',getXnr);
             function getXnr(data){
                 // console.log(data)
@@ -419,13 +443,13 @@ function addOR(data) {
                     if(data[i].wx_id == new_wx_id){
                         // 获取新添加的wx_id的wxbot_id
                         // console.log(data[i].wxbot_id)
-                        // console.log(data[i].login_status)
+                        console.log(data[i].login_status)
                         // 查询此wxbot_id的登录状态  listening时关闭二维码框
                         if(data[i].login_status == "listening"){
                             $('#QR_code').modal('hide');
-                            return
+
+                            window.clearInterval(L_timer)
                         }
-                        return
                     }
                 }
             }
