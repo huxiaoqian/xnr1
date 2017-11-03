@@ -118,13 +118,13 @@
     <div class="dialogue" style="position: relative;margin-top: 30px;">
         <div class="dialogue-1" style="width: 70%;">
             <form class="publish">
-            <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
-            <div class="add_thing">
-                <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
-                <!--<div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>-->
-                <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
-                <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
-            </div>
+                <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
+                <div class="add_thing">
+                    <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <!--<div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>-->
+                    <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
+                </div>
             </form>
         </div>
         <div id="user_recommend">
@@ -176,6 +176,8 @@
 <script>
 
     var loadingType = 'WX';
+    weiboORqq('WX');
+    $('.nav_type').text('(微信)');
     $('.coorName').text('操作控制');
     // var qqID='{{QQ_id}}';
     // var wxbot_id='{{WXbot_id}}';
@@ -207,7 +209,10 @@
 
 
 </script>
+<<<<<<< HEAD
 <!-- <script src="/static/js/jquery.sinaEmotion.js"></script> -->
+=======
+>>>>>>> 11ff9a76cbf0aef150e0e37965a59d0c73802197
 <script src="/static/js/LL_jquery.sinaEmotion.js"></script>
 <script src="/static/js/postingWX-1.js"></script>
 <script>

@@ -658,6 +658,8 @@
 {% block my_js %}
 <script>
     var loadingType='twitter';
+    weiboORqq('twitter');
+    $('.nav_type').text('(twitter)');
     judgmentTwitter('2');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
