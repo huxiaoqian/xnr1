@@ -478,6 +478,8 @@
 {% block my_js %}
 <script>
     var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
     judgment('3');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
