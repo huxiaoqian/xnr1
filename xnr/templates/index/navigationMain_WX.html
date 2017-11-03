@@ -142,7 +142,7 @@
         <h4>上报管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入微信群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
         </p>
         <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
@@ -154,7 +154,7 @@
         <h4>知识库管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入微信群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对虚拟人培养全过程中涉及到的领域、角色、业务以及言论知识进行信息创建、查看、管理。
         </p>
         <div class="bg55-top" id="knowledgebase">
             <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
@@ -165,7 +165,7 @@
 
         <h4>系统管理</h4>
 
-        <p>及时捕获网络重大突发事件和苗头性敏感信息，及时预警和回应疏导舆论焦点，信息预警延迟不超过5分钟。</p>
+        <p>支持系统管理员对系统用户的权限、操作日志以及用户虚拟人管理情况进行管理。</p>
 
         <div class="bg54-top" id="system">
             <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
@@ -318,13 +318,13 @@
         window.open('/behavioGauge/behaviorWX/');
     });
     $('#reportedmange').on('click',function () {
-        window.open('/reportManage/management/');
+        window.open('/reportManage/management/?flag=3');
     });
     $('#knowledgebase').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
+        window.open('/knowledge/domainLibrary/?flag=3');
     });
     $('#system').on('click',function () {
-        window.open('/systemManage/daily/');
+        window.open('/systemManage/daily/?flag=3');
     });
 
     //虚拟人列表--更改为微信

@@ -478,6 +478,8 @@
 {% block my_js %}
 <script>
     var loadingType='twitter';
+    weiboORqq('twitter');
+    $('.nav_type').text('(twitter)');
     judgmentTwitter('3');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
