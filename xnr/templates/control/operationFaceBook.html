@@ -658,6 +658,8 @@
 {% block my_js %}
 <script>
     var loadingType='faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
     judgmentFaceBook('2');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;

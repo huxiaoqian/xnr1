@@ -262,7 +262,6 @@ function login_QR_code(data) {
                 var checkstatus_url='/wx_xnr_manage/checkstatus/?wxbot_id='+$this_WXbot_id;
                 public_ajax.call_request('get',checkstatus_url,checkStatus);
                 function checkStatus(data){
-                    // console.log(data)
                     if(data!='logout'){
                             $($this_WX).attr('title','在线中').parent().prev().text('在线');
                             $($this_WX).attr('in_out','in');

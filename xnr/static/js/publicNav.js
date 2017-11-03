@@ -1,3 +1,31 @@
+//登录虚拟人后取出ID或者名字
+var ID_Num,REL_name,ID_name,userQQnum,nowUser;
+function weiboORqq(type) {
+    if (type=='weibo'){
+        ID_Num=localStorage.getItem('user');
+        REL_name=localStorage.getItem('userRelName');
+        ID_name=localStorage.getItem('userName');
+        if (ID_name){
+            nowUser=decodeURI(ID_name);
+        }
+    }else if(type=="QQ") {
+        ID_Num=localStorage.getItem('userQQ');
+        REL_name=localStorage.getItem('userQQRelName');
+        ID_name=localStorage.getItem('userQQName');
+        userQQnum=localStorage.getItem('userQQnum');
+        if (ID_name){
+            nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
+        }
+    }else if(type=="WX") {
+        ID_Num=localStorage.getItem('userWX');
+        REL_name=localStorage.getItem('userWXRelName');
+        ID_name=localStorage.getItem('userWXName');
+        if (ID_name){
+            nowUser=decodeURI(ID_name);
+        }
+    }
+}
+
 setTimeout(function(){
     if(loadingType=='QQ'){
         InloginName('QQ群虚拟人');
@@ -217,6 +245,7 @@ setTimeout(function(){
         });
     }
 },2000);
+
 $(document).ready(function() {
     $(document).on('show.bs.modal', '.modal', function() {
         var zIndex = 1040 + (10 * $('.modal:visible').length);
@@ -346,33 +375,6 @@ $('#choosePerson .sure_in').on('click',function () {
     }
     location.reload();
 });
-//登录虚拟人后取出ID或者名字
-var ID_Num,REL_name,ID_name,userQQnum,nowUser;
-function weiboORqq(type) {
-    if (type=='weibo'){
-        ID_Num=localStorage.getItem('user');
-        REL_name=localStorage.getItem('userRelName');
-        ID_name=localStorage.getItem('userName');
-        if (ID_name){
-            nowUser=decodeURI(ID_name);
-        }
-    }else if(type=="QQ") {
-        ID_Num=localStorage.getItem('userQQ');
-        REL_name=localStorage.getItem('userQQRelName');
-        ID_name=localStorage.getItem('userQQName');
-        userQQnum=localStorage.getItem('userQQnum');
-        if (ID_name){
-            nowUser=decodeURI(ID_name)+'（'+userQQnum+')';
-        }
-    }else if(type=="WX") {
-        ID_Num=localStorage.getItem('userWX');
-        REL_name=localStorage.getItem('userWXRelName');
-        ID_name=localStorage.getItem('userWXName');
-        if (ID_name){
-            nowUser=decodeURI(ID_name);
-        }
-    }
-}
 
 $('.old').on('click',Change);
 $('.old_2').on('click',Change);
@@ -409,9 +411,9 @@ $('#backHome').on('click',function () {
     }
 });
 var _$xnrList=['微博虚拟人', 'QQ群虚拟人', '微信虚拟人', 'FaceBook虚拟人', 'Twitter虚拟人'];
-function InloginName(one) {
-    $('.current').find('span').text(one);
-    _$xnrList.removeByValue(one);
+function InloginName(nameType) {
+    $('.current').find('span').text(nameType);
+    _$xnrList.removeByValue(nameType);
     $('.old').find('span').text(_$xnrList[0]);
     $('.old_2').find('span').text(_$xnrList[1]);
     $('.old_3').find('span').text(_$xnrList[2]);
@@ -504,22 +506,22 @@ function judgment(typeNum){
         $('.xnrShowHide').hide();
         afterEle=
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/domainLibrary/">' +
+            '    <a class="li_a" href="/knowledge/domainLibrary/?flag=1">' +
             '        <i class="icon icon-globe"></i>&nbsp;领域知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/characterLibrary/">' +
+            '    <a class="li_a" href="/knowledge/characterLibrary/?flag=1">' +
             '        <i class="icon icon-github"></i>&nbsp;角色知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/businessLibrary/">' +
+            '    <a class="li_a" href="/knowledge/businessLibrary/?flag=1">' +
             '        <i class="icon icon-glass"></i>&nbsp;业务知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/speechLibrary/">' +
+            '    <a class="li_a" href="/knowledge/speechLibrary/?flag=1">' +
             '        <i class="icon icon-comment"></i>&nbsp;言论知识库' +
             '    </a>'+
             '</li>';
@@ -528,17 +530,142 @@ function judgment(typeNum){
         $('.xnrShowHide').hide();
         afterEle=
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/daily/">' +
+            '    <a class="li_a" href="/systemManage/daily/?flag=1">' +
             '        <i class="icon icon-lightbulb"></i>&nbsp;日志管理' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/purview/">' +
+            '    <a class="li_a" href="/systemManage/purview/?flag=1">' +
             '        <i class="icon icon-tint"></i>&nbsp;权限管理' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/virtual/">' +
+            '    <a class="li_a" href="/systemManage/virtual/?flag=1">' +
+            '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
+            '    </a>'+
+            '</li>';
+    };
+    $('.behind').html(afterEle);
+};
+
+function judgmentFaceBook(typeNum) {
+    var typeNum=Number(typeNum);
+    var afterEle='';
+    if (typeNum==1){
+        $('.coorName').text('个人中心');
+        $('.xnrShowHide').hide();
+    }else if (typeNum==2){
+        $('.coorName').text('操作控制');
+        afterEle=
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/control/operationFaceBook/">'+
+            '        <i class="icon icon-user"></i>&nbsp;虚拟人中心' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/control/postingFaceBook/">' +
+            '        <i class="icon icon-pencil"></i>&nbsp;发帖操作' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/control/socialFeedbackFaceBook/">' +
+            '        <i class="icon icon-random"></i>&nbsp;社交反馈' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/control/activeSocializationFaceBook/">' +
+            '        <i class="icon icon-headphones"></i>&nbsp;主动社交' +
+            '    </a>'+
+            '</li>';
+    }else if (typeNum==3){
+        $('.coorName').text('信息监测');
+    }else if (typeNum==4){
+        $('.coorName').text('预警监控');
+        afterEle=
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/characterBehaviorFaceBook/">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;人物行为预警' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/speechContentFaceBook/">' +
+            '        <i class="icon icon-comment-alt"></i>&nbsp;言论内容预警' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/eventEmergesFaceBook/">' +
+            '        <i class="icon icon-bullhorn"></i>&nbsp;事件涌现预警' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/timeWarningFaceBook/">' +
+            '        <i class="icon icon-time"></i>&nbsp;时间预警' +
+            '    </a>'+
+            '</li>';
+    }else if (typeNum==5){
+        $('.coorName').text('行为评估');
+        afterEle=
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/influeAssessFaceBook/">' +
+            '        <i class="icon icon-lightbulb"></i>&nbsp;影响力评估' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/penetrationFaceBook/">' +
+            '        <i class="icon icon-tint"></i>&nbsp;渗透力评估' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/safeFaceBook/">' +
+            '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
+            '    </a>'+
+            '</li>';
+    }else if (typeNum==6){
+        $('.coorName').text('虚拟人定制');
+        $('.xnrShowHide').hide();
+    }else if (typeNum==7){
+        $('.coorName').text('上报管理');
+        $('.xnrShowHide').hide();
+    }else if (typeNum==8){
+        $('.coorName').text('知识库管理');
+        $('.xnrShowHide').hide();
+        afterEle=
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/knowledge/domainLibrary/?flag=4">' +
+            '        <i class="icon icon-globe"></i>&nbsp;领域知识库' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/knowledge/characterLibrary/?flag=4">' +
+            '        <i class="icon icon-github"></i>&nbsp;角色知识库' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/knowledge/businessLibrary/?flag=4">' +
+            '        <i class="icon icon-glass"></i>&nbsp;业务知识库' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/knowledge/speechLibrary/?flag=4">' +
+            '        <i class="icon icon-comment"></i>&nbsp;言论知识库' +
+            '    </a>'+
+            '</li>';
+    }else if (typeNum==9){
+        $('.coorName').text('系统管理');
+        $('.xnrShowHide').hide();
+        afterEle=
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/daily/?flag=4">' +
+            '        <i class="icon icon-lightbulb"></i>&nbsp;日志管理' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/purview/?flag=4">' +
+            '        <i class="icon icon-tint"></i>&nbsp;权限管理' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/virtual/?flag=4">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
             '</li>';
@@ -629,22 +756,22 @@ function judgmentTwitter(typeNum) {
         $('.xnrShowHide').hide();
         afterEle=
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/domainLibrary/">' +
+            '    <a class="li_a" href="/knowledge/domainLibrary/?flag=5">' +
             '        <i class="icon icon-globe"></i>&nbsp;领域知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/characterLibrary/">' +
+            '    <a class="li_a" href="/knowledge/characterLibrary/?flag=5">' +
             '        <i class="icon icon-github"></i>&nbsp;角色知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/businessLibrary/">' +
+            '    <a class="li_a" href="/knowledge/businessLibrary/?flag=5">' +
             '        <i class="icon icon-glass"></i>&nbsp;业务知识库' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/speechLibrary/">' +
+            '    <a class="li_a" href="/knowledge/speechLibrary/?flag=5">' +
             '        <i class="icon icon-comment"></i>&nbsp;言论知识库' +
             '    </a>'+
             '</li>';
@@ -653,145 +780,21 @@ function judgmentTwitter(typeNum) {
         $('.xnrShowHide').hide();
         afterEle=
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/daily/">' +
+            '    <a class="li_a" href="/systemManage/daily/?flag=5">' +
             '        <i class="icon icon-lightbulb"></i>&nbsp;日志管理' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/purview/">' +
+            '    <a class="li_a" href="/systemManage/purview/?flag=5">' +
             '        <i class="icon icon-tint"></i>&nbsp;权限管理' +
             '    </a>'+
             '</li>'+
             '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/virtual/">' +
+            '    <a class="li_a" href="/systemManage/virtual/?flag=5">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
             '</li>';
     };
     $('.behind').html(afterEle);
-}
+};
 
-function judgmentFaceBook(typeNum) {
-    var typeNum=Number(typeNum);
-    var afterEle='';
-    if (typeNum==1){
-        $('.coorName').text('个人中心');
-        $('.xnrShowHide').hide();
-    }else if (typeNum==2){
-        $('.coorName').text('操作控制');
-        afterEle=
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/control/operationFaceBook/">'+
-            '        <i class="icon icon-user"></i>&nbsp;虚拟人中心' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/control/postingFaceBook/">' +
-            '        <i class="icon icon-pencil"></i>&nbsp;发帖操作' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/control/socialFeedbackFaceBook/">' +
-            '        <i class="icon icon-random"></i>&nbsp;社交反馈' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/control/activeSocializationFaceBook/">' +
-            '        <i class="icon icon-headphones"></i>&nbsp;主动社交' +
-            '    </a>'+
-            '</li>';
-    }else if (typeNum==3){
-        $('.coorName').text('信息监测');
-    }else if (typeNum==4){
-        $('.coorName').text('预警监控');
-        afterEle=
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/monitor/characterBehaviorFaceBook/">' +
-            '        <i class="icon icon-user-md"></i>&nbsp;人物行为预警' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/monitor/speechContentFaceBook/">' +
-            '        <i class="icon icon-comment-alt"></i>&nbsp;言论内容预警' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/monitor/eventEmergesFaceBook/">' +
-            '        <i class="icon icon-bullhorn"></i>&nbsp;事件涌现预警' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/monitor/timeWarningFaceBook/">' +
-            '        <i class="icon icon-time"></i>&nbsp;时间预警' +
-            '    </a>'+
-            '</li>';
-    }else if (typeNum==5){
-        $('.coorName').text('行为评估');
-        afterEle=
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/behavioGauge/influeAssessFaceBook/">' +
-            '        <i class="icon icon-lightbulb"></i>&nbsp;影响力评估' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/behavioGauge/penetrationFaceBook/">' +
-            '        <i class="icon icon-tint"></i>&nbsp;渗透力评估' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/behavioGauge/safeFaceBook/">' +
-            '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
-            '    </a>'+
-            '</li>';
-    }else if (typeNum==6){
-        $('.coorName').text('虚拟人定制');
-        $('.xnrShowHide').hide();
-    }else if (typeNum==7){
-        $('.coorName').text('上报管理');
-        $('.xnrShowHide').hide();
-    }else if (typeNum==8){
-        $('.coorName').text('知识库管理');
-        $('.xnrShowHide').hide();
-        afterEle=
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/domainLibrary/">' +
-            '        <i class="icon icon-globe"></i>&nbsp;领域知识库' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/characterLibrary/">' +
-            '        <i class="icon icon-github"></i>&nbsp;角色知识库' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/businessLibrary/">' +
-            '        <i class="icon icon-glass"></i>&nbsp;业务知识库' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/knowledge/speechLibrary/">' +
-            '        <i class="icon icon-comment"></i>&nbsp;言论知识库' +
-            '    </a>'+
-            '</li>';
-    }else if (typeNum==9){
-        $('.coorName').text('系统管理');
-        $('.xnrShowHide').hide();
-        afterEle=
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/daily/">' +
-            '        <i class="icon icon-lightbulb"></i>&nbsp;日志管理' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/purview/">' +
-            '        <i class="icon icon-tint"></i>&nbsp;权限管理' +
-            '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/systemManage/virtual/">' +
-            '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
-            '    </a>'+
-            '</li>';
-    };
-    $('.behind').html(afterEle);
-}
