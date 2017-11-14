@@ -101,7 +101,7 @@ def show_completed_weiboxnr(account_no,now_time):
 def count_fans_num(xnr_user_no):
     try:
         result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-        followers_list=result['followers_list']
+        followers_list=result['fans_list']
         number=len(followers_list)
     except:
         number=0
@@ -110,7 +110,14 @@ def count_fans_num(xnr_user_no):
 #计算历史发帖量
 def count_history_post_num(xnr_user_no,now_time):
     #获取检索列表
-    weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    temp_weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    weibo_xnr_flow_text_listname=[]
+    for index_name in temp_weibo_xnr_flow_text_listname:
+        if es_xnr.indices.exists(index=index_name):
+            weibo_xnr_flow_text_listname.append(index_name)
+        else:
+            pass
+    #print 'weibo_xnr_flow_text_listname',weibo_xnr_flow_text_listname
     #定义检索规则
     query_body={
         'query':{
@@ -131,7 +138,9 @@ def count_history_post_num(xnr_user_no,now_time):
     try:
         results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
             body=query_body)['aggregations']['history_post_num']['buckets']
-        number=result[0]['doc_count']
+        number=0
+        for item in results:
+            number=item['doc_count']
     except:
         number=0
     return number
@@ -180,7 +189,9 @@ def count_history_comment_num(uid):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'uid':uid}
+                    'bool':{
+                        'must':[{'term':{'uid':uid}},{'term':{'comment_type':'make'}}]
+                    }
                 }
             }
         },
@@ -198,6 +209,7 @@ def count_history_comment_num(uid):
         number=result[0]['doc_count']
     except:
     	number=0
+    #print 'comment_number',number
     return number
 
 #step 2.2: show uncompleted weibo_xnr information 
@@ -321,41 +333,47 @@ def xnr_cumulative_statistics(xnr_date_info):
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     if xnr_date_info: 
-        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[0]['user_fansnum']
+        #print xnr_date_info[0]
+        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
         total_post_sum=0
         daily_post_num=0
         business_post_num=0
         hot_follower_num=0
-        #influence_sum=0
-        #penetration_sum=0
-        #safe_sum=0
+        trace_follow_tweet_num=0
+        influence_sum=0
+        penetration_sum=0
+        safe_sum=0
         number=len(xnr_date_info)
         for i in xrange(0,len(xnr_date_info)):
-            total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
+            #print xnr_date_info[i]['date_time']
+            #total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
             daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
             business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
             hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
-            #influence_sum=influence_sum+xnr_date_info[i]['influence']
-            #penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
-            #safe_sum=safe_sum+xnr_date_info[i]['safe']
+            trace_follow_tweet_num=trace_follow_tweet_num+xnr_date_info[i]['trace_follow_tweet_num']
+            influence_sum=influence_sum+xnr_date_info[i]['influence']
+            penetration_sum=penetration_sum+xnr_date_info[i]['penetration']
+            safe_sum=safe_sum+xnr_date_info[i]['safe']
             #print total_post_sum,daily_post_num
 
-        Cumulative_statistics_dict['total_post_sum']=total_post_sum
+        Cumulative_statistics_dict['total_post_sum']=daily_post_num+business_post_num+hot_follower_num+trace_follow_tweet_num
         Cumulative_statistics_dict['daily_post_num']=daily_post_num
         Cumulative_statistics_dict['business_post_num']=business_post_num
         Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
-        #Cumulative_statistics_dict['influence']=influence_sum/number
-        #Cumulative_statistics_dict['penetration']=penetration_sum/number
-        #Cumulative_statistics_dict['safe']=safe_sum/number
-        Cumulative_statistics_dict['influence']=xnr_date_info[0]['influence']
-        Cumulative_statistics_dict['penetration']=xnr_date_info[0]['penetration']
-        Cumulative_statistics_dict['safe']=xnr_date_info[0]['safe']
+        Cumulative_statistics_dict['trace_follow_tweet_num']=trace_follow_tweet_num
+        Cumulative_statistics_dict['influence']=round(influence_sum/number,2)
+        Cumulative_statistics_dict['penetration']=round(penetration_sum/number,2)
+        Cumulative_statistics_dict['safe']=round(safe_sum/number,2)
+        #Cumulative_statistics_dict['influence']=xnr_date_info[0]['influence']
+        #Cumulative_statistics_dict['penetration']=xnr_date_info[0]['penetration']
+        #Cumulative_statistics_dict['safe']=xnr_date_info[0]['safe']
     else:
     	Cumulative_statistics_dict['user_fansnum']=0
     	Cumulative_statistics_dict['total_post_sum']=0
         Cumulative_statistics_dict['daily_post_num']=0
         Cumulative_statistics_dict['business_post_num']=0
         Cumulative_statistics_dict['hot_follower_num']=0
+        Cumulative_statistics_dict['trace_follow_tweet_num']=0
         Cumulative_statistics_dict['influence']=0
         Cumulative_statistics_dict['penetration']=0
         Cumulative_statistics_dict['safe']=0
@@ -411,21 +429,55 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
                 xnr_user_detail['business_post_num']=item['doc_count']
             elif item['key'] == 'hot_post':
                 xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
         #总发帖量
-        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
+        
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
+        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
+
     except:
     	xnr_user_detail['user_fansnum']=0
     	xnr_user_detail['daily_post_num']=0
     	xnr_user_detail['business_post_num']=0
     	xnr_user_detail['hot_follower_num']=0
     	xnr_user_detail['total_post_sum']=0
+        xnr_user_detail['trace_follow_tweet_num']=0
 
     #评估信息
     #昨日信息
     yesterday_date=ts2datetime(datetime2ts(date_time)-DAY)
     xnr_assessment_id=xnr_user_no+'_'+yesterday_date
+    if xnr_user_detail['user_fansnum'] == 0:
+        count_id=xnr_user_no+'_'+yesterday_date
+        try:
+            xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        except:
+            xnr_user_detail['user_fansnum']=0
+    else:
+        pass
     try:
         xnr_assess_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
+        print 'xnr_assessment_id:::',xnr_assessment_id
         xnr_user_detail['influence']=xnr_assess_result['influence']
         xnr_user_detail['penetration']=xnr_assess_result['penetration']
         xnr_user_detail['safe']=xnr_assess_result['safe']
@@ -460,9 +512,10 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
                 }
             }
         },
-        'sort':{'timestamp':{'order':'asc'}} 
+        'sort':{'timestamp':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
     }
-    
+    print 'weibo_xnr_count_info_index_name::',weibo_xnr_count_info_index_name
     try:
         xnr_count_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
         xnr_date_info=[]
@@ -477,7 +530,7 @@ def show_history_count(xnr_user_no,date_range):
     if S_TYPE == 'test':
         test_time_gap=date_range['end_time']-date_range['start_time']
         test_datetime_gap=int(test_time_gap/DAY)
-        print 'test_datetime_gap',test_datetime_gap
+        #print 'test_datetime_gap',test_datetime_gap
         date_range['end_time']=XNR_CENTER_DATE_TIME
         if date_range['type'] == 'today':
             date_range['start_time']=datetime2ts(ts2datetime(date_range['end_time']))
@@ -490,7 +543,7 @@ def show_history_count(xnr_user_no,date_range):
     if date_range['type']=='today':
         start_time=datetime2ts(ts2datetime(date_range['end_time']))
         end_time=date_range['end_time']       #当前时间
-        print 'today_time:',start_time,end_time
+        #print 'today_time:',start_time,end_time
         xnr_date_info=show_today_history_count(xnr_user_no,start_time,end_time)
         
     else:
@@ -502,11 +555,11 @@ def show_history_count(xnr_user_no,date_range):
             end_time=now_time
         if start_time < system_start_time:
             start_time=system_start_time
-        print 'condition_time:',start_time,end_time
+        #print 'condition_time:',start_time,end_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
         
     #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
-    #print xnr_date_info
+    #print 'xnr_date_info',xnr_date_info
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
 
 
@@ -539,6 +592,7 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
         start_time=datetime2ts(ts2datetime(end_time-DAY*test_datetime_gap))
     else:
         pass
+    print start_time,end_time
     #print start_time,end_time
     #获取虚拟人编号
     #user_no_str=xnr_user_no[4:8]
@@ -1107,7 +1161,13 @@ def wxnr_list_concerns(user_id,order_type):
     user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
     return user_result
 '''
-
+def lookup_xnr_fans_followers(user_id,lookup_type):
+    try:
+        xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)['_source']
+        lookup_list=xnr_result[lookup_type]
+    except:
+        lookup_list=[]
+    return lookup_list
 
 def wxnr_list_concerns(user_id,order_type):
     try:
@@ -1115,7 +1175,10 @@ def wxnr_list_concerns(user_id,order_type):
         xnr_uid=xnr_result['uid']
     except:
         xnr_uid=''
-    
+
+    lookup_type='followers_list'
+    followers_list=lookup_xnr_fans_followers(user_id,lookup_type)
+
     query_body={
         'query':{
             'filtered':{
@@ -1134,26 +1197,29 @@ def wxnr_list_concerns(user_id,order_type):
         for item in followers_result:
             user_dict=dict()
             follower_uid=item['_source']['uid']
-            user_dict['uid']=follower_uid
-            #计算影响力
-            user_dict['influence']=count_weibouser_influence(follower_uid)
-            #敏感度查询,话题领域
-            try:
-                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=follower_uid)['_source']
-                user_dict['sensitive']=temp_user_result['sensitive']
-                user_dict['topic_string']=temp_user_result['topic_string']
-            except:
-                user_dict['sensitive']=0
-                user_dict['topic_string']=''
+            if follower_uid in followers_list:
+                user_dict['uid']=follower_uid
+                #计算影响力
+                user_dict['influence']=count_weibouser_influence(follower_uid)
+                #敏感度查询,话题领域
+                try:
+                    temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=follower_uid)['_source']
+                    user_dict['sensitive']=temp_user_result['sensitive']
+                    user_dict['topic_string']=temp_user_result['topic_string']
+                except:
+                    user_dict['sensitive']=0
+                    user_dict['topic_string']=''
 
-            user_dict['photo_url']=item['_source']['photo_url']            
-            user_dict['nick_name']=item['_source']['nick_name']
-            user_dict['sex']=item['_source']['sex']
-            #user_dict['user_birth']=item['_source']['user_birth']
-            #user_dict['create_at']=item['_source']['create_at']
-            user_dict['follow_source']=item['_source']['follow_source']  #微博推荐
-            #user_dict['user_location']=item['_source']['user_location']
-            xnr_followers_result.append(user_dict)
+                user_dict['photo_url']=item['_source']['photo_url']            
+                user_dict['nick_name']=item['_source']['nick_name']
+                user_dict['sex']=item['_source']['sex']
+                #user_dict['user_birth']=item['_source']['user_birth']
+                #user_dict['create_at']=item['_source']['create_at']
+                user_dict['follow_source']=item['_source']['follow_source']  #微博推荐
+                #user_dict['user_location']=item['_source']['user_location']
+                xnr_followers_result.append(user_dict)
+            else:
+                pass
     else:
     	xnr_followers_result=[]
 
@@ -1244,6 +1310,9 @@ def wxnr_list_fans(user_id,order_type):
     except:
         xnr_uid=''
     
+    lookup_type='fans_list'
+    fans_list=lookup_xnr_fans_followers(user_id,lookup_type)
+
     query_body={
         'query':{
             'filtered':{
@@ -1262,28 +1331,31 @@ def wxnr_list_fans(user_id,order_type):
         for item in fans_result:
             user_dict=dict()
             fans_uid=item['_source']['uid']
-            user_dict['uid']=fans_uid
-            #计算影响力
-            user_dict['influence']=count_weibouser_influence(fans_uid)
-            #敏感度查询,话题领域
-            try:
-                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=fans_uid)['_source']
-                user_dict['sensitive']=temp_user_result['sensitive']
-                user_dict['topic_string']=temp_user_result['topic_string']
-            except:
-                user_dict['sensitive']=0
-                user_dict['topic_string']=''
+            if fans_uid in fans_list:
+                user_dict['uid']=fans_uid
+                #计算影响力
+                user_dict['influence']=count_weibouser_influence(fans_uid)
+                #敏感度查询,话题领域
+                try:
+                    temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=fans_uid)['_source']
+                    user_dict['sensitive']=temp_user_result['sensitive']
+                    user_dict['topic_string']=temp_user_result['topic_string']
+                except:
+                    user_dict['sensitive']=0
+                    user_dict['topic_string']=''
 
-            user_dict['photo_url']=item['_source']['photo_url']            
-            user_dict['nick_name']=item['_source']['nick_name']
-            user_dict['sex']=item['_source']['sex']
-            #user_dict['user_birth']=item['_source']['user_birth']
-            #user_dict['create_at']=item['_source']['create_at']
-            user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
-            user_dict['user_location']=item['_source']['geo']
-            xnr_fans_result.append(user_dict)
+                user_dict['photo_url']=item['_source']['photo_url']            
+                user_dict['nick_name']=item['_source']['nick_name']
+                user_dict['sex']=item['_source']['sex']
+                #user_dict['user_birth']=item['_source']['user_birth']
+                #user_dict['create_at']=item['_source']['create_at']
+                user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
+                user_dict['user_location']=item['_source']['geo']
+                xnr_fans_result.append(user_dict)
+            else:
+                pass
     else:
-    	xnr_fans_result=[]
+        xnr_fans_result=[]
 
     #对结果按要求排序
     xnr_fans_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
@@ -1314,11 +1386,6 @@ def delete_weibo_xnr(xnr_user_no):
 #   step 7：虚拟人评估信息  #
 ###############################
 def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
-    if S_TYPE == 'test':
-        start_time=1506787200     #10月1日
-        end_time=1507305600      #10月7日
-    else:
-        pass
     query_body={
         'fields':['date_time',assess_type],
         'query':{
@@ -1352,16 +1419,46 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
 
 #create xnr_flow_text example
 def create_xnr_flow_text(task_detail,task_id):
-	result=es_xnr.index(index="xnr_flow_text_2017-10-07",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
+	result=es_xnr.index(index="xnr_flow_text_2017-10-14",doc_type=xnr_flow_text_index_type,id=task_id,body=task_detail)
 	return result
-	
+
+def delete_xnr_flow_text(task_id):
+	result=es_xnr.delete(index="xnr_flow_text_2017-10-11",doc_type=xnr_flow_text_index_type,id=task_id)
+	return result	
 
 
 def update_weibo_count(task_detail,task_id):
-    result=es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body=task_detail)
+    #result=es_xnr.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body=task_detail)
+    result=es_xnr.update(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id,body={"doc":{'user_fansnum':task_detail['user_fansnum']}})
+    return result
+
+def delete_weibo_count(task_id):
+    result=es_xnr.delete(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id)
     return result
 
 
 def create_send_like(task_detail,task_id):
     result=es_xnr.index(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,id=task_id,body=task_detail)
     return result
+
+
+def delete_receive_like():
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':{'range':{'timestamp':{'gte':0,'lte':1506787140}}}
+                    }
+                }
+            }
+        }    
+    }
+    id_result=es_xnr.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
+    result_list=[]
+    for item in id_result:
+        t_id=item['_id']
+        result=es_xnr.delete(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,id=t_id)
+        result_list.append(result)
+
+    return result_list

@@ -5,9 +5,7 @@ setTimeout(function () {
             $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
         public_ajax.call_request('GET',recommendURL,recommendTwo);
     }
-},800)
-
-
+},2000)
 function recommendTwo(data) {
     var name,age,sex,location,career,description;
     if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
@@ -202,6 +200,7 @@ function values() {
             'monitor_keywords':$('#character7').text(),
         };
         localStorage.setItem('firstStep',JSON.stringify(first));
+        public_ajax.call_request('get',saveSecond_url,modSecondSuccess);
     }else if (go_on==1){
         var a=$('#name').val();
         var b=$('#age').val();
@@ -218,7 +217,7 @@ function in_three(data) {
     if (data||data[0]){
         localStorage.setItem('secondStep',JSON.stringify(second));
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
-        window.open('/registered/socialAccounts/');
+        window.location.href='/registered/socialAccounts/';
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
