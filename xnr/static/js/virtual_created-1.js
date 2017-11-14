@@ -1,12 +1,24 @@
 //查看推荐
 setTimeout(function () {
-    if (!$two||(go_on=='2')){
-        var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
-            $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
-        public_ajax.call_request('GET',recommendURL,recommendTwo);
-    }
-},2000)
+    // if (!$two||(go_on=='2')){
+    var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
+        $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
+    public_ajax.call_request('GET',recommendURL,recommendTwo);
+},3000);
 function recommendTwo(data) {
+    if (isEmptyObject(data.role_example)){
+        $('#role_example .role_example_list').html('<p style="text-align: center;">抱歉，暂无数据。</p>')
+    }else {
+        var peo='';
+        for (var k in data.role_example){
+            var a=data.role_example[k][0];
+            var b=data.role_example[k][1];
+            if (!a){a=k}
+            if (!b){b='###'}
+            peo+='<li><a pid="'+k+'" href="'+b+'" title="'+a+'">'+a+'</a></li>';
+        }
+        $('#role_example .role_example_list').html(peo);
+    }
     var name,age,sex,location,career,description;
     if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
     if (data.age){age=data.age}else {age='无年龄推荐'}

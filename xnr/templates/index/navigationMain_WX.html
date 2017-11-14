@@ -1,0 +1,387 @@
+{% block title %}<title>网络虚拟人系统</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
+    <style>
+        .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+        .demo-radio{display:none!important;}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        <!---->
+        .modal-header {
+            background: #09344e!important;
+            color: white!important;
+        }
+        .modal-body,.modal-footer {
+            background: #041b29!important;
+            color: white!important;
+        }
+        .table-hover>tbody>tr:hover {
+            background-color: #2a556f!important;
+        }
+        .modal-header .close {
+            color:white!important;
+            opacity: 1!important;
+        }
+        .modal-footer .btn {
+            background-color: transparent;
+            border-color: silver;
+            color: white;
+        }
+        .modal-footer .btn:hover {
+            background-color: rgba(3, 8, 16, 0.61);
+            color: white;
+        }
+        #xnrName {
+            color:white;
+            max-width:237px;
+            min-width:237px;
+            display: inline-block;
+            vertical-align: middle;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: center;
+        }
+        <!---->
+        .weiboQQ {
+            position: absolute;
+            width: 554px;
+            left: 50%;
+            top: 24%;
+            margin: 0 0 0 -277px;
+            text-align: center;
+        }
+        .weiboQQ img {
+            margin:0 15px;
+            cursor: pointer;
+        }
+        @media screen and (min-width:1370px) and (max-width:1920px) {
+            .bg13 .warning {
+                top: 700px!important;
+                left: 890px!important;
+            }
+            .xnr {
+                left:43% !important;
+            }
+        }
+    </style>
+{% endblock %}
+{% block main %}
+<div class="section section1">
+
+    <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
+
+    <div class="bg11"></div>
+
+    <div class="bg12"></div>
+
+    <div class="bg13">
+        <div class="control" style="top: 240px;left:160px;">
+            <i class="icon icon-cogs"></i>
+            <div class="cover" id="control">
+                <em class="icon icon-plus-sign"></em>
+                <span>操作控制</span>
+            </div>
+        </div>
+        <div class="warning" style="top: 490px;right:44%;">
+            <i class="icon icon-eye-open"></i>
+            <div class="cover" id="warning">
+                <em class="icon icon-plus-sign"></em>
+                <span>预警监控</span>
+            </div>
+        </div>
+        <div class="evaluation" style="top: 240px;right:160px;">
+            <i class="icon icon-sitemap"></i>
+            <div class="cover" id="evaluation">
+                <em class="icon icon-plus-sign"></em>
+                <span>行为评估</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="hgroup">
+
+        <h1><a href="###">个人中心</a></h1>
+
+        <h2>发生，不止所见。</h2>
+
+    </div>
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
+    <div class="weiboQQ">
+        <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
+        <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+        <img src="/static/images/clickWX.png" title="正在使用微信登录中" class="wx">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
+    </div>
+
+    <p class="p11" style="font-size: 16px;">
+        虚拟人指挥管理系统通过微博和QQ群两个渠道，以虚拟人定制培养、统一管理、实时控制和联合指挥为目标，
+        实现了不同领域虚拟人身份画像定制、舆情信息实时监测浏览、网络社交行为半自动化辅助及模拟，使监管手段更具主动性和智能化。
+    </p>
+
+</div>
+<div class="section section5" style="text-align: center">
+
+    <div class="bg"><img src="/static/images/section5.jpg" alt=""></div>
+
+    <!--<strong>[ 功能·监控预警 ]</strong>-->
+
+    <!--<h3>全面监控，为你预警</h3>-->
+
+    <div class="bg51">
+
+        <h4>上报管理</h4>
+
+        <p>
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
+        </p>
+        <div class="bg51-top" id="reportedmange">
+            <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>上报管理</span>
+        </div>
+    </div>
+    <div class="bg55" style="margin: 0 150px;">
+
+        <h4>知识库管理</h4>
+
+        <p>
+            支持对虚拟人培养全过程中涉及到的领域、角色、业务以及言论知识进行信息创建、查看、管理。
+        </p>
+        <div class="bg55-top" id="knowledgebase">
+            <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>知识库管理</span>
+        </div>
+    </div>
+    <div class="bg54">
+
+        <h4>系统管理</h4>
+
+        <p>支持系统管理员对系统用户的权限、操作日志以及用户虚拟人管理情况进行管理。</p>
+
+        <div class="bg54-top" id="system">
+            <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>系统管理</span>
+        </div>
+    </div>
+
+</div>
+
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的微信昵称</span>
+                        <div class="identity" style="padding: 10px 25px;">
+
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择微信的显示模式</span>
+                        <div class="showType" style="padding: 10px 25px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                <span class="demo-checkbox demo-radioInput"></span> 隐身
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<script src="/static/js/jquery.fullPage.min.js"></script>
+<script>
+    $(function(){
+
+        $.fn.fullpage({
+
+            verticalCentered: false,
+
+            anchors: ['page1', 'page2'],
+
+            navigation: true,
+
+            navigationTooltips: ['', '']
+
+        });
+
+    });
+    $('.bg51').hover(function () {
+        $(".bg51-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg51-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg51-top").removeClass("effeckt-show");
+    });
+    $('.bg54').hover(function () {
+        $(".bg54-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg54-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg54-top").removeClass("effeckt-show");
+    });
+    $('.bg55').hover(function () {
+        $(".bg55-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg55-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg55-top").removeClass("effeckt-show");
+    });
+
+    //登录方式
+    $('.weibo').hover(function () {
+        $(this).attr('src','/static/images/clickweibo.png');
+    },function () {
+        $(this).attr('src','/static/images/weiboload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigation/';
+    });
+    $('.qq').hover(function () {
+        $(this).attr('src','/static/images/clickQQ.png');
+    },function () {
+        $(this).attr('src','/static/images/QQload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
+    $('.wx').on('click',function () {
+        window.location.href='/index/navigationWX/';
+    });
+    $('.facebook').hover(function () {
+        $(this).attr('src','/static/images/facebookclick.png');
+    },function () {
+        $(this).attr('src','/static/images/facebookload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationFaceBook/';
+    });
+    $('.twitter').hover(function () {
+        $(this).attr('src','/static/images/twitterclick.png');
+    },function () {
+        $(this).attr('src','/static/images/twitterload.png');
+    }).on('click',function () {
+        window.location.href = '/index/navigationTwitter/';
+    });
+
+    //页面跳转
+    // 操作控制
+    $('#control').on('click',function () {
+        window.open('/personalCenter/individualWX/');
+    });
+    // 10-26--修改
+    // 预警监控
+    $('#warning').on('click',function () {
+        window.open('/inforDetection/inforCheckingWX/');
+    });
+    // 行为评估
+    $('#evaluation').on('click',function () {
+        window.open('/behavioGauge/behaviorWX/');
+    });
+    $('#reportedmange').on('click',function () {
+        window.open('/reportManage/management/?flag=3');
+    });
+    $('#knowledgebase').on('click',function () {
+        window.open('/knowledge/domainLibrary/?flag=3');
+    });
+    $('#system').on('click',function () {
+        window.open('/systemManage/daily/?flag=3');
+    });
+
+    //虚拟人列表--更改为微信
+    var oneTrue=1;
+    $.ajax({
+        type: 'GET',
+        url: "/wx_xnr_manage/show/",
+        async: true,
+        dataType: "json",
+        success: function (data) {
+            console.log(data)
+            var str='';
+            $.each(data,function (index,item) {
+                var isChecked='';
+                var name;
+                if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
+                    name='无昵称';
+                }else {
+                    name=item.wx_id;
+                }
+                if (oneTrue=='1'){
+                    isChecked='checked';
+                    $('#xnrName').text(name+'（'+item.wxbot_id+'）').attr('title',name+'（'+item.wxbot_id+'）');
+                    localStorage.setItem('userWX',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXRelName',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXName',encodeURI(item.wx_id));
+                };
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.wxbot_id+'" valueID='+item.wxbot_id+' valueName='+name+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.wxbot_id+'）'+
+                    '</label>';
+                oneTrue++;
+            });
+            $('#choosePerson .identity').html(str);
+        }
+    });
+    //选择虚拟人确定进入
+    $('.sure_in').on('click',function () {
+        var userWXID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userWXName=$('input:radio[name="ID"]:checked').attr('valueName');
+        var userType=$('input:radio[name="choose"]:checked').val();
+        if (!userWXID||!userWXName||!userType){
+            $('#pormpt p').text('请检查选择登陆的微信显示模式。');
+            $('#pormpt').modal('show');
+        }else {
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userWXID;
+            }else {
+                id_or_name=userWXName;
+            }
+            localStorage.setItem('userWX',encodeURI(userWXID));
+            localStorage.setItem('userWXRelName',encodeURI(userWXName));
+            localStorage.setItem('userWXName',encodeURI(id_or_name));
+            $('#xnrName').text(id_or_name+'（'+userWXID+'）').attr('title',id_or_name+'（'+userWXID+'）');
+        }
+    });
+</script>
+{% endblock %}

@@ -17,3 +17,15 @@ def inforChecking():
 @mod.route('/inforCheckingQQ/')
 def inforCheckingQQ():
     return render_template('inforDetection/inforCheckingQQ.html')
+
+@mod.route('/inforCheckingWX/')
+def inforCheckingWX():
+    return render_template('inforDetection/inforCheckingWX.html')
+
+@mod.route('/inforCheckingTwitter/')
+def inforCheckingTwitter():
+    return render_template('inforDetection/inforCheckingTwitter.html')
+
+@mod.route('/inforCheckingFaceBook/')
+def inforCheckingFaceBook():
+    return render_template('inforDetection/inforCheckingFaceBook.html')

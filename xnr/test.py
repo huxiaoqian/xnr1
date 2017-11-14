@@ -276,4 +276,8 @@ es.indices.delete(index='twitter_feedback_comment_2017-11-13')
 
 #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':[1264080891,1715330060,1082347151]}})
 
+
+
+
 # es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
+

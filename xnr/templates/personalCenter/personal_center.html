@@ -199,6 +199,9 @@
 {% block my_js %}
 
 <script>
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
     judgment('1');
     $('.first_created').on('click',function () {
         window.open('/registered/targetCustom/');

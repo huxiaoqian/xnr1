@@ -12,12 +12,15 @@ mod = Blueprint('systemManage', __name__, url_prefix='/systemManage')
 
 @mod.route('/daily/')
 def daily():
-    return render_template('systemManage/daily.html')
+    flag = request.args.get('flag','')
+    return render_template('systemManage/daily.html',flag=flag)
 
 @mod.route('/purview/')
 def purview():
-    return render_template('systemManage/purview.html')
+    flag = request.args.get('flag','')
+    return render_template('systemManage/purview.html',flag=flag)
 
 @mod.route('/virtual/')
 def virtual():
-    return render_template('systemManage/virtual.html')
+    flag = request.args.get('flag','')
+    return render_template('systemManage/virtual.html',flag=flag)

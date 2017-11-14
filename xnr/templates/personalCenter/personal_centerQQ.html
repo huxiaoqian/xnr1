@@ -29,7 +29,7 @@
                 <!--</label>-->
                 <label class="demo-label">
                     <input class="demo-radio" type="radio" name="demo-radio" weiboqq="Q" checked>
-                    <span class="demo-radioInput"></span>QQ群虚拟人
+                    <span class="demo-radioInput"></span> QQ群虚拟人
                 </label>
             </div>
         </div>
@@ -123,6 +123,9 @@
 {% block my_js %}
 
 <script>
+    var loadingType = 'QQ';
+    weiboORqq('QQ');
+    $('.nav_type').text('(QQ群)');
     judgment('1');
 </script>
 <script src="/static/js/personal_centerQQ-1.js"></script>

@@ -35,24 +35,37 @@
             background-color: rgba(3, 8, 16, 0.61);
             color: white;
         }
+        #xnrName {
+            color:white;
+            max-width:237px;
+            min-width:237px;
+            display: inline-block;
+            vertical-align: middle;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: center;
+        }
         <!---->
         .weiboQQ {
             position: absolute;
             width: 554px;
-            /*height: 176px;*/
             left: 50%;
-            top: 19%;
+            top: 24%;
             margin: 0 0 0 -277px;
             text-align: center;
         }
         .weiboQQ img {
-            margin:0 30px;
+            margin:0 15px;
             cursor: pointer;
         }
         @media screen and (min-width:1370px) and (max-width:1920px) {
             .bg13 .warning {
                 top: 700px!important;
                 left: 890px!important;
+            }
+            .xnr {
+                left:43% !important;
             }
         }
     </style>
@@ -93,21 +106,26 @@
 
     <div class="hgroup">
 
-        <h1><a href="/personalCenter/individual/">个人中心</a></h1>
+        <h1><a href="###">个人中心</a></h1>
 
         <h2>发生，不止所见。</h2>
 
     </div>
-
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
     <div class="weiboQQ">
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/clickQQ.png" title="正在使用QQ登录中" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
     </div>
 
-    <p class="p11">
-        社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。
-        通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，
-        及时预警和回应疏导舆论焦点已成为舆情管理的重要内容之一。
+    <p class="p11" style="font-size: 16px;">
+        虚拟人指挥管理系统通过微博和QQ群两个渠道，以虚拟人定制培养、统一管理、实时控制和联合指挥为目标，
+        实现了不同领域虚拟人身份画像定制、舆情信息实时监测浏览、网络社交行为半自动化辅助及模拟，使监管手段更具主动性和智能化。
     </p>
 
 </div>
@@ -124,7 +142,7 @@
         <h4>上报管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
         </p>
         <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
@@ -136,7 +154,7 @@
         <h4>知识库管理</h4>
 
         <p>
-            支持对微博关注对象发布信息、已加入QQ群对话信息的实时监测、关键字检索、高频词云图统计显示。
+            支持对虚拟人培养全过程中涉及到的领域、角色、业务以及言论知识进行信息创建、查看、管理。
         </p>
         <div class="bg55-top" id="knowledgebase">
             <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
@@ -147,7 +165,7 @@
 
         <h4>系统管理</h4>
 
-        <p>及时捕获网络重大突发事件和苗头性敏感信息，及时预警和回应疏导舆论焦点，信息预警延迟不超过5分钟。</p>
+        <p>支持系统管理员对系统用户的权限、操作日志以及用户虚拟人管理情况进行管理。</p>
 
         <div class="bg54-top" id="system">
             <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
@@ -181,7 +199,7 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 隐身
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                             </label>
                         </div>
@@ -189,7 +207,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
                 <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
             </div>
         </div>
@@ -251,8 +269,6 @@
     },function () {
         $(".bg55-top").removeClass("effeckt-show");
     });
-    //登录类型
-    localStorage.setItem('loginType','QQ');
 
     //登录方式
     $('.weibo').hover(function () {
@@ -265,32 +281,49 @@
     $('.qq').on('click',function () {
         window.location.href='/index/navigationQQ/';
     });
-
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationWX/';
+    });
+    $('.facebook').hover(function () {
+        $(this).attr('src','/static/images/facebookclick.png');
+    },function () {
+        $(this).attr('src','/static/images/facebookload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationFaceBook/';
+    });
+    $('.twitter').hover(function () {
+        $(this).attr('src','/static/images/twitterclick.png');
+    },function () {
+        $(this).attr('src','/static/images/twitterload.png');
+    }).on('click',function () {
+        window.location.href = '/index/navigationTwitter/';
+    });
     //页面跳转
-    var htmlUrl='';
     $('#control').on('click',function () {
         window.open('/personalCenter/individualQQ/');
     });
     $('#warning').on('click',function () {
-        htmlUrl='/inforDetection/inforCheckingQQ/';
-        $('#choosePerson').modal('show');
+        window.open('/inforDetection/inforCheckingQQ/');
     });
     $('#evaluation').on('click',function () {
-        htmlUrl='/behavioGauge/behaviorQQ/';
-        $('#choosePerson').modal('show');
+        window.open('/behavioGauge/behaviorQQ/');
     });
-
     $('#reportedmange').on('click',function () {
-        window.open('/reportManage/management/');
+        window.open('/reportManage/management/?flag=2');
     });
     $('#knowledgebase').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
+        window.open('/knowledge/domainLibrary/?flag=2');
     });
     $('#system').on('click',function () {
-        window.open('/systemManage/daily/');
+        window.open('/systemManage/daily/?flag=2');
     });
 
     //虚拟人列表
+    var oneTrue=1;
     $.ajax({
         type: 'GET',
         url: "/qq_xnr_manage/show_qq_xnr/",
@@ -299,17 +332,28 @@
         success: function (data) {
             var str='';
             $.each(data,function (index,item) {
+                var isChecked='';
                 var name;
                 if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
                     name='无昵称';
                 }else {
                     name=item.nickname;
                 }
+                if (oneTrue=='1'){
+                    isChecked='checked';
+                    $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
+                    localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
+                    localStorage.setItem('userQQRelName',encodeURI(name));
+                    localStorage.setItem('userQQnum',encodeURI(item.qq_number));
+                    localStorage.setItem('userQQName',encodeURI(name));
+                };
                 str+=
                     '<label class="demo-label" title="'+name+'">'+
-                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+item.xnr_user_no+' valueName='+name+'>'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+
+                    item.xnr_user_no+' valueName='+name+' '+isChecked+'>'+
                     '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
                     '</label>';
+                oneTrue++;
             });
             $('#choosePerson .identity').html(str);
         }
@@ -334,7 +378,7 @@
             localStorage.setItem('userQQRelName',encodeURI(userQQName));
             localStorage.setItem('userQQnum',encodeURI(userQQnum));
             localStorage.setItem('userQQName',encodeURI(id_or_name));
-            window.open(htmlUrl);
+            $('#xnrName').text(id_or_name+'（'+userQQnum+'）').attr('title',id_or_name+'（'+userQQnum+'）');
         }
     });
 </script>

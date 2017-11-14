@@ -1,0 +1,229 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>操作控制</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/postingWX.css">
+<link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
+<style>
+    #sinaEmotion .face {width: inherit;height: inherit;}
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    /**/
+    #container .historyNews .everySpeak {
+        width: 950px;
+        margin-bottom: 15px;
+        /*position: relative;*/
+        /*padding: 20px 10px 20px 30px;*/
+        background: rgba(8,23,44,0.35);
+    }
+    #container .historyNews .everySpeak .center_icon {
+        position: absolute;
+        top:19px;
+        left:3px;
+        width: 20px;
+        height:20px;
+    }
+    /*下拉按钮*/
+    .demo-label{display:inline-block;margin:15px 10px 0 10px;cursor: pointer;}
+    .user_example_list .demo-label{width:260px;margin:2px 0 0 5px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin:-2px 0 0 0;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /*--------*/
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-edit note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">操作控制</b>
+        </div>
+    </div>
+    <div class="QQgroup" style="margin: 10px auto;">
+        <div class="QG-1" style="margin-top: 20px;">
+            <img src="/static/images/icon.png" alt="">
+            <span style="font-size: 18px;font-weight: 900;color: #fff;">此账号所在的群</span>
+        </div>
+        <div class="groupName" style="padding: 0 15px;">
+
+        </div>
+    </div>
+    <div class="type_page">
+        <div class="post_post">
+            <div class="post-1" style="margin-top: 20px;">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">群历史消息</span>
+            </div>
+            <div class="post-2">
+                <!--<div style="text-align: center;padding: 10px;width: 100%;">-->
+                    <!--<div style="display: inline-block;width: 94%;">-->
+                        <!--<input type="text" id="search-1-post" placeholder="请输入关键词或人物昵称或人物qq号码" style="width: 100%;"/>-->
+                    <!--</div>-->
+                    <!--<button type="button" class="btn-xs" id="search-post" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
+                    <!--<span id="search-post">搜索</span>-->
+                <!--</div>-->
+                <div class="titTime">
+                    <div style="display: inline-block;width: 94%;text-align: right;">
+                        <span style="display: inline-block;width: 11%;text-align: left;">时间范围：从</span>
+                        <input size="16" type="text" value="" readonly class="form_datetime start" placeholder="请选择时间">
+                        <span style="display: inline-block;width:3%;text-align: center;">到</span>
+                        <input size="16" type="text" readonly class="form_datetime end" placeholder="请选择时间">
+                    </div>
+                    <span class="timeSure">确定</span>
+                </div>
+            </div>
+            <div class="post-3">
+                <div class="historyNews">
+                    <dis id="historyNews"></dis>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dialogue" style="position: relative;margin-top: 30px;">
+        <div class="dialogue-1" style="width: 70%;">
+            <form class="publish">
+                <textarea id="post-2-content" class="form-control" cols="" rows="6"></textarea>
+                <div class="add_thing">
+                    <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <!--<div><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>-->
+                    <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float: right;">发送</button>
+                </div>
+            </form>
+        </div>
+        <div id="user_recommend">
+            <p style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;font-weight: 800;">消息推送微信群名称</p>
+            <div class="user_example_list" style="padding:5px;">
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--模态框-->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--多余的东西-->
+<div class="modal fade" id="moreThing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">微信群</h4>
+            </div>
+            <div class="modal-body moreCon">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+
+<script>
+
+    var loadingType = 'WX';
+    weiboORqq('WX');
+    $('.nav_type').text('(微信)');
+    $('.coorName').text('操作控制');
+    // var qqID='{{QQ_id}}';
+    // var wxbot_id='{{WXbot_id}}';
+    var wxbot_id=localStorage.getItem('userWX');
+    // console.log(wxbot_id)
+    // var qqNumber='{{QQ_num}}';
+    document.onkeydown = function(e) {
+        var ev = (typeof event!= 'undefined') ? window.event : e;
+        if(ev.keyCode == 13 && document.activeElement.id == "search-1-post") {//activeElement活动事件,该事件只可以使用于输入域中
+            console.log("获取到内容：" + document.activeElement.value);
+        }else if(ev.keyCode==13&& document.activeElement.id=='post-2-content'){
+            console.log("QQ内容：" + document.activeElement.value);
+        }
+    };
+
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+
+</script>
+<<<<<<< HEAD
+<!-- <script src="/static/js/jquery.sinaEmotion.js"></script> -->
+=======
+>>>>>>> 11ff9a76cbf0aef150e0e37965a59d0c73802197
+<script src="/static/js/LL_jquery.sinaEmotion.js"></script>
+<script src="/static/js/postingWX-1.js"></script>
+<script>
+    //表情
+    $('.emotion').bind({
+        click: function(event){
+            if(! $('#sinaEmotion').is(':visible')){
+                $(this).sinaEmotion();
+                event.stopPropagation();
+            }
+        }
+    });
+</script>
+{% endblock %}

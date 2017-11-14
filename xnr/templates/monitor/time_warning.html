@@ -136,8 +136,10 @@
 
 {% block my_js %}
 <script>
-    judgment('4');
+    var loadingType = 'weibo';
     weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('4');
 </script>
 <script src="/static/js/time_warning-1.js"></script>
 {% endblock %}
