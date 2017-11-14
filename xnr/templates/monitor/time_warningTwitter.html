@@ -1,0 +1,145 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 时间预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/time_warningTwitter.css">
+<style>
+    .fixed-table-toolbar .search{width: 100%}
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .bootstrap-table thead,.fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    th.bs-checkbox {width: 10%!important;}
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    #div-button input {
+        border:1px solid silver;
+        border-radius: 5px;
+        padding: 3px 5px;
+        font-size: 10px;
+        background: transparent;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-calendar note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">时间预警</b>
+        </div>
+    </div>
+    <!--<div class="timeRemind">-->
+    <!--<div style="margin: 15px 0 15px 30px;">-->
+    <!--<img src="/static/images/icon.png" alt="" class="center_icon">-->
+    <!--<span class="center_1" href="###">日历提醒</span>-->
+    <!--</div>-->
+    <!--<div class="remind">-->
+    <!--<div id="remind">-->
+    <!--<p class="load" style="width:100%;color:white;text-align: center;font-size:18px;">正在拼命加载中...</p>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="weiboContent">
+        <div id="group_emotion_loading" style="display:block;text-align:center;">正在拼命加载中...</div>
+        <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
+            <table id="input-table" class="In-table" style="width:100%;">
+                <tbody class="In-table" style='width:100%!important;'>
+                </tbody>
+            </table>
+        </div>
+        <div class='fanye' style="width:100%;text-align:center;margin-top: 20px;">
+            <div style="display:none;">
+                每页显示<input type="text" id="PageNo" size="1" value="1" style='text-align:center;border:1px solid #ccc;'/>组
+            </div>
+            <div id="div-button" style="display:inline-block;margin-left:5px;">
+                <input type="button" value="首页" id="F-page">
+                <input type="button" value="上一页" id="Pre-page">
+                <input type="button" value="下一页" id="Nex-page">
+                <input type="button" value="尾页" id="L-page">
+            </div>
+            <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
+            <span style="display:inline-block;">总共<span id="s1"></span>页</span>
+        </div>
+    </div>
+</div>
+
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType='twitter';
+    weiboORqq('twitter');
+    $('.nav_type').text('(twitter)');
+    judgmentTwitter('2');
+</script>
+<script src="/static/js/time_warningTwitter-1.js"></script>
+{% endblock %}

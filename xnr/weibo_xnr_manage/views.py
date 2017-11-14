@@ -396,12 +396,12 @@ def ajax_delete_xnr_flow_text():
 
 @mod.route('/update_weibo_count/')
 def ajax_update_weibo_count():
-    task_id='WXNR0004_2017-10-15'
+    task_id='WXNR0004_2017-10-16'
     task_detail=dict()
     #task_detail['date_time']='2017-10-01'
     #task_detail['safe']=19.22
     #task_detail['daily_post_num']=1
-    task_detail['user_fansnum']=11
+    task_detail['user_fansnum']=12
     #task_detail['business_post_num']=0
     #task_detail['timestamp']=1506787200
     #task_detail['xnr_user_no']='WXNR0004'

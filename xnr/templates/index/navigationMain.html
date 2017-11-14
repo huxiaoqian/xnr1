@@ -1,63 +1,76 @@
 {% block title %}<title>网络虚拟人系统</title>{% endblock %}
 {% block my_css %}
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
-    <link rel="stylesheet" href="/static/css/navigationMain.css">
-    <style>
-        .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
-        .demo-radio{display:none!important;}
-        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-        .modal-header {
-            background: #09344e!important;
-            color: white!important;
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/css/font-awesome.min.css">
+<link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+<link rel="stylesheet" href="/static/css/navigationMain.css">
+<style>
+    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+    .demo-radio{display:none!important;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .modal-header {
+        background: #09344e!important;
+        color: white!important;
+    }
+    .modal-body,.modal-footer {
+        background: #041b29!important;
+        color: white!important;
+    }
+    .table-hover>tbody>tr:hover {
+        background-color: #2a556f!important;
+    }
+    .modal-header .close {
+        color:white!important;
+        opacity: 1!important;
+    }
+    .modal-footer .btn {
+        background-color: transparent;
+        border-color: silver;
+        color: white;
+    }
+    .modal-footer .btn:hover {
+        background-color: rgba(3, 8, 16, 0.61);
+        color: white;
+    }
+    .weiboQQ {
+        position: absolute;
+        width: 554px;
+        left: 50%;
+        top: 24%;
+        margin: 0 0 0 -277px;
+        text-align: center;
+    }
+    .weiboQQ img {
+        margin:0 15px;
+        cursor: pointer;
+    }
+    #xnrName {
+        color:white;
+        max-width:237px;
+        min-width:237px;
+        display: inline-block;
+        vertical-align: middle;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        text-align: center;
+    }
+    @media screen and (min-width:1370px) and (max-width:1920px) {
+        .bg13 .monitor {
+            top: 700px!important;
+            left: 1100px!important;
         }
-        .modal-body,.modal-footer {
-            background: #041b29!important;
-            color: white!important;
+        .bg13 .info {
+            top: 700px!important;
+            left:700px!important;
         }
-        .table-hover>tbody>tr:hover {
-            background-color: #2a556f!important;
+        .xnr {
+            left:43% !important;
         }
-        .modal-header .close {
-            color:white!important;
-            opacity: 1!important;
-        }
-        .modal-footer .btn {
-            background-color: transparent;
-            border-color: silver;
-            color: white;
-        }
-        .modal-footer .btn:hover {
-            background-color: rgba(3, 8, 16, 0.61);
-            color: white;
-        }
-        .weiboQQ {
-            position: absolute;
-            width: 554px;
-            height: 176px;
-            left: 50%;
-            top: 22%;
-            margin: 0 0 0 -277px;
-            text-align: center;
-        }
-        .weiboQQ img {
-            margin:0 30px;
-            cursor: pointer;
-        }
-        @media screen and (min-width:1370px) and (max-width:1920px) {
-            .bg13 .monitor {
-                top: 700px!important;
-                left: 1100px!important;
-            }
-            .bg13 .info {
-                top: 700px!important;
-                left:700px!important;
-            }
-        }
-    </style>
+    }
+</style>
 {% endblock %}
 {% block main %}
 <div class="section section1">
@@ -116,15 +129,21 @@
 
     <div class="hgroup">
 
-        <h1><a href="/personalCenter/individual/">个人中心</a></h1>
+        <h1><a href='###'>个人中心</a></h1>
 
         <h2>发生，不止所见。</h2>
 
     </div>
-
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
     <div class="weiboQQ">
         <img src="/static/images/clickweibo.png" title="正在使用微博登录中" class="weibo">
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
     </div>
     <p class="p11" style="font-size: 16px;">
         <!--社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。-->
@@ -150,7 +169,7 @@
         <h4>上报管理</h4>
 
         <p>
-            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。。
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
         </p>
         <div class="bg51-top" id="reportedmange">
             <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
@@ -206,7 +225,7 @@
                                 <span class="demo-checkbox demo-radioInput"></span> 隐身
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose" value='昵称可见'>
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 昵称可见
                             </label>
                         </div>
@@ -214,7 +233,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
                 <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
             </div>
         </div>
@@ -249,19 +268,12 @@
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
     }
     $(function(){
-
         $.fn.fullpage({
-
             verticalCentered: false,
-
             anchors: ['page1', 'page2'],
-
             navigation: true,
-
             navigationTooltips: ['', '']
-
         });
-
     });
     $('.bg51').hover(function () {
         $(".bg51-top").show().addClass("from-below");
@@ -292,46 +304,57 @@
     }).on('click',function () {
         window.location.href='/index/navigationQQ/';
     });
+    $('.facebook').hover(function () {
+        $(this).attr('src','/static/images/facebookclick.png');
+    },function () {
+        $(this).attr('src','/static/images/facebookload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationFaceBook/';
+    });
+    $('.twitter').hover(function () {
+        $(this).attr('src','/static/images/twitterclick.png');
+    },function () {
+        $(this).attr('src','/static/images/twitterload.png');
+    }).on('click',function () {
+        window.location.href = '/index/navigationTwitter/';
+    });
 
-    localStorage.setItem('loginType','weibo');
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        window.location.href='/index/navigationWX/';
+    });
+
     //页面跳转
     var htmlUrl='';
     $('#personal').on('click',function () {
         window.open('/personalCenter/individual/');
     });
     $('#control').on('click',function () {
-        htmlUrl='/control/operationControl/';
-        $('#choosePerson').modal('show');
+        window.open('/control/operationControl/');
     });
     $('#info').on('click',function () {
-        htmlUrl='/inforDetection/inforChecking/';
-        $('#choosePerson').modal('show');
+        window.open('/inforDetection/inforChecking/');
     });
     $('#monitor').on('click',function () {
-        htmlUrl='/monitor/characterBehavior/';
-        $('#choosePerson').modal('show');
+        window.open('/monitor/characterBehavior/');
     });
     $('#reported').on('click',function () {
-        htmlUrl='/behavioGauge/influeAssess/';
-        $('#choosePerson').modal('show');
+        window.open('/behavioGauge/influeAssess/');
     });
     $('#knowledge').on('click',function () {
         window.open('/registered/targetCustom/')
     });
     $('#reportedmange').on('click',function () {
-        window.open('/reportManage/management/');
-        //htmlUrl='/reportManage/management/';
-        //$('#choosePerson').modal('show');
+        window.open('/reportManage/management/?flag=1');
     });
     $('#knowledgebase').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
-        //htmlUrl='/knowledge/domainLibrary/';
-        //$('#choosePerson').modal('show');
+        window.open('/knowledge/domainLibrary/?flag=1');
     });
     $('#system').on('click',function () {
-        window.open('/systemManage/daily/');
-        //htmlUrl='/systemManage/daily/';
-        //$('#choosePerson').modal('show');
+        window.open('/systemManage/daily/?flag=1');
     });
 
     //选择虚拟人确定进入
@@ -352,14 +375,14 @@
             localStorage.setItem('user',encodeURI(userID));
             localStorage.setItem('userRelName',encodeURI(userName));
             localStorage.setItem('userName',encodeURI(id_or_name));
-            window.open(htmlUrl);
+            $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     });
 
     //登录类型
-    //localStorage.setItem('loginType',encodeURI('weibo'));
     var admin='admin@qq.com';
     //虚拟人列表
+    var oneTrue=1;
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
@@ -371,11 +394,20 @@
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
                 }
+                var isChecked='';
+                if (oneTrue=='1'){
+                    isChecked='checked';
+                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
+                    localStorage.setItem('user',encodeURI(k));
+                    localStorage.setItem('userRelName',encodeURI(data[k]));
+                    localStorage.setItem('userName',encodeURI(data[k]));
+                };
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
-                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
                     '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
                     '</label>';
+                oneTrue++;
             }
             $('#choosePerson .identity').html(str);
         }

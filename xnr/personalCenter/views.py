@@ -17,3 +17,16 @@ def personal_center():
 @mod.route('/individualQQ/')
 def personal_centeQQ():
     return render_template('personalCenter/personal_centerQQ.html')
+
+@mod.route('/individualTwitter/')
+def individualTwitter():
+    return render_template('personalCenter/personal_centerTwitter.html')
+
+@mod.route('/individualFaceBook/')
+def individualFaceBook():
+    return render_template('personalCenter/personal_centerFaceBook.html')
+
+@mod.route('/individualWX/')
+def personal_centeWX():
+    return render_template('personalCenter/personal_centerWX.html')
+

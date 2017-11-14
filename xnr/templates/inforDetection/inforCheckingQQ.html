@@ -163,8 +163,10 @@
 
 {% block my_js %}
 <script>
-    $('.coorName').text('预警监控');
+    var loadingType = 'QQ';
     weiboORqq('QQ');
+    $('.nav_type').text('(QQ群)');
+    $('.coorName').text('预警监控');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         minView:2, //控制时分秒

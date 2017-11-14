@@ -25,3 +25,35 @@ def eventEmerges():
 @mod.route('/timeWarning/')
 def timeWarning():
     return render_template('monitor/time_warning.html')
+
+@mod.route('/characterBehaviorTwitter/')
+def characterBehaviorTwitter():
+    return render_template('monitor/character_behaviorTwitter.html')
+
+@mod.route('/speechContentTwitter/')
+def speechContentTwitter():
+    return render_template('monitor/speech_contentTwitter.html')
+
+@mod.route('/eventEmergesTwitter/')
+def eventEmergesTwitter():
+    return render_template('monitor/event_emergesTwitter.html')
+
+@mod.route('/timeWarningTwitter/')
+def timeWarningTwitter():
+    return render_template('monitor/time_warningTwitter.html')
+
+@mod.route('/characterBehaviorFaceBook/')
+def characterBehaviorFaceBook():
+    return render_template('monitor/character_behaviorFaceBook.html')
+
+@mod.route('/speechContentFaceBook/')
+def speechContentFaceBook():
+    return render_template('monitor/speech_contentFaceBook.html')
+
+@mod.route('/eventEmergesFaceBook/')
+def eventEmergesFaceBook():
+    return render_template('monitor/event_emergesFaceBook.html')
+
+@mod.route('/timeWarningFaceBook/')
+def timeWarningFaceBook():
+    return render_template('monitor/time_warningFaceBook.html')

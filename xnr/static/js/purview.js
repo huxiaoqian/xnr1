@@ -1,7 +1,6 @@
 var purview_Url='/system_manage/show_authority_list/';
 public_ajax.call_request('get',purview_Url,purview);
 function purview(data) {
-    console.log(data);
     $('#purviewlist').bootstrapTable('load', data);
     $('#purviewlist').bootstrapTable({
         data:data,

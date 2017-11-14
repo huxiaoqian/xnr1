@@ -86,8 +86,10 @@
 
 {% block my_js %}
 <script>
-    judgment('4');
+    var loadingType = 'weibo';
     weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('4');
     $('.demo-radio').on('click',function () {
         console.log(!!$(this).is(':checked'))
     })

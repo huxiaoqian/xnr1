@@ -477,8 +477,10 @@
 
 {% block my_js %}
 <script>
-    judgment('3');
+    var loadingType = 'weibo';
     weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('3');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         //minView:2, //控制时分秒

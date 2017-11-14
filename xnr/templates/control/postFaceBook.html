@@ -1,0 +1,1167 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>发帖操作</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/postingTwitter.css">
+<link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
+<style>
+    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
+    #grouplist .demo-label{width: 95px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin-top: 10px;}
+    #grouplist .demo-radioInput{margin-top: 0;}
+    #theme-4 .demo-label,#grouplist .demo-label{margin-left: 10px;}
+    .demo-radio{display:none!important;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top: -3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+
+    .table>thead>tr>th {border-top: none!important;}
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .btn-group.open .dropdown-toggle {
+        box-shadow: none!important;
+    }
+    .friends button b{
+        position: relative;
+        top: 2px;
+        font-weight: normal;
+        font-size: 12px;
+        display: inline-block;
+        width: 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .weiboTable .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .weiboTable .table-no-bordered,.weiboTable .table>tbody>tr>td,.weiboTable .fixed-table-container,
+    .weiboTable .bootstrap-table .table>thead>tr>th,.weiboTable .bootstrap-table .table,.weiboTable .table>tbody>tr>td{
+        border: none;
+    }
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .weiboTable .bootstrap-table thead,.weiboTable .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .follow_forward.weiboTable .bootstrap-table thead {
+        display: table-header-group!important;
+    }
+
+    .follow_forward.weiboTable .fixed-table-container thead th .both {background-image: none!important;}
+    .weiboTable .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .weiboTable .bootstrap-table .table:not(.table-condensed),.weiboTable .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .weiboTable .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    th.bs-checkbox {width: 10%!important;}
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control,.heavy-3 {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    #addHeavyUser .heavy-3 {width: 300px;margin: 20px 0 0 10px;}
+    #addHeavyUser .h-1 {display: inline-block;width:75px;text-align: right;}
+    .weiboTable .table:not(.table-condensed)>tbody>tr>td {
+        text-align: left!important;
+    }
+    .follow_forward.weiboTable .table:not(.table-condensed)>tbody>tr>td {text-align: center!important;}
+    /**/
+    .datetimepicker {color:black;}
+    #user_recommend .user_example_list .more:hover,sureADD:hover {
+        background: rgba(5, 23, 55, 0.45);
+    }
+    #moreThing .moreCon li {
+        display: inline-block;
+        margin: 5px 10px;
+    }
+    #moreThing .moreCon a {
+        display: inline-block;
+        text-align: center;
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white;
+    }
+    #sinaEmotion .face {width: inherit;height: inherit;}
+    /**/
+    .choosetime .demo-label {margin-right:15px;}
+    #start_1,#end_1,#sure-1{display: none;}
+    #sure-1 {
+        padding: 1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+        cursor: pointer;
+    }
+    #sure-1:hover {background: rgba(8,23,44,0.65);}
+    .focus_main .bootstrap-table .table>thead>tr>th {width: 9%;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-edit note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">发帖操作</b>
+        </div>
+    </div>
+    <div class="type_page" style="margin: 20px 0 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#everyday" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;日常发帖</a>
+            </li>
+            <li role="presentation">
+                <a href="#hot" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;热点跟随</a>
+            </li>
+            <li role="presentation">
+                <a href="#business" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;业务发帖</a>
+            </li>
+            <li role="presentation">
+                <a href="#reportNote" role="tab" data-toggle="tab"><b class="icon icon-cloud-upload"></b>&nbsp;跟踪转发</a>
+            </li>
+        </ul>
+        <div class="post_post">
+            <div class="post-1" style="margin-top: 20px;">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff">我要发推</span>
+            </div>
+            <div class="post-2">
+                <div>
+                    <a href="###" style="font-family: cursive;color: white;font-weight: 800;">撰写新推文</a>
+                    <span class="autoWrite" data-toggle="modal" data-target="#autoWritePost">智能写作</span>
+                </div>
+                <!--cols="101" rows="6"-->
+                <div id="post-2-content" class="content" contentEditable="true"
+                     style="width: 736px;height: 132px;">
+                </div>
+                <img src='' alt='' id='imgimg' style="display: none;"/>
+                <div class="add_thing">
+                    <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
+                    <div style="margin:0 10px;" onclick="selectFile();"><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
+                    <form action='' method='' name='myform' style="display: none;">
+                        <input type='file' id='iptfileupload' onchange='show()' value=''/>
+                    </form>
+                    <div style="margin-left:40px;">
+                        <label class="demo-label timingss" style="margin: 5px 7px;">
+                            <input class="demo-radio timing" type="checkbox" name="demo">
+                            <span class="demo-checkbox demo-radioInput"></span> 定时
+                        </label>
+                        <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
+                        <div class="ttime">
+                            <input type="text" size="22" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" size="22" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                            <input type="text" size="22" id="_timing3" class="remarks" placeholder="备注信息"
+                                   style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
+                </div>
+            </div>
+            <div id="user_recommend">
+                <p class="tit" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">@用户推荐</p>
+                <ul class="user_example_list" style="padding: 10px 20px;">
+
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content" id="content">
+            <div role="tabpanel" class="weiboTable tab-pane active" id="everyday">
+                <div class="everyday-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
+                </div>
+                <div class="everyday-2" style="margin-left: 30px;overflow: hidden;">
+                    <div class="ed-2-1">
+                        <span>按主题：</span>
+                        <div id="theme" style="">
+                            <label class="demo-label" title="旅游">
+                                <input class="demo-radio" type="radio" name="theme" value="旅游" checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 旅游
+                            </label>
+                            <label class="demo-label" title="美食">
+                                <input class="demo-radio" type="radio" name="theme" value="美食">
+                                <span class="demo-checkbox demo-radioInput"></span> 美食
+                            </label>
+                            <label class="demo-label" title="汽车">
+                                <input class="demo-radio" type="radio" name="theme" value="汽车">
+                                <span class="demo-checkbox demo-radioInput"></span> 汽车
+                            </label>
+                            <label class="demo-label" title="游戏">
+                                <input class="demo-radio" type="radio" name="theme" value="游戏">
+                                <span class="demo-checkbox demo-radioInput"></span> 游戏
+                            </label>
+                            <label class="demo-label" title="星座">
+                                <input class="demo-radio" type="radio" name="theme" value="星座">
+                                <span class="demo-checkbox demo-radioInput"></span> 星座
+                            </label>
+                            <label class="demo-label" title="音乐">
+                                <input class="demo-radio" type="radio" name="theme" value="音乐">
+                                <span class="demo-checkbox demo-radioInput"></span> 音乐
+                            </label>
+                            <label class="demo-label" title="影视">
+                                <input class="demo-radio" type="radio" name="theme" value="影视">
+                                <span class="demo-checkbox demo-radioInput"></span> 影视
+                            </label>
+                            <label class="demo-label" title="健身">
+                                <input class="demo-radio" type="radio" name="theme" value="健身">
+                                <span class="demo-checkbox demo-radioInput"></span> 健身
+                            </label>
+                            <label class="demo-label" title="养生">
+                                <input class="demo-radio" type="radio" name="theme" value="养生">
+                                <span class="demo-checkbox demo-radioInput"></span> 养生
+                            </label>
+                            <label class="demo-label" title="体育">
+                                <input class="demo-radio" type="radio" name="theme" value="体育">
+                                <span class="demo-checkbox demo-radioInput"></span> 体育
+                            </label>
+                            <label class="demo-label" title="萌宠">
+                                <input class="demo-radio" type="radio" name="theme" value="萌宠">
+                                <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                            </label>
+                            <label class="demo-label" title="动漫">
+                                <input class="demo-radio" type="radio" name="theme" value="动漫">
+                                <span class="demo-checkbox demo-radioInput"></span> 动漫
+                            </label>
+                            <label class="demo-label" title="时尚">
+                                <input class="demo-radio" type="radio" name="theme" value="时尚">
+                                <span class="demo-checkbox demo-radioInput"></span> 时尚
+                            </label>
+                            <label class="demo-label" title="鸡汤">
+                                <input class="demo-radio" type="radio" name="theme" value="鸡汤">
+                                <span class="demo-checkbox demo-radioInput"></span> 鸡汤
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="ed-2-2">
+                        <div style="text-align: center;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='timestamp' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按时间
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="th" value='retweeted'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按热度
+                            </label>
+                        </div>
+                        <div class="defaultWeibo">
+                            <div id="defaultWeibo">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div role="tabpanel" class="weiboTable tab-pane" id="hot">
+                <div class="hot-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">热门事件推荐</span>
+                </div>
+                <div class="hot-2" style="margin-left: 30px;overflow: hidden;">
+                    <div class="hot-2-1">
+                        <span>按主题：</span>
+                        <div id="theme-2">
+                            <label class="demo-label" title="民生类_法律">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_法律' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
+                            </label>
+                            <label class="demo-label" title="文体类_娱乐">
+                                <input class="demo-radio" type="radio" name="theme2h" value='文体类_娱乐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
+                            </label>
+                            <label class="demo-label" title="科技类">
+                                <input class="demo-radio" type="radio" name="theme2h" value='科技类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 科技类
+                            </label>
+                            <label class="demo-label" title="经济类">
+                                <input class="demo-radio" type="radio" name="theme2h" value='经济类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 经济类
+                            </label>
+                            <label class="demo-label" title="教育类">
+                                <input class="demo-radio" type="radio" name="theme2h" value='教育类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 教育类
+                            </label>
+                            <label class="demo-label" title="民生类_环保">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_环保'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
+                            </label>
+                            <label class="demo-label" title="民生类_健康">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_健康'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
+                            </label>
+                            <label class="demo-label" title="军事类">
+                                <input class="demo-radio" type="radio" name="theme2h" value='军事类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 军事类
+                            </label>
+                            <label class="demo-label" title="政治类_外交">
+                                <input class="demo-radio" type="radio" name="theme2h" value='政治类_外交'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
+                            </label>
+                            <label class="demo-label" title="文体类_体育">
+                                <input class="demo-radio" type="radio" name="theme2h" value='文体类_体育'>
+                                <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
+                            </label>
+                            <label class="demo-label" title="民生类_交通">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_交通'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
+                            </label>
+                            <label class="demo-label" title="其他类">
+                                <input class="demo-radio" type="radio" name="theme2h" value='其他类'>
+                                <span class="demo-checkbox demo-radioInput"></span> 其他类
+                            </label>
+                            <label class="demo-label" title="政治类_反腐">
+                                <input class="demo-radio" type="radio" name="theme2h" value='政治类_反腐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
+                            </label>
+                            <label class="demo-label" title="民生类_就业">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_就业'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
+                            </label>
+                            <label class="demo-label" title="政治类_暴恐">
+                                <input class="demo-radio" type="radio" name="theme2h" value='政治类_暴恐'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
+                            </label>
+                            <label class="demo-label" title="民生类_住房">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_住房'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
+                            </label>
+                            <label class="demo-label" title="政治类_地区和平">
+                                <input class="demo-radio" type="radio" name="theme2h" value='政治类_地区和平'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
+                            </label>
+                            <label class="demo-label" title="政治类_宗教">
+                                <input class="demo-radio" type="radio" name="theme2h" value='政治类_宗教'>
+                                <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
+                            </label>
+                            <label class="demo-label" title="民生类_社会保障">
+                                <input class="demo-radio" type="radio" name="theme2h" value='民生类_社会保障'>
+                                <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
+                            </label>
+                        </div>
+                    </div>
+                    <div class="hot-2-2">
+                        <div id="theme-3" style="text-align: center;">
+                            <label class="demo-label" title="按事件敏感度">
+                                <input class="demo-radio" type="radio" name="theme3" value='sensitive'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按事件敏感度
+                            </label>
+                            <label class="demo-label" title="按事件时间">
+                                <input class="demo-radio" type="radio" name="theme3" value='timestamp' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按事件时间
+                            </label>
+                            <label class="demo-label" title="按已提交观点分析">
+                                <input class="demo-radio" type="radio" name="theme3" value='compute_status'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按已提交观点分析
+                            </label>
+                        </div>
+                        <div class="defaultWeibo2">
+                            <div id="defaultWeibo2">
+                                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="weiboTable tab-pane" id="business">
+                <div class="business-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">微博推荐</span>
+                </div>
+                <div class="business-2" style="margin-left: 30px;">
+                    <!--<span>排序指标：</span>-->
+                    <div id="theme-4">
+                        <label class="demo-label" title="按时间">
+                            <input class="demo-radio" type="radio" name="theme2" value='timestamp' checked>
+                            <span class="demo-checkbox demo-radioInput"></span> 按时间
+                        </label>
+                        <label class="demo-label" title="按信息敏感度">
+                            <input class="demo-radio" type="radio" name="theme2" value='sensitive_info'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按信息敏感度
+                        </label>
+                        <label class="demo-label" title="按人物敏感度">
+                            <input class="demo-radio" type="radio" name="theme2" value='sensitive_user'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
+                        </label>
+                        <label class="demo-label" title="按信息影响力">
+                            <input class="demo-radio" type="radio" name="theme2" value='influence_info'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按信息影响力
+                        </label>
+                        <label class="demo-label" title="按人物影响力">
+                            <input class="demo-radio" type="radio" name="theme2" value='influence_user'>
+                            <span class="demo-checkbox demo-radioInput"></span> 按人物影响力
+                        </label>
+                    </div>
+                    <!--<div style="float: right;margin-right: 18px">-->
+                    <!--<input type="text" id="search-1-business" placeholder="搜索关键词或子观点相关的微博"/>-->
+                    <!--<button type="button" class="btn btn-primary btn-xs" id="search-business"-->
+                    <!--style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
+                    <!--</div>-->
+                    <div class="defaultWeibo3">
+                        <div id="defaultWeibo3">
+                            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="reportNote">
+                <div class="reportNote-2" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">重点关注用户</span>
+                    <span class="add_user" data-toggle="modal" data-target="#addHeavyUser" title="添加新的重点用户">添加用户</span>
+                    <span class="del_user disableCss" title="请勾选您要删除的用户">删除用户</span>
+                </div>
+                <div class="focus_main">
+                    <div id="focus_main">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+                </div>
+                <div class="reportNote-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">跟随转发任务</span>
+                </div>
+                <div class="choosetime" style="margin: 10px 0;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='no'>
+                        <span class="demo-checkbox demo-radioInput"></span> 未发布
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='0' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 今天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='1'>
+                        <span class="demo-checkbox demo-radioInput"></span> 昨天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='7'>
+                        <span class="demo-checkbox demo-radioInput"></span> 7天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='30'>
+                        <span class="demo-checkbox demo-radioInput"></span> 30天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='mize'>
+                        <span class="demo-checkbox demo-radioInput"></span> 自定义
+                    </label>
+                    <input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"
+                           style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                    <input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"
+                           style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                    <span id="sure-1" class="sureTime">确定</span>
+                    <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
+                </div>
+                <div class="follow_forward weiboTable">
+                    <div id="follow_forward">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+                </div>
+                <div class="reportNote-3" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">跟踪语料</span>
+                    <div style="margin:10px 0;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="_list">
+                            <span class="demo-checkbox demo-radioInput"></span> 重点用户
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="_list">
+                            <span class="demo-checkbox demo-radioInput"></span> 隐身关注
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="_list">
+                            <span class="demo-checkbox demo-radioInput"></span> 普通关注
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="_list">
+                            <span class="demo-checkbox demo-radioInput"></span> 粉丝
+                        </label>
+                    </div>
+                    <div class="followContent">
+                        <div id="followContent">
+                            <div class="post_perfect">
+                                <div class="post_center-hot">
+                                    <img src="/static/images/unknown.png" class="center_icon">
+                                    <div class="center_rel">
+                                        <a class="center_1" href="###" style="color: #f98077;">大大的Twitter</a>
+                                        <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;2017-10-31 10:23</span>
+                                        <span class="center_2">test</span>
+                                        <div class="center_3">
+                                            <span class="cen3-4"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>
+                                            <span class="cen3-1"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">22</b>）</span>
+                                            <span class="cen3-2"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">43</b>）</span>
+                                            <span class="cen3-3"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>
+                                        </div>
+                                        <div class="commentDown" style="width: 100%;display: none;">
+                                            <input type="text" class="comtnt" placeholder="评论内容"/>
+                                            <span class="sureCom" onclick="comMent(this)">评论</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
+        <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+        <!--</button>-->
+    </div>
+</div>
+<!--模态框-->
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--多余的东西-->
+<div class="modal fade" id="moreThing" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">推荐用户</h4>
+            </div>
+            <div class="modal-body moreCon">
+                <ul></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--智能发帖-->
+<style>
+    #autoWritePost #postCon{
+        padding: 5px;
+        background: transparent;
+        margin: 10px 0;
+        resize: none;
+        border: 1px solid silver;
+    }
+    #autoWritePost .pp {
+        margin-bottom: 10px;
+    }
+    #autoWritePost .keywords {
+        width:100%;
+        text-align: center;
+        background: transparent;
+        border: 1px solid silver;
+        padding:3px 6px;
+        border-radius: 5px;
+    }
+    #autoWritePost .recommendWEIbo {
+        color: white;
+        font-weight: 600;
+    }
+    #autoWritePost .recommendWEIbo .icon {
+        width: 20px;
+        height: 20px;
+    }
+    #autoWritePost .recommendWEIbo .recommendDown {
+        display: inline-block;
+    }
+    #autoWritePost .recommendWEIbo .copyRec {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 5px;
+        border: 1px solid silver;
+        font-size: 12px;
+    }
+</style>
+<div class="modal fade" id="autoWritePost" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">智能写作</h4>
+            </div>
+            <div class="modal-body">
+                <h4 style="color: white;">发帖</h4>
+                <textarea name="" id="postCon" cols="78" rows="6"></textarea>
+                <div class="pp"><h4>关键词</h4><input type="text" class="keywords" placeholder="多个关键词请用逗号分隔"></div>
+                <div class="pp">
+                    <span>选择领域：</span>
+                    <div class="autoPostfiled" style="display: inline-block;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="apf">
+                            <span class="demo-checkbox demo-radioInput"></span> 维权群体
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="apf">
+                            <span class="demo-checkbox demo-radioInput"></span> 智能群体
+                        </label>
+                    </div>
+                </div>
+                <div class="autoRecommend">
+                    <div id="autoRecommend">
+                        <div class="recommendWEIbo">
+                            <img src="/static/images/icon.png" class="icon">
+                            <p class="recommendDown">推荐1</p><span class="copyRec">复制</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--相似微博-->
+<div class="modal fade" id="simliar" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">相似微博</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--推荐内容-->
+<div class="modal fade" id="content_recommend" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">内容推荐</h4>
+            </div>
+            <div class="modal-body">
+                <div class="recommend-body" style="margin-left: 30px;">
+                    <div class="recommend-2">
+                        <div id="recommend-2"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--事件子观点及相关微博-->
+<div class="modal fade" id="thingsweibo" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">事件子观点及相关微博</h4>
+            </div>
+            <div class="modal-body">
+                <div class="thWeibo">
+                    <div id="thWeibo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--语料选择-->
+<style>
+    #wordcloud .demo-label {
+        width:90px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 5px 10px;
+    }
+</style>
+<div class="modal fade" id="wordcloud" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">语料选择</h4>
+            </div>
+            <div class="modal-body">
+                <div class="xnr_choose" style="margin: 10px;">
+                    <span style="position: relative;top:-3px;">虚拟人选择：</span>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="xnr" value='my_xnrs' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 私有
+                    </label>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="xnr" value='all_xnrs'>
+                        <span class="demo-checkbox demo-radioInput"></span> 共享
+                    </label>
+                </div>
+                <div class="word-1" style="margin: 10px;">
+                    <span style="position: relative;top:-3px;">语料分类：</span>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="theday" value='日常语料' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 日常语料
+                    </label>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="theday" value='主题语料'>
+                        <span class="demo-checkbox demo-radioInput"></span> 主题语料
+                    </label>
+                </div>
+                <div id="cloud-1">
+                    <label class="demo-label" title="旅游">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='旅游' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 旅游
+                    </label>
+                    <label class="demo-label" title="美食">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='美食'>
+                        <span class="demo-checkbox demo-radioInput"></span> 美食
+                    </label>
+                    <label class="demo-label" title="汽车">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='汽车'>
+                        <span class="demo-checkbox demo-radioInput"></span> 汽车
+                    </label>
+                    <label class="demo-label" title="游戏">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='游戏'>
+                        <span class="demo-checkbox demo-radioInput"></span> 游戏
+                    </label>
+                    <label class="demo-label" title="星座">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='星座'>
+                        <span class="demo-checkbox demo-radioInput"></span> 星座
+                    </label>
+                    <label class="demo-label" title="摄影">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='摄影'>
+                        <span class="demo-checkbox demo-radioInput"></span> 摄影
+                    </label>
+                    <label class="demo-label" title="音乐">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='音乐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 音乐
+                    </label>
+                    <label class="demo-label" title="电影">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='电影'>
+                        <span class="demo-checkbox demo-radioInput"></span> 电影
+                    </label>
+                    <label class="demo-label" title="运动">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='运动'>
+                        <span class="demo-checkbox demo-radioInput"></span> 运动
+                    </label>
+                    <label class="demo-label" title="搞笑">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='搞笑'>
+                        <span class="demo-checkbox demo-radioInput"></span> 搞笑
+                    </label>
+                    <label class="demo-label" title="数码">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='数码'>
+                        <span class="demo-checkbox demo-radioInput"></span> 数码
+                    </label>
+                    <label class="demo-label" title="军事">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='军事'>
+                        <span class="demo-checkbox demo-radioInput"></span> 军事
+                    </label>
+                    <label class="demo-label" title="历史">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='历史'>
+                        <span class="demo-checkbox demo-radioInput"></span> 历史
+                    </label>
+                    <label class="demo-label" title="萌宠">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='萌宠'>
+                        <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                    </label>
+                    <label class="demo-label" title="动漫">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='动漫'>
+                        <span class="demo-checkbox demo-radioInput"></span> 动漫
+                    </label>
+                    <label class="demo-label" title="情感">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='情感'>
+                        <span class="demo-checkbox demo-radioInput"></span> 情感
+                    </label>
+                    <label class="demo-label" title="时尚">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='时尚'>
+                        <span class="demo-checkbox demo-radioInput"></span> 时尚
+                    </label>
+                </div>
+                <div id="cloud-2" style="display: none;">
+                    <label class="demo-label" title="民生类_法律">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_法律' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
+                    </label>
+                    <label class="demo-label" title="文体类_娱乐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_娱乐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
+                    </label>
+                    <label class="demo-label" title="科技类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='科技类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 科技类
+                    </label>
+                    <label class="demo-label" title="经济类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='经济类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 经济类
+                    </label>
+                    <label class="demo-label" title="教育类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='教育类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 教育类
+                    </label>
+                    <label class="demo-label" title="民生类_环保">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_环保'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
+                    </label>
+                    <label class="demo-label" title="民生类_健康">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_健康'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
+                    </label>
+                    <label class="demo-label" title="军事类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='军事类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 军事类
+                    </label>
+                    <label class="demo-label" title="政治类_外交">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_外交'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
+                    </label>
+                    <label class="demo-label" title="文体类_体育">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_体育'>
+                        <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
+                    </label>
+                    <label class="demo-label" title="民生类_交通">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_交通'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
+                    </label>
+                    <label class="demo-label" title="其他类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='其他类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 其他类
+                    </label>
+                    <label class="demo-label" title="政治类_反腐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_反腐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
+                    </label>
+                    <label class="demo-label" title="民生类_就业">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_就业'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
+                    </label>
+                    <label class="demo-label" title="政治类_暴恐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_暴恐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
+                    </label>
+                    <label class="demo-label" title="民生类_住房">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_住房'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
+                    </label>
+                    <label class="demo-label" title="政治类_地区和平">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_地区和平'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
+                    </label>
+                    <label class="demo-label" title="政治类_宗教">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_宗教'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
+                    </label>
+                    <label class="demo-label" title="民生类_社会保障">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_社会保障'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="joinWord()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--添加重点用户-->
+<div class="modal fade" id="addHeavyUser" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加重点关注用户</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <span class="h-1">添加方式：</span>
+                    <label class="demo-label" style="margin:5px 0 0 10px;">
+                        <input class="demo-radio" type="radio" name="heavy" value='uid_string' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 按UID方式
+                    </label>
+                    <label class="demo-label" style="margin:5px 0 0 10px;">
+                        <input class="demo-radio" type="radio" name="heavy" value='nick_name_string'>
+                        <span class="demo-checkbox demo-radioInput"></span> 按人物昵称
+                    </label>
+                </div>
+                <div>
+                    <span class="heavy-2 h-1">UID：</span>
+                    <input type="text" class="heavy-3" placeholder="请输入人物UID（多个用逗号分隔）"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addHeavySure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType='faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
+    judgmentFaceBook('2');
+    //===============
+    $('#wordcloud .word-1 .demo-label .demo-radio').on('click',function () {
+        var _val=$(this).val();
+        if (_val=='日常语料'){
+            $('#cloud-1').show();
+            $('#cloud-2').hide();
+        }else {
+            $('#cloud-1').hide();
+            $('#cloud-2').show();
+        }
+    })
+    function selectFile(){
+        $("#iptfileupload").trigger("click");
+    }
+    /* 获取 文件的路径 ，用于测试*/
+    function getPath(obj,fileQuery,transImg) {
+        var imgSrc = '', imgArr = [], strSrc = '' ;
+        if(window.navigator.userAgent.indexOf("MSIE")>=1){ // IE浏览器判断
+            if(obj.select){
+                obj.select();
+                var path=document.selection.createRange().text;
+                alert(path) ;
+                obj.removeAttribute("src");
+                imgSrc = fileQuery.value ;
+                imgArr = imgSrc.split('.') ;
+                strSrc = imgArr[imgArr.length - 1].toLowerCase() ;
+                if(strSrc.localeCompare('jpg') === 0 || strSrc.localeCompare('jpeg') === 0 || strSrc.localeCompare('gif') === 0 || strSrc.localeCompare('png') === 0){
+                    obj.setAttribute("src",transImg);
+                    obj.style.filter=
+                        "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"+path+"', sizingMethod='scale');"; // IE通过滤镜的方式实现图片显示
+                }else{
+                    //try{
+                    throw new Error('File type Error! please image file upload..');
+                    //}catch(e){
+                    // alert('name: ' + e.name + 'message: ' + e.message) ;
+                    //}
+                }
+            }else{
+                // alert(fileQuery.value) ;
+                imgSrc = fileQuery.value ;
+                imgArr = imgSrc.split('.') ;
+                strSrc = imgArr[imgArr.length - 1].toLowerCase() ;
+
+                if(strSrc.localeCompare('jpg') === 0 || strSrc.localeCompare('jpeg') === 0 || strSrc.localeCompare('gif') === 0 || strSrc.localeCompare('png') === 0){
+                    obj.src = fileQuery.value ;
+                }else{
+                    //try{
+                    throw new Error('File type Error! please image file upload..') ;
+                    //}catch(e){
+                    // alert('name: ' + e.name + 'message: ' + e.message) ;
+                    //}
+                }
+
+            }
+
+        } else{
+            var file =fileQuery.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e){
+                imgSrc = fileQuery.value ;
+                imgArr = imgSrc.split('.') ;
+                strSrc = imgArr[imgArr.length - 1].toLowerCase() ;
+                if(strSrc.localeCompare('jpg') === 0 || strSrc.localeCompare('jpeg') === 0 || strSrc.localeCompare('gif') === 0 || strSrc.localeCompare('png') === 0){
+                    obj.setAttribute("src", e.target.result) ;
+//                    $('#post-2-content')
+                    var editor = document.getElementById('post-2-content');
+                    var img = document.createElement('img');
+                    img.style.width = '30px';
+                    img.style.height = '30px';
+                    img.src = e.target.result;
+                    editor.appendChild(img);
+                    var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
+                    var rr=res.substring(0,res.length);
+                    $.ajax({
+                        type:'GET',
+                        url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
+                        async:true,
+                        //timeout:300,
+                        //data:{"name":"xm"},//传参数
+                        dataType:"json",
+                        success:uploadIMG,
+                        error:function (xhr,textStatus,errorThrown) {
+                            //请求失败执行的函数
+                            console.log("请求失败",textStatus,errorThrown)
+                        },
+                        global:false//是否触发全局请求,需要触发就是true,不需要false
+                    });
+                }else{
+                    //try{
+                    throw new Error('File type Error! please image file upload..') ;
+                    //}catch(e){
+                    // alert('name: ' + e.name + 'message: ' + e.message) ;
+                    //}
+                }
+
+                // alert(e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+
+    }
+    var imgRoad=[];
+    function uploadIMG(data) {
+        imgRoad.push(data[0]);
+    }
+    function show(){
+        //以下即为完整客户端路径
+        var file_img=document.getElementById("imgimg"),
+            iptfileupload = document.getElementById('iptfileupload') ;
+        getPath(file_img,iptfileupload,file_img) ;
+    }
+
+    //==================================以下====关于群可见后的操作==================================================
+    $('.friends .dropdown-menu li').on('click',function(e) {
+        if (e.target.innerHTML||e.target.innerHTML.toString().substring(1,4)=='img'){
+            $('.friends button b').attr('title',e.target.innerText).text(e.target.innerText);
+        }else if (e.target.innerHTML==''){
+            var a=$(this).find('span').text();
+            $('.friends button b').attr('title',a).text(a);
+        }
+        if (e.target.innerHTML=='群可见'||$(this).find('span').text()=='群可见'){
+            var glfans_url='/weibo_xnr_operate/create_group_show_fans/?xnr_user_no='+ID_Num;
+            public_ajax.call_request('get',glfans_url,glfans);
+            var gl_url='/weibo_xnr_operate/show_group/?xnr_user_no='+ID_Num;
+            public_ajax.call_request('get',gl_url,gpList);
+        }
+    });
+    //========粉丝列表
+    function glfans(data) {
+        console.log(data)
+        if (isEmptyObject(data)){
+            $('#grouplist .gpmember').text('你还未有粉丝。');
+        }else {
+            var str='';
+            for (var f in data){
+                var name=data[f][0],photo=data[f][1];
+                if (data[f][0]==''){name=f};
+                if (data[f][1]==''){photo='/static/images/unknown.png'};
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="checkbox" name="ff" value='+f+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span>'+
+                    '   <img src="'+photo+'" style="width:20px;height:20px;"/>  '+ name+
+                    '</label>';
+            }
+            $('#grouplist .gpmember').html(str);
+        }
+    }
+    //========群列表
+    function gpList(data) {
+        if (isEmptyObject(data)){
+            $('#grouplist .group').text('还未创建任何群组');
+        }else {
+            var str='';
+            for (var k in data){
+                str+=
+                    '<label class="demo-label" title="'+data[k]+'">'+
+                    '   <input class="demo-radio" type="checkbox" name="gg" value='+k+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                    '</label>';
+            }
+            $('#grouplist .group').html(str);
+        }
+        $('#grouplist').modal('show');
+    };
+    //====确定这些群可见的===
+    //    function groupSure() {
+    //
+    //    }
+    //===新建一个群===
+    $('.sureADD').on('click',function () {
+        var n=$('.groupNUM').val();
+        var m=[];
+        $("#grouplist input:checkbox:checked").each(function (index,item) {
+            m.push($(this).val());
+        });
+        if (n==''){
+            $('#pormpt p').text('群名称不能为空。');
+            $('#pormpt').modal('show');
+        }else if (m.length==0){
+            $('#pormpt p').text('请勾选成员');
+            $('#pormpt').modal('show');
+        }else {
+            var mn='/weibo_xnr_operate/create_group/?xnr_user_no='+nowUser+'&group='+ n +
+                '&members='+m.join(',');
+            public_ajax.call_request('get',mn,postYES);
+        }
+    });
+    //===================================以上====关于群可见后的操作=========================================
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+
+
+</script>
+<script src="/static/js/jquery.sinaEmotion.js"></script>
+<script src="/static/js/postFaceBook-1.js"></script>
+<script>
+    //表情
+    $('.emotion').bind({
+        click: function(event){
+            if(! $('#sinaEmotion').is(':visible')){
+                $(this).sinaEmotion();
+                event.stopPropagation();
+            }
+        }
+    });
+</script>
+{% endblock %}
