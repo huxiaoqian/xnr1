@@ -15,12 +15,13 @@ from global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_in
 from time_utils import ts2datetime,datetime2ts,get_groupmessage_index_list
 from parameter import DAY,MAX_VALUE,MAX_SEARCH_SIZE
 
+# 安全性
 def qq_history_count(xnr_user_no,qq_number,current_time):
 
     current_date = ts2datetime(current_time)
     #timestamp = datetime2ts(current_date)
     last_date = ts2datetime(current_time-DAY)
-    print 'current_date:::',current_date
+    #print 'current_date:::',current_date
 
     group_message_index_name = group_message_index_name_pre + current_date
 
@@ -62,37 +63,36 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
     #item_dict['xnr_user_no'] = xnr_user_no
     item_dict['total_post_num'] = total_count_totay
     item_dict['daily_post_num'] = today_count
-    #item_dict['qq_number'] = qq_number
-    #item_dict['timestamp'] = current_time
 
     query_body_total_day = {
         'query':{
-            'bool':{
-                'must':[
-                    {'term':{'xnr_qq_number':qq_number}},
-                    {'wildcard':{'text':'*'+'@'+'*'}}
-                ]
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_qq_number':qq_number}
+                }
+            }
+        },
+        'aggs':{
+            'all_speakers':{
+                'terms':{'field':'speaker_qq_number',"order" : { "_count" : "desc" }}
             }
         }
     }
 
     try:
-        results_total_day = es_xnr.count(index=group_message_index_name,doc_type=group_message_index_type,\
-                    body=query_body_total_day)
 
-        if results_total_day['_shards']['successful'] != 0:
-            at_num_total_day = results_total_day['count']
-        else:
-            print 'es index rank error'
-            at_num_total_day = 0
+        results_total_day = es_xnr.search(index=group_message_index_name,doc_type=group_message_index_type,\
+                    body=query_body_total_day)['aggregations']['all_speakers']['buckets']
+
+        speaker_max = results_total_day[0]['doc_count']
     except:
-        at_num_total_day = 0
+        speaker_max = today_count
 
-    influence = (float(math.log(today_count+1))/(math.log(at_num_total_day+1)+1))*100
+    safe = (float(math.log(today_count+1))/(math.log(speaker_max+1)+1))*100
 
-    influence = round(influence,2)  # 保留两位小数
+    safe = round(safe,2)  # 保留两位小数
     
-    item_dict['mark'] = influence
+    item_dict['mark'] = safe
 
     # es.index(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
     #             id=_id_today,body=item_dict)
