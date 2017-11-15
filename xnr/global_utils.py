@@ -34,6 +34,10 @@ xnr_index_type = 'user'
 qq_xnr_index_name = 'qq_xnr'
 qq_xnr_index_type = 'user'
 
+#use to save xnr_mapping info
+xnr_map_index_name='xnr_mapping'
+xnr_map_index_type='user'
+
 ## qq上报管理
 qq_report_management_index_name = 'qq_report_management'
 qq_report_management_index_type = 'report'
