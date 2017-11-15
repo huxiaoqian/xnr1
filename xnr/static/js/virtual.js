@@ -198,19 +198,132 @@ function successFail(data) {
 }
 
 
-//给指定账户添加新的虚拟人
-// var current_id='';
-// function addVir(_id) {
-//     current_id=_id;
-//     $('#addVir').modal('show');
-// }
-// function addVirSure() {
-//     var accountid=$('#addVir .addVirContent .vir').val().toString().replace(/，/g,',');
-//     if (accountid){
-//         var new_vir_url='/system_manage/add_user_xnraccount/?account_id='+_id+'&xnr_accountid='+accountid;
-//         public_ajax.call_request('get',new_vir_url,successFail);
-//     }else {
-//         $('#pormpt p').text('虚拟人账号不能为空。');
-//         $('#pormpt').modal('show');
-//     }
-// }
+//虚拟人通道管理
+var xnr_road_url=''+admin;
+// public_ajax.call_request('get',xnr_road_url,xnr_road);
+function xnr_road(data) {
+    console.log(data)
+    $('#virtualtable_2').bootstrapTable('load', data);
+    $('#virtualtable_2').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 3,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "微博虚拟人",//标题
+                field: "weibo_xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.weibo_xnr_user_no==''||row.weibo_xnr_user_no=='null'||row.weibo_xnr_user_no=='unknown'||!row.weibo_xnr_user_no){
+                        return '未知';
+                    }else {
+                        return row.weibo_xnr_user_no;
+                    };
+                }
+            },
+            {
+                title: "QQ虚拟人",//标题
+                field: "qq_xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.qq_xnr_user_no==''||row.qq_xnr_user_no=='null'||!row.qq_xnr_user_no||row.qq_xnr_user_no=='unknown'){
+                        return '无任何虚拟人';
+                    }else {
+                        return row.qq_xnr_user_no;
+                    };
+                }
+            },
+            {
+                title: "微信虚拟人",//标题
+                field: "weixin_xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.weixin_xnr_user_no==''||row.weixin_xnr_user_no=='null'||!row.weixin_xnr_user_no||row.weixin_xnr_user_no=='unknown'){
+                        return '无任何虚拟人';
+                    }else {
+                        return row.weixin_xnr_user_no;
+                    };
+                }
+            },
+            {
+                title: "faceBook虚拟人",//标题
+                field: "facebook_xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.facebook_xnr_user_no==''||row.facebook_xnr_user_no=='null'||!row.facebook_xnr_user_no||row.facebook_xnr_user_no=='unknown'){
+                        return '无任何虚拟人';
+                    }else {
+                        return row.facebook_xnr_user_no;
+                    };
+                }
+            },
+            {
+                title: "twitter虚拟人",//标题
+                field: "twitter_xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.twitter_xnr_user_no==''||row.twitter_xnr_user_no=='null'||!row.twitter_xnr_user_no||row.twitter_xnr_user_no=='unknown'){
+                        return '无任何虚拟人';
+                    }else {
+                        return row.twitter_xnr_user_no;
+                    };
+                }
+            },
+            {
+                title: "操作",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    return '<span style="cursor:pointer;color:white;" onclick="roadXnrModify(\''+row.user_id+'\',\''+row.user_name+'\',\''+row.my_xnrs+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '<span style="cursor:pointer;color:white;" onclick="deleteRoadXnrInfo(\''+row.user_id+'\',\''+row.my_xnrs+'\')" title="删除"><i class="icon icon-trash"></i></span>';
+                }
+            },
+        ],
+    });
+}
+// 编辑和添加通道
+function roadXnrModify() {
+    '<label class="demo-label" title="旅游">' +
+    '   <input class="demo-radio" type="radio" name="theme" value="旅游">' +
+    '   <span class="demo-checkbox demo-radioInput"></span> 旅游' +
+    '</label>'
+}
+//删除通道
+function deleteRoadXnrInfo() {
+    $('#delroad').modal('show');
+}
+function deleteRoadXnr() {
+
+}
+
