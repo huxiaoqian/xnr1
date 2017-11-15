@@ -44,13 +44,24 @@
 <div id="container">
     <div class="title">
         <div class="tit-1">
-            <span class="icon icon-calendar account_icon"></span>
+            <span class="icon icon-user-md account_icon"></span>
             <b>虚拟人管理</b>
         </div>
     </div>
     <div class="virtualtable">
         <!--<span class="addaccount" data-toggle="modal" data-target="#addAccountModal">添加账户</span>-->
         <div id="virtualtable"></div>
+    </div>
+
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-road account_icon"></span>
+            <b>虚拟人通道管理</b>
+        </div>
+    </div>
+    <div class="virtualtable_2">
+        <span class="addaccount" data-toggle="modal" data-target="#addAccountModal">添加账户</span>
+        <div id="virtualtable_2"></div>
     </div>
 </div>
 <!--模态框-->
@@ -171,6 +182,62 @@
     </div>
 </div>
 
+
+<!--编辑通道和添加通道-->、
+<div class="modal fade" id="modifyAndAddRoad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="modActCC">
+                    <span>微博虚拟人：</span>
+                    <div class="weibolist"></div>
+                </div>
+                <div class="modActCC">
+                    <span>QQ虚拟人：</span>
+                    <div class="QQlist"></div>
+                </div>
+                <div class="modActCC">
+                    <span>微信虚拟人：</span>
+                    <div class="wxlist"></div>
+                </div>
+                <div class="modActCC">
+                    <span>faceBook虚拟人：</span>
+                    <div class="fblist"></div>
+                </div>
+                <div class="modActCC">
+                    <span>twitter虚拟人：</span>
+                    <div class="twlist"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureAddModify()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除通道-->
+<div class="modal fade" id="delroad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteRoadXnr()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
