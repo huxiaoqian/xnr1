@@ -6,11 +6,14 @@ import os
 import json
 import sqlite
 import sqlite3
+import string
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_log_management_index_name,weibo_log_management_index_type,\
 						weibo_authority_management_index_name,weibo_authority_management_index_type,\
-						weibo_account_management_index_name,weibo_account_management_index_type
+						weibo_account_management_index_name,weibo_account_management_index_type,\
+						qq_xnr_index_name,qq_xnr_index_type,\
+						xnr_map_index_name,xnr_map_index_type
 from xnr.parameter import MAX_VALUE,USER_XNR_NUM
 
 ##############################################################
@@ -164,6 +167,7 @@ def get_user_account_list():
     return user_info
 
 #根据账户名称查询所管理的虚拟人
+#微博虚拟人
 def get_user_xnr_list(user_account,status_start,status_end):
     query_body={
         'query':{
@@ -189,6 +193,30 @@ def get_user_xnr_list(user_account,status_start,status_end):
         xnr_user_no_list=[]
     return xnr_user_no_list
 
+#QQ虚拟人
+def get_qq_xnr_list(account_name):
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{'submitter':account_name}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
 
 #整合账户管理
 def show_users_account():
@@ -203,9 +231,17 @@ def show_users_account():
         status_zero=0
         status_second=2
         status_three=3
-        account_dict['uncomplete_xnr']=get_user_xnr_list(account_name,status_zero,status_second)
+        #uncomplete_xnr_list=[]
+        weibo_uncomplete_xnr_list=get_user_xnr_list(account_name,status_zero,status_second)
+        uncomplete_xnr_list=weibo_uncomplete_xnr_list
+        #
+        account_dict['uncomplete_xnr']=uncomplete_xnr_list
         #已完成虚拟人
-        account_dict['complete_xnr']=get_user_xnr_list(account_name,status_second,status_three)
+        weibo_complete_xnr_list=get_user_xnr_list(account_name,status_second,status_three)
+        complete_xnr_list=weibo_complete_xnr_list
+        qq_complete_xnr_list=get_qq_xnr_list(account_name)
+        complete_xnr_list.extend(qq_complete_xnr_list)
+        account_dict['complete_xnr']=complete_xnr_list
         account_info.append(account_dict)
     return account_info
 
@@ -264,3 +300,218 @@ def change_user_account(change_detail):
 	except:
 		result=False
 	return result
+
+
+
+
+
+##############################################################
+########	xnr_map
+##############################################################
+
+#add xnr_map_relationship
+def add_xnr_map_relationship(xnr_map_detail):
+    xnr_map_id=xnr_map_detail['main_user']+'_'+str(xnr_map_detail['timestamp'])
+    try:
+        es.index(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=xnr_map_detail,id=xnr_map_id)
+        result=True
+    except:
+        result=False
+    return result    	
+
+#control add xnr_map_relationship
+def select_all_xnr(main_user,index_name,index_type):
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{'submitter':main_user}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        user_result=es.search(index=index_name,doc_type=index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_dict=dict()
+            xnr_user_dict['xnr_user_no']=item['_source']['xnr_user_no']
+            xnr_user_dict['xnr_name']=item['_source']['nickname']
+            xnr_user_no_list.append(xnr_user_dict)
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
+
+def select_all_weibo_xnr(main_user,index_name,index_type):
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{'submitter':main_user}},
+        			    	{'term':{'create_status':2}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        user_result=es.search(index=index_name,doc_type=index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_dict=dict()
+            xnr_user_dict['xnr_user_no']=item['_source']['xnr_user_no']
+            xnr_user_dict['xnr_name']=item['_source']['nick_name']
+            xnr_user_no_list.append(xnr_user_dict)
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
+
+def select_xnr_map_relationship(main_user,platform_no,platform_name):
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{'main_user':main_user}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in es_result:
+            xnr_user_dict=dict()
+            xnr_user_dict['xnr_user_no']=item['_source'][platform_no]
+            xnr_user_dict['xnr_name']=item['_source'][platform_name]
+            result.append(xnr_user_dict)
+    except:
+        result=''
+    return result  
+
+#比较两个集合
+def compare_list(all_xnr_list,maped_xnr_list):
+    for item in maped_xnr_list:
+        if item in all_xnr_list:
+            all_xnr_list.remove(item)
+        else:
+            pass
+    return all_xnr_list
+
+def control_add_xnr_map_relationship(main_user):
+    xnr_dict=dict()
+    #weibo
+    weibo_all_xnr_list=select_all_weibo_xnr(main_user,weibo_xnr_index_name,weibo_xnr_index_type)
+    weibo_platform_no='weibo_xnr_user_no'
+    weibo_platform_name='weibo_xnr_name'
+    weibo_maped_xnr_list=select_xnr_map_relationship(main_user,weibo_platform_no,weibo_platform_name)
+    xnr_dict['weibo_xnr_list']=compare_list(weibo_all_xnr_list,weibo_maped_xnr_list)
+    #print weibo_all_xnr_list
+
+    #qq
+    qq_all_xnr_list=select_all_xnr(main_user,qq_xnr_index_name,qq_xnr_index_type)
+    qq_platform_no='qq_xnr_user_no'
+    qq_platform_name='qq_xnr_name'
+    qq_maped_xnr_list=select_xnr_map_relationship(main_user,qq_platform_no,qq_platform_name)
+    xnr_dict['qq_xnr_list']=compare_list(qq_all_xnr_list,qq_maped_xnr_list)
+
+    #weixin
+    xnr_dict['weixin_xnr_list']=''
+
+    #facebook
+    xnr_dict['facebook_xnr_list']=''
+
+    #twitter
+    xnr_dict['twitter_xnr_list']=''
+
+    return xnr_dict
+
+    
+
+
+#show xnr_map_relationship
+def show_xnr_map_relationship():
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{'main_user':main_user}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in es_result:
+            result.append(item['_source'])
+    except:
+        result=''
+    return result  
+
+#change platform
+def change_xnr_platform(origin_platform,origin_xnr_user_no,new_platform):
+    search_field=origin_platform + '_xnr_user_no'
+    new_search_field=new_platform + '_xnr_user_no'
+    query_body={
+        '_source':{
+        'include':new_search_field
+        },
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        			    'must':[
+        			    	{'term':{search_field:origin_xnr_user_no}}
+        			    ]
+        			}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in es_result:
+            result.append(item['_source'])
+    except:
+        result=''
+    return result 
+
+
+def delete_xnr_map_relationship(xnr_map_id):
+	try:
+		es.delete(index=xnr_map_index_name,doc_type=xnr_map_index_type,id=xnr_map_id)
+		result=True
+	except:
+		result=False
+	return result
+
+
+#update
+def update_xnr_map_relationship(xnr_map_detail,xnr_map_id):    
+    try:
+        es.update(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=xnr_map_detail,id=xnr_map_id)
+        result=True
+    except:
+        result=False
+    return result  
