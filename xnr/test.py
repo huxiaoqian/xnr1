@@ -163,46 +163,46 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # print 'uid_list::',uid_list
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01')['_source']
-item_dict = {}
-item_dict = {'influence':0.50,'safe':18.01,'penetration':20.05}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':18.01,'penetration':20.05}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-01',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02')['_source']
-item_dict = {}
-item_dict = {'influence':0.50,'safe':18.04,'penetration':14.28}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':18.04,'penetration':14.28}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-02',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03')['_source']
-item_dict = {}
-item_dict = {'influence':0.50,'safe':0,'penetration':16.33}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':0,'penetration':16.33}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-03',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04')['_source']
-item_dict = {}
-item_dict = {'influence':0.50,'safe':0,'penetration':17.24}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04')['_source']
+# item_dict = {}
+# item_dict = {'influence':0.50,'safe':0,'penetration':17.24}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-04',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05')['_source']
-item_dict = {}
-item_dict = {'influence':1.43,'safe':19.21,'penetration':10.03}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05')['_source']
+# item_dict = {}
+# item_dict = {'influence':1.43,'safe':19.21,'penetration':10.03}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-05',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06')['_source']
-item_dict = {}
-item_dict = {'influence':3.58,'safe':30.54,'penetration':25.48}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06')['_source']
+# item_dict = {}
+# item_dict = {'influence':3.58,'safe':30.54,'penetration':25.48}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-06',body   ={'doc':item_dict})
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07')['_source']
-item_dict = {}
-item_dict = {'influence':0,'safe':0,'penetration':24.56}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07')['_source']
+# item_dict = {}
+# item_dict = {'influence':0,'safe':0,'penetration':24.56}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-07',body   ={'doc':item_dict})
 
 
-get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15')['_source']
-item_dict = {}
-item_dict = {'influence':0,'penetration':0,'safe':0}
-es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body   ={'doc':item_dict})
+# get_reuslt = es.get(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15')['_source']
+# item_dict = {}
+# item_dict = {'influence':0,'penetration':0,'safe':0}
+# es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body   ={'doc':item_dict})
 
 
 # with open('./uid_sensitive.txt','w') as f:
@@ -255,7 +255,8 @@ es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body 
 # es.delete(index='weibo_xnr',doc_type='user',id='WXNR0023')
 # es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730626')
 # es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730700')
-# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730628')
+es.indices.delete(index='twitter_feedback_friends_2017-11-13')
+es.indices.delete(index='twitter_feedback_comment_2017-11-13')
 
 
 
@@ -275,4 +276,8 @@ es.update(index='weibo_xnr_count',doc_type='text',id='WXNR0004_2017-10-15',body 
 
 #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':[1264080891,1715330060,1082347151]}})
 
+
+
+
 # es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
+

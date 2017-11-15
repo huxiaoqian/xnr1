@@ -249,6 +249,65 @@ qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 
+# facebook
+#use to save feedback info
+facebook_feedback_comment_index_name_pre = 'facebook_feedback_comment_'
+facebook_feedback_comment_index_name = 'facebook_feedback_comment'
+facebook_feedback_comment_index_type = 'text'
+
+facebook_feedback_retweet_index_name_pre = 'facebook_feedback_retweet_'
+facebook_feedback_retweet_index_name = 'facebook_feedback_retweet'
+facebook_feedback_retweet_index_type = 'text'
+
+facebook_feedback_private_index_name_pre = 'facebook_feedback_private_'
+facebook_feedback_private_index_name = 'facebook_feedback_private'
+facebook_feedback_private_index_type = 'text'
+
+facebook_feedback_at_index_name_pre = 'facebook_feedback_at_'
+facebook_feedback_at_index_name = 'facebook_feedback_at'
+facebook_feedback_at_index_type = 'text'
+
+facebook_feedback_like_index_name_pre = 'facebook_feedback_like_'
+facebook_feedback_like_index_name = 'facebook_feedback_like'
+facebook_feedback_like_index_type = 'text'
+
+facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
+facebook_feedback_friends_index_name = 'facebook_feedback_friends'
+facebook_feedback_friends_index_type = 'text'
+
+
+# twitter
+#use to save feedback info
+twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
+twitter_feedback_comment_index_name = 'twitter_feedback_comment'
+twitter_feedback_comment_index_type = 'text'
+
+twitter_feedback_retweet_index_name_pre = 'twitter_feedback_retweet_'
+twitter_feedback_retweet_index_name = 'twitter_feedback_retweet'
+twitter_feedback_retweet_index_type = 'text'
+
+twitter_feedback_private_index_name_pre = 'twitter_feedback_private_'
+twitter_feedback_private_index_name = 'twitter_feedback_private'
+twitter_feedback_private_index_type = 'text'
+
+twitter_feedback_at_index_name_pre = 'twitter_feedback_at_'
+twitter_feedback_at_index_name = 'twitter_feedback_at'
+twitter_feedback_at_index_type = 'text'
+
+twitter_feedback_like_index_name_pre = 'twitter_feedback_like_'
+twitter_feedback_like_index_name = 'twitter_feedback_like'
+twitter_feedback_like_index_type = 'text'
+
+twitter_feedback_fans_index_name_pre = 'twitter_feedback_fans_'
+twitter_feedback_fans_index_name = 'twitter_feedback_fans'
+twitter_feedback_fans_index_type = 'text'
+
+twitter_feedback_follow_index_name_pre = 'twitter_feedback_follow_'
+twitter_feedback_follow_index_name = 'twitter_feedback_follow'
+twitter_feedback_follow_index_type = 'text'
+
+
+
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
     return redis.StrictRedis(host, port)
