@@ -141,7 +141,7 @@ def ajax_change_user_account():
 
 #虚拟人通道映射
 #添加映射关系
-#http://219.224.134.213:9209/system_manage/add_xnr_map_relationship/?main_user=admin@qq.com&weibo_xnr_user_no=WXNR0001&qq_xnr_user_no=QXNR0001
+#http://219.224.134.213:9209/system_manage/add_xnr_map_relationship/?main_user=admin@qq.com&weibo_xnr_user_no=WXNR0004&weibo_xnr_name=一只会飞的猪&qq_xnr_user_no=QXNR0001&qq_xnr_name=维权律师
 @mod.route('/add_xnr_map_relationship/')
 def ajax_add_xnr_map_relationship():
 	xnr_map_detail=dict()
@@ -151,11 +151,11 @@ def ajax_add_xnr_map_relationship():
 	xnr_map_detail['weixin_xnr_user_no']=request.args.get('weixin_xnr_user_no')
 	xnr_map_detail['facebook_xnr_user_no']=request.args.get('facebook_xnr_user_no')
 	xnr_map_detail['twitter_xnr_user_no']=request.args.get('twitter_xnr_user_no')
-	xnr_map_detail['weibo_xnr_name']=request.args.get('weibo_xnr_user_no')
-	xnr_map_detail['qq_xnr_name']=request.args.get('qq_xnr_user_no')
-	xnr_map_detail['weixin_xnr_name']=request.args.get('weixin_xnr_user_no')
-	xnr_map_detail['facebook_xnr_name']=request.args.get('facebook_xnr_user_no')
-	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_user_no')
+	xnr_map_detail['weibo_xnr_name']=request.args.get('weibo_xnr_name')
+	xnr_map_detail['qq_xnr_name']=request.args.get('qq_xnr_name')
+	xnr_map_detail['weixin_xnr_name']=request.args.get('weixin_xnr_name')
+	xnr_map_detail['facebook_xnr_name']=request.args.get('facebook_xnr_name')
+	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_name')
 	xnr_map_detail['timestamp']=int(time.time())
 	results=add_xnr_map_relationship(xnr_map_detail)
 	return json.dumps(results)
@@ -169,7 +169,7 @@ def ajax_control_add_xnr_map_relationship():
 	return json.dumps(results)
 
 #显示映射关系
-#http://219.224.134.213:9209/system_manage/show_xnr_map_relationship
+#http://219.224.134.213:9209/system_manage/show_xnr_map_relationship/?main_user=admin@qq.com
 @mod.route('/show_xnr_map_relationship/')
 def ajax_show_xnr_map_relationship():
 	main_user=request.args.get('main_user')
@@ -187,6 +187,7 @@ def ajax_change_xnr_platform():
     return json.dumps(results)
 
 #删除映射关系
+#http://219.224.134.213:9209/system_manage/delete_xnr_map_relationship/?xnr_map_id=admin@qq.com_1510730627
 @mod.route('/delete_xnr_map_relationship/')
 def ajax_delete_xnr_map_relationship():
 	xnr_map_id=request.args.get('xnr_map_id')
@@ -204,11 +205,11 @@ def ajax_update_xnr_map_relationship():
 	xnr_map_detail['weixin_xnr_user_no']=request.args.get('weixin_xnr_user_no')
 	xnr_map_detail['facebook_xnr_user_no']=request.args.get('facebook_xnr_user_no')
 	xnr_map_detail['twitter_xnr_user_no']=request.args.get('twitter_xnr_user_no')
-	xnr_map_detail['weibo_xnr_name']=request.args.get('weibo_xnr_user_no')
-	xnr_map_detail['qq_xnr_name']=request.args.get('qq_xnr_user_no')
-	xnr_map_detail['weixin_xnr_name']=request.args.get('weixin_xnr_user_no')
-	xnr_map_detail['facebook_xnr_name']=request.args.get('facebook_xnr_user_no')
-	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_user_no')
+	xnr_map_detail['weibo_xnr_name']=request.args.get('weibo_xnr_name')
+	xnr_map_detail['qq_xnr_name']=request.args.get('qq_xnr_name')
+	xnr_map_detail['weixin_xnr_name']=request.args.get('weixin_xnr_name')
+	xnr_map_detail['facebook_xnr_name']=request.args.get('facebook_xnr_name')
+	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_name')
 	xnr_map_detail['timestamp']=int(time.time())
 	results=update_xnr_map_relationship(xnr_map_detail,xnr_map_id)
 	return json.dumps(results)
