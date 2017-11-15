@@ -106,7 +106,8 @@ def ajax_add_user_xnraccount():
 #http://219.224.134.213:9209/system_manage/show_users_account
 @mod.route('/show_users_account/')
 def ajax_show_users_account():
-	results=show_users_account()
+	main_user=request.args.get('main_user')
+	results=show_users_account(main_user)
 	return json.dumps(results)
 
 #删除账户
