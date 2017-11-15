@@ -459,13 +459,13 @@ def control_add_xnr_map_relationship(main_user):
     xnr_dict['qq_xnr_list']=compare_list(qq_all_xnr_list,qq_maped_xnr_list)
 
     #weixin
-    xnr_dict['weixin_xnr_list']=''
+    xnr_dict['weixin_xnr_list']=[]
 
     #facebook
-    xnr_dict['facebook_xnr_list']=''
+    xnr_dict['facebook_xnr_list']=[]
 
     #twitter
-    xnr_dict['twitter_xnr_list']=''
+    xnr_dict['twitter_xnr_list']=[]
 
     return xnr_dict
 
@@ -473,7 +473,7 @@ def control_add_xnr_map_relationship(main_user):
 
 
 #show xnr_map_relationship
-def show_xnr_map_relationship():
+def show_xnr_map_relationship(main_user):
     query_body={
         'query':{
         	'filtered':{
@@ -492,6 +492,7 @@ def show_xnr_map_relationship():
         es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
         result=[]
         for item in es_result:
+            item['_source']['id']=item['_id']
             result.append(item['_source'])
     except:
         result=''
@@ -500,10 +501,11 @@ def show_xnr_map_relationship():
 #change platform
 def change_xnr_platform(origin_platform,origin_xnr_user_no,new_platform):
     search_field=origin_platform + '_xnr_user_no'
-    new_search_field=new_platform + '_xnr_user_no'
+    new_search_field_no=new_platform + '_xnr_user_no'
+    #new_search_field_name=new_platform + '_xnr_name'
     query_body={
         '_source':{
-        'include':new_search_field
+        'include':new_search_field_no
         },
         'query':{
         	'filtered':{
