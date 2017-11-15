@@ -219,6 +219,7 @@ def get_qq_xnr_list(account_name):
     return xnr_user_no_list
 
 #整合账户管理
+'''
 def show_users_account():
     account_list=get_user_account_list()
     print account_list
@@ -244,21 +245,50 @@ def show_users_account():
         account_dict['complete_xnr']=complete_xnr_list
         account_info.append(account_dict)
     return account_info
+'''
 
-'''
-def show_users_account():
-	query_body={
-		'query':{
-			'match_all':{}
-		},
-		'size':MAX_VALUE
-	}
-	result=es.search(index=weibo_account_management_index_name,doc_type=weibo_account_management_index_type,body=query_body)['hits']['hits']
-	results=[]
-	for item in result:
-		results.append(item['_source'])
-	return results
-'''
+def show_users_account(main_user):
+    account_list=[]
+    #微博
+    weibo_dict=dict()
+    weibo_dict['platform_name']='微博'
+    status_zero=0
+    status_second=2
+    status_three=3
+    weibo_dict['complete_xnr_list']=get_user_xnr_list(main_user,status_second,status_three)
+    weibo_dict['uncomplete_xnr_list']=get_user_xnr_list(main_user,status_zero,status_second)
+    account_list.append(weibo_dict)
+
+    #qq
+    qq_dict=dict()
+    qq_dict['platform_name']='QQ'
+    qq_dict['complete_xnr_list']=get_qq_xnr_list(main_user)
+    qq_dict['uncomplete_xnr_list']=[]
+    account_list.append(qq_dict)
+
+    #weixin
+    weixin_dict=dict()
+    weixin_dict['platform_name']='微信'
+    weixin_dict['complete_xnr_list']=[]
+    weixin_dict['uncomplete_xnr_list']=[]
+    account_list.append(weixin_dict)
+
+    #facebook
+    facebook_dict=dict()
+    facebook_dict['platform_name']='facebook'
+    facebook_dict['complete_xnr_list']=[]
+    facebook_dict['uncomplete_xnr_list']=[]
+    account_list.append(facebook_dict)
+
+    #twitter
+    twitter_dict=dict()
+    twitter_dict['platform_name']='twitter'
+    twitter_dict['complete_xnr_list']=[]
+    twitter_dict['uncomplete_xnr_list']=[]
+    account_list.append(twitter_dict)
+    return account_list
+
+
 #delete account
 #step 1:delete the user account
 def delete_user_account(account_id):
