@@ -8,8 +8,8 @@ from global_utils import wx_group_message_index_name_pre, wx_group_message_index
 
 from global_config import WX_S_DATE
 
-def wx_group_message_mappings(date):
-    index_name = wx_group_message_index_name_pre + str(date)
+def wx_group_message_mappings(index_name):
+    # index_name = wx_group_message_index_name_pre + str(date)
     index_info = {
         'settings':{
             'number_of_replicas':0,

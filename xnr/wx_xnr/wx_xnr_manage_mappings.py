@@ -81,20 +81,20 @@ def wx_xnr_mappings():
     if not exist_indice:
         es_xnr.indices.create(index=wx_xnr_index_name, body=index_info, ignore=400)
 
-def qq_xnr_history_count_mappings():
+def wx_xnr_history_count_mappings():
     index_info = {
         'settings':{
             'number_of_replicas':0,
             'number_of_shards':5
         },
         'mappings':{    
-            qq_xnr_history_count_index_type:{
+            wx_xnr_history_count_index_type:{
                 'properties':{
                     'xnr_user_no':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'qq_number':{
+                    'puid':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -116,26 +116,24 @@ def qq_xnr_history_count_mappings():
         }
     }
 
-    exist_indice = es_xnr.indices.exists(index=qq_xnr_history_count_index_name)
-    
+    exist_indice = es_xnr.indices.exists(index=wx_xnr_history_count_index_name)
     if not exist_indice:
+        es_xnr.indices.create(index=wx_xnr_history_count_index_name, body=index_info, ignore=400)
 
-        es_xnr.indices.create(index=qq_xnr_history_count_index_name, body=index_info, ignore=400)
-
-def qq_xnr_history_be_at_mappings():
+def wx_xnr_history_be_at_mappings():
     index_info = {
         'settings':{
             'number_of_replicas':0,
             'number_of_shards':5
         },
         'mappings':{    
-            qq_xnr_history_be_at_index_type:{
+            wx_xnr_history_be_at_index_type:{
                 'properties':{
                     'xnr_user_no':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'qq_number':{
+                    'puid':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -157,13 +155,11 @@ def qq_xnr_history_be_at_mappings():
         }
     }
 
-    exist_indice = es_xnr.indices.exists(index=qq_xnr_history_count_index_name)
-    
+    exist_indice = es_xnr.indices.exists(index=wx_xnr_history_count_index_name)
     if not exist_indice:
+        es_xnr.indices.create(index=wx_xnr_history_count_index_name, body=index_info, ignore=400)
 
-        es_xnr.indices.create(index=qq_xnr_history_count_index_name, body=index_info, ignore=400)
-
-def qq_xnr_history_sensitive_mappings():
+def wx_xnr_history_sensitive_mappings():
     index_info = {
         'settings':{
             'number_of_replicas':0,
@@ -176,7 +172,7 @@ def qq_xnr_history_sensitive_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'qq_number':{
+                    'puid':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -198,20 +194,11 @@ def qq_xnr_history_sensitive_mappings():
         }
     }
 
-    exist_indice = es_xnr.indices.exists(index=qq_xnr_history_count_index_name)
-    
+    exist_indice = es_xnr.indices.exists(index=wx_xnr_history_count_index_name)
     if not exist_indice:
-
-        es_xnr.indices.create(index=qq_xnr_history_count_index_name, body=index_info, ignore=400)
+        es_xnr.indices.create(index=wx_xnr_history_count_index_name, body=index_info, ignore=400)
 
 
 if __name__ == '__main__':
-
-    wx_xnr_mappings()
-    # qq_xnr_history_count_mappings()
-    # qq_xnr_history_sensitive_mappings()
-    # qq_xnr_history_be_at_mappings()
-
-    # es_xnr.indices.put_mapping(index=qq_xnr_index_name, doc_type='user', \
-    #         body={'properties':{'qqbot_port': {'type': 'string', 'index':'not_analyzed'}}}, ignore=400)
-
+    # wx_xnr_mappings()
+    print
