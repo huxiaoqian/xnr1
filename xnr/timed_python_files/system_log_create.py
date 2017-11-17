@@ -7,7 +7,7 @@ import json
 import time
 import sys
 reload(sys)
-sys.path.append('../../')
+sys.path.append('../')
 import sqlite
 import sqlite3
 from parameter import USER_XNR_NUM,DAY,MAX_VALUE
