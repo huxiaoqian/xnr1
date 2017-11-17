@@ -3,7 +3,7 @@ import time
 import datetime
 from xnr.wx_xnr.global_utils import es_xnr,wx_xnr_index_name,wx_xnr_index_type,\
                              wx_group_message_index_name_pre, wx_group_message_index_type
-from xnr.wx_xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
+from xnr.wx_xnr.parameter import MAX_VALUE, DAY
 from xnr.wx_xnr.time_utils import get_wx_groupmessage_index_list, ts2datetime, datetime2ts
 from xnr.wx_xnr.wx.control_bot import load_wxxnr_redis_data, send_msg
 
@@ -23,19 +23,25 @@ def utils_load_groups(wxbot_id):
         print e
         return 0
 
-#查看监听到的一个指定群组的群消息，可指定起始、终止时间
-def utils_search_by_group_puid(wxbot_id, group_puid, startdate='', enddate=''):
-    #end date
-    if enddate == '':
-        end = ts2datetime(time.time())
+def dump_date(period, startdate, enddate):
+    if period == '':
+        period = -1 #flag
+        start_ts = datetime2ts(startdate)
+        end_ts = datetime2ts(enddate)
     else:
-        end = enddate
-    #start date 
-    if startdate == '': 
-        start = ts2datetime(datetime2ts(end) - group_message_windowsize*DAY)
-    else:
-        start = startdate
-    index_names = get_wx_groupmessage_index_list(start, end)
+        period = int(period)
+        if period == 0:
+            end_ts = int(time.time())
+            start_ts = datetime2ts(ts2datetime(end_ts))
+        else:
+            end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
+            start_ts = end_ts - (period - 1) * DAY
+    return start_ts, end_ts, period
+
+#查看监听到的一个指定群组的群消息，可指定起始、终止时间。{'msg_type':'Text'}
+def utils_search_by_group_puid(wxbot_id, group_puid, period, startdate='', enddate=''):
+    start_ts, end_ts, period = dump_date(period, startdate, enddate)
+    index_names = get_wx_groupmessage_index_list(ts2datetime(start_ts), ts2datetime(end_ts))
     index_names.reverse()
     xnr_puid = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid'])['puid']
     query_body = {
@@ -45,8 +51,8 @@ def utils_search_by_group_puid(wxbot_id, group_puid, startdate='', enddate=''):
                 "bool":{
                     "must":[
                         {"term":{"xnr_id":xnr_puid}},
-                        {'term':{'group_id':group_puid}}
-
+                        {'term':{'group_id':group_puid}},
+                        {'term':{'msg_type':'Text'.lower()}}
                     ]
                 }
             }
