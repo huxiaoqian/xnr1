@@ -183,7 +183,9 @@
     $('.coorName').text('行为评估');
     weiboORqq('WX');
     $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd hh:ii",
+        // format: "yyyy-mm-dd hh:ii",
+        format: "yyyy-mm-dd",//改为日期 不选择具体时间
+        minView:2, //控制时分秒
         autoclose: true,
         todayBtn: true,
         pickerPosition: "bottom-left"

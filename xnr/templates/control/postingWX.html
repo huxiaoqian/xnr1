@@ -64,6 +64,23 @@
     .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     /*--------*/
+
+    /* 11-16事件搜索修改 */
+    #start_1,#end_1,.sureTime{display: none;}
+    .sureTime {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    .sureTime:hover {
+        background: rgba(8,23,44,0.65);
+    }
+
+
 </style>
 {% endblock %}
 {% block main %}
@@ -97,7 +114,8 @@
                     <!--<button type="button" class="btn-xs" id="search-post" style="padding:3px 5px;margin: -3px 0 0 0;">搜索</button>-->
                     <!--<span id="search-post">搜索</span>-->
                 <!--</div>-->
-                <div class="titTime">
+
+                <!-- <div class="titTime">
                     <div style="display: inline-block;width: 94%;text-align: right;">
                         <span style="display: inline-block;width: 11%;text-align: left;">时间范围：从</span>
                         <input size="16" type="text" value="" readonly class="form_datetime start" placeholder="请选择时间">
@@ -105,6 +123,37 @@
                         <input size="16" type="text" readonly class="form_datetime end" placeholder="请选择时间">
                     </div>
                     <span class="timeSure">确定</span>
+                </div> -->
+                <!-- 11-16改为7 天 30天那种 -->
+                <div class="choosetime" style="margin: 10px 0;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='0'>
+                        <span class="demo-checkbox demo-radioInput"></span> 今天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='1'>
+                        <span class="demo-checkbox demo-radioInput"></span> 昨天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='7' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 7天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='30'>
+                        <span class="demo-checkbox demo-radioInput"></span> 30天
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="time1" value='mize'>
+                        <span class="demo-checkbox demo-radioInput"></span> 自定义
+                    </label>
+                    <input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"
+                           style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;
+                                    padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                    <input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"
+                           style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;
+                                    padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+                    <span id="sure" class="sureTime">确定</span>
+                    <!--<input type="text" class="customizeTime" placeholder="输入查询天数（回车搜索）"/>-->
                 </div>
             </div>
             <div class="post-3">
@@ -209,10 +258,7 @@
 
 
 </script>
-<<<<<<< HEAD
 <!-- <script src="/static/js/jquery.sinaEmotion.js"></script> -->
-=======
->>>>>>> 11ff9a76cbf0aef150e0e37965a59d0c73802197
 <script src="/static/js/LL_jquery.sinaEmotion.js"></script>
 <script src="/static/js/postingWX-1.js"></script>
 <script>
