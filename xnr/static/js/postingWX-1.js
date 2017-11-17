@@ -12,7 +12,7 @@ function WXgroup(data) {
         var ched='';
         if (poi==0){
             ched='checked';
-            var WX_news_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+d;
+            var WX_news_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+d+'&period=7';
             public_ajax.call_request('get',WX_news_url,personEarly);
         }
         str +=
@@ -122,24 +122,61 @@ var _group_puid;
 function diff_group_news(_this) {
     var group_puid=$(_this).find('input').val();
     _group_puid = group_puid;
-    var chooseGroup_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid;
+    var chooseGroup_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&period=7';
     public_ajax.call_request('get',chooseGroup_url,personEarly);
 }
 
 //选择时间搜索
-$('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
-    var start=$('.start').val();
-    var end=$('.end').val();
-    var group_puid=$('.groupName input:radio[name="demo-radio"]:checked').val();
-    if (start==''||end==''){
-        $('#pormpt p').text('请检查时间，不能为空。');
-        $('#pormpt').modal('show');
+// $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
+//     var start=$('.start').val();
+//     var end=$('.end').val();
+//     var group_puid=$('.groupName input:radio[name="demo-radio"]:checked').val();
+//     if (start==''||end==''){
+//         $('#pormpt p').text('请检查时间，不能为空。');
+//         $('#pormpt').modal('show');
+//     }else {
+//         var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&startdate='+start+'&enddate='+end;
+//         console.log(search_news_url)
+//         public_ajax.call_request('get',search_news_url,personEarly);
+//     }
+// });
+//================发送消息更改11-16 7天 30天那种===============
+// 时间选项
+$('.choosetime .demo-label input').on('click',function () {
+    var _val=$(this).val();
+    if (_val=='mize'){
+        $('#start_1').show();
+        $('#end_1').show();
+        $('.sureTime').show();
     }else {
-        var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&startdate='+start+'&enddate='+end;
+        $('#start_1').hide();
+        $('#end_1').hide();
+        $('.sureTime').hide();
+        var urlLast='&period='+_val;
+        var group_puid=$('.groupName input:radio[name="demo-radio"]:checked').val();
+        var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+urlLast;
         console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,personEarly);
     }
 });
+// 确定时间搜索
+$('.sureTime').on('click',function () {
+    var s=$('#start_1').val();
+    var d=$('#end_1').val();
+    var group_puid=$('.groupName input:radio[name="demo-radio"]:checked').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('请检查时间，不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&startdate='+s+'&enddate='+d;
+        console.log(search_news_url)
+        public_ajax.call_request('get',search_news_url,personEarly);
+    }
+});
+
+
+
+
 
 //================发送消息===============
 $('#sure_post').on('click',function () {
@@ -172,6 +209,10 @@ function postYES(data) {
     $('#pormpt').on('hidden.bs.modal', function (e) {
         // 模态框关闭之后清空输入框
         $('#post-2-content').val('');
+        // 重新请求数据，以显示刚发送的消息
+        var _group_puid = $('.groupName input:checked').val()
+        var _chooseGroup_url='/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+_group_puid+'&period=7';
+        public_ajax.call_request('get',_chooseGroup_url,personEarly);
     })
 }
 

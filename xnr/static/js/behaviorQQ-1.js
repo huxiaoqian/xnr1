@@ -56,8 +56,10 @@ $('.sureTime').on('click',function () {
 //影响力
 var influe_url='/qq_xnr_assessment/influence_qq/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time;
+console.log('影响力=== '+influe_url)
 public_ajax.call_request('get',influe_url,influe);
 function influe(data) {
+    console.log(data)
     var score=0;
     if (data.mark){score=data.mark}
     $('.influe-1 .score').text(score);

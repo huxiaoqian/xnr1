@@ -10,8 +10,8 @@ wx_xnr_index_type = 'user'
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 
 
-body={'doc':{'access_id': 'xxxxxx'}}
+body={'doc':{'mail': 'feifanhanmc@163.com'}}
 
 
-id = 'WXXNR0004'
+id = 'WXXNR0001'
 print es_xnr.update(index=wx_xnr_index_name, doc_type=wx_xnr_index_type, body=body, id=id)

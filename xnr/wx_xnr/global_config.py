@@ -9,4 +9,8 @@ qiniu_secret_key = "Q91z6hnj5H0LaRkbAN8IPdc8dypdAQ_n21S8tEcu"
 qiniu_bucket_name = "publicbucket"
 qiniu_bucket_domain = "ovorc2c4c.bkt.clouddn.com"
 
-WX_S_DATE = '2017-10-12'
+WX_S_DATE = '2017-10-25'
+WX_S_DATE_NEW = '2017-10-25'
+WX_S_DATE_ASSESSMENT = '2017-10-25'
+WX_GROUP_MESSAGE_START_DATE = '2017-10-25'
+WX_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-10-25'

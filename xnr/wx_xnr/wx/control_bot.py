@@ -12,6 +12,7 @@ from xnr.wx_xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type
 from xnr.wx_xnr.parameter import MAX_VALUE, LOCALHOST_IP
 from xnr.wx_xnr.wx_xnr_manage_mappings import wx_xnr_mappings
 from xnr.wx_xnr.xnr_utils import user_no2wxbot_id, wxbot_id2user_no
+from send_mail import send_mail
 
 def IsOpen(ip,port):
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -165,7 +166,16 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         change_wxxnr_redis_data(wxbot_id, xnr_data={'remark':remark})
     if create_flag:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'create_flag':create_flag})
-    xnr_logout(wxbot_id)
+    logout_result = xnr_logout(wxbot_id)
+    if logout_result:
+    	print u'登录前登出成功'
+    else:
+    	print u'登录前登出失败'
+
+
+    print 'before login'
+    
+
     #login
     wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
     if init_groups_list:
@@ -188,11 +198,21 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         d = r.get(wxbot_id)
         if d:
             try:
+
+
+                
+
                 qr_path = eval(d)['qr_path']
+
+
+                # print 'qr_path', qr_path
+
                 #使用缓存登陆时，qr_path对应的二维码文件不存在
                 if qr_path == 'loginedwithcache':
                     return qr_path
                 if ('.png' in qr_path) and (os.path.isfile(qr_path)):
+                    #发送二维码图片至邮箱
+                    #send_qrcode2mail(wxbot_id, qr_path)
                     return qr_path
             except Exception,e:
                 print e
@@ -337,5 +357,27 @@ def send_msg(wxbot_id, puids, msg):
     command = {'opt': 'sendmsgbypuid', 'wxbot_id': wxbot_id, 'puids':puids, 'msg':msg}
     return send_command(command)
 
+def send_qrcode2mail(wxbot_id, qr_path):
+    xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['wx_id','nickname','mail','access_id'])
+    wx_id = xnr_data['wx_id']
+    nickname = xnr_data['nickname']
+    mail = xnr_data['mail']
+    password = xnr_data['access_id'] 
+    content = {
+    'subject': '扫描二维码以登陆微信虚拟人',
+    'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
+    'files_path': qr_path,   #支持多个，以逗号隔开
+    }
+    from_user = {
+        'name': '虚拟人项目（微信）',
+        'addr': mail,
+        'password': password,
+        'smtp_server': 'smtp.163.com'   
+    }
+    to_user = {
+        'name': '管理员',
+        'addr': mail  #支持多个，以逗号隔开
+    }
+    return send_mail(from_user=from_user, to_user=to_user, content=content)
 
 
