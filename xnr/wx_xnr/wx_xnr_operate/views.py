@@ -32,15 +32,17 @@ def load_groups():
             return json.dumps(res)
     return None 
 
-#默认加载最近30天的数据
+#默认加载最近*天的数据
 @mod.route('/searchbygrouppuid/')   
 def search_by_group_puid():
     wxbot_id = request.args.get('wxbot_id', '')
     group_puid = request.args.get('group_puid', '')
+    period = request.args.get('period', '')
     startdate = request.args.get('startdate', '')   #str 2017-10-15
     enddate = request.args.get('enddate', '')
     if wxbot_id and group_puid:
-        res = utils_search_by_group_puid(wxbot_id, group_puid, startdate, enddate)
-        if res:
-            return json.dumps(res)
+        if period or (startdate and enddate):
+            res = utils_search_by_group_puid(wxbot_id, group_puid, period, startdate, enddate)
+            if res:
+                return json.dumps(res)
     return None

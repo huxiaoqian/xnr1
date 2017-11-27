@@ -13,3 +13,60 @@ global name 'FileNotFoundError' is not defined
 █start_bot:  WXXNR0003 6663 
 starting WXXNR0003 ...
 global name 'FileNotFoundError' is not defined
+█[H[2Jstart_bot:  WXXNR0003 6663 
+starting WXXNR0003 ...
+loginedwithcache：file not exist
+save_bot_info
+MyBot: set_groups: self.groups_list:  [u'b2539f4a']
+Accept new connection from 127.0.0.1:33965...
+Connection from 127.0.0.1:33965 closed.
+Accept new connection from 127.0.0.1:33967...
+Connection from 127.0.0.1:33967 closed.
+Accept new connection from 127.0.0.1:34317...
+Accept new connection from 127.0.0.1:34320...
+
+Connection from 127.0.0.1:34320 closed.
+Connection from 127.0.0.1:34317 closed.
+█[H[2Jstart_bot:  WXXNR0003 6663 
+starting WXXNR0003 ...
+loginedwithcache：file not exist
+save_bot_info
+MyBot: set_groups: self.groups_list:  [u'b2539f4a']
+Accept new connection from 127.0.0.1:34509...
+Connection from 127.0.0.1:34509 closed.
+Accept new connection from 127.0.0.1:34513...
+Connection from 127.0.0.1:34513 closed.
+Accept new connection from 127.0.0.1:34581...
+Connection from 127.0.0.1:34581 closed.
+Accept new connection from 127.0.0.1:34582...
+Connection from 127.0.0.1:34582 closed.
+{u'_type': u'record', u'_id': u'AV-_P8QR82y9EzvV4NCk', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+Accept new connection from 127.0.0.1:34653...
+Connection from 127.0.0.1:34653 closed.
+{u'_type': u'record', u'_id': u'AV-_QdRlS8CBAF2ZGz94', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+{u'_type': u'record', u'_id': u'AV-_Qc3Yu7X2pgtOK_hJ', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-11-15'}
+{u'_type': u'record', u'_id': u'AV-_Qc3B82y9EzvV4NCl', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+Accept new connection from 127.0.0.1:34736...
+{u'_type': u'record', u'_id': u'AV-_QsZGS8CBAF2ZGz95', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-11-15'}
+{u'_type': u'record', u'_id': u'AV-_Qrr4u7X2pgtOK_hK', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+Connection from 127.0.0.1:34736 closed.
+Accept new connection from 127.0.0.1:35316...
+{u'_type': u'record', u'_id': u'AV-_TVgs82y9EzvV4NCm', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-11-15'}
+{u'_type': u'record', u'_id': u'AV-_TWOvS8CBAF2ZGz9-', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+Connection from 127.0.0.1:35316 closed.
+Accept new connection from 127.0.0.1:35582...
+{u'_type': u'record', u'_id': u'AV-_Uwv4u7X2pgtOK_hL', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-11-15'}
+{u'_type': u'record', u'_id': u'AV-_Uwvk82y9EzvV4NCn', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-11-15'}
+Connection from 127.0.0.1:35582 closed.
+█start_bot:  WXXNR0003 6663 b2539f4a
+starting WXXNR0003 ...
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0003 6663 b2539f4a
+starting WXXNR0003 ...
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0003 6663 b2539f4a
+starting WXXNR0003 ...
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0003 6663 b2539f4a
+starting WXXNR0003 ...
+global name 'FileNotFoundError' is not defined

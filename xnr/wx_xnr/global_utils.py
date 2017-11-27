@@ -23,7 +23,7 @@ wx_group_message_index_type = 'record'
 wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
 ## wx发言统计 
-wx_xnr_history_count_index_name = 'qq_history_count'
+wx_xnr_history_count_index_name = 'wx_history_count'
 wx_xnr_history_count_index_type = 'count'  # - 活跃
 wx_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透

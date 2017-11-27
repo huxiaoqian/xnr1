@@ -38,6 +38,8 @@ from xnr.jinja import gender, tsfmt, Int2string, gender_text, user_email, user_l
 from xnr.wx_xnr.wx_xnr_manage.views import mod as wxxnrmanageModule
 from xnr.wx_xnr.wx_xnr_operate.views import mod as wxxnroperateModule
 from xnr.wx_xnr.wx_xnr_monitor.views import mod as wxxnrmonitorModule
+from xnr.wx_xnr.wx_xnr_assessment.views import mod as wxxnrassessmentModule
+from xnr.wx_xnr.wx_xnr_report_manage.views import mod as wxxnrreportmanageModule
 
 def create_app():
     app = Flask(__name__)
@@ -50,6 +52,8 @@ def create_app():
     app.register_blueprint(wxxnrmanageModule)
     app.register_blueprint(wxxnroperateModule)
     app.register_blueprint(wxxnrmonitorModule)
+    app.register_blueprint(wxxnrassessmentModule)
+    app.register_blueprint(wxxnrreportmanageModule)
 
     app.register_blueprint(indexModule)
     app.register_blueprint(controlModule)
