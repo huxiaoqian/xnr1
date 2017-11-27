@@ -4,6 +4,7 @@
 <link rel="stylesheet" href="/static/css/virtual.css">
 <style>
     .fixed-table-toolbar .search {width: 100%;}
+    .virtualtable_2 .fixed-table-toolbar .search {width: 85%;}
     #addVir .addVirContent .vir,#modifyAccount .modAct .modActCC,
     #addAccountModal .addAccountContent .addCC {
         margin-bottom: 15px;
@@ -60,7 +61,7 @@
         </div>
     </div>
     <div class="virtualtable_2">
-        <span class="addaccount" data-toggle="modal" data-target="#addAccountModal">添加账户</span>
+        <span class="addaccount" onclick="addRoad('1')">添加通道</span>
         <div id="virtualtable_2"></div>
     </div>
 </div>
@@ -189,28 +190,28 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title tit"></h4>
             </div>
             <div class="modal-body">
                 <div class="modActCC">
-                    <span>微博虚拟人：</span>
-                    <div class="weibolist"></div>
+                    <span class="tt"><i class="icon icon-pushpin"></i> 微博虚拟人：</span>
+                    <div class="weibolist list"></div>
                 </div>
                 <div class="modActCC">
-                    <span>QQ虚拟人：</span>
-                    <div class="QQlist"></div>
+                    <span class="tt"><i class="icon icon-pushpin"></i> QQ虚拟人：</span>
+                    <div class="QQlist list"></div>
                 </div>
                 <div class="modActCC">
-                    <span>微信虚拟人：</span>
-                    <div class="wxlist"></div>
+                    <span class="tt"><i class="icon icon-pushpin"></i> 微信虚拟人：</span>
+                    <div class="wxlist list"></div>
                 </div>
                 <div class="modActCC">
-                    <span>faceBook虚拟人：</span>
-                    <div class="fblist"></div>
+                    <span class="tt"><i class="icon icon-pushpin"></i> faceBook虚拟人：</span>
+                    <div class="fblist list"></div>
                 </div>
                 <div class="modActCC">
-                    <span>twitter虚拟人：</span>
-                    <div class="twlist"></div>
+                    <span class="tt"><i class="icon icon-pushpin"></i> twitter虚拟人：</span>
+                    <div class="twlist list"></div>
                 </div>
             </div>
             <div class="modal-footer">
