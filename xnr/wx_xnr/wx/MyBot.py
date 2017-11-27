@@ -108,6 +108,7 @@ class MyBot(Bot):
 
     def my_logout_callback(self, **kwargs):
         self.change_status('logout')    #设置self.status字段，以便别处自动判断是否应该关闭socket端口
+        #send mail to admin ?
         
     def enable_logger(self, group_name):
         try:
@@ -173,10 +174,12 @@ class MyBot(Bot):
                 data = eval(d)
                 create_flag = data['create_flag']
                 if create_flag:
-                    groups = self.load_all_groups()
                     group_list = []
+                    groups = self.groups(update=True)
                     for group in groups:
-                        group_list.append(group[0])
+                        #load members details
+                        group.update_group(members_details=True)
+                        group_list.append(group.puid)
                     if self.set_groups(group_list):
                         if self.change_wxxnr_redis_data({'create_flag': 0}):
                             return 1
@@ -199,11 +202,19 @@ class MyBot(Bot):
             'speaker_name': self.self.name
         }
         nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-        index_name = wx_sent_group_message_index_name_pre + str(nowDate)
+        #虚拟人发送的消息在wx_sent_group_message中存一份
+        sent_index_name = wx_sent_group_message_index_name_pre + str(nowDate)
+        if not es_xnr.indices.exists(index=sent_index_name):
+            print 'get mapping'
+            print wx_group_message_mappings(sent_index_name)
+        print es_xnr.index(index=sent_index_name, doc_type=wx_group_message_index_type, body=data)
+        #虚拟人发送的消息在wx_group_message中再存一份
+        index_name = wx_group_message_index_name_pre + str(nowDate)
         if not es_xnr.indices.exists(index=index_name):
             print 'get mapping'
-            print wx_group_message_mappings(nowDate)
-        es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
+            print wx_group_message_mappings(index_name)
+        print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
+        
 
     def proc_msg(self, msg):
         group_puid = msg.sender.puid
@@ -261,7 +272,7 @@ class MyBot(Bot):
             if save_flag : 
                 if not es_xnr.indices.exists(index=index_name):
                     print 'get mapping'
-                    print wx_group_message_mappings(nowDate)
+                    print wx_group_message_mappings(index_name)
                 print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
             #自动回复监听的群组中@自己的消息
             if msg.is_at:
