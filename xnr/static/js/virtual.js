@@ -1,4 +1,4 @@
-var virtual_url='/system_manage/show_users_account/';
+var virtual_url='/system_manage/show_users_account/?main_user='+admin;
 public_ajax.call_request('get',virtual_url,virtual);
 function virtual(data) {
     $('#virtualtable').bootstrapTable('load', data);
@@ -29,49 +29,49 @@ function virtual(data) {
             //     valign: "middle",//垂直
             // },
             {
-                title: "用户名",//标题
-                field: "user_name",//键名
+                title: "平台名称",//标题
+                field: "platform_name",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.user_name==''||row.user_name=='null'||row.user_name=='unknown'){
+                    if (row.platform_name==''||row.platform_name=='null'||row.platform_name=='unknown'||!row.platform_name){
                         return '未知';
                     }else {
-                        return row.user_name;
+                        return row.platform_name;
                     };
                 }
             },
             {
                 title: "已完成虚拟人",//标题
-                field: "complete_xnr",//键名
+                field: "complete_xnr_list",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.complete_xnr==''||row.complete_xnr=='null'||!row.complete_xnr
-                        ||row.complete_xnr=='unknown'||row.complete_xnr.length==0){
+                    if (row.complete_xnr_list==''||row.complete_xnr_list=='null'||!row.complete_xnr_list
+                        ||row.complete_xnr_list=='unknown'||row.complete_xnr_list.length==0){
                         return '无任何虚拟人';
                     }else {
-                        return row.complete_xnr.join('，');
+                        return row.complete_xnr_list.join('，');
                     };
                 }
             },
             {
                 title: "未完成虚拟人",//标题
-                field: "uncomplete_xnr",//键名
+                field: "uncomplete_xnr_list",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.uncomplete_xnr==''||row.uncomplete_xnr=='null'||!row.uncomplete_xnr
-                        ||row.uncomplete_xnr=='unknown'||row.uncomplete_xnr.length==0){
+                    if (row.uncomplete_xnr_list==''||row.uncomplete_xnr_list=='null'||!row.uncomplete_xnr_list
+                        ||row.uncomplete_xnr_list=='unknown'||row.uncomplete_xnr_list.length==0){
                         return '无任何虚拟人';
                     }else {
-                        return row.uncomplete_xnr.join('，');
+                        return row.uncomplete_xnr_list.join('，');
                     };
                 }
             },
@@ -199,10 +199,9 @@ function successFail(data) {
 
 
 //虚拟人通道管理
-var xnr_road_url=''+admin;
-// public_ajax.call_request('get',xnr_road_url,xnr_road);
+var xnr_road_url='/system_manage/show_xnr_map_relationship/?main_user='+admin;
+public_ajax.call_request('get',xnr_road_url,xnr_road);
 function xnr_road(data) {
-    console.log(data)
     $('#virtualtable_2').bootstrapTable('load', data);
     $('#virtualtable_2').bootstrapTable({
         data:data,
@@ -233,7 +232,10 @@ function xnr_road(data) {
                     if (row.weibo_xnr_user_no==''||row.weibo_xnr_user_no=='null'||row.weibo_xnr_user_no=='unknown'||!row.weibo_xnr_user_no){
                         return '未知';
                     }else {
-                        return row.weibo_xnr_user_no;
+                        var name=row.weibo_xnr_name;
+                        if (!name){name=row.weibo_xnr_user_no}
+                        var Nm=name+'（'+row.weibo_xnr_user_no+'）\n';
+                        return Nm;
                     };
                 }
             },
@@ -248,7 +250,10 @@ function xnr_road(data) {
                     if (row.qq_xnr_user_no==''||row.qq_xnr_user_no=='null'||!row.qq_xnr_user_no||row.qq_xnr_user_no=='unknown'){
                         return '无任何虚拟人';
                     }else {
-                        return row.qq_xnr_user_no;
+                        var name=row.qq_xnr_name;
+                        if (!name){name=row.qq_xnr_user_no}
+                        var Nm=name+'（'+row.qq_xnr_user_no+'）\n';
+                        return Nm;
                     };
                 }
             },
@@ -263,7 +268,10 @@ function xnr_road(data) {
                     if (row.weixin_xnr_user_no==''||row.weixin_xnr_user_no=='null'||!row.weixin_xnr_user_no||row.weixin_xnr_user_no=='unknown'){
                         return '无任何虚拟人';
                     }else {
-                        return row.weixin_xnr_user_no;
+                        var name=row.weixin_xnr_name;
+                        if (!name){name=row.weixin_xnr_user_no}
+                        var Nm=name+'（'+row.weixin_xnr_user_no+'）\n';
+                        return Nm;
                     };
                 }
             },
@@ -278,7 +286,10 @@ function xnr_road(data) {
                     if (row.facebook_xnr_user_no==''||row.facebook_xnr_user_no=='null'||!row.facebook_xnr_user_no||row.facebook_xnr_user_no=='unknown'){
                         return '无任何虚拟人';
                     }else {
-                        return row.facebook_xnr_user_no;
+                        var name=row.facebook_xnr_name;
+                        if (!name){name=row.facebook_xnr_user_no}
+                        var Nm=name+'（'+row.facebook_xnr_user_no+'）\n';
+                        return Nm;
                     };
                 }
             },
@@ -293,7 +304,10 @@ function xnr_road(data) {
                     if (row.twitter_xnr_user_no==''||row.twitter_xnr_user_no=='null'||!row.twitter_xnr_user_no||row.twitter_xnr_user_no=='unknown'){
                         return '无任何虚拟人';
                     }else {
-                        return row.twitter_xnr_user_no;
+                        var name=row.twitter_xnr_name;
+                        if (!name){name=row.twitter_xnr_user_no}
+                        var Nm='<span>'+name+'<br/>（'+row.twitter_xnr_user_no+'）</span>';
+                        return Nm;
                     };
                 }
             },
@@ -305,25 +319,111 @@ function xnr_road(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor:pointer;color:white;" onclick="roadXnrModify(\''+row.user_id+'\',\''+row.user_name+'\',\''+row.my_xnrs+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '<span style="cursor:pointer;color:white;" onclick="deleteRoadXnrInfo(\''+row.user_id+'\',\''+row.my_xnrs+'\')" title="删除"><i class="icon icon-trash"></i></span>';
+                    return '<span style="cursor:pointer;color:white;" onclick="addRoad(\'2\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '<span style="cursor:pointer;color:white;" onclick="deleteRoadXnrInfo(\''+row.id+'\')" title="删除"><i class="icon icon-trash"></i></span>';
                 }
             },
         ],
     });
 }
+//添加通道
+var add_or_mondify;
+function addRoad(num) {
+    add_or_mondify=num;
+    var add_road_url='/system_manage/control_add_xnr_map_relationship/?main_user='+admin;
+    public_ajax.call_request('get',add_road_url,roadXnrModify);
+}
 // 编辑和添加通道
-function roadXnrModify() {
-    '<label class="demo-label" title="旅游">' +
-    '   <input class="demo-radio" type="radio" name="theme" value="旅游">' +
-    '   <span class="demo-checkbox demo-radioInput"></span> 旅游' +
-    '</label>'
+function roadXnrModify(data) {
+    listIDname=[];
+    var weibo=everyRoad(data['weibo_xnr_list'],'weibo');
+    var qq=everyRoad(data['qq_xnr_list'],'qq');
+    var weixin=everyRoad(data['weixin_xnr_list'],'weixin');
+    var faceBook=everyRoad(data['facebook_xnr_list'],'faceBook');
+    var twitter=everyRoad(data['twitter_xnr_list'],'twitter');
+    $('#modifyAndAddRoad .weibolist').html(weibo);
+    $('#modifyAndAddRoad .QQlist').html(qq);
+    $('#modifyAndAddRoad .wxlist').html(weixin);
+    $('#modifyAndAddRoad .fblist').html(faceBook);
+    $('#modifyAndAddRoad .twlist').html(twitter);
+    $('#modifyAndAddRoad h4.tit').text('添加通道');
+    $('#modifyAndAddRoad').modal('show');
+}
+function everyRoad(roadArray,key) {
+    var str='';
+    if (roadArray.length==0){
+        str='<b style="display:inline-block;width: 100%;text-align: center;">暂无虚拟人</b>';
+    }else {
+        $.each(roadArray,function (index,item) {
+            var a=item.xnr_name;
+            if(!a){a=item.xnr_user_no};
+            str+=
+                '<label class="demo-label" title="'+a+'">' +
+                '   <input class="demo-radio" type="radio" name="'+key+'" valueID="'+item.xnr_user_no+'" valueName="'+a+'">' +
+                '   <span class="demo-checkbox demo-radioInput"></span> '+a+
+                '</label>';
+        })
+    }
+    return str;
+}
+//确定添加
+var listIDname=[];
+function sureAddModify() {
+    var weiboID=$('#modifyAndAddRoad input:radio[name="weibo"]:checked').attr('valueID')||'';listIDname.push(weiboID);
+    var weiboName=$('#modifyAndAddRoad input:radio[name="weibo"]:checked').attr('valueName')||'';
+    var qqID=$('#modifyAndAddRoad input:radio[name="qq"]:checked').attr('valueID')||'';listIDname.push(qqID);
+    var qqName=$('#modifyAndAddRoad input:radio[name="qq"]:checked').attr('valueName')||'';
+    var weixinID=$('#modifyAndAddRoad input:radio[name="weixin"]:checked').attr('valueID')||'';listIDname.push(weixinID);
+    var weixinName=$('#modifyAndAddRoad input:radio[name="weixin"]:checked').attr('valueName')||'';
+    var faceBookID=$('#modifyAndAddRoad input:radio[name="faceBook"]:checked').attr('valueID')||'';listIDname.push(faceBookID);
+    var faceBookName=$('#modifyAndAddRoad input:radio[name="faceBook"]:checked').attr('valueName')||'';
+    var twitterID=$('#modifyAndAddRoad input:radio[name="twitter"]:checked').attr('valueID')||'';listIDname.push(twitterID);
+    var twitterName=$('#modifyAndAddRoad input:radio[name="twitter"]:checked').attr('valueName')||'';
+    if (listIDname.length<2){
+        $('#pormpt p').text('请选择虚拟人,最少2个。');
+        $('#pormpt').modal('show');
+    }else {
+        var mid='';
+        if (add_or_mondify=='1'){
+            mid='add_xnr_map_relationship';
+        }else {
+            mid='update_xnr_map_relationship';
+        }
+        var addModify_url='/system_manage/'+mid+'/?main_user='+admin+'&weibo_xnr_user_no='+weiboID+
+            '&weibo_xnr_name='+weiboName+'&qq_xnr_user_no='+qqID+'&qq_xnr_name='+qqName+'&weixin_xnr_user_no='+weixinID+
+            '&weixin_xnr_name='+weixinName+'&facebook_xnr_user_no='+faceBookID+'&facebook_xnr_name='+faceBookName+
+            '&twitter_xnr_user_no='+twitterID+'&twitter_xnr_name='+twitterName;
+        public_ajax.call_request('get',addModify_url,sufa);
+    }
+
+}
+//system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no=WXNR0001&new_platform=qq
+
+function checkUndefined(f) {
+    if (f){listIDname.push(f)};
 }
 //删除通道
-function deleteRoadXnrInfo() {
+var map_id;
+function deleteRoadXnrInfo(mapID) {
+    map_id=mapID;
     $('#delroad').modal('show');
 }
 function deleteRoadXnr() {
+    var del_url='/system_manage/delete_xnr_map_relationship/?xnr_map_id='+map_id;
+    public_ajax.call_request('get',del_url,sufa);
+}
+function sufa(data) {
+    var f='';
+    if (data){
+        f='操作成功';
+        setTimeout(function () {
+            public_ajax.call_request('get',xnr_road_url,xnr_road);
+        },1000)
+    }else {
+        f='操作失败';
+    }
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
 
 }
 

@@ -60,3 +60,13 @@ body {
 #modifyAccount .modAct .modActCC .addXnr:hover {
     background: rgba(49, 49, 49, 0.78);
 }
+#modifyAndAddRoad .modActCC .list {
+    margin:10px 0;
+}
+#modifyAndAddRoad .modActCC .tt i {color:coral;}
+#modifyAndAddRoad .modActCC .demo-label {
+    width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
