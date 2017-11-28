@@ -76,6 +76,13 @@ def get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
+def get_day_flow_text_index_list(date_ts):
+    day_date=ts2datetime(date_ts)
+    index_name = flow_text_index_name_pre + day_date
+
+    return index_name
+
+
 def get_xnr_flow_text_index_list(date_range_end_ts):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
