@@ -9,7 +9,8 @@ from utils import create_log_list,show_log_list,delete_log_list,\
 				  create_user_account,add_user_xnraccount,show_users_account,\
 				  delete_user_account,delete_user_xnraccount,change_user_account,\
 				  add_xnr_map_relationship,show_xnr_map_relationship,change_xnr_platform,\
-				  delete_xnr_map_relationship,update_xnr_map_relationship,control_add_xnr_map_relationship
+				  delete_xnr_map_relationship,update_xnr_map_relationship,control_add_xnr_map_relationship,\
+				  show_all_users_account
 
 
 mod = Blueprint('system_manage', __name__, url_prefix='/system_manage')
@@ -141,7 +142,7 @@ def ajax_change_user_account():
 
 #虚拟人通道映射
 #添加映射关系
-#http://219.224.134.213:9209/system_manage/add_xnr_map_relationship/?main_user=admin@qq.com&weibo_xnr_user_no=WXNR0004&weibo_xnr_name=一只会飞的猪&qq_xnr_user_no=QXNR0001&qq_xnr_name=维权律师
+#http://219.224.134.213:9209/system_manage/add_xnr_map_relationship/?main_user=admin@qq.com&weibo_xnr_user_no=WXNR0004&weibo_xnr_name=巨星大大&qq_xnr_user_no=QXNR0001&qq_xnr_name=维权律师
 @mod.route('/add_xnr_map_relationship/')
 def ajax_add_xnr_map_relationship():
 	xnr_map_detail=dict()
@@ -212,4 +213,12 @@ def ajax_update_xnr_map_relationship():
 	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_name')
 	xnr_map_detail['timestamp']=int(time.time())
 	results=update_xnr_map_relationship(xnr_map_detail,xnr_map_id)
+	return json.dumps(results)
+
+
+#admin用户权限展示所有虚拟人
+#http://219.224.134.213:9209/system_manage/show_all_users_account
+@mod.route('/show_all_users_account/')
+def ajax_show_all_users_account():
+	results=show_all_users_account()
 	return json.dumps(results)

@@ -21,6 +21,7 @@ from xnr.weibo_xnr_assessment.views import mod as weiboxnrassessmentModule
 from xnr.weibo_xnr_knowledge_base_management.views import mod as weiboxnrknowledgebasemanagementModule
 from xnr.weibo_xnr_monitor.views import mod as weiboxnrmonitorModule
 from xnr.weibo_xnr_warming.views import mod as weiboxnrwarmingModule
+from xnr.weibo_xnr_warming_new.views import mod as weiboxnrwarmingnewModule
 from xnr.weibo_xnr_report_manage.views import mod as weiboxnrreportmanageModule
 from xnr.qq_xnr_manage.views import mod as qqxnrmanageModule
 from xnr.qq_xnr_operate.views import mod as qqxnroperateModule
@@ -73,6 +74,7 @@ def create_app():
     app.register_blueprint(weiboxnrknowledgebasemanagementModule)
     app.register_blueprint(weiboxnrmonitorModule)
     app.register_blueprint(weiboxnrwarmingModule)
+    app.register_blueprint(weiboxnrwarmingnewModule)
     app.register_blueprint(weiboxnrreportmanageModule)
     app.register_blueprint(qqxnrmanageModule)
     app.register_blueprint(qqxnroperateModule)
