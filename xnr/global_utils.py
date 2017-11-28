@@ -212,12 +212,15 @@ weibo_hidden_expression_index_type = 'hidden_expression'
 
 ## 预警
 weibo_user_warning_index_name = 'weibo_user_warning'
+weibo_user_warning_index_name_pre = 'weibo_user_warning_'
 weibo_user_warning_index_type = 'text'
 
 weibo_event_warning_index_name = 'weibo_event_warning'
+weibo_event_warning_index_name_pre = 'weibo_event_warning_'
 weibo_event_warning_index_type = 'text'
 
 weibo_speech_warning_index_name = 'weibo_speech_warning'
+weibo_speech_warning_index_name_pre = 'weibo_speech_warning_'
 weibo_speech_warning_index_type = 'text'
 
 

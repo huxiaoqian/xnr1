@@ -219,8 +219,8 @@ def get_qq_xnr_list(account_name):
     return xnr_user_no_list
 
 #整合账户管理
-'''
-def show_users_account():
+
+def show_all_users_account():
     account_list=get_user_account_list()
     print account_list
     account_info=[]
@@ -231,21 +231,24 @@ def show_users_account():
         #未完成虚拟人
         status_zero=0
         status_second=2
-        status_three=3
-        #uncomplete_xnr_list=[]
+        status_three=3        
         weibo_uncomplete_xnr_list=get_user_xnr_list(account_name,status_zero,status_second)
-        uncomplete_xnr_list=weibo_uncomplete_xnr_list
-        #
-        account_dict['uncomplete_xnr']=uncomplete_xnr_list
+        account_dict['uncomplete_xnr_weibo']=weibo_uncomplete_xnr_list
+        account_dict['uncomplete_xnr_qq']=[]
+        account_dict['uncomplete_xnr_weixin']=[]
+        account_dict['uncomplete_xnr_facebook']=[]
+        account_dict['uncomplete_xnr_twitter']=[]
         #已完成虚拟人
         weibo_complete_xnr_list=get_user_xnr_list(account_name,status_second,status_three)
-        complete_xnr_list=weibo_complete_xnr_list
+        account_dict['complete_xnr_weibo']=weibo_complete_xnr_list
         qq_complete_xnr_list=get_qq_xnr_list(account_name)
-        complete_xnr_list.extend(qq_complete_xnr_list)
-        account_dict['complete_xnr']=complete_xnr_list
+        account_dict['complete_xnr_qq']=qq_complete_xnr_list
+        account_dict['complete_xnr_weixin']=[]
+        account_dict['complete_xnr_facebook']=[]
+        account_dict['complete_xnr_twitter']=[]
         account_info.append(account_dict)
     return account_info
-'''
+
 
 def show_users_account(main_user):
     account_list=[]
