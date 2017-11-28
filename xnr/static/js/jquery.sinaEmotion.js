@@ -150,7 +150,6 @@
 		showFacePage(0);
 		showPages();
 	};
-
 	var showFacePage = function(page) {
 
 		var face;
