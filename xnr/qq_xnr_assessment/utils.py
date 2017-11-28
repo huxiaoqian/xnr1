@@ -35,7 +35,7 @@ def get_influence_at_num(xnr_user_no,start_ts,end_ts):
 
     search_results = es_xnr.search(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
                     body=query_body)['hits']['hits']
-
+    print 'search_results:::',search_results
     for result in search_results:
         
         result = result['_source']
@@ -331,9 +331,9 @@ def get_safe_qq(xnr_user_no,start_ts,end_ts):
     return speak_dict
 
 def get_safe_qq_today(xnr_user_no):
-    speak_dict = {}
-    speak_dict['speak_day'] = {}
-    speak_dict['speak_total'] = {}
+    # speak_dict = {}
+    # speak_dict['speak_day'] = {}
+    # speak_dict['speak_total'] = {}
     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
     qq_number = get_result['qq_number']
 
@@ -420,9 +420,9 @@ def get_safe_qq_today(xnr_user_no):
 
     safe_active = round(safe_active,2)  # 保留两位小数
     
-    speak_dict['mark'] = safe_active
+    item_dict['mark'] = safe_active
 
-    return speak_dict
+    return item_dict
 
 
 # def get_safe_qq(xnr_user_no):

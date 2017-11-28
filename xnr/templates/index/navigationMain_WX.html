@@ -335,17 +335,16 @@
         async: true,
         dataType: "json",
         success: function (data) {
-            console.log(data)
-            var str='';
+            var str='',isChecked='';
             $.each(data,function (index,item) {
-                var isChecked='';
+                var sameid=localStorage.getItem('sameXnr');
                 var name;
                 if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
                     name='无昵称';
                 }else {
                     name=item.wx_id;
                 }
-                if (oneTrue=='1'){
+                if ((sameid==item.wxbot_id)||(oneTrue==1)){
                     isChecked='checked';
                     $('#xnrName').text(name+'（'+item.wxbot_id+'）').attr('title',name+'（'+item.wxbot_id+'）');
                     localStorage.setItem('userWX',encodeURI(item.wxbot_id));

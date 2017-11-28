@@ -330,16 +330,17 @@
         async: true,
         dataType: "json",
         success: function (data) {
-            var str='';
+            var str='',isChecked='';
+            var sameid=localStorage.getItem('sameXnr');
             $.each(data,function (index,item) {
-                var isChecked='';
                 var name;
                 if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
                     name='无昵称';
                 }else {
                     name=item.nickname;
                 }
-                if (oneTrue=='1'){
+
+                if ((sameid==item.xnr_user_no)||(oneTrue==1)){
                     isChecked='checked';
                     $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
                     localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
