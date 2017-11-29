@@ -262,6 +262,32 @@
 <script src="/static/js/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
     function getLocalTime(nS) {
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
     }
@@ -300,21 +326,45 @@
     },function () {
         $(this).attr('src','/static/images/QQload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationQQ/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=qq';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationQQ/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.facebook').hover(function () {
         $(this).attr('src','/static/images/facebookclick.png');
     },function () {
         $(this).attr('src','/static/images/facebookload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationFaceBook/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=facebook';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationFaceBook/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.twitter').hover(function () {
         $(this).attr('src','/static/images/twitterclick.png');
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        window.location.href = '/index/navigationTwitter/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href = '/index/navigationTwitter/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
 
     $('.wx').hover(function () {
@@ -322,7 +372,15 @@
     },function () {
         $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationWX/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationWX/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
 
     //页面跳转
@@ -373,6 +431,7 @@
             localStorage.setItem('user',encodeURI(userID));
             localStorage.setItem('userRelName',encodeURI(userName));
             localStorage.setItem('userName',encodeURI(id_or_name));
+            sameID=userID;
             $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     });
@@ -380,22 +439,28 @@
     //登录类型
     var admin='admin@qq.com';
     //虚拟人列表
-    var oneTrue=1;
+    var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
         async: true,
         dataType: "json",
         success: function (data) {
-            var str='',isChecked='';
+            var str='';
             var sameid=localStorage.getItem('sameXnr');
             for (var k in data){
+                var isChecked=''
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
                 }
-                if ((sameid==item.xnr_user_no)||(oneTrue==1)){
+                if (sameid==k){
                     isChecked='checked';
-                    downXnr(k,data[k]);
+                    sameID=sameid
+                    downXnr(sameID,data[k]);
+                }else if (oneTrue==1){
+                    isChecked='checked';
+                    sameID=sameid
+                    downXnr(sameID,data[k]);
                 }
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
@@ -412,6 +477,12 @@
         localStorage.setItem('user',encodeURI(k1));
         localStorage.setItem('userRelName',encodeURI(k2));
         localStorage.setItem('userName',encodeURI(k2));
+    }
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
+        }
     }
 
 </script>

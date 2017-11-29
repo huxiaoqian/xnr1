@@ -236,6 +236,33 @@
 <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
+
     $(function(){
 
         $.fn.fullpage({
@@ -276,7 +303,16 @@
     },function () {
         $(this).attr('src','/static/images/weiboload.png');
     }).on('click',function () {
-        window.location.href='/index/navigation/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weibo';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigation/';
+            $('#pormpt').modal('hide');
+        },1000);
+
     });
     $('.qq').on('click',function () {
         window.location.href='/index/navigationQQ/';
@@ -286,21 +322,45 @@
     },function () {
         $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationWX/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationWX/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.facebook').hover(function () {
         $(this).attr('src','/static/images/facebookclick.png');
     },function () {
         $(this).attr('src','/static/images/facebookload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationFaceBook/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=facebook';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationFaceBook/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.twitter').hover(function () {
         $(this).attr('src','/static/images/twitterclick.png');
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        window.location.href = '/index/navigationTwitter/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href = '/index/navigationTwitter/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     //页面跳转
     $('#control').on('click',function () {
@@ -323,30 +383,40 @@
     });
 
     //虚拟人列表
-    var oneTrue=1;
+    var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
         url: "/qq_xnr_manage/show_qq_xnr/",
         async: true,
         dataType: "json",
         success: function (data) {
-            var str='',isChecked='';
+            var str='';
             var sameid=localStorage.getItem('sameXnr');
             $.each(data,function (index,item) {
-                var name;
+                var name,isChecked='';
                 if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
                     name='无昵称';
                 }else {
                     name=item.nickname;
                 }
-
-                if ((sameid==item.xnr_user_no)||(oneTrue==1)){
+                if (sameid==item.xnr_user_no){
                     isChecked='checked';
+                    sameID=item.xnr_user_no;
                     $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
                     localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
                     localStorage.setItem('userQQRelName',encodeURI(name));
                     localStorage.setItem('userQQnum',encodeURI(item.qq_number));
                     localStorage.setItem('userQQName',encodeURI(name));
+                    localStorage.setItem('sameXnr',encodeURI(item.xnr_user_no));
+                }else if (oneTrue==1){
+                    isChecked='checked';
+                    sameID=item.xnr_user_no;
+                    $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
+                    localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
+                    localStorage.setItem('userQQRelName',encodeURI(name));
+                    localStorage.setItem('userQQnum',encodeURI(item.qq_number));
+                    localStorage.setItem('userQQName',encodeURI(name));
+                    localStorage.setItem('sameXnr',encodeURI(item.xnr_user_no));
                 };
                 str+=
                     '<label class="demo-label" title="'+name+'">'+
@@ -379,8 +449,16 @@
             localStorage.setItem('userQQRelName',encodeURI(userQQName));
             localStorage.setItem('userQQnum',encodeURI(userQQnum));
             localStorage.setItem('userQQName',encodeURI(id_or_name));
+            sameID=userQQID;
             $('#xnrName').text(id_or_name+'（'+userQQnum+'）').attr('title',id_or_name+'（'+userQQnum+'）');
         }
     });
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
+
+        }
+    }
 </script>
 {% endblock %}

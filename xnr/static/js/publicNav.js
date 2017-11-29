@@ -244,7 +244,7 @@ setTimeout(function(){
             window.open('/systemManage/daily/');
         });
     }
-},2000);
+},500);
 
 $(document).ready(function() {
     $(document).on('show.bs.modal', '.modal', function() {
@@ -434,11 +434,9 @@ function same_xnr(mid2) {
     public_ajax.call_request('GET',sameXnr_url,sameXnrPoint)
 }
 function sameXnrPoint(data) {
-    console.log(data)
     for (var k in data[0]){
         var sameID='';
-        if (data[0][k]){sameID=data[0][k]};
-        localStorage.setItem('sameXnr',sameID);
+        if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
     }
 }
 
@@ -590,6 +588,11 @@ function judgment(typeNum){
             '    <a class="li_a" href="/systemManage/virtual/?flag=1">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=1">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
+            '    </a>'+
             '</li>';
     };
     $('.behind').html(afterEle);
@@ -715,6 +718,11 @@ function judgmentFaceBook(typeNum) {
             '    <a class="li_a" href="/systemManage/virtual/?flag=4">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=4">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
+            '    </a>'+
             '</li>';
     };
     $('.behind').html(afterEle);
@@ -839,6 +847,11 @@ function judgmentTwitter(typeNum) {
             '<li class="main_li">'+
             '    <a class="li_a" href="/systemManage/virtual/?flag=5">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=5">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
             '    </a>'+
             '</li>';
     };

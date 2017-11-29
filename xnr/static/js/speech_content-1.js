@@ -1,12 +1,28 @@
-var time=Date.parse(new Date())/1000;//1480176000
+var time2=Date.parse(new Date())/1000;//1480176000
 $('#typelist .demo-radio').on('click',function () {
-    var _val=$(this).val(),time=Date.parse(new Date())/1000;
-    var weiboUrl='/weibo_xnr_warming/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type='+_val+'&day_time='+time;
+    var _val=$(this).val();
+    var time=$('.choosetime input:radio[name="time"]:checked').val();
+    var time1=getDaysBefore(time);
+    if (time=='mize'){
+        var s=$(this).parents('.choosetime').find('#start').val();
+        var d=$(this).parents('.choosetime').find('#end').val();
+        if (s==''||d==''){
+            $('#pormpt p').text('时间不能为空。');
+            $('#pormpt').modal('show');
+            return false;
+        }else {
+            time1=(Date.parse(new Date(s))/1000);
+            time2=(Date.parse(new Date(d))/1000);
+        }
+    }
+    var weiboUrl='/weibo_xnr_warming_new/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type='+_val+
+        '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',weiboUrl,weibo);
 })
-var weiboUrl='/weibo_xnr_warming/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type=0&day_time='+time;
+var weiboUrl='/weibo_xnr_warming_new/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type=0&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
@@ -97,7 +113,37 @@ function weibo(data) {
             },
         ],
     });
+    $('#weiboContent p').slideUp(30);
 };
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    var valCH=$('#typelist input:radio[name="focus"]:checked').val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/weibo_xnr_warming_new/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type='+valCH+
+            '&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_warming_new/show_speech_warming/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
 
 // 转发===评论===点赞
 function retComLike(_this) {

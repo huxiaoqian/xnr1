@@ -128,7 +128,8 @@ def get_submit_tweet(task_detail):
         return False
 
     # 发布微博
-
+    #account_name = 'weiboxnr03@126.com'
+    print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
 
