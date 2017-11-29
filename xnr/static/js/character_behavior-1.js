@@ -1,7 +1,8 @@
-var time=Date.parse(new Date())/1000;//1480176000
-var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
+var time2=Date.parse(new Date())/1000;//1480176000
+var weiboUrl='/weibo_xnr_warming_new/show_personnal_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    console.log(data)
     $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
@@ -31,6 +32,7 @@ function weibo(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var artical=row.content,str='';
+                    artical=JSON.parse(artical)
                     if (artical.length==0||!artical){
                         str='暂无微博内容';
                     }else {
@@ -70,7 +72,7 @@ function weibo(data) {
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                                 '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
                                 '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
-                                '   <span class="center_2">'+text+'</span>'+
+                                '   <span class="center_2" style="text-align: left;">'+text+'</span>'+
                                 '   <div class="center_3">'+
                                 '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                                 '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
@@ -93,7 +95,7 @@ function weibo(data) {
                     var rel_str=
                         '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
                         '        <div class="user_center">'+
-                        '            <div style="margin: 10px 0;">'+
+                        '            <div style="margin: 10px 0;text-align: left;">'+
                         '                <label class="demo-label">'+
                         '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
@@ -114,6 +116,34 @@ function weibo(data) {
     });
     $('#weiboContent p').slideUp(30);
 };
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/weibo_xnr_warming_new/show_personnal_warming/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_warming_new/show_personnal_warming/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+
 
 // 转发===评论===点赞
 function retComLike(_this) {
