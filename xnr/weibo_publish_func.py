@@ -133,7 +133,7 @@ def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,x
     user.rankid = rankid
     #print 'user.pic_ids::',user.pic_ids
     mark = user.publish()
-
+    print 'mark...',mark
     # 保存微博
     if mark:
         try:
@@ -323,55 +323,3 @@ if __name__ == '__main__':
     #result = es.search(index='weibo_domain',doc_type='group',body={'query':{'match_all':{}}})['hits']['hits']
     print getUserShow(screen_name='巨星大大')
     # f_domain_data = open('domain.txt','rb')
-
-    # for data in f_domain_data:
-    #     data = json.loads(data)
-    #     for domain in data:
-    #         domain = domain['_source']
-    #         domain_pinyin = json.loads(domain['domain_pinyin'])
-    #         domain['domain_pinyin'] = domain_pinyin
-    #         domain['domain_name'] = json.loads(domain['domain_name'])
-    #         domain['submitter'] = json.loads(domain['submitter'])
-    #         domain['political_side'] = json.loads(domain['political_side'])
-    #         domain['top_keywords'] = json.loads(domain['top_keywords'])
-    #         domain['role_distribute'] = json.loads(domain['role_distribute'])
-    #         domain['create_type'] = json.loads(domain['create_type'])
-    #         domain['topic_preference'] = json.loads(domain['topic_preference'])
-    #         domain['remark'] = json.loads(domain['remark'])
-    #         domain['create_time'] = int(domain['create_time'])
-
-    #         if domain_pinyin == 'wei_quan_qun_ti':
-    #             domain['xnr_user_no'] = 'WXNR0001'
-    #             domain['description'] =  '追踪维权群体'
-    #         else:
-    #             domain['xnr_user_no'] = 'WXNR0004'
-    #             domain['description'] =  '追踪乌镇群体'
-    #         print 'domain:::',domain
-    #         es.index(index='weibo_domain',doc_type='group',body=domain,id=domain_pinyin)
-
-    #es.delete(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0002')
-    #['5537979196','3969238480','3302557313','5717296960']
-    # es.delete(index='weibo_domain',doc_type='group',id='wei_quan_qun_ti')
-    # f_domain_data.write(json.dumps(result))
-
-    # with open('weibo_xnr.json','wb') as f:
-    #     result = es.search(index='weibo_xnr',doc_type='user',body={'query':{'match_all':{}}})['hits']['hits']
-    #     json.dump(result,f)
-
-    # with open('weibo_xnr.json','rb') as f:
-    #     data = json.load(f)
-
-    #     for item in data:
-    #         item = item['_source']
-    #         xnr_user_no = item['xnr_user_no']
-    #         es.index(index='weibo_xnr',doc_type='user',id=xnr_user_no,body=item)
-    # query_body = {
-    # 	'query':{
-    # 		'term':{'member_uids':'1725252714'}
-    # 	}
-    # }
-
-    # results = es.search(index='weibo_domain',doc_type='group',body=query_body)['hits']['hits']
-    # print 'results:::',results
-
-    #es.update(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0004',body={'doc':{'trace_follow_list':["3632086395"]}})

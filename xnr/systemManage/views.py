@@ -24,3 +24,8 @@ def purview():
 def virtual():
     flag = request.args.get('flag','')
     return render_template('systemManage/virtual.html',flag=flag)
+
+@mod.route('/userMange/')
+def userMange():
+    flag = request.args.get('flag','')
+    return render_template('systemManage/userMange.html',flag=flag)
