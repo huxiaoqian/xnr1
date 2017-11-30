@@ -550,3 +550,33 @@ def update_xnr_map_relationship(xnr_map_detail,xnr_map_id):
     except:
         result=False
     return result  
+
+
+
+#change platform
+def lookup_xnr_relation(origin_platform,origin_xnr_user_no):
+    search_field=origin_platform + '_xnr_user_no'
+    #new_search_field_no=new_platform + '_xnr_user_no'
+    #new_search_field_name=new_platform + '_xnr_name'
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{search_field:origin_xnr_user_no}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
+        result=[]
+        for item in es_result:
+            result.append(item['_source'])
+    except:
+        result=''
+    return result 

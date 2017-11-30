@@ -218,15 +218,66 @@ def weibo_speech_warning_mappings():
 		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_BCI
 	else:
 		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + NOW_DATE
-	print weibo_speech_warning_index_name
+	#print weibo_speech_warning_index_name
 	if not es.indices.exists(index=weibo_speech_warning_index_name):
 		es.indices.create(index=weibo_speech_warning_index_name,body=index_info,ignore=400)
-		print 'finish index'
+		#print 'finish index'
+
+
+def weibo_timing_warning_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			weibo_timing_warning_index_type:{
+				'properties':{
+					'xnr_user_no':{  #虚拟人
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'date_name':{   #时间节点名称
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'main_user_info':{ #主要参与用户信息列表
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'event_time':{ #事件时间
+						'type':'long'
+					},
+					'main_weibo_info':{ #典型微博信息
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'event_influence':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'validity':{   #预警有效性，有效1，无效-1
+						'type':'long'
+					},
+					'timestamp':{
+						'type':'long'
+					}
+				}
+			}
+		}
+	}
+	if S_TYPE == 'test':
+		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + S_DATE_BCI
+	else:
+		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + NOW_DATE
+	if not es.indices.exists(index=weibo_timing_warning_index_name):
+		es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
+
 
 
 if __name__ == '__main__':
 	#weibo_user_warning_mappings()
 	#weibo_event_warning_mappings()
-	weibo_speech_warning_mappings()
+	#weibo_speech_warning_mappings()
 
 
