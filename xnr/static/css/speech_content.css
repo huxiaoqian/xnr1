@@ -45,17 +45,12 @@ body {
 }
 #container .speakType {
     display: inline-block;
-    margin: 10px 0 10px 40px;
+    margin-left: 10px;
 }
 #container .speakType #typelist {
     display: inline-block;
-    /*padding: 5px 10px;*/
-    /*background: rgb(28, 62, 101);*/
     color: white;
     margin: 10px 0;
-    /*border: 1px solid silver;*/
-    /*border-radius: 5px;*/
-    /*cursor: pointer;*/
 }
 #container .title .output1:hover,
 #container .title .output2:hover {
@@ -75,6 +70,7 @@ body {
     height: 20px;
 }
 #container .everySpeak .speak_center .center_rel {
+    text-align: left;
     position: relative;
     padding:10px 20px;
     background: rgba(16, 33, 51, 0.42);
