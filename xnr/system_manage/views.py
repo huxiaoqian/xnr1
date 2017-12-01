@@ -10,7 +10,7 @@ from utils import create_log_list,show_log_list,delete_log_list,\
 				  delete_user_account,delete_user_xnraccount,change_user_account,\
 				  add_xnr_map_relationship,show_xnr_map_relationship,change_xnr_platform,\
 				  delete_xnr_map_relationship,update_xnr_map_relationship,control_add_xnr_map_relationship,\
-				  show_all_users_account
+				  show_all_users_account,lookup_xnr_relation
 
 
 mod = Blueprint('system_manage', __name__, url_prefix='/system_manage')
@@ -221,4 +221,14 @@ def ajax_update_xnr_map_relationship():
 @mod.route('/show_all_users_account/')
 def ajax_show_all_users_account():
 	results=show_all_users_account()
+	return json.dumps(results)
+
+
+#查询映射关系
+#http://219.224.134.213:9209/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no=WXNR0004
+@mod.route('/lookup_xnr_relation/')
+def ajax_lookup_xnr_relation():
+	origin_platform = request.args.get('origin_platform','')
+	origin_xnr_user_no = request.args.get('origin_xnr_user_no','')
+	results = lookup_xnr_relation(origin_platform,origin_xnr_user_no)
 	return json.dumps(results)

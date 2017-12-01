@@ -278,6 +278,16 @@ facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'
 
+#预警
+facebook_user_warning_index_name_pre = 'facebook_user_warning_'
+facebook_user_warning_index_type = 'text'
+
+facebook_event_warning_index_name_pre = 'facebook_event_warning_'
+facebook_event_warning_index_type = 'text'
+
+facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
+facebook_speech_warning_index_type = 'text'
+
 
 # twitter
 #use to save feedback info

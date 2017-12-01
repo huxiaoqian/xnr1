@@ -208,6 +208,13 @@ def create_speech_warning(xnr_user_no,today_datetime):
     return result
 
 
+#事件预警
+#def create_event_warning():
+
+#时间预警
+#def create_timing_warning():
+
+
 #微博预警内容组织
 def create_weibo_warning():
     #时间设置
