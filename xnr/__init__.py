@@ -29,6 +29,7 @@ from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
 from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.qq_xnr_report_manage.views import mod as qqxnrreportmanageModule
 from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
+from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
 #from flask.ext.security import SQLAlchemyUserDatastore
@@ -83,6 +84,9 @@ def create_app():
     app.register_blueprint(qqxnrreportmanageModule)
     app.register_blueprint(qqxnrwarmingModule)
     # the debug toolbar is only enabled in debug mode
+
+    app.register_blueprint(facebookxnrwarningModule)
+
     app.config['DEBUG'] = True
 
     app.config['ADMINS'] = frozenset(['youremail@yourdomain.com'])
