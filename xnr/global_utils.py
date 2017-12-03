@@ -4,11 +4,15 @@ use to save table info in database
 '''
 import redis
 from elasticsearch import Elasticsearch
+from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
                           REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
-                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2
+                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
+                          REDIS_WX_HOST, REDIS_WX_PORT, \
+                          qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
+
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 #module1.2:config es table---index_name, doc_type
@@ -33,6 +37,9 @@ xnr_index_type = 'user'
 #use to save qq xnr info
 qq_xnr_index_name = 'qq_xnr'
 qq_xnr_index_type = 'user'
+#use to save wx xnr info
+wx_xnr_index_name = 'wx_xnr'
+wx_xnr_index_type = 'user'
 
 #use to save xnr_mapping info
 xnr_map_index_name='xnr_mapping'
@@ -46,6 +53,15 @@ qq_report_management_index_type = 'report'
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
 sent_group_message_index_name_pre = 'sent_group_message_'
+
+## wx上报管理
+wx_report_management_index_name = 'wx_report_management'
+wx_report_management_index_type = 'report'
+
+#use to save wx xnr group message
+wx_group_message_index_name_pre = 'wx_group_message_'        #wx_group_message_2017-06-24
+wx_group_message_index_type = 'record'
+wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
 # use to search flow text and bci 
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
@@ -73,6 +89,11 @@ update_userinfo_queue_name = 'update_userinfo'
 QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
 ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
 
+#wxxnr的一些数据的存放地址
+wx_xnr_data_path = 'xnr/wx/data'
+wx_xnr_qrcode_path = 'xnr/static/images/WX'
+WX_LOGIN_PATH = 'xnr/wx/run_bot.py'	#使用命令行开启run_bot()的subprocess的程序地址
+sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
 '''
 以下为微博相关定义
@@ -248,6 +269,11 @@ qq_xnr_history_count_index_type = 'count'  # - 活跃
 qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
+## wx发言统计 
+wx_xnr_history_count_index_name = 'wx_history_count'
+wx_xnr_history_count_index_type = 'count'  # - 活跃
+wx_xnr_history_be_at_index_type = 'be_at'   # - 影响力
+wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 # facebook
 #use to save feedback info
@@ -349,3 +375,8 @@ R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, d
 
 # 存储qq监测群
 r_qq_group_set_pre = 'qq_group_set_'
+
+#微信虚拟人相关
+r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
+qiniu = Auth(qiniu_access_key, qiniu_secret_key)
+
