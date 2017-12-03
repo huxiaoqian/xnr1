@@ -171,11 +171,6 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
     	print u'登录前登出成功'
     else:
     	print u'登录前登出失败'
-
-
-    print 'before login'
-    
-
     #login
     wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
     if init_groups_list:
@@ -198,15 +193,8 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         d = r.get(wxbot_id)
         if d:
             try:
-
-
-                
-
                 qr_path = eval(d)['qr_path']
-
-
                 # print 'qr_path', qr_path
-
                 #使用缓存登陆时，qr_path对应的二维码文件不存在
                 if qr_path == 'loginedwithcache':
                     return qr_path

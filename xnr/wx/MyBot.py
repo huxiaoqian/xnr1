@@ -66,10 +66,31 @@ class MyBot(Bot):
                 self.groups_list.append(group_puid)
         #登陆
         print 'starting %s ...' % self.wxbot_id
+        print '-----------------------------'
+        print self.cache_path
+        print self.console_qr
+        print self.qr_path
+        # print self.qr_callback
+        # print self.login_callback
+        # print self.if_logout_callback
+        print '=============================='
+
+        def login_c():
+            pass
+        bot = Bot(login_callback=login_c())
+
+
+
+        
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
+        print '?????'
+
+
+
         #启用puid
         if self.if_enable_puid:
             self.puid_path = os.path.join(self.data_path,self.wxbot_id + '_puid.pkl')
+            print 'self.puid_path: ', self.puid_path
             self.enable_puid(self.puid_path)
         #注册群消息处理函数
         @self.register(Group)
