@@ -479,7 +479,7 @@ def show_date_warming(today_time):
         today_time=1480176000
     else:
         pass
-
+    # print '^^^^', len(result)
     #print today_time
     date_warming_result=[]
     for item in result:
