@@ -5,13 +5,16 @@ weibo_xnr warming function
 import os
 import json
 import time
-from xnr.time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list
+from xnr.time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime
 from xnr.global_utils import es_xnr,weibo_user_warning_index_name_pre,weibo_user_warning_index_type,\
                              weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                              es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
                              weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                              weibo_xnr_index_name,weibo_xnr_index_type,\
-                             weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type
+                             weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
+                             weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
+                             weibo_date_remind_index_name,weibo_date_remind_index_type
+
 
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY,WARMING_DAY
@@ -370,3 +373,195 @@ def show_speech_warming(xnr_user_no,show_type,start_time,end_time):
         pass
 
     return speech_warming
+
+
+
+
+###################################################################
+###################       date warming       ##################
+###################################################################
+def lookup_date_info(account_name,start_time,end_time,today_datetime):
+    start_year=ts2yeartime(start_time)
+    end_year=ts2yeartime(end_time)
+
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'date_time':{'order':'asc'}}
+    }
+    result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+    date_result=[]
+    for item in result:
+        date_time = item['_source']['date_time']
+        date_name = item['_source']['date_name']
+        start_tempdate_name = start_year + '-' + date_time
+        start_tempdate_time = datetime2ts(start_tempdate_name)
+        end_tempdate_name = end_year + '-' + date_time
+        end_tempdate_time = datetime2ts(end_tempdate_name)
+
+        year=ts2yeartime(today_datetime)
+        warming_date=year+'-'+date_time        
+        item['_source']['countdown_num']=(datetime2ts(warming_date)-today_datetime)/DAY 
+
+        keywords=item['_source']['keywords']
+
+        if (start_tempdate_time >= start_time and start_tempdate_time <= end_time) or (end_tempdate_time >= start_time and end_tempdate_time <= end_time):
+            if item['_source']['create_type'] == 'all_xnrs':
+                item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
+                date_result.append(item['_source'])
+            elif item['_source']['create_type'] == 'my_xnrs':
+                if item['_source']['submitter'] == account_name:
+                    item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
+                    date_result.append(item['_source'])
+                else:
+                    pass
+        else:
+            pass
+    date_result.sort(key=lambda k:(k.get('countdown_num',0)),reverse=True)
+    return date_result
+
+
+def lookup_weibo_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords):
+    weibo_timing_warning_index_name_list = []
+    if start_year != end_year:
+        start_year_int = int(start_year)
+        end_year_int = int(end_year)
+        iter_year = end_year_int
+        while iter_year >= start_year_int:
+            index_name = weibo_timing_warning_index_name_pre + str(start_year_int) + '-' + date_time
+            if es_xnr.indices.exists(index=index_name):
+                weibo_timing_warning_index_name_list.append(index_name)
+            else:
+                pass            
+            iter_year = iter_year - 1
+    else:
+        index_name = weibo_timing_warning_index_name_pre + start_year + '-' + date_time
+        if es_xnr.indices.exists(index=index_name):
+            weibo_timing_warning_index_name_list.append(index_name)
+        else:
+            pass 
+
+    query_body={
+       'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                        {'term':{'date_name':date_name}}
+                        ]
+                    }
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
+    }
+    result=es_xnr.search(index=weibo_timing_warning_index_name_list,doc_type=weibo_timing_warning_index_type,body=query_body)['hits']['hits']
+    warming_content=[]
+    for item in result:
+        warming_content.extend(json.loads(item['_source']['weibo_date_warming_content']))
+
+    #当前时间范围内的预警信息
+    now_time = int(time.time())
+    if now_time >= start_time and now_time <= end_time:
+        today_warming=lookup_todayweibo_date_warming(keywords,now_time)
+        warming_content.append(today_warming)
+    else:
+        pass
+    return warming_content
+
+
+def lookup_todayweibo_date_warming(keywords,today_datetime):
+    keyword_query_list=[]
+    for keyword in keywords:
+        keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
+
+    flow_text_index_name=get_day_flow_text_index_list(today_datetime)
+
+    query_body={
+        'query':{
+            'bool':{
+                'should':keyword_query_list
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        temp_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        date_result=[]
+        for item in temp_result:
+            date_result.append(item['_source'])
+    except:
+            date_result=[]
+    return date_result
+
+
+def show_date_warming(account_name,start_time,end_time):
+    if S_TYPE == 'test':
+        test_today_date = S_DATE_EVENT_WARMING
+        test_time_gap = end_time - start_time
+        today_datetime = datetime2ts(test_today_date)
+        end_time = today_datetime
+        start_time = end_time - test_time_gap
+        end_datetime = datetime2ts(ts2datetime(end_time))
+        start_datetime = datetime2ts(ts2datetime(start_time))
+    else:
+        now_time = int(time.time())
+        today_datetime = datetime2ts(ts2datetime(now_time))
+        end_datetime = datetime2ts(ts2datetime(end_time))
+        start_datetime = datetime2ts(ts2datetime(start_time))
+
+    result=lookup_date_info(account_name,start_time,end_time,today_datetime)
+    return result
+
+
+
+
+
+
+
+
+# def lookup_date_history(account_name,start_time,end_time):
+#     query_body={
+#        'query':{
+#             'filtered':{
+#                 'filter':{
+#                     'bool':{
+#                         'must':[
+#                             {'range':{
+#                               'timestamp':{
+#                                   'gte':start_time,
+#                                   'lte':end_time
+#                               }
+#                             }}
+#                         ]
+#                     }
+#                 }
+#             }
+#         },
+#         'sort':{'date_time':{'order':'asc'}} ,
+#         'size':MAX_SEARCH_SIZE
+#     }
+#     weibo_timing_warning_index_name=get_xnr_warming_index_listname(weibo_timing_warning_index_name_pre,date_range_start_ts,date_range_end_ts)
+
+#     result=es_xnr.search(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,body=query_body)['hits']['hits']
+#     date_result=[]
+#     today_time=int(time.time())
+#     today_date=ts2datetime(today_time)
+
+#     for item in result:
+#         date_time=item['_source']['date_time']
+#         year=ts2yeartime(today_time)
+#         warming_date=year+'-'+date_time        
+#         item['_source']['countdown_num']=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY        
+
+#         if item['_source']['create_type'] == 'all_xnrs':
+#             date_result.append(item['_source'])
+#         elif item['_source']['create_type'] == 'my_xnrs':
+#             if item['_source']['submitter'] == account_name:
+#                 date_result.append(item['_source'])
+#             else:
+#                 pass    
+#     return date_result
