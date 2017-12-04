@@ -198,7 +198,8 @@
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post"
+                            data-toggle="modal" data-target="#sameRoad">发布</button>
                 </div>
             </div>
             <div id="user_recommend">
@@ -867,9 +868,50 @@
         </div>
     </div>
 </div>
-<script>
 
-</script>
+
+<!--相关通道-->
+<style>
+
+</style>
+<div class="modal fade" id="sameRoad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">同步到其他通道发帖</h4>
+            </div>
+            <div class="modal-body">
+                <div id="sameXnrRoad">
+                    <div class="modActCC">
+                        <span class="tt"><i class="icon icon-pushpin"></i> 微博虚拟人：</span>
+                        <div class="weibolist list"></div>
+                    </div>
+                    <div class="modActCC">
+                        <span class="tt"><i class="icon icon-pushpin"></i> QQ虚拟人：</span>
+                        <div class="QQlist list"></div>
+                    </div>
+                    <div class="modActCC">
+                        <span class="tt"><i class="icon icon-pushpin"></i> 微信虚拟人：</span>
+                        <div class="wxlist list"></div>
+                    </div>
+                    <div class="modActCC">
+                        <span class="tt"><i class="icon icon-pushpin"></i> faceBook虚拟人：</span>
+                        <div class="fblist list"></div>
+                    </div>
+                    <div class="modActCC">
+                        <span class="tt"><i class="icon icon-pushpin"></i> twitter虚拟人：</span>
+                        <div class="twlist list"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -1008,7 +1050,6 @@
     });
     //========粉丝列表
     function glfans(data) {
-        console.log(data)
         if (isEmptyObject(data)){
             $('#grouplist .gpmember').text('你还未有粉丝。');
         }else {
@@ -1093,5 +1134,6 @@
             }
         }
     });
+
 </script>
 {% endblock %}

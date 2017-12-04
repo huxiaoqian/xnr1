@@ -421,6 +421,13 @@ function postYES22(data) {
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
+//=====================相关通道========================
+var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
+public_ajax.call_request('get',roadInforurl,roadInfor);
+function roadInfor(data) {
+    console.log(data)
+}
+//=====================相关通道=======完=================
 //群可见的情况
 var rankidList=[];
 function groupSure() {
@@ -1020,6 +1027,5 @@ function businessWeibo(data) {
     });
     $('#defaultWeibo3 p').slideUp(700);
     $('.defaultWeibo3 .search .form-control').attr('placeholder','搜索关键词或子观点相关的微博（回车搜索）');
-}
-
+};
 
