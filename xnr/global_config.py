@@ -11,6 +11,7 @@ S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
 S_UID = '1910774981' #'3986246393'
 S_DATE_BCI = '2016-11-27'
 S_DATE_EVENT_WARMING = '2016-11-28'
+S_DATE_WARMING = '2016-11-26'
 
 QQ_S_DATE = '2017-07-12'
 QQ_S_DATE_NEW = '2017-08-25'
@@ -18,11 +19,12 @@ QQ_S_DATE_ASSESSMENT = '2017-09-28'
 QQ_GROUP_MESSAGE_START_DATE = '2017-08-23'
 QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-09-28'
 
+FACEBOOK_FLOW_START_DATE='2017-09-10'
 
 XNR_CENTER_DATE_TIME=int(time.time())      #当前时间
 
 
-PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+PATH_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 #config es
 #config xnr user info

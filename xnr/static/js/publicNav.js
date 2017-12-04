@@ -244,7 +244,7 @@ setTimeout(function(){
             window.open('/systemManage/daily/');
         });
     }
-},2000);
+},500);
 
 $(document).ready(function() {
     $(document).on('show.bs.modal', '.modal', function() {
@@ -380,18 +380,63 @@ $('.old').on('click',Change);
 $('.old_2').on('click',Change);
 $('.old_3').on('click',Change);
 $('.old_4').on('click',Change);
+var flagtxt='';
 function Change(){
     var txt=$(this).find('span').text();
+    flagtxt=txt;
     if (txt=='微博虚拟人'){
-        window.open('/index/navigation/');
+        same_xnr('weibo')
+        setTimeout(function () {
+            window.open('/index/navigation/');
+        },1000);
     }else if(txt=='QQ群虚拟人') {
-        window.open('/index/navigationQQ/');
+        same_xnr('qq');
+        setTimeout(function () {
+            window.open('/index/navigationQQ/');
+        },1000)
     }else if(txt=='微信虚拟人'){
-        window.open('/index/navigationWX/');
+        same_xnr('weixin');
+        setTimeout(function () {
+            window.open('/index/navigationWX/');
+        },1000);
     }else if(txt=='FaceBook虚拟人'){
-        window.open('/index/navigationFaceBook/');
+        same_xnr('facebook');
+        setTimeout(function () {
+            window.open('/index/navigationFaceBook/');
+        },1000);
     }else if(txt=='Twitter虚拟人'){
-        window.open('/index/navigationTwitter/');
+        same_xnr('twitter');
+        setTimeout(function () {
+            window.open('/index/navigationTwitter/');
+        },1000);
+    }
+    $('#errorInfor h4').text('跳转提示');
+    $('#errorInfor p').text('准备跳转中...请稍后...');
+    $('#errorInfor').modal('show');
+    setTimeout(function () {
+        $('#errorInfor').modal('hide');
+    },1000);
+}
+function same_xnr(mid2) {
+    var txt=$('.nav_type').text(),mid1='',xnrNo='';
+    if (txt=='(微博)'){
+        mid1='weibo';xnrNo=localStorage.getItem('user');
+    }else if (flagType=='2'){
+        mid1='qq';xnrNo=localStorage.getItem('userQQ');
+    }else if (flagType=='3'){
+        mid1='weixin';xnrNo=localStorage.getItem('userWX');
+    }else if (flagType=='4'){
+        mid1='facebook';xnrNo=localStorage.getItem('userFB');
+    }else if (flagType=='5'){
+        mid1='twitter';xnrNo=localStorage.getItem('userTw');
+    }
+    var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform='+mid1+'&origin_xnr_user_no='+xnrNo+'&new_platform='+mid2;
+    public_ajax.call_request('GET',sameXnr_url,sameXnrPoint)
+}
+function sameXnrPoint(data) {
+    for (var k in data[0]){
+        var sameID='';
+        if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
     }
 }
 
@@ -543,6 +588,11 @@ function judgment(typeNum){
             '    <a class="li_a" href="/systemManage/virtual/?flag=1">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=1">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
+            '    </a>'+
             '</li>';
     };
     $('.behind').html(afterEle);
@@ -668,6 +718,11 @@ function judgmentFaceBook(typeNum) {
             '    <a class="li_a" href="/systemManage/virtual/?flag=4">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=4">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
+            '    </a>'+
             '</li>';
     };
     $('.behind').html(afterEle);
@@ -792,6 +847,11 @@ function judgmentTwitter(typeNum) {
             '<li class="main_li">'+
             '    <a class="li_a" href="/systemManage/virtual/?flag=5">' +
             '        <i class="icon icon-glass"></i>&nbsp;虚拟人管理' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/systemManage/userMange/?flag=5">' +
+            '        <i class="icon icon-user-md"></i>&nbsp;用户管理' +
             '    </a>'+
             '</li>';
     };

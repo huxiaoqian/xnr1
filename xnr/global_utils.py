@@ -124,7 +124,7 @@ weibo_example_model_index_type = 'model'
 
 
 # use to publish tweet at future time
-weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
+weibo_xnr_timing_list_index_name = 'tweet_timing_list'
 weibo_xnr_timing_list_index_type = 'timing_list'
 
 # use to retweet tweet at future time
@@ -206,7 +206,7 @@ weibo_private_white_uid_index_name = 'weibo_private_white_uid'
 weibo_private_white_uid_index_type = 'white_uid'
 
 
-# content recommendation & sub opinion 
+# content recommendation & sub opinion
 
 weibo_hot_keyword_task_index_name = 'recommend_subopinion_keywords_task'
 weibo_hot_keyword_task_index_type = 'keywords_task'
@@ -233,14 +233,19 @@ weibo_hidden_expression_index_type = 'hidden_expression'
 
 ## 预警
 weibo_user_warning_index_name = 'weibo_user_warning'
+weibo_user_warning_index_name_pre = 'weibo_user_warning_'
 weibo_user_warning_index_type = 'text'
 
 weibo_event_warning_index_name = 'weibo_event_warning'
+weibo_event_warning_index_name_pre = 'weibo_event_warning_'
 weibo_event_warning_index_type = 'text'
 
 weibo_speech_warning_index_name = 'weibo_speech_warning'
+weibo_speech_warning_index_name_pre = 'weibo_speech_warning_'
 weibo_speech_warning_index_type = 'text'
 
+weibo_timing_warning_index_name_pre = 'weibo_time_warning_'
+weibo_timing_warning_index_type = 'text'
 
 # 语料库 -- 主题和日常
 weibo_xnr_corpus_index_name = 'weibo_corpus'
@@ -300,6 +305,16 @@ facebook_feedback_like_index_type = 'text'
 facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'
+
+#预警
+facebook_user_warning_index_name_pre = 'facebook_user_warning_'
+facebook_user_warning_index_type = 'text'
+
+facebook_event_warning_index_name_pre = 'facebook_event_warning_'
+facebook_event_warning_index_type = 'text'
+
+facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
+facebook_speech_warning_index_type = 'text'
 
 
 # twitter
