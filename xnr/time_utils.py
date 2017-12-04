@@ -2,7 +2,9 @@
 
 import time
 from global_utils import flow_text_index_name_pre,group_message_index_name_pre,xnr_flow_text_index_name_pre,\
-                        xnr_flow_text_index_type
+                        xnr_flow_text_index_type,facebook_flow_text_index_name_pre,\
+                        facebook_count_index_name_pre,twitter_flow_text_index_name_pre,\
+                        twitter_count_index_name_pre
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE
 
@@ -84,7 +86,7 @@ def get_xnr_flow_text_index_list(date_range_end_ts):
         date_range_start_datetime = ts2datetime(date_range_start_ts)
         index_name = xnr_flow_text_index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
-    print 'index_name_list!!!',index_name_list
+    
     return index_name_list
 
 def get_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):
@@ -149,4 +151,54 @@ def get_timeset_indexset_list(index_name_pre,startdate,enddate):
         index_name = index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
 
+    return index_name_list
+
+
+def get_facebook_flow_text_index_list(date_range_end_ts):
+    ## 不包括 date_range_end_ts 这天
+    index_name_list = []
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = facebook_flow_text_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+    
+    return index_name_list
+
+def get_facebook_count_index_list(date_range_end_ts):
+    ## 不包括 date_range_end_ts 这天
+    index_name_list = []
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = facebook_count_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+    
+    return index_name_list
+
+
+def get_twitter_flow_text_index_list(date_range_end_ts):
+    ## 不包括 date_range_end_ts 这天
+    index_name_list = []
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = twitter_flow_text_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+    
+    return index_name_list
+
+def get_twitter_count_index_list(date_range_end_ts):
+    ## 不包括 date_range_end_ts 这天
+    index_name_list = []
+    days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = twitter_count_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
+    
     return index_name_list

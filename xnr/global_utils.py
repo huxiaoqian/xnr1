@@ -246,6 +246,15 @@ qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 
 # facebook
+
+#use to save fb xnr personal information
+fb_xnr_index_name='fb_xnr'
+fb_xnr_index_type='user'
+
+#use to save fb xnr information which should be count
+fb_xnr_fans_followers_index_name='fb_xnr_fans_followers'
+fb_xnr_fans_followers_index_type='uids'
+
 #use to save feedback info
 facebook_feedback_comment_index_name_pre = 'facebook_feedback_comment_'
 facebook_feedback_comment_index_name = 'facebook_feedback_comment'
@@ -271,8 +280,32 @@ facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'
 
+# use to save flow text 
+facebook_flow_text_index_name_pre = 'facebook_flow_text_'
+facebook_flow_text_index_type = 'text'
+
+facebook_count_index_name_pre = 'facebook_count_'
+facebook_count_index_type = 'text'
+
+facebook_user_index_name = 'facebook_user'
+facebook_user_index_type = 'user'
+
+# use to save influence
+fb_bci_index_name_pre = 'fb_bci_'
+fb_bci_index_type = 'bci'
+
 
 # twitter
+
+#use to save tw xnr personal information
+tw_xnr_index_name='tw_xnr'
+tw_xnr_index_type='user'
+
+#use to save tw xnr information which should be count
+tw_xnr_fans_followers_index_name='tw_xnr_fans_followers'
+tw_xnr_fans_followers_index_type='uids'
+
+
 #use to save feedback info
 twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
 twitter_feedback_comment_index_name = 'twitter_feedback_comment'
@@ -302,7 +335,19 @@ twitter_feedback_follow_index_name_pre = 'twitter_feedback_follow_'
 twitter_feedback_follow_index_name = 'twitter_feedback_follow'
 twitter_feedback_follow_index_type = 'text'
 
+# use to save twitter flow text
+twitter_flow_text_index_name_pre = 'twitter_flow_text_'
+twitter_flow_text_index_type = 'text'
 
+twitter_count_index_name_pre = 'twitter_count_'
+twitter_count_index_type = 'text'
+
+twitter_user_index_name = 'twitter_user'
+twitter_user_index_type = 'user'
+
+# use to save influence
+tw_bci_index_name_pre = 'tw_bci_'
+tw_bci_index_type = 'bci'
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
@@ -345,3 +390,8 @@ R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, d
 
 # 存储qq监测群
 r_qq_group_set_pre = 'qq_group_set_'
+
+# facebook&twitter uname_id
+R_UNAME2ID_FT = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+fb_uname2id = 'fb_user'
+tw_uname2id = 'tw_user'
