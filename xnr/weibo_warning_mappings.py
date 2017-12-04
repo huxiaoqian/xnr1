@@ -3,13 +3,16 @@
 import sys
 import json
 import time
-from time_utils import ts2datetime
-from global_config import S_TYPE,S_DATE_BCI
+from time_utils import ts2datetime,ts2yeartime,datetime2ts
+from parameter import WARMING_DAY,MAX_VALUE,DAY
+from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import weibo_user_warning_index_name_pre,weibo_user_warning_index_type,\
 						weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
-						weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type
+						weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
+						weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
+						weibo_date_remind_index_name,weibo_date_remind_index_type
 
 NOW_DATE=ts2datetime(int(time.time()))
 
@@ -42,7 +45,7 @@ def weibo_user_warning_mappings():
 					},
 					'content':{     #敏感言论内容
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'timestamp':{    #预警生成时间
 						'type':'long'
@@ -78,14 +81,14 @@ def weibo_event_warning_mappings():
 					},
 					'main_user_info':{ #主要参与用户信息列表
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'event_time':{ #事件时间
 						'type':'long'
 					},
 					'main_weibo_info':{ #典型微博信息
 						'type':'string',
-						'index':'not_analyzed'
+						'index':'no'
 					},
 					'event_influence':{
 						'type':'string',
@@ -224,7 +227,7 @@ def weibo_speech_warning_mappings():
 		#print 'finish index'
 
 
-def weibo_timing_warning_mappings():
+def weibo_timing_warning_mappings(date_result):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -233,29 +236,37 @@ def weibo_timing_warning_mappings():
 		'mappings':{
 			weibo_timing_warning_index_type:{
 				'properties':{
-					'xnr_user_no':{  #虚拟人
+					'submitter' : {
+						'type': 'string', 
+						'index':'not_analyzed'
+					},
+					'weibo_date_warming_content':{ #典型微博信息
+						'type':'string',
+						'index':'no'
+					},
+					'date_name':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'date_name':{   #时间节点名称
+					'date_time':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'main_user_info':{ #主要参与用户信息列表
+					'keywords':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'event_time':{ #事件时间
+					'create_type':{  # all_xnrs - 所有虚拟人  my_xnrs -我管理的虚拟人
+						'type':'string',  
+						'index':'not_analyzed'
+					},	
+					'create_time':{
 						'type':'long'
 					},
-					'main_weibo_info':{ #典型微博信息
+					'content_recommend':{  # list: [text1,text2,text3,...]
 						'type':'string',
 						'index':'not_analyzed'
-					},
-					'event_influence':{
-						'type':'string',
-						'index':'not_analyzed'
-					},
+					},			
 					'validity':{   #预警有效性，有效1，无效-1
 						'type':'long'
 					},
@@ -266,18 +277,62 @@ def weibo_timing_warning_mappings():
 			}
 		}
 	}
-	if S_TYPE == 'test':
-		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + S_DATE_BCI
-	else:
-		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + NOW_DATE
-	if not es.indices.exists(index=weibo_timing_warning_index_name):
-		es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
+	for date in date_result:
+		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + date
+		if not es.indices.exists(index=weibo_timing_warning_index_name):
+			es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
+	
+	# if S_TYPE == 'test':
+	# 	weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + S_DATE_BCI
+	# else:
+	# 	weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + NOW_DATE
+	# if not es.indices.exists(index=weibo_timing_warning_index_name):
+	# 	es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
+		#print weibo_timing_warning_index_name
 
 
 
-if __name__ == '__main__':
-	#weibo_user_warning_mappings()
-	#weibo_event_warning_mappings()
+def lookup_date_info(today_datetime):
+    query_body={
+        'query':{
+        	'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'date_time':{'order':'asc'}}
+    }
+    try:
+        result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+        date_result=[]
+        for item in result:
+            #计算距离日期
+            date_time=item['_source']['date_time']
+            year=ts2yeartime(today_datetime)
+            warming_date=year+'-'+date_time
+            today_date=ts2datetime(today_datetime)
+            countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+            item['_source']['countdown_days']=countdown_num
+            if abs(countdown_num) < WARMING_DAY:
+                date_result.append(warming_date)
+            else:
+            	pass
+    except:
+        date_result=[]
+    #print 'date_result',date_result
+    return date_result
+
+
+
+if __name__ == '__main__':	
+	weibo_user_warning_mappings()
+	weibo_event_warning_mappings()
 	#weibo_speech_warning_mappings()
+
+	if S_TYPE == 'test':
+		today_datetime=datetime2ts(S_DATE_WARMING)
+	else:
+		today_datetime=int(time.time())
+	date_result=lookup_date_info(today_datetime)
+	weibo_timing_warning_mappings(date_result)
+
 
 
