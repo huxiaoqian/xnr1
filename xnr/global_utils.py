@@ -223,6 +223,8 @@ weibo_speech_warning_index_name = 'weibo_speech_warning'
 weibo_speech_warning_index_name_pre = 'weibo_speech_warning_'
 weibo_speech_warning_index_type = 'text'
 
+weibo_timing_warning_index_name_pre = 'weibo_time_warning_'
+weibo_timing_warning_index_type = 'text'
 
 # 语料库 -- 主题和日常
 weibo_xnr_corpus_index_name = 'weibo_corpus'
