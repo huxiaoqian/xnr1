@@ -4,7 +4,7 @@ import time
 from global_utils import flow_text_index_name_pre,group_message_index_name_pre,xnr_flow_text_index_name_pre,\
                         xnr_flow_text_index_type,facebook_flow_text_index_name_pre,\
                         facebook_count_index_name_pre,twitter_flow_text_index_name_pre,\
-                        twitter_count_index_name_pre
+                        twitter_count_index_name_pre,\
                         xnr_flow_text_index_type, wx_group_message_index_name_pre
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE
