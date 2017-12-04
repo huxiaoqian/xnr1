@@ -13,7 +13,8 @@ from xnr.global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 						weibo_authority_management_index_name,weibo_authority_management_index_type,\
 						weibo_account_management_index_name,weibo_account_management_index_type,\
 						qq_xnr_index_name,qq_xnr_index_type,\
-						xnr_map_index_name,xnr_map_index_type
+						xnr_map_index_name,xnr_map_index_type,qq_xnr_index_name,qq_xnr_index_type,\
+						weibo_feedback_group_index_name,weibo_feedback_group_index_type
 from xnr.parameter import MAX_VALUE,USER_XNR_NUM
 
 ##############################################################
@@ -576,7 +577,86 @@ def lookup_xnr_relation(origin_platform,origin_xnr_user_no):
         es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
         result=[]
         for item in es_result:
+            #qq群组
+            item['_source']['qq_groups']=lookup_qqxnr_group(item['_source']['qq_xnr_user_no'])
+            #微信群组
+            #item['_source']['weixin_groups']=lookup_weixinxnr_group(item['_source']['weixin_xnr_user_no'])
+            #微博群组
+            item['_source']['weibo_groups']=lookup_weiboxnr_group(item['_source']['weibo_xnr_user_no'])
+            #facebook群组
+            item['_source']['facebook_groups']=[]
+            #item['_source']['facebook_groups']=lookup_facebookxnr_group(item['_source']['facebook_xnr_user_no'])
+            #twitter群组
+            item['_source']['twitter_groups']=[]
+            #item['_source']['twitter_groups']=lookup_twitterxnr_group(item['_source']['twitter_xnr_user_no'])
             result.append(item['_source'])
     except:
         result=''
     return result 
+
+#qq群编号
+def lookup_qqxnr_group(xnr_user_no):
+    try:
+        qq_xnr_result=es.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+        qq_groups=[]
+        for item in qq_xnr_result['qq_groups']:
+            qq_groups_dict=dict()
+            qq_groups_dict['gid']=item
+            qq_groups_dict['gname']=''  
+            qq_groups.append(qq_groups_dict)
+    except:
+        qq_groups=[]
+    return qq_groups
+
+
+#微信群编号
+def lookup_weixinxnr_group(xnr_user_no):
+    grou_info=show_listening_groups(xnr_user_no)
+    idx = grou_info['wx_groups_id'] 
+    names = grou_info['wx_groups_nickname']
+    id_name = []
+    for i, _id in enumerate(idx):
+        id_name_dict = {}
+        id_name_dict['gid'] = idx[i]
+        id_name_dict['gname'] = names[i]
+        id_name.append(id_name_dict)
+    return id_name
+
+
+#查询微博虚拟人uid
+def lookup_weiboxnr_uid(xnr_user_no):
+	try:
+		xnr_result=es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+		xnr_uid=xnr_result['uid']
+	except:
+		xnr_uid=''
+	return xnr_uid
+
+
+#微博群组信息
+def lookup_weiboxnr_group(xnr_user_no):
+    #查询虚拟人uid
+    xnr_uid=lookup_weiboxnr_uid(xnr_user_no)
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'term':{'uid':xnr_uid}
+        		}
+        	}
+        },
+        'size':MAX_VALUE
+    }
+    
+    try:
+        group_result=es.search(index=weibo_feedback_group_index_name,doc_type=weibo_feedback_group_index_type,body=query_body)['hits']['hits']
+    #print 'group_result:',group_result
+        group_list=[]
+        for item in group_result:
+            group_dict=dict()
+            group_dict['gid']=item['_source']['gid']
+            group_dict['gname']=item['_source']['gname']
+            group_list.append(group_dict)
+    except:
+        group_list=[]
+    return group_list
