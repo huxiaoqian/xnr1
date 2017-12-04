@@ -37,12 +37,12 @@ class SinaOperateAPI:
         }
 
     def __getPostURL(self, url, post_data):
-        #print 'post_data:::',post_data
-        #print 'url:::',url
+        print 'post_data:::',post_data
+        print 'url:::',url
         try:
 
             data = urllib.urlencode(post_data).encode('utf-8')
-            #print 'data::::',data
+            print 'data::::',data
             request = urllib2.Request(url=url, data=data, headers=self._headers)
             response = urllib2.urlopen(request, timeout=90)
 
@@ -330,19 +330,19 @@ def execute():
     输入发布内容（和rank）
     :return:
     """
-    xnr = SinaLauncher('', '')
+    xnr = SinaLauncher('weiboxnr04@126.com', 'xnr123456')
     xnr.login()
 
     user = SinaOperateAPI(xnr.uid)
     # pics = user.request_image_url("['e:/tes33.gif', 'e:/ttest.jpg']")
     # user.pic_ids = ' '.join(pics).strip()
     # print user.pic_ids
-    user.text = 'comment wei撒打算bo 434 3'
-    user.r_mid = '4131527589733848'
+    user.text ='HHHHHHHHHHHH'
+    #user.r_mid = '4131527589733848'
     # user.rank = 0
     # if user.rank == 7:
     #     user.rankid = ''
-    user.publish()
+    print user.publish()
 
 
 if __name__ == '__main__':

@@ -125,10 +125,6 @@ def weibo_xnr_flow_text_mappings(index_name):
                         'sensitive':{
                             'type':'long'
                             },
-                        'sensitive_words_dict':{
-                            'type': 'string',
-                            'analyzer': 'my_analyzer'
-                            },
                         'retweeted':{
                             'type':'long'
                             }

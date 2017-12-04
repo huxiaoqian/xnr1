@@ -72,7 +72,7 @@ def wx_xnr_mappings():
                     'submitter':{
                         'type':'string',
                         'index':'not_analyzed'
-                    }     
+                    }
                 }
             }
         }
@@ -87,7 +87,7 @@ def wx_xnr_history_count_mappings():
             'number_of_replicas':0,
             'number_of_shards':5
         },
-        'mappings':{    
+        'mappings':{
             wx_xnr_history_count_index_type:{
                 'properties':{
                     'xnr_user_no':{
@@ -102,7 +102,7 @@ def wx_xnr_history_count_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'daily_post_num':{  
+                    'daily_post_num':{
                         'type':'long'
                     },
                     'total_post_num':{
@@ -126,7 +126,7 @@ def wx_xnr_history_be_at_mappings():
             'number_of_replicas':0,
             'number_of_shards':5
         },
-        'mappings':{    
+        'mappings':{
             wx_xnr_history_be_at_index_type:{
                 'properties':{
                     'xnr_user_no':{
@@ -141,7 +141,7 @@ def wx_xnr_history_be_at_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'daily_be_at_num':{  
+                    'daily_be_at_num':{
                         'type':'long'
                     },
                     'total_be_at_num':{
@@ -165,7 +165,7 @@ def wx_xnr_history_sensitive_mappings():
             'number_of_replicas':0,
             'number_of_shards':5
         },
-        'mappings':{    
+        'mappings':{
             qq_xnr_history_sensitive_index_type:{
                 'properties':{
                     'xnr_user_no':{
@@ -180,7 +180,7 @@ def wx_xnr_history_sensitive_mappings():
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'daily_sensitive_num':{  
+                    'daily_sensitive_num':{
                         'type':'long'
                     },
                     'total_sensitive_num':{
