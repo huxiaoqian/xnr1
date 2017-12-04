@@ -115,6 +115,8 @@ CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_
 
 TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
 
+PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
+
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
 

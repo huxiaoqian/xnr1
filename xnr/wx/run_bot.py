@@ -10,7 +10,7 @@ def run_bot(wxbot_id, wxbot_port, groups_list):
         bot.listen()
     except Exception,e:
         print e
-    
+
 if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'hi:p:g:')
