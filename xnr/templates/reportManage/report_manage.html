@@ -67,6 +67,24 @@
         border-radius: 5px;
         background: #0e2233;
     }
+
+
+    #start_1,#end_1,.sureTime{display: none;}
+    .sureTime {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    .sureTime:hover {
+        background: rgba(8,23,44,0.65);
+    }
+    .datetimepicker td, .datetimepicker th {
+        color: black;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -138,7 +156,7 @@
 
 {% block my_js %}
 <script>
-var loadingType = 'weibo';
+// var loadingType = 'weibo';
 
     judgment('7');
 </script>

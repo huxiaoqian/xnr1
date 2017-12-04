@@ -415,7 +415,7 @@ def create_user_log():
         #账户是否创建虚拟人
         xnr_number=create_xnr_number(user_account,start_time,end_time)
         if xnr_number > 0:
-            log_content_dict[u'创建虚拟人']=xnr_number
+            log_content_dict[u'创建微信虚拟人']=xnr_number
         else:
             pass
 

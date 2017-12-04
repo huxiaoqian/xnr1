@@ -200,6 +200,7 @@
 //==========登录一个微信虚拟人=========
     var $this_WX,$this_WXbot_id,$this_wx_id;
     function loginIN(_this, wxbot_id, wx_id,status) {
+        console.log('===登录用户===')
         $this_WX=_this;
         $this_WXbot_id=wxbot_id;
         $this_wx_id = wx_id;
@@ -512,16 +513,28 @@
                             if(data[i].login_status == "listening"){
                                 $('#QR_code').modal('hide');
                                 window.clearInterval(L_timer);
+                                // 添加成功之后提示。清空添加的输入框并收起
+                                $('#succee_fail #words').text('添加成功。');
+                                $('#succee_fail').modal('show');
                             }
                         }
                     }
                 }
             }, 1000)
-
+            // 二维码框关闭之后，显示提示框 。
             $('#QR_code').on('hidden.bs.modal', function (e) {
-                // 模态框关闭之后重新画表
-                window.clearInterval(L_timer);
-                public_ajax.call_request('GET','/wx_xnr_manage/show/',has_table_WX);
+                $('#succee_fail').on('hidden.bs.modal', function (e) {
+                    // 提示消息模态框关闭之后重新画表
+                    window.clearInterval(L_timer);
+                    public_ajax.call_request('GET','/wx_xnr_manage/show/',has_table_WX);
+                    // 清空添加的输入框并收起
+                    $('.QQoptions .wx_id').val('');
+                    $('.QQoptions .wxRemark').val('');
+                    $('.QQoptions .email').val('');
+                    $('.QQoptions .wxPower').val('');
+                    $('.addQQperson').slideUp(20);
+                    k=1;
+                })
             });
         }
     }

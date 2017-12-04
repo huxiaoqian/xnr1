@@ -5,6 +5,7 @@ from global_utils import flow_text_index_name_pre,group_message_index_name_pre,x
                         xnr_flow_text_index_type,facebook_flow_text_index_name_pre,\
                         facebook_count_index_name_pre,twitter_flow_text_index_name_pre,\
                         twitter_count_index_name_pre
+                        xnr_flow_text_index_type, wx_group_message_index_name_pre
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE
 
@@ -62,7 +63,7 @@ r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 def get_db_num(timestamp):
     date = ts2datetime(timestamp)
     date_ts = datetime2ts(date)
-    db_number = ((date_ts - r_beigin_ts) / (DAY*7)) % 2 + 1    
+    db_number = ((date_ts - r_beigin_ts) / (DAY*7)) % 2 + 1
     if S_TYPE == 'test':
         db_number = 1
     return db_number
@@ -77,6 +78,13 @@ def get_flow_text_index_list(date_range_end_ts):
         index_name_list.append(index_name)
 
     return index_name_list
+
+def get_day_flow_text_index_list(date_ts):
+    day_date=ts2datetime(date_ts)
+    index_name = flow_text_index_name_pre + day_date
+
+    return index_name
+
 
 def get_xnr_flow_text_index_list(date_range_end_ts):
     index_name_list = []
@@ -123,11 +131,11 @@ def get_xnr_flow_text_index_listname(index_name_pre,date_range_start_ts,date_ran
         index_name=index_name_pre+date_range_start_date
         index_name_list.append(index_name)
     return index_name_list
-    
+
 # use to search certain period of group message without the upper bound of days limit
 
 def get_groupmessage_index_list(startdate,enddate):
-    
+
     index_name_list = []
     days_num = (datetime2ts(enddate)-datetime2ts(startdate))/DAY
 
@@ -141,7 +149,7 @@ def get_groupmessage_index_list(startdate,enddate):
 
 
 def get_timeset_indexset_list(index_name_pre,startdate,enddate):
-    
+
     index_name_list = []
     days_num = (datetime2ts(enddate)-datetime2ts(startdate))/DAY
 
@@ -201,4 +209,13 @@ def get_twitter_count_index_list(date_range_end_ts):
         index_name = twitter_count_index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
     
+# use to search certain period of group message without the upper bound of days limit
+def get_wx_groupmessage_index_list(startdate,enddate):
+    index_name_list = []
+    days_num = (datetime2ts(enddate)-datetime2ts(startdate))/DAY
+    for i in range(0,(days_num+1)):
+        date_range_start_ts = datetime2ts(startdate) + i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        index_name = wx_group_message_index_name_pre + date_range_start_datetime
+        index_name_list.append(index_name)
     return index_name_list
