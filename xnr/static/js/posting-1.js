@@ -411,8 +411,16 @@ $('#sure_post').on('click',function () {
         }
     }
     if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
-    public_ajax.call_request('get',post_url_1,postYES)
+    public_ajax.call_request('get',post_url_1,postYES22)
 });
+function postYES22(data) {
+    var f='操作失败';
+    if (data[0]){
+        f='操作成功';
+    }
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
+}
 //群可见的情况
 var rankidList=[];
 function groupSure() {

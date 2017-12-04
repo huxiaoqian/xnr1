@@ -236,6 +236,33 @@
 <script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
+    <!---->
     $(function(){
 
         $.fn.fullpage({
@@ -276,14 +303,30 @@
     },function () {
         $(this).attr('src','/static/images/weiboload.png');
     }).on('click',function () {
-        window.location.href='/index/navigation/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=weibo';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigation/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.qq').hover(function () {
         $(this).attr('src','/static/images/clickQQ.png');
     },function () {
         $(this).attr('src','/static/images/QQload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationQQ/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=qq';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationQQ/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.wx').on('click',function () {
         window.location.href='/index/navigationWX/';
@@ -293,14 +336,30 @@
     },function () {
         $(this).attr('src','/static/images/facebookload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationFaceBook/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=facebook';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationFaceBook/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
     $('.twitter').hover(function () {
         $(this).attr('src','/static/images/twitterclick.png');
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        window.location.href = '/index/navigationTwitter/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $('#pormpt h4').text('跳转提示');
+        $('#pormpt p').text('准备跳转中...请稍后...');
+        $('#pormpt').modal('show');
+        setTimeout(function () {
+            window.location.href = '/index/navigationTwitter/';
+            $('#pormpt').modal('hide');
+        },1000);
     });
 
     //页面跳转
@@ -328,29 +387,38 @@
     });
 
     //虚拟人列表--更改为微信
-    var oneTrue=1;
+    var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
         url: "/wx_xnr_manage/show/",
         async: true,
         dataType: "json",
         success: function (data) {
-            console.log(data)
             var str='';
             $.each(data,function (index,item) {
-                var isChecked='';
-                var name;
+                var sameid=localStorage.getItem('sameXnr');
+                var name,isChecked='';
                 if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
                     name='无昵称';
                 }else {
                     name=item.wx_id;
                 }
-                if (oneTrue=='1'){
+                if (sameid==item.wxbot_id){
                     isChecked='checked';
+                    sameid=item.wxbot_id;
                     $('#xnrName').text(name+'（'+item.wxbot_id+'）').attr('title',name+'（'+item.wxbot_id+'）');
                     localStorage.setItem('userWX',encodeURI(item.wxbot_id));
                     localStorage.setItem('userWXRelName',encodeURI(item.wxbot_id));
                     localStorage.setItem('userWXName',encodeURI(item.wx_id));
+                    localStorage.setItem('sameXnr',encodeURI(item.wxbot_id));
+                }else if(oneTrue==1){
+                    isChecked='checked';
+                    sameid=item.wxbot_id;
+                    $('#xnrName').text(name+'（'+item.wxbot_id+'）').attr('title',name+'（'+item.wxbot_id+'）');
+                    localStorage.setItem('userWX',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXRelName',encodeURI(item.wxbot_id));
+                    localStorage.setItem('userWXName',encodeURI(item.wx_id));
+                    localStorage.setItem('sameXnr',encodeURI(item.wxbot_id));
                 };
                 str+=
                     '<label class="demo-label" title="'+name+'">'+
@@ -380,8 +448,18 @@
             localStorage.setItem('userWX',encodeURI(userWXID));
             localStorage.setItem('userWXRelName',encodeURI(userWXName));
             localStorage.setItem('userWXName',encodeURI(id_or_name));
+            sameID=userWXID;
             $('#xnrName').text(id_or_name+'（'+userWXID+'）').attr('title',id_or_name+'（'+userWXID+'）');
         }
     });
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){
+                sameID=data[0][k]
+                localStorage.setItem('sameXnr',sameID);
+            };
+        }
+    }
 </script>
 {% endblock %}

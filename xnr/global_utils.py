@@ -4,11 +4,15 @@ use to save table info in database
 '''
 import redis
 from elasticsearch import Elasticsearch
+from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
                           REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
-                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2
+                          REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
+                          REDIS_WX_HOST, REDIS_WX_PORT, \
+                          qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
+
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 #module1.2:config es table---index_name, doc_type
@@ -33,6 +37,13 @@ xnr_index_type = 'user'
 #use to save qq xnr info
 qq_xnr_index_name = 'qq_xnr'
 qq_xnr_index_type = 'user'
+#use to save wx xnr info
+wx_xnr_index_name = 'wx_xnr'
+wx_xnr_index_type = 'user'
+
+#use to save xnr_mapping info
+xnr_map_index_name='xnr_mapping'
+xnr_map_index_type='user'
 
 ## qq上报管理
 qq_report_management_index_name = 'qq_report_management'
@@ -42,6 +53,15 @@ qq_report_management_index_type = 'report'
 group_message_index_name_pre = 'group_message_'        #group_message_2017-06-24
 group_message_index_type = 'record'
 sent_group_message_index_name_pre = 'sent_group_message_'
+
+## wx上报管理
+wx_report_management_index_name = 'wx_report_management'
+wx_report_management_index_type = 'report'
+
+#use to save wx xnr group message
+wx_group_message_index_name_pre = 'wx_group_message_'        #wx_group_message_2017-06-24
+wx_group_message_index_type = 'record'
+wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
 # use to search flow text and bci 
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
@@ -69,6 +89,11 @@ update_userinfo_queue_name = 'update_userinfo'
 QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
 ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
 
+#wxxnr的一些数据的存放地址
+wx_xnr_data_path = 'xnr/wx/data'
+wx_xnr_qrcode_path = 'xnr/static/images/WX'
+WX_LOGIN_PATH = 'xnr/wx/run_bot.py'	#使用命令行开启run_bot()的subprocess的程序地址
+sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
 '''
 以下为微博相关定义
@@ -99,7 +124,7 @@ weibo_example_model_index_type = 'model'
 
 
 # use to publish tweet at future time
-weibo_xnr_timing_list_index_name = 'tweet_timing_list'			
+weibo_xnr_timing_list_index_name = 'tweet_timing_list'
 weibo_xnr_timing_list_index_type = 'timing_list'
 
 # use to retweet tweet at future time
@@ -181,7 +206,7 @@ weibo_private_white_uid_index_name = 'weibo_private_white_uid'
 weibo_private_white_uid_index_type = 'white_uid'
 
 
-# content recommendation & sub opinion 
+# content recommendation & sub opinion
 
 weibo_hot_keyword_task_index_name = 'recommend_subopinion_keywords_task'
 weibo_hot_keyword_task_index_type = 'keywords_task'
@@ -208,14 +233,19 @@ weibo_hidden_expression_index_type = 'hidden_expression'
 
 ## 预警
 weibo_user_warning_index_name = 'weibo_user_warning'
+weibo_user_warning_index_name_pre = 'weibo_user_warning_'
 weibo_user_warning_index_type = 'text'
 
 weibo_event_warning_index_name = 'weibo_event_warning'
+weibo_event_warning_index_name_pre = 'weibo_event_warning_'
 weibo_event_warning_index_type = 'text'
 
 weibo_speech_warning_index_name = 'weibo_speech_warning'
+weibo_speech_warning_index_name_pre = 'weibo_speech_warning_'
 weibo_speech_warning_index_type = 'text'
 
+weibo_timing_warning_index_name_pre = 'weibo_time_warning_'
+weibo_timing_warning_index_type = 'text'
 
 # 语料库 -- 主题和日常
 weibo_xnr_corpus_index_name = 'weibo_corpus'
@@ -244,6 +274,11 @@ qq_xnr_history_count_index_type = 'count'  # - 活跃
 qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
+## wx发言统计 
+wx_xnr_history_count_index_name = 'wx_history_count'
+wx_xnr_history_count_index_type = 'count'  # - 活跃
+wx_xnr_history_be_at_index_type = 'be_at'   # - 影响力
+wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 # facebook
 
@@ -293,6 +328,15 @@ facebook_user_index_type = 'user'
 # use to save influence
 fb_bci_index_name_pre = 'fb_bci_'
 fb_bci_index_type = 'bci'
+#预警
+facebook_user_warning_index_name_pre = 'facebook_user_warning_'
+facebook_user_warning_index_type = 'text'
+
+facebook_event_warning_index_name_pre = 'facebook_event_warning_'
+facebook_event_warning_index_type = 'text'
+
+facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
+facebook_speech_warning_index_type = 'text'
 
 
 # twitter
@@ -395,3 +439,7 @@ r_qq_group_set_pre = 'qq_group_set_'
 R_UNAME2ID_FT = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 fb_uname2id = 'fb_user'
 tw_uname2id = 'tw_user'
+#微信虚拟人相关
+r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
+qiniu = Auth(qiniu_access_key, qiniu_secret_key)
+

@@ -1,5 +1,6 @@
 //敏感消息
 var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
+console.log(senNews_url)
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
     var news=data.hits.hits;
@@ -71,6 +72,7 @@ function senNews(data) {
 var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
+    console.log(data)
     $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
         data:data,

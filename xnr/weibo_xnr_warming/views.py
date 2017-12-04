@@ -86,6 +86,7 @@ def ajax_get_hashtag():
 @mod.route('/show_date_warming/')
 def ajax_show_date_warming():
 	today_time=int(time.time())
+	# print '&&&&&&'
 	results=show_date_warming(today_time)
 	return json.dumps(results)
 

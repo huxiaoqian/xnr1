@@ -1,7 +1,99 @@
-var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
-public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+var reportDefaul_url;
+console.log(flagType)
+if(flagType == 3){//微信
+    //===============时间搜索添加11---21 ===============
+    var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
+        +'<label class="demo-label">'
+            +'<input class="demo-radio" type="radio" name="time1" value="0">'
+            +'<span class="demo-checkbox demo-radioInput"></span> 今天'
+        +'</label>'
+        +'<label class="demo-label">'
+            +'<input class="demo-radio" type="radio" name="time1" value="1">'
+            +'<span class="demo-checkbox demo-radioInput"></span> 昨天'
+        +'</label>'
+        +'<label class="demo-label">'
+            +'<input class="demo-radio" type="radio" name="time1" value="7" checked>'
+            +'<span class="demo-checkbox demo-radioInput"></span> 7天'
+        +'</label>'
+        +'<label class="demo-label">'
+           +'<input class="demo-radio" type="radio" name="time1" value="30">'
+            +'<span class="demo-checkbox demo-radioInput"></span> 30天'
+        +'</label>'
+        +'<label class="demo-label">'
+            +'<input class="demo-radio" type="radio" name="time1" value="mize">'
+            +'<span class="demo-checkbox demo-radioInput"></span> 自定义'
+        +'</label>'
+        +'<input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"'
+               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
+                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
+        +'<input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"'
+               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
+                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
+        +'<span id="sure" class="sureTime">确定</span>'
+    +'</div>';
+    $('#container .title').after(choosetimeStr)
+
+    // 时间选项
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.choosetime .demo-label input').on('click',function () {
+        var _val=$(this).val();
+        if (_val=='mize'){
+            $('#start_1').show();
+            $('#end_1').show();
+            $('.sureTime').show();
+        }else {
+            $('#start_1').hide();
+            $('#end_1').hide();
+            $('.sureTime').hide();
+            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
+            console.log(reportDefaul_url)
+            public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
+        }
+    });
+    // 确定时间搜索
+    $('.sureTime').on('click',function () {
+        var s=$('#start_1').val();
+        var d=$('#end_1').val();
+        if (s==''||d==''){
+            $('#pormpt p').text('请检查时间，不能为空。');
+            $('#pormpt').modal('show');
+        }else {
+            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
+            console.log(reportDefaul_url)
+        }
+    });
+
+    weiboORqq('WX');
+    console.log(ID_Num);
+    reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+    console.log('最近7天的上报记录----'+reportDefaul_url)
+    public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
+}else if(flagType == 1){//微博
+    weiboORqq('weibo');
+    console.log(ID_Num);
+    reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
+    public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+}else if(flagType == 2){//QQ
+    weiboORqq('QQ');
+    console.log(ID_Num);
+    var start_ts=getDaysBefore(7);
+    var end_ts= todayTimetamp();
+    reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
+    console.log(reportDefaul_url)
+    public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+}
+
+// var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
+// public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 var currentData={},wordCurrentData={},currentDataPrival={};
 function reportDefaul(data) {
+    console.log(data)
     $.each(data,function (index,item) {
         currentDataPrival[item.report_time]=item;
     });
@@ -79,6 +171,155 @@ function reportDefaul(data) {
                     }else {
                         nameuid = row.event_name;
                     };
+                    if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
+                        time = '未知';
+                    }else {
+                        time = getLocalTime(row.report_time);
+                    };
+                    if (row.report_type==''||row.report_type=='null'||row.report_type=='unknown'){
+                        report_type = '暂无';
+                    }else {
+                        report_type = row.report_type;
+                    };
+                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
+                        xnr = '暂无';
+                    }else {
+                        xnr = row.xnr_user_no;
+                    }
+                    var rel_str=
+                        '<div class="post_center-every" style="margin: 10px auto 0;text-align: left;">'+
+                        '        <div class="user_center">'+
+                        '            <div style="margin: 10px 0;">'+
+                        '                <label class="demo-label">'+
+                        '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" value="'+row.report_time+'" onclick="chooseNo(this)">'+
+                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        '                </label>'+
+                        '                <img src="/static/images/post-6.png" class="center_icon">'+
+                        '                <a class="ID" style="display: none;">'+row.report_time+'</a>'+
+                        '                <a class="center_1">上报名称：'+nameuid+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">上报时间：'+time+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">上报类型：'+report_type+'</a>&nbsp;&nbsp;'+
+                        '                <a class="center_1">虚拟人：'+xnr+'</a>'+
+                        '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
+                        '            </div>'+
+                        '           <div class="weiboContent">'+str+'</div>'+
+                        '        </div>'+
+                        '    </div>';
+                    return rel_str;
+                }
+            },
+        ],
+        onPageChange:function (number, size) {
+            var ft=$('.filesList .everyCopy');
+            for(var a=0;a<ft.length;a++){
+                var b=$(ft[a]).find('i').attr('pointIds');
+                var tt=$("#person input[type='checkbox'][value='"+b+"']");
+                $(tt[0]).prop('checked', true);
+                $(tt[0]).attr('YesNo','1');
+            }
+        }
+    });
+    $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+}
+// 复制了一份上面的函数给微信
+function WXreportDefaul(data) {
+    console.log(data)
+    $.each(data,function (index,item) {
+        currentDataPrival[item.report_time]=item;
+    });
+    $('#person').bootstrapTable('load', data);
+    $('#person').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 3,//单页记录数
+        pageList: [15,25,35],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    /*var artical=row.report_content.weibo_list,str='';
+                    $.each(artical,function (index,item) {
+                        var text,time;
+                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                            text='暂无内容';
+                        }else {
+                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                var s=item.text;
+                                var keywords=item.sensitive_words_string.split('&');
+                                for (var f=0;f<keywords.length;f++){
+                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                }
+                                text=s;
+                            }else {
+                                text=item.text;
+                            };
+                        };
+                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
+                            time='未知';
+                        }else {
+                            time=getLocalTime(item.timestamp);
+                        };
+                        var sye_1='',sye_2='';
+                        if (Number(item.sensitive) < 50){
+                            sye_1='border-color: transparent transparent #131313';
+                            sye_2='color: yellow';
+                        }
+                        str+=
+                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                            // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                            '   <span class="center_2">'+text+'</span>'+
+                            // '   <div class="center_3">'+
+                            // '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                            // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                            // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                            // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                            // '    </div>'+
+                            '</div>'
+                    });
+                    */
+                    var text = row.report_content;
+                    var str =
+                        '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                        // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                        // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                        // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                        '   <span class="center_2">'+text+'</span>'+
+                        // '   <div class="center_3">'+
+                        // '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                        // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                        // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                        // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        // '    </div>'+
+                        '</div>';
+
+                    var nameuid,time,report_type,xnr;
+                    // if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
+                    //     nameuid = row.uid;
+                    // }else {
+                    //     nameuid = row.event_name;
+                    // };
+                    nameuid='未知';//上报名称暂时设为未知。。。11-17
+
+
                     if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
                         time = '未知';
                     }else {
