@@ -64,28 +64,12 @@ class MyBot(Bot):
         if self.init_groups_list:
             for group_puid in self.init_groups_list.split(','):
                 self.groups_list.append(group_puid)
+        
         #登陆
         print 'starting %s ...' % self.wxbot_id
-        print '-----------------------------'
-        print self.cache_path
-        print self.console_qr
-        print self.qr_path
-        # print self.qr_callback
-        # print self.login_callback
-        # print self.if_logout_callback
-        print '=============================='
-
-        def login_c():
-            pass
-        bot = Bot(login_callback=login_c())
-
-
-
-        
+        print 'before login'
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
-        print '?????'
-
-
+        print 'after login'	#如果此条没有打印出来，多半是该账号网页版被封了……
 
         #启用puid
         if self.if_enable_puid:
