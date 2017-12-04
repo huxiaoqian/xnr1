@@ -439,6 +439,13 @@ r_qq_group_set_pre = 'qq_group_set_'
 R_UNAME2ID_FT = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 fb_uname2id = 'fb_user'
 tw_uname2id = 'tw_user'
+
+# r_retweet 转发网络
+R_retweet = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=2)
+fb_retweet_dict = {'1':'fb_retweet_1','2':'fb_retweet_2'}
+tw_retweet_dict = {'1':'tw_retweet_1','2':'tw_retweet_2'}
+
+
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
