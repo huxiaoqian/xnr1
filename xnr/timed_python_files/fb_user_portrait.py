@@ -43,16 +43,34 @@ def load_fb_flow_text(fb_flow_text_index_list, uid_list):
         'size': MAX_SEARCH_SIZE,
         "sort": {"timestamp": {"order": "desc"}},
     }
-    results = []
+    fb_flow_text = {}
     for index_name in fb_flow_text_index_list:
         try:
             search_results = es.search(index=index_name, doc_type=facebook_flow_text_index_type, body=fb_flow_text_query_body)['hits']['hits']
             for item in search_results:
-                pass
+                content = item['_source']
+                uid = content['uid']
+                if not uid in fb_flow_text:
+                    fb_flow_text[uid] = {
+                        'keywords_dict': {},
+                        
+                    }
+
+                fb_flow_text[content['uid']] = {
+                    'uname': user['username'],
+                }
 
         except Exception,e:
             print e
-    return results
+    return fb_flow_text
+
+def merge_dict(x, y):
+    for k, v in y.items():
+        if k in x.keys():
+            x[k] += v
+        else:
+            x[k] = v
+    return x
 
 def compute_attribute():
     pass
