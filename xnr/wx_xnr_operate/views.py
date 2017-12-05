@@ -33,7 +33,7 @@ def load_groups():
     return None 
 
 #默认加载最近*天的数据
-@mod.route('/searchbygrouppuid/')   
+@mod.route('/searchbygrouppuid/')
 def search_by_group_puid():
     wxbot_id = request.args.get('wxbot_id', '')
     group_puid = request.args.get('group_puid', '')
