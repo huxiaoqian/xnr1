@@ -439,9 +439,9 @@ def twitter_feedback_fans_mappings():  ## 粉丝提醒及回粉
 		}
 	}
 
-	current_time = time.time() - 24*3600
-	twitter_feedback_fans_index_name = twitter_feedback_fans_index_name_pre + ts2datetime(current_time)
-
+	#current_time = time.time() - 24*3600
+	#twitter_feedback_fans_index_name = twitter_feedback_fans_index_name_pre + ts2datetime(current_time)
+	twitter_feedback_fans_index_name = 'twitter_feedback_fans'
 	if not es.indices.exists(index=twitter_feedback_fans_index_name):
 		es.indices.create(index=twitter_feedback_fans_index_name,body=index_info,ignore=400)
 
@@ -526,9 +526,9 @@ def twitter_feedback_follow_mappings():  ## 粉丝提醒及回粉
 		}
 	}
 
-	current_time = time.time() -24*3600
-	twitter_feedback_follow_index_name = twitter_feedback_follow_index_name_pre + ts2datetime(current_time)
-
+	#current_time = time.time() -24*3600
+	#twitter_feedback_follow_index_name = twitter_feedback_follow_index_name_pre + ts2datetime(current_time)
+	twitter_feedback_follow_index_name = 'twitter_feedback_follow'
 	if not es.indices.exists(index=twitter_feedback_follow_index_name):
 		es.indices.create(index=twitter_feedback_follow_index_name,body=index_info,ignore=400)
 
