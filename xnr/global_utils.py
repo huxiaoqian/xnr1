@@ -290,6 +290,8 @@ facebook_event_warning_index_type = 'text'
 facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
 facebook_speech_warning_index_type = 'text'
 
+facebook_timing_warning_index_name_pre = 'facebook_time_warning_'
+facebook_timing_warning_index_type = 'text'
 
 # twitter
 #use to save feedback info
