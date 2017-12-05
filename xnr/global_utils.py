@@ -444,8 +444,15 @@ tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
 R_retweet = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=2)
-fb_retweet_dict = {'1':'fb_retweet_1','2':'fb_retweet_2'}
-tw_retweet_dict = {'1':'tw_retweet_1','2':'tw_retweet_2'}
+
+fb_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=3)
+fb_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=4)
+
+tw_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=5)
+tw_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=6)
+
+fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
+tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
 
 #微信虚拟人相关
