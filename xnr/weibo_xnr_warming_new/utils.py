@@ -13,7 +13,8 @@ from xnr.global_utils import es_xnr,weibo_user_warning_index_name_pre,weibo_user
                              weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
                              weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
-                             weibo_date_remind_index_name,weibo_date_remind_index_type
+                             weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                             weibo_event_warning_index_name_pre,weibo_event_warning_index_type
 
 
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
@@ -232,8 +233,8 @@ def show_personnal_warming(xnr_user_no,start_time,end_time):
         start_time = end_time - test_time_gap
         end_datetime = datetime2ts(ts2datetime(end_time))
         start_datetime = datetime2ts(ts2datetime(start_time))
-        print ts2datetime(end_time),ts2datetime(start_time)
-        print end_time,start_time
+        #print ts2datetime(end_time),ts2datetime(start_time)
+        #print end_time,start_time
     else:
         now_time = int(time.time())
         today_datetime = datetime2ts(ts2datetime(now_time))
@@ -406,8 +407,10 @@ def lookup_date_info(account_name,start_time,end_time,today_datetime):
         item['_source']['countdown_num']=(datetime2ts(warming_date)-today_datetime)/DAY 
 
         keywords=item['_source']['keywords']
-
+       # print date_time
+       #print start_tempdate_time,start_time,end_time,end_tempdate_time
         if (start_tempdate_time >= start_time and start_tempdate_time <= end_time) or (end_tempdate_time >= start_time and end_tempdate_time <= end_time):
+            #print 'aaaa'
             if item['_source']['create_type'] == 'all_xnrs':
                 item['_source']['weibo_date_warming_content']=lookup_weibo_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
                 date_result.append(item['_source'])
@@ -514,13 +517,8 @@ def show_date_warming(account_name,start_time,end_time):
         start_datetime = datetime2ts(ts2datetime(start_time))
 
     result=lookup_date_info(account_name,start_time,end_time,today_datetime)
+    #print 'result',result
     return result
-
-
-
-
-
-
 
 
 # def lookup_date_history(account_name,start_time,end_time):
@@ -565,3 +563,86 @@ def show_date_warming(account_name,start_time,end_time):
 #             else:
 #                 pass    
 #     return date_result
+
+
+
+###################################################################
+###################         event warming        ##################
+###################################################################
+###查询历史事件预警信息
+def lookup_history_event_warming(xnr_user_no,start_time,end_time):
+    query_body={
+       'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no}},
+                            {'range':{
+                                'timestamp':{
+                                    'gte':start_time,
+                                    'lte':end_time
+                                }
+                            }}
+                        ]
+                    }
+                }
+            }
+        },
+        'sort':{'user_sensitive':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
+    }
+
+    event_warming_list=get_xnr_warming_index_listname(weibo_event_warning_index_name_pre,start_time,end_time)
+
+    try:
+        temp_results=es_xnr.search(index=event_warming_list,doc_type=weibo_event_warning_index_type,body=query_body)['hits']['hits']
+        results=[]
+        for item in temp_results:
+            results.append(item['_source'])
+        results.sort(key=lambda k:(k.get('event_influence',0)),reverse=True)
+    except:
+        results=[]
+    #print results
+    return results  
+
+#今天的时间涌现预警
+#create_event_warning(xnr_user_no,now_time,write_mark=False)
+
+def show_event_warming(xnr_user_no,start_time,end_time):
+    if S_TYPE == 'test':
+        test_today_date = S_DATE_EVENT_WARMING
+        test_time_gap = end_time - start_time
+        today_datetime = datetime2ts(test_today_date)
+        end_time = today_datetime
+        start_time = end_time - test_time_gap
+        end_datetime = datetime2ts(ts2datetime(end_time))
+        start_datetime = datetime2ts(ts2datetime(start_time))
+    else:
+        now_time = int(time.time())
+        today_datetime = datetime2ts(ts2datetime(now_time))
+        end_datetime = datetime2ts(ts2datetime(end_time))
+        start_datetime = datetime2ts(ts2datetime(start_time))
+
+    event_warming=[]
+    if today_datetime > end_datetime :
+        #print 'aaaa'
+        event_warming = lookup_history_event_warming(xnr_user_no,start_time,end_time)
+    else:
+        if end_datetime == start_datetime:
+            #print 'bbbbb'
+            event_warming = create_event_warning(xnr_user_no,end_time,write_mark=False)
+        else:
+            #print 'cccc'
+            today_event_warming = create_event_warning(xnr_user_no,end_time,write_mark=False)
+            history_event_warming = lookup_history_event_warming(xnr_user_no,start_time,today_datetime)
+            history_event_warming.extend(today_event_warming)
+            event_warming = history_event_warming
+
+    if event_warming:
+        event_warming.sort(key=lambda k:(k.get('event_influence',0)),reverse=True)
+    else:
+        pass
+
+    return event_warming    
+
