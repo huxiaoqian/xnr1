@@ -19,12 +19,16 @@ QQ_S_DATE_ASSESSMENT = '2017-09-28'
 QQ_GROUP_MESSAGE_START_DATE = '2017-08-23'
 QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-09-28'
 
+S_DATE_FB = '2017-10-25'
+S_DATE_TW = '2017-10-25'
 FACEBOOK_FLOW_START_DATE='2017-09-10'
+
+R_BEGIN_TIME = '2017-07-07'
 
 XNR_CENTER_DATE_TIME=int(time.time())      #当前时间
 
 
-PATH_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+PATH_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 #config es
 #config xnr user info
@@ -67,3 +71,20 @@ REDIS_CLUSTER_PORT_FLOW3 = '6379'
 
 REDIS_HOST_SENSITIVE = '219.224.134.212' #'10.128.55.68'
 REDIS_PORT_SENSITIVE = '6381' #'6379'
+
+#wx redis
+REDIS_WX_PORT = 6660
+REDIS_WX_HOST = '219.224.134.213'
+
+#使用七牛来存储捕获到的图片
+qiniu_access_key = "2QHQTgGYH8Ow3dy1jpuSKLAlTo-ZkRav1ty2Nok8"
+qiniu_secret_key = "Q91z6hnj5H0LaRkbAN8IPdc8dypdAQ_n21S8tEcu"
+qiniu_bucket_name = "publicbucket"
+qiniu_bucket_domain = "ovorc2c4c.bkt.clouddn.com"
+
+#wx
+WX_S_DATE = '2017-10-25'
+WX_S_DATE_NEW = '2017-10-25'
+WX_S_DATE_ASSESSMENT = '2017-10-25'
+WX_GROUP_MESSAGE_START_DATE = '2017-10-25'
+WX_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-10-25'

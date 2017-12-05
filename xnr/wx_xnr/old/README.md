@@ -1,2 +1,0 @@
-# wxpy
-注意xnr_data目录下保存着虚拟人的puid文件，如果需要更改程序位置，请将puid文件一起移动，并保证相应程序中enable_puid(puid_path)中的puid_path是puid文件的位置。
