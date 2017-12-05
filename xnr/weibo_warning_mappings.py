@@ -323,7 +323,7 @@ def lookup_date_info(today_datetime):
 
 
 if __name__ == '__main__':	
-	weibo_user_warning_mappings()
+	#weibo_user_warning_mappings()
 	weibo_event_warning_mappings()
 	#weibo_speech_warning_mappings()
 
@@ -332,7 +332,7 @@ if __name__ == '__main__':
 	else:
 		today_datetime=int(time.time())
 	date_result=lookup_date_info(today_datetime)
-	weibo_timing_warning_mappings(date_result)
+	#weibo_timing_warning_mappings(date_result)
 
 
 
