@@ -15,7 +15,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_type
 from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.time_utils import get_flow_text_index_list,get_xnr_flow_text_index_list,get_xnr_flow_text_index_listname
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY,WARMING_DAY
-from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING
+from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING,S_DATE_WARMING
 
 ###################################################################
 ###################       personal warming       ##################
@@ -234,7 +234,7 @@ def addto_speech_warming(xnr_user_no,speech_info):
 ###################         event warming        ##################
 ###################################################################
 
-def get_hashtag():
+def get_hashtag(now_time):
 
     uid_list = []
     hashtag_list = {}
@@ -246,9 +246,11 @@ def get_hashtag():
 
     for uid in uid_list:
         if S_TYPE == 'test':
-            hashtag = r_cluster.hget('hashtag_'+str(datetime2ts(S_DATE)+7*DAY),uid)
+            hashtag = r_cluster.hget('hashtag_' + str(datetime2ts(S_DATE_WARMING)),uid)
+            #hashtag = r_cluster.hget('hashtag_'+str(datetime2ts(S_DATE)+7*DAY),uid)
         else:
-            hashtag = r_cluster.hget('hashtag_'+str((time.time()-DAY)),uid)
+            hashtag = r_cluster.hget('hashtag_' + str(now_time),uid)
+            #hashtag = r_cluster.hget('hashtag_'+str((time.time()-DAY)),uid)
 
         if hashtag != None:
             hashtag = hashtag.encode('utf8')
