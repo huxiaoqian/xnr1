@@ -63,7 +63,7 @@ wx_group_message_index_name_pre = 'wx_group_message_'        #wx_group_message_2
 wx_group_message_index_type = 'record'
 wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
-# use to search flow text and bci 
+# use to search flow text and bci
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
@@ -76,6 +76,18 @@ es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
+
+#fb user portrait
+# es_fb_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_fb_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+fb_portrait_index_name = 'fb_user_portrait'
+fb_portrait_index_type = 'user'
+
+#tw user portrait
+# es_tw_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_tw_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+tw_portrait_index_name = 'tw_user_portrait'
+tw_portrait_index_type = 'user'
 
 #use to identify the qq document task redis list
 qq_document_task_name = 'qq_document'
@@ -92,7 +104,7 @@ ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
 wx_xnr_qrcode_path = 'xnr/static/images/WX'
-WX_LOGIN_PATH = 'xnr/wx/run_bot.py'	#使用命令行开启run_bot()的subprocess的程序地址
+WX_LOGIN_PATH = 'xnr/wx/run_bot.py' #使用命令行开启run_bot()的subprocess的程序地址
 sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
 '''
@@ -385,8 +397,15 @@ twitter_feedback_follow_index_type = 'text'
 twitter_flow_text_index_name_pre = 'twitter_flow_text_'
 twitter_flow_text_index_type = 'text'
 
+
 twitter_count_index_name_pre = 'twitter_count_'
 twitter_count_index_type = 'text'
+
+
+
+twitter_count_index_name_pre = 'twitter_count_'
+twitter_count_index_type = 'text'
+
 
 twitter_user_index_name = 'twitter_user'
 twitter_user_index_type = 'user'
