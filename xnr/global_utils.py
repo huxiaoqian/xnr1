@@ -63,7 +63,7 @@ wx_group_message_index_name_pre = 'wx_group_message_'        #wx_group_message_2
 wx_group_message_index_type = 'record'
 wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
-# use to search flow text and bci 
+# use to search flow text and bci
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
@@ -397,8 +397,15 @@ twitter_feedback_follow_index_type = 'text'
 twitter_flow_text_index_name_pre = 'twitter_flow_text_'
 twitter_flow_text_index_type = 'text'
 
+
 twitter_count_index_name_pre = 'twitter_count_'
 twitter_count_index_type = 'text'
+
+
+
+twitter_count_index_name_pre = 'twitter_count_'
+twitter_count_index_type = 'text'
+
 
 twitter_user_index_name = 'twitter_user'
 twitter_user_index_type = 'user'
