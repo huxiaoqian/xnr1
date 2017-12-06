@@ -31,7 +31,7 @@ def com_p(word_list,domain_dict,domain_count,len_dict,total):
     p = 0
     test_word = set(word_list.keys())
     train_word = set(domain_dict.keys())
-    c_set = test_word & train_word
+    c_set = test_word & train_word  
     p = sum([float(domain_dict[k]*word_list[k])/float(domain_count) for k in c_set])
 
     return p
@@ -44,7 +44,7 @@ def load_weibo(uid_weibo):
         domain_p = TOPIC_DICT
         for d_k in domain_p.keys():
             domain_p[d_k] = com_p(v,DOMAIN_DICT[d_k],DOMAIN_COUNT[d_k],LEN_DICT[d_k],TOTAL)#计算文档属于每一个类的概率
-            end_time = time.time()
+            end_time = time.time()        
         result_data[k] = domain_p
         p_data[k] = rank_result(domain_p)
 

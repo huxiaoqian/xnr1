@@ -119,28 +119,62 @@ def load_fb_user_data(fb_user_baseinfo, fb_flow_text):
         }
     return uid_list, users_fb_text, users_data
 
-def compute_attribute(uid_list, users_fb_text, users_data):
+def compute_domain(users_data):
     '''
-    #用户话题分类
-    输出数据示例：字典
+    ###输入数据：
+    user_data用户数据字典：{'uid':{'bio_str':bio_string,'category':category,'number_of_text':number of text}...}
+    其中：
+    bio_str:Facebook用户背景信息中的quotes、bio、about、description，用'_'链接。注意：有部分内容是英文，需要转换成中文
+    category:Facebook用户背景信息中的category
+    number_of_text:用户最近7天发帖数量
+    ###输出数据：
+    user_label用户身份字典:{'uid':label,'uid':label...}
+    '''
+    user_label = domain_main(users_data)
+    return user_label
+
+def compute_topic(users_fb_text, users_data):
+    '''
+    ###输入数据示例：
+    uidlist:uid列表（[uid1,uid2,uid3,...]）
+    uid_weibo:分词之后的词频字典（{uid1:{'key1':f1,'key2':f2...}...}）
+    ###输出数据示例：字典
     1、用户18个话题的分布：
     {uid1:{'art':0.1,'social':0.2...}...}
     2、用户关注较多的话题（最多有3个）：
     {uid1:['art','social','media']...}
     '''
-    result_data, uid_topic = topic_classfiy(uid_list, users_fb_text)
+    #转换编码格式
+    users_fb_text_encode = {}
+    for key, val in users_fb_text.items():
+        key = key.encode('utf8')
+        users_fb_text_encode[key] = {}
+        for k, v in val.items():
+            k = k.encode('utf8')
+            users_fb_text_encode[key][k] = v
+    topic_result_data, uid_topic = topic_classfiy(uid_list, users_fb_text_encode)
+    return topic_result_data, uid_topic
 
+def compute_attribute(uid_list, users_fb_text, users_data):
+    user_label = compute_domain(users_data)
+    topic_result_data, uid_topic = compute_topic(users_fb_text, users_data)
+    
+
+    return topic_result_data, uid_topic, user_label
+
+def save_compute_result(result_data, uid_topic, user_label):
+    print 'result_data: '
+    print result_data
+    print 'uid_topic'
+    print uid_topic
+    print 'user_label'
+    print user_label
     '''
-    #类别标签
-    输出数据：
-    user_label用户身份字典:{'uid':label,'uid':label...}
+    注意重复用户
+    记录id用uid
     '''
-    user_label = domain_main(users_data)
 
-    return result_data, uid_topic, user_label
 
-def save_compute_result():
-    pass
 
 def main(type='RT'):
     if type == 'test':
@@ -153,10 +187,7 @@ def main(type='RT'):
     fb_flow_text = load_fb_flow_text(fb_flow_text_index_list, fb_user_baseinfo.keys())
     uid_list, users_fb_text, users_data = load_fb_user_data(fb_user_baseinfo, fb_flow_text)
     result_data, uid_topic, user_label = compute_attribute(uid_list, users_fb_text, users_data)
-    print result_data
-    print uid_topic
-    print user_label
-    save_compute_result()
+    save_compute_result(result_data, uid_topic, user_label)
 
 if __name__ == '__main__':
     main('test')
