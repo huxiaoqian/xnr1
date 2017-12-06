@@ -437,18 +437,18 @@ def facebook_feedback_friends_mappings():  ## 粉丝提醒及回粉
 		}
 	}
 
-	#current_time = time.time()
-	#facebook_feedback_friends_index_name = facebook_feedback_friends_index_name_pre + ts2datetime(current_time)
-	facebook_feedback_friends_index_name = 'facebook_feedback_friends'
+	current_time = time.time()
+	facebook_feedback_friends_index_name = facebook_feedback_friends_index_name_pre + ts2datetime(current_time)
+
 	if not es.indices.exists(index=facebook_feedback_friends_index_name):
 		es.indices.create(index=facebook_feedback_friends_index_name,body=index_info,ignore=400)
 
 
 if __name__ == '__main__':
 	
-	#facebook_feedback_like_mappings()
-	#facebook_feedback_retweet_mappings()
-	#facebook_feedback_at_mappings()
-	#facebook_feedback_comment_mappings()
-	#facebook_feedback_private_mappings()
+	facebook_feedback_like_mappings()
+	facebook_feedback_retweet_mappings()
+	facebook_feedback_at_mappings()
+	facebook_feedback_comment_mappings()
+	facebook_feedback_private_mappings()
 	facebook_feedback_friends_mappings()

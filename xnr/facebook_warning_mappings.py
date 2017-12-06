@@ -133,7 +133,7 @@ def facebook_speech_warning_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'content_type':{  # unfollow - 未关注，follow - 已关注
+					'content_type':{  # friends - 好友，unfriends - 非好友
 						'type':'string',
 						'index':'not_analyzed'
 					},					
