@@ -18,6 +18,7 @@ from test_topic import topic_classfiy
 sys.path.append(FB_DOMAIN_ABS_PATH)
 from domain_classify import domain_main
 
+
 def load_fb_user_baseinfo():
     fb_user = {}
     # fb_user_query_body = {'size': MAX_SEARCH_SIZE}
