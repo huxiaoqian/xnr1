@@ -6,7 +6,6 @@ var time=Date.parse(new Date());
 var WXgroup_url='/wx_xnr_operate/loadgroups/?wxbot_id='+wxbot_id;
 public_ajax.call_request('get',WXgroup_url,WXgroup);
 function WXgroup(data) {
-    console.log(data)
     var str = '',poi=0;
     for (var d in data){
         var ched='';
