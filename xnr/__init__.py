@@ -29,7 +29,16 @@ from xnr.qq_xnr_assessment.views import mod as qqxnrassessmentModule
 from xnr.qq_xnr_monitor.views import mod as qqxnrmonitorModule
 from xnr.qq_xnr_report_manage.views import mod as qqxnrreportmanageModule
 from xnr.qq_xnr_warming.views import mod as qqxnrwarmingModule
+
+from xnr.wx_xnr_manage.views import mod as wxxnrmanageModule
+from xnr.wx_xnr_operate.views import mod as wxxnroperateModule
+from xnr.wx_xnr_monitor.views import mod as wxxnrmonitorModule
+from xnr.wx_xnr_assessment.views import mod as wxxnrassessmentModule
+from xnr.wx_xnr_report_manage.views import mod as wxxnrreportmanageModule
+from xnr.wx_xnr_warning.views import mod as wxxnrwarningModule
+
 from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
+
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
 #from flask.ext.security import SQLAlchemyUserDatastore
@@ -37,11 +46,7 @@ from flask_security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
 from xnr.jinja import gender, tsfmt, Int2string, gender_text, user_email, user_location, user_birth, user_vertify, weibo_source
 
-from xnr.wx_xnr.wx_xnr_manage.views import mod as wxxnrmanageModule
-from xnr.wx_xnr.wx_xnr_operate.views import mod as wxxnroperateModule
-from xnr.wx_xnr.wx_xnr_monitor.views import mod as wxxnrmonitorModule
-from xnr.wx_xnr.wx_xnr_assessment.views import mod as wxxnrassessmentModule
-from xnr.wx_xnr.wx_xnr_report_manage.views import mod as wxxnrreportmanageModule
+
 
 def create_app():
     app = Flask(__name__)
@@ -51,12 +56,6 @@ def create_app():
 
     # Create modules
     #
-    app.register_blueprint(wxxnrmanageModule)
-    app.register_blueprint(wxxnroperateModule)
-    app.register_blueprint(wxxnrmonitorModule)
-    app.register_blueprint(wxxnrassessmentModule)
-    app.register_blueprint(wxxnrreportmanageModule)
-
     app.register_blueprint(indexModule)
     app.register_blueprint(controlModule)
     app.register_blueprint(personalCenterModule)
@@ -83,6 +82,12 @@ def create_app():
     app.register_blueprint(qqxnrmonitorModule)
     app.register_blueprint(qqxnrreportmanageModule)
     app.register_blueprint(qqxnrwarmingModule)
+    app.register_blueprint(wxxnrmanageModule)
+    app.register_blueprint(wxxnroperateModule)
+    app.register_blueprint(wxxnrmonitorModule)
+    app.register_blueprint(wxxnrassessmentModule)
+    app.register_blueprint(wxxnrreportmanageModule)
+    app.register_blueprint(wxxnrwarningModule)
     # the debug toolbar is only enabled in debug mode
 
     app.register_blueprint(facebookxnrwarningModule)

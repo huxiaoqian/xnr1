@@ -2,7 +2,7 @@
 * @Author: Marte
 * @Date:   2017-10-26 11:22:02
 * @Last Modified by:   Marte
-* @Last Modified time: 2017-11-17 10:35:36
+* @Last Modified time: 2017-11-29 11:23:31
 */
 
 console.log('===微信预警监控页面js===')
@@ -67,13 +67,15 @@ function senNews(data) {
                         // '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.group_id+'</b><span>）</span>' +
                         '               <b class="name">'+name+'</b>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
-                        '               <span class="joinWord" onclick="joinWord(this)" tp="content" speaker_id='+row._source.speaker_id+' sensitive_value='+row._source.sensitive_value+' sensitive_words_string='+row._source.sensitive_words_string+' text='+row._source.text+' speaker_nickname='+row._source.speaker_nickname+' timestamp='+row._source.timestamp+' group_puid='+row._source.group_puid+'>上报</span>'+
+                        '               <span class="joinWord" onclick="joinWord(this)" tp="content" speaker_id='+row._source.speaker_id+' sensitive_value='+row._source.sensitive_value+' sensitive_words_string='+row._source.sensitive_words_string+
+                        ' text="'+row._source.text+'" speaker_nickname='+row._source.speaker_name+' timestamp='+row._source.timestamp+' group_puid='+row._source.group_id+'>上报</span>'+
                         '           </a>'+
                         '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b><span>'+txt+'</span></div>'+
                         '       </div>'+
                         '   </div>'+
                         '</div>';
                     return str;
+
                 }
             },
         ],
@@ -292,15 +294,17 @@ function joinWord(_this) {
     var qq_1=($(_this).parents('.center_1').find('.QQnum').text())||($(_this).prev().text());//群id
     var qq_2=($(_this).parents('.center_1').next('.center_2').find('span').text())||($(_this).parents('.center_rel').find('qq-2').text());//内容
     var speaker_id = $(_this).attr('speaker_id');
-    var sensitive_value = $(_this).attr('sensitive_value');
+    var sensitive_value = Number($(_this).attr('sensitive_value'));
     var sensitive_words_string = $(_this).attr('sensitive_words_string');
     var text = $(_this).attr('text');
     var speaker_nickname = $(_this).attr('speaker_nickname');
-    var timestamp = $(_this).attr('timestamp');
+    var timestamp = Number($(_this).attr('timestamp'));
     var group_puid = $(_this).attr('group_puid');
 
-    var reportContent = {'speaker_id':speaker_id, "sensitive_value": sensitive_value,"sensitive_words_string": sensitive_words_string, "text": text,"speaker_nickname": speaker_nickname, "timestamp": timestamp,"group_puid":group_puid };
+    var reportContent = {'speaker_id':speaker_id, 'sensitive_value': sensitive_value,'sensitive_words_string': sensitive_words_string, 'text': text,'speaker_nickname': speaker_nickname, 'timestamp': timestamp,'group_puid':group_puid };
     reportContent = JSON.stringify(reportContent);
+
+    // reportContent = reportContent.sensitive_words_string;
 
     var reportType=$(_this).attr('tp');//--- content
     // var upload_mange_url='/qq_xnr_monitor/report_warming_content/?report_type='+reportType+'&xnr_user_no='+ID_Num+

@@ -115,8 +115,14 @@ CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_
 
 TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
 
+PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
+
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
+#FB & TW 属性计算
+FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_facebook'
+TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_twitter'
+FB_TW_TOPIC_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/topic'
 
 MID_VALUE = 500      #查询活跃用户数量
 
