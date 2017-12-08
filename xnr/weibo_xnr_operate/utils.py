@@ -9,7 +9,7 @@ import re
 
 #reload(sys)
 #sys.path.append('../../')
-from xnr.global_config import S_DATE,S_TYPE,S_DATE_BCI
+from xnr.global_config import S_DATE,S_TYPE,S_DATE_BCI,SYSTEM_START_DATE
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_task_index_type,\
                             weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type,\
@@ -35,7 +35,8 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_private_white_uid_index_type,daily_interest_index_name_pre,\
                             daily_interest_index_type
 
-from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
+from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,\
+                            get_timeset_indexset_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
                                 like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func,\
                                 reply_tweet_func #,at_tweet_func
@@ -129,7 +130,7 @@ def get_submit_tweet(task_detail):
 
     # 发布微博
     #account_name = 'weiboxnr03@126.com'
-    print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
+    # print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
 
@@ -695,16 +696,22 @@ def get_show_comment(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'comment_type':'receive'}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    {'term':{'comment_type':'receive'}}
                 ]
             }
         },
         'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
+    
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
 
-    es_results = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    index_name_pre = weibo_feedback_comment_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+
+    es_results = es.search(index=index_name,doc_type=weibo_feedback_comment_index_type,\
                             body=query_body)['hits']['hits']
 
     results_all = []
@@ -760,8 +767,7 @@ def get_show_retweet(task_detail):
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         },
@@ -769,7 +775,15 @@ def get_show_retweet(task_detail):
         'size':MAX_SEARCH_SIZE
     }
 
-    es_results = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = weibo_feedback_retweet_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+
+
+    es_results = es.search(index=index_name,doc_type=weibo_feedback_retweet_index_type,\
                             body=query_body)['hits']['hits']
 
     results_all = []
@@ -838,8 +852,7 @@ def get_show_private(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'private_type':'receive'}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    {'term':{'private_type':'receive'}}
                 ],
                 'must_not':{'terms':{'uid':white_uid_list}}
             }
@@ -847,8 +860,15 @@ def get_show_private(task_detail):
         'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
+  
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
 
-    es_results = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+    index_name_pre = weibo_feedback_private_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+
+    es_results = es.search(index=index_name,doc_type=weibo_feedback_private_index_type,\
                             body=query_body)['hits']['hits']
 
     results_all = []
@@ -901,7 +921,14 @@ def get_show_at(task_detail):
         'size':MAX_SEARCH_SIZE
     }
     	
-    es_results = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = weibo_feedback_at_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+
+    es_results = es.search(index=index_name,doc_type=weibo_feedback_at_index_type,\
                             body=query_body)['hits']['hits']
 
     results_all = []
