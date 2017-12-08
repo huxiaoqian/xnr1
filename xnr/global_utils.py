@@ -350,8 +350,6 @@ facebook_event_warning_index_type = 'text'
 facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
 facebook_speech_warning_index_type = 'text'
 
-facebook_timing_warning_index_name_pre = 'facebook_time_warning_'
-facebook_timing_warning_index_type = 'text'
 
 # twitter
 
@@ -462,6 +460,7 @@ fb_uname2id = 'fb_user'
 tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
+redis_host_list = [1,2]
 R_retweet = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=2)
 
 fb_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=3)

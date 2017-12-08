@@ -5,6 +5,9 @@ use to save database information
 import os
 import time
 
+# xnr system start date
+SYSTEM_START_DATE = '2017-10-01'
+
 #use to mark type:  run or test
 S_TYPE = 'test'   #test/run
 S_DATE = '2016-11-20' #when type=test, now_date=S_DATE

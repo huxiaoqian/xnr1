@@ -29,12 +29,14 @@ def newest_time_func(uid):
     
     query_body = {'query':{'term':{'root_uid':uid}},'sort':{'timestamp':{'order':'desc'}}}
     try:
+        weibo_feedback_retweet_index_name = weibo_feedback_retweet_index_name + '_*'
         timestamp_retweet = es.search(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     except:
         timestamp_retweet = 0
     
     try:    
+        weibo_feedback_like_index_name = weibo_feedback_like_index_name + '_*'
         timestamp_like = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     except:
@@ -44,6 +46,9 @@ def newest_time_func(uid):
     #timestamp_fans = es.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,\
                         #body=query_body)['hits']['hits'][0]['_source']['timestamp']
     try:
+
+        weibo_feedback_at_index_name = weibo_feedback_at_index_name + '_*'
+
         timestamp_at = es.search(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     except:
@@ -60,6 +65,8 @@ def newest_time_func(uid):
         'sort':{'timestamp':{'order':'desc'}}
     }
     try:
+        weibo_feedback_private_index_name = weibo_feedback_private_index_name + '_*'
+
         timestamp_private = es.search(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     except:
@@ -93,6 +100,8 @@ def newest_time_func(uid):
         'sort':{'timestamp':{'order':'desc'}}
     }
     try:
+        weibo_feedback_comment_index_name = weibo_feedback_comment_index_name + '_*'
+        
         timestamp_comment_receive = es.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                         body=query_body)['hits']['hits'][0]['_source']['timestamp']
     except:
