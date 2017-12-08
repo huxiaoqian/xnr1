@@ -35,9 +35,11 @@ def be_retweet_es_mappings(db_number,ft_type):
 
     exist_indice = es.indices.exists(index=index_name)
 
-    if not exist_indice:
-        #es.indices.delete(index=index_name)
-        es.indices.create(index=index_name, body=index_info, ignore=400)
+    if exist_indice:
+        es.indices.delete(index=index_name)
+    
+    es.indices.create(index=index_name, body=index_info, ignore=400)
+    
     return True
 
 if __name__ == '__main__':
