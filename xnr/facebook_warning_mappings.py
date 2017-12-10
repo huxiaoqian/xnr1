@@ -244,7 +244,7 @@ def facebook_timing_warning_mappings(date_result):
 	}
 	for date in date_result:
 		facebook_timing_warning_index_name = facebook_timing_warning_index_name_pre + date
-		#print 'facebook_timing_warning_index_name',facebook_timing_warning_index_name
+		print 'facebook_timing_warning_index_name',facebook_timing_warning_index_name
 		if not es.indices.exists(index=facebook_timing_warning_index_name):
 			es.indices.create(index=facebook_timing_warning_index_name,body=index_info,ignore=400)
 	
@@ -279,9 +279,9 @@ def lookup_date_info(today_datetime):
     return date_result
 
 if __name__ == '__main__':
-	facebook_user_warning_mappings()
-	facebook_event_warning_mappings()
-	facebook_speech_warning_mappings()
+	#facebook_user_warning_mappings()
+	#facebook_event_warning_mappings()
+	#facebook_speech_warning_mappings()
 
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE)

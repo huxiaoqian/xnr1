@@ -12,10 +12,10 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
                              weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type,\
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
-                             weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
-                             weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
-                             weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
-                             weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
+                             weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_name_pre,weibo_feedback_retweet_index_type,\
+                             weibo_feedback_at_index_name,weibo_feedback_at_index_name_pre,weibo_feedback_at_index_type,\
+                             weibo_feedback_comment_index_name,weibo_feedback_comment_index_name_pre,weibo_feedback_comment_index_type,\
+                             weibo_feedback_like_index_name,weibo_feedback_like_index_name_pre,weibo_feedback_like_index_type,\
                              weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
                              portrait_index_name,portrait_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
@@ -30,7 +30,30 @@ from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
 from caculate_history_info import create_xnr_history_info_count
-from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME
+from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
+
+##获取索引
+def get_xnr_set_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
+    index_name_list=[]
+    if ts2datetime(date_range_start_ts) != ts2datetime(date_range_end_ts):
+        iter_date_ts=date_range_end_ts
+        while iter_date_ts >= date_range_start_ts:
+            date_range_start_date=ts2datetime(iter_date_ts)
+            index_name=index_name_pre+date_range_start_date
+            if es_xnr.indices.exists(index=index_name):
+                index_name_list.append(index_name)
+            else:
+                pass
+            iter_date_ts=iter_date_ts-DAY
+    else:
+        date_range_start_date=ts2datetime(date_range_start_ts)
+        index_name=index_name_pre+date_range_start_date
+        if es_xnr.indices.exists(index=index_name):
+            index_name_list.append(index_name)
+        else:
+            pass
+    return index_name_list
+
 
 ##########################################
 #	step 2：show weibo_xnr 	information  #
@@ -184,6 +207,7 @@ def count_today_comment_num(xnr_user_no,now_time):
 
 #计算历史评论数
 def count_history_comment_num(uid):
+    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,datetime2ts(S_WEIBO_TEST_DATE),XNR_CENTER_DATE_TIME)
     #定义检索规则
     query_body={
         'query':{
@@ -204,8 +228,10 @@ def count_history_comment_num(uid):
         }
     }
     try:
-        result=es_xnr.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+        result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,\
     		body=query_body)['aggregations']['history_comment_num']['buckets']
+    #print result
+    # number=0
         number=result[0]['doc_count']
     except:
     	number=0
@@ -698,8 +724,11 @@ def show_history_posting(require_detail):
 
     xnr_user_no=require_detail['xnr_user_no']	
     task_source=require_detail['task_source']
-    es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
-    uid=es_result['uid']
+    try:
+        es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        uid=es_result['uid']
+    except:
+        uid=''
 
 
     temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
@@ -760,7 +789,7 @@ def show_at_content(require_detail):
     else:
         start_time=require_detail['start_time']
         end_time=require_detail['end_time']
-
+    #print start_time,end_time
     query_body={
 		'query':{
 			'filtered':{
@@ -788,21 +817,27 @@ def show_at_content(require_detail):
     index_name_list=[]
     index_type_list=[]
     #condition_list=[]
+    weibo_feedback_retweet_index_name_list = get_xnr_set_index_listname(weibo_feedback_retweet_index_name_pre,start_time,end_time)
+    weibo_feedback_at_index_name_list = get_xnr_set_index_listname(weibo_feedback_at_index_name_pre,start_time,end_time)
+
     for i in xrange(0,len(content_type)):
         if content_type[i]=='weibo':
-            index_name_list.append(weibo_feedback_retweet_index_name)
+            index_name_list.append(weibo_feedback_retweet_index_name_list)
             index_type_list.append(weibo_feedback_retweet_index_type)
         elif content_type[i]=='at':
-            index_name_list.append(weibo_feedback_at_index_name)
+            index_name_list.append(weibo_feedback_at_index_name_list)
             index_type_list.append(weibo_feedback_at_index_type)
 
     result=[]
     for j in xrange(0,len(index_name_list)):
         try:
-            r_result=es_xnr.search(index=index_name_list[j],doc_type=index_type_list[j],body=query_body)['hits']['hits']
-            #result=[]
-            for item in r_result:
-                result.append(item['_source'])
+            if index_name_list[j]:
+                r_result=es_xnr.search(index=index_name_list[j],doc_type=index_type_list[j],body=query_body)['hits']['hits']
+                #result=[]
+                for item in r_result:
+                    result.append(item['_source'])
+            else:
+                pass
         except:
             result=[]
 		#results.append(result)
@@ -851,11 +886,17 @@ def show_comment_content(require_detail):
 		'sort':{'timestamp':{'order':'desc'}},
 		'size':MAX_SEARCH_SIZE
     }
+
+    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,start_time,end_time)
+
     try:
-        result=es_xnr.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
         results=[]
-        for item in result:
-            results.append(item['_source'])
+        if weibo_feedback_comment_index_name_list:
+            result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
+            for item in result:
+                results.append(item['_source'])
+        else:
+            pass
     except:
         results=[]
     return results
@@ -915,11 +956,15 @@ def lookup_receive_like(uid,start_time,end_time):
         'sort':{'timestamp':{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
+    weibo_feedback_like_index_name_list = get_xnr_set_index_listname(weibo_feedback_like_index_name_pre,start_time,end_time)
     try:
-        result=es_xnr.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
         results=[]
-        for item in result:
-            results.append(item['_source'])
+        if weibo_feedback_like_index_name_list:
+            result=es_xnr.search(index=weibo_feedback_like_index_name_list,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
+            for item in result:
+                results.append(item['_source'])
+        else:
+            pass
     except:
         results=[]
     return results
@@ -1051,7 +1096,7 @@ def get_weibohistory_like(task_detail):
 #查看对话
 ####root_mid之间的数据关系可能存在问题
 def show_comment_dialog(mid):
-	query_body={
+    query_body={
 		'query':{
 			'filtered':{
 				'filter':{
@@ -1066,10 +1111,17 @@ def show_comment_dialog(mid):
 		'sort':{'timestamp':{'order':'desc'}},
 		'size':MAX_SEARCH_SIZE
 	}
-	es_result=es_xnr.search(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
-	results=[]
-	for item in es_result:
-		results.append(item['_source'])
+    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,start_time,end_time)
+    try:
+        if weibo_feedback_comment_index_name_list:
+            results=[]
+            es_result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
+            for item in es_result:
+                results.append(item['_source'])
+        else:
+            pass
+    except:
+        results=[]
 	return results
 
 
