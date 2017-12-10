@@ -3,18 +3,18 @@ import os
 import json
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
-from global_utils import weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
-						weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
-						weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
-						weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
-						weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
+from global_utils import weibo_feedback_comment_index_name_pre,weibo_feedback_comment_index_type,\
+						weibo_feedback_retweet_index_name_pre,weibo_feedback_retweet_index_type,\
+						weibo_feedback_private_index_name_pre,weibo_feedback_private_index_type,\
+						weibo_feedback_at_index_name_pre,weibo_feedback_at_index_type,\
+						weibo_feedback_like_index_name_pre,weibo_feedback_like_index_type,\
 						weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
 						weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
 						weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
 						weibo_private_white_uid_index_name,weibo_private_white_uid_index_type
-from time_utils import ts2datetime
+from time_utils import ts2datetime,datetime2ts
 
-def weibo_feedback_retweet_mappings():
+def weibo_feedback_retweet_mappings(datetime):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -82,11 +82,11 @@ def weibo_feedback_retweet_mappings():
 	}
 
 	#current_time = time.time()
-	#weibo_feedback_retweet_index_name = weibo_feedback_retweet_index_name_pre + ts2datetime(current_time)
+	weibo_feedback_retweet_index_name = weibo_feedback_retweet_index_name_pre + datetime
 	if not es.indices.exists(index=weibo_feedback_retweet_index_name):
 		es.indices.create(index=weibo_feedback_retweet_index_name,body=index_info,ignore=400)
 
-def weibo_feedback_comment_mappings():
+def weibo_feedback_comment_mappings(datetime):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -149,13 +149,13 @@ def weibo_feedback_comment_mappings():
 	}
 
 	#current_time = time.time()
-	#weibo_feedback_comment_index_name = weibo_feedback_comment_index_name_pre + ts2datetime(current_time)
+	weibo_feedback_comment_index_name = weibo_feedback_comment_index_name_pre + datetime
 
 	if not es.indices.exists(index=weibo_feedback_comment_index_name):
 		es.indices.create(index=weibo_feedback_comment_index_name,body=index_info,ignore=400)
 
 
-def weibo_feedback_at_mappings():
+def weibo_feedback_at_mappings(datetime):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -214,13 +214,13 @@ def weibo_feedback_at_mappings():
 	}
 
 	#current_time = time.time()
-	#weibo_feedback_at_index_name = weibo_feedback_at_index_name_pre + ts2datetime(current_time)
+	weibo_feedback_at_index_name = weibo_feedback_at_index_name_pre + datetime
 
 	if not es.indices.exists(index=weibo_feedback_at_index_name):
 		es.indices.create(index=weibo_feedback_at_index_name,body=index_info,ignore=400)
 
 
-def weibo_feedback_like_mappings():
+def weibo_feedback_like_mappings(datetime):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -279,12 +279,12 @@ def weibo_feedback_like_mappings():
 	}
 
 	#current_time = time.time()
-	#weibo_feedback_like_index_name = weibo_feedback_like_index_name_pre + ts2datetime(current_time)
+	weibo_feedback_like_index_name = weibo_feedback_like_index_name_pre + datetime
 
 	if not es.indices.exists(index=weibo_feedback_like_index_name):
 		es.indices.create(index=weibo_feedback_like_index_name,body=index_info,ignore=400)
 
-def weibo_feedback_private_mappings():
+def weibo_feedback_private_mappings(datetime):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -346,7 +346,7 @@ def weibo_feedback_private_mappings():
 	}
 
 	#current_time = time.time()
-	#weibo_feedback_private_index_name = weibo_feedback_private_index_name_pre + ts2datetime(current_time)
+	weibo_feedback_private_index_name = weibo_feedback_private_index_name_pre + datetime
 
 	if not es.indices.exists(index=weibo_feedback_private_index_name):
 		es.indices.create(index=weibo_feedback_private_index_name,body=index_info,ignore=400)
@@ -612,12 +612,17 @@ def weibo_private_white_uid_mappings():
 
 
 if __name__ == '__main__':
-	weibo_feedback_retweet_mappings()
-	weibo_feedback_comment_mappings()
-	weibo_feedback_at_mappings()
-	weibo_feedback_like_mappings()
-	weibo_feedback_private_mappings()
-	weibo_feedback_follow_mappings()
-	weibo_feedback_fans_mappings()
-	weibo_create_group_mappings()
-	weibo_private_white_uid_mappings()
+
+	current_time = int(time.time())
+	datetime = ts2datetime(current_time)
+
+	weibo_feedback_retweet_mappings(datetime)
+	weibo_feedback_comment_mappings(datetime)
+	weibo_feedback_at_mappings(datetime)
+	weibo_feedback_like_mappings(datetime)
+	weibo_feedback_private_mappings(datetime)
+
+	#weibo_feedback_follow_mappings()
+	#weibo_feedback_fans_mappings()
+	#weibo_create_group_mappings()
+	#weibo_private_white_uid_mappings()

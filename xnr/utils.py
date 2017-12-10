@@ -196,8 +196,9 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type='ord
 
 ## 判断是否为敏感人物传感器
 def judge_sensing_sensor(xnr_user_no,uid):
-
+    
     exist_item = es_xnr.exists(index=index_sensing,doc_type=type_sensing,id=xnr_user_no)
+
     if not exist_item:
         return False 
     else:
