@@ -3,16 +3,13 @@
 import sys
 import json
 import time
-from time_utils import ts2datetime,datetime2ts,ts2yeartime
+from time_utils import ts2datetime
 from global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
-from parameter import WARMING_DAY,MAX_VALUE,DAY
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
 						facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
-						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
-						facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
-						weibo_date_remind_index_name,weibo_date_remind_index_type
+						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type
 
 NOW_DATE=ts2datetime(int(time.time()))
 
@@ -45,7 +42,7 @@ def facebook_user_warning_mappings():
 					},
 					'content':{     #敏感言论内容
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'timestamp':{    #预警生成时间
 						'type':'long'
@@ -81,14 +78,14 @@ def facebook_event_warning_mappings():
 					},
 					'main_user_info':{ #主要参与用户信息列表
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'event_time':{ #事件时间
 						'type':'long'
 					},
-					'main_facebook_info':{ #典型信息
+					'main_facebook_info':{ #典型微博信息
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'event_influence':{
 						'type':'string',
@@ -186,10 +183,11 @@ def facebook_speech_warning_mappings():
 		facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + FACEBOOK_FLOW_START_DATE
 	else:
 		facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + NOW_DATE
-	#print facebook_speech_warning_index_name
+	print facebook_speech_warning_index_name
 	if not es.indices.exists(index=facebook_speech_warning_index_name):
 		es.indices.create(index=facebook_speech_warning_index_name,body=index_info,ignore=400)
-		#print 'finish index'
+		print 'finish index'
+
 
 
 def facebook_timing_warning_mappings(date_result):
@@ -278,6 +276,7 @@ def lookup_date_info(today_datetime):
     #print 'date_result',date_result
     return date_result
 
+
 if __name__ == '__main__':
 	#facebook_user_warning_mappings()
 	#facebook_event_warning_mappings()
@@ -286,7 +285,8 @@ if __name__ == '__main__':
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE)
 	else:
-		today_datetime=int(time.time())
+		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
-	#print 'date_result',date_result
 	facebook_timing_warning_mappings(date_result)
+
+
