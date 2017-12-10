@@ -258,12 +258,18 @@ def create_date_warning(today_datetime):
                 #写入数据库
                 
                 facebook_timing_warning_index_name=facebook_timing_warning_index_name_pre+warming_date
-                print facebook_timing_warning_index_name
-                try:
-                    es_xnr.index(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_name,body=item['_source'],id=task_id)
-                    mark=True
-                except:
-                    mark=False
+                
+                if date_warming:
+                    print facebook_timing_warning_index_name
+                    try:
+
+                        es_xnr.index(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_name,body=item['_source'],id=task_id)
+                        mark=True
+                    except:
+                        mark=False
+                else:
+                    pass
+
                 date_result.append(mark)
         else:
             pass
@@ -540,10 +546,10 @@ def create_facebook_warning():
 
         for xnr_user_no in xnr_list:
             #人物行为预警
-            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            #personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
-            #speech_mark=True
+            #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            speech_mark=True
             #事件涌现预警
             #create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
