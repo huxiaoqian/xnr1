@@ -171,8 +171,8 @@ if __name__ == '__main__':
     ts = tb
     index_name_pre = twitter_flow_text_index_name_pre
     index_type = twitter_flow_text_index_type
-    start_date = '2017-09-10'
-    end_date = '2017-10-25'
+    start_date = '2017-10-10'
+    end_date = '2017-10-24'
 
     start_ts = datetime2ts(start_date)
     end_ts = datetime2ts(end_date)
@@ -191,7 +191,7 @@ if __name__ == '__main__':
         }
 
         es_scan_results = scan(es,query=query_body,size=1000,index=index_name,\
-            doc_type=index_type)
+            doc_type=index_type,scroll='30m')
 
         while 1:
             try:
