@@ -578,7 +578,7 @@ def lookup_xnr_relation(origin_platform,origin_xnr_user_no):
         result=[]
         for item in es_result:
             #qq群组
-            item['_source']['qq_groups']=lookup_qqxnr_group(item['_source']['qq_xnr_user_no'])
+            #item['_source']['qq_groups']=lookup_qqxnr_group(item['_source']['qq_xnr_user_no'])
             #微信群组
             #item['_source']['weixin_groups']=lookup_weixinxnr_group(item['_source']['weixin_xnr_user_no'])
             #微博群组
