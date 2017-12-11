@@ -21,6 +21,8 @@ USER_NUM = 50 #人物行为预警返回用户数量
 USER_CONTENT_NUM=50 #人物行为预警每个用户返回的敏感微博数量最大值
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 WARMING_DAY=15 #时间预警，预警天数
+MAX_WARMING_SIZE=100 #最大预警数目
+EVENT_COUNT=20 #实时计算事件频率阈值
 #xnr
 USER_XNR_NUM=50 #用户管理虚拟人数量
 # weibo

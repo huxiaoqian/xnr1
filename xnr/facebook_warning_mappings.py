@@ -189,9 +189,104 @@ def facebook_speech_warning_mappings():
 		print 'finish index'
 
 
+
+def facebook_timing_warning_mappings(date_result):
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			facebook_timing_warning_index_type:{
+				'properties':{
+					'submitter' : {
+						'type': 'string', 
+						'index':'not_analyzed'
+					},
+					'facebook_date_warming_content':{ #典型微博信息
+						'type':'string',
+						'index':'no'
+					},
+					'date_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'date_time':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'keywords':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'create_type':{  # all_xnrs - 所有虚拟人  my_xnrs -我管理的虚拟人
+						'type':'string',  
+						'index':'not_analyzed'
+					},	
+					'create_time':{
+						'type':'long'
+					},
+					'content_recommend':{  # list: [text1,text2,text3,...]
+						'type':'string',
+						'index':'not_analyzed'
+					},			
+					'validity':{   #预警有效性，有效1，无效-1
+						'type':'long'
+					},
+					'timestamp':{
+						'type':'long'
+					}
+				}
+			}
+		}
+	}
+	for date in date_result:
+		facebook_timing_warning_index_name = facebook_timing_warning_index_name_pre + date
+		print 'facebook_timing_warning_index_name',facebook_timing_warning_index_name
+		if not es.indices.exists(index=facebook_timing_warning_index_name):
+			es.indices.create(index=facebook_timing_warning_index_name,body=index_info,ignore=400)
+	
+
+
+def lookup_date_info(today_datetime):
+    query_body={
+        'query':{
+        	'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'date_time':{'order':'asc'}}
+    }
+    try:
+        result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+        date_result=[]
+        for item in result:
+            #计算距离日期
+            date_time=item['_source']['date_time']
+            year=ts2yeartime(today_datetime)
+            warming_date=year+'-'+date_time
+            today_date=ts2datetime(today_datetime)
+            countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+            item['_source']['countdown_days']=countdown_num
+            if abs(countdown_num) < WARMING_DAY:
+                date_result.append(warming_date)
+            else:
+        	    pass
+    except:
+        date_result=[]
+    #print 'date_result',date_result
+    return date_result
+
+
 if __name__ == '__main__':
-	facebook_user_warning_mappings()
-	facebook_event_warning_mappings()
-	facebook_speech_warning_mappings()
+	#facebook_user_warning_mappings()
+	#facebook_event_warning_mappings()
+	#facebook_speech_warning_mappings()
+
+	if S_TYPE == 'test':
+		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE)
+	else:
+		today_datetime=int(time.time()) - DAY
+	date_result=lookup_date_info(today_datetime)
+	facebook_timing_warning_mappings(date_result)
 
 
