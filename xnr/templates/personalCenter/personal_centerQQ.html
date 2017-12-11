@@ -118,6 +118,26 @@
         </div>
     </div>
 </div>
+<!--删除提示-->
+<div class="modal fade" id="delQQxnr" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">QQ虚拟人删除</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                    您确定要删除吗？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal" onclick="sureDel()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}

@@ -1,5 +1,26 @@
-var timeUrl='/weibo_xnr_warming/show_date_warming/'//?xnr_user_no='+ID_Num;
+var time2=Date.parse(new Date())/1000;
+var timeUrl='/weibo_xnr_warming_new/show_date_warming/?account_name='+ID_Num+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
+//
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    var valCH=$('#typelist input:radio[name="focus"]:checked').val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var timeUrl='/weibo_xnr_warming_new/show_date_warming/?account_name='+ID_Num+
+            '&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',timeUrl,calendar);
+    }
+});
+//
+
+
 var contentList = {};
 function calendar(data){
     $.each(data,function (index,item) {
@@ -500,6 +521,7 @@ function postYES(data) {
 }
 
 function weibo(idx,data,words) {
+    console.log(data)
     $('.DsAuto'+idx).bootstrapTable('load', data);
     $('.DsAuto'+idx).bootstrapTable({
         data:data,
@@ -562,7 +584,7 @@ function weibo(idx,data,words) {
                     str_new+=
                         '<div class="everySpeak" style="margin: 0 auto;">'+
                         '        <div class="speak_center">'+
-                        '            <div class="center_rel center_rel_weibo">'+
+                        '            <div class="center_rel center_rel_weibo" style="text-align: left;">'+
                         // '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" title="地理位置"><i class="icon icon-screenshot"></i> '+geo+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
