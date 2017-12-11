@@ -277,15 +277,16 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
     }
 
     speech_warming_list=get_xnr_warming_index_listname(facebook_speech_warning_index_name_pre,start_time,end_time)
-    
-    try:
-        temp_results=es_xnr.search(index=speech_warming_list,doc_type=facebook_speech_warning_index_type,body=query_body)['hits']['hits']
-        results=[]
-        for item in temp_results:
-            results.append(item['_source'])
-        #results.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
-    except:
-        results=[]
+    #print speech_warming_list
+    # try:
+    temp_results=es_xnr.search(index=speech_warming_list,doc_type=facebook_speech_warning_index_type,body=query_body)['hits']['hits']
+    print temp_results
+    results=[]
+    for item in temp_results:
+        results.append(item['_source'])
+    #results.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
+    # except:
+        # results=[]
     return results   
 
 
@@ -340,7 +341,8 @@ def show_speech_warning(xnr_user_no,show_type,start_time,end_time):
         today_datetime = datetime2ts(ts2datetime(now_time))
         end_datetime = datetime2ts(ts2datetime(end_time))
         start_datetime = datetime2ts(ts2datetime(start_time))
-
+    
+    #print start_time,end_time
     speech_warming=[]
     if today_datetime > end_datetime :
         speech_warming = lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time)
@@ -502,4 +504,14 @@ def show_date_warning(account_name,start_time,end_time):
 
     result=lookup_date_info(account_name,start_time,end_time,today_datetime)
     #print 'result',result
+    return result
+
+
+
+#更新flow text数据用于测试
+def update_fb_flow_text(task_id,sensitive):
+    result=es_xnr.update(index='facebook_flow_text_2017-09-10',doc_type='text',id=task_id,\
+                body={"doc":{'sensitive':sensitive}})
+
+
     return result
