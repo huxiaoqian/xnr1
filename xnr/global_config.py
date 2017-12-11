@@ -5,13 +5,16 @@ use to save database information
 import os
 import time
 
+# xnr system start date
+SYSTEM_START_DATE = '2017-10-01'
+
 #use to mark type:  run or test
 S_TYPE = 'test'   #test/run
 S_DATE = '2016-11-20' #when type=test, now_date=S_DATE
 S_UID = '1910774981' #'3986246393'
 S_DATE_BCI = '2016-11-27'
-S_DATE_EVENT_WARMING = '2016-11-28'
-S_DATE_WARMING = '2016-11-28'
+S_DATE_EVENT_WARMING = '2016-11-27'
+S_DATE_WARMING = '2016-11-27'
 
 QQ_S_DATE = '2017-07-12'
 QQ_S_DATE_NEW = '2017-08-25'
@@ -25,8 +28,8 @@ FACEBOOK_FLOW_START_DATE='2017-09-11'
 
 R_BEGIN_TIME = '2017-07-07'
 
+S_WEIBO_TEST_DATE = '2017-08-10'
 XNR_CENTER_DATE_TIME=int(time.time())      #当前时间
-
 
 PATH_ROOT = os.path.dirname(os.path.abspath(__file__))
 

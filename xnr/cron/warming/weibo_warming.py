@@ -8,8 +8,8 @@ import time
 import sys
 reload(sys)
 sys.path.append('../../')
-from timed_python_files.system_log_create import get_user_account_list,get_user_xnr_list
-from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH
+from timed_python_files.system_log_create import get_user_account_list
+from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH,MAX_SEARCH_SIZE,MAX_WARMING_SIZE,USER_XNR_NUM
 from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING,S_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime
 from global_utils import R_CLUSTER_FLOW2 as r_cluster
@@ -21,8 +21,34 @@ from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fa
                          weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
                          weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
                          weibo_date_remind_index_name,weibo_date_remind_index_type,\
-                         weibo_event_warning_index_name_pre,weibo_event_warning_index_type
+                         weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
+                         es_user_profile,profile_index_name,profile_index_type
 
+
+def get_user_xnr_list(user_account):
+    query_body={
+        'query':{
+        	'filtered':{
+        		'filter':{
+        			'bool':{
+        				'must':[
+        				{'term':{'submitter':user_account}},
+        				{'term':{'create_status':2}}
+        				]
+        			}
+        		}
+        	}
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
 
 #查询关注列表或者粉丝列表
 #lookup_type='followers_list'或者'fans_list'
@@ -71,7 +97,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
                 }                        
             }
             },
-        'size':MAX_VALUE
+        'size':MAX_SEARCH_SIZE
     }
 
     flow_text_index_name=get_day_flow_text_index_list(today_datetime)
@@ -123,7 +149,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
                     }
                 }
             },
-            'size':MAX_VALUE,
+            'size':MAX_WARMING_SIZE,
             'sort':{'sensitive':{'order':'desc'}}
         }
 
@@ -180,7 +206,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
                 }
             }
         },
-        'size':MAX_VALUE,
+        'size':MAX_SEARCH_SIZE,
         'sort':{'sensitive':{'order':'desc'}}
     }
 
@@ -248,16 +274,31 @@ def get_hashtag(now_time):
                     hashtag_list[k] = v
         #r_cluster.hget('hashtag_'+str(a))
 
-    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:200]
+    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:100]
 
     return hashtag_list
 
+
+#查询事件内容
+def lookup_event_content(event_name,today_datetime):
+    query_body={
+        'query':{
+            'bool':{
+                'should':{'wildcard':{'text':'*'+event_name+'*'}},
+                'must':{'range':{'sensitive':{'gte':1,'lte':100}}}
+            }
+        },
+        'size':MAX_WARMING_SIZE,
+        'sort':{'sensitive':{'order':'desc'}}
+    }
+    flow_text_index_name = get_day_flow_text_index_list(today_datetime)
+    return True
 
 
 def create_event_warning(xnr_user_no,today_datetime,write_mark):
     #获取事件名称
     hashtag_list = get_hashtag(today_datetime)
-    print 'hashtag_list::',hashtag_list
+    #print 'hashtag_list::',hashtag_list
 
     flow_text_index_name = get_day_flow_text_index_list(today_datetime)
 
@@ -271,64 +312,74 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
         fans_list=[]
 
     event_warming_list=[]
+    event_num=0
     for event_item in hashtag_list:
         event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item[0]
-        print 'event_name:',event_item[0]
+        print 'event_name:',event_item
+        event_num=event_num+1
+        print 'event_num:::',event_num
+        print 'first_time:::',int(time.time())
         event_influence_sum=0
         event_time_sum=0       
         query_body={
             'query':{
                 'bool':{
-                    'should':{'wildcard':{'text':'*'+event_item[0]+'*'}}
+                    'must':[{'wildcard':{'text':'*'+event_item[0]+'*'}},
+                    {'range':{'sensitive':{'gte':1,'lte':100}}}]
                 }
-            }
+            },
+            'size':MAX_WARMING_SIZE,
+            'sort':{'sensitive':{'order':'desc'}}
         }
-        try:         
-            event_results=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        #try:         
+        event_results=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
+        if event_results:
             weibo_result=[]
             fans_num_dict=dict()
             followers_num_dict=dict()
             alluser_num_dict=dict()
+            print 'sencond_time:::',int(time.time())
             for item in event_results:
-                if item['_source']['sensitive'] >0:
-                    event_sensitive_count=event_sensitive_count+1
-                    #统计用户信息
-                    if alluser_num_dict.has_key(str(item['_source']['uid'])):
-                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                #print 'event_content:',item['_source']['text']          
+                event_sensitive_count=event_sensitive_count+1
+                #统计用户信息
+                if alluser_num_dict.has_key(str(item['_source']['uid'])):
+                    alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                else:
+                    alluser_num_dict[str(item['_source']['uid'])]=1
+                    
+                for fans_uid in fans_list:                    
+                    if fans_uid==item['_source']['uid']:
+                        if fans_num_dict.has_key(str(fans_uid)):
+                            fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
+                        else:
+                            fans_num_dict[str(fans_uid)]=1
                     else:
-                        alluser_num_dict[str(item['_source']['uid'])]=1
-                        
-                    for fans_uid in fans_list:                    
-                        if fans_uid==item['_source']['uid']:
-                            if fans_num_dict.has_key(str(fans_uid)):
-                                fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
-                            else:
-                                fans_num_dict[str(fans_uid)]=1
+                        pass
+                
+                for followers_uid in followers_list:
+                    if followers_uid==item['_source']['uid']:
+                        if followers_num_dict.has_key(str(followers_uid)):
+                            fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
                         else:
-                            pass
-                        
-                    for followers_uid in followers_list:
-                        if followers_uid==item['_source']['uid']:
-                            if followers_num_dict.has_key(str(followers_uid)):
-                                fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
-                            else:
-                                fans_num_dict[str(followers_uid)]=1
-                        else:
-                            pass
+                            fans_num_dict[str(followers_uid)]=1
+                    else:
+                        pass
 
-                    #计算影响力
-                    origin_influence_value=(item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
-                    fans_value=judge_user_type(item['_source']['uid'],fans_list)
-                    followers_value=judge_user_type(item['_source']['uid'],followers_list)
-                    item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
-                    weibo_result.append(item['_source'])
+                #计算影响力
+                origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
+                fans_value=judge_user_type(item['_source']['uid'],fans_list)
+                followers_value=judge_user_type(item['_source']['uid'],followers_list)
+                item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                weibo_result.append(item['_source'])
 
-                    #统计影响力、时间
-                    event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
-                    event_time_sum=item['_source']['timestamp']            
-
+                #统计影响力、时间
+                event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
+                event_time_sum=event_time_sum+item['_source']['timestamp']            
+        
+            print 'third_time:::',int(time.time())
             #典型微博信息
             weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
             event_warming_content['main_weibo_info']=json.dumps(weibo_result)
@@ -338,14 +389,14 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             event_warming_content['event_influence']=event_influence_sum/number
             event_warming_content['event_time']=event_time_sum/number
 
-        except:
-            event_warming_content['main_weibo_info']=[]
-            event_warming_content['event_influence']=0
-            event_warming_content['event_time']=0
+        # except:
+        #     event_warming_content['main_weibo_info']=[]
+        #     event_warming_content['event_influence']=0
+        #     event_warming_content['event_time']=0
         
-        try:
+        # try:
             if event_sensitive_count > 0:
-            #对用户进行排序
+        #对用户进行排序
                 temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
                 main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
                 main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
@@ -353,11 +404,11 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 for i in xrange(0,len(main_userid_dict)):
                     main_userid_list.append(main_userid_dict[i][0])
 
-                #主要参与用户信息
+            #主要参与用户信息
                 main_user_info=[]
                 user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
                 for item in user_es_result:
- 
+
                     user_dict=dict()
                     if item['found']:
                         user_dict['photo_url']=item['_source']['photo_url']
@@ -375,25 +426,30 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 event_warming_content['main_user_info']=json.dumps(main_user_info)
 
             else:
-                event_warming_content['main_user_info']=[]
-        except:
-            event_warming_content['main_user_info']=[]
-
-        event_warming_content['xnr_user_no']=xnr_user_no
-        event_warming_content['validity']=0
-        event_warming_content['timestamp']=today_datetime
-        now_time=int(time.time())
-        task_id=xnr_user_no+'_'+str(now_time) 
+                event_warming_content['main_user_info']=''
+        # except:
+            # event_warming_content['main_user_info']=[]
+            print 'fourth_time:::',int(time.time())
+            event_warming_content['xnr_user_no']=xnr_user_no
+            event_warming_content['validity']=0
+            event_warming_content['timestamp']=today_datetime
+            now_time=int(time.time())
+            task_id=xnr_user_no+'_'+str(now_time) 
         
-        if event_sensitive_count > 0:
-            #写入数据库           
-            if write_mark:
-                mark=write_envent_warming(today_datetime,event_warming_content,task_id)
-                event_warming_list.append(mark)
+            if event_sensitive_count > 0:
+                print 'event_sensitive_count:::',event_sensitive_count
+                #写入数据库           
+                if write_mark:
+                    print 'today_datetime:::',ts2datetime(today_datetime)
+                    mark=write_envent_warming(today_datetime,event_warming_content,task_id)
+                    event_warming_list.append(mark)
+                else:
+                    event_warming_list.append(event_warming_content)
             else:
-                event_warming_list.append(event_warming_content)
+                pass
         else:
-            pass
+        	pass
+        print 'fifth_time:::',int(time.time())
     return event_warming_list
 
 
@@ -428,7 +484,7 @@ def union_dict(*objs):
 
 #时间预警
 def create_date_warning(today_datetime):
-    lookup_condition=[]
+
     query_body={
         'query':{
         	'match_all':{}
@@ -436,42 +492,45 @@ def create_date_warning(today_datetime):
         'size':MAX_VALUE,
         'sort':{'date_time':{'order':'asc'}}
     }
-    try:
-        result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-        date_result=[]
-        for item in result:
-            #计算距离日期
-            date_time=item['_source']['date_time']
-            year=ts2yeartime(today_datetime)
-            warming_date=year+'-'+date_time
-            today_date=ts2datetime(today_datetime)
-            countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
-        
-            if abs(countdown_num) < WARMING_DAY:
-                #根据给定的关键词查询预警微博
-                keywords=item['_source']['keywords']
-                date_warming=lookup_weibo_date_warming(keywords,today_datetime)
-                item['_source']['weibo_date_warming_content']=json.dumps(date_warming)
-                item['_source']['validity']=0
-                item['_source']['timestamp']=today_datetime
+    #try:
+    result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+    date_result=[]
+    for item in result:
+        #计算距离日期
+        date_time=item['_source']['date_time']
+        year=ts2yeartime(today_datetime)
+        warming_date=year+'-'+date_time
+        today_date=ts2datetime(today_datetime)
+        countdown_num=(datetime2ts(warming_date)-datetime2ts(today_date))/DAY
+    
+        if abs(countdown_num) < WARMING_DAY:
+            #根据给定的关键词查询预警微博
+            keywords=item['_source']['keywords']
+            date_warming=lookup_weibo_date_warming(keywords,today_datetime)
+            item['_source']['weibo_date_warming_content']=json.dumps(date_warming)
+            item['_source']['validity']=0
+            item['_source']['timestamp']=today_datetime
 
-                task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)    
-                #print 'task_id',task_id
-                #写入数据库
-                
-                weibo_timing_warning_index_name=weibo_timing_warning_index_name_pre+warming_date
-                print weibo_timing_warning_index_name
+            task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)    
+            #print 'task_id',task_id
+            #写入数据库
+            
+            weibo_timing_warning_index_name=weibo_timing_warning_index_name_pre+warming_date
+            print weibo_timing_warning_index_name
+            if date_warming:
                 try:
                     es_xnr.index(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,body=item['_source'],id=task_id)
                     mark=True
                 except:
                     mark=False
-                date_result.append(mark)
-        else:
-            pass
+            else:
+                pass
+            date_result.append(mark)
+    else:
+        pass
 
-    except:
-        date_result=[]
+    #except:
+    #    date_result=[]
     return date_result
 
 
@@ -484,19 +543,25 @@ def lookup_weibo_date_warming(keywords,today_datetime):
 
     query_body={
         'query':{
-            'bool':{
-                'should':keyword_query_list
+            'bool':
+            {
+                'should':keyword_query_list,
+                'must':{'range':{'sensitive':{'gte':1,'lte':100}}}
             }
         },
-        'size':MAX_VALUE
+        'size':MAX_WARMING_SIZE,
+        'sort':{'sensitive':{'order':'desc'}}
     }
-    try:
+    if es_flow_text.indices.exists(index=flow_text_index_name):
+        #try:
         temp_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in temp_result:
             date_result.append(item['_source'])
-    except:
-            date_result=[]
+        #except:
+        #        date_result=[]
+    else:
+        pass
     return date_result
 
 
@@ -515,7 +580,8 @@ def create_weibo_warning():
         start_time=today_datetime    #前一天0点
         end_time=today_datetime          #定时文件启动的0点
         operate_date=ts2datetime(start_time)
-
+    
+    print 'today_datetime',today_datetime,'operate_date',operate_date
     account_list=get_user_account_list()
     for account in account_list:
         xnr_list=get_user_xnr_list(account)
