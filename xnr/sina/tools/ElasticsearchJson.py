@@ -62,8 +62,12 @@ def save_to_redis_fans_follow(uid_xnr,uid,save_item):
 def executeES(indexName, typeName, listData):
     #current_time = int(time.time())
     #indexName += '_' + ts2datetime(current_time)
-
+    
+    #print 'listData:',listData
+    number=0
     for list_data in listData:
+        number=number+1
+        print 'number:::',number
         data = {}
         jsonData = json.loads(list_data)
         for key, val in jsonData.items():
@@ -107,6 +111,7 @@ def executeES(indexName, typeName, listData):
 
                     # trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
                     # data['trace_follow_mark'] = trace_follow_mark
+                print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
 
             elif indexName == 'weibo_feedback_fans':
                 _id = data["root_uid"]+'_'+data["mid"]
@@ -123,52 +128,75 @@ def executeES(indexName, typeName, listData):
 
                     # trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
                     # data['trace_follow_mark'] = trace_follow_mark
-
+                print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
             
             elif indexName == 'weibo_feedback_comment':
-                # indexName += '_' + ts2datetime(data['timestamp'])
+                indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
                 date_time = ts2datetime(data['timestamp'])
-                print 'date!!!!!!!',date_time
+                # print 'date!!!!!!!',date_time
+                # print 'indexName_date:::',indexName_date
                 mappings_func = weibo_feedback_comment_mappings
                 _id = data["mid"]
+                # print 'comment_id........',_id
                 mappings_func(date_time)
+                # print 'data:::',data
+                print 'save to es!!!!',es.index(index=indexName_date, doc_type=typeName, id=_id, body=data)
 
             elif indexName == 'weibo_feedback_retweet':
                 # indexName += '_' + ts2datetime(data['timestamp'])
+                indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
+
                 date_time = ts2datetime(data['timestamp'])
 
                 mappings_func = weibo_feedback_retweet_mappings
                 _id = data["mid"]
                 mappings_func(date_time)
+                print 'save to es!!!!',es.index(index=indexName_date, doc_type=typeName, id=_id, body=data)
 
             elif indexName == 'weibo_feedback_at':
                 # indexName += '_' + ts2datetime(data['timestamp'])
+                indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
+
                 date_time = ts2datetime(data['timestamp'])
                 
                 mappings_func = weibo_feedback_at_mappings
                 _id = data["mid"]
-                print mappings_func(date_time)
+                mappings_func(date_time)
+                print 'save to es!!!!',es.index(index=indexName_date, doc_type=typeName, id=_id, body=data)
 
             elif indexName == 'weibo_feedback_like':
                 # indexName += '_' + ts2datetime(data['timestamp'])
+                indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
+
                 date_time = ts2datetime(data['timestamp'])
 
                 mappings_func = weibo_feedback_like_mappings
                 _id = data["mid"]
                 mappings_func(date_time)
+                print 'save to es!!!!',es.index(index=indexName_date, doc_type=typeName, id=_id, body=data)
 
             elif indexName == 'weibo_feedback_private':
-                #indexName += '_' + ts2datetime(data['timestamp'])
+                # indexName += '_' + ts2datetime(data['timestamp'])
+                indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
+
                 date_time = ts2datetime(data['timestamp'])
                 mappings_func = weibo_feedback_private_mappings
                 _id = data["mid"]
                 mappings_func(date_time)
+                print 'save to es!!!!',es.index(index=indexName_date, doc_type=typeName, id=_id, body=data)
 
-        # else:
+        else:
         
-        _id = data["mid"]
+            _id = data["mid"]
+            print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
 
-        es.index(index=indexName, doc_type=typeName, id=_id, body=data)
+        # print 'data.........',data
+        # print 'indexName....',indexName
+        # print '_id......',_id
+        # #print 'typeName.....',typeName
+        # print 'es...',es
+
+        # print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
 
     print 'update %s ES done' % indexName
 
