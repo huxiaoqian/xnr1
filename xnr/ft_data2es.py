@@ -434,18 +434,16 @@ def Facebook_user_mappings():
 
 if __name__ == '__main__':
 
-	#db = MySQLdb.connect(host="localhost",user="root",passwd="",db="db_F",charset='utf8')
-	db = MySQLdb.connect(host="localhost",user="root",passwd="",db="twitter_chinese_326",charset='utf8')
-	# #db = MySQLdb.connect("localhost","root","","twitter_chinese_326" )
+	# #db = MySQLdb.connect(host="localhost",user="root",passwd="",db="db_F",charset='utf8')
+	# db = MySQLdb.connect(host="localhost",user="root",passwd="",db="twitter_chinese_326",charset='utf8')
+	# # #db = MySQLdb.connect("localhost","root","","twitter_chinese_326" )
 
-	cursor = db.cursor()
-	#cursor.execute("SELECT * from Fscouting")
-	#cursor.execute("SELECT * from FIDscouting")
-	# #cursor.execute("SELECT * from Tscouting")
-	#cursor.execute("SELECT * from TIDscouting")
-	cursor.execute("SELECT * from chinese_info_sc")
-	rows = cursor.fetchall()
-	Twitter_user_mappings(rows)
+	# cursor = db.cursor()
+	# cursor.execute("SELECT * from chinese_info_sc")
+	# rows = cursor.fetchall()
+	# Twitter_user_mappings(rows)
+
+
 	# print rows[877]
 	# print rows[871]
 	# print rows[873]
@@ -454,9 +452,9 @@ if __name__ == '__main__':
 	# print rows[879]
 	
 	#Twitter_user_mappings()
-	#Twitters_mappings()
+	Twitters_mappings()
 	#Twitter_count_mappings()
-	#Facebooks_mappings()
+	Facebooks_mappings()
 	#Facebooks_mappings_test()
 	#Facebook_count_mappings()
 
