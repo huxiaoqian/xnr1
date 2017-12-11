@@ -55,7 +55,7 @@ def weibo_user_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + S_DATE_BCI
+		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + S_DATE_WARMING
 	else:
 		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + NOW_DATE
 	if not es.indices.exists(index=weibo_user_warning_index_name):
@@ -218,7 +218,7 @@ def weibo_speech_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_BCI
+		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_WARMING
 	else:
 		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + NOW_DATE
 	#print weibo_speech_warning_index_name
@@ -323,16 +323,16 @@ def lookup_date_info(today_datetime):
 
 
 if __name__ == '__main__':	
-	#weibo_user_warning_mappings()
+	weibo_user_warning_mappings()
 	weibo_event_warning_mappings()
-	#weibo_speech_warning_mappings()
+	weibo_speech_warning_mappings()
 
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(S_DATE_WARMING) - DAY
 	else:
 		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
-	#weibo_timing_warning_mappings(date_result)
+	weibo_timing_warning_mappings(date_result)
 
 
 
