@@ -27,7 +27,12 @@ def get_user_xnr_list(user_account):
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'submitter':user_account}
+                    'bool':{
+                        'must':[
+                        {'term':{'submitter':user_account}},
+                        {'term':{'create_status':2}}
+                        ]
+                    }
                 }
             }
         },
@@ -72,7 +77,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
         'query':{
             'filtered':{
                 'filter':{
-                    'bool':{'must':{'range':{'sensitive':{'gte':1,'lte':100}}}}
+                    'bool':{'must':{'range':{'sensitive':{'gte':1}}}}
                 }
             }
         },
@@ -82,7 +87,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
     facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,today_datetime,today_datetime)
     #print facebook_flow_text_index_name
     results=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
-    print results
+    #print results
     result=[]
     for item in results:
         if item['_source']['uid'] in friends_list:
@@ -147,7 +152,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
     except:
         first_sum_result=[]
 
-    #print first_sum_result
+    print 'first_sum_result',first_sum_result
     top_userlist=[]
     for i in xrange(0,len(first_sum_result)):
         user_sensitive=first_sum_result[i]['sensitive_num']['value']
@@ -182,7 +187,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
                         'bool':{
                             'must':[
                                 {'term':{'uid':user['uid']}},
-                                {'range':{'sensitive':{'gte':1,'lte':100}}}
+                                {'range':{'sensitive':{'gte':1}}}
                             ]
                         }
                     }
@@ -288,11 +293,14 @@ def lookup_facebook_date_warming(keywords,today_datetime):
 
     query_body={
         'query':{
-            'bool':{
-                'should':keyword_query_list
+            'bool':
+            {
+                'should':keyword_query_list,
+                'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
-        'size':MAX_VALUE
+        'size':MAX_WARMING_SIZE,
+        'sort':{'sensitive':{'order':'desc'}}
     }
     try:
         temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
@@ -542,13 +550,14 @@ def create_facebook_warning():
 
     account_list=get_user_account_list()
     for account in account_list:
-        xnr_list=get_user_xnr_list(account)
-
+        #xnr_list=get_user_xnr_list(account)
+        #print xnr_list
+        xnr_list=['FXNR0001']
         for xnr_user_no in xnr_list:
             #人物行为预警
-            #personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
             #create_event_warning(xnr_user_no,today_datetime,write_mark=True)
