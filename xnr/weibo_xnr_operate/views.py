@@ -9,7 +9,7 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from xnr.global_utils import es_flow_text
 from xnr.global_config import S_TYPE
-from xnr.time_utils import datetime2s
+from xnr.time_utils import datetime2ts
 from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,get_recommend_at_user,\
                 get_daily_recommend_tweets,get_hot_recommend_tweets,get_hot_content_recommend,\
                 get_hot_subopinion,get_hot_sensitive_recommend_at_user,get_bussiness_recomment_tweets,\
