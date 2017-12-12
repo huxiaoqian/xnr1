@@ -14,7 +14,7 @@ from global_utils import weibo_user_warning_index_name_pre,weibo_user_warning_in
 						weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
 						weibo_date_remind_index_name,weibo_date_remind_index_type
 
-NOW_DATE=ts2datetime(int(time.time()))
+NOW_DATE=ts2datetime(int(time.time())-DAY)
 
 def weibo_user_warning_mappings():
 	index_info = {
@@ -55,7 +55,7 @@ def weibo_user_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + S_DATE_BCI
+		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + S_DATE_WARMING
 	else:
 		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + NOW_DATE
 	if not es.indices.exists(index=weibo_user_warning_index_name):
@@ -105,7 +105,7 @@ def weibo_event_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_event_warning_index_name = weibo_event_warning_index_name_pre + S_DATE_BCI
+		weibo_event_warning_index_name = weibo_event_warning_index_name_pre + ts2datetime(datetime2ts(S_DATE_WARMING) - DAY)
 	else:
 		weibo_event_warning_index_name = weibo_event_warning_index_name_pre + NOW_DATE
 	if not es.indices.exists(index=weibo_event_warning_index_name):
@@ -218,7 +218,7 @@ def weibo_speech_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_BCI
+		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_WARMING
 	else:
 		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + NOW_DATE
 	#print weibo_speech_warning_index_name
@@ -325,12 +325,12 @@ def lookup_date_info(today_datetime):
 if __name__ == '__main__':	
 	weibo_user_warning_mappings()
 	weibo_event_warning_mappings()
-	#weibo_speech_warning_mappings()
+	weibo_speech_warning_mappings()
 
 	if S_TYPE == 'test':
-		today_datetime=datetime2ts(S_DATE_WARMING)
+		today_datetime=datetime2ts(S_DATE_WARMING) - DAY
 	else:
-		today_datetime=int(time.time())
+		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
 	weibo_timing_warning_mappings(date_result)
 

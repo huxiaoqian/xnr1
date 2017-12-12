@@ -388,7 +388,8 @@ function obtain(t) {
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
-$('#sure_post').on('click',function () {
+$('#sure_postRel').on('click',function () {
+    //
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
     var flag=$('.friends button b').text(),rank='',middle_timing='submit_tweet';
@@ -408,19 +409,56 @@ $('#sure_post').on('click',function () {
         }else {
             $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间。');
             $('#pormpt').modal('show');
+            return false;
         }
     }
     if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
-    public_ajax.call_request('get',post_url_1,postYES22)
+    public_ajax.call_request('get',post_url_1,postYES22);
+
 });
 function postYES22(data) {
-    var f='操作失败';
+    var f='发帖内容提交失败';
     if (data[0]){
-        f='操作成功';
+        f='发帖内容提交成功';
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
+//=====================相关通道========================
+//相关通道
+var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
+public_ajax.call_request('get',roadInforurl,roadInfor);
+function roadInfor(data) {
+    var data=data[0];
+    ///nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
+    //nameAndGroup(data['weixin_xnr_name'],data['weixin_xnr_user_no'],'#sameRoad .wxlist .weixinName',data['weixin_groups'],'#sameRoad .wxlist .weixinGroup')
+    nameAndGroup(data['facebook_xnr_name'],data['facebook_xnr_user_no'],'#sameRoad .fblist .fbName',data['facebook_groups'],'#sameRoad .fblist .fbGroup')
+    nameAndGroup(data['twitter_xnr_name'],data['twitter_xnr_user_no'],'#sameRoad .twlist .twName',data['twitter_groups'],'#sameRoad .twlist .twGroup')
+}
+var osia=0;
+function nameAndGroup(opt1,opt2,opt3,opt4,opt5) {
+    var name='',str='';
+    if (opt1){name=opt1}else {name=opt2}
+    if (opt2){name+='('+opt2+')'}
+    if (!opt1&&!opt2){$(opt3).html('暂无相同通道下虚拟人');return false;}
+    $(opt3).html(name).attr('sid',opt2);
+    if (opt4){
+        osia++;
+        $.each(opt4,function (index,item) {
+            var a='';
+            if (item.gname){a=item.gname}else {a=item.gid}
+            if (item.gid){a+='('+item.gid+')'}
+            str+=
+                '<label class="demo-label">'+
+                '   <input class="demo-radio" type="checkbox" value="'+item.gid+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+a+
+                '</label>';
+        });
+    }
+
+    $(opt5).html(str);
+}
+//=====================相关通道=======完=================
 //群可见的情况
 var rankidList=[];
 function groupSure() {
@@ -1020,6 +1058,5 @@ function businessWeibo(data) {
     });
     $('#defaultWeibo3 p').slideUp(700);
     $('.defaultWeibo3 .search .form-control').attr('placeholder','搜索关键词或子观点相关的微博（回车搜索）');
-}
-
+};
 

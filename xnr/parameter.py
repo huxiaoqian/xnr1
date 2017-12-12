@@ -21,6 +21,8 @@ USER_NUM = 50 #人物行为预警返回用户数量
 USER_CONTENT_NUM=50 #人物行为预警每个用户返回的敏感微博数量最大值
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 WARMING_DAY=15 #时间预警，预警天数
+MAX_WARMING_SIZE=100 #最大预警数目
+EVENT_COUNT=20 #实时计算事件频率阈值
 #xnr
 USER_XNR_NUM=50 #用户管理虚拟人数量
 # weibo
@@ -115,8 +117,14 @@ CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_
 
 TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
 
+PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
+
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
+#FB & TW 属性计算
+FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_facebook'
+TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_twitter'
+FB_TW_TOPIC_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/topic'
 
 MID_VALUE = 500      #查询活跃用户数量
 
