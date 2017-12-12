@@ -44,7 +44,6 @@ def wx_group_message_mappings(index_name):
                     },
                     'timestamp':{
                         'type':'long'
-                        
                     },
                     'xnr_wx_id':{
                         'type':'string',

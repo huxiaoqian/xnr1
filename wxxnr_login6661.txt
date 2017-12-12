@@ -1,6 +1,0 @@
-█start_bot:  WXXNR0001 6661 8ddbf030,6f64e630,cfb4644f,b7affa65,e31affb6,66d10328,ad6cbaea,8b060032
-starting WXXNR0001 ...
-global name 'FileNotFoundError' is not defined
-█start_bot:  WXXNR0001 6661 8ddbf030,6f64e630,cfb4644f,b7affa65,e31affb6,66d10328,ad6cbaea,8b060032
-starting WXXNR0001 ...
-global name 'FileNotFoundError' is not defined

@@ -21,7 +21,7 @@ def create_xnr():
         res = utils_create_xnr({'wx_id':wx_id, 'submitter':submitter, 'mail':mail, 'access_id':access_id, 'remark':remark})
         if res:
             return json.dumps(res)
-    return None   
+    return None
 
 @mod.route('/login/')
 def login():
@@ -30,7 +30,7 @@ def login():
         res = utils_login(wxbot_id)
         if res:
             return json.dumps(res)
-    return None 
+    return None
 
 @mod.route('/logout/')
 def logout():
@@ -39,7 +39,7 @@ def logout():
         res = utils_logout(wxbot_id)
         if res:
             return json.dumps(res)
-    return None 
+    return None
 
 @mod.route('/checkstatus/')
 def check_status():
@@ -48,7 +48,7 @@ def check_status():
         res = utils_check_status(wxbot_id)
         if res:
             return json.dumps(res)
-    return None 
+    return None
 
 @mod.route('/loadallgroups/')
 def load_all_groups():
@@ -94,4 +94,4 @@ def delete():
         res = utils_delete(wxbot_id)
         if res:
             return json.dumps(res)
-    return None 
+    return None

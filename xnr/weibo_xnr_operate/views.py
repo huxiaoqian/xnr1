@@ -8,6 +8,8 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from xnr.global_utils import es_flow_text
+from xnr.global_config import S_TYPE
+from xnr.time_utils import datetime2ts
 from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,get_recommend_at_user,\
                 get_daily_recommend_tweets,get_hot_recommend_tweets,get_hot_content_recommend,\
                 get_hot_subopinion,get_hot_sensitive_recommend_at_user,get_bussiness_recomment_tweets,\
@@ -250,6 +252,11 @@ def ajax_show_comment():
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
+
+    if S_TYPE == 'test':
+        task_detail['start_ts'] = datetime2s('2017-10-01')
+        task_detail['end_ts'] = datetime2s('2017-10-07')
+
     results = get_show_comment(task_detail)
     return json.dumps(results)
 
@@ -274,6 +281,11 @@ def ajax_show_retweet():
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
+
+    if S_TYPE == 'test':
+        task_detail['start_ts'] = datetime2s('2017-10-01')
+        task_detail['end_ts'] = datetime2s('2017-10-07')
+
     results = get_show_retweet(task_detail)
     return json.dumps(results)
 
@@ -297,6 +309,12 @@ def ajax_show_private():
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
+
+    if S_TYPE == 'test':
+        task_detail['start_ts'] = datetime2s('2017-10-01')
+        task_detail['end_ts'] = datetime2s('2017-10-07')
+
+
     results = get_show_private(task_detail)
     return json.dumps(results)
 
@@ -320,6 +338,11 @@ def ajax_show_at():
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
+
+    if S_TYPE == 'test':
+        task_detail['start_ts'] = datetime2s('2017-10-01')
+        task_detail['end_ts'] = datetime2s('2017-10-07')   
+
     results = get_show_at(task_detail)
     return json.dumps(results)
 

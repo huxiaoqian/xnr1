@@ -20,14 +20,6 @@ function virtual(data) {
         sortName:'bci',
         sortOrder:"desc",
         columns: [
-            // {
-            //     title: "用户ID",//标题
-            //     field: "user_id",//键名
-            //     sortable: true,//是否可排序
-            //     order: "desc",//默认排序方式
-            //     align: "center",//水平
-            //     valign: "middle",//垂直
-            // },
             {
                 title: "平台名称",//标题
                 field: "platform_name",//键名
@@ -75,18 +67,6 @@ function virtual(data) {
                     };
                 }
             },
-            // {
-            //     title: "操作",//标题
-            //     field: "",//键名
-            //     sortable: true,//是否可排序
-            //     order: "desc",//默认排序方式
-            //     align: "center",//水平
-            //     valign: "middle",//垂直
-            //     formatter: function (value, row, index) {
-            //         return '<span style="cursor:pointer;color:white;" onclick="addVirModify(\''+row.user_id+'\',\''+row.user_name+'\',\''+row.my_xnrs+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
-            //             '<span style="cursor:pointer;color:white;" onclick="deleteVir(\''+row.user_id+'\',\''+row.my_xnrs+'\')" title="删除"><i class="icon icon-trash"></i></span>';
-            //     }
-            // },
         ],
     });
 };

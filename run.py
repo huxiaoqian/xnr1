@@ -25,7 +25,6 @@ from xnr.extensions import db, user_datastore
 from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.global_utils import es_xnr,weibo_log_management_index_name,weibo_log_management_index_type
 
-
 optparser = OptionParser()
 optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number', default=9001, type='int')
 (options, args) = optparser.parse_args()

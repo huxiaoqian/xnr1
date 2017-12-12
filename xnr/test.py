@@ -140,6 +140,11 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
+es.indices.delete(index='weibo_feedback_retweet_2017*')
+es.indices.delete(index='weibo_feedback_comment_2017*')
+es.indices.delete(index='weibo_feedback_at_2017*')
+es.indices.delete(index='weibo_feedback_private_2017*')
+es.indices.delete(index='weibo_feedback_like_2017*')
 
 # query_body={
 #     'query':{
@@ -244,19 +249,6 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.index(index='group_message_2017-10-01',doc_type='record',id=id,body=item)
 
 #es.delete(index='group_message_2017-10-01',doc_type='record',id='AV7cBiJA82y9EzvV4MqU')
-
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0016')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0017')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0018')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0019')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0020')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0021')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0022')
-# es.delete(index='weibo_xnr',doc_type='user',id='WXNR0023')
-# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730626')
-# es.delete(index='xnr_flow_text_2017-10-11',doc_type='text',id='WXNR0004_1507730700')
-es.indices.delete(index='twitter_feedback_friends_2017-11-13')
-es.indices.delete(index='twitter_feedback_comment_2017-11-13')
 
 
 

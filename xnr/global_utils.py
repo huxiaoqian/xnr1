@@ -63,7 +63,7 @@ wx_group_message_index_name_pre = 'wx_group_message_'        #wx_group_message_2
 wx_group_message_index_type = 'record'
 wx_sent_group_message_index_name_pre = 'wx_sent_group_message_'
 
-# use to search flow text and bci 
+# use to search flow text and bci
 es_flow_text = Elasticsearch(ES_FLOW_TEXT_HOST, timeout=600)
 flow_text_index_name_pre = 'flow_text_' #flow_text_index_name: flow_text_2017-06-24
 flow_text_index_type = 'text'
@@ -76,6 +76,18 @@ es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
+
+#fb user portrait
+# es_fb_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_fb_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+fb_portrait_index_name = 'fb_user_portrait'
+fb_portrait_index_type = 'user'
+
+#tw user portrait
+# es_tw_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_tw_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+tw_portrait_index_name = 'tw_user_portrait'
+tw_portrait_index_type = 'user'
 
 #use to identify the qq document task redis list
 qq_document_task_name = 'qq_document'
@@ -92,7 +104,7 @@ ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
 wx_xnr_qrcode_path = 'xnr/static/images/WX'
-WX_LOGIN_PATH = 'xnr/wx/run_bot.py'	#使用命令行开启run_bot()的subprocess的程序地址
+WX_LOGIN_PATH = 'xnr/wx/run_bot.py' #使用命令行开启run_bot()的subprocess的程序地址
 sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
 '''
@@ -281,6 +293,15 @@ wx_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 # facebook
+
+#use to save fb xnr personal information
+fb_xnr_index_name='fb_xnr'
+fb_xnr_index_type='user'
+
+#use to save fb xnr information which should be count
+fb_xnr_fans_followers_index_name='fb_xnr_fans_followers'
+fb_xnr_fans_followers_index_type='uids'
+
 #use to save feedback info
 facebook_feedback_comment_index_name_pre = 'facebook_feedback_comment_'
 facebook_feedback_comment_index_name = 'facebook_feedback_comment'
@@ -306,6 +327,19 @@ facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'
 
+# use to save flow text 
+facebook_flow_text_index_name_pre = 'facebook_flow_text_'
+facebook_flow_text_index_type = 'text'
+
+facebook_count_index_name_pre = 'facebook_count_'
+facebook_count_index_type = 'text'
+
+facebook_user_index_name = 'facebook_user'
+facebook_user_index_type = 'user'
+
+# use to save influence
+fb_bci_index_name_pre = 'fb_bci_'
+fb_bci_index_type = 'bci'
 #预警
 facebook_user_warning_index_name_pre = 'facebook_user_warning_'
 facebook_user_warning_index_type = 'text'
@@ -316,8 +350,19 @@ facebook_event_warning_index_type = 'text'
 facebook_speech_warning_index_name_pre = 'facebook_speech_warning_'
 facebook_speech_warning_index_type = 'text'
 
-
+facebook_timing_warning_index_name_pre = 'facebook_time_warning_'
+facebook_timing_warning_index_type = 'text'
 # twitter
+
+#use to save tw xnr personal information
+tw_xnr_index_name='tw_xnr'
+tw_xnr_index_type='user'
+
+#use to save tw xnr information which should be count
+tw_xnr_fans_followers_index_name='tw_xnr_fans_followers'
+tw_xnr_fans_followers_index_type='uids'
+
+
 #use to save feedback info
 twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
 twitter_feedback_comment_index_name = 'twitter_feedback_comment'
@@ -347,7 +392,26 @@ twitter_feedback_follow_index_name_pre = 'twitter_feedback_follow_'
 twitter_feedback_follow_index_name = 'twitter_feedback_follow'
 twitter_feedback_follow_index_type = 'text'
 
+# use to save twitter flow text
+twitter_flow_text_index_name_pre = 'twitter_flow_text_'
+twitter_flow_text_index_type = 'text'
 
+
+twitter_count_index_name_pre = 'twitter_count_'
+twitter_count_index_type = 'text'
+
+
+
+twitter_count_index_name_pre = 'twitter_count_'
+twitter_count_index_type = 'text'
+
+
+twitter_user_index_name = 'twitter_user'
+twitter_user_index_type = 'user'
+
+# use to save influence
+tw_bci_index_name_pre = 'tw_bci_'
+tw_bci_index_type = 'bci'
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
@@ -390,6 +454,25 @@ R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, d
 
 # 存储qq监测群
 r_qq_group_set_pre = 'qq_group_set_'
+
+# facebook&twitter uname_id
+R_UNAME2ID_FT = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+fb_uname2id = 'fb_user'
+tw_uname2id = 'tw_user'
+
+# r_retweet 转发网络
+redis_host_list = [1,2]
+R_retweet = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=2)
+
+fb_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=3)
+fb_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=4)
+
+tw_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=5)
+tw_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=6)
+
+fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
+tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
+
 
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
