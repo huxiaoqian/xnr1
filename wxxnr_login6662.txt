@@ -9562,3 +9562,171 @@ Accept new connection from 127.0.0.1:56122...
 Accept new connection from 127.0.0.1:56123...
 Connection from 127.0.0.1:56123 closed.
 Connection from 127.0.0.1:56122 closed.
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:57084...
+Connection from 127.0.0.1:57084 closed.
+Accept new connection from 127.0.0.1:57086...
+Connection from 127.0.0.1:57086 closed.
+get mapping
+wx_group_message_2017-12-05
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAkSCP2aWrYsxKSPloT', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+get mapping
+wx_sent_group_message_2017-12-05
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAkSC5ERRfILYi0fxcw', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSDH_aWrYsxKSPloU', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSD_HuTANEfYmgYc3', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSEslRRfILYi0fxcx', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSEsfaWrYsxKSPloV', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSHUJuTANEfYmgYc4', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSH8kRRfILYi0fxcy', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSH8daWrYsxKSPloW', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSIyAuTANEfYmgYc5', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSJVoRRfILYi0fxcz', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSJVhaWrYsxKSPloX', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSKKluTANEfYmgYc6', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSKwURRfILYi0fxc0', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSKwNaWrYsxKSPloY', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+{u'_type': u'record', u'_id': u'AWAkSVBiuTANEfYmgYc7', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-05'}
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:38019...
+Connection from 127.0.0.1:38019 closed.
+Accept new connection from 127.0.0.1:38020...
+Connection from 127.0.0.1:38020 closed.
+get mapping
+wx_group_message_2017-12-06
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWApl29DaWrYsxKSPloa', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-06'}
+get mapping
+wx_sent_group_message_2017-12-06
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWApl3LXuTANEfYmgYc8', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-06'}
+{u'_type': u'record', u'_id': u'AWApl3wyaWrYsxKSPlob', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-06'}
+Accept new connection from 127.0.0.1:38026...
+Accept new connection from 127.0.0.1:38027...
+Connection from 127.0.0.1:38027 closed.
+Connection from 127.0.0.1:38026 closed.
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:45503...
+Connection from 127.0.0.1:45503 closed.
+Accept new connection from 127.0.0.1:45504...
+Connection from 127.0.0.1:45504 closed.
+get mapping
+wx_group_message_2017-12-07
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAuo-2QRRfILYi0fxga', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-07'}
+get mapping
+wx_sent_group_message_2017-12-07
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAuo_SBaWrYsxKSPlod', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-07'}
+{u'_type': u'record', u'_id': u'AWAuo_wfRRfILYi0fxgb', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-07'}
+{u'_type': u'record', u'_id': u'AWAuo_yDuTANEfYmgYc9', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-07'}
+{u'_type': u'record', u'_id': u'AWAupAQcaWrYsxKSPloe', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-07'}
+{u'_type': u'record', u'_id': u'AWAupAQiRRfILYi0fxgc', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-07'}
+Accept new connection from 127.0.0.1:45531...
+Accept new connection from 127.0.0.1:45532...
+Connection from 127.0.0.1:45532 closed.
+Connection from 127.0.0.1:45531 closed.
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:37480...
+Connection from 127.0.0.1:37480 closed.
+Accept new connection from 127.0.0.1:37482...
+Connection from 127.0.0.1:37482 closed.
+get mapping
+wx_group_message_2017-12-08
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAztI_LuTANEfYmgYc-', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+get mapping
+wx_sent_group_message_2017-12-08
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWAztJugRRfILYi0fxh4', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztJkeuTANEfYmgYc_', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztK6PaWrYsxKSPlog', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztLIRRRfILYi0fxh5', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztK0ZuTANEfYmgYdA', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztMR-aWrYsxKSPloh', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztMdORRfILYi0fxh6', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztMJXuTANEfYmgYdB', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+{u'_type': u'record', u'_id': u'AWAztXzSaWrYsxKSPloi', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-08'}
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:42067...
+Connection from 127.0.0.1:42067 closed.
+Accept new connection from 127.0.0.1:42069...
+Connection from 127.0.0.1:42069 closed.
+get mapping
+wx_group_message_2017-12-11
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWBDN5p4aWrYsxKSPlp2', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-11'}
+get mapping
+wx_sent_group_message_2017-12-11
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWBDN6UBRRfILYi0fyRA', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-11'}
+{u'_type': u'record', u'_id': u'AWBDN6kwaWrYsxKSPlp3', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-11'}
+Accept new connection from 127.0.0.1:42077...
+Accept new connection from 127.0.0.1:42078...
+Connection from 127.0.0.1:42078 closed.
+Connection from 127.0.0.1:42077 closed.
+█[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:60030...
+Connection from 127.0.0.1:60030 closed.
+Accept new connection from 127.0.0.1:60032...
+Connection from 127.0.0.1:60032 closed.
+get mapping
+wx_group_message_2017-12-12
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWBIXnkmuTANEfYmgYdt', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-12'}
+get mapping
+wx_sent_group_message_2017-12-12
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWBIXofTRRfILYi0fybp', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-12'}
+{u'_type': u'record', u'_id': u'AWBIXoLKuTANEfYmgYdu', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-12'}
+{u'_type': u'record', u'_id': u'AWBIXpMSaWrYsxKSPlp7', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-12'}
+{u'_type': u'record', u'_id': u'AWBIXpdYRRfILYi0fybq', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2017-12-12'}
+{u'_type': u'record', u'_id': u'AWBIXpC6uTANEfYmgYdv', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2017-12-12'}
+Accept new connection from 127.0.0.1:60439...
+Accept new connection from 127.0.0.1:60444...
+Connection from 127.0.0.1:60444 closed.
+Connection from 127.0.0.1:60439 closed.
