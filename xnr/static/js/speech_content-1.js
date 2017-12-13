@@ -4,8 +4,8 @@ $('#typelist .demo-radio').on('click',function () {
     var time=$('.choosetime input:radio[name="time"]:checked').val();
     var time1=getDaysBefore(time);
     if (time=='mize'){
-        var s=$(this).parents('.choosetime').find('#start').val();
-        var d=$(this).parents('.choosetime').find('#end').val();
+        var s=$('.choosetime').find('#start').val();
+        var d=$('.choosetime').find('#end').val();
         if (s==''||d==''){
             $('#pormpt p').text('时间不能为空。');
             $('#pormpt').modal('show');
@@ -77,7 +77,7 @@ function weibo(data) {
                         time=getLocalTime(item.timestamp);
                     };
                     var rel_str=
-                        '<div class="everySpeak" style="margin: 0 auto;width: 950px;">'+
+                        '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel">'+
                         '                <label class="demo-label">'+
