@@ -1,6 +1,5 @@
-var ID_Num='FXNR0001';
 var time2=Date.parse(new Date())/1000;
-var timeUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
+var timeUrl='/facebook_xnr_warning/show_date_warning/?account_name='+admin+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
@@ -13,7 +12,7 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
-        var weiboUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        var weiboUrl='/facebook_xnr_warning/show_date_warning/?account_name='+admin+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
         public_ajax.call_request('get',weiboUrl,weibo);
     }
 });
@@ -24,7 +23,7 @@ $('#sure').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+
+        var weiboUrl='/weibo_xnr_warming_new/show_date_warning/?account_name='+admin+'&start_time='+
             (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',weiboUrl,weibo);
     }
@@ -35,7 +34,7 @@ var contentList = {};
 function calendar(data){
     $('#group_emotion_loading').css('display', 'block');
     $.each(data,function (index,item) {
-        contentList['exo_'+index]=item['weibo_date_warming_content'];
+        contentList['exo_'+index]=item['facebook_date_warming_content'];
     })
 
     // $('#input-table').css('display', 'block');
