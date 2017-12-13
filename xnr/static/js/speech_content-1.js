@@ -113,7 +113,7 @@ function weibo(data) {
             },
         ],
     });
-    $('#weiboContent p').slideUp(30);
+    $('#weiboContent p').slideUp(300);
 };
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {

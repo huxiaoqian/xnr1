@@ -55,6 +55,7 @@ $('#sure').on('click',function () {
 var weiboUrl='/facebook_xnr_warning/show_speech_warning/?xnr_user_no='+ID_Num+'&show_type=0&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
+    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
@@ -145,6 +146,7 @@ function weibo(data) {
             },
         ],
     });
+    $('#weiboContent p').slideUp(300);
 };
 
 // 转发===评论===点赞

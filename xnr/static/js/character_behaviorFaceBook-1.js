@@ -121,7 +121,7 @@ function weibo(data) {
                         nameuid=row.user_name;
                     };
                     var rel_str=
-                        '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
+                        '<div class="everyUser" style="margin: 0 auto;width: 950px;text-align:left;">'+
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+
@@ -142,7 +142,7 @@ function weibo(data) {
             },
         ],
     });
-    $('#weiboContent p').slideUp(30);
+    $('#weiboContent p').slideUp(300);
 };
 
 // 转发===评论===点赞
