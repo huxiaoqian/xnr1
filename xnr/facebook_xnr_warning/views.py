@@ -39,7 +39,7 @@ def ajax_show_speech_warning():
 
 
 #时间预警
-#http://219.224.134.213:9209/facebook_xnr_warning/show_date_warning/?account_name=admin@qq.com&start_time=1511668800&end_time=1512389253
+#http://219.224.134.213:9209/facebook_xnr_warning/show_date_warning/?account_name=admin@qq.com&start_time=1504195200&end_time=1512389253
 @mod.route('/show_date_warning/')
 def ajax_show_date_warning():
 	account_name=request.args.get('account_name','')
@@ -53,7 +53,10 @@ def ajax_show_date_warning():
 @mod.route('/update_fb_flow_text/')
 def ajax_update_fb_flow_text():
 	#task_id='328762654255381'
-	task_id='328760217588958'
+	#task_id='328760217588958'
+	#task_id='1555096127914839'
+	#task_id='1554860021271783'
+	task_id='1554849701272815'
 	sensitive=1
 	results=update_fb_flow_text(task_id,sensitive)
 	return json.dumps(results)
