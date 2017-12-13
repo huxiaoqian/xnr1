@@ -1,11 +1,43 @@
-var timeUrl='/weibo_xnr_warming/show_date_warming/'//?xnr_user_no='+ID_Num;
+var ID_Num='FXNR0001';
+var time2=Date.parse(new Date())/1000;
+var timeUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+
+
 var contentList = {};
 function calendar(data){
+    $('#group_emotion_loading').css('display', 'block');
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item['weibo_date_warming_content'];
     })
-    $('#group_emotion_loading').css('display', 'none');
+
     // $('#input-table').css('display', 'block');
     var dataArray = data;
     var PageNo=document.getElementById('PageNo');                   //设置每页显示行数
@@ -427,6 +459,7 @@ function calendar(data){
         }
     }
 
+    $('#group_emotion_loading').css('display', 'none');
 }
 
 function startTable(index,key) {
