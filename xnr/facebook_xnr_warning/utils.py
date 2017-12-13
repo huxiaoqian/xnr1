@@ -114,13 +114,13 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
 
      #计算敏感度排名靠前的用户
     query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':friends_list}
-                }
-            }
-        },
+        # 'query':{
+        #     'filtered':{
+        #         'filter':{
+        #             'terms':{'uid':friends_list}
+        #         }
+        #     }
+        # },
         'aggs':{
             'friends_sensitive_num':{
                 'terms':{'field':'uid'},
@@ -244,6 +244,22 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
             #print today_user_warming
             #print history_user_warming
             #print user_warming
+
+    warming_list=[]
+    user_uid_list=[]
+    for item in user_warming:
+        user_uid=item['uid']
+        item['content']=json.loads(item['content'])
+        if user_uid in user_uid_list:
+            old_user=[user for user in warming_list if user['uid'] == user_uid][0]
+            new_warming_list = [user for user in warming_list if user['uid'] != user_uid][0]
+            old_user['content'].extend(item['content'])
+            old_user['user_sensitive']=old_user['user_sensitive']+item['user_sensitive']
+            new_warming_list.append(old_user)
+            warming_list = new_warming_list
+        else:          
+            warming_list.append(item)
+            user_uid_list.append(user_uid)
 
     if user_warming:
         user_warming.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
@@ -475,7 +491,7 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
                 'should':keyword_query_list
             }
         },
-        'size':MAX_VALUE
+        'size':MAX_WARMING_SIZE
     }
     try:
         temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
@@ -510,7 +526,7 @@ def show_date_warning(account_name,start_time,end_time):
 
 #更新flow text数据用于测试
 def update_fb_flow_text(task_id,sensitive):
-    result=es_xnr.update(index='facebook_flow_text_2017-09-10',doc_type='text',id=task_id,\
+    result=es_xnr.update(index='facebook_flow_text_2017-09-11',doc_type='text',id=task_id,\
                 body={"doc":{'sensitive':sensitive}})
 
 
