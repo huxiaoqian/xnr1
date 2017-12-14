@@ -182,11 +182,14 @@ def create_personal_warning(xnr_user_no,today_datetime):
         task_id=xnr_user_no+'_'+user_detail['uid']
         #print weibo_user_warning_index_name
         #print user_detail
-        try:
-            es_xnr.index(index=weibo_user_warning_index_name,doc_type=weibo_user_warning_index_type,body=user_detail,id=task_id)
-            mark=True
-        except:
-            mark=False
+        if s_result:
+            try:
+                es_xnr.index(index=weibo_user_warning_index_name,doc_type=weibo_user_warning_index_type,body=user_detail,id=task_id)
+                mark=True
+            except:
+                mark=False
+        else:
+            pass
 
         results.append(mark)
 
@@ -364,9 +367,9 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 # for followers_uid in followers_list:
                 if followers_mark > 0:
                     if followers_num_dict.has_key(str(item['_source']['uid'])):
-                        fans_num_dict[str(item['_source']['uid'])]=fans_num_dict[str(item['_source']['uid'])]+1
+                        followers_num_dict[str(item['_source']['uid'])]=followers_num_dict[str(item['_source']['uid'])]+1
                     else:
-                        fans_num_dict[str(item['_source']['uid'])]=1
+                        followers_num_dict[str(item['_source']['uid'])]=1
                 else:
                     pass
 

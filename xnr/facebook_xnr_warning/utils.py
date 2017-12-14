@@ -12,10 +12,11 @@ from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
                              facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
                              facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
-                             weibo_date_remind_index_name,weibo_date_remind_index_type
+                             weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                             facebook_count_index_name_pre,facebook_count_index_type
 
 
-from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM
+from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE
 from xnr.global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
 
 
@@ -41,6 +42,31 @@ def get_xnr_warming_index_listname(index_name_pre,date_range_start_ts,date_range
             pass
     return index_name_list
 
+
+#查询fid的comment、favorite、retweet等字段的数值
+def lookup_fid_attend_index(fid,today_datetime):
+    facebook_count_index_name=get_timets_set_indexset_list(facebook_count_index_name_pre,today_datetime,today_datetime)
+    
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{'must':{'term':{'fid':fid}}}
+                }
+            }
+        },
+        'size':MAX_WARMING_SIZE,
+        'sort':{'update_time':{'order':'desc'}}
+    }
+    try:
+        result=es_xnr.search(index=facebook_count_index_name,doc_type=facebook_count_index_type,body=query_body)['hits']['hits']
+        print result
+        fid_result=[]
+        for item in result:
+            fid_result.append(item['_source'])
+    except:
+        fid_result=[]
+    return fid_result
  
 ###################################################################
 ###################       personal warning       ##################
@@ -67,7 +93,7 @@ def lookup_history_user_warming(xnr_user_no,start_time,end_time):
             }
         },
         'sort':{'user_sensitive':{'order':'asc'}} ,
-        'size':MAX_SEARCH_SIZE
+        'size':MAX_WARMING_SIZE
     }
 
     user_warming_list=get_xnr_warming_index_listname(facebook_user_warning_index_name_pre,start_time,end_time)
@@ -114,13 +140,13 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
 
      #计算敏感度排名靠前的用户
     query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':friends_list}
-                }
-            }
-        },
+        # 'query':{
+        #     'filtered':{
+        #         'filter':{
+        #             'terms':{'uid':friends_list}
+        #         }
+        #     }
+        # },
         'aggs':{
             'friends_sensitive_num':{
                 'terms':{'field':'uid'},
@@ -131,7 +157,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
                 }                        
             }
             },
-        'size':MAX_VALUE
+        'size':MAX_SEARCH_SIZE
     }
 
     facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,start_time,end_time)
@@ -183,7 +209,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
                     }
                 }
             },
-            'size':MAX_VALUE,
+            'size':MAX_WARMING_SIZE,
             'sort':{'sensitive':{'order':'desc'}}
         }
 
@@ -194,6 +220,16 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
 
         s_result=[]
         for item in second_result:
+            #查询三个指标字段
+            fid_result=lookup_fid_attend_index(item['_source']['fid'],start_time)
+            if fid_result:
+                item['_source']['comment']=fid_result['comment']
+                item['_source']['share']=fid_result['share']
+                item['_source']['favorite']=fid_result['favorite']
+            else:
+                item['_source']['comment']=0
+                item['_source']['share']=0
+                item['_source']['favorite']=0   
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
@@ -244,6 +280,22 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
             #print today_user_warming
             #print history_user_warming
             #print user_warming
+
+    warming_list=[]
+    user_uid_list=[]
+    for item in user_warming:
+        user_uid=item['uid']
+        item['content']=json.loads(item['content'])
+        if user_uid in user_uid_list:
+            old_user=[user for user in warming_list if user['uid'] == user_uid][0]
+            new_warming_list = [user for user in warming_list if user['uid'] != user_uid][0]
+            old_user['content'].extend(item['content'])
+            old_user['user_sensitive']=old_user['user_sensitive']+item['user_sensitive']
+            new_warming_list.append(old_user)
+            warming_list = new_warming_list
+        else:          
+            warming_list.append(item)
+            user_uid_list.append(user_uid)
 
     if user_warming:
         user_warming.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
@@ -319,6 +371,16 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
     try:
         results=es_flow_text.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         for item in results:
+            #查询三个指标字段
+            fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
+            if fid_result:
+                item['_source']['comment']=fid_result['comment']
+                item['_source']['share']=fid_result['share']
+                item['_source']['favorite']=fid_result['favorite']
+            else:
+                item['_source']['comment']=0
+                item['_source']['share']=0
+                item['_source']['favorite']=0   
             result.append(item['_source'])
     except:
         result=[]
@@ -444,7 +506,7 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
             }
         },
         'sort':{'timestamp':{'order':'asc'}} ,
-        'size':MAX_SEARCH_SIZE
+        'size':MAX_WARMING_SIZE
     }
     result=es_xnr.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
     warming_content=[]
@@ -475,12 +537,22 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
                 'should':keyword_query_list
             }
         },
-        'size':MAX_VALUE
+        'size':MAX_WARMING_SIZE
     }
     try:
         temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in temp_result:
+            #查询三个指标字段
+            fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
+            if fid_result:
+                item['_source']['comment']=fid_result['comment']
+                item['_source']['share']=fid_result['share']
+                item['_source']['favorite']=fid_result['favorite']
+            else:
+                item['_source']['comment']=0
+                item['_source']['share']=0
+                item['_source']['favorite']=0   
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -510,7 +582,7 @@ def show_date_warning(account_name,start_time,end_time):
 
 #更新flow text数据用于测试
 def update_fb_flow_text(task_id,sensitive):
-    result=es_xnr.update(index='facebook_flow_text_2017-09-10',doc_type='text',id=task_id,\
+    result=es_xnr.update(index='facebook_flow_text_2017-09-11',doc_type='text',id=task_id,\
                 body={"doc":{'sensitive':sensitive}})
 
 
