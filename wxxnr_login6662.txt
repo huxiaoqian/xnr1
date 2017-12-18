@@ -10452,3 +10452,17 @@ global name 'FileNotFoundError' is not defined
 starting WXXNR0002 ...
 before login
 global name 'FileNotFoundError' is not defined
+██[H[2Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:59382...
+Connection from 127.0.0.1:59382 closed.
+Accept new connection from 127.0.0.1:59383...
+Connection from 127.0.0.1:59383 closed.
+Accept new connection from 127.0.0.1:59385...
+Accept new connection from 127.0.0.1:59386...
+Connection from 127.0.0.1:59386 closed.
+Connection from 127.0.0.1:59385 closed.
