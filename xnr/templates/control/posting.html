@@ -113,6 +113,48 @@
         cursor: pointer;
     }
     #sure-1:hover {background: rgba(8,23,44,0.65);}
+
+
+	/* LL 12-18智能发帖 */
+	#container #content #intelliGence .point-view-1 {
+		width: 40%;
+	    background: transparent;
+	    border: 1px solid silver;
+	    border-radius: 5px;
+	    padding: 3px 6px;
+	}
+	#container #content #intelliGence .ed-2-1-bottom{
+		margin:10px 0;
+	}
+	#container #content #intelliGence .ed-2-1-bottom button {
+		width:10%;
+		background-color: transparent;
+	    border-color: silver;
+	    color: white;
+	}
+	#container #content #intelliGence .ed-2-1-bottom button:hover {
+		background-color: rgba(3, 8, 16, 0.61);
+    	color: white;
+	}
+	#container .type_page #intelligenceTabs a {
+        color: white;
+    }
+
+    #content #intelliGence #eventRiver {
+    	/* border: 1px solid red; */
+    	/* width:100%; */
+    	width:900px;
+    	height:400px;
+    }
+    #z-1 h5 {
+    	margin:10px 0;
+    }
+    #z-1 h5 img {
+    	width:20px;
+    	height:20px;
+    	margin-right:5px;
+    }
+
 </style>
 {% endblock %}
 {% block main %}
@@ -125,7 +167,7 @@
     </div>
     <div class="type_page" style="margin: 20px 0 30px;">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
+            <li role="presentation" class="">
                 <a href="#everyday" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;日常发帖</a>
             </li>
             <li role="presentation">
@@ -136,6 +178,9 @@
             </li>
             <li role="presentation">
                 <a href="#reportNote" role="tab" data-toggle="tab"><b class="icon icon-cloud-upload"></b>&nbsp;跟踪转发</a>
+            </li>
+            <li role="presentation" class="active">
+                <a href="#intelliGence" role="tab" data-toggle="tab"><b class="icon icon-laptop"></b>&nbsp;智能发帖</a>
             </li>
         </ul>
         <div class="post_post">
@@ -210,7 +255,7 @@
             </div>
         </div>
         <div class="tab-content" id="content">
-            <div role="tabpanel" class="weiboTable tab-pane active" id="everyday">
+            <div role="tabpanel" class="weiboTable tab-pane " id="everyday">
                 <div class="everyday-1" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
@@ -508,6 +553,99 @@
                     </div>
                 </div>
             </div>
+
+			<!-- 智能发帖 -->
+            <div role="tabpanel" class="weiboTable tab-pane active" id="intelliGence">
+                <div class="intelliGence-1" style="margin: 20px 0;">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
+                </div>
+                <div class="intelliGence-2" style="margin-left: 30px;overflow: hidden;">
+                    <div class="ed-2-1">
+                    	<div>
+                    		<span>事件名称：</span>&nbsp;
+	                       	<input type="text" class="point-view-1" placeholder="请输入搜索事件名称"/>
+	                       	<span style="margin-left:15%;">帖子极性：</span>
+	                       	<label class="demo-label" title="全部">
+	                            <input class="demo-radio" type="radio" name="theme" value="全部" checked>
+	                            <span class="demo-checkbox demo-radioInput"></span> 全部
+	                        </label>
+	                        <label class="demo-label" title="积极">
+	                            <input class="demo-radio" type="radio" name="theme" value="积极">
+	                            <span class="demo-checkbox demo-radioInput"></span> 积极
+	                        </label>
+	                        <label class="demo-label" title="消极">
+	                            <input class="demo-radio" type="radio" name="theme" value="消极">
+	                            <span class="demo-checkbox demo-radioInput"></span> 消极
+	                        </label>
+                    	</div>
+                    	<div class="ed-2-1-bottom">
+                    		<span>观点关键词:</span>
+	                        <input type="text" class="point-view-1" placeholder="输入上述事件下的子观点关键词" style="width:63%;"/>
+	                        <button type="button" class="btn btn-info btn-sm" id=""
+	                            data-toggle="modal" data-target="#sameRoad" style="margin-left:1%;margin-right:2%;">观点分析</button>
+	                        <button type="button" class="btn btn-default btn-sm" id=""
+	                            data-toggle="modal" data-target="#sameRoad">文本推荐</button>
+                    	</div>
+
+
+                    </div>
+
+                    <div class="ed-2-2">
+                        <ul id="intelligenceTabs" class="nav nav-tabs" role="tablist">
+				            <li role="presentation" class="active">
+				                <a href="#z-1" role="tab" data-toggle="tab">事件摘要</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-2" role="tab" data-toggle="tab">代表性观点</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-3" role="tab" data-toggle="tab">渗透群体观点</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-4" role="tab" data-toggle="tab">紧密跟随者观点</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-5" role="tab" data-toggle="tab">高影响力用户观点</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-6" role="tab" data-toggle="tab">高敏感度用户观点</a>
+				            </li>
+				            <li role="presentation">
+				                <a href="#z-7" role="tab" data-toggle="tab">观点语料库</a>
+				            </li>
+				        </ul>
+						<div class="tab-content" id="content-2">
+							<div role="tabpanel" class="weiboTable tab-pane active" id="z-1">
+								<h5><img src="/static/images/post-6.png" alt="">事件主题河</h5>
+				                <div id="eventRiver">
+
+				                </div>
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-2">
+				                代表性观点
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-3">
+				                渗透群体观点
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-4">
+				                紧密跟随者观点
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-5">
+				                高影响力用户观点
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
+				                高敏感度用户观点
+				            </div>
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-7">
+				                观点语料库
+				            </div>
+						</div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
 
         <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
@@ -925,7 +1063,7 @@
     weiboORqq('weibo');
     $('.nav_type').text('(微博)');
     judgment('2');
-    
+
     //===============
     $('#wordcloud .word-1 .demo-label .demo-radio').on('click',function () {
         var _val=$(this).val();
@@ -1127,6 +1265,7 @@
         $('.start').datetimepicker('setEndDate',ev.date);
     });
 </script>
+<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
 <script src="/static/js/jquery.sinaEmotion.js"></script>
 <script src="/static/js/posting-1.js"></script>
 <script>
