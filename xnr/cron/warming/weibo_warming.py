@@ -80,13 +80,13 @@ def create_personal_warning(xnr_user_no,today_datetime):
 
     #计算敏感度排名靠前的用户
     query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':followers_list}
-                }
-            }
-        },
+        # 'query':{
+        #     'filtered':{
+        #         'filter':{
+        #             'terms':{'uid':followers_list}
+        #         }
+        #     }
+        # },
         'aggs':{
             'followers_sensitive_num':{
                 'terms':{'field':'uid'},
@@ -120,6 +120,9 @@ def create_personal_warning(xnr_user_no,today_datetime):
         else:
             pass
 
+    ####################################
+    #如果是关注者则敏感度提升
+    ####################################
     #查询敏感用户的敏感微博内容
     results=[]
     for user in top_userlist:
@@ -130,8 +133,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_lookup_id=xnr_uid+'_'+user['uid']
         print user_lookup_id
         try:
-            user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
-            #user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+            #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
+            user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''
