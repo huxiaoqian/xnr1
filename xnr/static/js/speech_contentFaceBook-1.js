@@ -12,12 +12,10 @@ $('#typelist .demo-radio').on('click',function () {
             $('#pormpt').modal('show');
             return false;
         }else {
-            console.log(s,d)
             time1=(Date.parse(new Date(s))/1000);
             time2=(Date.parse(new Date(d))/1000);
         }
     }
-    console.log(time1,time2)
     var weiboUrl='/facebook_xnr_warning/show_speech_warning/?xnr_user_no='+ID_Num+'&show_type='+_val+
         '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',weiboUrl,weibo);
@@ -129,9 +127,9 @@ function weibo(data) {
                         '                </span>'+
                         '                <div class="center_3">'+
                         // '                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
-                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
