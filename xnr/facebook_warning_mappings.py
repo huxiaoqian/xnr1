@@ -177,6 +177,15 @@ def facebook_speech_warning_mappings():
 					'keywords_dict':{
 						'type': 'string',
 						'index': 'not_analyzed'
+					},
+					'share':{
+						'type':'long'
+					},
+					'comment':{
+						'type':'long'
+					},
+					'favorite':{
+						'type':'long'
 					}
 				}
 			}

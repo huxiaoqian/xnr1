@@ -367,9 +367,9 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 # for followers_uid in followers_list:
                 if followers_mark > 0:
                     if followers_num_dict.has_key(str(item['_source']['uid'])):
-                        fans_num_dict[str(item['_source']['uid'])]=fans_num_dict[str(item['_source']['uid'])]+1
+                        followers_num_dict[str(item['_source']['uid'])]=followers_num_dict[str(item['_source']['uid'])]+1
                     else:
-                        fans_num_dict[str(item['_source']['uid'])]=1
+                        followers_num_dict[str(item['_source']['uid'])]=1
                 else:
                     pass
 
