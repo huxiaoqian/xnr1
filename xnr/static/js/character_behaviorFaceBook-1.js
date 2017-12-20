@@ -1,6 +1,35 @@
-var time=Date.parse(new Date())/1000;//1480176000
-var weiboUrl='/weibo_xnr_warming/show_personnal_warming/?xnr_user_no='+ID_Num+'&day_time='+time;
+var ID_Num='FXNR0001';
+var time2=Date.parse(new Date())/1000;
+var weiboUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/facebook_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+
 function weibo(data) {
     $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
@@ -73,9 +102,9 @@ function weibo(data) {
                                 '   <span class="center_2">'+text+'</span>'+
                                 '   <div class="center_3">'+
                                 '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                                '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                                '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                                '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                                '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
                                 '    </div>'+
                                 '    <div class="commentDown" style="width: 100%;display: none;">'+
@@ -92,7 +121,7 @@ function weibo(data) {
                         nameuid=row.user_name;
                     };
                     var rel_str=
-                        '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
+                        '<div class="everyUser" style="margin: 0 auto;width: 950px;text-align:left;">'+
                         '        <div class="user_center">'+
                         '            <div style="margin: 10px 0;">'+
                         '                <label class="demo-label">'+
@@ -113,7 +142,7 @@ function weibo(data) {
             },
         ],
     });
-    $('#weiboContent p').slideUp(30);
+    $('#weiboContent p').slideUp(300);
 };
 
 // 转发===评论===点赞

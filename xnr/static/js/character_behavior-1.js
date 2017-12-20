@@ -2,7 +2,6 @@ var time2=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming_new/show_personnal_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
-    console.log(data)
     $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
@@ -32,7 +31,7 @@ function weibo(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var artical=row.content,str='';
-                    artical=JSON.parse(artical)
+                    //artical=JSON.parse(artical)
                     if (artical.length==0||!artical){
                         str='暂无微博内容';
                     }else {
