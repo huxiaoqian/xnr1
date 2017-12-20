@@ -127,7 +127,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            {'terms':{'uid':followers_list}},
+                            # {'terms':{'uid':followers_list}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -182,8 +182,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_lookup_id=xnr_uid+'_'+user['uid']
         print user_lookup_id
         try:
-            user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
-            #user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+            #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
+            user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''

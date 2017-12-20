@@ -19,7 +19,8 @@ from global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,weibo_date_r
                          facebook_feedback_friends_index_name,facebook_feedback_friends_index_type,\
                          facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
                          facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
-                         facebook_count_index_name_pre,facebook_count_index_type
+                         facebook_count_index_name_pre,facebook_count_index_type,\
+                         facebook_user_index_name,facebook_user_index_type
 
  
 #虚拟人列表
@@ -212,8 +213,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_lookup_id=user['uid']
         print user_lookup_id
         try:
-            user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
-            #user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+            #user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
+            user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''
