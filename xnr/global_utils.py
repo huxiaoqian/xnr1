@@ -362,6 +362,18 @@ tw_xnr_index_type='user'
 tw_xnr_fans_followers_index_name='tw_xnr_fans_followers'
 tw_xnr_fans_followers_index_type='uids'
 
+#use to save warning info
+twitter_user_warning_index_name_pre = 'twitter_user_warning_'
+twitter_user_warning_index_type = 'text'
+
+twitter_event_warning_index_name_pre = 'twitter_event_warning_'
+twitter_event_warning_index_type = 'text'
+
+twitter_speech_warning_index_name_pre = 'twitter_speech_warning_'
+twitter_speech_warning_index_type = 'text'
+
+twitter_timing_warning_index_name_pre = 'twitter_time_warning_'
+twitter_timing_warning_index_type = 'text'
 
 #use to save feedback info
 twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
