@@ -12,7 +12,7 @@
     .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    .bootstrap-table thead,.fixed-table-pagination .page-list {
+    .fixed-table-pagination .page-list {
         display: none!important;
     }
     .fixed-table-body {
@@ -37,8 +37,8 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
-    .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
+    .fixed-table-container thead th .both {
+        background-image: none!important;
     }
 
     /**/
@@ -49,6 +49,22 @@
     .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
     .fixed-table-toolbar .fixed-table-toolbar .search {width:96%;margin: 0 auto;float: none!important;}
     #weiboContent .demo-label{display: none;}
+    /**/
+    #start,#end,#sure {
+        display:none;
+    }
+    #sure {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    #sure:hover {
+        background: rgba(8,23,44,0.65);
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -60,6 +76,35 @@
         </div>
         <!-- <div class="output1">导出至Excel文件</div>
         <div class="output2">导出至Word文件</div> -->
+    </div>
+    <div class="choosetime" style="margin: 10px 0;">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='0' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='7'>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start" class="form_datetime" placeholder="开始时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end" class="form_datetime" placeholder="结束时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sure" class="sureTime">确定</span>
     </div>
     <div class="speakType">
         <span>内容分类：</span>
@@ -79,7 +124,9 @@
         </div>
     </div>
     <div class="weiboContent" style="">
-        <div id="weiboContent"></div>
+        <div id="weiboContent">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
     </div>
 </div>
 
@@ -98,51 +145,6 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="firstChoose" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">系统提示</h4>
-            </div>
-            <div class="modal-body">
-                <div class="coverbody">
-                    <div class="option1">
-                        <span>一、请先选择要进入的虚拟人身份</span>
-                        <div class="identity">
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> ZZ0902
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> SADJ93
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="idcard" value=""> KVF820
-                            </label>
-                        </div>
-                    </div>
-                    <div class="option2">
-                        <span>二、请先选择虚拟人的显示模式</span>
-                        <div class="showType">
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 隐身
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="show" value=""> 昵称可见
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
-                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock %}
 
 {% block my_js %}
@@ -151,6 +153,18 @@
     weiboORqq('faceBook');
     $('.nav_type').text('(FaceBook)');
     judgmentFaceBook('4');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
+    });
 </script>
 <script src="/static/js/speech_contentFaceBook-1.js"></script>
 {% endblock %}

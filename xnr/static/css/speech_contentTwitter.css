@@ -45,7 +45,7 @@ body {
 }
 #container .speakType {
     display: inline-block;
-    margin: 10px 0 10px 40px;
+    margin: 0 0 10px 10px;
 }
 #container .speakType #typelist {
     display: inline-block;
