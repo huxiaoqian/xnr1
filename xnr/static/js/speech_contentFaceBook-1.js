@@ -202,7 +202,6 @@ function joinPolice(_this) {
 //一键上报
 function oneUP(_this) {
     var info=getInfo(_this);
-    console.log(info)
     var allMent=[];
     allMent.push(info[1]);
     var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);

@@ -1,8 +1,0 @@
-████start_bot:  WXXNR0003 6663 b2539f4a
-starting WXXNR0003 ...
-before login
-global name 'FileNotFoundError' is not defined
-██start_bot:  WXXNR0003 6663 b2539f4a
-starting WXXNR0003 ...
-before login
-global name 'FileNotFoundError' is not defined
