@@ -63,6 +63,21 @@
         font-size: 10px;
         background: transparent;
     }
+    #start,#end,#sure {
+        display:none;
+    }
+    #sure {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    #sure:hover {
+        background: rgba(8,23,44,0.65);
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -72,11 +87,37 @@
             <span class="icon icon-fire note_icon" style="color: #fff;"></span>
             <b style="font-size: 20px;color: #fff;">事件涌现预警</b>
         </div>
-        <!-- <div class="output1">导出至Excel文件</div>
-        <div class="output2">导出至Word文件</div> -->
+    </div>
+    <div class="choosetime" style="margin: 10px 0;">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='0' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='7'>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start" class="form_datetime" placeholder="开始时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end" class="form_datetime" placeholder="结束时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sure" class="sureTime">确定</span>
     </div>
     <div class="weiboContent">
-        <!--<div id="weiboContent"></div>-->
         <div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>
         <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
             <table id="input-table" class="In-table" style="width:100%;">
@@ -129,16 +170,15 @@
     judgmentFaceBook('4');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
-        //minView:2, //控制时分秒
         autoclose: true,
         todayBtn: true,
         pickerPosition: "bottom-left"
     });
-    $('.start').on('changeDate', function(ev){
-        $('.end').datetimepicker('setStartDate',ev.date);
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
     });
-    $('.end').on('changeDate', function(ev){
-        $('.start').datetimepicker('setEndDate',ev.date);
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
     });
 
 </script>
