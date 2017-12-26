@@ -5,6 +5,7 @@ import json
 from time import time
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
+from zhtools.langconv import *
 
 reload(sys)
 sys.path.append('../../')
@@ -29,9 +30,13 @@ def createWordTree():
     wordTree.append(0)
     nodeTree = [wordTree, 0]
     awords = []
-    for b in open('sensitive_words.txt', 'rb'):
+
+    for b in open('sensitive_words_fanjian.txt', 'rb'):
         #print b.strip().split('={MOD}')[0]
-        awords.append(b.strip().split('={MOD}')[0])
+        #awords.append(b.strip().split('={MOD}')[0])
+        print 'b.strip()...',b.strip()
+        awords.append(b.strip())
+
     #awords = r.hkeys('sensitive_words')    
     #print 'awords:::',awords
     #print 'awords...........',type(awords[0])
@@ -56,7 +61,13 @@ def createWordTree():
             awords.append(origin_word.encode('utf-8'))
             for evolution_words in evolution_words_list:
                 # awords.append(evolution_words.encode('utf-8')+"={MOD}")
-                awords.append(evolution_words.encode('utf-8'))
+                evolution_words = evolution_words.encode('utf-8')
+                awords.append(evolution_words)
+
+                line = Converter('zh-hant').convert(word.decode('utf-8'))
+                line = line.encode('utf-8')
+                if line != evolution_words:
+                    awords.append(line)
 
         except StopIteration:
                 print 'over!!!!'
@@ -134,10 +145,10 @@ if __name__ == '__main__':
     #text = "RT @zhu0588: 打朋友斗父母 要想参加红卫兵造反派组织的大串联,还要经受种种的考验,过了关才有资格.比如他们会叫你打你最好的朋友俩嘴巴,或是给某个他们不喜欢的老师的脑门上写上一条标语,如果你的父母被揪出来了,他们甚至会让你押着他们到最热闹的地方游街.https://t…"
     text = '中办发'
     # sensitive_words_dict = searchWord(text.encode('utf-8', 'ignore'), DFA)
-    sensitive_words_dict = searchWord(text, DFA)
+    #sensitive_words_dict = searchWord(text, DFA)
     
 
-    print 'sensitive_words_dict...',sensitive_words_dict
+    #print 'sensitive_words_dict...',sensitive_words_dict
     # createWordTree();
     # beign=time()
     # list2 = searchWord(input2)
