@@ -340,6 +340,9 @@ facebook_user_index_type = 'user'
 fb_xnr_flow_text_index_name_pre = 'fb_xnr_flow_text_'
 fb_xnr_flow_text_index_type = 'text'
 
+fb_xnr_index_name='fb_xnr'
+fb_xnr_index_type='user'
+
 # use to save influence
 fb_bci_index_name_pre = 'fb_bci_'
 fb_bci_index_type = 'bci'
@@ -365,18 +368,6 @@ tw_xnr_index_type='user'
 tw_xnr_fans_followers_index_name='tw_xnr_fans_followers'
 tw_xnr_fans_followers_index_type='uids'
 
-#use to save warning info
-twitter_user_warning_index_name_pre = 'twitter_user_warning_'
-twitter_user_warning_index_type = 'text'
-
-twitter_event_warning_index_name_pre = 'twitter_event_warning_'
-twitter_event_warning_index_type = 'text'
-
-twitter_speech_warning_index_name_pre = 'twitter_speech_warning_'
-twitter_speech_warning_index_type = 'text'
-
-twitter_timing_warning_index_name_pre = 'twitter_time_warning_'
-twitter_timing_warning_index_type = 'text'
 
 #use to save feedback info
 twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
@@ -421,6 +412,9 @@ twitter_user_index_type = 'user'
 
 tw_xnr_flow_text_index_name_pre = 'tw_xnr_flow_text_'
 tw_xnr_flow_text_index_type = 'text'
+
+tw_xnr_index_name='tw_xnr'
+tw_xnr_index_type='user'
 
 
 # use to save influence
