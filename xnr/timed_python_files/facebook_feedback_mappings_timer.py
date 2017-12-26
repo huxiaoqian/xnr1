@@ -11,12 +11,13 @@ from global_utils import facebook_feedback_comment_index_name_pre,facebook_feedb
 						facebook_feedback_private_index_name_pre,facebook_feedback_private_index_type,\
 						facebook_feedback_at_index_name_pre,facebook_feedback_at_index_type,\
 						facebook_feedback_like_index_name_pre,facebook_feedback_like_index_type,\
-						facebook_feedback_friends_index_name_pre,facebook_feedback_friends_index_type
+						facebook_feedback_friends_index_name_pre,facebook_feedback_friends_index_type,\
+						facebook_feedback_friends_index_name
 
 from time_utils import ts2datetime
 
 # 点赞
-def facebook_feedback_like_mappings():
+def facebook_feedback_like_mappings(facebook_feedback_like_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -74,14 +75,14 @@ def facebook_feedback_like_mappings():
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_like_index_name = facebook_feedback_like_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_like_index_name = facebook_feedback_like_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=facebook_feedback_like_index_name):
 		es.indices.create(index=facebook_feedback_like_index_name,body=index_info,ignore=400)
 
 # 分享
-def facebook_feedback_retweet_mappings():
+def facebook_feedback_retweet_mappings(facebook_feedback_retweet_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -148,13 +149,14 @@ def facebook_feedback_retweet_mappings():
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_retweet_index_name = facebook_feedback_retweet_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_retweet_index_name = facebook_feedback_retweet_index_name_pre + ts2datetime(current_time)
+	
 	if not es.indices.exists(index=facebook_feedback_retweet_index_name):
 		es.indices.create(index=facebook_feedback_retweet_index_name,body=index_info,ignore=400)
 
 # 标记
-def facebook_feedback_at_mappings():
+def facebook_feedback_at_mappings(facebook_feedback_at_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -212,15 +214,15 @@ def facebook_feedback_at_mappings():
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_at_index_name = facebook_feedback_at_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_at_index_name = facebook_feedback_at_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=facebook_feedback_at_index_name):
 		es.indices.create(index=facebook_feedback_at_index_name,body=index_info,ignore=400)
 
 
 # 评论
-def facebook_feedback_comment_mappings():
+def facebook_feedback_comment_mappings(facebook_feedback_comment_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -282,15 +284,15 @@ def facebook_feedback_comment_mappings():
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_comment_index_name = facebook_feedback_comment_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_comment_index_name = facebook_feedback_comment_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=facebook_feedback_comment_index_name):
 		es.indices.create(index=facebook_feedback_comment_index_name,body=index_info,ignore=400)
 
 
 # 私信
-def facebook_feedback_private_mappings():
+def facebook_feedback_private_mappings(facebook_feedback_private_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -351,8 +353,8 @@ def facebook_feedback_private_mappings():
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_private_index_name = facebook_feedback_private_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_private_index_name = facebook_feedback_private_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=facebook_feedback_private_index_name):
 		es.indices.create(index=facebook_feedback_private_index_name,body=index_info,ignore=400)
@@ -437,18 +439,22 @@ def facebook_feedback_friends_mappings():  ## 粉丝提醒及回粉
 		}
 	}
 
-	current_time = time.time()
-	facebook_feedback_friends_index_name = facebook_feedback_friends_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#facebook_feedback_friends_index_name = facebook_feedback_friends_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=facebook_feedback_friends_index_name):
 		es.indices.create(index=facebook_feedback_friends_index_name,body=index_info,ignore=400)
 
 
 if __name__ == '__main__':
-	
-	facebook_feedback_like_mappings()
-	facebook_feedback_retweet_mappings()
-	facebook_feedback_at_mappings()
-	facebook_feedback_comment_mappings()
-	facebook_feedback_private_mappings()
+
+	#current_time = time.time()
+	#index_name = index_name_pre + ts2datetime(current_time)
+
+	index_name = ''
+	facebook_feedback_like_mappings(index_name)
+	facebook_feedback_retweet_mappings(index_name)
+	facebook_feedback_at_mappings(index_name)
+	facebook_feedback_comment_mappings(index_name)
+	facebook_feedback_private_mappings(index_name)
 	facebook_feedback_friends_mappings()
