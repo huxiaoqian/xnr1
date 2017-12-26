@@ -6,19 +6,20 @@ import os
 import json
 import time
 from xnr.time_utils import ts2datetime,datetime2ts,ts2yeartime,get_timets_set_indexset_list
-from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
-                             facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
-                             facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
-                             fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
-                             facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
-                             facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
-                             weibo_date_remind_index_name,weibo_date_remind_index_type,\
-                             facebook_count_index_name_pre,facebook_count_index_type,\
-                             facebook_user_index_name,facebook_user_index_type
+from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
+                             tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
+                             twitter_flow_text_index_name_pre,twitter_flow_text_index_type,\
+                             twitter_speech_warning_index_name_pre,twitter_speech_warning_index_type,\
+                             twitter_feedback_fans_index_name,twitter_feedback_fans_index_type,\
+                             twitter_feedback_follow_index_name,twitter_feedback_follow_index_type,\
+                             twitter_user_warning_index_name_pre,twitter_user_warning_index_type,\
+                             twitter_timing_warning_index_name_pre,twitter_timing_warning_index_type,\
+                             twitter_count_index_name_pre,twitter_count_index_type,\
+                             twitter_user_index_name,twitter_user_index_type
 
 
 from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE
-from xnr.global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
+from xnr.global_config import S_TYPE,TWITTER_FLOW_START_DATE
 
 
 ##获取索引
@@ -44,15 +45,15 @@ def get_xnr_warming_index_listname(index_name_pre,date_range_start_ts,date_range
     return index_name_list
 
 
-#查询fid的comment、favorite、retweet等字段的数值
-def lookup_fid_attend_index(fid,today_datetime):
-    facebook_count_index_name=get_timets_set_indexset_list(facebook_count_index_name_pre,today_datetime,today_datetime)
+#查询tid的comment、favorite、retweet等字段的数值
+def lookup_tid_attend_index(tid,today_datetime):
+    twitter_count_index_name=get_timets_set_indexset_list(twitter_count_index_name_pre,today_datetime,today_datetime)
     
     query_body={
         'query':{
             'filtered':{
                 'filter':{
-                    'bool':{'must':{'term':{'fid':fid}}}
+                    'bool':{'must':{'term':{'tid':tid}}}
                 }
             }
         },
@@ -60,14 +61,16 @@ def lookup_fid_attend_index(fid,today_datetime):
         'sort':{'update_time':{'order':'desc'}}
     }
     try:
-        result=es_xnr.search(index=facebook_count_index_name,doc_type=facebook_count_index_type,body=query_body)['hits']['hits']
+        result=es_xnr.search(index=twitter_count_index_name,doc_type=twitter_count_index_type,body=query_body)['hits']['hits']
         print result
-        fid_result=[]
+        tid_result=[]
         for item in result:
-            fid_result.append(item['_source'])
+            tid_result.append(item['_source'])
     except:
-        fid_result=[]
-    return fid_result
+        tid_result=[]
+    return tid_result
+
+
  
 ###################################################################
 ###################       personal warning       ##################
@@ -97,25 +100,25 @@ def lookup_history_user_warming(xnr_user_no,start_time,end_time):
         'size':MAX_WARMING_SIZE
     }
 
-    user_warming_list=get_xnr_warming_index_listname(facebook_user_warning_index_name_pre,start_time,end_time)
+    user_warming_list=get_xnr_warming_index_listname(twitter_user_warning_index_name_pre,start_time,end_time)
 
     try:
-        temp_results=es_xnr.search(index=user_warming_list,doc_type=facebook_user_warning_index_type,body=query_body)['hits']['hits']
+        temp_results=es_xnr.search(index=user_warming_list,doc_type=twitter_user_warning_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in temp_results:
             results.append(item['_source'])
         results.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
     except:
         results=[]
-    #print results
+    # print 'r:',results
     return results   
 
 
-#查询好友列表
-def lookup_xnr_friends(xnr_user_no):
+#查询关注者或粉丝列表
+def lookup_xnr_fans_followers(xnr_user_no,lookup_type):
     try:
-        xnr_result=es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
-        lookup_list=xnr_result['fans_list']
+        xnr_result=es_xnr.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        lookup_list=xnr_result[lookup_type]
     except:
         lookup_list=[]
     return lookup_list
@@ -124,7 +127,7 @@ def lookup_xnr_friends(xnr_user_no):
 #查询虚拟人uid
 def lookup_xnr_uid(xnr_user_no):
     try:
-        xnr_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
         xnr_uid=xnr_result['uid']
     except:
         xnr_uid=''
@@ -133,8 +136,9 @@ def lookup_xnr_uid(xnr_user_no):
 
 #查询今日人物行为预警
 def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
-    #查询好友列表
-    friends_list=lookup_xnr_friends(xnr_user_no)
+    #查询关注列表
+    lookup_type='followers_list'
+    followers_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
 
     #查询虚拟人uid
     xnr_uid=lookup_xnr_uid(xnr_user_no)
@@ -161,10 +165,10 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
 
-    facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,start_time,end_time)
+    twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,start_time,end_time)
     
     try:   
-        first_sum_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,\
+        first_sum_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
         body=query_body)['aggregations']['friends_sensitive_num']['buckets']
     except:
         first_sum_result=[]
@@ -191,8 +195,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_lookup_id=user['uid']
         print user_lookup_id
         try:
-            #user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
-            user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=user['uid'])['_source']
+            user_result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''
@@ -215,22 +218,22 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         }
 
         try:
-            second_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+            second_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         except:
             second_result=[]
 
         s_result=[]
         for item in second_result:
             #查询三个指标字段
-            fid_result=lookup_fid_attend_index(item['_source']['fid'],start_time)
-            if fid_result:
-                item['_source']['comment']=fid_result['comment']
-                item['_source']['share']=fid_result['share']
-                item['_source']['favorite']=fid_result['favorite']
+            tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+            if tid_result:
+                item['_source']['comment']=tid_result['comment']
+                item['_source']['share']=tid_result['share']
+                item['_source']['favorite']=tid_result['favorite']
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0  
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
@@ -248,15 +251,15 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
 
 def show_personnal_warning(xnr_user_no,start_time,end_time):
     if S_TYPE == 'test':
-        test_today_date = FACEBOOK_FLOW_START_DATE
+        test_today_date = TWITTER_FLOW_START_DATE
         test_time_gap = end_time - start_time
         today_datetime = datetime2ts(test_today_date)
         end_time = today_datetime
         start_time = end_time - test_time_gap
         end_datetime = datetime2ts(ts2datetime(end_time))
         start_datetime = datetime2ts(ts2datetime(start_time))
-        #print ts2datetime(end_time),ts2datetime(start_time)
-        #print end_time,start_time
+        # print ts2datetime(end_time),ts2datetime(start_time)
+        # print end_time,start_time
     else:
         now_time = int(time.time())
         today_datetime = datetime2ts(ts2datetime(now_time))
@@ -278,9 +281,9 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
             history_user_warming = lookup_history_user_warming(xnr_user_no,start_time,today_datetime)
             history_user_warming.extend(today_user_warming)
             user_warming = history_user_warming
-            #print today_user_warming
-            #print history_user_warming
-            #print user_warming
+            # print 't:',today_user_warming
+            # print 'h:',history_user_warming
+            # print 'u:',user_warming
 
     warming_list=[]
     user_uid_list=[]
@@ -329,31 +332,32 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
         'sort':{'sensitive':{'order':'desc'}}
     }
 
-    speech_warming_list=get_xnr_warming_index_listname(facebook_speech_warning_index_name_pre,start_time,end_time)
+    speech_warming_list=get_xnr_warming_index_listname(twitter_speech_warning_index_name_pre,start_time,end_time)
     #print speech_warming_list
-    # try:
-    temp_results=es_xnr.search(index=speech_warming_list,doc_type=facebook_speech_warning_index_type,body=query_body)['hits']['hits']
-    print temp_results
-    results=[]
-    for item in temp_results:
-        results.append(item['_source'])
-    #results.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
-    # except:
-        # results=[]
+    try:
+        temp_results=es_xnr.search(index=speech_warming_list,doc_type=twitter_speech_warning_index_type,body=query_body)['hits']['hits']
+        #print temp_results
+        results=[]
+        for item in temp_results:
+            results.append(item['_source'])
+        results.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
+    except:
+        results=[]
     return results   
 
 
 def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
-    #查询好友列表
-    friends_list=lookup_xnr_friends(xnr_user_no)
+    #查询关注列表
+    lookup_type='followers_list'
+    followers_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
 
     show_condition_list=[]
     if show_type == 0: #全部用户
-        show_condition_list.append({'must':[{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
-    elif show_type == 1: #好友
-        show_condition_list.append({'must':[{'terms':{'uid':friends_list}},{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
-    elif show_type ==2: #非好友
-        show_condition_list.append({'must_not':{'terms':{'uid':friends_list}},'must':[{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+        show_condition_list.append({'must':[{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+    elif show_type == 1: #关注者
+        show_condition_list.append({'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+    elif show_type ==2: #非关注者
+        show_condition_list.append({'must_not':{'terms':{'uid':followers_list}},'must':[{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
 
     query_body={
         'query':{
@@ -367,17 +371,17 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
         'sort':{'sensitive':{'order':'desc'}}
     }
 
-    facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,start_time,end_time)
+    twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,start_time,end_time)
     result=[]
     try:
-        results=es_flow_text.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+        results=es_flow_text.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         for item in results:
             #查询三个指标字段
-            fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
-            if fid_result:
-                item['_source']['comment']=fid_result['comment']
-                item['_source']['share']=fid_result['share']
-                item['_source']['favorite']=fid_result['favorite']
+            tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+            if tid_result:
+                item['_source']['comment']=tid_result['comment']
+                item['_source']['share']=tid_result['share']
+                item['_source']['favorite']=tid_result['favorite']
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
@@ -392,7 +396,7 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
    
 def show_speech_warning(xnr_user_no,show_type,start_time,end_time):
     if S_TYPE == 'test':
-        test_today_date = FACEBOOK_FLOW_START_DATE
+        test_today_date = TWITTER_FLOW_START_DATE
         test_time_gap = end_time - start_time
         today_datetime = datetime2ts(test_today_date)
         end_time = today_datetime
@@ -460,11 +464,11 @@ def lookup_date_info(account_name,start_time,end_time,today_datetime):
         if (start_tempdate_time >= start_time and start_tempdate_time <= end_time) or (end_tempdate_time >= start_time and end_tempdate_time <= end_time):
             #print 'aaaa'
             if item['_source']['create_type'] == 'all_xnrs':
-                item['_source']['facebook_date_warming_content']=lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
+                item['_source']['twitter_date_warming_content']=lookup_twitter_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
                 date_result.append(item['_source'])
             elif item['_source']['create_type'] == 'my_xnrs':
                 if item['_source']['submitter'] == account_name:
-                    item['_source']['facebook_date_warming_content']=lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
+                    item['_source']['twitter_date_warming_content']=lookup_twitter_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords)
                     date_result.append(item['_source'])
                 else:
                     pass
@@ -474,23 +478,23 @@ def lookup_date_info(account_name,start_time,end_time,today_datetime):
     return date_result
 
 
-def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords):
-    facebook_timing_warning_index_name_list = []
+def lookup_twitter_date_warming_content(start_year,end_year,date_time,date_name,start_time,end_time,keywords):
+    twitter_timing_warning_index_name_list = []
     if start_year != end_year:
         start_year_int = int(start_year)
         end_year_int = int(end_year)
         iter_year = end_year_int
         while iter_year >= start_year_int:
-            index_name = facebook_timing_warning_index_name_pre + str(start_year_int) + '-' + date_time
+            index_name = twitter_timing_warning_index_name_pre + str(start_year_int) + '-' + date_time
             if es_xnr.indices.exists(index=index_name):
-                facebook_timing_warning_index_name_list.append(index_name)
+                twitter_timing_warning_index_name_list.append(index_name)
             else:
                 pass            
             iter_year = iter_year - 1
     else:
-        index_name = facebook_timing_warning_index_name_pre + start_year + '-' + date_time
+        index_name = twitter_timing_warning_index_name_pre + start_year + '-' + date_time
         if es_xnr.indices.exists(index=index_name):
-            facebook_timing_warning_index_name_list.append(index_name)
+            twitter_timing_warning_index_name_list.append(index_name)
         else:
             pass 
 
@@ -509,15 +513,15 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
         'sort':{'timestamp':{'order':'asc'}} ,
         'size':MAX_WARMING_SIZE
     }
-    result=es_xnr.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
+    result=es_xnr.search(index=twitter_timing_warning_index_name_list,doc_type=twitter_timing_warning_index_type,body=query_body)['hits']['hits']
     warming_content=[]
     for item in result:
-        warming_content.extend(json.loads(item['_source']['facebook_date_warming_content']))
+        warming_content.extend(json.loads(item['_source']['twitter_date_warming_content']))
 
     #当前时间范围内的预警信息
     now_time = int(time.time())
     if now_time >= start_time and now_time <= end_time:
-        today_warming=lookup_todayfacebook_date_warming(keywords,now_time)
+        today_warming=lookup_todaytwitter_date_warming(keywords,now_time)
         warming_content.append(today_warming)
     else:
         pass
@@ -525,12 +529,12 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
 
 
 
-def lookup_todayfacebook_date_warming(keywords,today_datetime):
+def lookup_todaytwitter_date_warming(keywords,today_datetime):
     keyword_query_list=[]
     for keyword in keywords:
         keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
 
-    facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,today_datetime,today_datetime)
+    twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,today_datetime,today_datetime)
 
     query_body={
         'query':{
@@ -541,19 +545,19 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
         'size':MAX_WARMING_SIZE
     }
     try:
-        temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+        temp_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in temp_result:
             #查询三个指标字段
-            fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
-            if fid_result:
-                item['_source']['comment']=fid_result['comment']
-                item['_source']['share']=fid_result['share']
-                item['_source']['favorite']=fid_result['favorite']
+            tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+            if tid_result:
+                item['_source']['comment']=tid_result['comment']
+                item['_source']['share']=tid_result['share']
+                item['_source']['favorite']=tid_result['favorite']
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0    
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -562,7 +566,7 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
 
 def show_date_warning(account_name,start_time,end_time):
     if S_TYPE == 'test':
-        test_today_date = FACEBOOK_FLOW_START_DATE
+        test_today_date = TWITTER_FLOW_START_DATE
         test_time_gap = end_time - start_time
         today_datetime = datetime2ts(test_today_date)
         end_time = today_datetime
@@ -579,12 +583,3 @@ def show_date_warning(account_name,start_time,end_time):
     #print 'result',result
     return result
 
-
-
-#更新flow text数据用于测试
-def update_fb_flow_text(task_id,sensitive):
-    result=es_xnr.update(index='facebook_flow_text_2017-09-11',doc_type='text',id=task_id,\
-                body={"doc":{'sensitive':sensitive}})
-
-
-    return result

@@ -1,11 +1,42 @@
-var timeUrl='/weibo_xnr_warming/show_date_warming/'//?xnr_user_no='+ID_Num;
+var time2=Date.parse(new Date())/1000;
+var timeUrl='/facebook_xnr_warning/show_date_warning/?account_name='+admin+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/facebook_xnr_warning/show_date_warning/?account_name='+admin+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_warming_new/show_date_warning/?account_name='+admin+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+
+
 var contentList = {};
 function calendar(data){
+    $('#group_emotion_loading').css('display', 'block');
     $.each(data,function (index,item) {
-        contentList['exo_'+index]=item['weibo_date_warming_content'];
+        contentList['exo_'+index]=item['facebook_date_warming_content'];
     })
-    $('#group_emotion_loading').css('display', 'none');
+
     // $('#input-table').css('display', 'block');
     var dataArray = data;
     var PageNo=document.getElementById('PageNo');                   //设置每页显示行数
@@ -427,6 +458,7 @@ function calendar(data){
         }
     }
 
+    $('#group_emotion_loading').css('display', 'none');
 }
 
 function startTable(index,key) {
@@ -573,9 +605,9 @@ function weibo(idx,data,words) {
                         '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '                <div class="center_2">'+txt+'</div>'+
                         '                <div class="center_3">'+
-                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.share+'</b>）</span>'+
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+

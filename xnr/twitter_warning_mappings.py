@@ -3,27 +3,27 @@
 import sys
 import json
 import time
-from time_utils import ts2datetime,ts2yeartime,datetime2ts
-from parameter import WARMING_DAY,MAX_VALUE,DAY
-from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING
+from time_utils import ts2datetime,datetime2ts,ts2yeartime
+from parameter import MAX_VALUE,DAY,WARMING_DAY
+from global_config import S_TYPE,TWITTER_FLOW_START_DATE
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
-from global_utils import weibo_user_warning_index_name_pre,weibo_user_warning_index_type,\
-						weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
-						weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
-						weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
+from global_utils import twitter_user_warning_index_name_pre,twitter_user_warning_index_type,\
+						twitter_event_warning_index_name_pre,twitter_event_warning_index_type,\
+						twitter_speech_warning_index_name_pre,twitter_speech_warning_index_type,\
+						twitter_timing_warning_index_name_pre,twitter_timing_warning_index_type,\
 						weibo_date_remind_index_name,weibo_date_remind_index_type
 
-NOW_DATE=ts2datetime(int(time.time())-DAY)
+NOW_DATE=ts2datetime(int(time.time()))
 
-def weibo_user_warning_mappings():
+def twitter_user_warning_mappings():
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
 			'number_of_shards':5
 		},
 		'mappings':{
-			weibo_user_warning_index_type:{
+			twitter_user_warning_index_type:{
 				'properties':{
 					'xnr_user_no':{  # 虚拟人  
 						'type':'string',
@@ -45,7 +45,7 @@ def weibo_user_warning_mappings():
 					},
 					'content':{     #敏感言论内容
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'timestamp':{    #预警生成时间
 						'type':'long'
@@ -55,21 +55,21 @@ def weibo_user_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + S_DATE_WARMING
+		twitter_user_warning_index_name=twitter_user_warning_index_name_pre + TWITTER_FLOW_START_DATE
 	else:
-		weibo_user_warning_index_name=weibo_user_warning_index_name_pre + NOW_DATE
-	if not es.indices.exists(index=weibo_user_warning_index_name):
-		es.indices.create(index=weibo_user_warning_index_name,body=index_info,ignore=400)
+		twitter_user_warning_index_name=twitter_user_warning_index_name_pre + NOW_DATE
+	if not es.indices.exists(index=twitter_user_warning_index_name):
+		es.indices.create(index=twitter_user_warning_index_name,body=index_info,ignore=400)
 
 
-def weibo_event_warning_mappings():
+def twitter_event_warning_mappings():
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
 			'number_of_shards':5
 		},
 		'mappings':{
-			weibo_event_warning_index_type:{
+			twitter_event_warning_index_type:{
 				'properties':{
 					'xnr_user_no':{  #虚拟人
 						'type':'string',
@@ -81,14 +81,14 @@ def weibo_event_warning_mappings():
 					},
 					'main_user_info':{ #主要参与用户信息列表
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'event_time':{ #事件时间
 						'type':'long'
 					},
-					'main_weibo_info':{ #典型微博信息
+					'main_facebook_info':{ #典型微博信息
 						'type':'string',
-						'index':'no'
+						'index':'not_analyzed'
 					},
 					'event_influence':{
 						'type':'string',
@@ -105,14 +105,14 @@ def weibo_event_warning_mappings():
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_event_warning_index_name = weibo_event_warning_index_name_pre + ts2datetime(datetime2ts(S_DATE_WARMING) - DAY)
+		twitter_event_warning_index_name = twitter_event_warning_index_name_pre + TWITTER_FLOW_START_DATE
 	else:
-		weibo_event_warning_index_name = weibo_event_warning_index_name_pre + NOW_DATE
-	if not es.indices.exists(index=weibo_event_warning_index_name):
-		es.indices.create(index=weibo_event_warning_index_name,body=index_info,ignore=400)
+		twitter_event_warning_index_name = twitter_event_warning_index_name_pre + NOW_DATE
+	if not es.indices.exists(index=twitter_event_warning_index_name):
+		es.indices.create(index=twitter_event_warning_index_name,body=index_info,ignore=400)
 
 
-def weibo_speech_warning_mappings():
+def twitter_speech_warning_mappings():
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -127,13 +127,13 @@ def weibo_speech_warning_mappings():
 				}
 		},
 		'mappings':{
-			weibo_speech_warning_index_type:{
+			twitter_speech_warning_index_type:{
 				'properties':{
 					'xnr_user_no':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'content_type':{  # unfollow - 未关注，follow - 已关注
+					'content_type':{  # friends - 好友，unfriends - 非好友
 						'type':'string',
 						'index':'not_analyzed'
 					},					
@@ -143,21 +143,14 @@ def weibo_speech_warning_mappings():
 					'timestamp':{
 						'type':'long'
 					},
-					'comment':{
-						'type':'long'
-					},
-					'directed_uid':{
-						'type':'long'
-					},
 					'uid':{ 
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'sensitive':{
+						'type':'long'
 					},	
 					'sentiment':{ 
-						'type':'string',
-						'index':'not_analyzed'
-					},
-					'root_uid':{ 
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -169,19 +162,13 @@ def weibo_speech_warning_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'user_fansnum':{
-						'type':'long'
-					},
-					'mid':{
+					'fid':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
 					'keywords_string':{
 						'type': 'string',
 						'analyzer': 'my_analyzer'
-					},
-					'sensitive':{
-						'type':'long'
 					},
 					'sensitive_words_dict':{
 						'type': 'string',
@@ -190,57 +177,36 @@ def weibo_speech_warning_mappings():
 					'keywords_dict':{
 						'type': 'string',
 						'index': 'not_analyzed'
-					},
-					'ip':{  
-						'type':'string',
-						'index':'not_analyzed'
-					},	
-					'directed_uname':{
-						'type': 'string',
-						'index': 'not_analyzed'
-					},
-					'geo':{
-						'type': 'string',
-						'analyzer': 'my_analyzer'
-					},
-					'message_type':{
-						'type':'long'
-					},
-					'retweeted':{
-						'type':'long'
-					},
-					'root_mid':{
-						'type':'string',
-						'index':'not_analyzed'
 					}
 				}
 			}
 		}
 	}
 	if S_TYPE == 'test':
-		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + S_DATE_WARMING
+		twitter_speech_warning_index_name = twitter_speech_warning_index_name_pre + TWITTER_FLOW_START_DATE
 	else:
-		weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + NOW_DATE
-	#print weibo_speech_warning_index_name
-	if not es.indices.exists(index=weibo_speech_warning_index_name):
-		es.indices.create(index=weibo_speech_warning_index_name,body=index_info,ignore=400)
-		#print 'finish index'
+		twitter_speech_warning_index_name = twitter_speech_warning_index_name_pre + NOW_DATE
+	print twitter_speech_warning_index_name
+	if not es.indices.exists(index=twitter_speech_warning_index_name):
+		es.indices.create(index=twitter_speech_warning_index_name,body=index_info,ignore=400)
+		print 'finish index'
 
 
-def weibo_timing_warning_mappings(date_result):
+
+def twitter_timing_warning_mappings(date_result):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
 			'number_of_shards':5
 		},
 		'mappings':{
-			weibo_timing_warning_index_type:{
+			twitter_timing_warning_index_type:{
 				'properties':{
 					'submitter' : {
 						'type': 'string', 
 						'index':'not_analyzed'
 					},
-					'weibo_date_warming_content':{ #典型微博信息
+					'facebook_date_warming_content':{ #典型微博信息
 						'type':'string',
 						'index':'no'
 					},
@@ -278,18 +244,11 @@ def weibo_timing_warning_mappings(date_result):
 		}
 	}
 	for date in date_result:
-		weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + date
-		if not es.indices.exists(index=weibo_timing_warning_index_name):
-			es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
+		twitter_timing_warning_index_name = twitter_timing_warning_index_name_pre + date
+		#print 'facebook_timing_warning_index_name:',facebook_timing_warning_index_name
+		if not es.indices.exists(index=twitter_timing_warning_index_name):
+			es.indices.create(index=twitter_timing_warning_index_name,body=index_info,ignore=400)
 	
-	# if S_TYPE == 'test':
-	# 	weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + S_DATE_BCI
-	# else:
-	# 	weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + NOW_DATE
-	# if not es.indices.exists(index=weibo_timing_warning_index_name):
-	# 	es.indices.create(index=weibo_timing_warning_index_name,body=index_info,ignore=400)
-		#print weibo_timing_warning_index_name
-
 
 
 def lookup_date_info(today_datetime):
@@ -314,25 +273,24 @@ def lookup_date_info(today_datetime):
             if abs(countdown_num) < WARMING_DAY:
                 date_result.append(warming_date)
             else:
-            	pass
+    	        pass
     except:
         date_result=[]
     #print 'date_result',date_result
     return date_result
 
 
-
-if __name__ == '__main__':	
-	weibo_user_warning_mappings()
-	weibo_event_warning_mappings()
-	weibo_speech_warning_mappings()
+if __name__ == '__main__':
+	twitter_user_warning_mappings()
+	twitter_event_warning_mappings()
+	twitter_speech_warning_mappings()
 
 	if S_TYPE == 'test':
-		today_datetime=datetime2ts(S_DATE_WARMING) - DAY
+		today_datetime=datetime2ts(TWITTER_FLOW_START_DATE)
 	else:
 		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
-	weibo_timing_warning_mappings(date_result)
-
+	#print 'date_result:',date_result
+	twitter_timing_warning_mappings(date_result)
 
 

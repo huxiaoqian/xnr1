@@ -3,13 +3,16 @@
 import sys
 import json
 import time
-from time_utils import ts2datetime
+from time_utils import ts2datetime,datetime2ts,ts2yeartime
+from parameter import MAX_VALUE,DAY,WARMING_DAY
 from global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
 						facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
-						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type
+						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
+						facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
+						weibo_date_remind_index_name,weibo_date_remind_index_type
 
 NOW_DATE=ts2datetime(int(time.time()))
 
@@ -174,6 +177,15 @@ def facebook_speech_warning_mappings():
 					'keywords_dict':{
 						'type': 'string',
 						'index': 'not_analyzed'
+					},
+					'share':{
+						'type':'long'
+					},
+					'comment':{
+						'type':'long'
+					},
+					'favorite':{
+						'type':'long'
 					}
 				}
 			}
@@ -242,7 +254,7 @@ def facebook_timing_warning_mappings(date_result):
 	}
 	for date in date_result:
 		facebook_timing_warning_index_name = facebook_timing_warning_index_name_pre + date
-		print 'facebook_timing_warning_index_name',facebook_timing_warning_index_name
+		#print 'facebook_timing_warning_index_name:',facebook_timing_warning_index_name
 		if not es.indices.exists(index=facebook_timing_warning_index_name):
 			es.indices.create(index=facebook_timing_warning_index_name,body=index_info,ignore=400)
 	
@@ -270,7 +282,7 @@ def lookup_date_info(today_datetime):
             if abs(countdown_num) < WARMING_DAY:
                 date_result.append(warming_date)
             else:
-        	    pass
+    	        pass
     except:
         date_result=[]
     #print 'date_result',date_result
@@ -287,6 +299,7 @@ if __name__ == '__main__':
 	else:
 		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
+	#print 'date_result:',date_result
 	facebook_timing_warning_mappings(date_result)
 
 

@@ -207,6 +207,7 @@ function login_1(data) {
     }
 }
 function login_QR_code(data) {
+    console.log(data)
     if (data){
         var kl=data.toString();
         if (kl.substring(kl.length-3)!='png'){
@@ -220,28 +221,10 @@ function login_QR_code(data) {
                 var _src='/static/images/QQ/'+data;
                 $('#QR_code #QQ_picture .imageqq').attr('src',_src);
                 $('#QR_code').modal('show');
-                // LL_11-3 模态框显示之后一直获取所有虚拟人数据,判断登录状态以关闭模态框
-                var timer1 = setInterval(function(){
-                    public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',getXnr);
-                    function getXnr(data){
-                        // console.log(data)
-                        for(var i=0;i<data.length;i++){
-                            if(data[i].qq_number == $this_QQ_id){
-                                // 获取当前虚拟人的wxbot_id
-                                console.log(data[i].login_status)
-                                // 查询此wxbot_id的登录状态  listening时关闭二维码框
-                                if(data[i].login_status == true){
-                                    $('#QR_code').modal('hide');
-                                    window.clearInterval(timer1)
-                                }
-                            }
-                        }
-                    }
-                }, 500)
                 // LL_11-3 模态框关闭之后重新画表
-                $('#QR_code').on('hidden.bs.modal', function (e) {
-                    // 停止请求
-                    window.clearInterval(timer1)
+                $('#QR_code').one('hidden.bs.modal', function (e) {
+                    // console.log('---二维码框关闭了、、画表中---');
+                    // 重新画表
                     public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
                 })
             }
@@ -297,8 +280,12 @@ function enterIn(QQ_id,QQ_num,status) {
 var k=1;
 $('.hasAddQQ').on('click',function () {
     if (k==1){
-        $('.addQQperson').slideDown(30);
-        k=0;
+        $('.addQQperson').slideDown(30,function(){
+            k=0;
+            // 滚动到底部
+            $('html, body, #containe').animate({scrollTop: $(document).height()},'slow');
+        });
+
     }else {
         $('.addQQperson').slideUp(20);
         k=1;
