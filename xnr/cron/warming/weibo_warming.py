@@ -80,13 +80,13 @@ def create_personal_warning(xnr_user_no,today_datetime):
 
     #计算敏感度排名靠前的用户
     query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'uid':followers_list}
-                }
-            }
-        },
+        # 'query':{
+        #     'filtered':{
+        #         'filter':{
+        #             'terms':{'uid':followers_list}
+        #         }
+        #     }
+        # },
         'aggs':{
             'followers_sensitive_num':{
                 'terms':{'field':'uid'},
@@ -120,6 +120,9 @@ def create_personal_warning(xnr_user_no,today_datetime):
         else:
             pass
 
+    ####################################
+    #如果是关注者则敏感度提升
+    ####################################
     #查询敏感用户的敏感微博内容
     results=[]
     for user in top_userlist:
@@ -130,8 +133,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_lookup_id=xnr_uid+'_'+user['uid']
         print user_lookup_id
         try:
-            user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
-            #user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+            #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
+            user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''
@@ -143,7 +146,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
                         'bool':{
                             'must':[
                                 {'term':{'uid':user['uid']}},
-                                {'range':{'sensitive':{'gte':1,'lte':100}}}
+                                {'range':{'sensitive':{'gte':1}}}
                             ]
                         }
                     }
@@ -182,11 +185,14 @@ def create_personal_warning(xnr_user_no,today_datetime):
         task_id=xnr_user_no+'_'+user_detail['uid']
         #print weibo_user_warning_index_name
         #print user_detail
-        try:
-            es_xnr.index(index=weibo_user_warning_index_name,doc_type=weibo_user_warning_index_type,body=user_detail,id=task_id)
-            mark=True
-        except:
-            mark=False
+        if s_result:
+            try:
+                es_xnr.index(index=weibo_user_warning_index_name,doc_type=weibo_user_warning_index_type,body=user_detail,id=task_id)
+                mark=True
+            except:
+                mark=False
+        else:
+            pass
 
         results.append(mark)
 
@@ -202,7 +208,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
         'query':{
             'filtered':{
                 'filter':{
-                    'bool':{'must':{'range':{'sensitive':{'gte':1,'lte':100}}}}
+                    'bool':{'must':{'range':{'sensitive':{'gte':1}}}}
                 }
             }
         },
@@ -274,7 +280,7 @@ def get_hashtag(now_time):
                     hashtag_list[k] = v
         #r_cluster.hget('hashtag_'+str(a))
 
-    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:100]
+    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:80]
 
     return hashtag_list
 
@@ -285,7 +291,7 @@ def lookup_event_content(event_name,today_datetime):
         'query':{
             'bool':{
                 'should':{'wildcard':{'text':'*'+event_name+'*'}},
-                'must':{'range':{'sensitive':{'gte':1,'lte':100}}}
+                'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -327,7 +333,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             'query':{
                 'bool':{
                     'must':[{'wildcard':{'text':'*'+event_item[0]+'*'}},
-                    {'range':{'sensitive':{'gte':1,'lte':100}}}]
+                    {'range':{'sensitive':{'gte':1}}}]
                 }
             },
             'size':MAX_WARMING_SIZE,
@@ -350,23 +356,25 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 else:
                     alluser_num_dict[str(item['_source']['uid'])]=1
                     
-                for fans_uid in fans_list:                    
-                    if fans_uid==item['_source']['uid']:
-                        if fans_num_dict.has_key(str(fans_uid)):
-                            fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
-                        else:
-                            fans_num_dict[str(fans_uid)]=1
+                fans_mark=set_intersection(item['_source']['uid'],fans_list)
+                # for fans_uid in fans_list:                    
+                if fans_mark > 0:
+                    if fans_num_dict.has_key(str(item['_source']['uid'])):
+                        fans_num_dict[str(item['_source']['uid'])]=fans_num_dict[str(item['_source']['uid'])]+1
                     else:
-                        pass
+                        fans_num_dict[str(item['_source']['uid'])]=1
+                else:
+                    pass
                 
-                for followers_uid in followers_list:
-                    if followers_uid==item['_source']['uid']:
-                        if followers_num_dict.has_key(str(followers_uid)):
-                            fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
-                        else:
-                            fans_num_dict[str(followers_uid)]=1
+                followers_mark=set_intersection(item['_source']['uid'],followers_list)
+                # for followers_uid in followers_list:
+                if followers_mark > 0:
+                    if followers_num_dict.has_key(str(item['_source']['uid'])):
+                        followers_num_dict[str(item['_source']['uid'])]=followers_num_dict[str(item['_source']['uid'])]+1
                     else:
-                        pass
+                        followers_num_dict[str(item['_source']['uid'])]=1
+                else:
+                    pass
 
                 #计算影响力
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
@@ -465,7 +473,8 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 
 #粉丝或关注用户判断
 def judge_user_type(uid,user_list):
-    if uid in user_list:
+    number=set_intersection(uid,user_list)
+    if number > 0:
         mark=1.2
     else:
         mark=0.8
@@ -480,6 +489,16 @@ def union_dict(*objs):
         _total[_key]=sum([int(obj.get(_key,0)) for obj in objs])
 
     return _total
+
+#交集判断
+def set_intersection(str_A,list_B):
+    list_A=[]
+    list_A.append(str_A)
+    set_A = set(list_A)
+    set_B = set(list_B)
+    result = set_A & set_B
+    number = len(result)
+    return number
 
 
 #时间预警
@@ -546,7 +565,7 @@ def lookup_weibo_date_warming(keywords,today_datetime):
             'bool':
             {
                 'should':keyword_query_list,
-                'must':{'range':{'sensitive':{'gte':1,'lte':100}}}
+                'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -590,7 +609,7 @@ def create_weibo_warning():
             #人物行为预警
             #personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
             create_event_warning(xnr_user_no,today_datetime,write_mark=True)

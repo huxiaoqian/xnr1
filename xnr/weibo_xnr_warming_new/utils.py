@@ -127,7 +127,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            {'terms':{'uid':followers_list}},
+                            # {'terms':{'uid':followers_list}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -182,8 +182,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_lookup_id=xnr_uid+'_'+user['uid']
         print user_lookup_id
         try:
-            user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
-            #user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+            #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
+            user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
             user_detail['user_name']=user_result['nick_name']
         except:
             user_detail['user_name']=''
@@ -330,11 +330,11 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
 
     show_condition_list=[]
     if show_type == 0: #全部用户
-        show_condition_list.append({'must':[{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+        show_condition_list.append({'must':[{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
     elif show_type == 1: #关注用户
-        show_condition_list.append({'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+        show_condition_list.append({'must':[{'terms':{'uid':followers_list}},{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
     elif show_type ==2: #未关注用户
-        show_condition_list.append({'must_not':{'terms':{'uid':followers_list}},'must':[{'range':{'sensitive':{'gte':1,'lte':100}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
+        show_condition_list.append({'must_not':{'terms':{'uid':followers_list}},'must':[{'range':{'sensitive':{'gte':1}}},{'range':{'timestamp':{'gte':start_time,'lte':end_time}}}]})
 
     query_body={
         'query':{
@@ -377,6 +377,7 @@ def show_speech_warming(xnr_user_no,show_type,start_time,end_time):
         start_datetime = datetime2ts(ts2datetime(start_time))
 
     speech_warming=[]
+    #print 'start_time:',start_time,'end_time:',end_time
     if today_datetime > end_datetime :
         speech_warming = lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time)
     else:
@@ -507,7 +508,7 @@ def lookup_todayweibo_date_warming(keywords,today_datetime):
             'bool':
             {
                 'should':keyword_query_list,
-                'must':{'range':{'sensitive':{'gte':1,'lte':100}}}
+                'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -652,7 +653,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 'query':{
                     'bool':{
                         'must':[{'wildcard':{'text':'*'+event_item[0]+'*'}},
-                        {'range':{'sensitive':{'gte':1,'lte':100}}}]
+                        {'range':{'sensitive':{'gte':1}}}]
                     }
                 },
                 'size':MAX_WARMING_SIZE,
@@ -663,6 +664,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             event_results=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
             if event_results:
                 weibo_result=[]
+                main_userid_list=[]
                 fans_num_dict=dict()
                 followers_num_dict=dict()
                 alluser_num_dict=dict()
@@ -672,49 +674,55 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                     event_sensitive_count=event_sensitive_count+1
                     #统计用户信息
                     #print '3::',int(time.time())
-                    if alluser_num_dict.has_key(str(item['_source']['uid'])):
-                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
-                    else:
-                        alluser_num_dict[str(item['_source']['uid'])]=1
+                    # if alluser_num_dict.has_key(str(item['_source']['uid'])):
+                    #     alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                    # else:
+                    #     alluser_num_dict[str(item['_source']['uid'])]=1
                         
-                    for fans_uid in fans_list:                    
-                        if fans_uid==item['_source']['uid']:
-                            if fans_num_dict.has_key(str(fans_uid)):
-                                fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
-                            else:
-                                fans_num_dict[str(fans_uid)]=1
-                        else:
-                            pass
+                    # for fans_uid in fans_list:                    
+                    #     if fans_uid==item['_source']['uid']:
+                    #         if fans_num_dict.has_key(str(fans_uid)):
+                    #             fans_num_dict[str(fans_uid)]=fans_num_dict[str(fans_uid)]+1
+                    #         else:
+                    #             fans_num_dict[str(fans_uid)]=1
+                    #     else:
+                    #         pass
                         
-                    for followers_uid in followers_list:
-                        if followers_uid==item['_source']['uid']:
-                            if followers_num_dict.has_key(str(followers_uid)):
-                                fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
-                            else:
-                                fans_num_dict[str(followers_uid)]=1
-                        else:
-                            pass
+                    # for followers_uid in followers_list:
+                    #     if followers_uid==item['_source']['uid']:
+                    #         if followers_num_dict.has_key(str(followers_uid)):
+                    #             fans_num_dict[str(followers_uid)]=fans_num_dict[str(followers_uid)]+1
+                    #         else:
+                    #             fans_num_dict[str(followers_uid)]=1
+                    #     else:
+                    #         pass
 
                     #计算影响力
-                    origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
-                    fans_value=judge_user_type(item['_source']['uid'],fans_list)
-                    followers_value=judge_user_type(item['_source']['uid'],followers_list)
-                    item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                    # origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
+                    # fans_value=judge_user_type(item['_source']['uid'],fans_list)
+                    # followers_value=judge_user_type(item['_source']['uid'],followers_list)
+                    # item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                    item['_source']['weibo_influence_value']=0
                     weibo_result.append(item['_source'])
 
+                    main_userid_list.append(item['_source']['uid'])
+
                     #统计影响力、时间
-                    event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
-                    event_time_sum=event_time_sum+item['_source']['timestamp']            
+                    # event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
+                    # event_time_sum=event_time_sum+item['_source']['timestamp']            
 
                 #典型微博信息
-                weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
+                # weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
                 event_warming_content['main_weibo_info']=json.dumps(weibo_result)
                 #event_warming_content['main_weibo_info']=weibo_result
 
                 #事件影响力和事件时间
-                number=len(event_results)
-                event_warming_content['event_influence']=event_influence_sum/number
-                event_warming_content['event_time']=event_time_sum/number
+                # number=len(event_results)
+                # event_warming_content['event_influence']=event_influence_sum/number
+                # event_warming_content['event_time']=event_time_sum/number
+
+                event_warming_content['event_influence']=0
+                event_warming_content['event_time']=0
 
                 # except:
                 #     event_warming_content['main_weibo_info']=[]
@@ -725,12 +733,12 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 #print '4::',int(time.time())
                 if event_sensitive_count > 0:
                 #对用户进行排序
-                    temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
-                    main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
-                    main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
-                    main_userid_list=[]
-                    for i in xrange(0,len(main_userid_dict)):
-                        main_userid_list.append(main_userid_dict[i][0])
+                    # temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
+                    # main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
+                    # main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
+                    # main_userid_list=[]
+                    # for i in xrange(0,len(main_userid_dict)):
+                    #     main_userid_list.append(main_userid_dict[i][0])
 
                     #主要参与用户信息
                     main_user_info=[]

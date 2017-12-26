@@ -5,17 +5,13 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import show_personnal_warning,show_speech_warning,show_date_warning,\
-                  update_fb_flow_text
-                  #show_event_warning,\                  
-				  #,addto_speech_warning,\
-				  #,report_warning_content,get_hashtag
+from utils import show_personnal_warning,show_speech_warning,show_date_warning
 
 
-mod = Blueprint('facebook_xnr_warning', __name__, url_prefix='/facebook_xnr_warning')
+mod = Blueprint('twitter_xnr_warning', __name__, url_prefix='/twitter_xnr_warning')
 
 #人物行为预警
-#http://219.224.134.213:9209/facebook_xnr_warning/show_personnal_warning/?xnr_user_no=FXNR0001&start_time=1511755200&end_time=1511857583
+#http://219.224.134.213:9209/twitter_xnr_warning/show_personnal_warning/?xnr_user_no=TXNR0001&start_time=1511755200&end_time=1511857583
 @mod.route('/show_personnal_warning/')
 def ajax_show_personnal_warning():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -27,7 +23,7 @@ def ajax_show_personnal_warning():
 
 #言论内容预警
 #show_type=0,全部用户；1，关注用户；2，未关注用户
-#http://219.224.134.213:9209/facebook_xnr_warning/show_speech_warning/?xnr_user_no=FXNR0001&show_type=0&start_time=1511755200&end_time=1511857583
+#http://219.224.134.213:9209/twitter_xnr_warning/show_speech_warning/?xnr_user_no=TXNR0001&show_type=0&start_time=1511755200&end_time=1511857583
 @mod.route('/show_speech_warning/')
 def ajax_show_speech_warning():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -39,7 +35,7 @@ def ajax_show_speech_warning():
 
 
 #时间预警
-#http://219.224.134.213:9209/facebook_xnr_warning/show_date_warning/?account_name=admin@qq.com&start_time=1504195200&end_time=1512389253
+#http://219.224.134.213:9209/twitter_xnr_warning/show_date_warning/?account_name=admin@qq.com&start_time=1504195200&end_time=1512389253
 @mod.route('/show_date_warning/')
 def ajax_show_date_warning():
 	account_name=request.args.get('account_name','')
@@ -49,14 +45,3 @@ def ajax_show_date_warning():
 	return json.dumps(results)
 
 
-#http://219.224.134.213:9209/facebook_xnr_warning/update_fb_flow_text
-@mod.route('/update_fb_flow_text/')
-def ajax_update_fb_flow_text():
-	#task_id='328762654255381'
-	#task_id='328760217588958'
-	#task_id='1555096127914839'
-	#task_id='1554860021271783'
-	task_id='1554849701272815'
-	sensitive=1
-	results=update_fb_flow_text(task_id,sensitive)
-	return json.dumps(results)
