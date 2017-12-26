@@ -53,7 +53,7 @@ def fb_xnr_flow_text_mappings(index_name):
                         'weibos_sum':{
                             'type':'long'
                         },
-                        'mid':{
+                        'fid':{
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
@@ -102,14 +102,14 @@ def fb_xnr_flow_text_mappings(index_name):
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'root_mid':{
+                        'root_fid':{
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
                          # uncut weibo text
                         'origin_text':{
                             'type': 'string',
-                            'index': 'not_analyzed'
+                            'index': 'no'
                             },
                         'origin_keywords_dict':{
                             'type': 'string',
