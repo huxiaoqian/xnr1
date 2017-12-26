@@ -140,11 +140,11 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
-es.indices.delete(index='weibo_feedback_retweet_2017*')
-es.indices.delete(index='weibo_feedback_comment_2017*')
-es.indices.delete(index='weibo_feedback_at_2017*')
-es.indices.delete(index='weibo_feedback_private_2017*')
-es.indices.delete(index='weibo_feedback_like_2017*')
+es.indices.delete(index='user_bought')
+# es.indices.delete(index='weibo_feedback_comment_2017*')
+# es.indices.delete(index='weibo_feedback_at_2017*')
+# es.indices.delete(index='weibo_feedback_private_2017*')
+# es.indices.delete(index='weibo_feedback_like_2017*')
 
 # query_body={
 #     'query':{

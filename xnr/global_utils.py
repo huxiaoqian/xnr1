@@ -337,6 +337,9 @@ facebook_count_index_type = 'text'
 facebook_user_index_name = 'facebook_user'
 facebook_user_index_type = 'user'
 
+fb_xnr_flow_text_index_name_pre = 'fb_xnr_flow_text_'
+fb_xnr_flow_text_index_type = 'text'
+
 # use to save influence
 fb_bci_index_name_pre = 'fb_bci_'
 fb_bci_index_type = 'bci'
@@ -413,13 +416,12 @@ twitter_count_index_name_pre = 'twitter_count_'
 twitter_count_index_type = 'text'
 
 
-
-twitter_count_index_name_pre = 'twitter_count_'
-twitter_count_index_type = 'text'
-
-
 twitter_user_index_name = 'twitter_user'
 twitter_user_index_type = 'user'
+
+tw_xnr_flow_text_index_name_pre = 'tw_xnr_flow_text_'
+tw_xnr_flow_text_index_type = 'text'
+
 
 # use to save influence
 tw_bci_index_name_pre = 'tw_bci_'
