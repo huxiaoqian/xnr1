@@ -68,5 +68,5 @@ if __name__ == '__main__':
 
 	#tw2redis()
 	#print R_UNAME2ID_FT.hget(tw_uname2id,'ArchiveDaily')
-	print R_UNAME2ID_FT.hget(fb_uname2id,'xulinfree')
-	#fb2redis()
+	#print R_UNAME2ID_FT.hget(fb_uname2id,'xulinfree')
+	fb2redis()

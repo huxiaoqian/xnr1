@@ -97,7 +97,7 @@ def scan_retweet(ft_type):
                 save_dict['uid'] = uid
                 save_dict['uid_be_retweet'] = json.dumps(item_result)
                 be_retweet_bulk_action.extend([{'index':{'_id':uid}}, save_dict])
-        
+        print 'be_retweet_bulk_action...',be_retweet_bulk_action
         es.bulk(be_retweet_bulk_action, index=index_name, doc_type='user')
         retweet_bulk_action = []
         be_retweet_bulk_action = []
@@ -118,5 +118,5 @@ def scan_retweet(ft_type):
 
 if __name__ == '__main__':
 
-    ft_type = 'tw' #'fb'
+    ft_type = 'fb' #'tw'
     scan_retweet(ft_type)
