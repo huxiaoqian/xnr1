@@ -1,11 +1,11 @@
 # -*- coding:utf-8 -*-
 import sys
 import json
-from global_utils import es_xnr as es, fb_xnr_flow_text_index_name_pre, \
-                fb_xnr_flow_text_index_type
+from global_utils import es_xnr as es, tw_xnr_flow_text_index_name_pre, \
+                tw_xnr_flow_text_index_type
 
 
-def fb_xnr_flow_text_mappings(index_name):
+def tw_xnr_flow_text_mappings(index_name):
     index_info = {
             'settings':{
                 'analysis':{
@@ -53,7 +53,7 @@ def fb_xnr_flow_text_mappings(index_name):
                         'weibos_sum':{
                             'type':'long'
                         },
-                        'mid':{
+                        'tid':{
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
@@ -102,7 +102,7 @@ def fb_xnr_flow_text_mappings(index_name):
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'root_mid':{
+                        'root_tid':{
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
@@ -139,4 +139,4 @@ def fb_xnr_flow_text_mappings(index_name):
 
 if __name__ == '__main__':
 
-    fb_xnr_flow_text_mappings(index_name)
+    tw_xnr_flow_text_mappings(index_name)
