@@ -428,7 +428,7 @@ function mainJoin(data,idx) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.username==''||row.username=='unknown'||row.username=='numm'||!row.username){
+                    if (row.username==''||row.username=='unknown'||row.username=='null'||!row.username){
                         return row.uid;
                     }else {
                         return row.username;
@@ -443,7 +443,7 @@ function mainJoin(data,idx) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.talking_about_count==''||row.talking_about_count=='unknown'||row.talking_about_count=='numm'||!row.talking_about_count){
+                    if (row.talking_about_count=='unknown'||row.talking_about_count=='null'){
                         return '-';
                     }else {
                         return row.talking_about_count;
@@ -458,7 +458,7 @@ function mainJoin(data,idx) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.likes==''||row.likes=='unknown'||row.likes=='numm'||!row.likes){
+                    if (row.likes=='unknown'||row.likes=='null'){
                         return '-';
                     }else {
                         return row.likes;

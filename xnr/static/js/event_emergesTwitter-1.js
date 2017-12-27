@@ -382,15 +382,16 @@ function weibo(data){
 
 function startTable(index) {
     mainJoin(contentList['exo_'+index]['main_user_info'],index)
-    mainWeibo(contentList['exo_'+index]['main_weibo_info'],index);
+    mainWeibo(contentList['exo_'+index]['main_twitter_info'],index);
 }
 function mainJoin(data,idx) {
+    console.log(data)
     $('.mainJoinTable'+idx).bootstrapTable('load', data);
     $('.mainJoinTable'+idx).bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 10,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -421,46 +422,46 @@ function mainJoin(data,idx) {
             },
             {
                 title: "用户昵称",//标题
-                field: "nick_name",//键名
+                field: "username",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.nick_name==''||row.nick_name=='unknown'||row.nick_name=='numm'||!row.nick_name){
+                    if (row.username==''||row.username=='unknown'||row.username=='null'||!row.username){
                         return row.uid;
                     }else {
-                        return row.nick_name;
+                        return row.username;
                     }
                 },
             },
             {
-                title: "关注数",//标题
-                field: "favoritesnum",//键名
+                title: "好友数",//标题
+                field: "friendscount",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.favoritesnum==''||row.favoritesnum=='unknown'||row.favoritesnum=='numm'||!row.favoritesnum){
+                    if (row.friendscount=='unknown'||row.friendscount=='null'){
                         return '-';
                     }else {
-                        return row.favoritesnum;
+                        return row.friendscount;
                     }
                 },
             },
             {
                 title: "粉丝数",//标题
-                field: "fansnum",//键名
+                field: "followerscount",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.fansnum==''||row.fansnum=='unknown'||row.fansnum=='numm'||!row.fansnum){
+                    if (row.followerscount=='unknown'||row.followerscount=='null'){
                         return '-';
                     }else {
-                        return row.fansnum;
+                        return row.followerscount;
                     }
                 },
             },
@@ -533,9 +534,9 @@ function mainWeibo(_data,idx) {
                         '   <span class="center_2" style="display:block;text-align:left;">'+text+'</span>'+
                         '   <div class="center_3">'+
                         '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢（<b class="like">'+row.favorite+'</b>）</span>'+
                         '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
                         '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+
