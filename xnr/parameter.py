@@ -23,6 +23,7 @@ REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
 WARMING_DAY=15 #时间预警，预警天数
 MAX_WARMING_SIZE=100 #最大预警数目
 EVENT_COUNT=20 #实时计算事件频率阈值
+EVENT_OFFLINE_COUNT=80 #离线计算事件预警数量
 #xnr
 USER_XNR_NUM=50 #用户管理虚拟人数量
 # weibo
