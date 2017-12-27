@@ -20,7 +20,8 @@ from global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,weibo_date_r
                          facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
                          facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
                          facebook_count_index_name_pre,facebook_count_index_type,\
-                         facebook_user_index_name,facebook_user_index_type
+                         facebook_user_index_name,facebook_user_index_type,\
+                         facebook_event_warning_index_name_pre,facebook_event_warning_index_type
 
  
 #虚拟人列表
@@ -433,6 +434,7 @@ def get_hashtag(today_datetime):
 def create_event_warning(xnr_user_no,today_datetime,write_mark):
     #获取事件名称
     hashtag_list = get_hashtag(today_datetime)
+    #print 'hashtag_list/:',hashtag_list
 
     facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,today_datetime,today_datetime)
 
@@ -441,7 +443,6 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
 
     event_warming_list=[]
     for event_item in hashtag_list:
-        event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
         event_warming_content['event_name']=event_item['event_name']
         event_influence_sum=0
@@ -452,7 +453,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 	'filter':{
                 		'bool':{
                 			'must':[
-                				{'term':{'field':event_item['event_name']}},
+                				{'term':{'hashtag':event_item['event_name']}},
                 				{'range':{'sensitive':{'gte':1}}}
                 			]
                 		}
@@ -461,8 +462,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             },
             'size':MAX_WARMING_SIZE,
             'sort':{'sensitive':{'order':'desc'}}
-        }
-        #try:         
+        }       
         event_results=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         if event_results:
             facebook_result=[]
@@ -470,113 +470,115 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             alluser_num_dict=dict()
             #print 'sencond_time:::',int(time.time())
             for item in event_results:
+            	            #查询三个指标字段
+                fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
+                if fid_result:
+                    item['_source']['comment']=fid_result['comment']
+                    item['_source']['share']=fid_result['share']
+                    item['_source']['favorite']=fid_result['favorite']
+                else:
+                    item['_source']['comment']=0
+                    item['_source']['share']=0
+                    item['_source']['favorite']=0   
                 #print 'event_content:',item['_source']['text']          
-                event_sensitive_count=event_sensitive_count+1
                 #统计用户信息
                 if alluser_num_dict.has_key(str(item['_source']['uid'])):
-                    alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                    friends_mark=set_intersection(item['_source']['uid'],friends_list)
+                    if friends_mark > 0:
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1*2
+                    else:
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
                 else:
                     alluser_num_dict[str(item['_source']['uid'])]=1
-                    
-                friends_mark=set_intersection(item['_source']['uid'],friends_list)                   
-                if friends_mark > 0:
-                    if friends_num_dict.has_key(str(item['_source']['uid'])):
-                        friends_num_dict[str(item['_source']['uid'])]=friends_num_dict[str(item['_source']['uid'])]+1
-                    else:
-                        friends_num_dict[str(item['_source']['uid'])]=1
-                else:
-                    pass
-                
+                                   
 
                 #计算影响力
-                origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
+                origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
                 friends_value=judge_user_type(item['_source']['uid'],friends_list)
                 item['_source']['facebook_influence_value']=origin_influence_value*friends_value
-                weibo_result.append(item['_source'])
+                facebook_result.append(item['_source'])
 
                 #统计影响力、时间
-                event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
+                event_influence_sum=event_influence_sum+item['_source']['facebook_influence_value']
                 event_time_sum=event_time_sum+item['_source']['timestamp']            
         
-            print 'third_time:::',int(time.time())
-            #典型微博信息
-            weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
-            event_warming_content['main_weibo_info']=json.dumps(weibo_result)
+            # print 'third_time:::',int(time.time())
+            #典型信息
+            facebook_result.sort(key=lambda k:(k.get('facebook_influence_value',0)),reverse=True)
+            event_warming_content['main_facebook_info']=json.dumps(facebook_result)
 
             #事件影响力和事件时间
             number=len(event_results)
             event_warming_content['event_influence']=event_influence_sum/number
             event_warming_content['event_time']=event_time_sum/number
 
-        # except:
-        #     event_warming_content['main_weibo_info']=[]
-        #     event_warming_content['event_influence']=0
-        #     event_warming_content['event_time']=0
-        
-        # try:
-            if event_sensitive_count > 0:
+
         #对用户进行排序
-                temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
-                main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
-                main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
-                main_userid_list=[]
-                for i in xrange(0,len(main_userid_dict)):
-                    main_userid_list.append(main_userid_dict[i][0])
+            alluser_num_dict=sorted(alluser_num_dict.items(),key=lambda d:d[1],reverse=True)
+            main_userid_list=[]
+            for i in xrange(0,len(alluser_num_dict)):
+                main_userid_list.append(alluser_num_dict[i][0])
 
-            #主要参与用户信息
-                main_user_info=[]
-                user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
-                for item in user_es_result:
+        #主要参与用户信息
+            main_user_info=[]
+            user_es_result=es_xnr.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':main_userid_list})['docs']
+            # print 'user_es_result:',user_es_result
+            for item in user_es_result:
 
-                    user_dict=dict()
-                    if item['found']:
-                        user_dict['photo_url']=item['_source']['photo_url']
-                        user_dict['uid']=item['_id']
-                        user_dict['nick_name']=item['_source']['nick_name']
-                        user_dict['favoritesnum']=item['_source']['favoritesnum']
-                        user_dict['fansnum']=item['_source']['fansnum']
+                user_dict=dict()
+                if item['found']:
+                    user_dict['uid']=item['_id']
+                    user_dict['username']=item['_source']['username']
+                    if item['_source'].has_key('talking_about_count'):
+                        user_dict['talking_about_count']=item['_source']['talking_about_count']
                     else:
-                        user_dict['photo_url']=''
-                        user_dict['uid']=item['_id']
-                        user_dict['nick_name']=''
-                        user_dict['favoritesnum']=0
-                        user_dict['fansnum']=0
-                    main_user_info.append(user_dict)
-                event_warming_content['main_user_info']=json.dumps(main_user_info)
+                        user_dict['talking_about_count']=0
+                    if item['_source'].has_key('likes'):
+                        user_dict['likes']=item['_source']['likes']
+                    else:
+                    	user_dict['likes']=0
+                    if item['_source'].has_key('category'):
+                        user_dict['category']=item['_source']['category']
+                    else:
+                    	user_dict['category']=''
+                else:
+                    # user_dict['icon']=''
+                    user_dict['uid']=item['_id']
+                    user_dict['username']=''
+                    user_dict['talking_about_count']=0
+                    user_dict['likes']=0
+                    user_dict['category']=''
+                main_user_info.append(user_dict)
+            event_warming_content['main_user_info']=json.dumps(main_user_info)
 
-            else:
-                event_warming_content['main_user_info']=''
-        # except:
-            # event_warming_content['main_user_info']=[]
-            print 'fourth_time:::',int(time.time())
+
+
+            # print 'fourth_time:::',int(time.time())
             event_warming_content['xnr_user_no']=xnr_user_no
             event_warming_content['validity']=0
             event_warming_content['timestamp']=today_datetime
             now_time=int(time.time())
             task_id=xnr_user_no+'_'+str(now_time) 
         
-            if event_sensitive_count > 0:
-                print 'event_sensitive_count:::',event_sensitive_count
-                #写入数据库           
-                if write_mark:
-                    print 'today_datetime:::',ts2datetime(today_datetime)
-                    mark=write_envent_warming(today_datetime,event_warming_content,task_id)
-                    event_warming_list.append(mark)
-                else:
-                    event_warming_list.append(event_warming_content)
+            #写入数据库           
+            if write_mark:
+                # print 'today_datetime:::',ts2datetime(today_datetime)
+                mark=write_envent_warming(today_datetime,event_warming_content,task_id)
+                event_warming_list.append(mark)
             else:
-                pass
+                event_warming_list.append(event_warming_content)
+
         else:
             pass
-        print 'fifth_time:::',int(time.time())
+        # print 'fifth_time:::',int(time.time())
     return event_warming_list
 
 
 def write_envent_warming(today_datetime,event_warming_content,task_id):
-    weibo_event_warning_index_name=weibo_event_warning_index_name_pre+ts2datetime(today_datetime)
-    print 'weibo_event_warning_index_name:',weibo_event_warning_index_name
+    facebook_event_warning_index_name=facebook_event_warning_index_name_pre+ts2datetime(today_datetime)
+    # print 'facebook_event_warning_index_name:',facebook_event_warning_index_name
     #try:
-    es_xnr.index(index=weibo_event_warning_index_name,doc_type=weibo_event_warning_index_type,body=event_warming_content,id=task_id)
+    es_xnr.index(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,body=event_warming_content,id=task_id)
     mark=True
     #except:
     #    mark=False
@@ -643,11 +645,10 @@ def create_facebook_warning():
             #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
     #date_mark=create_date_warning(today_datetime)
-    get_hashtag(today_datetime)
 
     return True
 
