@@ -1061,6 +1061,159 @@ function businessWeibo(data) {
 };
 
 // =====LL 12-18===智能发帖
+    //任务列表
+function eventList(data) {
+    $('#eventList p').show();
+    $('#eventList').bootstrapTable('load', data);
+    $('#eventList').bootstrapTable({
+        data:data,
+        search: true,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 4,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "事件名称",//标题
+                field: "a",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "极性",//标题
+                field: "b",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "子观点名称",//标题
+                field: "c",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "创建时间",//标题
+                field: "d",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "创建人",//标题
+                field: "e",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "计算状态",//标题
+                field: "d",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    var name;
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        name='未命名';
+                    }else {
+                        name=row.a;
+                    };
+                    return name;
+                }
+            },
+            {
+                title: "操作",//标题
+                field: "a",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    return '<i class="icon icon-file" onclick="lookType(\''+row.a+'\')" title="查看" style="color: white;font-size: 12px;cursor: pointer;"></i>&nbsp;&nbsp;&nbsp;'+
+                     '<i class="icon icon-trash" onclick="delEvent(\''+row.a+'\')" title="删除" style="color: white;font-size: 12px;cursor: pointer;"></i>'
+                }
+            },
+        ],
+    });
+    $('#eventList p').slideUp(700);
+}
+eventList([{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'}]);
+function lookType(showType) {
+    $('#intelligenceTabs li').eq(0).removeClass('active');
+    $('.radyType1').addClass('active').show();
+    $('.radyType3').show();
+    $('.radyType5').show();
+    $('.radyType6').show();
+    $('#z-0').eq(0).removeClass('active');
+    $('#z-1').addClass('active');
+}
+function delEvent(_id) {
+
+}
     // 事件主题河
     // 路径配置
     require.config({
