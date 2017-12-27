@@ -7,10 +7,6 @@ from flask import Blueprint, url_for, render_template, request,\
 
 from utils import show_personnal_warning,show_speech_warning,show_date_warning,show_event_warming,\
                   update_fb_flow_text
-                  #show_event_warning,\                  
-				  #,addto_speech_warning,\
-				  #,report_warning_content,get_hashtag
-
 
 mod = Blueprint('facebook_xnr_warning', __name__, url_prefix='/facebook_xnr_warning')
 
