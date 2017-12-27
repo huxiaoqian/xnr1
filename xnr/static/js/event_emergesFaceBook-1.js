@@ -1,5 +1,35 @@
-var weiboUrl='/weibo_xnr_warming/show_event_warming/?xnr_user_no='+ID_Num;
+var ID_Num='FXNR0001';
+var time2=Date.parse(new Date())/1000;
+var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
+
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
 //文本信息
 var contentList = {};
 function weibo(data){
@@ -353,7 +383,7 @@ function weibo(data){
 
 function startTable(index) {
     mainJoin(contentList['exo_'+index]['main_user_info'],index)
-    mainWeibo(contentList['exo_'+index]['main_weibo_info'],index);
+    mainWeibo(contentList['exo_'+index]['main_facebook_info'],index);
 }
 function mainJoin(data,idx) {
     $('.mainJoinTable'+idx).bootstrapTable('load', data);
@@ -392,46 +422,46 @@ function mainJoin(data,idx) {
             },
             {
                 title: "用户昵称",//标题
-                field: "nick_name",//键名
+                field: "username",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.nick_name==''||row.nick_name=='unknown'||row.nick_name=='numm'||!row.nick_name){
+                    if (row.username==''||row.username=='unknown'||row.username=='numm'||!row.username){
                         return row.uid;
                     }else {
-                        return row.nick_name;
+                        return row.username;
                     }
                 },
             },
             {
                 title: "关注数",//标题
-                field: "favoritesnum",//键名
+                field: "talking_about_count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.favoritesnum==''||row.favoritesnum=='unknown'||row.favoritesnum=='numm'||!row.favoritesnum){
+                    if (row.talking_about_count==''||row.talking_about_count=='unknown'||row.talking_about_count=='numm'||!row.talking_about_count){
                         return '-';
                     }else {
-                        return row.favoritesnum;
+                        return row.talking_about_count;
                     }
                 },
             },
             {
                 title: "粉丝数",//标题
-                field: "fansnum",//键名
+                field: "likes",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.fansnum==''||row.fansnum=='unknown'||row.fansnum=='numm'||!row.fansnum){
+                    if (row.likes==''||row.likes=='unknown'||row.likes=='numm'||!row.likes){
                         return '-';
                     }else {
-                        return row.fansnum;
+                        return row.likes;
                     }
                 },
             },
@@ -517,7 +547,7 @@ function mainWeibo(_data,idx) {
                         '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                         '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
+                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+row.favorite+'</b>)</span>'+
                         '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
                         '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+

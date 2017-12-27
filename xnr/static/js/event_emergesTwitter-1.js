@@ -1,5 +1,34 @@
-var weiboUrl='/weibo_xnr_warming/show_event_warming/?xnr_user_no='+ID_Num;
+var ID_Num='TXNR0001';
+var time2=Date.parse(new Date())/1000;
+var weiboUrl='/twitter_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/twitter_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/twitter_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,weibo);
+    }
+});
 //文本信息
 var contentList = {};
 function weibo(data){
@@ -435,17 +464,6 @@ function mainJoin(data,idx) {
                     }
                 },
             },
-            // {
-            //     title: '操作',//标题
-            //     field: "",//键名
-            //     sortable: true,//是否可排序
-            //     order: "desc",//默认排序方式
-            //     align: "center",//水平
-            //     valign: "middle",//垂直
-            //     formatter: function (value, row, index) {
-            //         return '<a style="cursor: pointer;" onclick="details()" title="查看详情"><i class="icon icon-edit"></i></a>';
-            //     },
-            // },
         ],
     });
 }
@@ -548,7 +566,6 @@ function retComLike(_this) {
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
-
 function comMent(_this){
     var txt = $(_this).prev().val();
     var mid = $(_this).parents('.center_rel').find('.mid').text();
@@ -560,7 +577,6 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-
 //上报
 function oneUP(_this) {
 // #user_dict=[uid,nick_name,fansnum,friendsnum]
