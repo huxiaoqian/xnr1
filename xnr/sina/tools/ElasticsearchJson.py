@@ -64,10 +64,8 @@ def executeES(indexName, typeName, listData):
     #indexName += '_' + ts2datetime(current_time)
     
     #print 'listData:',listData
-    number=0
     for list_data in listData:
-        number=number+1
-        print 'number:::',number
+        
         data = {}
         jsonData = json.loads(list_data)
         for key, val in jsonData.items():

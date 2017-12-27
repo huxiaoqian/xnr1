@@ -3,7 +3,10 @@
 from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                        index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type
+                        index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type,\
+                        tw_xnr_index_name,tw_xnr_index_type,fb_xnr_index_name,fb_xnr_index_type,\
+                        tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
+                        fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type
 from parameter import MAX_SEARCH_SIZE,DAY
 from global_config import S_TYPE,S_DATE_BCI
 from time_utils import ts2datetime
@@ -77,6 +80,24 @@ def xnr_user_no2uid(xnr_user_no):
         uid = ''
 
     return uid
+
+def fb_xnr_user_no2uid(xnr_user_no):
+    try:
+        result = es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+        uid = result['uid']
+    except:
+        uid = ''
+
+    return uid    
+
+def tw_xnr_user_no2uid(xnr_user_no):
+    try:
+        result = es_xnr.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+        uid = result['uid']
+    except:
+        uid = ''
+
+    return uid 
 
 def uid2xnr_user_no(uid):
     try:
@@ -279,6 +300,106 @@ def get_influence_relative(uid,influence):
     influence_relative = influence/user_index_max
 
     return influence_relative
+
+def fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
+
+ 
+    results = es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+            id=xnr_user_no)
+
+    results = results["_source"]
+    if follow_type == 'follow':
+        if trace_type == 'trace_follow':
+            # 添加追随关注
+            try:
+                trace_follow_uids = results['trace_follow_pre_list']
+                trace_follow_uids_set = set(trace_follow_uids)
+                trace_follow_uids_set.add(uid)
+                trace_follow_uids = list(trace_follow_uids_set)
+            except:
+                trace_follow_uids = [uid]
+
+            # # 添加普通关注
+            # try:
+            #     followers_uids = results['followers_list']
+            #     followers_uids_set = set(followers_uids)
+            #     followers_uids_set.add(uid)
+            #     followers_uids = list(followers_uids_set)
+            # except:
+            #     followers_uids = [uid]
+            
+            # results['followers_list'] = followers_uids
+            results['trace_follow_list'] = trace_follow_uids
+            es_xnr.update(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                        id=xnr_user_no,body={'doc':results})
+
+
+    elif follow_type == 'unfollow':
+
+        try:
+            followers_uids = results['trace_follow_pre_list']
+            followers_uids = list(set(followers_uids).difference(set([uid])))
+            results['trace_follow_pre_list'] = followers_uids
+
+            es_xnr.update(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                        id=xnr_user_no,body={'doc':results})
+        except:
+            return False
+
+    return True
+
+
+def tw_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
+
+ 
+    results = es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+            id=xnr_user_no)
+
+    results = results["_source"]
+    if follow_type == 'follow':
+        if trace_type == 'trace_follow':
+            try:
+                # 添加追随关注
+                try:
+                    trace_follow_uids = results['trace_follow_list']
+                    trace_follow_uids_set = set(trace_follow_uids)
+                    trace_follow_uids_set.add(uid)
+                    trace_follow_uids = list(trace_follow_uids_set)
+                except:
+                    trace_follow_uids = [uid]
+
+                # # 添加普通关注
+                # try:
+                #     followers_uids = results['followers_list']
+                #     followers_uids_set = set(followers_uids)
+                #     followers_uids_set.add(uid)
+                #     followers_uids = list(followers_uids_set)
+                # except:
+                #     followers_uids = [uid]
+                
+                # results['followers_list'] = followers_uids
+            
+                results['trace_follow_list'] = trace_follow_uids
+                es_xnr.update(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':results})
+            except:
+                return False
+
+
+    elif follow_type == 'unfollow':
+
+        try:
+            followers_uids = results['trace_follow_pre_list']
+            followers_uids = list(set(followers_uids).difference(set([uid])))
+            results['trace_follow_pre_list'] = followers_uids
+
+            es_xnr.update(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                        id=xnr_user_no,body={'doc':results})
+        except:
+            return False
+
+    return True
+
 
 if __name__ == '__main__':
 

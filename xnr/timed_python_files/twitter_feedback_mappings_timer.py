@@ -17,7 +17,7 @@ from global_utils import twitter_feedback_comment_index_name_pre,twitter_feedbac
 from time_utils import ts2datetime
 
 # 点赞
-def twitter_feedback_like_mappings():
+def twitter_feedback_like_mappings(twitter_feedback_like_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -75,14 +75,14 @@ def twitter_feedback_like_mappings():
 		}
 	}
 
-	current_time = time.time()
-	twitter_feedback_like_index_name = twitter_feedback_like_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#twitter_feedback_like_index_name = twitter_feedback_like_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=twitter_feedback_like_index_name):
 		es.indices.create(index=twitter_feedback_like_index_name,body=index_info,ignore=400)
 
 # 分享
-def twitter_feedback_retweet_mappings():
+def twitter_feedback_retweet_mappings(twitter_feedback_retweet_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -149,13 +149,13 @@ def twitter_feedback_retweet_mappings():
 		}
 	}
 
-	current_time = time.time()
-	twitter_feedback_retweet_index_name = twitter_feedback_retweet_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#twitter_feedback_retweet_index_name = twitter_feedback_retweet_index_name_pre + ts2datetime(current_time)
 	if not es.indices.exists(index=twitter_feedback_retweet_index_name):
 		es.indices.create(index=twitter_feedback_retweet_index_name,body=index_info,ignore=400)
 
 # 标记
-def twitter_feedback_at_mappings():
+def twitter_feedback_at_mappings(twitter_feedback_at_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -213,15 +213,15 @@ def twitter_feedback_at_mappings():
 		}
 	}
 
-	current_time = time.time()
-	twitter_feedback_at_index_name = twitter_feedback_at_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#twitter_feedback_at_index_name = twitter_feedback_at_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=twitter_feedback_at_index_name):
 		es.indices.create(index=twitter_feedback_at_index_name,body=index_info,ignore=400)
 
 
 # 评论
-def twitter_feedback_comment_mappings():
+def twitter_feedback_comment_mappings(twitter_feedback_comment_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -283,15 +283,15 @@ def twitter_feedback_comment_mappings():
 		}
 	}
 
-	current_time = time.time()
-	twitter_feedback_comment_index_name = twitter_feedback_comment_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#twitter_feedback_comment_index_name = twitter_feedback_comment_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=twitter_feedback_comment_index_name):
 		es.indices.create(index=twitter_feedback_comment_index_name,body=index_info,ignore=400)
 
 
 # 私信
-def twitter_feedback_private_mappings():
+def twitter_feedback_private_mappings(twitter_feedback_private_index_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -352,8 +352,8 @@ def twitter_feedback_private_mappings():
 		}
 	}
 
-	current_time = time.time()
-	twitter_feedback_private_index_name = twitter_feedback_private_index_name_pre + ts2datetime(current_time)
+	#current_time = time.time()
+	#twitter_feedback_private_index_name = twitter_feedback_private_index_name_pre + ts2datetime(current_time)
 
 	if not es.indices.exists(index=twitter_feedback_private_index_name):
 		es.indices.create(index=twitter_feedback_private_index_name,body=index_info,ignore=400)
