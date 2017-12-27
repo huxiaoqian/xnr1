@@ -290,9 +290,9 @@ def lookup_date_info(today_datetime):
 
 
 if __name__ == '__main__':
-	#facebook_user_warning_mappings()
-	#facebook_event_warning_mappings()
-	#facebook_speech_warning_mappings()
+	facebook_user_warning_mappings()
+	facebook_event_warning_mappings()
+	facebook_speech_warning_mappings()
 
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE)
