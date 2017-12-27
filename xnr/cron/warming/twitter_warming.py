@@ -9,7 +9,7 @@ import sys
 reload(sys)
 sys.path.append('../../')
 from timed_python_files.system_log_create import get_user_account_list
-from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE
+from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE,EVENT_OFFLINE_COUNT
 from global_config import S_TYPE,TWITTER_FLOW_START_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime,get_timets_set_indexset_list
 from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
@@ -21,7 +21,8 @@ from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_r
                          twitter_user_warning_index_name_pre,twitter_user_warning_index_type,\
                          twitter_timing_warning_index_name_pre,twitter_timing_warning_index_type,\
                          twitter_count_index_name_pre,twitter_count_index_type,\
-                         twitter_user_index_name,twitter_user_index_type
+                         twitter_user_index_name,twitter_user_index_type,\
+                         twitter_event_warning_index_name_pre,twitter_event_warning_index_type
 
  
 #虚拟人列表
@@ -368,7 +369,7 @@ def lookup_twitter_date_warming(keywords,today_datetime):
         for item in temp_result:
         	#查询三个指标字段
             tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
-            if fid_result:
+            if tid_result:
                 item['_source']['comment']=tid_result['comment']
                 item['_source']['share']=tid_result['share']
                 item['_source']['favorite']=tid_result['favorite']
@@ -380,6 +381,244 @@ def lookup_twitter_date_warming(keywords,today_datetime):
     except:
             date_result=[]
     return date_result
+
+
+
+
+#事件预警
+def get_hashtag(today_datetime):
+    
+    twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,today_datetime,today_datetime)
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                'bool':{
+                    'must':[
+                        {'range':{'sensitive':{'gte':1}}}
+                    ]
+                }}
+            }
+        },
+        'aggs':{
+            'all_hashtag':{
+                'terms':{'field':'hashtag'},
+                'aggs':{'sum_sensitive':{
+                    'sum':{'field':'sensitive'}
+                }
+                }
+            }
+        },
+        'size':EVENT_OFFLINE_COUNT
+    }
+    twitter_text_exist=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
+                body=query_body)['aggregations']['all_hashtag']['buckets']
+    
+    hashtag_list = []
+    for item in twitter_text_exist:
+        event_dict=dict()
+        if item['key']:
+            event_dict['event_name'] = item['key']
+            event_dict['event_count'] = item['doc_count']
+            event_dict['event_sensitive'] = item['sum_sensitive']['value']
+            hashtag_list.append(event_dict)
+        else:
+            pass
+
+    hashtag_list.sort(key=lambda k:(k.get('event_sensitive',0),k.get('event_count',0)),reverse=True)
+    # print hashtag_list
+    return hashtag_list
+
+
+# #查询事件内容
+
+def create_event_warning(xnr_user_no,today_datetime,write_mark):
+    #获取事件名称
+    hashtag_list = get_hashtag(today_datetime)
+    print 'hashtag_list/:',hashtag_list
+
+    twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,today_datetime,today_datetime)
+
+    #查询关注列表
+    lookup_type='followers_list'
+    followers_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
+
+    event_warming_list=[]
+    for event_item in hashtag_list:
+        event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
+        event_warming_content['event_name']=event_item['event_name']
+        event_influence_sum=0
+        event_time_sum=0       
+        query_body={
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'bool':{
+                            'must':[
+                                {'term':{'hashtag':event_item['event_name']}},
+                                {'range':{'sensitive':{'gte':1}}}
+                            ]
+                        }
+                    }
+                }
+            },
+            'size':MAX_WARMING_SIZE,
+            'sort':{'sensitive':{'order':'desc'}}
+        }       
+        event_results=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
+        if event_results:
+            twitter_result=[]
+            alluser_num_dict=dict()
+            #print 'sencond_time:::',int(time.time())
+            for item in event_results:
+                #查询三个指标字段
+                tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+                if tid_result:
+                    item['_source']['comment']=tid_result['comment']
+                    item['_source']['share']=tid_result['share']
+                    item['_source']['favorite']=tid_result['favorite']
+                else:
+                    item['_source']['comment']=0
+                    item['_source']['share']=0
+                    item['_source']['favorite']=0  
+                #print 'event_content:',item['_source']['text']          
+                #统计用户信息
+                if alluser_num_dict.has_key(str(item['_source']['uid'])):
+                    followers_mark=set_intersection(item['_source']['uid'],followers_list)
+                    if followers_mark > 0:
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1*2
+                    else:
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
+                else:
+                    alluser_num_dict[str(item['_source']['uid'])]=1
+                                   
+
+                #计算影响力
+                origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
+                followers_value=judge_user_type(item['_source']['uid'],followers_list)
+                item['_source']['twitter_influence_value']=origin_influence_value*followers_value
+                twitter_result.append(item['_source'])
+
+                #统计影响力、时间
+                event_influence_sum=event_influence_sum+item['_source']['twitter_influence_value']
+                event_time_sum=event_time_sum+item['_source']['timestamp']            
+        
+            # print 'third_time:::',int(time.time())
+            #典型信息
+            twitter_result.sort(key=lambda k:(k.get('twitter_influence_value',0)),reverse=True)
+            event_warming_content['main_twitter_info']=json.dumps(twitter_result)
+
+            #事件影响力和事件时间
+            number=len(event_results)
+            event_warming_content['event_influence']=event_influence_sum/number
+            event_warming_content['event_time']=event_time_sum/number
+
+
+        #对用户进行排序
+            alluser_num_dict=sorted(alluser_num_dict.items(),key=lambda d:d[1],reverse=True)
+            main_userid_list=[]
+            for i in xrange(0,len(alluser_num_dict)):
+                main_userid_list.append(alluser_num_dict[i][0])
+
+        #主要参与用户信息
+            main_user_info=[]
+            user_es_result=es_xnr.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':main_userid_list})['docs']
+            # print 'user_es_result:',user_es_result
+            for item in user_es_result:
+
+                user_dict=dict()
+                if item['found']:
+                    user_dict['uid']=item['_id']
+                    user_dict['username']=item['_source']['username']
+                    if item['_source'].has_key('profileimageurl'):
+                        user_dict['profileimageurl']=item['_source']['profileimageurl']
+                    else:
+                        user_dict['profileimageurl']=''
+                    if item['_source'].has_key('statuscount'):
+                        user_dict['statuscount']=item['_source']['statuscount']
+                    else:
+                        user_dict['statuscount']=0
+                    if item['_source'].has_key('followerscount'):
+                        user_dict['followerscount']=item['_source']['followerscount']
+                    else:
+                        user_dict['followerscount']=0
+                    if item['_source'].has_key('friendscount'):
+                        user_dict['friendscount']=item['_source']['friendscount']
+                    else:
+                        user_dict['friendscount']=0
+                else:
+                    # user_dict['icon']=''
+                    user_dict['uid']=item['_id']
+                    user_dict['username']=''
+                    user_dict['profileimageurl']=''
+                    user_dict['statuscount']=0
+                    user_dict['followerscount']=0
+                    user_dict['friendscount']=0
+                main_user_info.append(user_dict)
+            event_warming_content['main_user_info']=json.dumps(main_user_info)
+
+
+
+            # print 'fourth_time:::',int(time.time())
+            event_warming_content['xnr_user_no']=xnr_user_no
+            event_warming_content['validity']=0
+            event_warming_content['timestamp']=today_datetime
+            now_time=int(time.time())
+            task_id=xnr_user_no+'_'+str(now_time) 
+        
+            #写入数据库           
+            if write_mark:
+                # print 'today_datetime:::',ts2datetime(today_datetime)
+                mark=write_envent_warming(today_datetime,event_warming_content,task_id)
+                event_warming_list.append(mark)
+            else:
+                event_warming_list.append(event_warming_content)
+
+        else:
+            pass
+        # print 'fifth_time:::',int(time.time())
+    return event_warming_list
+
+
+def write_envent_warming(today_datetime,event_warming_content,task_id):
+    twitter_event_warning_index_name=twitter_event_warning_index_name_pre+ts2datetime(today_datetime)
+    # print 'facebook_event_warning_index_name:',facebook_event_warning_index_name
+    #try:
+    es_xnr.index(index=twitter_event_warning_index_name,doc_type=twitter_event_warning_index_type,body=event_warming_content,id=task_id)
+    mark=True
+    #except:
+    #    mark=False
+    return mark
+
+#粉丝或关注用户判断
+def judge_user_type(uid,user_list):
+    number=set_intersection(uid,user_list)
+    if number > 0:
+        mark=1.2
+    else:
+        mark=0.8
+    return mark
+
+def union_dict(*objs):
+    #print 'objs:', objs[0]
+    _keys=set(sum([obj.keys() for obj in objs],[]))
+    _total={}
+
+    for _key in _keys:
+        _total[_key]=sum([int(obj.get(_key,0)) for obj in objs])
+
+    return _total
+
+#交集判断
+def set_intersection(str_A,list_B):
+    list_A=[]
+    list_A.append(str_A)
+    set_A = set(list_A)
+    set_B = set(list_B)
+    result = set_A & set_B
+    number = len(result)
+    return number
+
 
 
 
@@ -409,15 +648,15 @@ def create_twitter_warning():
         xnr_list=['TXNR0001']
         for xnr_user_no in xnr_list:
             #人物行为预警
-            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            # personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            # speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
-    date_mark=create_date_warning(today_datetime)
+    # date_mark=create_date_warning(today_datetime)
 
     return True
 
