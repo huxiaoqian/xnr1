@@ -416,6 +416,19 @@ tw_xnr_flow_text_index_type = 'text'
 tw_xnr_index_name='tw_xnr'
 tw_xnr_index_type='user'
 
+#预警
+twitter_user_warning_index_name_pre = 'twitter_user_warning_'
+twitter_user_warning_index_type = 'text'
+
+twitter_event_warning_index_name_pre = 'twitter_event_warning_'
+twitter_event_warning_index_type = 'text'
+
+twitter_speech_warning_index_name_pre = 'twitter_speech_warning_'
+twitter_speech_warning_index_type = 'text'
+
+twitter_timing_warning_index_name_pre = 'twitter_time_warning_'
+twitter_timing_warning_index_type = 'text'
+
 
 # use to save influence
 tw_bci_index_name_pre = 'tw_bci_'
