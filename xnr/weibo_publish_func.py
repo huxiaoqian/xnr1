@@ -24,6 +24,7 @@ from global_utils import weibo_feedback_comment_index_name,weibo_feedback_commen
 from utils import save_to_fans_follow_ES,xnr_user_no2uid
 from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 from time_utils import ts2datetime
+
 ## 获取实时数据表最新的timestamp
 def newest_time_func(uid):
     

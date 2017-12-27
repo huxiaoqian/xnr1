@@ -23,7 +23,8 @@ from global_utils import es_xnr as es,R_UNAME2ID_FT, fb_uname2id, tw_uname2id
 def uname2uid(uname,ft_type):
 	uid = R_UNAME2ID_FT.hget(ft_type,uname)
 	if not uid:
-		uid = uname
+		#uid = uname
+		uid = ''
 
 	return uid
 
@@ -47,14 +48,18 @@ def get_fb_retweet_network(item):
 		repost_chains2 = RE2.findall(text)
 		
 		if repost_chains2 != []:
+
 			root_uname = repost_chains2[0]
 			root_uid = uname2uid(root_uname,ft_type=fb_uname2id)
+			print 'root_uname_retweeted.....',root_uname
 	elif ' shared ' in text:
 		res = text.split(' shared ')
 		root_con = res[1]
 		if "'s" in root_con:
 			root_uname = root_con.split("'s")[0]
 			root_uid = uname2uid(root_uname,ft_type=fb_uname2id)
+			print 'root_uname_shared.....',root_uname
+			
 		else:
 			root_uname = ''
 			root_uid = ''		
@@ -64,9 +69,10 @@ def get_fb_retweet_network(item):
 
 	# if direct_uid == '':
 	# 	direct_uid = root_uid
-	print 'root_uid...',root_uid
+	#print 'root_uid...',root_uid
 
 	if root_uid:
+		print 'root_uid...',root_uid
 		save_retweet(uid, root_uid, timestamp,'fb')
 
 
@@ -91,15 +97,15 @@ def get_tw_retweet_network(item):
 		root_uname = ''
 		root_uid = ''
 
-	print 'root_uid...',root_uid
+	#print 'root_uid...',root_uid
 
 	if root_uid:
 		save_retweet(uid, root_uid, timestamp,'tw')
 
 if __name__ == '__main__':
 
-	#ft_list = ['ft', 'tw']
-	ft_list = ['tw']
+	#ft_list = ['fb', 'tw']
+	ft_list = ['fb']
 
 	for ft_item in ft_list:
 		if ft_item == 'fb':
@@ -128,22 +134,26 @@ if __name__ == '__main__':
 		current_date = ts2datetime(current_time)
 		index_name = index_name_pre + current_date
 		print 'index......',index_name
+		print 'index_type.',index_type
 		query_body = {
 			'query':{
 				'match_all':{}
 			}
 		}
 
+		# results = es.search(index=index_name,doc_type=index_type,body=query_body)['hits']['hits']
+		# print 'results...',len(results)
+
 		es_scan_results = scan(es,query=query_body,size=1000,index=index_name,\
 			doc_type=index_type)
-
+		#print 'len..es_scan_results...',len(es_scan_results)
 		while 1:
 			try:
 				read_count += 1
 				
 				scan_data = es_scan_results.next()
 				item = scan_data['_source']
-
+				#print 'item...',item
 				#text = item['text']
 
 				get_retweet_network_func(item)

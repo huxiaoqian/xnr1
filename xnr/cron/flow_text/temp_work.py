@@ -171,8 +171,8 @@ if __name__ == '__main__':
     ts = tb
     index_name_pre = twitter_flow_text_index_name_pre
     index_type = twitter_flow_text_index_type
-    start_date = '2017-10-10'
-    end_date = '2017-10-24'
+    start_date = '2017-10-12'
+    end_date = '2017-10-25'
 
     start_ts = datetime2ts(start_date)
     end_ts = datetime2ts(end_date)
@@ -190,8 +190,10 @@ if __name__ == '__main__':
             }
         }
 
+        # es_scan_results = scan(es,query=query_body,size=500,index=index_name,\
+        #     doc_type=index_type,scroll='60m')
         es_scan_results = scan(es,query=query_body,size=1000,index=index_name,\
-            doc_type=index_type,scroll='30m')
+            doc_type=index_type)
 
         while 1:
             try:
@@ -203,14 +205,14 @@ if __name__ == '__main__':
                 text = item['text']
                 uid = item['uid']
 
-                try:
-                    text_ch = trans([text])
+                # try:
+                #     text_ch = trans([text])
 
-                    if text_ch:
-                        text = text_ch[0]
-                        item['text'] = text_ch[0]
-                except:
-                    pass
+                #     if text_ch:
+                #         text = text_ch[0]
+                #         item['text'] = text_ch[0]
+                # except:
+                #     pass
 
                 #add sentiment field to weibo
                 sentiment, keywords_list  = triple_classifier(item)
