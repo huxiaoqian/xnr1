@@ -5,7 +5,7 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import show_personnal_warning,show_speech_warning,show_date_warning,\
+from utils import show_personnal_warning,show_speech_warning,show_date_warning,show_event_warming,\
                   update_fb_flow_text
                   #show_event_warning,\                  
 				  #,addto_speech_warning,\
@@ -47,6 +47,18 @@ def ajax_show_date_warning():
 	end_time=int(request.args.get('end_time',''))  
 	results=show_date_warning(account_name,start_time,end_time)
 	return json.dumps(results)
+
+
+###事件涌现预警
+#http://219.224.134.213:9209/facebook_xnr_warning/show_event_warming/?xnr_user_no=FXNR0001&start_time=1511755200&end_time=1511857583
+@mod.route('/show_event_warming/')
+def ajax_show_event_warming():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))  
+	results=show_event_warming(xnr_user_no,start_time,end_time)
+	return json.dumps(results)
+
 
 
 #http://219.224.134.213:9209/facebook_xnr_warning/update_fb_flow_text
