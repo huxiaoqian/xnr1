@@ -358,6 +358,10 @@ facebook_speech_warning_index_type = 'text'
 
 facebook_timing_warning_index_name_pre = 'facebook_time_warning_'
 facebook_timing_warning_index_type = 'text'
+
+#监测
+facebook_keyword_count_index_name = 'facebook_keyword_count'
+facebook_keyword_count_index_type = 'text'
 # twitter
 
 #use to save tw xnr personal information
