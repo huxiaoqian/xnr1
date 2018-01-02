@@ -3,6 +3,8 @@
 
 from launcher import Launcher
 from es import Es_twitter
+from selenium.webdriver.common.keys import Keys
+import time
 
 class Favourite():
 	def __init__(self, username, password):
@@ -22,7 +24,7 @@ class Favourite():
 		self.driver.find_element_by_xpath('//a[@data-nav="tweets_with_replies_toggle"]').click()
 		time.sleep(10)
 
-	def id(slef,screen_name):
+	def id(self,screen_name):
 		for each in self.api.user_timeline(screen_name):
 			id = each.id
 			text = each.text
@@ -36,4 +38,4 @@ if __name__ == '__main__':
 	favourite = Favourite('18538728360@163.com','zyxing,0513')
 	list = favourite.id('lvleilei1')
 	print(list)
-	favourite.do_favourite('923754480524517376')
+	favourite.do_favourite('92375448
