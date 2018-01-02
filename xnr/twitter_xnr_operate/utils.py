@@ -7,19 +7,19 @@ import random
 import re
 
 from xnr.global_config import S_DATE_FB,S_TYPE,S_DATE_BCI_FB,SYSTEM_START_DATE
-from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
-					fb_xnr_timing_list_index_name, fb_xnr_timing_list_index_type,\
-					fb_xnr_retweet_timing_list_index_name, fb_xnr_retweet_timing_list_index_type,\
-					facebook_flow_text_index_name_pre, facebook_flow_text_index_type,\
-					facebook_user_index_name, facebook_user_index_type, fb_social_sensing_index_name, \
-					fb_social_sensing_index_type, fb_hot_keyword_task_index_name, fb_hot_keyword_task_index_type,\
-					fb_hot_subopinion_results_index_name, fb_hot_subopinion_results_index_type, \
-					es_fb_user_portrait, fb_portrait_index_name, fb_portrait_index_type, \
-					fb_bci_index_name_pre, fb_bci_index_type
+from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
+					tw_xnr_timing_list_index_name, tw_xnr_timing_list_index_type,\
+					tw_xnr_retweet_timing_list_index_name, tw_xnr_retweet_timing_list_index_type,\
+					twitter_flow_text_index_name_pre, twitter_flow_text_index_type,\
+					twitter_user_index_name, twitter_user_index_type, tw_social_sensing_index_name, \
+					tw_social_sensing_index_type, tw_hot_keyword_task_index_name, tw_hot_keyword_task_index_type,\
+					tw_hot_subopinion_results_index_name, tw_hot_subopinion_results_index_type, \
+					es_tw_user_portrait, tw_portrait_index_name, tw_portrait_index_type, \
+					tw_bci_index_name_pre, tw_bci_index_type
 
 
-from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_follow, fb_unfollow, fb_like, fb_mention
-from xnr.utils import fb_uid2nick_name_photo
+from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention
+from xnr.utils import tw_uid2nick_name_photo
 
 def get_submit_tweet(task_detail):
 
@@ -27,28 +27,28 @@ def get_submit_tweet(task_detail):
 	tweet_type = task_detail['tweet_type']
 	xnr_user_no = task_detail['xnr_user_no']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_publish(account_name, password, text, tweet_type, xnr_user_no)
+		mark = tw_publish(account_name, password, text, tweet_type, xnr_user_no)
 
 	else:
 		mark = False
 
 	return mark
 
-def fb_save_to_tweet_timing_list(task_detail):
+def tw_save_to_tweet_timing_list(task_detail):
 
     item_detail = dict()
 
@@ -67,7 +67,7 @@ def fb_save_to_tweet_timing_list(task_detail):
     # task_id: uid_提交时间_发帖时间
 
     try:
-        es.index(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,id=task_id,body=item_detail)
+        es.index(index=tw_xnr_timing_list_index_name,doc_type=tw_xnr_timing_list_index_type,id=task_id,body=item_detail)
         mark = True
     except:
         mark = False
@@ -77,7 +77,7 @@ def fb_save_to_tweet_timing_list(task_detail):
 
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
-    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
     #print 'es_result:::',es_result
     if es_result:
         uid = es_result['uid']
@@ -88,11 +88,11 @@ def get_recommend_at_user(xnr_user_no):
         now_ts = int(time.time())
     datetime = ts2datetime(now_ts-24*3600)
 
-    index_name = facebook_flow_text_index_name_pre + datetime
+    index_name = twitter_flow_text_index_name_pre + datetime
     nest_query_list = []
     daily_interests_list = daily_interests.split('&')
 
-    es_results_daily = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,\
+    es_results_daily = es_flow_text.search(index=index_name,doc_type=twitter_flow_text_index_type,\
                         body={'query':{'match_all':{}},'size':200,\
                         'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
 
@@ -104,7 +104,7 @@ def get_recommend_at_user(xnr_user_no):
 
     ## 根据uid，从weibo_user中得到 nick_name
     uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-    es_results_user = es_flow_text.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':uid_list})['docs']
+    es_results_user = es_flow_text.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
 
@@ -139,7 +139,7 @@ def get_daily_recommend_tweets(theme,sort_item):
     for result in content:
         #result = result['_source']
         uid = result['uid']
-        nick_name,photo_url = fb_uid2nick_name_photo(uid)
+        nick_name,photo_url = tw_uid2nick_name_photo(uid)
         result['nick_name'] = nick_name
         result['photo_url'] = photo_url
         results_all.append(result)
@@ -156,7 +156,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 
     sort_item = 'sensitive'
     sort_item_2 = 'timestamp'
-    index_name = facebook_flow_text_index_name_pre + datetime
+    index_name = twitter_flow_text_index_name_pre + datetime
 
     query_body = {
         'query':{
@@ -172,7 +172,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
     # else:
     #     sort_item_2 = 'retweeted'
 
-    es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
     
     uid_fansnum_dict = dict()
     if es_results:
@@ -233,17 +233,17 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         'size':TOP_WEIBOS_LIMIT
     }
 
-    es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,body=query_body)['hits']['hits']
+    es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,body=query_body)['hits']['hits']
 
     if not es_results:    
-        es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,\
+        es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
     for result in es_results:
         result = result['_source']
         uid = result['uid']
-        nick_name,photo_url = fb_uid2nick_name_photo(uid)
+        nick_name,photo_url = tw_uid2nick_name_photo(uid)
         result['nick_name'] = nick_name
         result['photo_url'] = photo_url
         results_all.append(result)
@@ -263,7 +263,7 @@ def push_keywords_task(task_detail):
         item_dict['submit_time'] = task_detail['submit_time']
         item_dict['submit_user'] = task_detail['submit_user']
         _id = item_dict['xnr_user_no']+'_'+task_detail['task_id']
-        es.index(index=fb_hot_keyword_task_index_name,doc_type=fb_hot_keyword_task_index_type,\
+        es.index(index=tw_hot_keyword_task_index_name,doc_type=tw_hot_keyword_task_index_type,\
                 id=_id,body=item_dict)
         mark = True
     except:
@@ -276,7 +276,7 @@ def get_hot_subopinion(xnr_user_no,task_id):
     task_id_new = xnr_user_no+'_'+task_id
     es_task = []
     try:
-        es_task = es.get(index=fb_hot_keyword_task_index_name,doc_type=fb_hot_keyword_task_index_type,\
+        es_task = es.get(index=tw_hot_keyword_task_index_name,doc_type=tw_hot_keyword_task_index_type,\
                     id=task_id_new)['_source']
     except:
         return '尚未提交计算'
@@ -285,7 +285,7 @@ def get_hot_subopinion(xnr_user_no,task_id):
         if es_task['compute_status'] != 2:
             return '正在计算'
         else:
-            es_result = es.get(index=fb_hot_subopinion_results_index_name,doc_type=fb_hot_subopinion_results_index_type,\
+            es_result = es.get(index=tw_hot_subopinion_results_index_name,doc_type=tw_hot_subopinion_results_index_type,\
                                 id=task_id_new)['_source']
 
             if es_result:
@@ -295,7 +295,7 @@ def get_hot_subopinion(xnr_user_no,task_id):
 
 def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
     
-    get_results = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    get_results = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
     
     monitor_keywords = get_results['monitor_keywords']
     monitor_keywords_list = monitor_keywords.split(',')
@@ -340,19 +340,19 @@ def get_tweets_from_flow(monitor_keywords_list,sort_item_new):
         now_ts = int(time.time())
     datetime = ts2datetime(now_ts-24*3600)
 
-    index_name = facebook_flow_text_index_name_pre + datetime
+    index_name = twitter_flow_text_index_name_pre + datetime
 
-    es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
 
     if not es_results:
-        es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,\
+        es_results = es_flow_text.search(index=index_name,doc_type=twitter_flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item_new:{'order':'desc'}}})['hits']['hits']
     results_all = []
     for result in es_results:
         result = result['_source']
         uid = result['uid']
-        nick_name,photo_url = fb_uid2nick_name_photo(uid)
+        nick_name,photo_url = tw_uid2nick_name_photo(uid)
         result['nick_name'] = nick_name
         result['photo_url'] = photo_url
         results_all.append(result)
@@ -368,7 +368,7 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
         'size':USER_POETRAIT_NUMBER
     }
     #print 'query_body:::',query_body
-    es_results_portrait = es_fb_user_portrait.search(index=fb_portrait_index_name,doc_type=fb_portrait_index_type,body=query_body)['hits']['hits']
+    es_results_portrait = es_tw_user_portrait.search(index=tw_portrait_index_name,doc_type=tw_portrait_index_type,body=query_body)['hits']['hits']
 
     uid_set = set()
 
@@ -379,12 +379,12 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
             uid_set.add(uid)
     uid_list = list(uid_set)
 
-    es_results = uid_lists2fb_from_flow_text(monitor_keywords_list,uid_list)
+    es_results = uid_lists2tw_from_flow_text(monitor_keywords_list,uid_list)
     
     return es_results    
 
 
-def uid_lists2fb_from_flow_text(monitor_keywords_list,uid_list):
+def uid_lists2tw_from_flow_text(monitor_keywords_list,uid_list):
 
     nest_query_list = []
     for monitor_keyword in monitor_keywords_list:
@@ -410,15 +410,15 @@ def uid_lists2fb_from_flow_text(monitor_keywords_list,uid_list):
         now_ts = int(time.time())
     datetime = ts2datetime(now_ts-24*3600)
 
-    index_name_flow = facebook_flow_text_index_name_pre + datetime
+    index_name_flow = twitter_flow_text_index_name_pre + datetime
 
-    es_results = es_flow_text.search(index=index_name_flow,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es_flow_text.search(index=index_name_flow,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
 
     results_all = []
     for result in es_results:
         result = result['_source']
         uid = result['uid']
-        nick_name,photo_url = fb_uid2nick_name_photo(uid)
+        nick_name,photo_url = tw_uid2nick_name_photo(uid)
         result['nick_name'] = nick_name
         result['photo_url'] = photo_url
         results_all.append(result)
@@ -435,7 +435,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
     datetime = ts2datetime(now_ts-24*3600)
     datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
 
-    index_name = fb_bci_index_name_pre + datetime_new
+    index_name = tw_bci_index_name_pre + datetime_new
 
     query_body = {
         'query':{
@@ -445,7 +445,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
         'size':BCI_USER_NUMBER
     }
 
-    es_results_bci = es_flow_text.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
+    es_results_bci = es_flow_text.search(index=index_name,doc_type=tw_bci_index_type,body=query_body)['hits']['hits']
     #print 'es_results_bci::',es_results_bci
     #print 'index_name::',index_name
     #print ''
@@ -457,7 +457,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
             uid_set.add(uid)
     uid_list = list(uid_set)
 
-    es_results = uid_lists2fb_from_flow_text(monitor_keywords_list,uid_list)
+    es_results = uid_lists2tw_from_flow_text(monitor_keywords_list,uid_list)
 
     return es_results
 
@@ -471,21 +471,21 @@ def get_comment_operate(task_detail):
 	#_id = ??????
 	uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
+		mark = tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
 
 	else:
 		mark = False
@@ -501,21 +501,21 @@ def get_retweet_operate(task_detail):
 	#_id = ??????
 	uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
+		mark = tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
 
 	else:
 		mark = False
@@ -530,21 +530,21 @@ def get_at_operate(task_detail):
 	xnr_user_no = task_detail['xnr_user_no']
 	user_name = task_detail['nick_name']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_mention(account_name,password, user_name, text, xnr_user_no, tweet_type)
+		mark = tw_mention(account_name,password, user_name, text, xnr_user_no, tweet_type)
 
 	else:
 		mark = False
@@ -558,21 +558,21 @@ def get_like_operate(task_detail):
 	#_id = ??????
 	uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_like(account_name,password, _id, uid)
+		mark = tw_like(account_name,password, _id, uid)
 
 	else:
 		mark = False
@@ -585,21 +585,21 @@ def get_follow_operate(task_detail):
 	xnr_user_no = task_detail['xnr_user_no']
 	uid = task_detail['uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_follow(account_name, password, uid, xnr_user_no, trace_type)
+		mark = tw_follow(account_name, password, uid, xnr_user_no, trace_type)
 
 	else:
 		mark = False
@@ -611,21 +611,21 @@ def get_unfollow_operate(task_detail):
 	xnr_user_no = task_detail['xnr_user_no']
 	uid = task_detail['uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
+	tw_mail_account = es_xnr_result['tw_mail_account']
+	tw_phone_account = es_xnr_result['tw_phone_account']
 	password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
+	if tw_phone_account:
+		account_name = tw_phone_account
+	elif tw_mail_account:
+		account_name = tw_mail_account
 	else:
 		account_name = False
 
 	if account_name:
-		mark = fb_unfollow(account_name, password, uid, xnr_user_no)
+		mark = tw_unfollow(account_name, password, uid, xnr_user_no)
 
 	else:
 		mark = False
