@@ -387,7 +387,16 @@ facebook_timing_warning_index_type = 'text'
 #监测
 facebook_keyword_count_index_name = 'facebook_keyword_count'
 facebook_keyword_count_index_type = 'text'
+
+
 # twitter
+
+# social sensing
+tw_index_sensing = "tw_manage_sensing_task"
+tw_type_sensing = "task"
+tw_id_sensing = "tw_social_sensing_task"
+tw_social_sensing_index_name = 'tw_social_sensing_text'
+tw_social_sensing_index_type = 'text'
 
 #use to save tw xnr personal information
 tw_xnr_index_name='tw_xnr'
