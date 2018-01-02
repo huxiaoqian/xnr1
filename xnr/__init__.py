@@ -41,6 +41,9 @@ from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
 
 from xnr.twitter_xnr_warning.views import mod as twitterxnrwarningModule
 
+from xnr.facebook_xnr_operate.views import mod as facebookxnroperateModule
+from xnr.twitter_xnr_operate.views import mod as twitterxnroperateModule
+
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
 #from flask.ext.security import SQLAlchemyUserDatastore
@@ -95,6 +98,9 @@ def create_app():
     app.register_blueprint(facebookxnrwarningModule)
 
     app.register_blueprint(twitterxnrwarningModule)
+
+    app.register_blueprint(facebookxnroperateModule)
+    app.register_blueprint(twitterxnroperateModule)
 
     app.config['DEBUG'] = True
 
