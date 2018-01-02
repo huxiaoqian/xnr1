@@ -5,6 +5,9 @@
 <link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">
 <link rel="stylesheet" type="text/css" href="/static/css/LL_jquery.eeyellow.Timeline.css" />
 <style>
+    #intelligenceTabs .radyType {
+        display: none;
+    }
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
     #grouplist .demo-label{width: 95px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin-top: 10px;}
     #grouplist .demo-radioInput{margin-top: 0;}
@@ -516,7 +519,7 @@
             </div>
 
 			<!-- 智能发帖 -->
-            <div role="tabpanel" class="weiboTable tab-pane " id="intelliGence">
+            <div role="tabpanel" class="tab-pane " id="intelliGence">
                 <div class="intelliGence-1" style="margin: 20px 0;">
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">语料推荐</span>
@@ -545,12 +548,12 @@
                     	</div>
                     	<div class="ed-2-1-bottom">
                     		<span>观点关键词:</span>
-	                        <input type="text" class="point-view-1" placeholder="输入上述事件下的子观点关键词" style="width:70%;"/>
+	                        <input type="text" class="point-view-1" placeholder="输入上述事件下的子观点关键词" style="width:83%;"/>
                             <span class="pull-right">
-                                <button type="button" class="btn btn-primary btn-xs" id=""
+                                <button type="button" class="btn btn-primary btn-xs"
                                 data-toggle="modal" data-target="#sameRoad">观点分析</button>
-                                <button type="button" class="btn btn-primary btn-xs" id=""
-                                data-toggle="modal" data-target="#sameRoad" style="margin:0 10px 0 20px;">文本推荐</button>
+                                <!--<button type="button" class="btn btn-primary btn-xs"-->
+                                <!--data-toggle="modal" data-target="#sameRoad" style="margin:0 10px 0 20px;">文本推荐</button>-->
                             </span>
 
                     	</div>
@@ -560,30 +563,40 @@
 
                     <div class="ed-2-2">
                         <ul id="intelligenceTabs" class="nav nav-tabs" role="tablist">
-				            <li role="presentation" class="active">
+                            <li role="presentation" class="active">
+                                <a href="#z-0" role="tab" data-toggle="tab">任务列表</a>
+                            </li>
+				            <li role="presentation" class="radyType1 radyType">
 				                <a href="#z-1" role="tab" data-toggle="tab">事件摘要</a>
 				            </li>
-				            <li role="presentation">
+				            <li role="presentation" class="radyType2 radyType">
 				                <a href="#z-2" role="tab" data-toggle="tab">代表性观点</a>
 				            </li>
-				            <li role="presentation">
-				                <a href="#z-3" role="tab" data-toggle="tab">渗透群体观点</a>
+				            <li role="presentation" class="radyType3 radyType">
+				                <a href="#z-3" role="tab" data-toggle="tab">关注群体观点</a>
 				            </li>
-				            <li role="presentation">
-				                <a href="#z-4" role="tab" data-toggle="tab">紧密跟随者观点</a>
+				            <li role="presentation" class="radyType4 radyType">
+				                <a href="#z-4" role="tab" data-toggle="tab">高影响力用户观点</a>
 				            </li>
-				            <li role="presentation">
-				                <a href="#z-5" role="tab" data-toggle="tab">高影响力用户观点</a>
+				            <li role="presentation" class="radyType5 radyType">
+				                <a href="#z-5" role="tab" data-toggle="tab">高敏感度用户观点</a>
 				            </li>
-				            <li role="presentation">
-				                <a href="#z-6" role="tab" data-toggle="tab">高敏感度用户观点</a>
+				            <li role="presentation" class="radyType6 radyType">
+				                <a href="#z-6" role="tab" data-toggle="tab">观点语料库</a>
 				            </li>
-				            <li role="presentation">
-				                <a href="#z-7" role="tab" data-toggle="tab">观点语料库</a>
-				            </li>
+                            <li role="presentation" class="radyType7 radyType">
+                                <a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>
+                            </li>
 				        </ul>
 						<div class="tab-content" id="content-2">
-							<div role="tabpanel" class="weiboTable tab-pane active" id="z-1">
+                            <div role="tabpanel" class="tab-pane active" id="z-0">
+                                <div class="eventList">
+                                    <div id="eventList">
+                                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                                    </div>
+                                </div>
+                            </div>
+							<div role="tabpanel" class="weiboTable tab-pane" id="z-1">
                                 <div style="margin:10px 0">
                                     <img src="/static/images/post-6.png" alt="">
                                     <span>事件主题河</span>
@@ -716,19 +729,28 @@
 
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-3">
+                                <div class="z-3Top" style="margin: 10px 0;">
+                                    <img src="/static/images/post-6.png" width="18" height="18">
+                                    <span>关注类型</span>
+                                    <label class="demo-label" title="紧密跟随">
+                                        <input class="demo-radio" type="radio" name="focus_Type" value="紧密跟随" checked>
+                                        <span class="demo-checkbox demo-radioInput"></span> 紧密跟随
+                                    </label>
+                                    <label class="demo-label" title="渗透">
+                                        <input class="demo-radio" type="radio" name="focus_Type" value="渗透">
+                                        <span class="demo-checkbox demo-radioInput"></span> 渗透
+                                    </label>
+                                </div>
                                 <!-- 暂代位置 -->
 				                <center style="margin-top:20px;">渗透群体观点</center>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-4">
-				                <center style="margin-top:20px;">紧密跟随者观点</center>
-				            </div>
-				            <div role="tabpanel" class="weiboTable tab-pane" id="z-5">
 				                <center style="margin-top:20px;">高影响力用户观点</center>
 				            </div>
-				            <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-5">
 				                <center style="margin-top:20px;">高敏感度用户观点</center>
 				            </div>
-				            <div role="tabpanel" class="weiboTable tab-pane" id="z-7">
+				            <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
 				                <div class="z-7Top">
                                     <img src="/static/images/post-6.png" alt="">
                                     <span>语料主题</span>
@@ -746,6 +768,9 @@
                                     <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
                                 </div>
 				            </div>
+                            <div role="tabpanel" class="weiboTable tab-pane" id="z-7">
+                                <center style="margin-top:20px;">文本推荐</center>
+                            </div>
 						</div>
                     </div>
 
