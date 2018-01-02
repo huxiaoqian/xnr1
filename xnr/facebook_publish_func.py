@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+import os
+import time
+import json
+import sys
 
 from facebook.fb_operate import Operation
 from timed_python_files.fb_xnr_flow_text_mappings import fb_xnr_flow_text_mappings
