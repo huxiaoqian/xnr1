@@ -1,3 +1,4 @@
+var ID_Num='FXNR0001';
 var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
 var to_ts=Date.parse(new Date())/1000;
 $('.title .perTime .demo-label input').on('click',function () {
@@ -11,7 +12,7 @@ $('.title .perTime .demo-label input').on('click',function () {
             from_ts=getDaysBefore(_val);
         }
         public_ajax.call_request('get',word_url,wordCloud);
-        // public_ajax.call_request('get',hotPost_url,hotPost);
+        public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
         $('.titTime').hide();
     }
@@ -27,12 +28,12 @@ $('.timeSure').on('click',function () {
         $('#pormpt').modal('show');
     }else {
         public_ajax.call_request('get',word_url,wordCloud);
-        // public_ajax.call_request('get',hotPost_url,hotPost);
+        public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
     }
 });
 //----关键词云
-var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
+var word_url='/facebook_xnr_monitor/lookup_weibo_keywordstring/?from_ts='+from_ts+'&to_ts='+to_ts+'&xnr_no='+ID_Num;
 public_ajax.call_request('get',word_url,wordCloud);
 require.config({
     paths: {
@@ -92,20 +93,20 @@ function wordCloud(data) {
 $('#theme-2 .demo-radio').on('click',function () {
     var classify_id=$(this).val();
     var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
-    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    var NEWhotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&xnr_no='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
 $('#theme-3 .demo-radio').on('click',function () {
     var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
     var order_id=$(this).val();
-    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    var NEWhotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&xnr_no='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
-var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-    '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
-// public_ajax.call_request('get',hotPost_url,hotPost);
+var hotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+    '&xnr_no='+ID_Num+'&classify_id=0&order_id=1';
+public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
     $('#hot_post p').show();
     $('#hot_post').bootstrapTable('load', data);
@@ -141,7 +142,7 @@ function hotPost(data) {
                     }else {
                         name=row.uid;
                     };
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
                     }else {
                         img=row.photo_url;
@@ -171,14 +172,15 @@ function hotPost(data) {
                         '           <span class="center_2">'+txt+'</span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
-                        '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
+                        '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
+                        '           <div class="translate"><span style="color: #f98077;display: none;">译文：</span><span class="tsWord"></span></div>'
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="comtnt" placeholder="回复内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">回复</span>'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
                         '           </div>'+
                         '       </div>'+
                         '    </div>'+
@@ -194,12 +196,12 @@ function hotPost(data) {
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
-    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id+
-        '&start_time='+from_ts+'&end_time='+to_ts;
+    var NEWactivePost_url='/facebook_xnr_monitor/lookup_active_user/?xnr_no='+ID_Num+'&from_ts='+
+        from_ts+'&to_ts='+to_ts+'&classify_id=0';
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
-var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
-    '&start_time='+from_ts+'&end_time='+to_ts+'&classify_id=0';
+var activePost_url='/facebook_xnr_monitor/lookup_active_user/?xnr_no='+ID_Num+'&from_ts='+
+    from_ts+'&to_ts='+to_ts+'&classify_id=0';
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
@@ -257,7 +259,7 @@ function activeUser(persondata) {
                 // }
             },
             {
-                title: "全名",//标题
+                title: "昵称",//标题
                 field: "uname",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -272,7 +274,7 @@ function activeUser(persondata) {
                 }
             },
             {
-                title: "位置",//标题
+                title: "注册地",//标题
                 field: "location",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -287,7 +289,7 @@ function activeUser(persondata) {
                 }
             },
             {
-                title: "关注者数",//标题
+                title: "粉丝数",//标题
                 field: "fans_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -295,7 +297,7 @@ function activeUser(persondata) {
                 valign: "middle",//垂直
             },
             {
-                title: "推文数",//标题
+                title: "微博数",//标题
                 field: "total_number",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -360,7 +362,7 @@ function _judge() {
     }
 }
 $('.userList .addFocus').on('click',function () {
-    var add_url='/weibo_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
+    var add_url='/facebook_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
     public_ajax.call_request('get',add_url,postYES);
 })
 //-------------------颜色----------------------
