@@ -35,6 +35,7 @@ MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
 MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
+MAX_HOT_POST_SIZE = 200 #热门帖子未筛选前返回最大数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 20

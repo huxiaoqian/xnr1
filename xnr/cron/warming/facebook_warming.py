@@ -306,7 +306,7 @@ def create_date_warning(today_datetime):
         
             if abs(countdown_num) < WARMING_DAY:
                 #根据给定的关键词查询预警微博
-                print 'date_time:',date_time
+                # print 'date_time:',date_time
                 keywords=item['_source']['keywords']
                 date_warming=lookup_facebook_date_warming(keywords,today_datetime)
                 item['_source']['facebook_date_warming_content']=json.dumps(date_warming)
@@ -316,6 +316,7 @@ def create_date_warning(today_datetime):
                 task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)    
                 #print 'task_id',task_id
                 #print 'date_warming',date_warming
+                print 'type:',type(item['_source'])
                 #写入数据库
                 
                 facebook_timing_warning_index_name=facebook_timing_warning_index_name_pre+warming_date
@@ -323,8 +324,7 @@ def create_date_warning(today_datetime):
                 if date_warming:
                     print facebook_timing_warning_index_name
                     try:
-
-                        es_xnr.index(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_name,body=item['_source'],id=task_id)
+                        es_xnr.index(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_type,body=item['_source'],id=task_id)
                         mark=True
                     except:
                         mark=False
@@ -362,7 +362,7 @@ def lookup_facebook_date_warming(keywords,today_datetime):
     try:
         temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
-        print 'temp_result::',temp_result
+        # print 'temp_result::',temp_result
         for item in temp_result:
         	#查询三个指标字段
             fid_result=lookup_fid_attend_index(item['_source']['fid'],today_datetime)
@@ -645,10 +645,10 @@ def create_facebook_warning():
             #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
-    #date_mark=create_date_warning(today_datetime)
+    date_mark=create_date_warning(today_datetime)
 
     return True
 
