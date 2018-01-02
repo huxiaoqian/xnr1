@@ -6,7 +6,9 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type,\
                         tw_xnr_index_name,tw_xnr_index_type,fb_xnr_index_name,fb_xnr_index_type,\
                         tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
-                        fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type
+                        fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
+                        facebook_user_index_name,facebook_user_index_type,\
+                        twitter_user_index_name, twitter_user_index_type
 from parameter import MAX_SEARCH_SIZE,DAY
 from global_config import S_TYPE,S_DATE_BCI
 from time_utils import ts2datetime
@@ -42,6 +44,30 @@ def uid2nick_name_photo(uid):
         user = es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
         nick_name = user['nick_name']
         photo_url = user['photo_url']
+    except:
+        nick_name = uid
+        photo_url = ''
+        
+    return nick_name,photo_url
+
+def fb_uid2nick_name_photo(uid):
+    uname_photo_dict = {}
+    try:
+        user = es_flow_text.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)['_source']
+        nick_name = user['name']
+        photo_url = ''#user['photo_url']
+    except:
+        nick_name = uid
+        photo_url = ''
+        
+    return nick_name,photo_url
+
+def tw_uid2nick_name_photo(uid):
+    uname_photo_dict = {}
+    try:
+        user = es_flow_text.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)['_source']
+        nick_name = user['username']
+        photo_url = user['profile_image_url_https']
     except:
         nick_name = uid
         photo_url = ''

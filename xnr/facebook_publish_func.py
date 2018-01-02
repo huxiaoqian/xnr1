@@ -62,7 +62,7 @@ def fb_publish(account_name, password, text, tweet_type, xnr_user_no):
 
 
 # 评论
-def fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
+def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
