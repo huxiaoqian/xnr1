@@ -10,13 +10,13 @@ from flask import Flask, Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_flow_text
 from xnr.global_config import S_TYPE
 from xnr.time_utils import datetime2ts, ts2datetime
-from utils import get_submit_tweet, fb_save_to_tweet_timing_list, get_recommend_at_user,\
+from utils import get_submit_tweet, tw_save_to_tweet_timing_list, get_recommend_at_user,\
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
 				get_unfollow_operate 
 
-mod = Blueprint('facebook_xnr_operate', __name__, url_prefix='/facebook_xnr_operate')
+mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
 '''
 日常发帖
@@ -63,7 +63,7 @@ def ajax_submit_timing_post_task():
     task_detail['task_status'] = 0
     task_detail['remark'] = request.args.get('remark','')
 
-    mark = fb_save_to_tweet_timing_list(task_detail)
+    mark = tw_save_to_tweet_timing_list(task_detail)
 
     return json.dumps(mark)  # True False
 
@@ -76,7 +76,7 @@ def ajax_recommend_at_user():
 
 
 # 日常语料推荐
-# fb 暂无？？？？
+# tw 暂无？？？？
 @mod.route('/daily_recommend_tweets/')
 def ajax_daily_recommend_tweets():
     theme = request.args.get('theme','') # 默认日常兴趣主题
