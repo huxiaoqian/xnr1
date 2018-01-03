@@ -159,47 +159,6 @@
     </div>
 </div>
 
-<!-- 10-12 LL===QQ -->
-<!--选择虚拟人 模态框-->
-<div class="modal fade" id="choosePerson_2" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">系统提示</h4>
-            </div>
-            <div class="modal-body">
-                <div class="coverbody">
-                    <div class="option1">
-                        <span>一、请先选择要进入的QQ号昵称</span>
-                        <div class="identity" style="padding: 10px 25px;">
-
-                        </div>
-                    </div>
-                    <div class="option2">
-                        <span>二、请先选择QQ的显示模式</span>
-                        <div class="showType" style="padding: 10px 25px;">
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose_2" value='隐身'>
-                                <span class="demo-checkbox demo-radioInput"></span> 隐身
-                            </label>
-                            <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="choose_2" value='昵称可见'>
-                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
-                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 {% endblock %}
 <!-- 导航结束 -->
 
@@ -230,7 +189,9 @@
             url: "/logout/",
             async: true,
             dataType: "json",
-            success: function (data) {}
+            success: function (data) {
+                window.location.href='/index/login/'
+            }
         });
     });
 

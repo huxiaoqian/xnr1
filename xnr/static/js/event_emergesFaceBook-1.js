@@ -1,4 +1,4 @@
-var ID_Num='FXNR0001';
+var operateType='info_warning';
 var time2=Date.parse(new Date())/1000;
 var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
@@ -14,6 +14,7 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
+        $('#group_emotion_loading').css('display', 'block');
         var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
         public_ajax.call_request('get',weiboUrl,weibo);
     }
@@ -25,6 +26,7 @@ $('#sure').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
+        $('#group_emotion_loading').css('display', 'block');
         var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+
             (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',weiboUrl,weibo);
@@ -36,7 +38,6 @@ function weibo(data){
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item;
     })
-    $('#group_emotion_loading').css('display', 'none');
     // $('#input-table').css('display', 'block');
     var dataArray = data;
     var PageNo=document.getElementById('PageNo');                   //设置每页显示行数
@@ -379,6 +380,7 @@ function weibo(data){
         }
     }
 
+    $('#group_emotion_loading').css('display', 'none');
 }
 
 function startTable(index) {
@@ -537,7 +539,7 @@ function mainWeibo(_data,idx) {
                         '   <div class="icons" style="'+sye_1+'">'+
                         '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
                         '   </div>'+
-                        '   <a class="mid" style="display: none;">'+row.mid+'</a>'+
+                        '   <a class="fid" style="display: none;">'+row.fid+'</a>'+
                         '   <a class="uid" style="display: none;">'+row.uid+'</a>'+
                         '   <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
                         '   <a class="sensitive" style="display: none;">'+row.sensitive+'</a>'+
@@ -545,10 +547,10 @@ function mainWeibo(_data,idx) {
                         '   <span class="center_2" style="display:block;text-align:left;">'+text+'</span>'+
                         '   <div class="center_3">'+
                         '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.share+'</b>）</span>'+
-                        '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+row.favorite+'</b>)</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
+                        '       <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.share+'</b>）</span>'+
+                        '       <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '       <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+row.favorite+'</b>)</span>'+
+                        '       <span class="cen3-4" onclick="retComLike(this)" type=""><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
                         '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+
                         '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -563,27 +565,30 @@ function mainWeibo(_data,idx) {
 };
 // 转发===评论===点赞
 function retComLike(_this) {
-    var mid=$(_this).parents('.center_rel').find('.mid').text();
+    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var uid=$(_this).parents('.center_rel').find('.uid').text();
+    var fid=$(_this).parents('.center_rel').find('.fid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
-    if (middle=='get_weibohistory_like'){
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
+    if (middle=='retweet_operate'){
+        opreat_url='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
-    }else if (middle=='get_weibohistory_comment'){
+    }else if (middle=='comment_operate'){
         $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
-        var txt=$(_this).parents('.center_rel').find('.center_2').text();
-        if (txt=='暂无内容'){txt=''};
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
+        opreat_url='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+            '&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
-
 function comMent(_this){
-    var txt = $(_this).prev().val();
-    var mid = $(_this).parents('.center_rel').find('.mid').text();
+    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    var fid = $(_this).parents('.center_rel').find('.fid').text();
     if (txt!=''){
-        var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
+        var post_url='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');

@@ -1,4 +1,3 @@
-var ID_Num='TXNR0001';
 var time2=Date.parse(new Date())/1000;
 var weiboUrl='/twitter_xnr_warning/show_personnal_warning/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
