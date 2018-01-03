@@ -22,3 +22,74 @@ global name 'FileNotFoundError' is not defined
 starting WXXNR0002 ...
 before login
 global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:46019...
+Connection from 127.0.0.1:46019 closed.
+Accept new connection from 127.0.0.1:46020...
+Connection from 127.0.0.1:46020 closed.
+get mapping
+wx_group_message_2018-01-02
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWC0kq-RGn9L3Xej201g', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+get mapping
+wx_sent_group_message_2018-01-02
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWC0krXn1COAk33WH1aP', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0krc3Gn9L3Xej201h', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0nKyFNJ1oPWOT3bxq', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0pkho1COAk33WH1aT', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0plVOGn9L3Xej201l', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0prSSNJ1oPWOT3bxr', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0vfM61COAk33WH1aW', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0vma_Gn9L3Xej201o', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0vmsNNJ1oPWOT3bxu', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+{u'_type': u'record', u'_id': u'AWC0zLI41COAk33WH1aZ', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-02'}
+Accept new connection from 127.0.0.1:46339...
+Connection from 127.0.0.1:46339 closed.
+Accept new connection from 127.0.0.1:47207...
+Connection from 127.0.0.1:47207 closed.
+Accept new connection from 127.0.0.1:47209...
+Connection from 127.0.0.1:47209 closed.
+Accept new connection from 127.0.0.1:48414...
+Connection from 127.0.0.1:48414 closed.
+Accept new connection from 127.0.0.1:56067...
+Connection from 127.0.0.1:56067 closed.
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
