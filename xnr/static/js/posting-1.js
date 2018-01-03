@@ -375,16 +375,16 @@ var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='origin';
-        recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t=='r'){
         operateType='retweet';
-        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t== 'c'){
         operateType='comment';
-        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }

@@ -1,4 +1,4 @@
-var ID_Num='FXNR0001';
+var operateType='info_warning';
 var time2=Date.parse(new Date())/1000;//1480176000
 $('#typelist .demo-radio').on('click',function () {
     var _val=$(this).val();
@@ -117,7 +117,7 @@ function weibo(data) {
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+name+'</a>'+
-                        '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                        '                <a class="fid" style="display: none;">'+item.fid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
@@ -127,9 +127,9 @@ function weibo(data) {
                         '                </span>'+
                         '                <div class="center_3">'+
                         // '                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
-                        '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
-                        '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
+                        '                    <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
+                        '                    <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
+                        '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
@@ -149,30 +149,30 @@ function weibo(data) {
 
 // 转发===评论===点赞
 function retComLike(_this) {
-    var mid=$(_this).parents('.everySpeak').find('.mid').text();
+    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var uid=$(_this).parents('.center_rel').find('.uid').text();
+    var fid=$(_this).parents('.center_rel').find('.fid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
-    if (middle=='get_weibohistory_like'){
-        var uid=$(_this).parents('.center_rel').find('.uid').text();
-        var timestamp=$(_this).parents('.center_rel').find('.timestamp').text();
-        var text=$(_this).parents('.center_rel').find('.center_2').text();
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&uid='+uid+'&text='+text+
-            '&timestamp='+timestamp+'&nick_name='+REL_name;
+    if (middle=='retweet_operate'){
+        opreat_url='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
-    }else if (middle=='get_weibohistory_comment'){
-        $(_this).parents('.everySpeak').find('.commentDown').show();
+    }else if (middle=='comment_operate'){
+        $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
-        var txt=$(_this).parents('.everySpeak').find('.center_2').text();
-        if (txt=='暂无内容'){txt=''};
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
+        opreat_url='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+            '&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
 function comMent(_this){
-    var txt = $(_this).prev().val();
-    var mid = $(_this).parents('.everySpeak').find('.mid').text();
+    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    var fid = $(_this).parents('.center_rel').find('.fid').text();
     if (txt!=''){
-        var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
+        var post_url='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');

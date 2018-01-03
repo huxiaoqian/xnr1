@@ -1,4 +1,3 @@
-var ID_Num='TXNR0001';
 var time2=Date.parse(new Date())/1000;//1480176000
 $('#typelist .demo-radio').on('click',function () {
     var _val=$(this).val();

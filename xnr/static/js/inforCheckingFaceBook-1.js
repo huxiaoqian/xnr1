@@ -1,4 +1,4 @@
-var ID_Num='FXNR0001';
+var operateType='info_detect';
 var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
 var to_ts=Date.parse(new Date())/1000;
 $('.title .perTime .demo-label input').on('click',function () {
@@ -165,7 +165,7 @@ function hotPost(data) {
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
@@ -353,7 +353,7 @@ function activeUser(persondata) {
         },
     });
     $('#userList p').slideUp(700);
-}
+};
 function _judge() {
     if (act_user_list.length==0){
         $('.userList .addFocus').addClass('disableCss');
@@ -405,34 +405,33 @@ function showInput(_this) {
 };
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
     if (txt!=''){
-        var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
+        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
     }
 }
-
 //转发
 function retweet(_this) {
     var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_mid='+mid;
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+        '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
-
 //点赞
 function thumbs(_this) {
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
-        '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
-    public_ajax.call_request('get',post_r_s_url,postYES)
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+        '&r_fid='+fid+'&r_uid='+uid;
+    public_ajax.call_request('get',post_r_s_url,postYES);
 };
 
 //关注该用户
