@@ -15,7 +15,7 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#sure').hide();
         $('#group_emotion_loading').css('display', 'block');
         var weiboUrl='/facebook_xnr_warning/show_date_warning/?account_name='+admin+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
-        public_ajax.call_request('get',weiboUrl,weibo);
+        public_ajax.call_request('get',weiboUrl,calendar);
     }
 });
 $('#sure').on('click',function () {
@@ -28,7 +28,7 @@ $('#sure').on('click',function () {
         $('#group_emotion_loading').css('display', 'block');
         var weiboUrl='/weibo_xnr_warming_new/show_date_warning/?account_name='+admin+'&start_time='+
             (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
-        public_ajax.call_request('get',weiboUrl,weibo);
+        public_ajax.call_request('get',weiboUrl,calendar);
     }
 });
 
@@ -568,12 +568,12 @@ function weibo(idx,data,words) {
                     var item=row;
                     var str_new='';
                     var geo,txt,img,time;
-                    if (item.geo==''||item.geo=='null'||item.geo=='unknown'){
+                    if (item.geo==''||item.geo=='null'||item.geo=='unknown'||!item.geo){
                         geo='未知';
                     }else {
                         geo=item.geo.toString().replace(/&/g,' ');
                     };
-                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'){
+                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
                     }else {
                         img=item.photo_url;
