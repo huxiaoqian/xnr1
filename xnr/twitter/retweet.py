@@ -3,6 +3,8 @@
 
 from launcher import Launcher
 from es import Es_twitter
+from selenium.webdriver.common.keys import Keys
+import time
 
 class Retweet():
 	def __init__(self, username, password):
@@ -36,4 +38,4 @@ if __name__ == '__main__':
 	retweet = Retweet('18538728360@163.com','zyxing,0513')
 	list = retweet.id('lvleilei1')
 	print(list)
-	retweet.do_retweet('923754480524517376')
+	retweet.do_retweet('92375448

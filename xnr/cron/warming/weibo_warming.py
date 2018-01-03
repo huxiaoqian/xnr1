@@ -529,8 +529,8 @@ def create_date_warning(today_datetime):
             item['_source']['weibo_date_warming_content']=json.dumps(date_warming)
             item['_source']['validity']=0
             item['_source']['timestamp']=today_datetime
-
-            task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)    
+            now_time=int(time.time())
+            task_id=str(item['_source']['create_time'])+'_'+str(now_time)    
             #print 'task_id',task_id
             #写入数据库
             
