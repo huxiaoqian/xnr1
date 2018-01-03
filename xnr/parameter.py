@@ -35,6 +35,7 @@ MAX_DETECT_COUNT = 900
 MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
 MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
+MAX_HOT_POST_SIZE = 200 #热门帖子未筛选前返回最大数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 20
@@ -168,7 +169,8 @@ domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroa
                      'lawyer':u'法律机构及人士', 'politician':u'政府机构及人士', 'mediaworker':u'媒体人士',\
                      'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}   
 
-task_source_ch2en = {u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post'}
+task_source_ch2en = {u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
+                    u'跟随转发':'trace_post',u'智能发帖':'intel_post'}
 
 # 敏感词等级评分, string类型
 sensitive_score_dict = {

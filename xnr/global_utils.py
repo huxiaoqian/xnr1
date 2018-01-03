@@ -294,6 +294,13 @@ wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 
 # facebook
 
+# social sensing
+fb_index_sensing = "fb_manage_sensing_task"
+fb_type_sensing = "task"
+fb_id_sensing = "fb_social_sensing_task"
+fb_social_sensing_index_name = 'fb_social_sensing_text'
+fb_social_sensing_index_type = 'text'
+
 #use to save fb xnr personal information
 fb_xnr_index_name='fb_xnr'
 fb_xnr_index_type='user'
@@ -340,12 +347,30 @@ facebook_user_index_type = 'user'
 fb_xnr_flow_text_index_name_pre = 'fb_xnr_flow_text_'
 fb_xnr_flow_text_index_type = 'text'
 
-fb_xnr_index_name='fb_xnr'
-fb_xnr_index_type='user'
+
+# use to publish tweet at future time
+fb_xnr_timing_list_index_name = 'fb_tweet_timing_list'
+fb_xnr_timing_list_index_type = 'timing_list'
+
+# use to retweet tweet at future time
+fb_xnr_retweet_timing_list_index_name = 'fb_tweet_retweet_timing_list'
+fb_xnr_retweet_timing_list_index_type = 'timing_list'
+
 
 # use to save influence
 fb_bci_index_name_pre = 'fb_bci_'
 fb_bci_index_type = 'bci'
+
+fb_hot_keyword_task_index_name = 'fb_recommend_subopinion_keywords_task'
+fb_hot_keyword_task_index_type = 'keywords_task'
+
+fb_hot_content_recommend_results_index_name = 'fb_content_recommend_results'
+fb_hot_content_recommend_results_index_type = 'content_recommend'
+
+fb_hot_subopinion_results_index_name = 'fb_subopinion_results'
+fb_hot_subopinion_results_index_type = 'subopinion'
+
+
 #预警
 facebook_user_warning_index_name_pre = 'facebook_user_warning_'
 facebook_user_warning_index_type = 'text'
@@ -358,7 +383,20 @@ facebook_speech_warning_index_type = 'text'
 
 facebook_timing_warning_index_name_pre = 'facebook_time_warning_'
 facebook_timing_warning_index_type = 'text'
+
+#监测
+facebook_keyword_count_index_name = 'facebook_keyword_count'
+facebook_keyword_count_index_type = 'text'
+
+
 # twitter
+
+# social sensing
+tw_index_sensing = "tw_manage_sensing_task"
+tw_type_sensing = "task"
+tw_id_sensing = "tw_social_sensing_task"
+tw_social_sensing_index_name = 'tw_social_sensing_text'
+tw_social_sensing_index_type = 'text'
 
 #use to save tw xnr personal information
 tw_xnr_index_name='tw_xnr'
@@ -433,6 +471,26 @@ twitter_timing_warning_index_type = 'text'
 # use to save influence
 tw_bci_index_name_pre = 'tw_bci_'
 tw_bci_index_type = 'bci'
+
+
+# use to publish tweet at future time
+tw_xnr_timing_list_index_name = 'tw_tweet_timing_list'
+tw_xnr_timing_list_index_type = 'timing_list'
+
+# use to retweet tweet at future time
+tw_xnr_retweet_timing_list_index_name = 'tw_tweet_retweet_timing_list'
+tw_xnr_retweet_timing_list_index_type = 'timing_list'
+
+
+tw_hot_keyword_task_index_name = 'tw_recommend_subopinion_keywords_task'
+tw_hot_keyword_task_index_type = 'keywords_task'
+
+tw_hot_content_recommend_results_index_name = 'tw_content_recommend_results'
+tw_hot_content_recommend_results_index_type = 'content_recommend'
+
+tw_hot_subopinion_results_index_name = 'tw_subopinion_results'
+tw_hot_subopinion_results_index_type = 'subopinion'
+
 
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
