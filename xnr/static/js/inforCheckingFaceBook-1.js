@@ -11,6 +11,9 @@ $('.title .perTime .demo-label input').on('click',function () {
         }else {
             from_ts=getDaysBefore(_val);
         }
+        $('#content-1-word p').show();
+        $('#hot_post p').show();
+        $('#userList p').show();
         public_ajax.call_request('get',word_url,wordCloud);
         public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
@@ -19,6 +22,9 @@ $('.title .perTime .demo-label input').on('click',function () {
 });
 //选择时间范围
 $('.timeSure').on('click',function () {
+    $('#content-1-word p').show();
+    $('#hot_post p').show();
+    $('#userList p').show();
     var from = $('.start').val();
     var to = $('.end').val();
     from_ts=Date.parse(new Date(from))/1000;
@@ -91,6 +97,7 @@ function wordCloud(data) {
 }
 //热门帖子
 $('#theme-2 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$(this).val();
     var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
     var NEWhotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
@@ -98,6 +105,7 @@ $('#theme-2 .demo-radio').on('click',function () {
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
 $('#theme-3 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
     var order_id=$(this).val();
     var NEWhotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
@@ -108,13 +116,12 @@ var hotPost_url='/facebook_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_
     '&xnr_no='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
-    $('#hot_post p').show();
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -136,8 +143,8 @@ function hotPost(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
-                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
+                    var name,txt,img,txt2,all='';
+                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
                         name='未命名';
                     }else {
                         name=row.uid;
@@ -155,12 +162,30 @@ function hotPost(data) {
                             for (var f of keyword){
                                 txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            var rrr=row.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keyword){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             txt=row.text;
+                            if (txt.length>=160){
+                                txt2=txt.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
                         };
                     };
                     var str=
-                        '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+
+                        '<div class="post_perfect" style="margin-bottom:10px;width:920px;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
@@ -168,16 +193,20 @@ function hotPost(data) {
                         '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <span class="center_2">'+txt+'</span>'+
+                        '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '           <span class="center_2">'+txt2+'</span>'+
+                        '           <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
                         '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '           </div>'+
-                        '           <div class="translate"><span style="color: #f98077;display: none;">译文：</span><span class="tsWord"></span></div>'
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
                         '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
@@ -193,6 +222,7 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();

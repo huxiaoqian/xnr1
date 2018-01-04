@@ -1,6 +1,3 @@
-table.table-condensed {
-    color: black;
-}
 body {
     /*padding: 30px 0 ;*/
     background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
@@ -47,9 +44,9 @@ body {
 .weiboContent #div-button input:hover {
     background:rgba(3, 8, 16, 0.61)!important;
 }
-#container .weiboContent {
+/*#container .weiboContent {
     margin-top: 30px;
-}
+}*/
 #container .weiboContent .text_information .fanye input {
     background: transparent;
     border: 1px solid silver;
@@ -72,6 +69,7 @@ body {
 }
 #container .everyEvent .event_center .center_rel {
     width: 910px;
+    text-align: left;
     position: relative;
     padding:10px 10px 10px 70px;
     margin-bottom: 10px;
@@ -125,14 +123,14 @@ body {
     text-align: center;
     font-size: 12px;
 }
-#container .everyEvent .event_center .center_3 span:nth-child(2) {
+#container .everyEvent .event_center .center_3 span:nth-child(2),
+#container .everyEvent .event_center .center_3 span:nth-child(4){
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container .everyEvent .event_center .center_3 span:nth-child(4) {
+/*#container .everyEvent .event_center .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
-    border-right:1px solid slategrey;
-}
+}*/
 #container .everyEvent .event_center .center_3 span:hover {
     color:#eb7350;
 }

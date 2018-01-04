@@ -775,7 +775,6 @@ function historyNews(data) {
     $('#'+boxShoes+' p').slideUp(700);
 }
 //查看全文
-
 function allWord(_this) {
     var a=$(_this).attr('data-all');
     if (a==0){

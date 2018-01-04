@@ -325,6 +325,7 @@ function addXnr(data) {
     $('#choosePerson .identity').html(str);
 }
 $('#choosePerson .sure_in').on('click',function () {
+    console.log(loadingType)
     if (loadingType=='QQ'){
         var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
@@ -333,6 +334,7 @@ $('#choosePerson .sure_in').on('click',function () {
         if (!userQQID||!userQQName||!userType){
             $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
@@ -349,9 +351,13 @@ $('#choosePerson .sure_in').on('click',function () {
         var userID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userName=$('input:radio[name="ID"]:checked').attr('valueName');
         var userType=$('input:radio[name="choose"]:checked').val();
+        console.log(userID)
+        console.log(userName)
+        console.log(userType)
         if (!userID||!userName||!userType){
             $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
@@ -370,6 +376,7 @@ $('#choosePerson .sure_in').on('click',function () {
         if (!userWXID||!userWXName||!userType){
             $('#pormpt p').text('请检查选择登陆的微信显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
