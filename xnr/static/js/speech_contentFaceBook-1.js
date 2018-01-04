@@ -59,7 +59,7 @@ function weibo(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -82,7 +82,17 @@ function weibo(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var item=row;
-                    var name,text,time;
+                    var name,text,text2,time,all='',img;
+                    if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                        name=item.uid;
+                    }else {
+                        name=item.name;
+                    };
+                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=item.photo_url;
+                    };
                     if (item.user_name==''||item.user_name=='null'||item.user_name=='unknown'||!item.user_name){
                         name=item.uid;
                     }else {
@@ -98,8 +108,27 @@ function weibo(data) {
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
                             text=s;
+
+                            var rrr=item.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=item.text;
+                                all='none';
+                            }
+                            for (var f of keywords){
+                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             text=item.text;
+                            if (text.length>=160){
+                                text2=text.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                text2=text;
+                                all='none';
+                            }
                         };
                     };
                     if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
@@ -111,20 +140,23 @@ function weibo(data) {
                         '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel">'+
-                        '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                        '                </label>'+
-                        '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
+                        // '                <label class="demo-label">'+
+                        // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                        // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        // '                </label>'+
+                        '                <img src="'+img+'" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+name+'</a>'+
                         '                <a class="fid" style="display: none;">'+item.fid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
                         '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
-                        '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
-                        '                <span class="center_2">'+text+
-                        '                </span>'+
+                        '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                        '                <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '                <p class="allall1" style="display:none;">'+text+'</p>'+
+                        '                <p class="allall2" style="display:none;">'+text2+'</p>'+
+                        '                <span class="center_2">'+text2+'</span>'+
+                        '                <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '                <div class="center_3">'+
                         // '                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                         '                    <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
@@ -132,6 +164,7 @@ function weibo(data) {
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
+                        '                    <span class="cen3-7" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="回复内容"/>'+
