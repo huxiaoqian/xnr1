@@ -8,11 +8,10 @@ from selenium.webdriver.common.keys import Keys
 
 class Comment():
 	def __init__(self, username, password):
-		self.list = []
-		self.launcher = Launcher(username,password)
+		self.launcher = Launcher(username, password)
 		self.driver = self.launcher.login()
 		self.api = self.launcher.api()
-		time.sleep(10)
+		self.list = []
 
 	def target(self, screen_name):
 		self.driver.find_element_by_xpath('//input[@id="search-query"]').send_keys(screen_name)
@@ -25,7 +24,7 @@ class Comment():
 		self.driver.find_element_by_xpath('//a[@data-nav="tweets_with_replies_toggle"]').click()
 		time.sleep(10)
 
-	def id(slef, screen_name):
+	def id(self, screen_name):
 		for each in self.api.user_timeline(screen_name):
 			id = each.id
 			text = each.text

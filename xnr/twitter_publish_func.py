@@ -1,4 +1,5 @@
 # -*-coding:utf-8-*-
+import os
 
 from twitter.twitter_operate import Operation
 from timed_python_files.tw_xnr_flow_text_mappings import tw_xnr_flow_text_mappings
@@ -61,48 +62,48 @@ def tw_publish(account_name, password, text, tweet_type, xnr_user_no):
     return mark
 
 
-# # 评论
-# def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
+# 评论
+def tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
-#     operation = Operation(account_name,password)
+    operation = Operation(account_name,password)
     
-#     try:
-#         operation.comment(_id, uid,text)
-#         mark = True
-#     except:
-#         mark = False
+    try:
+        operation.comment(_id, uid,text)
+        mark = True
+    except:
+        mark = False
 
-#     message_type = 2 # 评论
+    message_type = 2 # 评论
     
-#     try:
-#         save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-#     except:
-#         print '保存微博过程遇到错误！'
-#         save_mark = False
+    try:
+        save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
 
-#     return mark
+    return mark
 
 
-# # 转发
-# def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
+# 转发
+def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
-#     operation = Operation(account_name,password)
+    operation = Operation(account_name,password)
     
-#     try:
-#         operation.share(_id, uid,text)
-#         mark = True
-#     except:
-#         mark = False
+    try:
+        operation.share(_id, uid,text)
+        mark = True
+    except:
+        mark = False
 
-#     message_type = 3 # 转发
+    message_type = 3 # 转发
     
-#     try:
-#         save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-#     except:
-#         print '保存微博过程遇到错误！'
-#         save_mark = False
+    try:
+        save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
 
-#     return mark
+    return mark
 
 # 关注
 def tw_follow(account_name, password, screen_name, xnr_user_no, trace_type):
@@ -148,19 +149,19 @@ def tw_unfollow(account_name, password, screen_name, xnr_user_no):
 
     return mark
 
-# # 点赞
-# def tw_like(account_name,password, _id, uid):
-#     # uid: 原贴用户id
-#     operation = Operation(account_name,password)
+# 点赞
+def tw_like(account_name,password, _id, uid):
+    # uid: 原贴用户id
+    operation = Operation(account_name,password)
     
-#     try:
-#         operation.like(uid)
-#         mark = True
-#     except:
-#         mark = False
+    try:
+        operation.like(uid)
+        mark = True
+    except:
+        mark = False
 
    
-#     return mark
+    return mark
 
 
 # 提到
