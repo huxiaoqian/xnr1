@@ -38,8 +38,13 @@ from xnr.wx_xnr_report_manage.views import mod as wxxnrreportmanageModule
 from xnr.wx_xnr_warning.views import mod as wxxnrwarningModule
 
 from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
+from xnr.facebook_xnr_monitor.views import mod as facebookxnrmonitorModule
 
 from xnr.twitter_xnr_warning.views import mod as twitterxnrwarningModule
+from xnr.twitter_xnr_monitor.views import mod as twitterxnrmonitorModule
+
+from xnr.facebook_xnr_operate.views import mod as facebookxnroperateModule
+from xnr.twitter_xnr_operate.views import mod as twitterxnroperateModule
 
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
@@ -93,8 +98,13 @@ def create_app():
     # the debug toolbar is only enabled in debug mode
 
     app.register_blueprint(facebookxnrwarningModule)
+    app.register_blueprint(facebookxnrmonitorModule)
 
     app.register_blueprint(twitterxnrwarningModule)
+    app.register_blueprint(twitterxnrmonitorModule)
+
+    app.register_blueprint(facebookxnroperateModule)
+    app.register_blueprint(twitterxnroperateModule)
 
     app.config['DEBUG'] = True
 

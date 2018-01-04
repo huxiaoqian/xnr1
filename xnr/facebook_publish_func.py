@@ -1,4 +1,8 @@
 # -*-coding:utf-8-*-
+import os
+import time
+import json
+import sys
 
 from facebook.fb_operate import Operation
 from timed_python_files.fb_xnr_flow_text_mappings import fb_xnr_flow_text_mappings
@@ -62,7 +66,7 @@ def fb_publish(account_name, password, text, tweet_type, xnr_user_no):
 
 
 # 评论
-def fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
+def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
