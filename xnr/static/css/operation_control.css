@@ -47,7 +47,7 @@ body {
 }
 #container .rightWindow h4 {
     margin: 5px 0 20px 0;
-    font-size: 12px;
+    font-size: 16px;
     color: white;
 }
 /*#container .rightWindow h4 i {*/
@@ -59,9 +59,9 @@ body {
     padding: 5px 11px;
 }
 #container .rightWindow .oli {
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     /*background-color: rgba(8,23,44,0.35);*/
-    margin-bottom: 30px;
+    /*margin-bottom: 30px;*/
 }
 #container .rightWindow .oli #content .hisnews,
 #container .rightWindow .oli #content .mys,
