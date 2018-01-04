@@ -1,5 +1,4 @@
 var reportDefaul_url;
-console.log(flagType)
 if(flagType == 3){//微信
     //===============时间搜索添加11---21 ===============
     var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
@@ -126,7 +125,17 @@ function reportDefaul(data) {
                 formatter: function (value, row, index) {
                     var artical=row.report_content.weibo_list,str='';
                     $.each(artical,function (index,item) {
-                        var text,time;
+                        var text,time,name,img,row;
+                        if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                            name=item.uid||'未命名';
+                        }else {
+                            name=item.name;
+                        };
+                        if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                            img='/static/images/unknown.png';
+                        }else {
+                            img=item.photo_url;
+                        };
                         if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                             text='暂无内容';
                         }else {
@@ -137,8 +146,27 @@ function reportDefaul(data) {
                                     s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                                 }
                                 text=s;
+
+                                var rrr=item.text;
+                                if (rrr.length>=160){
+                                    rrr=rrr.substring(0,160)+'...';
+                                    all='inline-block';
+                                }else {
+                                    rrr=item.text;
+                                    all='none';
+                                }
+                                for (var f of keywords){
+                                    text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                }
                             }else {
                                 text=item.text;
+                                if (txt.length>=160){
+                                    text2=txt.substring(0,160)+'...';
+                                    all='inline-block';
+                                }else {
+                                    text2=txt;
+                                    all='none';
+                                }
                             };
                         };
                         if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
@@ -153,12 +181,17 @@ function reportDefaul(data) {
                         }
                         str+=
                             '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                            '   <img src="'+img+'" alt="" class="center_icon">'+
+                            '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
                             '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                             // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                             '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '   <span class="center_2">'+text+'</span>'+
+                            '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                            '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                            '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                            '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                            '   <span class="center_2">'+text2+'</span>'+
                             '   <div class="center_3">'+
-                            '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                             '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
                             '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                             '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -187,9 +220,9 @@ function reportDefaul(data) {
                         xnr = row.xnr_user_no;
                     }
                     var rel_str=
-                        '<div class="post_center-every" style="margin: 10px auto 0;text-align: left;">'+
+                        '<div class="post_center-every" style="text-align: left;">'+
                         '        <div class="user_center">'+
-                        '            <div style="margin: 10px 0;">'+
+                        '            <div>'+
                         '                <label class="demo-label">'+
                         '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" value="'+row.report_time+'" onclick="chooseNo(this)">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
@@ -223,7 +256,6 @@ function reportDefaul(data) {
 }
 // 复制了一份上面的函数给微信
 function WXreportDefaul(data) {
-    console.log(data)
     $.each(data,function (index,item) {
         currentDataPrival[item.report_time]=item;
     });
@@ -254,48 +286,6 @@ function WXreportDefaul(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    /*var artical=row.report_content.weibo_list,str='';
-                    $.each(artical,function (index,item) {
-                        var text,time;
-                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                            text='暂无内容';
-                        }else {
-                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                var s=item.text;
-                                var keywords=item.sensitive_words_string.split('&');
-                                for (var f=0;f<keywords.length;f++){
-                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
-                                }
-                                text=s;
-                            }else {
-                                text=item.text;
-                            };
-                        };
-                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
-                            time='未知';
-                        }else {
-                            time=getLocalTime(item.timestamp);
-                        };
-                        var sye_1='',sye_2='';
-                        if (Number(item.sensitive) < 50){
-                            sye_1='border-color: transparent transparent #131313';
-                            sye_2='color: yellow';
-                        }
-                        str+=
-                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '   <span class="center_2">'+text+'</span>'+
-                            // '   <div class="center_3">'+
-                            // '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                            // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            // '    </div>'+
-                            '</div>'
-                    });
-                    */
                     var text = row.report_content;
                     var str =
                         '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
@@ -336,9 +326,9 @@ function WXreportDefaul(data) {
                         xnr = row.xnr_user_no;
                     }
                     var rel_str=
-                        '<div class="post_center-every" style="margin: 10px auto 0;text-align: left;">'+
+                        '<div class="post_center-every" style="text-align: left;">'+
                         '        <div class="user_center">'+
-                        '            <div style="margin: 10px 0;">'+
+                        '            <div>'+
                         '                <label class="demo-label">'+
                         '                    <input class="demo-radio" YesNo="0" type="checkbox" name="printData" value="'+row.report_time+'" onclick="chooseNo(this)">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+

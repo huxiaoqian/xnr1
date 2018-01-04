@@ -2,7 +2,6 @@ var time2=Date.parse(new Date())/1000;//1480176000
 var weiboUrl='/weibo_xnr_warming_new/show_personnal_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
-    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
@@ -36,7 +35,17 @@ function weibo(data) {
                         str='暂无微博内容';
                     }else {
                         $.each(artical,function (index,item) {
-                            var text,time;
+                            var text,time,text2,img,name,all='';
+                            if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                                name=item.uid;
+                            }else {
+                                name=item.name;
+                            };
+                            if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                                img='/static/images/unknown.png';
+                            }else {
+                                img=item.photo_url;
+                            };
                             if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                                 text='暂无内容';
                             }else {
@@ -47,8 +56,26 @@ function weibo(data) {
                                         s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                                     }
                                     text=s;
+                                    var rrr=item.text;
+                                    if (rrr.length>=160){
+                                        rrr=rrr.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        rrr=item.text;
+                                        all='none';
+                                    }
+                                    for (var f of keywords){
+                                        text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                    }
                                 }else {
                                     text=item.text;
+                                    if (text.length>=160){
+                                        text2=text.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        text2=text;
+                                        all='none';
+                                    }
                                 };
                             };
                             if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
@@ -66,14 +93,19 @@ function weibo(data) {
                                 '   <div class="icons" style="'+sye_1+'">'+
                                 '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
                                 '   </div>'+
+                                '   <img src="'+img+'" alt="" class="center_icon">'+
+                                '   <a class="center_1" style="color: #f98077;">'+name+'</a>'+
                                 '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                                 '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                                 '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
                                 '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
-                                '   <span class="center_2" style="text-align: left;">'+text+'</span>'+
+                                '   <span class="cen3-1" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;&nbsp;'+
+                                '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                                '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                                '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                                '   <span class="center_2" style="text-align: left;">'+text2+'</span>'+
                                 '   <div class="center_3">'+
-                                '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                                 '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
@@ -92,9 +124,9 @@ function weibo(data) {
                         nameuid=row.user_name;
                     };
                     var rel_str=
-                        '<div class="everyUser" style="margin: 0 auto;width: 950px;">'+
+                        '<div class="everyUser" style="margin: 0 auto;width: 950px;text-align: left;">'+
                         '        <div class="user_center">'+
-                        '            <div style="margin: 10px 0;text-align: left;">'+
+                        '            <div style="margin-bottom:10px;text-align: left;">'+
                         '                <label class="demo-label">'+
                         '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
@@ -115,8 +147,22 @@ function weibo(data) {
     });
     $('#weiboContent p').slideUp(30);
 };
+//查看全文
+// function allWord(_this) {
+//     var a=$(_this).attr('data-all');
+//     if (a==0){
+//         $(_this).text('收起');
+//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().html());
+//         $(_this).attr('data-all','1');
+//     }else {
+//         $(_this).text('查看全文');
+//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().next().html());
+//         $(_this).attr('data-all','0');
+//     }
+// }
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
+    $('#weiboContent p').show();
     var _val = $(this).val();
     if (_val == 'mize') {
         $(this).parents('.choosetime').find('#start').show();
@@ -131,6 +177,7 @@ $('.choosetime .demo-label input').on('click',function () {
     }
 });
 $('#sure').on('click',function () {
+    $('#weiboContent p').show();
     var s=$(this).parents('.choosetime').find('#start').val();
     var d=$(this).parents('.choosetime').find('#end').val();
     if (s==''||d==''){

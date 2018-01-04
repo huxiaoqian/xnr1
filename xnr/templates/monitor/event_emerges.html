@@ -12,7 +12,7 @@
     .event-2 .mainWeibo .bootstrap-table .table>thead>tr>th,.event-2 .mainWeibo .bootstrap-table .table,.event-2 .mainWeibo .table>tbody>tr>td{
         border: none;
     }
-    .event-2 .mainWeibo .fixed-table-pagination .page-list {
+    .fixed-table-pagination .page-list {
         display: none!important;
     }
     .event-2 .mainWeibo .fixed-table-body {
@@ -23,7 +23,8 @@
     .event-2 .mainWeibo .table>tbody>tr>td{
         padding: 0!important;
     }
-    .event-2 .mainWeibo .fixed-table-container {top: 15px;}
+    .event-2 .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.event-2 .mainWeibo .fixed-table-container {top: 15px;}*/
     .event-2 .mainWeibo .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -90,7 +91,7 @@
         <!-- <div class="output1">导出至Excel文件</div>
         <div class="output2">导出至Word文件</div> -->
     </div>
-    <div class="choosetime" style="margin: 10px 0;">
+    <div class="choosetime" style="margin-top: 10px;">
         <label class="demo-label">
             <input class="demo-radio" type="radio" name="time" value='0' checked>
             <span class="demo-checkbox demo-radioInput"></span> 今天
