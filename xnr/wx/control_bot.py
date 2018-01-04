@@ -9,9 +9,10 @@ from MyBot import MyBot
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path
-from xnr.parameter import MAX_VALUE, LOCALHOST_IP
+from xnr.parameter import MAX_VALUE, LOCALHOST_IP, DAY
 from xnr.wx_xnr_manage_mappings import wx_xnr_mappings
 from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
+from xnr.time_utils import ts2datetime, datetime2ts
 from send_mail import send_mail
 
 def IsOpen(ip,port):
@@ -168,9 +169,9 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         change_wxxnr_redis_data(wxbot_id, xnr_data={'create_flag':create_flag})
     logout_result = xnr_logout(wxbot_id)
     if logout_result:
-    	print u'登录前登出成功'
+        print u'登录前登出成功'
     else:
-    	print u'登录前登出失败'
+        print u'登录前登出失败'
     #login
     wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
     if init_groups_list:
@@ -395,5 +396,7 @@ def send_qrcode2mail(wxbot_id, qr_path):
         'addr': mail  #支持多个，以逗号隔开
     }
     return send_mail(from_user=from_user, to_user=to_user, content=content)
+
+
 
 

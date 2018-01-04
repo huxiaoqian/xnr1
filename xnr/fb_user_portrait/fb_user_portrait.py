@@ -2,6 +2,8 @@
 import time
 import json
 from collections import Counter
+from textrank4zh import TextRank4Keyword, TextRank4Sentence
+from keyword_extraction import get_filter_keywords
 import sys
 sys.path.append('../')
 from global_config import S_DATE_FB, S_DATE_TW
@@ -12,6 +14,8 @@ from global_utils import es_fb_user_portrait as es, \
                          fb_bci_index_name_pre, fb_bci_index_type
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH
+
+sys.path.append('../cron')
 from trans.trans import trans
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
@@ -31,8 +35,8 @@ def merge_dict(x, y):
 
 def load_uid_list():
     uid_list = []
-    # uid_list_query_body = {'size': MAX_SEARCH_SIZE}
-    uid_list_query_body = {'size': 3}
+    uid_list_query_body = {'size': MAX_SEARCH_SIZE}
+    # uid_list_query_body = {'size': 3}
     try:
         search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=uid_list_query_body)['hits']['hits']
         for item in search_results:
@@ -216,12 +220,44 @@ def load_fb_user_data(fb_flow_text_index_list, fb_bci_index_list):
         baseinfo = fb_user_baseinfo[uid]
         user_keywords_data[uid] = fb_flow_text[uid]['keywords_dict']
         # bio_str:Facebook用户背景信息中的quotes、bio、about、description，用'_'链接
-        bio_str = '_'.join(trans([baseinfo['quotes'], baseinfo['bio'], baseinfo['about'], baseinfo['description']]))
-        if not bio_str:
-            print 'translate error', uid
-            bio_str = u'\u9519\u8bef_\u9519\u8bef_\u9519\u8bef_\u9519\u8bef'    #错误_错误_错误_错误
+        #不在这里进行翻译了，所以给bio_str传一个list而非str回去，更容易后续操作
+        
+        '''
+        #繁体
+        baseinfo['quotes'] = u''
+        baseinfo['bio'] = u''
+        baseinfo['about'] = u'新聞、時事、中國內幕、香港台灣新聞、世界新聞、財經、名家點評、生活、教育、時尚、幽默、奇聞異事、娛樂、健康養生 正體：http://b5.secretchina.com/ 簡體：http://www.secretchina.com/'
+        baseinfo['description'] = u'全球都在看中國 全球都愛《看中國》'
+        #0 1 0 0
+        #处理前： 
+        #politician
+        #0 2 3 0
+        #转换后： 
+        #mediaworker
+        #0 2 3 0
+        #翻译后： 
+        #mediaworker
+        '''
+
+        '''
+        #英文
+        baseinfo['quotes'] = u''
+        baseinfo['bio'] = u''
+        baseinfo['about'] = u"中国Advocating for the advancement of democracy and human rights since 2003."
+        baseinfo['description'] = u"Asia's first national democracy assistance foundation committed to advancing human rights and democracy in Asia and worldwide."
+        #0 0 0 0
+        #处理前： 
+        #other
+        #0 0 0 0
+        #转换后： 
+        #other
+        #0 0 0 1
+        #翻译后： 
+        #business
+        '''
+
         user_domain_data[uid] = {
-            'bio_str': bio_str,
+            'bio_str': [baseinfo['quotes'], baseinfo['bio'], baseinfo['about'], baseinfo['description']],
             'category': baseinfo['category'],
             'number_of_text': fb_flow_text[uid]['number_of_text']
         }
@@ -236,7 +272,26 @@ def load_fb_user_data(fb_flow_text_index_list, fb_bci_index_list):
     for uid, bci_data in fb_bci_data.items():
         user_influence_data[uid] = bci_data['influence']
 
+    
+
+
+
+
+
+
     user_topic_data = user_keywords_data
+    #新建一个filter_keywords在flow_text中？这样效率高吗，毕竟单条的处理不如多条一起处理的快
+    #把这块功能单独写到一个文件里？
+    #这样的话原始的keywords还要吗？
+
+
+
+
+
+
+
+
+
     return uid_list, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data
 
 def compute_domain(users_base_data):
@@ -251,9 +306,10 @@ def compute_domain(users_base_data):
     user_label用户身份字典:{'uid':label,'uid':label...}
     '''
     user_label = domain_main(users_base_data)
+
     return user_label
 
-def compute_topic(uid_list, users_fb_text):
+def compute_topic(uid_list, user_filter_keywords):
     '''
     ###输入数据示例：
     uidlist:uid列表（[uid1,uid2,uid3,...]）
@@ -264,21 +320,30 @@ def compute_topic(uid_list, users_fb_text):
     2、用户关注较多的话题（最多有3个）：
     {uid1:['art','social','media']...}
     '''
+
     #转换编码格式
-    users_fb_text_encode = {}
-    for key, val in users_fb_text.items():
+    user_filter_keywords_encode = {}
+    for key, val in user_filter_keywords.items():
         key = key.encode('utf8')
-        users_fb_text_encode[key] = {}
+        user_filter_keywords_encode[key] = {}
         for k, v in val.items():
             k = k.encode('utf8')
-            users_fb_text_encode[key][k] = v
-    user_topic_dict, user_topic_list = topic_classfiy(uid_list, users_fb_text_encode)
+            user_filter_keywords_encode[key][k] = v
+
+
+    # print 'users_fb_text_encode'
+    # print users_fb_text_encode
+    user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_filter_keywords_encode)
+    # print 'user_topic_dict'
+    # print user_topic_dict
     user_topic_string = {}
     for uid, topic_list in user_topic_list.items():
         li = []
         for t in topic_list:
-            li.append(zh_data[name_list.index(t)])
+            li.append(zh_data[name_list.index(t)].decode('utf8'))
         user_topic_string[uid] = '&'.join(li)
+    print user_topic_string 
+    print user_topic_dict
     return user_topic_dict, user_topic_string
 
 def compute_influence(influence_list):
@@ -308,23 +373,24 @@ def compute_sentiment(sentiment_list):
     else:
         return 0
 
-def compute_attribute(uid_list, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data): 
-    user_dmain = compute_domain(user_domain_data)
-    user_topic_dict, user_topic_string = compute_topic(uid_list, user_topic_data)
+def compute_attribute(uid_list, user_filter_keywords, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data): 
+    user_domain = compute_domain(user_domain_data)
+    # user_topic_dict, user_topic_string = compute_topic(uid_list, user_topic_data)
+    user_topic_dict, user_topic_string = compute_topic(uid_list, user_filter_keywords)
 
     user_data = {}
     for uid in uid_list:
         user_data[uid] = {
-            'domain': user_dmain[uid],
-            # 'topic': json.dumps(user_topic_dict[uid]),
+            'domain': user_domain[uid],
+            'topic': json.dumps(user_topic_dict[uid]),
             'topic_string': user_topic_string[uid].decode('utf8'),
-            'filter_keywords': '',  #等flow_text中的filter_keywords计算好以后再说
+            'filter_keywords': json.dumps(user_filter_keywords[uid]),  #等flow_text中的filter_keywords计算好以后再说
             # 'keywords': json.dumps(user_keywords_data[uid]),
             'influence': compute_influence(user_influence_data[uid]),
             'sensitive': compute_sensitive(user_sensitive_data[uid]['sensitive']),
             'sentiment': compute_sentiment(user_sentiment_data[uid]),
-            'keywords_string': '&'.join(user_keywords_data[uid].keys()),
-            # 'sensitive_dict': json.dumps(user_sensitive_data[uid]['sensitive_words_dict']),
+            # 'keywords_string': '&'.join(user_keywords_data[uid].keys()),
+            'sensitive_dict': json.dumps(user_sensitive_data[uid]['sensitive_words_dict']),
             'sensitive_string': user_sensitive_data[uid]['sensitive_words_string'],
         }
     return user_data
@@ -335,8 +401,6 @@ def save_compute_result(user_data):
         for uid, u_data in user_data.items():
             action = {'index':{'_id': uid}}
             bulk_action.extend([action, {'doc': u_data}])
-            print type(u_data)
-            print u_data 
         result = es.bulk(bulk_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
         if result['errors'] :
             print result
@@ -358,8 +422,13 @@ def main(type='RT'):
     
     uid_list, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data = load_fb_user_data(fb_flow_text_index_list, fb_bci_index_list)
     
-    user_data = compute_attribute(uid_list, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data)
+
+
+    user_filter_keywords = get_filter_keywords(fb_flow_text_index_list, uid_list)
+
+    user_data = compute_attribute(uid_list, user_filter_keywords, user_keywords_data, user_topic_data, user_domain_data, user_influence_data, user_sentiment_data, user_sensitive_data)
     print save_compute_result(user_data)
+    print uid_list
     
 if __name__ == '__main__':
     main('test')
