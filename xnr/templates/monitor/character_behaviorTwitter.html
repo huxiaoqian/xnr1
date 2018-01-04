@@ -29,7 +29,8 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -72,7 +73,7 @@
             <b style="font-size: 20px;color: #fff;">人物行为预警</b>
         </div>
     </div>
-    <div class="choosetime" style="margin: 10px 0;">
+    <div class="choosetime">
         <label class="demo-label">
             <input class="demo-radio" type="radio" name="time" value='0' checked>
             <span class="demo-checkbox demo-radioInput"></span> 今天
@@ -132,9 +133,6 @@
     weiboORqq('twitter');
     $('.nav_type').text('(twitter)');
     judgmentTwitter('4');
-    $('.demo-radio').on('click',function () {
-        console.log(!!$(this).is(':checked'))
-    })
 
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",

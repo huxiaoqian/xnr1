@@ -116,7 +116,8 @@ $('.choosetime .demo-label input').on('click',function () {
         $('#start_1').hide();
         $('#end_1').hide();
         $('.sureTime').hide();
-        var startTime='',today='',startTime_2,midURL='safe_active',lastURL='';
+        var startTime='',today='',startTime_2,midURL='safe_active',
+            lastURL='';
         if (_val==0){
             startTime=todayTimetamp();
             startTime_2=0;
@@ -241,6 +242,7 @@ var defaultUrl='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
 public_ajax.call_request('get',defaultUrl,safe);
 var t;
 $('#container .type_page #myTabs li').on('click',function () {
+    $('#postRelease p').show();
     var mid=$(this).attr('midurl');
     if (mid.indexOf('&')==-1){
         public_ajax.call_request('get',defaultUrl,safe);
@@ -272,9 +274,9 @@ $('#container .type_page #myTabs li').on('click',function () {
 //--活跃安全性
 function safe(data) {
     //total_num、day_num、growth_rate
-    $('#safeContent p').show();
+    $('#active-1 p').show();
     if (isEmptyObject(data)){
-        $('#safeContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#active-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],totData=[];
         for (var i in data){
@@ -403,6 +405,7 @@ function dashBoard(dashVal) {
 }
 //发表内容
 $('.pc-4 input').on('click',function () {
+    $('#postRelease p').show();
     var name=$(this).attr('name'),theSort='',the='';
     if (name=='th'){
         if (t=='area'){
@@ -452,7 +455,7 @@ function weiboData(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,location,txt,img;
+                    var name,location,txt,txt2,all='',img;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name='未命名';
                     }else {
@@ -471,7 +474,32 @@ function weiboData(data) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
+                            var keyword_d=row.sensitive_words_string.split('&');
+                            for (var f of keyword_d){
+                                txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                            var rrr=row.text;
+                            if (rrr.length>=50){
+                                rrr=rrr.substring(0,50)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keyword_d){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                        }else {
+                            txt=row.text;
+                            if (txt.length>=160){
+                                txt2=txt.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
+                        };
                     };
                     var str=
                         '<div class="post_center-every" style="text-align: left;">'+
@@ -479,12 +507,14 @@ function weiboData(data) {
                         '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
-                        '           <span class="time" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left: 20px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
-                        '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left: 20px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
+                        '           <span class="time" style="font-weight:700;color:#f6a38e;display: inline-block;margin-left:5px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
+                        // '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left:5px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        '           <div class="center_2" style="margin: 5px 0;">'+txt+
-                        '           </div>'+
+                        '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
@@ -503,7 +533,7 @@ function weiboData(data) {
             },
         ],
     });
-    $('#postRelease p').hide();
+    $('#postRelease p').slideUp(30);
     $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //评论

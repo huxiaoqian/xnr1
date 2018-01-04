@@ -1,5 +1,6 @@
 var time2=Date.parse(new Date())/1000;//1480176000
 $('#typelist .demo-radio').on('click',function () {
+    $('#weiboContent p').show();
     var _val=$(this).val();
     var time=$('.choosetime input:radio[name="time"]:checked').val();
     var time1=getDaysBefore(time);
@@ -22,13 +23,12 @@ $('#typelist .demo-radio').on('click',function () {
 var weiboUrl='/weibo_xnr_warming_new/show_speech_warming/?xnr_user_no='+ID_Num+'&show_type=0&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 function weibo(data) {
-    $('#weiboContent p').show();
     $('#weiboContent').bootstrapTable('load', data);
     $('#weiboContent').bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -51,11 +51,16 @@ function weibo(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var item=row;
-                    var name,text,time;
-                    if (item.user_name==''||item.user_name=='null'||item.user_name=='unknown'||!item.user_name){
+                    var name,text,text2,time,all='',img;
+                    if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
                         name=item.uid;
                     }else {
-                        name=item.user_name;
+                        name=item.name;
+                    };
+                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=item.photo_url;
                     };
                     if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                         text='暂无内容';
@@ -67,8 +72,27 @@ function weibo(data) {
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
                             text=s;
+
+                            var rrr=item.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=item.text;
+                                all='none';
+                            }
+                            for (var f of keywords){
+                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             text=item.text;
+                            if (text.length>=160){
+                                text2=text.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                text2=text;
+                                all='none';
+                            }
                         };
                     };
                     if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
@@ -77,22 +101,25 @@ function weibo(data) {
                         time=getLocalTime(item.timestamp);
                     };
                     var rel_str=
-                        '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
+                        '<div class="everySpeak" style="margin:0 auto;width: 950px;text-align: left;">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel">'+
-                        '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                        '                </label>'+
-                        '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '                <a class="center_1" href="###">'+name+'</a>'+
+                        // '                <label class="demo-label">'+
+                        // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                        // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        // '                </label>'+
+                        '                <img src="'+img+'" alt="" class="center_icon">'+
+                        '                <a class="center_1" style="color:#f98077;">'+name+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
                         '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
-                        '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
-                        '                <span class="center_2">'+text+
+                        '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                        '                <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '                <p class="allall1" style="display:none;">'+text+'</p>'+
+                        '                <p class="allall2" style="display:none;">'+text2+'</p>'+
+                        '                <span class="center_2">'+text2+
                         '                </span>'+
                         '                <div class="center_3">'+
                         // '                    <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
@@ -115,8 +142,10 @@ function weibo(data) {
     });
     $('#weiboContent p').slideUp(300);
 };
+
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
+    
     var _val = $(this).val();
     var valCH=$('#typelist input:radio[name="focus"]:checked').val();
     if (_val == 'mize') {
@@ -124,6 +153,7 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#end').show();
         $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
     } else {
+        $('#weiboContent p').show();
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
@@ -133,6 +163,7 @@ $('.choosetime .demo-label input').on('click',function () {
     }
 });
 $('#sure').on('click',function () {
+    $('#weiboContent p').show();
     var s=$(this).parents('.choosetime').find('#start').val();
     var d=$(this).parents('.choosetime').find('#end').val();
     if (s==''||d==''){
@@ -219,64 +250,3 @@ function postYES(data) {
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
-
-//导出文件
-function exportTableToCSV(filename) {
-    var str =  '';
-    for (var k in currentData){
-        var name='',time='',type='',user='',uid='',txt='';
-        if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
-            name='暂无';
-        }else {
-            name=currentData[k].event_name;
-        };
-        if (currentData[k].report_time==''||currentData[k].report_time=='unknown'||currentData[k].report_time=='null'){
-            time='暂无';
-        }else {
-            time=getLocalTime(currentData[k].report_time);
-        };
-        if (currentData[k].report_type==''||currentData[k].report_type=='unknown'||currentData[k].report_type=='null'){
-            type='暂无';
-        }else {
-            type=currentData[k].report_type;
-        };
-        if (currentData[k].uid==''||currentData[k].uid=='unknown'||currentData[k].uid=='null'){
-            uid='暂无';
-        }else {
-            uid=currentData[k].uid;
-        };
-        if (currentData[k].xnr_user_no==''||currentData[k].xnr_user_no=='unknown'||currentData[k].xnr_user_no=='null'){
-            user='暂无';
-        }else {
-            user=currentData[k].xnr_user_no;
-        };
-        if (currentData[k].report_content['weibo_list'].length==0){
-            txt='暂无内容';
-        }else {
-            $.each(currentData[k].report_content['weibo_list'],function (index,item) {
-                if (item.text==''||item.text=='null'||item.text=='unknown'){
-                    txt='暂无内容';
-                }else {
-                    txt=item.text;
-                };
-            })
-        };
-        str+='上报名称：'+name+'\n上报时间：'+time+'\n上报类型：'+type+'\n虚拟人：'+user+'\n人物UID：'+uid+
-            '\n'+'上报内容：'+txt+'\n\n\n';
-    };
-
-    str =  encodeURIComponent(str);
-    csvData = "data:text/csv;charset=utf-8,\ufeff"+str;
-    $(this).attr({
-        'download': filename,
-        'href': csvData,
-        'target': '_blank'
-    });
-    // $('#pormpt p').text('素材导出成功。');
-    // $('#pormpt').modal('show');
-}
-
-$("a[id='output1']").on('click', function (event) {
-    filename="上报数据列表EXCEL.csv";
-    exportTableToCSV.apply(this, [filename]);
-});

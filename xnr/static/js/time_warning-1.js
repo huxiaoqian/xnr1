@@ -10,6 +10,7 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#end').show();
         $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
     } else {
+        $('#group_emotion_loading').css('display', 'block');
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
@@ -18,7 +19,19 @@ $('.choosetime .demo-label input').on('click',function () {
         public_ajax.call_request('get',timeUrl,calendar);
     }
 });
-//
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        $('#group_emotion_loading').css('display', 'block');
+        var weiboUrl='/weibo_xnr_warming_new/show_date_warning/?account_name='+admin+'&start_time='+
+            (Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,calendar);
+    }
+});
 
 
 var contentList = {};
@@ -26,7 +39,7 @@ function calendar(data){
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item['weibo_date_warming_content'];
     })
-    $('#group_emotion_loading').css('display', 'none');
+    
     // $('#input-table').css('display', 'block');
     var dataArray = data;
     var PageNo=document.getElementById('PageNo');                   //设置每页显示行数
@@ -99,7 +112,7 @@ function calendar(data){
                     }
                 };
                 html_c =
-                    '<div class="post_perfect" style="margin:10px auto;">'+
+                    '<div class="post_perfect">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
@@ -180,7 +193,7 @@ function calendar(data){
                         }
                     };
                     html_c =
-                        '<div class="post_perfect" style="margin:10px auto;">'+
+                        '<div class="post_perfect">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
@@ -268,7 +281,7 @@ function calendar(data){
                     }
                 };
                 html_c =
-                    '<div class="post_perfect" style="margin:10px auto;">'+
+                    '<div class="post_perfect">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
@@ -346,7 +359,7 @@ function calendar(data){
                     }
                 };
                 html_c =
-                    '<div class="post_perfect" style="margin:10px auto;">'+
+                    '<div class="post_perfect">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
@@ -430,7 +443,7 @@ function calendar(data){
                 }
             };
             html_c =
-                '<div class="post_perfect" style="margin:10px auto;">'+
+                '<div class="post_perfect">'+
                 '   <div class="post_center-hot">'+
                 '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                 '       <div class="center_rel">'+
@@ -448,6 +461,8 @@ function calendar(data){
         }
     }
 
+    $('#group_emotion_loading').css('display', 'none');
+
 }
 
 function startTable(index,key) {
@@ -456,16 +471,16 @@ function startTable(index,key) {
 
 // 转发===评论===点赞
 function retComLike(_this) {
-    var mid=$(_this).parents('.center_rel_weibo').find('.mid').text();
+    var mid=$(_this).parents('.speak_center').find('.mid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='get_weibohistory_like'){
         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='get_weibohistory_comment'){
-        $(_this).parents('.center_rel_weibo').find('.commentDown').show();
+        $(_this).parents('.speak_center').find('.commentDown').show();
     }else {
-        var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');
+        var txt=$(_this).parents('.speak_center').find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');
         if (txt=='暂无内容'){txt=''};
         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
         public_ajax.call_request('get',opreat_url,postYES);
@@ -474,7 +489,7 @@ function retComLike(_this) {
 
 function comMent(_this){
     var txt = $(_this).prev().val();
-    var mid = $(_this).parents('.center_rel_weibo').find('.mid').text();
+    var mid = $(_this).parents('.speak_center').find('.mid').text();
     if (txt!=''){
         var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
         public_ajax.call_request('get',post_url,postYES)
@@ -521,13 +536,12 @@ function postYES(data) {
 }
 
 function weibo(idx,data,words) {
-    console.log(data)
     $('.DsAuto'+idx).bootstrapTable('load', data);
     $('.DsAuto'+idx).bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -551,13 +565,13 @@ function weibo(idx,data,words) {
                 formatter: function (value, row, index) {
                     var item=row;
                     var str_new='';
-                    var geo,txt,img,time;
-                    if (item.geo==''||item.geo=='null'||item.geo=='unknown'){
-                        geo='未知';
+                    var txt,txt2,all='',img,time,name='';
+                    if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                        name=item.uid;
                     }else {
-                        geo=item.geo.toString().replace(/&/g,' ');
+                        name=item.name;
                     };
-                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'){
+                    if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
                     }else {
                         img=item.photo_url;
@@ -577,23 +591,45 @@ function weibo(idx,data,words) {
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
                             txt=s;
+                            var rrr=item.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=item.text;
+                                all='none';
+                            }
+                            for (var f of keywords){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             txt=item.text;
+                            if (txt.length>=160){
+                                txt2=text.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
                         };
                     };
                     str_new+=
-                        '<div class="everySpeak" style="margin: 0 auto;">'+
+                        '<div class="everySpeak">'+
                         '        <div class="speak_center">'+
+                        // '            <img src="'+img+'" alt="" class="center_icon">'+
                         '            <div class="center_rel center_rel_weibo" style="text-align: left;">'+
-                        // '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '                <a class="center_1" title="地理位置"><i class="icon icon-screenshot"></i> '+geo+'</a>'+
+                        '                <img src="'+img+'" alt="" class="center_icon">'+
+                        '                <a class="center_1" style="color: #f98077;">'+name+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
                         '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
-                        '                <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
-                        '                <div class="center_2">'+txt+'</div>'+
+                        '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                        '                <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '                <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '                <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '                <span class="center_2">'+txt2+'</span>'+
                         '                <div class="center_3">'+
                         '                    <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
