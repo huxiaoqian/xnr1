@@ -81,14 +81,20 @@ REDIS_WX_PORT = 6660
 REDIS_WX_HOST = '219.224.134.213'
 
 #使用七牛来存储捕获到的图片
+#2018-1-2 放弃使用七牛，改为存储到本地
 qiniu_access_key = "2QHQTgGYH8Ow3dy1jpuSKLAlTo-ZkRav1ty2Nok8"
 qiniu_secret_key = "Q91z6hnj5H0LaRkbAN8IPdc8dypdAQ_n21S8tEcu"
 qiniu_bucket_name = "publicbucket"
 qiniu_bucket_domain = "ovorc2c4c.bkt.clouddn.com"
+
+#微信多媒体数据存放地址
+WX_IMAGE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/image'
+WX_VOICE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice'
 
 #wx
 WX_S_DATE = '2017-10-25'
 WX_S_DATE_NEW = '2017-10-25'
 WX_S_DATE_ASSESSMENT = '2017-10-25'
 WX_GROUP_MESSAGE_START_DATE = '2017-10-25'
+WX_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-10-25'
 WX_GROUP_MESSAGE_START_DATE_ASSESSMENT = '2017-10-25'
