@@ -141,11 +141,19 @@ function flow_faw(data) {
                     }else {
                         img=row.photo_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.text.length>=170){
+                            txt=row.text.substring(0,170)+'...';
+                            all='inline-block';
+                        }else {
+                            txt=row.text;
+                            all='none';
+                        }
                     };
+
                     if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
                         postTime = '未知';
                     }else {
@@ -172,6 +180,8 @@ function flow_faw(data) {
                         '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;微博发布时间：'+postTime+'</a>&nbsp;&nbsp;'+
                         '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;微博转发时间：'+retweedTime+'</a>&nbsp;&nbsp;'+
                         '           <a class="center_1" href="###" style="color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;转发状态：'+$_status+'</a>&nbsp;&nbsp;'+
+                        '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall" style="display: none;">'+row.text+'</p>'+
                         '           <div class="center_2" style="text-align: left;margin: 10px 0;">'+txt+'</div>'+
                         '       </div>'+
                         '   </div>'+
@@ -375,16 +385,16 @@ var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='origin';
-        recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t=='r'){
         operateType='retweet';
-        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t== 'c'){
         operateType='comment';
-        recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
-        public_ajax.call_request('get',recommendUrl,recommendlist);
+        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
+        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
@@ -466,7 +476,6 @@ function groupSure() {
         rankidList.push('1022:230491'+$(this).val());
     });
 }
-
 //语料推荐
 var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
 public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
@@ -524,10 +533,17 @@ function defalutWords(data) {
                     }else {
                         img=row.photo_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.text.length>=170){
+                            txt=row.text.substring(0,170)+'...';
+                            all='inline-block';
+                        }else {
+                            txt=row.text;
+                            all='none';
+                        }
                     };
                     var str=
                         '<div class="post_perfect">'+
@@ -536,6 +552,8 @@ function defalutWords(data) {
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall" style="display: none;">'+row.text+'</p>'+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <span class="center_2">'+txt+
@@ -562,6 +580,20 @@ function defalutWords(data) {
     $('#defaultWeibo p').slideUp(700);
     $('.defaultWeibo .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+//查看全文
+function allWord(_this) {
+    var a=$(_this).attr('data-all');
+    if (a==0){
+        $(_this).text('收起');
+        $(_this).parents('.post_perfect').find('.center_2').html($(_this).next().text());
+        $(_this).attr('data-all','1');
+    }else {
+        $(_this).text('查看全文');
+        $(_this).parents('.post_perfect').find('.center_2').text($(_this).next().text().substring(0,160)+'...');
+        $(_this).attr('data-all','0');
+    }
+}
+
 //复制内容
 function copyPost(_this) {
     var txt = $(_this).parent().prev().text();
@@ -668,10 +700,17 @@ function hotWeibo(data) {
                     }else {
                         img=row.photo_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.text.length>=170){
+                            txt=row.text.substring(0,170)+'...';
+                            all='inline-block';
+                        }else {
+                            txt=row.text;
+                            all='none';
+                        }
                     };
                     var str=
                         '<div class="post_perfect">'+
@@ -680,6 +719,8 @@ function hotWeibo(data) {
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
                         '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall" style="display: none;">'+row.text+'</p>'+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <span class="center_2">'+txt+
@@ -828,17 +869,25 @@ function calNot(data) {
                     align: "center",//水平
                     valign: "middle",//垂直
                     formatter: function (value, row, index) {
-                        var txt;
+                        var txt,all='';
                         if (row==''||row=='null'||row=='unknown'){
                             txt='暂无内容';
                         }else {
-                            txt=row;
+                            if (row.length>=170){
+                                txt=row.substring(0,170)+'...';
+                                all='inline-block';
+                            }else {
+                                txt=row;
+                                all='none';
+                            }
                         };
                         var str=
                             '<div class="post_perfect">'+
                             '   <div id="post_center-recommend">'+
                             '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                             '       <div class="center_rel">'+
+                            '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                            '           <p class="allall" style="display: none;">'+row+'</p>'+
                             '           <span class="center_2">'+txt+ '</span>'+
                             '           <div class="center_3" style="margin: 10px 0;padding-top: 10px;border-top:1px solid silver;">'+
                             '               <label class="demo-label">'+
@@ -1021,10 +1070,17 @@ function businessWeibo(data) {
                     }else {
                         img=row.photo_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.text.length>=170){
+                            txt=row.text.substring(0,170)+'...';
+                            all='inline-block';
+                        }else {
+                            txt=row.text;
+                            all='none';
+                        }
                     };
                     var str=
                         '<div class="post_perfect">'+
@@ -1033,6 +1089,8 @@ function businessWeibo(data) {
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall" style="display: none;">'+row.text+'</p>'+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <span class="center_2">'+txt+

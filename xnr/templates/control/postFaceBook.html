@@ -160,20 +160,20 @@
                     <form action='' method='' name='myform' style="display: none;">
                         <input type='file' id='iptfileupload' onchange='show()' value=''/>
                     </form>
-                    <div style="margin-left:40px;">
+                    <div style="margin-left:5px;">
                         <label class="demo-label timingss" style="margin: 5px 7px;">
                             <input class="demo-radio timing" type="checkbox" name="demo">
                             <span class="demo-checkbox demo-radioInput"></span> 定时
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
                         <div class="ttime">
-                            <input type="text" size="22" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                            <input type="text" size="24" id="_timing1" class="form_datetime start" placeholder="开始时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                            <input type="text" size="24" id="_timing2" class="form_datetime end" placeholder="结束时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing3" class="remarks" placeholder="备注信息"
+                            <input type="text" size="24" id="_timing3" class="remarks" placeholder="备注信息"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                         </div>
@@ -1076,7 +1076,6 @@
     });
     //========粉丝列表
     function glfans(data) {
-        console.log(data)
         if (isEmptyObject(data)){
             $('#grouplist .gpmember').text('你还未有粉丝。');
         }else {
