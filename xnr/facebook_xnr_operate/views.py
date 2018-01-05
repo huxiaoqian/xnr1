@@ -30,7 +30,7 @@ def ajax_submit_daily_tweet():
 	task_detail['tweet_type'] = request.args.get('tweet_type','')
 	# 参数传对应英文 (以下所有url一样)
 	#u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
-    #u'跟随转发':'trace_post',u'智能发帖':'intel_post'
+    #u'跟随转发':'trace_post',u'智能发帖':'intel_post', u'信息监测':'info_detect'，u'预警': 'info_warning'
 	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
 	task_detail['text'] = request.args.get('text','').encode('utf-8')
 

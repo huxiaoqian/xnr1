@@ -3,6 +3,8 @@
 
 from launcher import Launcher
 from es import Es_twitter
+import datetime
+import time
 
 class At():
 	def __init__(self, username, password):
@@ -21,7 +23,7 @@ class At():
 			user_mention_screen_name = each.entities['user_mentions'][0]['screen_name']
 			user_mention_name = each.entities['user_mentions'][0]['name']
 			user_mention_id = each.entities['user_mentions'][0]['id']
-			time = each.created_at
+			timestamp = int(time.mktime(each.created_at.timetuple()))
 			item = {
 				'user_name': user_screen_name,
 				'nick_name': user_name,
@@ -30,7 +32,7 @@ class At():
 				'user_mention_screen_name': user_mention_screen_name,
 				'user_mention_name': user_mention_name,
 				'user_mention_id': user_mention_id,
-				'timestamp': time
+				'timestamp': timestamp
 			}
 			self.list.append(item)
 		return self.list
@@ -42,7 +44,6 @@ class At():
 if __name__ == '__main__':
 	at = At('18538728360@163.com','zyxing,0513')
 	list = at.get_mention()
-	print(list)
 	at.save('twitter_feedback_at_2017-11-13','text',list)
 
 
