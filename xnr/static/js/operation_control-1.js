@@ -687,7 +687,7 @@ function historyNews(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -716,16 +716,23 @@ function historyNews(data) {
                     }else {
                         name=row.xnr_user_no||row.nick_name;
                     };
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
                         row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
                         img='/static/images/unknown.png';
                     }else {
                         img=row.photo_url||row.picture_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.text.length>=170){
+                            txt=row.text.substring(0,170)+'...';
+                            all='inline-block';
+                        }else {
+                            txt=row.text;
+                            all='none';
+                        }
                     };
                     var a=Number(row.retweeted).toString();
                     var b=Number(row.retweet).toString();
@@ -736,7 +743,9 @@ function historyNews(data) {
                         '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel" style="text-align: left;">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;&nbsp;'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>&nbsp;&nbsp;'+
+                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)||'未知'+'</span>&nbsp;&nbsp;'+
+                        '           <button data-all="0" style="display: '+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall" style="display: none;">'+row.text+'</p>'+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
@@ -764,6 +773,19 @@ function historyNews(data) {
         ],
     });
     $('#'+boxShoes+' p').slideUp(700);
+}
+//查看全文
+function allWord(_this) {
+    var a=$(_this).attr('data-all');
+    if (a==0){
+        $(_this).text('收起');
+        $(_this).parents('.post_perfect').find('.center_2').html($(_this).next().text());
+        $(_this).attr('data-all','1');
+    }else {
+        $(_this).text('查看全文');
+        $(_this).parents('.post_perfect').find('.center_2').text($(_this).next().text().substring(0,160)+'...');
+        $(_this).attr('data-all','0');
+    }
 }
 //=====评论======
 //查看对话

@@ -3,32 +3,42 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/time_warningTwitter.css">
 <style>
-    /**/
-    .event-2 .mainWeibo .bootstrap-table {
+    .fixed-table-toolbar .search{width: 100%}
+    .bootstrap-table {
         margin: 0 auto;
         height: auto!important;
     }
-    .event-2 .mainWeibo .table-no-bordered,.event-2 .mainWeibo .fixed-table-container,
-    .event-2 .mainWeibo .bootstrap-table .table>thead>tr>th,.event-2 .mainWeibo .bootstrap-table .table,.event-2 .mainWeibo .table>tbody>tr>td{
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
         border: none;
     }
-    .event-2 .mainWeibo .fixed-table-pagination .page-list {
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .fixed-table-pagination .page-list {
         display: none!important;
     }
-    .event-2 .mainWeibo .fixed-table-body {
+    .fixed-table-body {
         height: auto!important;
         overflow-y: hidden;
     }
-    .event-2 .mainWeibo .bootstrap-table .table:not(.table-condensed),.event-2 .mainWeibo .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-    .event-2 .mainWeibo .table>tbody>tr>td{
+    .fixed-table-container thead th .both {
+        background-image: none!important;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
         padding: 0!important;
     }
-    .event-2 .mainWeibo .fixed-table-container {top: 15px;}
-    .event-2 .mainWeibo .table-hover>tbody>tr:hover {
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
+    .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
-    .fixed-table-toolbar .search {width: 100%;}
-    .event-2 .mainWeibo .form-control {
+    th.bs-checkbox {width: 10%!important;}
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    .fixed-table-container thead th .th-inner {padding: 0;}
+    .fixed-table-toolbar .search {width: 100%;margin-bottom: 0;} 
+    .form-control {
         text-align: center;
         font-size: 14px;
         color: white;
@@ -37,22 +47,6 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
-    .datetimepicker td, .datetimepicker th {color: black;}
-    .event-2 .fixed-table-container thead th .both {
-        background-image:none!important;
-    }
-    .table .table {
-        background: transparent!important;
-    }
-    .bootstrap-table .table>thead>tr>th {width: 7%;}
-    /**/
-    .demo-label{display:inline-block}
-    .demo-radio{display:none}
-    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
-    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-
-    #weiboContent .demo-label{display: none;}
     #div-button input {
         border:1px solid silver;
         border-radius: 5px;
@@ -115,7 +109,7 @@
         <span id="sure" class="sureTime">确定</span>
     </div>
     <div class="weiboContent">
-        <div id="group_emotion_loading" style="display:block;text-align:center;">正在拼命加载中...</div>
+        <div id="group_emotion_loading" style="text-align:center;">正在拼命加载中...</div>
         <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
             <table id="input-table" class="In-table" style="width:100%;">
                 <tbody class="In-table" style='width:100%!important;'>
