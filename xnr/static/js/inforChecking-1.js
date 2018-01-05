@@ -10,6 +10,9 @@ $('.title .perTime .demo-label input').on('click',function () {
         }else {
             from_ts=getDaysBefore(_val);
         }
+        $('#content-1-word p').show();
+        $('#hot_post p').show();
+        $('#userList p').show();
         public_ajax.call_request('get',word_url,wordCloud);
         public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
@@ -18,6 +21,7 @@ $('.title .perTime .demo-label input').on('click',function () {
 });
 //选择时间范围
 $('.timeSure').on('click',function () {
+    $('#content-1-word p').show();
     var from = $('.start').val();
     var to = $('.end').val();
     from_ts=Date.parse(new Date(from))/1000;
@@ -26,6 +30,9 @@ $('.timeSure').on('click',function () {
         $('#pormpt p').text('请检查选择的时间（不能为空）');
         $('#pormpt').modal('show');
     }else {
+        $('#content-1-word p').show();
+        $('#hot_post p').show();
+        $('#userList p').show();
         public_ajax.call_request('get',word_url,wordCloud);
         public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
@@ -40,7 +47,6 @@ require.config({
     }
 });
 function wordCloud(data) {
-    $('#content-1-word p').show();
     if (data.length==0||isEmptyObject(data)){
        $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'24px'}).text('暂无数据');
     }else {
@@ -90,6 +96,7 @@ function wordCloud(data) {
 }
 //热门帖子
 $('#theme-2 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$(this).val();
     var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
     var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
@@ -97,6 +104,7 @@ $('#theme-2 .demo-radio').on('click',function () {
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
 $('#theme-3 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
     var order_id=$(this).val();
     var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
@@ -107,7 +115,6 @@ var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts=
     '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
-    $('#hot_post p').show();
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
@@ -135,28 +142,48 @@ function hotPost(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
+                    var name,txt,txt2,img;
                     if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
                         name='未命名';
                     }else {
                         name=row.uid;
                     };
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
                     }else {
                         img=row.photo_url;
                     };
+                    var all='';
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
                         if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
-                            var keyword=row.sensitive_words_string.split('&');
-                            for (var f of keyword){
+                            var keyword_d=row.sensitive_words_string.split('&');
+                            for (var f of keyword_d){
                                 txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                            var rrr=row.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keyword_d){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
                         }else {
                             txt=row.text;
+                            if (txt.length>=160){
+                                txt2=txt.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
                         };
+
                     };
                     var str=
                         '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+
@@ -167,8 +194,11 @@ function hotPost(data) {
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <span class="center_2">'+txt+'</span>'+
+                        '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '           <span class="center_2">'+txt2+'</span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
@@ -191,8 +221,22 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+// //查看全文
+// function allWord(_this) {
+//     var a=$(_this).attr('data-all');
+//     if (a==0){
+//         $(_this).text('收起');
+//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().html());
+//         $(_this).attr('data-all','1');
+//     }else {
+//         $(_this).text('查看全文');
+//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().next().html());
+//         $(_this).attr('data-all','0');
+//     }
+// }
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
+    $('#userList p').show();
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
     var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id+
     '&start_time='+from_ts+'&end_time='+to_ts;
@@ -203,7 +247,6 @@ var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
-    $('#userList p').show();
     $('.userList #userList').bootstrapTable('load', persondata);
     $('.userList #userList').bootstrapTable({
         data:persondata,

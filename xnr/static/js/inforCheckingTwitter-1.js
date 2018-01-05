@@ -1,3 +1,4 @@
+var operateType='info_detect';
 var from_ts=Date.parse(new Date(new Date().setHours(0,0,0,0)))/1000;
 var to_ts=Date.parse(new Date())/1000;
 $('.title .perTime .demo-label input').on('click',function () {
@@ -10,6 +11,9 @@ $('.title .perTime .demo-label input').on('click',function () {
         }else {
             from_ts=getDaysBefore(_val);
         }
+        $('#content-1-word p').show();
+        $('#hot_post p').show();
+        $('#userList p').show();
         public_ajax.call_request('get',word_url,wordCloud);
         public_ajax.call_request('get',hotPost_url,hotPost);
         public_ajax.call_request('get',activePost_url,activeUser);
@@ -18,6 +22,9 @@ $('.title .perTime .demo-label input').on('click',function () {
 });
 //选择时间范围
 $('.timeSure').on('click',function () {
+    $('#content-1-word p').show();
+    $('#hot_post p').show();
+    $('#userList p').show();
     var from = $('.start').val();
     var to = $('.end').val();
     from_ts=Date.parse(new Date(from))/1000;
@@ -32,7 +39,7 @@ $('.timeSure').on('click',function () {
     }
 });
 //----关键词云
-var word_url='/weibo_xnr_monitor/lookup_weibo_keywordstring/?weiboxnr_id='+ID_Num+'&from_ts='+from_ts+'&to_ts='+to_ts;
+var word_url='/twitter_xnr_monitor/lookup_weibo_keywordstring/?from_ts='+from_ts+'&to_ts='+to_ts+'&xnr_no='+ID_Num;
 public_ajax.call_request('get',word_url,wordCloud);
 require.config({
     paths: {
@@ -90,30 +97,31 @@ function wordCloud(data) {
 }
 //热门帖子
 $('#theme-2 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$(this).val();
     var order_id=$('#theme-3 input:radio[name="demo"]:checked').val();
-    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    var NEWhotPost_url='/twitter_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&xnr_no='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
 $('#theme-3 .demo-radio').on('click',function () {
+    $('#hot_post p').show();
     var classify_id=$('#theme-2 input:radio[name="demo-radio"]:checked').val();
     var order_id=$(this).val();
-    var NEWhotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-        '&weiboxnr_id='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
+    var NEWhotPost_url='/twitter_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+        '&xnr_no='+ID_Num+'&classify_id='+classify_id+'&order_id='+order_id;
     public_ajax.call_request('get',NEWhotPost_url,hotPost);
 });
-var hotPost_url='/weibo_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
-    '&weiboxnr_id='+ID_Num+'&classify_id=0&order_id=1';
+var hotPost_url='/twitter_xnr_monitor/lookup_hot_posts/?from_ts='+from_ts+'&to_ts='+to_ts+
+    '&xnr_no='+ID_Num+'&classify_id=0&order_id=1';
 public_ajax.call_request('get',hotPost_url,hotPost);
 function hotPost(data) {
-    $('#hot_post p').show();
     $('#hot_post').bootstrapTable('load', data);
     $('#hot_post').bootstrapTable({
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -135,13 +143,13 @@ function hotPost(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt,img;
-                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
+                    var name,txt,img,txt2,all='';
+                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
                         name='未命名';
                     }else {
                         name=row.uid;
                     };
-                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
                     }else {
                         img=row.photo_url;
@@ -154,31 +162,54 @@ function hotPost(data) {
                             for (var f of keyword){
                                 txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            var rrr=row.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keyword){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             txt=row.text;
+                            if (txt.length>=160){
+                                txt2=txt.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
                         };
                     };
                     var str=
-                        '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+
+                        '<div class="post_perfect" style="margin-bottom:10px;width:920px;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
-                        '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <span class="center_2">'+txt+'</span>'+
+                        '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                        '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '           <span class="center_2">'+txt2+'</span>'+
+                        '           <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
-                        '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
+                        '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="comtnt" placeholder="回复内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">回复</span>'+
+                        '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
                         '           </div>'+
                         '       </div>'+
                         '    </div>'+
@@ -191,15 +222,21 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
+//翻译
+function translateWord(_this) {
+    $(_this).parents('.center_rel').find('.tsWord').text(3152351);
+    $(_this).parents('.center_rel').find('._translate').show();
+
+}
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
-    var NEWactivePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+'&classify_id='+classify_id+
-        '&start_time='+from_ts+'&end_time='+to_ts;
+    var NEWactivePost_url='/twitter_xnr_monitor/lookup_active_user/?xnr_no='+ID_Num+'&from_ts='+
+        from_ts+'&to_ts='+to_ts+'&classify_id=0';
     public_ajax.call_request('get',NEWactivePost_url,activeUser);
 });
-var activePost_url='/weibo_xnr_monitor/lookup_active_weibouser/?weiboxnr_id='+ID_Num+
-    '&start_time='+from_ts+'&end_time='+to_ts+'&classify_id=0';
+var activePost_url='/twitter_xnr_monitor/lookup_active_user/?xnr_no='+ID_Num+'&from_ts='+
+    from_ts+'&to_ts='+to_ts+'&classify_id=0';
 public_ajax.call_request('get',activePost_url,activeUser);
 var act_user_list=[];
 function activeUser(persondata) {
@@ -257,7 +294,7 @@ function activeUser(persondata) {
                 // }
             },
             {
-                title: "全名",//标题
+                title: "昵称",//标题
                 field: "uname",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -272,7 +309,7 @@ function activeUser(persondata) {
                 }
             },
             {
-                title: "位置",//标题
+                title: "注册地",//标题
                 field: "location",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -287,7 +324,7 @@ function activeUser(persondata) {
                 }
             },
             {
-                title: "关注者数",//标题
+                title: "粉丝数",//标题
                 field: "fans_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -295,7 +332,7 @@ function activeUser(persondata) {
                 valign: "middle",//垂直
             },
             {
-                title: "推文数",//标题
+                title: "微博数",//标题
                 field: "total_number",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -351,7 +388,7 @@ function activeUser(persondata) {
         },
     });
     $('#userList p').slideUp(700);
-}
+};
 function _judge() {
     if (act_user_list.length==0){
         $('.userList .addFocus').addClass('disableCss');
@@ -360,7 +397,7 @@ function _judge() {
     }
 }
 $('.userList .addFocus').on('click',function () {
-    var add_url='/weibo_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
+    var add_url='/twitter_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
     public_ajax.call_request('get',add_url,postYES);
 })
 //-------------------颜色----------------------
@@ -403,34 +440,33 @@ function showInput(_this) {
 };
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
     if (txt!=''){
-        var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
+        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
     }
 }
-
 //转发
 function retweet(_this) {
     var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_mid='+mid;
+    var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+        '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
-
 //点赞
 function thumbs(_this) {
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
-        '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
-    public_ajax.call_request('get',post_r_s_url,postYES)
+    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+        '&r_fid='+fid+'&r_uid='+uid;
+    public_ajax.call_request('get',post_r_s_url,postYES);
 };
 
 //关注该用户
