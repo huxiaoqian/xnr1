@@ -3,13 +3,14 @@ var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&
 public_ajax.call_request('get',weiboUrl,weibo);
 
 //时间选择
-$('.choosetime .demo-label input').on('click',function () {
+$('.choosetime .demo-label input').on('click',function () {     
     var _val = $(this).val();
     if (_val == 'mize') {
         $(this).parents('.choosetime').find('#start').show();
         $(this).parents('.choosetime').find('#end').show();
         $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
     } else {
+        $('#group_emotion_loading').show();
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
@@ -18,6 +19,7 @@ $('.choosetime .demo-label input').on('click',function () {
     }
 });
 $('#sure').on('click',function () {
+     $('#group_emotion_loading').show();
     var s=$(this).parents('.choosetime').find('#start').val();
     var d=$(this).parents('.choosetime').find('#end').val();
     if (s==''||d==''){
@@ -33,7 +35,6 @@ $('#sure').on('click',function () {
 //文本信息
 var contentList = {};
 function weibo(data){
-    $('#group_emotion_loading').show();
     $.each(data,function (index,item) {
         contentList['exo_'+index]=item;
     })
@@ -79,13 +80,13 @@ function weibo(data){
             {                                                          //循环打印数组值
                 oTBody.insertRow(i);
                 html_c =
-                    '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
+                    '<div class="everyEvent" style="margin:0 auto;text-align: left;">'+
                     '        <div class="event_center">'+
-                    '            <div style="margin: 10px 0;">'+
-                    '                <label class="demo-label">'+
-                    '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                    '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                    '                </label>'+
+                    '            <div style="margin:10px;">'+
+                    // '                <label class="demo-label">'+
+                    // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                    // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                    // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
                     '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
@@ -97,7 +98,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+i+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2" style="margin: 20px 0;">'+
+                    '                <div class="event-2">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+i+'"></div>'+
@@ -146,11 +147,11 @@ function weibo(data){
                     html_c =
                         '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
                         '        <div class="event_center">'+
-                        '            <div style="margin: 10px 0;">'+
-                        '                <label class="demo-label">'+
-                        '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                        '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                        '                </label>'+
+                        '            <div style="margin:10px;">'+
+                        // '                <label class="demo-label">'+
+                        // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                        // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                        // '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
                         '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
                         '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
@@ -162,7 +163,7 @@ function weibo(data){
                         '                        <div class="mainJoinTable'+i+'"></div>'+
                         '                    </div>'+
                         '                </div>'+
-                        '                <div class="event-2" style="margin: 20px 0;">'+
+                        '                <div class="event-2">'+
                         '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                         '                    <div class="mainWeibo">'+
                         '                        <div class="mainWeiboTable'+i+'"></div>'+
@@ -218,11 +219,11 @@ function weibo(data){
                 html_c =
                     '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
                     '        <div class="event_center">'+
-                    '            <div style="margin: 10px 0;">'+
-                    '                <label class="demo-label">'+
-                    '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                    '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                    '                </label>'+
+                    '            <div style="margin:10px;">'+
+                    // '                <label class="demo-label">'+
+                    // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                    // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                    // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
                     '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
@@ -234,7 +235,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2" style="margin: 20px 0;">'+
+                    '                <div class="event-2">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
@@ -280,11 +281,11 @@ function weibo(data){
                 html_c =
                     '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
                     '        <div class="event_center">'+
-                    '            <div style="margin: 10px 0;">'+
-                    '                <label class="demo-label">'+
-                    '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                    '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                    '                </label>'+
+                    '            <div style="margin:10px;">'+
+                    // '                <label class="demo-label">'+
+                    // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                    // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                    // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
                     '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
@@ -296,7 +297,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2" style="margin: 20px 0;">'+
+                    '                <div class="event-2">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
@@ -349,11 +350,11 @@ function weibo(data){
             html_c =
                 '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
                 '        <div class="event_center">'+
-                '            <div style="margin: 10px 0;">'+
-                '                <label class="demo-label">'+
-                '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
-                '                    <span class="demo-checkbox demo-radioInput"></span>'+
-                '                </label>'+
+                '            <div style="margin:10px;">'+
+                // '                <label class="demo-label">'+
+                // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
+                // '                    <span class="demo-checkbox demo-radioInput"></span>'+
+                // '                </label>'+
                 '                <img src="/static/images/post-6.png" class="center_icon">'+
                 '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
                 '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
@@ -365,7 +366,7 @@ function weibo(data){
                 '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                 '                    </div>'+
                 '                </div>'+
-                '                <div class="event-2" style="margin: 20px 0;">'+
+                '                <div class="event-2">'+
                 '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                 '                    <div class="mainWeibo">'+
                 '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
@@ -392,7 +393,7 @@ function mainJoin(data,idx) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 10,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -486,7 +487,7 @@ function mainWeibo(_data,idx) {
         data:_data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -508,7 +509,17 @@ function mainWeibo(_data,idx) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var text,time;
+                    var text,text2,time,img,all='',name;
+                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
+                        name=row.uid;
+                    }else {
+                        name=row.name;
+                    };
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
+                        img='/static/images/unknown.png';
+                    }else {
+                        img=row.photo_url;
+                    };
                     if (row.text==''||row.text=='null'||row.text=='unknown'||!row.text){
                         text='暂无内容';
                     }else {
@@ -519,8 +530,26 @@ function mainWeibo(_data,idx) {
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
                             text=s;
+                            var rrr=row.text;
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keywords){
+                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
                         }else {
                             text=row.text;
+                            if (text.length>=160){
+                                text2=text.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                text2=text;
+                                all='none';
+                            }
                         };
                     };
                     if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
@@ -538,14 +567,19 @@ function mainWeibo(_data,idx) {
                         '   <div class="icons" style="'+sye_1+'">'+
                         '       <i class="icon icon-warning-sign weiboFlag" style="'+sye_2+'"></i>'+
                         '   </div>'+
+                        '   <img src="'+img+'" alt="" class="center_icon">'+
+                        '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
+                        '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                         '   <a class="mid" style="display: none;">'+row.mid+'</a>'+
                         '   <a class="uid" style="display: none;">'+row.uid+'</a>'+
                         '   <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
                         '   <a class="sensitive" style="display: none;">'+row.sensitive+'</a>'+
                         '   <a class="sensitiveWords" style="display: none;">'+row.sensitive_words_string+'</a>'+
-                        '   <span class="center_2" style="display:block;text-align:left;">'+text+'</span>'+
+                        '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                        '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                        '   <span class="center_2">'+text2+'</span>'+
                         '   <div class="center_3">'+
-                        '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                         '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
                         '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+

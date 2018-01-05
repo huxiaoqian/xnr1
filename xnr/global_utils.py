@@ -478,6 +478,10 @@ twitter_speech_warning_index_type = 'text'
 twitter_timing_warning_index_name_pre = 'twitter_time_warning_'
 twitter_timing_warning_index_type = 'text'
 
+#监测
+twitter_keyword_count_index_name = 'twitter_keyword_count'
+twitter_keyword_count_index_type = 'text'
+
 
 # use to save influence
 tw_bci_index_name_pre = 'tw_bci_'

@@ -47,15 +47,15 @@ body {
 #container .title .output:hover {
     background:rgba(3, 8, 16, 0.61);
 }
-#container .type .type-1{
+/*#container .type .type-1{
     display: inline-block;
     width: 90px;
     text-align: right;
-}
+}*/
 
 #container .post_center-every {
     position: relative;
-    padding: 10px 10px 10px 30px;
+    /*padding: 10px 10px 10px 30px;*/
     /*background:#06162d;*/
     margin-bottom: 5px;
     text-align: left;
@@ -78,7 +78,7 @@ body {
 }
 #container .post_center-every .center_3 span {
     display: inline-block;
-    width: 22%;
+    width: 32%;
     padding: 3px;
     color: white;
     cursor: pointer;
@@ -89,9 +89,9 @@ body {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container .post_center-every .center_3 span:nth-child(4) {
+/*#container .post_center-every .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
-}
+}*/
 /*#container .post_center-every .center_3 span:hover {*/
     /*color:#eb7350;*/
 /*}*/
