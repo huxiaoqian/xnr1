@@ -38,7 +38,8 @@ def dump_date(period, startdate, enddate):
             start_ts = end_ts - (period - 1) * DAY
     return start_ts, end_ts, period
 
-#查看监听到的一个指定群组的群消息，可指定起始、终止时间。{'msg_type':'Text'}
+#查看监听到的一个指定群组的群消息，可指定起始、终止时间。
+#{'msg_type':['Text', 'Picture', 'Recording']}
 def utils_search_by_group_puid(wxbot_id, group_puid, period, startdate='', enddate=''):
     start_ts, end_ts, period = dump_date(period, startdate, enddate)
     index_names = get_wx_groupmessage_index_list(ts2datetime(start_ts), ts2datetime(end_ts))
@@ -52,7 +53,7 @@ def utils_search_by_group_puid(wxbot_id, group_puid, period, startdate='', endda
                     "must":[
                         {"term":{"xnr_id":xnr_puid}},
                         {'term':{'group_id':group_puid}},
-                        {'term':{'msg_type':'Text'.lower()}}
+                        {"terms": {"msg_type": ['Text'.lower(), 'Picture'.lower(), 'Recording'.lower()]}},
                     ]
                 }
             }

@@ -7,7 +7,7 @@ import csv
 import heapq
 import random
 from decimal import *
-from config import abs_path,DOMAIN_DICT,DOMAIN_COUNT,LEN_DICT,TOTAL,name_list,TOPIC_DICT
+from config import DOMAIN_DICT, DOMAIN_COUNT, LEN_DICT, TOTAL, name_list, TOPIC_DICT
 from topic_input import input_data #测试输入
 
 class TopkHeap(object):
@@ -31,9 +31,8 @@ def com_p(word_list,domain_dict,domain_count,len_dict,total):
     p = 0
     test_word = set(word_list.keys())
     train_word = set(domain_dict.keys())
-    c_set = test_word & train_word  
-    p = sum([float(domain_dict[k]*word_list[k])/float(domain_count) for k in c_set])
-
+    c_set = test_word & train_word 
+    p = sum([float(domain_dict[k])*float(word_list[k])/float(domain_count) for k in c_set])
     return p
 
 def load_weibo(uid_weibo):
@@ -47,7 +46,6 @@ def load_weibo(uid_weibo):
             end_time = time.time()        
         result_data[k] = domain_p
         p_data[k] = rank_result(domain_p)
-
     return result_data,p_data
 
 def rank_dict(has_word):

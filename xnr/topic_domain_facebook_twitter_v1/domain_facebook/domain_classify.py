@@ -8,7 +8,10 @@ import csv
 import opencc
 from global_utils_do import *
 
-cc = opencc.OpenCC('t2s', opencc_path='/usr/bin/opencc')
+sys.path.append('../../cron')
+from trans.trans import trans, traditional2simplified
+
+# cc = opencc.OpenCC('t2s', opencc_path='/usr/bin/opencc')
 s = load_scws()
 
 def classify_by_category(category):#根据用户category划分
@@ -33,17 +36,33 @@ def classify_by_category(category):#根据用户category划分
 
     return label
 
-def classify_by_biostring(bio_string):#根据用户bio_string划分
+def classify_by_biostring(bio_string, flag):#根据用户bio_string划分
+    bio_list = bio_string
 
-    bio_string_s = cc.convert(bio_string.decode('utf-8'))
+    if flag == 0: #原文
+        bio_string_s = '_'.join(bio_list)
+    elif flag == 1: #繁体转简体
+        simplified_bio_list = []
+        for text in bio_list: 
+            simplified_bio_list.append(traditional2simplified(text))
+        bio_string_s = '_'.join(simplified_bio_list)
+    else: #翻译
+        try:
+            bio_string_s = '_'.join(trans(bio_list))
+        except Exception,e:
+            print e
+            bio_string_s = '_'.join(bio_list)
+
+    # bio_string_s = cc.convert(bio_string.decode('utf-8'))
     kwdlist = cut(s, bio_string_s.encode('utf-8'))
+
     lawyer_weight = sum([1 for keyword in kwdlist if keyword in lawyerw]) # 律师
     adminw_weight = sum([1 for keyword in kwdlist if keyword in adminw]) # 政府官员
     mediaw_weight = sum([1 for keyword in kwdlist if keyword in mediaw]) # 媒体人士
     businessw_weight = sum([1 for keyword in kwdlist if keyword in businessw]) # 商业人士
 
+    print lawyer_weight, adminw_weight, mediaw_weight, businessw_weight
     max_weight = 0
-        
     if max_weight < businessw_weight:
         max_weight = businessw_weight
         label = 'business'
@@ -103,12 +122,17 @@ def domain_main(user_data):#facebook用户身份分类主函数
             continue
 
         #根据bio_string划分
+        #不翻译时
         if bio_string:
-            label = classify_by_biostring(bio_string)
-
+            label = classify_by_biostring(bio_string, flag=1)   #转成简体
         if label != 'other':
             user_label[k] = label
             continue
+        else:
+            label = classify_by_biostring(bio_string, flag=3)   #翻译
+            if label != 'other':
+                user_label[k] = label
+                continue
 
         #根据发帖数量判定
         if number_of_text >= ACTIVE_COUNT:
