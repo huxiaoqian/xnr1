@@ -7,6 +7,7 @@ import time
 import hashlib
 import datetime
 import socket
+import shutil
 import threading
 import subprocess
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
@@ -289,14 +290,14 @@ class MyBot(Bot):
                 if not os.path.isdir(filepath):
                     os.mkdir(filepath)
                     remove_wx_media_old_files(WX_IMAGE_ABS_PATH, period=30)
-                msg.get_file(save_path = os.path.join(filepath, filename))
+                print msg.get_file(save_path = os.path.join(filepath, filename))
                 data['text'] = os.path.join(filepath, filename)
             elif msg_type == 'Recording':
                 filename = str(msg.id) + '.mp3'
                 filepath = os.path.join(WX_VOICE_ABS_PATH, ts2datetime(time.time()))
                 if not os.path.isdir(filepath):
                     os.mkdir(filepath)
-                remove_wx_media_old_files(WX_VOICE_ABS_PATH, period=30)
+                    remove_wx_media_old_files(WX_VOICE_ABS_PATH, period=30)
                 print msg.get_file(save_path = os.path.join(filepath, filename))
                 data['text'] = os.path.join(filepath, filename)
             #存储msg到es中
@@ -304,7 +305,7 @@ class MyBot(Bot):
                 if not es_xnr.indices.exists(index=index_name):
                     print 'get mapping'
                     print wx_group_message_mappings(index_name)
-                print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
+                es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
             #自动回复监听的群组中@自己的消息
             if msg.is_at:
                 time.sleep(random.random())
@@ -421,22 +422,14 @@ def remove_wx_media_old_files(filepath_pre, period=30):
     #遍历filepath_pre下的文件夹，如果不在最近30天内，则删除
     #1、得到合法的（在period内）文件夹名
     legal_filepath_suf_list = []
-    for i in range(1, (period + 1)):
+    for i in range(0, period):
         date_range_start_ts = time.time() - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
         legal_filepath_suf_list.append(date_range_start_datetime)
     filepath_suf_list = os.listdir(filepath_pre) #得到文件夹下的所有文件名称 
-    '''
-    ['2018-01-02', '2018-01-01', '2017-12-31', '2017-12-30', '2017-12-29', '2017-12-28', 
-    '2017-12-27', '2017-12-26', '2017-12-25', '2017-12-24', '2017-12-23', '2017-12-22', 
-    '2017-12-21', '2017-12-20', '2017-12-19', '2017-12-18', '2017-12-17', '2017-12-16', 
-    '2017-12-15', '2017-12-14', '2017-12-13', '2017-12-12', '2017-12-11', '2017-12-10', 
-    '2017-12-09', '2017-12-08', '2017-12-07', '2017-12-06', '2017-12-05', '2017-12-04']
-    '''
-    print filepath_suf_list 
     for filepath_suf in filepath_suf_list: #遍历文件夹  
         filepath = os.path.join(filepath_pre, filepath_suf)
         if os.path.isdir(filepath):
-            print filepath_suf
             if not filepath_suf in legal_filepath_suf_list:
-                os.remove(filepath)
+                shutil.rmtree(filepath)
+    print 'remove ok'
