@@ -60,7 +60,7 @@ body {
 }
 #container .post_perfect .time {
     display: inline-block;
-    margin-left: 15px;
+    margin-left:5px;
 }
 #container .post_perfect .center_2 {
     margin: 10px 0;
@@ -73,23 +73,22 @@ body {
     margin-right:20px;
 }
 
-
 #container .everySpeak .speak_center {
     position: relative;
-    /*padding: 10px;*/
+    padding-bottom: 10px;
     background:#06162d;
     margin-bottom: 10px;
 }
 #container .everySpeak .speak_center .center_icon {
-    /*position: absolute;*/
-    /*top: 10px;*/
-    /*left: 3px;*/
+    position: absolute;
+    top: 10px;
+    left: 5px;
     width: 20px;
     height: 20px;
 }
 #container .everySpeak .speak_center .center_rel {
     position: relative;
-    padding:10px 20px;
+    padding:10px 10px 10px 30px;
     /*background: rgba(16, 33, 51, 0.42);*/
 }
 #container .everySpeak .speak_center .center_1 {
@@ -98,27 +97,28 @@ body {
     display: inline-block;
 }
 #container .everySpeak .speak_center .center_3 {
-    margin: 10px 0;
+    /*margin: 10px 0;*/
     text-align:center;
     border-top: 1px solid slategrey;
     padding-top:5px;
 }
 #container .everySpeak .speak_center .center_3 span {
     display: inline-block;
-    width: 23%;
+    width: 19%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
-#container .everySpeak .speak_center .center_3 span:nth-child(2) {
+#container .everySpeak .speak_center .center_3 span:nth-child(2),
+#container .everySpeak .speak_center .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container .everySpeak .speak_center .center_3 span:nth-child(4) {
-    border-left:1px solid slategrey;
-}
+/*#container .everySpeak .speak_center .center_3 span:nth-child(4) {*/
+    /*border-left:1px solid slategrey;*/
+/*}*/
 #container .everySpeak .speak_center .center_3 span:hover {
     color:#eb7350;
 }

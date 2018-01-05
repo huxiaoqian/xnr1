@@ -27,7 +27,8 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -36,7 +37,7 @@
         background-color: #2a556f!important;
     }
     .fixed-table-container thead th .th-inner {padding: 0;}
-    .fixed-table-toolbar .search {width: 100%;}
+    .fixed-table-toolbar .search {width: 100%;margin-bottom: 0;} 
     .form-control {
         text-align: center;
         font-size: 14px;
@@ -78,7 +79,7 @@
             <b style="font-size: 20px;color: #fff;">时间预警</b>
         </div>
     </div>
-    <div class="choosetime" style="margin: 10px 0;">
+    <div class="choosetime">
         <label class="demo-label">
             <input class="demo-radio" type="radio" name="time" value='0' checked>
             <span class="demo-checkbox demo-radioInput"></span> 今天
@@ -108,7 +109,7 @@
         <span id="sure" class="sureTime">确定</span>
     </div>
     <div class="weiboContent">
-        <div id="group_emotion_loading" style="display:block;text-align:center;">正在拼命加载中...</div>
+        <div id="group_emotion_loading" style="text-align:center;">正在拼命加载中...</div>
         <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
             <table id="input-table" class="In-table" style="width:100%;">
                 <tbody class="In-table" style='width:100%!important;'>
