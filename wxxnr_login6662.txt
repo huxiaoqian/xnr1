@@ -93,3 +93,57 @@ global name 'FileNotFoundError' is not defined
 starting WXXNR0002 ...
 before login
 global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+global name 'FileNotFoundError' is not defined
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:44439...
+Connection from 127.0.0.1:44439 closed.
+Accept new connection from 127.0.0.1:44441...
+Connection from 127.0.0.1:44441 closed.
+Accept new connection from 127.0.0.1:44448...
+Accept new connection from 127.0.0.1:44449...
+Connection from 127.0.0.1:44449 closed.
+Connection from 127.0.0.1:44448 closed.
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:42197...
+Connection from 127.0.0.1:42197 closed.
+Accept new connection from 127.0.0.1:42199...
+Connection from 127.0.0.1:42199 closed.
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:49655...
+Connection from 127.0.0.1:49655 closed.
+Accept new connection from 127.0.0.1:49657...
+Connection from 127.0.0.1:49657 closed.
+get mapping
+wx_group_message_2018-01-05
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWDD8koAGn9L3Xej2029', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+get mapping
+wx_sent_group_message_2018-01-05
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWDD8k-QNJ1oPWOT3bzO', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDD8k_JGn9L3Xej202-', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDD8ort1COAk33WH1br', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
