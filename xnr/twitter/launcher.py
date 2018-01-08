@@ -20,7 +20,8 @@ class Launcher():
 		#self.firefoxProfile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so','false')
 		#self.firefoxProfile.set_preference('permissions.default.image',2)
 		#self.driver = webdriver.Firefox(firefox_profile=self.firefoxProfile)
-		self.driver = webdriver.Firefox()
+		#self.driver = webdriver.Firefox()
+		self.driver = webdriver.Chrome()
 		
 	def login(self):
 		self.driver.get('https://twitter.com/login')

@@ -64,7 +64,7 @@ def createWordTree():
                 evolution_words = evolution_words.encode('utf-8')
                 awords.append(evolution_words)
 
-                line = Converter('zh-hant').convert(word.decode('utf-8'))
+                line = Converter('zh-hant').convert(evolution_words.decode('utf-8'))
                 line = line.encode('utf-8')
                 if line != evolution_words:
                     awords.append(line)
@@ -143,12 +143,12 @@ if __name__ == '__main__':
     #text = u'王丹'
     #print 'DFA..',DFA
     #text = "RT @zhu0588: 打朋友斗父母 要想参加红卫兵造反派组织的大串联,还要经受种种的考验,过了关才有资格.比如他们会叫你打你最好的朋友俩嘴巴,或是给某个他们不喜欢的老师的脑门上写上一条标语,如果你的父母被揪出来了,他们甚至会让你押着他们到最热闹的地方游街.https://t…"
-    text = '中办发'
-    # sensitive_words_dict = searchWord(text.encode('utf-8', 'ignore'), DFA)
-    #sensitive_words_dict = searchWord(text, DFA)
-    
+    text = u'中国的乡村创新迎亲队'
 
-    #print 'sensitive_words_dict...',sensitive_words_dict
+    sensitive_words_dict = searchWord(text.encode('utf-8', 'ignore'), DFA)
+    #sensitive_words_dict = searchWord(text, DFA)
+
+    print 'sensitive_words_dict...',sensitive_words_dict
     # createWordTree();
     # beign=time()
     # list2 = searchWord(input2)
