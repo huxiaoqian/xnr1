@@ -3,7 +3,8 @@
 
 from launcher import Launcher
 from es import Es_twitter
-
+import datetime
+import time
 
 class Message():
 	def __init__(self,username, password):
@@ -18,13 +19,13 @@ class Message():
 			content = each.text
 			sender_screen_name = each.sender._json['screen_name']
 			sender_id = each.sender._json['id']
-			time = each.created_at
+			timestamp = int(time.mktime(each.created_at.timetuple()))
 
 			item = {
 				'nick_name':sender_screen_name,
 				'uid':sender_id,
 				'text':content,
-				'timestamp':time
+				'timestamp':timestamp
 			}
 			self.list.append(item)
 
@@ -37,5 +38,4 @@ class Message():
 if __name__ == '__main__':
 	message = Message('18538728360@163.com','zyxing,0513')
 	list = message.get_message()
-	print(list)
 	message.save('twitter_feedback_private_2017-11-13','text',list)

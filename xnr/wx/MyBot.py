@@ -7,15 +7,17 @@ import time
 import hashlib
 import datetime
 import socket
+import shutil
 import threading
 import subprocess
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, wx_xnr_data_path, wx_xnr_qrcode_path, wx_sent_group_message_index_name_pre
-from xnr.global_config import qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
-from xnr.parameter import LOCALHOST_IP
+from xnr.global_config import qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain, WX_IMAGE_ABS_PATH, WX_VOICE_ABS_PATH
+from xnr.parameter import LOCALHOST_IP, DAY
 from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
+from xnr.time_utils import ts2datetime, datetime2ts
 from xnr.wx_xnr_groupmessage_mappings import wx_group_message_mappings
 from sensitive_compute import sensitive_check
 
@@ -68,8 +70,12 @@ class MyBot(Bot):
         #登陆
         print 'starting %s ...' % self.wxbot_id
         print 'before login'
+        print self.cache_path
+        print self.console_qr
+        print self.qr_path
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
-        print 'after login'	#如果此条没有打印出来，多半是该账号网页版被封了……
+        print 'after login' #如果此条没有打印出来，多半是该账号网页版被封了……
+        #还可能是因为certifi==2015.04.28被替换掉了
 
         #启用puid
         if self.if_enable_puid:
@@ -98,9 +104,11 @@ class MyBot(Bot):
         self.set_default_groups()
 
     def my_qr_callback(self, **kwargs):
+        print 'trying to save qrcode picture'
         with open(self.qr_path, 'wb') as fp:
             fp.write(kwargs['qrcode'])
         #可以将二维码图片发送到邮箱之类的, 但是登陆也可能会使用缓存登陆，不一定会产生新的二维码图片
+        print 'save qrcode picture'
     
     def my_login_callback(self, **kwargs):
         d = r.get(self.wxbot_id)
@@ -227,7 +235,7 @@ class MyBot(Bot):
             msg_type = msg.type
             save_flag = 0
             data = {}
-            if msg_type in ['Text','Picture']:
+            if msg_type in ['Text','Picture', 'Recording']:
                 save_flag = 1
                 data = {
                     'xnr_id': self.self.puid, 
@@ -261,6 +269,8 @@ class MyBot(Bot):
                 except Exception,e:
                     print e
             elif msg_type == 'Picture':
+                '''
+                #保存到七牛（已弃用，2018-1-2，hanmc）
                 try:
                     #save picture
                     filename = str(msg.id) + '.png'
@@ -273,12 +283,29 @@ class MyBot(Bot):
                     os.remove(filepath)
                 except Exception,e:
                     print e
+                '''
+                #保存到本地
+                filename = str(msg.id) + '.png'
+                filepath = os.path.join(WX_IMAGE_ABS_PATH, ts2datetime(time.time()))
+                if not os.path.isdir(filepath):
+                    os.mkdir(filepath)
+                    remove_wx_media_old_files(WX_IMAGE_ABS_PATH, period=30)
+                print msg.get_file(save_path = os.path.join(filepath, filename))
+                data['text'] = os.path.join(filepath, filename)
+            elif msg_type == 'Recording':
+                filename = str(msg.id) + '.mp3'
+                filepath = os.path.join(WX_VOICE_ABS_PATH, ts2datetime(time.time()))
+                if not os.path.isdir(filepath):
+                    os.mkdir(filepath)
+                    remove_wx_media_old_files(WX_VOICE_ABS_PATH, period=30)
+                print msg.get_file(save_path = os.path.join(filepath, filename))
+                data['text'] = os.path.join(filepath, filename)
             #存储msg到es中
             if save_flag : 
                 if not es_xnr.indices.exists(index=index_name):
                     print 'get mapping'
                     print wx_group_message_mappings(index_name)
-                print es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
+                es_xnr.index(index=index_name, doc_type=wx_group_message_index_type, body=data)
             #自动回复监听的群组中@自己的消息
             if msg.is_at:
                 time.sleep(random.random())
@@ -389,4 +416,20 @@ class MyBot(Bot):
             conn, addr = server.accept()
             t = threading.Thread(target=self.tcplink, args=(conn, addr))
             t.start()
-        
+
+
+def remove_wx_media_old_files(filepath_pre, period=30):
+    #遍历filepath_pre下的文件夹，如果不在最近30天内，则删除
+    #1、得到合法的（在period内）文件夹名
+    legal_filepath_suf_list = []
+    for i in range(0, period):
+        date_range_start_ts = time.time() - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        legal_filepath_suf_list.append(date_range_start_datetime)
+    filepath_suf_list = os.listdir(filepath_pre) #得到文件夹下的所有文件名称 
+    for filepath_suf in filepath_suf_list: #遍历文件夹  
+        filepath = os.path.join(filepath_pre, filepath_suf)
+        if os.path.isdir(filepath):
+            if not filepath_suf in legal_filepath_suf_list:
+                shutil.rmtree(filepath)
+    print 'remove ok'

@@ -376,6 +376,11 @@ fb_hot_subopinion_results_index_name = 'fb_subopinion_results'
 fb_hot_subopinion_results_index_type = 'subopinion'
 
 
+# 日常兴趣
+fb_daily_interest_index_name_pre = 'fb_daily_inerest_flow_text_'
+fb_daily_interest_index_type = 'text'
+
+
 #预警
 facebook_user_warning_index_name_pre = 'facebook_user_warning_'
 facebook_user_warning_index_type = 'text'
@@ -458,6 +463,12 @@ tw_xnr_flow_text_index_type = 'text'
 
 tw_xnr_index_name='tw_xnr'
 tw_xnr_index_type='user'
+
+
+# 日常兴趣
+tw_daily_interest_index_name_pre = 'tw_daily_inerest_flow_text_'
+tw_daily_interest_index_type = 'text'
+
 
 #预警
 twitter_user_warning_index_name_pre = 'twitter_user_warning_'

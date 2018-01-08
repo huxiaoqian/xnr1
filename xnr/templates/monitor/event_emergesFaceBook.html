@@ -12,7 +12,7 @@
     .event-2 .mainWeibo .bootstrap-table .table>thead>tr>th,.event-2 .mainWeibo .bootstrap-table .table,.event-2 .mainWeibo .table>tbody>tr>td{
         border: none;
     }
-    .event-2 .mainWeibo .fixed-table-pagination .page-list {
+    .fixed-table-pagination .page-list {
         display: none!important;
     }
     .event-2 .mainWeibo .fixed-table-body {
@@ -23,7 +23,8 @@
     .event-2 .mainWeibo .table>tbody>tr>td{
         padding: 0!important;
     }
-    .event-2 .mainWeibo .fixed-table-container {top: 15px;}
+    .event-2 .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.event-2 .mainWeibo .fixed-table-container {top: 15px;}*/
     .event-2 .mainWeibo .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -38,7 +39,7 @@
         background: rgba(8,23,44,0.35);
     }
     /*.event-2 .mainWeibo .table:not(.table-condensed)>tbody>tr>td {*/
-    /*text-align: left!important;*/
+        /*text-align: left!important;*/
     /*}*/
     /**/
     .event-2 .fixed-table-container thead th .both {
@@ -88,7 +89,7 @@
             <b style="font-size: 20px;color: #fff;">事件涌现预警</b>
         </div>
     </div>
-    <div class="choosetime" style="margin: 10px 0;">
+    <div class="choosetime">
         <label class="demo-label">
             <input class="demo-radio" type="radio" name="time" value='0' checked>
             <span class="demo-checkbox demo-radioInput"></span> 今天
@@ -118,7 +119,7 @@
         <span id="sure" class="sureTime">确定</span>
     </div>
     <div class="weiboContent">
-        <div id="group_emotion_loading" style="display:block;text-align:center;">正在加载，请稍后...</div>
+        <div id="group_emotion_loading" style="text-align:center;">正在加载，请稍后...</div>
         <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
             <table id="input-table" class="In-table" style="width:100%;">
                 <tbody class="In-table" style='width:100%!important;'>
