@@ -94,6 +94,15 @@ function personEarly(personEarly_QQ) {
                     }else {
                         name=row._source.group_name;
                     };
+                    var chatContent;//摘要内容
+                    if(row._source.msg_type == 'Text'){
+                        chatContent = row._source.text;
+                    }else if(row._source.msg_type == 'Picture'){
+                        // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;height:48px;cursor:pointer;" />'
+                        // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;cursor:pointer;" />';
+                        chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
+                        // $('.btn-fanyi').hide();
+                    }
                     var str=
                         '<div class="everySpeak">'+
                         '   <div class="speak_center">'+
@@ -105,8 +114,9 @@ function personEarly(personEarly_QQ) {
                         '               <b class="speaker" style="display: inline-block;margin-left: 30px;""><i class="icon icon-bullhorn"></i>&nbsp;发言人：'+row._source.speaker_name+'</b>  '+
                         '           </a>'+
                         '           <div class="center_2" style="margin-top: 10px;">'+
-                        '                <b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+
-                        '               <button type="button" class="btn btn-default btn-xs" title="翻译" style="float: right;">语音翻译</button>'+
+                        // '                <b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+
+                        '                <b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+chatContent+
+                        '               <button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;">语音翻译</button>'+
                         '           </div>'+
                         '       </div>'+
                         '   </div>'+
@@ -118,6 +128,23 @@ function personEarly(personEarly_QQ) {
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信号码（回车搜索）');
 };
+function showThis(e){
+    var targ = e.target;
+    // console.log(targ);
+    // console.log($(targ).attr('src'));
+    // $('#mo').css('display','block');
+    $('#mo').show();
+    $('#moimg').attr('src',$(targ).attr('src'));
+    $(document).css({'overflow':'hidden','height':'100%'})
+}
+$('#close').on('click',function(){
+    $('#mo').css('display','none');
+})
+$('#mo').not("#moimg").click(function(){
+    if($("#mo").css('display')=='block'){
+        $("#mo").hide();
+    }
+});
 
 //========选择群========
 var _group_puid;
