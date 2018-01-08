@@ -272,6 +272,7 @@
                 //data:{"name":"xm"},//传参数
                 dataType:"json",
                 success:callback,
+                //cache:false,//不会从浏览器缓存中加载请求信息
                 error:function (xhr,textStatus,errorThrown) {
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown);

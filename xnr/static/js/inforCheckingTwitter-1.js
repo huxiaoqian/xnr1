@@ -190,7 +190,7 @@ function hotPost(data) {
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
+                        '           <i class="tid" style="display: none;">'+row.tid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
@@ -222,12 +222,7 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-//翻译
-function translateWord(_this) {
-    $(_this).parents('.center_rel').find('.tsWord').text(3152351);
-    $(_this).parents('.center_rel').find('._translate').show();
 
-}
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
@@ -441,10 +436,10 @@ function showInput(_this) {
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
     if (txt!=''){
-        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+        var post_url_3='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
@@ -455,18 +450,18 @@ function comMent(_this){
 function retweet(_this) {
     var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
+    var post_url_2='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+        '&text='+txt+'&tid='+tid+'&uid='+uid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
 //点赞
 function thumbs(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&r_fid='+fid+'&r_uid='+uid;
-    public_ajax.call_request('get',post_r_s_url,postYES);
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
+    var post_url_4='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+        '&tid='+tid+'&uid='+uid;
+    public_ajax.call_request('get',post_url_4,postYES);
 };
 
 //关注该用户

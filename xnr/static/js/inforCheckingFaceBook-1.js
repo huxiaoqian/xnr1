@@ -144,10 +144,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img,txt2,all='';
-                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
-                        name='未命名';
-                    }else {
+                    if (row.uname==''||row.uname=='null'||row.uname=='unknown'||!uname.name){
                         name=row.uid;
+                    }else {
+                        name=row.uname;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -327,7 +327,7 @@ function activeUser(persondata) {
                 valign: "middle",//垂直
             },
             {
-                title: "微博数",//标题
+                title: "发帖数",//标题
                 field: "total_number",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -439,7 +439,7 @@ function comMent(_this){
     var fid = $(_this).parents('.post_perfect').find('.fid').text();
     if (txt!=''){
         var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
@@ -452,7 +452,7 @@ function retweet(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var fid = $(_this).parents('.post_perfect').find('.fid').text();
     var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+        '&text='+txt+'&fid='+fid+'&uid='+uid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
 //点赞
@@ -460,8 +460,8 @@ function thumbs(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var fid = $(_this).parents('.post_perfect').find('.fid').text();
     var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&r_fid='+fid+'&r_uid='+uid;
-    public_ajax.call_request('get',post_r_s_url,postYES);
+        '&fid='+fid+'&uid='+uid;
+    public_ajax.call_request('get',post_url_4,postYES);
 };
 
 //关注该用户
