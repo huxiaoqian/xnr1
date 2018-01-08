@@ -61,7 +61,7 @@ class Friend():
 			self.es.executeES(indexName, typeName, item)
 
 if __name__ == '__main__':
-	friend = Friend('18538728360@163.com','zyxing,0513')
+	friend = Friend('8617078448226','xnr123456')
 	list = friend.get_friend()
 	friend.save('facebook_feedback_friends','text',list)
 

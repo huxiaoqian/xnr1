@@ -31,16 +31,16 @@ class Comment():
 			self.list.append({'id':id,'text':text})
 		return self.list
 
-	def do_comment(self, id):
+	def do_comment(self, id, text):
 		self.driver.find_element_by_xpath('//li[@data-item-id="%s"]/div/div[2]/div[4]/div[2]/div[1]/button/div'%id).click()
 		time.sleep(10)
 		self.driver.find_element_by_xpath('//div[@class="tweet-box rich-editor is-showPlaceholder"]').click()
-		self.driver.find_element_by_xpath('//div[@class="tweet-box rich-editor is-showPlaceholder"]').send_keys('11.22 test')
+		self.driver.find_element_by_xpath('//div[@class="tweet-box rich-editor is-showPlaceholder"]').send_keys(text)
 		time.sleep(10)
 		self.driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
 
 
 if __name__ == '__main__':
-	comment = Comment('18538728360@163.com','zyxing,0513')
-	comment.target('lvleilei1')
-	comment.do_comment('923754480524517376')
+	comment = Comment('8617078448226','xnr123456')
+	comment.target('墙裂热推')
+	comment.do_comment('921048620971053056')
