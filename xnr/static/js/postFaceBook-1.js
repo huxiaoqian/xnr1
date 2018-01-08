@@ -428,7 +428,7 @@ function obtain(t) {
 }
 $('#sure_post').on('click',function () {
     obtain('o');
-    var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
+    var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");
     var middle_timing='submit_tweet';
     //if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
     if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
@@ -470,19 +470,20 @@ public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
 $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     //var d=$('.everyday-2 .ed-2-2 .demo-radio');
     // for(var e=0;e<d.length;e++){if(d[e].checked) {d[e].checked=false;}};
+    $('#defaultWeibo p').show();
     var the=$(this).val();
     var theSort=$('.everyday-2 .ed-2-2 input:radio[name="th"]:checked').val();
     var the_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+theSort;
     public_ajax.call_request('get',the_url,defalutWords)
 });
 $('.everyday-2 .ed-2-2 .demo-radio').on('click',function () {
+    $('#defaultWeibo p').show();
     var TH=$(this).val();
     var the=$('.everyday-2 .ed-2-1 input:radio[name="theme"]:checked').val();
     var TH_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+TH;
     public_ajax.call_request('get',TH_url,defalutWords)
 });
 function defalutWords(data) {
-    $('#defaultWeibo p').show();
     $('#defaultWeibo').bootstrapTable('load', data);
     $('#defaultWeibo').bootstrapTable({
         data:data,

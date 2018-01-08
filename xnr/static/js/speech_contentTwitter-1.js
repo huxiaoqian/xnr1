@@ -146,7 +146,7 @@ function weibo(data) {
                         // '                </label>'+
                         '                <img src="'+img+'" alt="" class="center_icon">'+
                         '                <a class="center_1" href="###">'+name+'</a>'+
-                        '                <a class="fid" style="display: none;">'+item.fid+'</a>'+
+                        '                <a class="tid" style="display: none;">'+item.tid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
@@ -185,28 +185,28 @@ function weibo(data) {
 function retComLike(_this) {
     var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid=$(_this).parents('.center_rel').find('.uid').text();
-    var fid=$(_this).parents('.center_rel').find('.fid').text();
+    var tid=$(_this).parents('.center_rel').find('.tid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='retweet_operate'){
         opreat_url='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='comment_operate'){
         $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
         opreat_url='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-            '&r_fid='+fid+'&r_uid='+uid;
+            '&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var fid = $(_this).parents('.center_rel').find('.fid').text();
+    var tid = $(_this).parents('.center_rel').find('.tid').text();
     if (txt!=''){
         var post_url='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');

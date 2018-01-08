@@ -470,20 +470,20 @@ function startTable(index,key) {
 
 // 转发===评论===点赞
 function retComLike(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var txt=$(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid=$(_this).parents('.center_rel').find('.uid').text();
     var fid=$(_this).parents('.center_rel').find('.fid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='retweet_operate'){
         opreat_url='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='comment_operate'){
         $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
         opreat_url='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-            '&r_fid='+fid+'&r_uid='+uid;
+            '&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
@@ -493,7 +493,7 @@ function comMent(_this){
     var fid = $(_this).parents('.center_rel').find('.fid').text();
     if (txt!=''){
         var post_url='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
