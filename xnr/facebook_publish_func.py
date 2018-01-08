@@ -48,11 +48,13 @@ def fb_publish(account_name, password, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.publish(text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print 'fb111'
+    print operation.publish(text)
+    print 'fb222'
+    mark = True
+    # except:
+    #     mark = False
 
     message_type = 1 # 原创
 
@@ -70,19 +72,19 @@ def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.comment(_id, uid,text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print operation.comment(_id, uid,text)
+    mark = True
+    # except:
+    #     mark = False
 
     message_type = 2 # 评论
     
-    try:
-        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # try:
+    #     save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
@@ -92,19 +94,19 @@ def fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.share(_id, uid,text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print operation.share(_id, uid,text)
+    mark = True
+    # except:
+    #     mark = False
 
     message_type = 3 # 转发
     
-    try:
-        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # try:
+    #     save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
@@ -113,11 +115,13 @@ def fb_follow(account_name, password, uid, xnr_user_no, trace_type):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.follow(uid)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print '11111'
+    operation.follow(uid)
+    print '22222'
+    mark = True
+    # except:
+    #     mark = False
 
     #save_type = 'followers'
     follow_type = 'follow'
@@ -133,18 +137,18 @@ def fb_unfollow(account_name, password, uid, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.not_follow(uid)
-        mark = True
-    except:
-        mark = False
+    # try:
+    print operation.not_follow(uid)
+    mark = True
+    # except:
+    #     mark = False
 
     #save_type = 'friends'
     follow_type = 'unfollow'
     # trace_type = 'trace_follow' or 'ordinary_follow'
     trace_type = 'trace_follow'
 
-    fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type)
+    # fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type)
 
     return mark
 
@@ -153,11 +157,11 @@ def fb_like(account_name,password, _id, uid):
     # uid: 原贴用户id
     operation = Operation(account_name,password)
     
-    try:
-        operation.like(uid)
-        mark = True
-    except:
-        mark = False
+    #try:
+    operation.like(_id,uid)
+    mark = True
+    # except:
+    #     mark = False
 
    
     return mark
@@ -169,22 +173,38 @@ def fb_mention(account_name,password, user_name, text, xnr_user_no, tweet_type):
     # uid: 原贴用户id
     operation = Operation(account_name,password)
     
-    try:
-        operation.mention(user_name, text)
-        mark = True
-    except:
-        mark = False
+    #try:
+
+    print operation.mention(user_name, text)
+    mark = True
+    # except:
+    #     mark = False
     
     message_type = 4 # 提到
     
-    try:
-        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    # try:
+    #     save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    # except:
+    #     print '保存微博过程遇到错误！'
+    #     save_mark = False
 
     return mark
 
+
+# 私信
+
+# 私信
+def fb_message(account_name,password, text, uid):
+
+    operation = Operation(account_name,password)
+    
+    #try:
+    print operation.send_message(uid, text)
+    mark = True
+    # except:
+    #     mark = False
+
+    return mark
 
 
 '''

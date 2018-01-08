@@ -14,7 +14,7 @@ from utils import get_submit_tweet, fb_save_to_tweet_timing_list, get_recommend_
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate 
+				get_unfollow_operate, get_private_operate
 
 mod = Blueprint('facebook_xnr_operate', __name__, url_prefix='/facebook_xnr_operate')
 
@@ -220,5 +220,19 @@ def ajax_unfollow_operate():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
     mark = get_unfollow_operate(task_detail)
+
+    return json.dumps(mark)
+
+
+# 私信
+@mod.route('/private_operate/')
+def ajax_private_operate():
+
+    task_detail= dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['uid'] = request.args.get('uid','')
+    task_detail['text'] = request.args.get('text','')
+
+    mark = get_private_operate(task_detail)
 
     return json.dumps(mark)
