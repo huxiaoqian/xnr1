@@ -35,6 +35,6 @@ class Share():
 			self.es.executeES(indexName,typeName,item)
 
 if __name__ == '__main__':
-	share = Share('18538728360','zyxing,0513')
+	share = Share('8617078448226','xnr123456')
 	list = share.get_share()
 	share.save('facebook_feedback_retweet_2017-11-13','text',list)
