@@ -49,7 +49,7 @@ class Like():
 			self.es.executeES(indexName,typeName,item)
 
 if __name__ == '__main__':
-	like = Like('18538728360@163.com','zyxing,0513')
+	like = Like('8617078448226','xnr123456')
 	list = like.get_like()
 	like.save('facebook_feedback_like_2017-11-13','text',list)
 

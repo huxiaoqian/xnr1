@@ -17,7 +17,7 @@ class Message():
 		sx_list = []
 		for each in self.driver.find_elements_by_xpath('//ul[@aria-label="对话列表"]/li'):
 			author_name = each.find_element_by_xpath('./div/a/div[2]/div[1]/span').text
-			pic_url = each.find_element_by_xpath('./div/a/div[1]/div/div/div/img').get_attribute('src')
+			pic_url = each.find_element_by_xpath('./div/a/div[1]/div/div/div//img').get_attribute('src')
 			message_url = each.find_element_by_xpath('./div/a').get_attribute('data-href')
 			sx_list.append({'name':author_name,'pic':pic_url,'message_url':message_url})
 		return sx_list
@@ -36,11 +36,12 @@ class Message():
 			self.list.append({'nick_name':sx['name'],'text':mes})
 		return self.list
 
-	def save(self,indexName,typeName,item):
-		self.es.executeES(indexName,typeName,item)
+	def save(self,indexName,typeName,list):
+		for item in list:
+			self.es.executeES(indexName,typeName,item)
 
 if __name__ == '__main__':
-	message = Message('18538728360','zyxing,0513')
+	message = Message('8617078448226','xnr123456')
 	list = message.get_message()
 	message.save('facebook_feedback_private_2017-11-13','text',list)
 

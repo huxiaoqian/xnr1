@@ -32,7 +32,10 @@ class Retweet():
 		return self.list
 
 	def do_retweet(self, id):
-		self.api.retweet(id)
+		try:
+			self.api.retweet(id)
+		except Exception as e:
+			print(e)
 
 if __name__ == '__main__':
 	retweet = Retweet('18538728360@163.com','zyxing,0513')

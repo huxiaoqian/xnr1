@@ -11,16 +11,10 @@ class Launcher():
 	def __init__(self,username,password):
 		self.username = username
 		self.password = password
-		self.consumer_key = 'IajAzCcakYnbGOkJ90Yv2uFOh'
-		self.consumer_secret = 'VLCgFUCMsgsMEJ6zF3laSjsscbgNYWWCxaFhcGzzuol27ocDhI'
-		self.access_token = '922372762651561984-7rMZRMQZEoI4lgiZDQnQbJr0dm5msSc'
-		self.access_secret = 'pfbceEGlDGcQOhsaBGV3YSnCIsmGPwhJJrjnd0cI1DvD7'
-		#self.firefoxProfile = webdriver.FirefoxProfile()
-		#self.firefoxProfile.set_preference('permissions.default.stylesheet',2)
-		#self.firefoxProfile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so','false')
-		#self.firefoxProfile.set_preference('permissions.default.image',2)
-		#self.driver = webdriver.Firefox(firefox_profile=self.firefoxProfile)
-		#self.driver = webdriver.Firefox()
+		self.consumer_key = 'v87gW3XqF49PL13xRYGsdVTXX'
+		self.consumer_secret = 'Bzm94HKmBwkbwlCsPsAwv3wU2PYbuGPO6IfZ4TiaR4bZOBEvMR'
+		self.access_token = '943290911039029250-ZKg5KT0edFDGctuVbHvWCJWoZ9CmV5t'
+		self.access_secret = 'OEcFiPfqUihKUzW61ZR23fOkMY5BIsDRjj5urf8rmYMTt'
 		self.driver = webdriver.Chrome()
 		
 	def login(self):

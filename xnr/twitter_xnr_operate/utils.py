@@ -18,7 +18,7 @@ from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
 					tw_bci_index_name_pre, tw_bci_index_type
 
 
-from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention
+from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention, tw_message
 from xnr.utils import tw_uid2nick_name_photo
 
 def get_submit_tweet(task_detail):
@@ -469,7 +469,8 @@ def get_comment_operate(task_detail):
 	xnr_user_no = task_detail['xnr_user_no']
 	_id = task_detail['r_fid']
 	#_id = ??????
-	uid = task_detail['r_uid']
+    # uid = task_detail['r_uid']
+	nick_name = task_detail['nick_name']
 
 	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
@@ -485,7 +486,7 @@ def get_comment_operate(task_detail):
 		account_name = False
 
 	if account_name:
-		mark = tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
+		mark = tw_comment(account_name, password, _id, nick_name, text, tweet_type, xnr_user_no)
 
 	else:
 		mark = False
@@ -528,7 +529,7 @@ def get_at_operate(task_detail):
 	text = task_detail['text']
 	tweet_type = task_detail['tweet_type']
 	xnr_user_no = task_detail['xnr_user_no']
-	user_name = task_detail['nick_name']
+	# user_name = task_detail['nick_name']
 
 	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
@@ -544,7 +545,7 @@ def get_at_operate(task_detail):
 		account_name = False
 
 	if account_name:
-		mark = tw_mention(account_name,password, user_name, text, xnr_user_no, tweet_type)
+		mark = tw_mention(account_name,password, text, xnr_user_no, tweet_type)
 
 	else:
 		mark = False
@@ -631,3 +632,32 @@ def get_unfollow_operate(task_detail):
 		mark = False
 
 	return mark
+
+
+def get_private_operate(task_detail):
+
+    xnr_user_no = task_detail['xnr_user_no']
+    text = task_detail['text']
+    nick_name = task_detail['nick_name']
+
+    es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+
+    tw_mail_account = es_xnr_result['tw_mail_account']
+    tw_phone_account = es_xnr_result['tw_phone_account']
+    password = es_xnr_result['password']
+
+    if tw_phone_account:
+        account_name = tw_phone_account
+    elif tw_mail_account:
+        account_name = tw_mail_account
+    else:
+        account_name = False
+
+    if account_name:
+        mark = tw_message(account_name, password,  text, nick_name)
+
+    else:
+        mark = False
+
+    return mark
+

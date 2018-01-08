@@ -36,6 +36,6 @@ class Mention():
 			es.executeES(indexName,typeName,item)
 
 if __name__ == '__main__':
-	mention = Mention('18538728360','zyxing,0513')
+	mention = Mention('8617078448226','xnr123456')
 	list = mention.get_mention()
 	mention.save('facebook_feedback_at_2017-11-13','text',list)
