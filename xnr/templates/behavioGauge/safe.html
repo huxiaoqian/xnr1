@@ -34,7 +34,8 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -143,7 +144,9 @@
         <div class="safe">
             <div class="tab-content" id="content">
                 <div role="tabpanel" class="tab-pane active" id="active">
-                    <div id="active-1" style="width:950px;height:400px;margin: 30px auto 0;"></div>
+                    <div id="active-1" style="width:950px;height:400px;margin: 30px auto 0;">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;">正在拼命加载中...</p>
+                    </div>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="postContent">
                     <div id="postContent-1" style="text-align: center;">
@@ -527,6 +530,7 @@
 <script>
     var loadingType = 'weibo';
     weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
     judgment('5');
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",

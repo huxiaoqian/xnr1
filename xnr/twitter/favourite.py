@@ -37,5 +37,4 @@ class Favourite():
 if __name__ == '__main__':
 	favourite = Favourite('18538728360@163.com','zyxing,0513')
 	list = favourite.id('lvleilei1')
-	print(list)
 	favourite.do_favourite('92375448

@@ -10,7 +10,8 @@ class Launcher():
 	def __init__(self, username, password):
 		self.username = username
 		self.password = password
-		self.driver = webdriver.Firefox()
+		#self.driver = webdriver.Firefox()
+		self.driver = webdriver.Chrome()
 		self.req = requests.Session()
 
 	def login(self):
@@ -24,6 +25,7 @@ class Launcher():
 			self.driver.find_element_by_xpath('//a[@action="cancel"]').click()
 		except Exception as e:
 			pass
+		self.driver.find_element_by_xpath('//div[@role="navigation"]/div/div[2]/div/a').click()
 
 		# 将cookie保存在req中
 		cookies = self.driver.get_cookies()

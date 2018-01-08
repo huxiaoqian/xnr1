@@ -23,7 +23,8 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -76,6 +77,23 @@
         </div>
         <!-- <div class="output1">导出至Excel文件</div>
         <div class="output2">导出至Word文件</div> -->
+        <div class="speakType">
+            <!-- <span>内容分类：</span> -->
+            <div id="typelist">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='0' checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 全部
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='1'>
+                    <span class="demo-checkbox demo-radioInput"></span> 已关注
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="focus" value='2'>
+                    <span class="demo-checkbox demo-radioInput"></span> 未关注
+                </label>
+            </div>
+        </div>
     </div>
     <div class="choosetime" style="margin: 10px 0;">
         <label class="demo-label">
@@ -106,23 +124,7 @@
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
         <span id="sure" class="sureTime">确定</span>
     </div>
-    <div class="speakType">
-        <span>内容分类：</span>
-        <div id="typelist">
-            <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='0' checked>
-                <span class="demo-checkbox demo-radioInput"></span> 全部
-            </label>
-            <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='1'>
-                <span class="demo-checkbox demo-radioInput"></span> 已关注
-            </label>
-            <label class="demo-label">
-                <input class="demo-radio" type="radio" name="focus" value='2'>
-                <span class="demo-checkbox demo-radioInput"></span> 未关注
-            </label>
-        </div>
-    </div>
+    
     <div class="weiboContent" style="">
         <div id="weiboContent">
             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>

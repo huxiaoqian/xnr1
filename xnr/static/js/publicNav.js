@@ -23,6 +23,16 @@ function weiboORqq(type) {
         if (ID_name){
             nowUser=decodeURI(ID_name);
         }
+    }else if(type=="faceBook") {
+        ID_Num='FXNR0001';
+        REL_name='FXNR0001';
+        ID_name='FXNR0001';
+        nowUser=decodeURI('FXNR0001');
+    }else if(type=="twitter") {
+        ID_Num='TXNR0001';
+        REL_name='TXNR0001';
+        ID_name='TXNR0001';
+        nowUser=decodeURI('TXNR0001');
     }
 }
 
@@ -58,13 +68,13 @@ setTimeout(function(){
             window.open('/behavioGauge/behaviorQQ/')
         });
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
+            window.open('/reportManage/management/?flag=2');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
+            window.open('/knowledge/domainLibrary/?flag=2');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
+            window.open('/systemManage/daily?flag=2');
         });
     }else if (loadingType=='weibo'){
         InloginName('微博虚拟人');
@@ -96,13 +106,13 @@ setTimeout(function(){
             window.open('/registered/targetCustom/')
         });
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
+            window.open('/reportManage/management/?flag=3');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
+            window.open('/knowledge/domainLibrary/?flag=3');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
+            window.open('/systemManage/daily/?flag=3');
         });
     }else if (loadingType=='WX'){
         InloginName('微信虚拟人');
@@ -139,13 +149,13 @@ setTimeout(function(){
         });
 
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
+            window.open('/reportManage/management/?flag=3');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
+            window.open('/knowledge/domainLibrary/?flag=3');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
+            window.open('/systemManage/daily/?flag=3');
         });
     }else if(loadingType=='twitter'){
         InloginName('Twitter虚拟人');
@@ -187,13 +197,13 @@ setTimeout(function(){
             window.open('/registered/targetCustom/')
         });
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
+            window.open('/reportManage/management/?flag=5');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
+            window.open('/knowledge/domainLibrary/?flag=5');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
+            window.open('/systemManage/daily/?flag=5');
         });
     }else if(loadingType=='faceBook') {
         InloginName('FaceBook虚拟人');
@@ -220,28 +230,28 @@ setTimeout(function(){
             window.open('/personalCenter/individualFaceBook/');
         });
         $('#control').on('click',function () {
-            window.open('/control/operationTwitter/');
+            window.open('/control/operationFaceBook/');
         });
         $('#info').on('click',function () {
-            window.open('/inforDetection/inforCheckingTwitter/');
+            window.open('/inforDetection/inforCheckingFaceBook/');
         });
         $('#monitor').on('click',function () {
-            window.open('/monitor/characterBehaviorTwitter/');
+            window.open('/monitor/characterBehaviorFaceBook/');
         });
         $('#reported').on('click',function () {
-            window.open('/behavioGauge/influeAssessTwitter/');
+            window.open('/behavioGauge/influeAssessFaceBook/');
         });
         $('#knowledge').on('click',function () {
             window.open('/registered/targetCustom/')
         });
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/');
+            window.open('/reportManage/management/?flag=4');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/');
+            window.open('/knowledge/domainLibrary/?flag=4');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/');
+            window.open('/systemManage/daily/?flag=4');
         });
     }
 },500);
@@ -315,6 +325,7 @@ function addXnr(data) {
     $('#choosePerson .identity').html(str);
 }
 $('#choosePerson .sure_in').on('click',function () {
+    console.log(loadingType)
     if (loadingType=='QQ'){
         var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
@@ -323,6 +334,7 @@ $('#choosePerson .sure_in').on('click',function () {
         if (!userQQID||!userQQName||!userType){
             $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
@@ -339,9 +351,13 @@ $('#choosePerson .sure_in').on('click',function () {
         var userID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userName=$('input:radio[name="ID"]:checked').attr('valueName');
         var userType=$('input:radio[name="choose"]:checked').val();
+        console.log(userID)
+        console.log(userName)
+        console.log(userType)
         if (!userID||!userName||!userType){
             $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
@@ -360,6 +376,7 @@ $('#choosePerson .sure_in').on('click',function () {
         if (!userWXID||!userWXName||!userType){
             $('#pormpt p').text('请检查选择登陆的微信显示模式。');
             $('#pormpt').modal('show');
+            return false;
         }else {
             var id_or_name='';
             if (userType=='隐身'){
