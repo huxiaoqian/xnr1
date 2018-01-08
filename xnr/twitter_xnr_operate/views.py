@@ -33,7 +33,7 @@ def ajax_submit_daily_tweet():
     #u'跟随转发':'trace_post',u'智能发帖':'intel_post'
 	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
 	task_detail['text'] = request.args.get('text','').encode('utf-8')
-
+    print 'task_detail...',task_detail
 	mark = get_submit_tweet(task_detail)
 
 	return json.dumps(mark)

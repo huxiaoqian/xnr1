@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import sys
 import json
+sys.path.append('../../')
 from global_utils import es_xnr as es, tw_xnr_flow_text_index_name_pre, \
                 tw_xnr_flow_text_index_type
 
@@ -136,6 +137,32 @@ def tw_xnr_flow_text_mappings(index_name):
     if not exist_indice:
         es.indices.create(index=index_name, body=index_info, ignore=400)
 
+def tw_daily_inerests_flow_text_mappings(index_name):
+
+    index_info = {
+        'settings':{
+            'number_of_replicas':0,
+            'bumber_of_shards':5
+        },
+        'mappings':{
+            'text':{
+                'properties':{
+                    'timestamp':{
+                        'type':'long'
+                    },
+                    'content':{
+                        'type':'string',
+                        'index':'no'
+                    }
+                }
+            }
+        }
+    }
+
+    exist_indice = es.indices.exists(index=index_name)
+
+    if not exist_indice:
+        es.indices.create(index=index_name, body=index_info, ignore=400)
 
 if __name__ == '__main__':
 
