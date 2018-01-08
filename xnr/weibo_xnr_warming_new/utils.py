@@ -311,9 +311,11 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
     }
 
     speech_warming_list=get_xnr_warming_index_listname(weibo_speech_warning_index_name_pre,start_time,end_time)
-    
+    # print 'speech_warming_list:',speech_warming_list
+    # print show_condition_list[0]
     try:
         temp_results=es_xnr.search(index=speech_warming_list,doc_type=weibo_speech_warning_index_type,body=query_body)['hits']['hits']
+        # print 'temp_results',temp_results
         results=[]
         for item in temp_results:
             results.append(item['_source'])
@@ -377,7 +379,7 @@ def show_speech_warming(xnr_user_no,show_type,start_time,end_time):
         start_datetime = datetime2ts(ts2datetime(start_time))
 
     speech_warming=[]
-    #print 'start_time:',start_time,'end_time:',end_time
+    print 'start_time:',start_time,'end_time:',end_time
     if today_datetime > end_datetime :
         speech_warming = lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time)
     else:
