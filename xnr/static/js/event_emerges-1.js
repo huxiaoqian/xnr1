@@ -510,10 +510,10 @@ function mainWeibo(_data,idx) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var text,text2,time,img,all='',name;
-                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
-                        name=row.uid;
+                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
+                        name=item.uid;
                     }else {
-                        name=row.name;
+                        name=item.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
