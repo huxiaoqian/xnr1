@@ -154,7 +154,7 @@ def ajax_comment_operate():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     # task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
     task_detail['nick_name'] = request.args.get('nick_name','') # 被转发帖子的用户
 
@@ -169,7 +169,7 @@ def ajax_retweet_operate():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
     mark = get_retweet_operate(task_detail)
@@ -195,7 +195,7 @@ def ajax_at_operate():
 def ajax_like_operate():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
     
     mark = get_like_operate(task_detail)
