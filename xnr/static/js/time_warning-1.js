@@ -566,10 +566,10 @@ function weibo(idx,data,words) {
                     var item=row;
                     var str_new='';
                     var txt,txt2,all='',img,time,name='';
-                    if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                         name=item.uid;
                     }else {
-                        name=item.name;
+                        name=item.nick_name;
                     };
                     if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
