@@ -746,20 +746,23 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                     main_user_info=[]
                     user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
                     for item in user_es_result:
-     
+                        # print 'item:',item
                         user_dict=dict()
-                        if item['found']:
-                            user_dict['photo_url']=item['_source']['photo_url']
-                            user_dict['uid']=item['_id']
-                            user_dict['nick_name']=item['_source']['nick_name']
-                            user_dict['favoritesnum']=item['_source']['favoritesnum']
-                            user_dict['fansnum']=item['_source']['fansnum']
+                        if item.has_key('found'):
+                            if item['found']:
+                                user_dict['photo_url']=item['_source']['photo_url']
+                                user_dict['uid']=item['_id']
+                                user_dict['nick_name']=item['_source']['nick_name']
+                                user_dict['favoritesnum']=item['_source']['favoritesnum']
+                                user_dict['fansnum']=item['_source']['fansnum']
+                            else:
+                                user_dict['photo_url']=''
+                                user_dict['uid']=item['_id']
+                                user_dict['nick_name']=''
+                                user_dict['favoritesnum']=0
+                                user_dict['fansnum']=0
                         else:
-                            user_dict['photo_url']=''
-                            user_dict['uid']=item['_id']
-                            user_dict['nick_name']=''
-                            user_dict['favoritesnum']=0
-                            user_dict['fansnum']=0
+                            pass
                         main_user_info.append(user_dict)
                     event_warming_content['main_user_info']=json.dumps(main_user_info)
 

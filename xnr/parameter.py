@@ -24,6 +24,8 @@ WARMING_DAY=15 #时间预警，预警天数
 MAX_WARMING_SIZE=100 #最大预警数目
 EVENT_COUNT=20 #实时计算事件频率阈值
 EVENT_OFFLINE_COUNT=80 #离线计算事件预警数量
+FOLLOWER_INFLUENCE_MAX_JUDGE=1.5 #预警中关注者、粉丝权重增加影响力倍数
+NOFOLLOWER_INFLUENCE_MIN_JUDGE=1 #预警中非关注者影响力值降低倍数
 #xnr
 USER_XNR_NUM=50 #用户管理虚拟人数量
 # weibo
