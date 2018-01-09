@@ -71,10 +71,10 @@ function weibo(data) {
                             }else {
                                 img=item.photo_url;
                             };
-                            if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
-                                name='未命名';
-                            }else {
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                                 name=item.uid;
+                            }else {
+                                name=item.nick_name;
                             };
                             if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                                 txt='暂无内容';
@@ -139,12 +139,16 @@ function weibo(data) {
                                 '       <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
-                                '       <span class="cen3-4" onclick="retComLike(this)" type=""><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
+                                '       <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                                 '       <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                                 '    </div>'+
                                 '    <div class="commentDown" style="width: 100%;display: none;">'+
                                 '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
                                 '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                                '    </div>'+
+                                '    <div class="emailDown" style="width: 100%;display: none;">'+
+                                '        <input type="text" class="infor" placeholder="私信内容"/>'+
+                                '        <span class="sureEmail" onclick="letter(this)">发送</span>'+
                                 '    </div>'+
                                 '</div>'
                         });

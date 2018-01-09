@@ -211,7 +211,37 @@ a,a:link,a:hover,a:visited,a:active {
 #nav .username .sign_out:hover {
     background-color: #176de2;
 }
-
+/**/
+#container .commentDown,#container .emailDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .commentDown input,
+#container .emailDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .commentDown span,
+#container .emailDown span{
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .commentDown span:hover,
+#container .emailDown span:hover{
+    background: rgba(28, 28, 28, 0.96);
+}
 /*模态框*/
 .modal-open .modal {
     overflow-x: hidden;

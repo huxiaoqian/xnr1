@@ -83,10 +83,10 @@ function weibo(data) {
                 formatter: function (value, row, index) {
                     var item=row;
                     var name,text,text2,time,all='',img;
-                    if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                         name=item.uid;
                     }else {
-                        name=item.name;
+                        name=item.nick_name;
                     };
                     if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
@@ -162,9 +162,10 @@ function weibo(data) {
                         '                    <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
+                        '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
+                        '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
-                        '                    <span class="cen3-7" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="回复内容"/>'+
