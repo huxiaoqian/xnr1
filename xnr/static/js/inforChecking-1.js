@@ -153,10 +153,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,txt2,img;
-                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
-                        name='未命名';
-                    }else {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
                         name=row.uid;
+                    }else {
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';

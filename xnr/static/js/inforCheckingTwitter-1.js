@@ -144,10 +144,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img,txt2,all='';
-                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
                         name=row.uid;
                     }else {
-                        name=row.name;
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -467,17 +467,6 @@ function thumbs(_this) {
     public_ajax.call_request('get',post_url_4,postYES);
 };
 
-//私信该用户
-function emailThis(_this) {
-    $(_this).parents('.post_perfect').find('.emailDown').show();
-}
-function letter(_this) {
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var post_url_6='/twitter_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
-        '&text='+txt;
-    public_ajax.call_request('get',post_url_6,postYES)
-}
 
 //加入语料库
 var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
