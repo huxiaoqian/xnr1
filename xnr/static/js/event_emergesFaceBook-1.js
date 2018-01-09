@@ -510,10 +510,10 @@ function mainWeibo(_data,idx) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var text,text2,time,img,all='',name;
-                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
-                        name=row.uid;
+                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
+                        name=item.uid;
                     }else {
-                        name=row.name;
+                        name=item.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -584,8 +584,8 @@ function mainWeibo(_data,idx) {
                         '       <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '       <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+row.comment+'</b>）</span>'+
                         '       <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+row.favorite+'</b>)</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type=""><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
-                        '       <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+        
+                        '               <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
+                        '               <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+
                         '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -600,20 +600,20 @@ function mainWeibo(_data,idx) {
 };
 // 转发===评论===点赞
 function retComLike(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var txt=$(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid=$(_this).parents('.center_rel').find('.uid').text();
     var fid=$(_this).parents('.center_rel').find('.fid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='retweet_operate'){
         opreat_url='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='comment_operate'){
         $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
         opreat_url='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-            '&r_fid='+fid+'&r_uid='+uid;
+            '&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
@@ -623,7 +623,7 @@ function comMent(_this){
     var fid = $(_this).parents('.center_rel').find('.fid').text();
     if (txt!=''){
         var post_url='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&fid='+fid+'&uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');

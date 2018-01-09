@@ -261,6 +261,17 @@
         $(_this).parents('.center_rel').find('.tsWord').text('==============测试翻译============');
         $(_this).parent().prev('._translate').show();
     }
+    //私信该用户
+    function emailThis(_this) {
+        $(_this).parents('.center_rel').find('.emailDown').show();
+    }
+    function letter(_this) {
+        var uid = $(_this).parents('.center_rel').find('.uid').text();
+        var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
+        var post_url_6='/twitter_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
+            '&text='+txt;
+        public_ajax.call_request('get',post_url_6,postYES)
+    }
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {
@@ -272,6 +283,7 @@
                 //data:{"name":"xm"},//传参数
                 dataType:"json",
                 success:callback,
+                //cache:false,//不会从浏览器缓存中加载请求信息
                 error:function (xhr,textStatus,errorThrown) {
                     //请求失败执行的函数
                     console.log("请求失败",textStatus,errorThrown);

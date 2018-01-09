@@ -71,10 +71,10 @@ function weibo(data) {
                             }else {
                                 img=item.photo_url;
                             };
-                            if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
-                                name='未命名';
-                            }else {
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                                 name=item.uid;
+                            }else {
+                                name=item.nick_name;
                             };
                             if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
                                 txt='暂无内容';
@@ -124,7 +124,7 @@ function weibo(data) {
                                 '   </div>'+
                                 '   <img src="'+img+'" alt="" class="center_icon">'+
                                 '   <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                                '   <a class="fid" style="display: none;">'+item.fid+'</a>'+
+                                '   <a class="tid" style="display: none;">'+item.tid+'</a>'+
                                 '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                                 '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
@@ -139,12 +139,16 @@ function weibo(data) {
                                 '       <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
-                                '       <span class="cen3-4" onclick="retComLike(this)" type=""><i class="icon icon-envelope-alt"></i>&nbsp;&nbsp;私信</span>'+
+                                '       <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                                 '       <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                                 '    </div>'+
                                 '    <div class="commentDown" style="width: 100%;display: none;">'+
                                 '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
                                 '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                                '    </div>'+
+                                '    <div class="emailDown" style="width: 100%;display: none;">'+
+                                '        <input type="text" class="infor" placeholder="私信内容"/>'+
+                                '        <span class="sureEmail" onclick="letter(this)">发送</span>'+
                                 '    </div>'+
                                 '</div>'
                         });
@@ -182,30 +186,30 @@ function weibo(data) {
 
 // 转发===评论===点赞
 function retComLike(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var txt = $(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid=$(_this).parents('.center_rel').find('.uid').text();
-    var fid=$(_this).parents('.center_rel').find('.fid').text();
+    var tid=$(_this).parents('.center_rel').find('.tid').text();
     var middle=$(_this).attr('type');
     var opreat_url;
     if (middle=='retweet_operate'){
         opreat_url='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }else if (middle=='comment_operate'){
         $(_this).parents('.center_rel').find('.commentDown').show();
     }else {
         opreat_url='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-            '&r_fid='+fid+'&r_uid='+uid;
+            '&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',opreat_url,postYES);
     }
 }
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var fid = $(_this).parents('.center_rel').find('.fid').text();
+    var tid = $(_this).parents('.center_rel').find('.tid').text();
     if (txt!=''){
         var post_url='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
