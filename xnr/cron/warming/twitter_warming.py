@@ -9,7 +9,8 @@ import sys
 reload(sys)
 sys.path.append('../../')
 from timed_python_files.system_log_create import get_user_account_list
-from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE,EVENT_OFFLINE_COUNT
+from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE,EVENT_OFFLINE_COUNT,\
+                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from global_config import S_TYPE,TWITTER_FLOW_START_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime,get_timets_set_indexset_list
 from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
@@ -24,6 +25,14 @@ from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_r
                          twitter_user_index_name,twitter_user_index_type,\
                          twitter_event_warning_index_name_pre,twitter_event_warning_index_type
 
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
  
 #虚拟人列表
 def get_user_xnr_list(user_account):
@@ -88,7 +97,7 @@ def lookup_tid_attend_index(tid,today_datetime):
     }
     try:
         result=es_xnr.search(index=twitter_count_index_name,doc_type=twitter_count_index_type,body=query_body)['hits']['hits']
-        print result
+        # print result
         tid_result=[]
         for item in result:
             tid_result.append(item['_source'])
@@ -137,7 +146,10 @@ def create_speech_warning(xnr_user_no,today_datetime):
         else:
             item['_source']['comment']=0
             item['_source']['share']=0
-            item['_source']['favorite']=0        	
+            item['_source']['favorite']=0 
+
+        #查询用户昵称
+        item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
 
         task_id=xnr_user_no+'_'+item['_source']['tid']
 
@@ -200,12 +212,13 @@ def create_personal_warning(xnr_user_no,today_datetime):
         if user_sensitive > 0:
             user_dict=dict()
             user_dict['uid']=first_sum_result[i]['key']
-            user_dict['sensitive']=user_sensitive
+            followers_mark=judge_user_type(user_dict['uid'],followers_list)
+            user_dict['sensitive']=user_sensitive*followers_mark
             top_userlist.append(user_dict)
         else:
             pass
     #####################
-    #如果是关注者，则用户敏感度计算值增加1.2倍
+    #如果是关注者，则用户敏感度计算值增加1.5倍
     #####################
     #查询敏感用户的敏感内容
     results=[]
@@ -216,12 +229,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_detail['user_sensitive']=user['sensitive']
         user_lookup_id=user['uid']
         print user_lookup_id
-        try:
-            #user_result=es_xnr.get(index=twitter_feedback_friends_index_name,doc_type=twitter_feedback_friends_index_type,id=user_lookup_id)['_source']
-            user_result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=user['uid'])['_source']
-            user_detail['user_name']=user_result['nick_name']
-        except:
-            user_detail['user_name']=''
+        #查询用户昵称
+        user_detail['user_name']=get_user_nickname(user['uid'])
 
         query_body={
             'query':{
@@ -257,7 +266,10 @@ def create_personal_warning(xnr_user_no,today_datetime):
                 item['_source']['comment']=0
                 item['_source']['share']=0
                 item['_source']['favorite']=0   
-
+            
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+            
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
@@ -377,6 +389,10 @@ def lookup_twitter_date_warming(keywords,today_datetime):
                 item['_source']['comment']=0
                 item['_source']['share']=0
                 item['_source']['favorite']=0 
+
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -418,6 +434,7 @@ def get_hashtag(today_datetime):
     for item in twitter_text_exist:
         event_dict=dict()
         if item['key']:
+            # print item['key']
             event_dict['event_name'] = item['key']
             event_dict['event_count'] = item['doc_count']
             event_dict['event_sensitive'] = item['sum_sensitive']['value']
@@ -497,6 +514,10 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
                 followers_value=judge_user_type(item['_source']['uid'],followers_list)
                 item['_source']['twitter_influence_value']=origin_influence_value*followers_value
+                
+                #查询用户昵称
+                item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+                
                 twitter_result.append(item['_source'])
 
                 #统计影响力、时间
@@ -594,9 +615,9 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 def judge_user_type(uid,user_list):
     number=set_intersection(uid,user_list)
     if number > 0:
-        mark=1.2
+        mark=FOLLOWER_INFLUENCE_MAX_JUDGE
     else:
-        mark=0.8
+        mark=NOFOLLOWER_INFLUENCE_MIN_JUDGE
     return mark
 
 def union_dict(*objs):
@@ -630,7 +651,7 @@ def create_twitter_warning():
     #时间设置
     if S_TYPE == 'test':
         test_day_date=TWITTER_FLOW_START_DATE
-        today_datetime=datetime2ts(test_day_date) - DAY
+        today_datetime=datetime2ts(test_day_date)
         start_time=today_datetime
         end_time=today_datetime
         operate_date=ts2datetime(start_time) 
@@ -641,7 +662,8 @@ def create_twitter_warning():
         end_time=today_datetime          #定时文件启动的0点
         operate_date=ts2datetime(start_time)
 
-    account_list=get_user_account_list()
+    #account_list=get_user_account_list()
+    account_list=['admin@qq.com']
     for account in account_list:
         #xnr_list=get_user_xnr_list(account)
         #print xnr_list

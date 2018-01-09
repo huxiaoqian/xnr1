@@ -20,6 +20,14 @@ from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_
                           MAX_HOT_POST_SIZE
 from xnr.global_config import S_TYPE,S_DATE_FB
 
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
 
 #查询好友列表
 def lookup_xnr_friends(xnr_user_no):
@@ -212,6 +220,8 @@ def lookup_hot_posts(from_ts,to_ts,xnr_id,classify_id,order_id):
             item['_source']['comment']=0
             item['_source']['share']=0
             item['_source']['favorite']=0 
+            #查询用户昵称
+        item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
         hot_result.append(item['_source'])
     # except:
         # hot_result=[]
