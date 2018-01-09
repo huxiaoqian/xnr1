@@ -190,6 +190,11 @@ weibo_xnr_count_info_index_type='text'
 weibo_keyword_count_index_name='weibo_keyword_count'
 weibo_keyword_count_index_type='text'
 
+#community discovery
+#use to save weibo community target user info
+weibo_community_target_user_index_name_pre = 'weibo_community_target_user_'
+weibo_community_target_user_index_type = 'user'
+
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
