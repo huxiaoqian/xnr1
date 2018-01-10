@@ -18,8 +18,18 @@ from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              facebook_event_warning_index_name_pre,facebook_event_warning_index_type
 
 
-from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE
+from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE,\
+                          FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from xnr.global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
+
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
 
 
 ##获取索引
@@ -177,7 +187,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         if user_sensitive > 0:
             user_dict=dict()
             user_dict['uid']=first_sum_result[i]['key']
-            user_dict['sensitive']=user_sensitive
+            friends_mark=judge_user_type(user_dict['uid'],friends_list)
+            user_dict['sensitive']=user_sensitive*friends_mark
             top_userlist.append(user_dict)
         else:
             pass
@@ -231,7 +242,9 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0 
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])   
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
@@ -285,6 +298,7 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
 
     warming_list=[]
     user_uid_list=[]
+   
     for item in user_warming:
         user_uid=item['uid']
         item['content']=json.loads(item['content'])
@@ -382,7 +396,9 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0
+             #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])    
             result.append(item['_source'])
     except:
         result=[]
@@ -483,6 +499,7 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
         iter_year = end_year_int
         while iter_year >= start_year_int:
             index_name = facebook_timing_warning_index_name_pre + str(start_year_int) + '-' + date_time
+            # print 'index_name:',index_name
             if es_xnr.indices.exists(index=index_name):
                 facebook_timing_warning_index_name_list.append(index_name)
             else:
@@ -510,10 +527,15 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
         'sort':{'timestamp':{'order':'asc'}} ,
         'size':MAX_WARMING_SIZE
     }
-    result=es_xnr.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
-    warming_content=[]
-    for item in result:
-        warming_content.extend(json.loads(item['_source']['facebook_date_warming_content']))
+    if facebook_timing_warning_index_name_list:
+        result=es_xnr.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
+        print 'facebook_timing_warning_index_name_list:',facebook_timing_warning_index_name_list
+        warming_content=[]
+        for item in result:
+            print 'item:',item['_source']['date_name'],item['_source']['date_time']
+            warming_content.extend(json.loads(item['_source']['facebook_date_warming_content']))
+    else:
+        warming_content=[]
 
     #当前时间范围内的预警信息
     now_time = int(time.time())
@@ -554,7 +576,9 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0 
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])   
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -738,6 +762,9 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark=False):
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
                 friends_value=judge_user_type(item['_source']['uid'],friends_list)
                 item['_source']['facebook_influence_value']=origin_influence_value*friends_value
+                
+                #查询用户昵称
+                item['_source']['nick_name']=get_user_nickname(item['_source']['uid']) 
                 facebook_result.append(item['_source'])
 
                 #统计影响力、时间
@@ -830,9 +857,9 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 def judge_user_type(uid,user_list):
     number=set_intersection(uid,user_list)
     if number > 0:
-        mark=1.2
+        mark=FOLLOWER_INFLUENCE_MAX_JUDGE
     else:
-        mark=0.8
+        mark=NOFOLLOWER_INFLUENCE_MIN_JUDGE
     return mark
 
 def union_dict(*objs):
@@ -893,22 +920,67 @@ def show_event_warming(xnr_user_no,start_time,end_time):
 
     warming_list=[]
     event_name_list=[]
-    #new_waining_list=[]
+
+
     for item in event_warming:
         event_name=item['event_name']
         item['main_user_info']=json.loads(item['main_user_info'])
         item['main_facebook_info']=json.loads(item['main_facebook_info']) 
-        if event_name in event_name_list:
+
+        if event_name not in event_name_list:
+            print 'event_name !!!!', event_name
+
+            event_name_list.append(event_name)
+            warming_list.append(item)
+        else:
             old_event=[event for event in warming_list if event['event_name'] == event_name][0]
             new_warming_list = [event for event in warming_list if event['event_name'] != event_name]
-            old_event['main_user_info'].extend(item['main_user_info'])
-            old_event['main_facebook_info'].extend(item['main_facebook_info'])
+            
+            old_main_user_info = [event['main_user_info'] for event in warming_list if event['event_name'] == event_name][0]
+            old_main_user_uids = [user['uid'] for user in old_main_user_info]
+            now_uids = [u['uid'] for u in item['main_user_info']]
+            new_uids = list(set(old_main_user_uids) - (set(old_main_user_uids) & set(now_uids)))
+            print 'new_uid:',new_uids
+            
+            new_main_user_info = []
+            for uid in new_uids:
+                uid_info = [u for u in item['main_user_info'] if u['uid'] == uid]
+                new_main_user_info.append(uid_info[0])
+            old_event['main_user_info'].extend(new_main_user_info)
+
+            old_main_facebook_info = [event['main_facebook_info'] for event in warming_list if event['event_name'] == event_name][0]
+            old_main_fids = [content['fid'] for content in old_main_facebook_info]
+            now_fids = [c['fid'] for c in item['main_facebook_info']]
+            new_fids = list(set(old_main_fids) - (set(old_main_fids) & set(now_fids)))
+            print 'new_fids',new_fids
+
+            new_main_facebook_info = []
+            for fid in new_fids:
+                fid_info = [f for f in item['main_facebook_info'] if f['fid'] == fid]
+                new_main_twitter_info.append(fid_info[0])
+            old_event['main_facebook_info'].extend(new_main_facebook_info)
+
             old_event['event_influence']=old_event['event_influence']+item['event_influence']
             new_warming_list.append(old_event)
-            warming_list = new_warming_list
-        else:          
-            warming_list.append(item)
-            event_name_list.append(event_name)
+            warming_list = new_warming_list 
+
+
+    #new_waining_list=[]
+    # for item in event_warming:
+    #     event_name=item['event_name']
+    #     item['main_user_info']=json.loads(item['main_user_info'])
+    #     item['main_facebook_info']=json.loads(item['main_facebook_info']) 
+    #     if event_name in event_name_list:
+    #         old_event=[event for event in warming_list if event['event_name'] == event_name][0]
+    #         new_warming_list = [event for event in warming_list if event['event_name'] != event_name]
+    #         old_event['main_user_info'].extend(item['main_user_info'])
+    #         old_event['main_facebook_info'].extend(item['main_facebook_info'])
+    #         old_event['event_influence']=old_event['event_influence']+item['event_influence']
+    #         new_warming_list.append(old_event)
+    #         warming_list = new_warming_list
+    #     else:          
+    #         warming_list.append(item)
+    #         event_name_list.append(event_name)
 
     if warming_list:
         warming_list.sort(key=lambda k:(k.get('event_influence',0)),reverse=True)
