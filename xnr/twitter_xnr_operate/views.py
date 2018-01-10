@@ -14,7 +14,7 @@ from utils import get_submit_tweet, tw_save_to_tweet_timing_list, get_recommend_
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate 
+				get_unfollow_operate
 
 mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
@@ -33,7 +33,7 @@ def ajax_submit_daily_tweet():
     #u'跟随转发':'trace_post',u'智能发帖':'intel_post'
 	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
 	task_detail['text'] = request.args.get('text','').encode('utf-8')
-    print 'task_detail...',task_detail
+    # print 'task_detail...',task_detail
 	mark = get_submit_tweet(task_detail)
 
 	return json.dumps(mark)
@@ -100,7 +100,7 @@ def ajax_hot_sensitive_recommend_at_user():
 @mod.route('/hot_recommend_tweets/')
 def ajax_hot_recommend_tweets():
 
-    xnr_user_no = request.args.get('xnr_user_no','') # 当前虚拟人 
+    xnr_user_no = request.args.get('xnr_user_no','') # 当前虚拟人
     topic_field = request.args.get('topic_field','') # 默认...
     sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, compute_status-按事件完成度
     tweets = get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item)
@@ -112,12 +112,12 @@ def ajax_submit_hot_keyword_task():
     #mark = True
     task_detail = dict()
 
-    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人 
-    task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid 
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','') # 当前虚拟人
+    task_detail['task_id'] = request.args.get('task_id','') # 当前代表微博的mid
     task_detail['keywords_string'] = request.args.get('keywords_string','') # 提交的关键词，以中文逗号分隔“，”
     task_detail['compute_status'] = 0 # 尚未计算
     task_detail['submit_time'] = int(time.time()) # 当前时间
-    task_detail['submit_user'] = request.args.get('submit_user','admin@qq.com') 
+    task_detail['submit_user'] = request.args.get('submit_user','admin@qq.com')
 
     mark = push_keywords_task(task_detail)
 
@@ -141,7 +141,7 @@ def ajax_hot_hot_subopinion():
 @mod.route('/bussiness_recomment_tweets/')
 def ajax_bussiness_recomment_tweets():
     xnr_user_no = request.args.get('xnr_user_no','')
-    sort_item = request.args.get('sort_item','timestamp') 
+    sort_item = request.args.get('sort_item','timestamp')
     tweets = get_bussiness_recomment_tweets(xnr_user_no,sort_item)
     return json.dumps(tweets)
 
@@ -197,7 +197,7 @@ def ajax_like_operate():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
-    
+
     mark = get_like_operate(task_detail)
 
     return json.dumps(mark)
