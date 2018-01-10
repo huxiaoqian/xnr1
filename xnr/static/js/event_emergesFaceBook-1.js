@@ -1,6 +1,6 @@
 var operateType='info_warning';
 var time2=Date.parse(new Date())/1000;
-var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
+var weiboUrl='/facebook_xnr_warning/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 
 //时间选择
