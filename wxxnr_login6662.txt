@@ -525,4 +525,210 @@ Connection from 127.0.0.1:57966 closed.
 {u'_type': u'record', u'_id': u'AWDFMUa-Gn9L3Xej204I', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
 {u'_type': u'record', u'_id': u'AWDFMgLZNJ1oPWOT3b0a', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
 {u'_type': u'record', u'_id': u'AWDFMjdf1COAk33WH1cw', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
-{u'_type': u'record', u'_id': u'AWDFMkdCGn9L3Xej204K', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01
+{u'_type': u'record', u'_id': u'AWDFMkdCGn9L3Xej204K', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMpAMNJ1oPWOT3b0c', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMseU1COAk33WH1cy', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMvUjGn9L3Xej204M', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMxH5NJ1oPWOT3b0e', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMx251COAk33WH1c0', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFMz-0Gn9L3Xej204O', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFM19ONJ1oPWOT3b0g', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNCCE1COAk33WH1c2', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNHJnGn9L3Xej204Q', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNNNGNJ1oPWOT3b0i', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNOA11COAk33WH1c4', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNQ8lGn9L3Xej204S', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNTM2NJ1oPWOT3b0k', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNUAu1COAk33WH1c6', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNUkzGn9L3Xej204U', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFNYV6NJ1oPWOT3b0m', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFOi2B1COAk33WH1c8', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFOmOXGn9L3Xej204V', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+{u'_type': u'record', u'_id': u'AWDFPr24NJ1oPWOT3b0n', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-05'}
+Accept new connection from 127.0.0.1:57844...
+Connection from 127.0.0.1:57844 closed.
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_4a2fcb173a37f6bdf40e2c4e0b182a17_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:58485...
+Connection from 127.0.0.1:58485 closed.
+Accept new connection from 127.0.0.1:58486...
+Connection from 127.0.0.1:58486 closed.
+get mapping
+wx_group_message_2018-01-08
+{u'acknowledged': True}
+None
+get mapping
+wx_sent_group_message_2018-01-08
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWDTcL5v1COAk33WH1dS', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-08'}
+{u'_type': u'record', u'_id': u'AWDTcMJlNJ1oPWOT3b19', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-08'}
+remove ok
+{'PostFix': '', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+{'PostFix': '', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_ac428d0109852887559223c1765f28e5_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:56151...
+Connection from 127.0.0.1:56151 closed.
+Accept new connection from 127.0.0.1:56152...
+Connection from 127.0.0.1:56152 closed.
+get mapping
+wx_group_message_2018-01-09
+{u'acknowledged': True}
+None
+get mapping
+wx_sent_group_message_2018-01-09
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWDYyAAPNJ1oPWOT3b2J', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-09'}
+{u'_type': u'record', u'_id': u'AWDYyAH4Gn9L3Xej205D', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-09'}
+remove ok
+{'PostFix': 'gif', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+Accept new connection from 127.0.0.1:40648...
+
+Connection from 127.0.0.1:40648 closed.
+█start_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_dd25e06e7a73d2323791f68d0f67a08b_qrcode.png
+global name 'FileNotFoundError' is not defined
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_5dbd23235fdbf0e28e8780149cb7c029_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:41188...
+Connection from 127.0.0.1:41188 closed.
+Accept new connection from 127.0.0.1:41189...
+Connection from 127.0.0.1:41189 closed.
+Accept new connection from 127.0.0.1:41190...
+Connection from 127.0.0.1:41190 closed.
+Accept new connection from 127.0.0.1:41191...
+Connection from 127.0.0.1:41191 closed.
+Accept new connection from 127.0.0.1:41192...
+Connection from 127.0.0.1:41192 closed.
+Accept new connection from 127.0.0.1:41193...
+Connection from 127.0.0.1:41193 closed.
+Accept new connection from 127.0.0.1:41194...
+Connection from 127.0.0.1:41194 closed.
+Accept new connection from 127.0.0.1:41195...
+Connection from 127.0.0.1:41195 closed.
+Accept new connection from 127.0.0.1:41196...
+Connection from 127.0.0.1:41196 closed.
+Accept new connection from 127.0.0.1:41197...
+Connection from 127.0.0.1:41197 closed.
+Accept new connection from 127.0.0.1:41198...
+Connection from 127.0.0.1:41198 closed.
+Accept new connection from 127.0.0.1:41199...
+Connection from 127.0.0.1:41199 closed.
+Accept new connection from 127.0.0.1:41200...
+Connection from 127.0.0.1:41200 closed.
+Accept new connection from 127.0.0.1:41201...
+Connection from 127.0.0.1:41201 closed.
+Accept new connection from 127.0.0.1:41202...
+Connection from 127.0.0.1:41202 closed.
+Accept new connection from 127.0.0.1:41203...
+Connection from 127.0.0.1:41203 closed.
+Accept new connection from 127.0.0.1:41204...
+Connection from 127.0.0.1:41204 closed.
+Accept new connection from 127.0.0.1:41205...
+Connection from 127.0.0.1:41205 closed.
+{u'_type': u'record', u'_id': u'AWDZ03vy1COAk33WH1dp', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-09'}
+{u'_type': u'record', u'_id': u'AWDZ03w2NJ1oPWOT3b2V', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-09'}
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_0d96a4d364edde7dda061d8d3ab51e56_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:41889...
+Connection from 127.0.0.1:41889 closed.
+Accept new connection from 127.0.0.1:41890...
+Connection from 127.0.0.1:41890 closed.
+{u'_type': u'record', u'_id': u'AWDZ6Ssh1COAk33WH1dt', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-09'}
+{u'_type': u'record', u'_id': u'AWDZ6StGGn9L3Xej205U', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-09'}
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_056293c1d037d32011a9aaaa529ad8fb_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:34647...
+Connection from 127.0.0.1:34647 closed.
+Accept new connection from 127.0.0.1:34648...
+Connection from 127.0.0.1:34648 closed.
+get mapping
+wx_group_message_2018-01-10
+{u'acknowledged': True}
+None
+get mapping
+wx_sent_group_message_2018-01-10
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWDeCc-DGn9L3Xej205j', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-01-10'}
+{u'_type': u'record', u'_id': u'AWDeCdNrNJ1oPWOT3b2m', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-01-10'}
+remove ok
+{'PostFix': 'gif', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+remove ok
+{'PostFix': '', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+Accept new connection from 127.0.0.1:34678...
+Connection from 127.0.0.1:34678 closed.
+{'PostFix': 'jpg', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}

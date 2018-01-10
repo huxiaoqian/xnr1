@@ -95,14 +95,24 @@ function personEarly(personEarly_QQ) {
                         name=row._source.group_name;
                     };
                     var chatContent;//摘要内容
-                    if(row._source.msg_type == 'Text'){
+                    if(row._source.msg_type == 'Text'){//文本信息
                         chatContent = row._source.text;
-                    }else if(row._source.msg_type == 'Picture'){
-                        // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;height:48px;cursor:pointer;" />'
+                    }else if(row._source.msg_type == 'Picture'){//图片信息
                         // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;cursor:pointer;" />';
                         chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
                         // $('.btn-fanyi').hide();
+                    }else if(row._source.msg_type == 'Recording'){//语音信息
+                        chatContent = '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
+                          '<source src="'+row._source.text.slice(28)+'"/>'+
+                          '<source src="'+row._source.text.slice(28)+'"/>'+
+                          '<source src="'+row._source.text.slice(28)+'"/>'+
+                          '抱歉，你的浏览器版本过低，请更新！'+
+                        '</audio>'+
+                        '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;">语音翻译</button>'
+                    }else{
+                        chatContent = row._source.text;
                     }
+
                     var str=
                         '<div class="everySpeak">'+
                         '   <div class="speak_center">'+
@@ -116,7 +126,7 @@ function personEarly(personEarly_QQ) {
                         '           <div class="center_2" style="margin-top: 10px;">'+
                         // '                <b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+row._source.text+
                         '                <b style="color:#ff5722;font-weight: 700;">摘要内容：</b>'+chatContent+
-                        '               <button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;">语音翻译</button>'+
+                        // '               <button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;">语音翻译</button>'+
                         '           </div>'+
                         '       </div>'+
                         '   </div>'+
@@ -128,6 +138,7 @@ function personEarly(personEarly_QQ) {
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信号码（回车搜索）');
 };
+// 显示大图
 function showThis(e){
     var targ = e.target;
     // console.log(targ);
@@ -135,16 +146,25 @@ function showThis(e){
     // $('#mo').css('display','block');
     $('#mo').show();
     $('#moimg').attr('src',$(targ).attr('src'));
-    $(document).css({'overflow':'hidden','height':'100%'})
+    // $(document).css({'overflow':'hidden','height':'100%'})
 }
-$('#close').on('click',function(){
-    $('#mo').css('display','none');
-})
-$('#mo').not("#moimg").click(function(){
+// 关闭大图
+// $('#mo #close').on('click',function(){
+//     $('#mo').css('display','none');
+// })
+$('#mo').click(function(){
     if($("#mo").css('display')=='block'){
         $("#mo").hide();
     }
 });
+$('#mo #moimg').click(function(event){
+    event.stopPropagation();
+});
+// $('#mo *').not("#moimg").click(function(){
+//     if($("#mo").css('display')=='block'){
+//         $("#mo").hide();
+//     }
+// });
 
 //========选择群========
 var _group_puid;
