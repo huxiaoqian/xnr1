@@ -23,10 +23,11 @@ class Operation():
 		self.driver = self.launcher.login()
 
 	def publish(self, text):
+		time.sleep(1)
 		self.driver.find_element_by_xpath('//div[@class="_4bl9 _42n-"]').click()
-		time.sleep(3)
-		self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
-		self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
+		time.sleep(4)
+		#self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
+		self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]/div/div/div[2]/div').send_keys(text)
 		self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
 
 	def mention(self, username, text):
@@ -42,30 +43,34 @@ class Operation():
 
 	def follow(self, uid):
 		driver = self.launcher.target_page(uid)
-		driver.find_element_by_xpath('//a[@class="_42ft _4jy0 _4jy4 _517h _51sy"]').click()
+		print 'follow!!!!'
+		print driver.find_element_by_xpath('//a[@class="_42ft _4jy0 _4jy4 _517h _51sy"]').click()
+		print 'follow over!!'
 
 	def not_follow(self, uid):
 		driver = self.launcher.target_page(uid)
 		chain = ActionChains(driver)
 		implement = driver.find_element_by_xpath('//button[@class="_42ft _4jy0 _3oz- _52-0 _4jy4 _517h _51sy"]')
 		chain.move_to_element(implement).perform()
-		driver.find_element_by_xpath('//a[@ajaxify="/ajax/follow/unfollow_profile.php?profile_id=100022568024116&location=1"]').click()
+		driver.find_element_by_xpath('//a[@ajaxify="/ajax/follow/unfollow_profile.php?profile_id=100022934584514&location=1"]').click()
 
 # 私信(未关注)
-	def send_message(self, uid):
+	def send_message(self, uid, text):
 		#发送给未关注的用户
 		driver = self.launcher.target_page(uid)
-		url = driver.find_element_by_xpath('//a[@class="_51xa _2yfv _3y89"]/a[2]').get_attribute('href')
-		driver.get('https://www.facebook.com' + url)
-		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys('test')
+		url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[2]').get_attribute('href')
+		driver.get(url)
+		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(text)
 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(Keys.ENTER)
 # 私信(已关注)
-	def send_message2(self, uid):
+	def send_message2(self, uid, text):
 		#发送给已关注的用户
 		driver = self.launcher.target_page(uid)
 		url = driver.find_element_by_xpath('//a[@class="_51xa _2yfv _3y89"]/a[1]').get_attribute('href')
 		driver.get('https://www.facebook.com' + url)
-		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys('test')
+		time.sleep(4)
+		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').click()
+		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(text)
 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(Keys.ENTER)
 
 # 测试id
@@ -73,30 +78,34 @@ class Operation():
 
 	def like(self, id, uid):
 		driver = self.launcher.target_page(uid)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[1]/div/a'%id).click()
+		_id = 'tl_unit_-' + str(id)
+		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[1]/div/a'%_id).click()
 
 
 	def comment(self, id, uid, text):
 		driver = self.launcher.target_page(uid)
+		_id = 'tl_unit_-' + str(id)
+
 		try:
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%id).click()
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%id).send_keys(text)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%id).send_keys(Keys.ENTER)
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).click()
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).send_keys(text)
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).send_keys(Keys.ENTER)
 		except:
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%id).click()
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).click()
 			time.sleep(3)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%id).send_keys(text)
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).send_keys(text)
 			time.sleep(3)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%id).send_keys(Keys.ENTER)
+			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).send_keys(Keys.ENTER)
 	
 
 # 分享
 	def share(self, id, uid, text):
 		driver = self.launcher.target_page(uid)
 		#action_chains = ActionChains(driver)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]//span'%id).click()
+		_id = 'tl_unit_-' + str(id)
+		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]//span'%_id).click()
 		time.sleep(3)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]/div/span'%id).click()
+		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]/div/span'%_id).click()
 		#action_chains.key_down(Keys.CONTROL).click(el)
 		#driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]/div/span'%id).click()
 		time.sleep(3)
@@ -147,9 +156,10 @@ class Operation():
 
 if __name__ == '__main__':
 	operation = Operation('8617078448226','xnr123456')
-	#operation.publish('12.24 test')
+	#operation.publish('01.08 test')
+	operation.send_message('100022934584514','01.08 test')
 	#operation.mention('xerxes','12.24 test')
-	operation.follow('100022568024116')
+	#operation.follow('100022568024116')
 	#operation.not_follow('100022568024116')
 	#operation.like('tl_unit_-8182132709408758851','100022568024116')
 	#operation.comment('tl_unit_-8182132709408758851','100022568024116','12.26 test')

@@ -24,6 +24,8 @@ WARMING_DAY=15 #时间预警，预警天数
 MAX_WARMING_SIZE=100 #最大预警数目
 EVENT_COUNT=20 #实时计算事件频率阈值
 EVENT_OFFLINE_COUNT=80 #离线计算事件预警数量
+FOLLOWER_INFLUENCE_MAX_JUDGE=1.5 #预警中关注者、粉丝权重增加影响力倍数
+NOFOLLOWER_INFLUENCE_MIN_JUDGE=1 #预警中非关注者影响力值降低倍数
 #xnr
 USER_XNR_NUM=50 #用户管理虚拟人数量
 # weibo
@@ -36,6 +38,10 @@ MAX_FLOW_TEXT_DAYS = 7 ## 最多查询最近多少天的流数据
 TOP_KEYWORDS_NUM = 20  ## 最常用的关键词的数量
 MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
 MAX_HOT_POST_SIZE = 200 #热门帖子未筛选前返回最大数量
+
+#社区发现
+MAX_TARGET_USER_NUM=100000 #种子用户最大数量
+MAX_CACULATE_USER_NUM=200000 #种子用户计算最大数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 20

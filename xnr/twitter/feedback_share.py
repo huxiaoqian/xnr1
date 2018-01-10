@@ -50,7 +50,6 @@ class Share():
 if __name__ == '__main__':
 	share = Share('18538728360@163.com','zyxing,0513')
 	list = share.get_share()
-	print(list)
 	share.save('twitter_feedback_retweet_2017-11-13','text',list)
 
 

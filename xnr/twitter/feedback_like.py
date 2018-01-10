@@ -48,7 +48,6 @@ class Like():
 if __name__ == '__main__':
 	like = Like('18538728360@163.com','zyxing,0513')
 	list = like.get_like()
-	print(list)
 	like.save('twitter_feedback_like_2017-11-13','text',list)
 
 

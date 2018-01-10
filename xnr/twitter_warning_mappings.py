@@ -177,6 +177,10 @@ def twitter_speech_warning_mappings():
 					'keywords_dict':{
 						'type': 'string',
 						'index': 'not_analyzed'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}

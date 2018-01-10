@@ -47,6 +47,7 @@ def tw_publish(account_name, password, text, tweet_type, xnr_user_no):
     
     try:
         operation.publish(text)
+        #print 'publish....',
         mark = True
     except:
         mark = False
@@ -63,15 +64,19 @@ def tw_publish(account_name, password, text, tweet_type, xnr_user_no):
 
 
 # 评论
-def tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
+def tw_comment(account_name, password, _id, nick_name, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.comment(_id, uid,text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    #screen_name = 'zhu0588'
+    operation.target(nick_name)
+    # print 'comment...',operation.do_comment(_id, uid,text)
+    print 'comment!!'
+    print 'comment...',operation.do_comment(_id,text)
+    #mark = True
+    #except:
+    #    mark = False
 
     message_type = 2 # 评论
     
@@ -81,7 +86,7 @@ def tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
         print '保存微博过程遇到错误！'
         save_mark = False
 
-    return mark
+    #return mark
 
 
 # 转发
@@ -89,11 +94,14 @@ def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.share(_id, uid,text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    #print operation.share(_id, uid,text)
+    
+    print operation.do_retweet(_id)
+    
+    mark = True
+    # except:
+    #     mark = False
 
     message_type = 3 # 转发
     
@@ -145,7 +153,7 @@ def tw_unfollow(account_name, password, screen_name, xnr_user_no):
     trace_type = 'trace_follow'
 
     # tw_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type)
-    tw_save_to_fans_follow_ES(xnr_user_no,screen_name,follow_type,trace_type)
+    #tw_save_to_fans_follow_ES(xnr_user_no,screen_name,follow_type,trace_type)
 
     return mark
 
@@ -154,11 +162,13 @@ def tw_like(account_name,password, _id, uid):
     # uid: 原贴用户id
     operation = Operation(account_name,password)
     
-    try:
-        operation.like(uid)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print 'like111'
+    operation.do_favourite(_id)
+    print 'like222'
+    #     mark = True
+    # except:
+    #     mark = False
 
    
     return mark
@@ -170,11 +180,11 @@ def tw_mention(account_name,password, text, xnr_user_no, tweet_type):
     # text = '@lvleilei1 test'
     operation = Operation(account_name,password)
     
-    try:
-        operation.mention(text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print operation.mention(text)
+    mark = True
+    # except:
+    #     mark = False
     
     message_type = 4 # 提到
     
@@ -191,11 +201,11 @@ def tw_message(account_name,password, text, screen_name):
 
     operation = Operation(account_name,password)
     
-    try:
-        operation.message(screen_name, text)
-        mark = True
-    except:
-        mark = False
+    #try:
+    print operation.message(screen_name, text)
+    mark = True
+    # except:
+    #     mark = False
 
     return mark
 
