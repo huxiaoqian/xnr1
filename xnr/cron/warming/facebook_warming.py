@@ -9,7 +9,8 @@ import sys
 reload(sys)
 sys.path.append('../../')
 from timed_python_files.system_log_create import get_user_account_list
-from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE,EVENT_OFFLINE_COUNT
+from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MAX_SEARCH_SIZE,EVENT_OFFLINE_COUNT,\
+                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime,get_timets_set_indexset_list
 from global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
@@ -23,6 +24,15 @@ from global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,weibo_date_r
                          facebook_user_index_name,facebook_user_index_type,\
                          facebook_event_warning_index_name_pre,facebook_event_warning_index_type
 
+
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
  
 #虚拟人列表
 def get_user_xnr_list(user_account):
@@ -134,7 +144,10 @@ def create_speech_warning(xnr_user_no,today_datetime):
         else:
             item['_source']['comment']=0
             item['_source']['share']=0
-            item['_source']['favorite']=0        	
+            item['_source']['favorite']=0 
+
+        #查询用户昵称
+        item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])       	
 
         task_id=xnr_user_no+'_'+item['_source']['fid']
 
@@ -197,12 +210,13 @@ def create_personal_warning(xnr_user_no,today_datetime):
         if user_sensitive > 0:
             user_dict=dict()
             user_dict['uid']=first_sum_result[i]['key']
-            user_dict['sensitive']=user_sensitive
+            friends_mark=judge_user_type(user_dict['uid'],friends_list)
+            user_dict['sensitive']=user_sensitive*friends_mark
             top_userlist.append(user_dict)
         else:
             pass
     #####################
-    #如果是好友，则用户敏感度计算值增加1.2倍
+    #如果是好友，则用户敏感度计算值增加1.5倍
     #####################
     #查询敏感用户的敏感内容
     results=[]
@@ -253,7 +267,9 @@ def create_personal_warning(xnr_user_no,today_datetime):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0 
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])    
 
             s_result.append(item['_source'])
 
@@ -373,7 +389,9 @@ def lookup_facebook_date_warming(keywords,today_datetime):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0 
+                item['_source']['favorite']=0
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])   
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -496,6 +514,9 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
                 friends_value=judge_user_type(item['_source']['uid'],friends_list)
                 item['_source']['facebook_influence_value']=origin_influence_value*friends_value
+                
+                #查询用户昵称
+                item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])  
                 facebook_result.append(item['_source'])
 
                 #统计影响力、时间
@@ -588,9 +609,9 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 def judge_user_type(uid,user_list):
     number=set_intersection(uid,user_list)
     if number > 0:
-        mark=1.2
+        mark=FOLLOWER_INFLUENCE_MAX_JUDGE
     else:
-        mark=0.8
+        mark=NOFOLLOWER_INFLUENCE_MIN_JUDGE
     return mark
 
 def union_dict(*objs):
@@ -633,19 +654,21 @@ def create_facebook_warning():
         end_time=today_datetime          #定时文件启动的0点
         operate_date=ts2datetime(start_time)
 
-    account_list=get_user_account_list()
+    # account_list=get_user_account_list()
+    account_list = ['admin@qq.com']
     for account in account_list:
         #xnr_list=get_user_xnr_list(account)
         #print xnr_list
         xnr_list=['FXNR0001']
         for xnr_user_no in xnr_list:
+            print 'xnr_user_no:',xnr_user_no
             #人物行为预警
-            #personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            #speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
     date_mark=create_date_warning(today_datetime)
