@@ -592,7 +592,8 @@ def create_weibo_warning():
         today_datetime=datetime2ts(test_day_date) - DAY
         start_time=today_datetime
         end_time=today_datetime
-        operate_date=ts2datetime(start_time) 
+        operate_date=ts2datetime(start_time)
+        print 'operate_date:',operate_date 
     else:
         now_time=int(time.time())
         today_datetime=datetime2ts(ts2datetime(now_time)) - DAY 
@@ -612,7 +613,7 @@ def create_weibo_warning():
             speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
     #date_mark=create_date_warning(today_datetime)

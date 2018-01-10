@@ -14,7 +14,7 @@ from utils import get_submit_tweet, tw_save_to_tweet_timing_list, get_recommend_
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate
+				get_unfollow_operate , get_private_operate
 
 mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
@@ -33,7 +33,6 @@ def ajax_submit_daily_tweet():
     #u'跟随转发':'trace_post',u'智能发帖':'intel_post'
 	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
 	task_detail['text'] = request.args.get('text','').encode('utf-8')
-    # print 'task_detail...',task_detail
 	mark = get_submit_tweet(task_detail)
 
 	return json.dumps(mark)
@@ -155,8 +154,9 @@ def ajax_comment_operate():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
-    task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
+    # task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
+    task_detail['nick_name'] = request.args.get('nick_name','') # 被转发帖子的用户
 
     mark = get_comment_operate(task_detail)
 
@@ -169,7 +169,7 @@ def ajax_retweet_operate():
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['text'] = request.args.get('text','').encode('utf-8')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
     mark = get_retweet_operate(task_detail)
@@ -195,7 +195,7 @@ def ajax_at_operate():
 def ajax_like_operate():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
+    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
     mark = get_like_operate(task_detail)
@@ -220,5 +220,18 @@ def ajax_unfollow_operate():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
     mark = get_unfollow_operate(task_detail)
+
+    return json.dumps(mark)
+
+# 私信
+@mod.route('/private_operate/')
+def ajax_private_operate():
+
+    task_detail= dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['nick_name'] = request.args.get('nick_name','')
+    task_detail['text'] = request.args.get('text','')
+
+    mark = get_private_operate(task_detail)
 
     return json.dumps(mark)
