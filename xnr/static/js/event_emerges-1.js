@@ -1,5 +1,5 @@
 var time2=Date.parse(new Date())/1000;
-var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
+var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 
 //时间选择
@@ -510,10 +510,10 @@ function mainWeibo(_data,idx) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var text,text2,time,img,all='',name;
-                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
-                        name=item.uid;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
+                        name=row.uid;
                     }else {
-                        name=item.nick_name;
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
