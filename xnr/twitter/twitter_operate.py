@@ -21,7 +21,7 @@ from es import Es_twitter
 class Operation():
 	def __init__(self, username, password):
 		self.launcher = Launcher(username, password)
-		self.driver = self.launcher.login()
+		#self.driver = self.launcher.login()
 		self.api = self.launcher.api()
 		self.list = []
 
@@ -46,31 +46,31 @@ class Operation():
 		except Exception as e:
 			print(e)
 
-	def message(self, screen_name, text):
-		#try:
-		print self.api.send_direct_message(screen_name, text=text)
-		# except Exception as e:
-		# 	print(e)
-
-	def follow(self,screen_name):
+	def message(self, uid, text):
 		try:
-			self.api.create_friendship(screen_name)
+			print self.api.send_direct_message(uid, text=text)
+		except Exception as e:
+		 	print(e)
+
+	def follow(self, uid):
+		try:
+			self.api.create_friendship(uid)
 		except Exception as e:
 			print(e)
 
-	def destroy_friendship(self,screen_name):
+	def destroy_friendship(self, uid):
 		try:
-			self.api.destroy_friendship(screen_name)
+			self.api.destroy_friendship(uid)
 		except Exception as e:
 			print(e)
 
-	def do_retweet(self, id):
-		#try:
-		self.api.retweet(id)
-		# except Exception as e:
-		# 	print(e)
+	def do_retweet(self, tid):
+		try:
+			self.api.retweet(id)
+		except Exception as e:
+		 	print(e)
 
-	def do_favourite(self, id):
+	def do_favourite(self, tid):
 		#try:
 		print 'do_favourite1111'
 		print self.api.create_favorite(id)
@@ -79,45 +79,27 @@ class Operation():
 		# except Exception as e:
 		# 	print(e)
 
-	#评论前要运行target
-	def do_comment(self, id,text):
-		print '111'
-		try:
-			self.driver.find_element_by_xpath('//li[@data-item-id="%s"]/div/div[2]/div[4]/div[2]/div[1]/button/div'%id).click()
-		except:
-			self.driver.find_element_by_xpath('//li[@data-item-id="%s"]/div/div[2]/div[5]/div[2]/div[1]/button/div'%id).click()			
-		time.sleep(10)
-		self.driver.find_element_by_xpath('//div[@class="tweet-box rich-editor is-showPlaceholder"]').click()
-		print '222'
-		self.driver.find_element_by_xpath('//div[@class="tweet-box rich-editor is-showPlaceholder"]').send_keys(text)
-		time.sleep(10)
-		self.driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
-		print '333'
-
-	def target(self, screen_name):
-		self.driver.find_element_by_xpath('//input[@id="search-query"]').send_keys(screen_name)
-		self.driver.find_element_by_xpath('//input[@id="search-query"]').send_keys(Keys.ENTER)
-		time.sleep(10)
-		self.driver.find_element_by_xpath('//ul[@class="AdaptiveFiltersBar-nav"]/li[3]/a').click()
-		time.sleep(10)
-		self.driver.find_element_by_xpath('//div[@class="Grid Grid--withGutter"]/div[1]/div/div/a').click()
-		time.sleep(10)
-		self.driver.find_element_by_xpath('//a[@data-nav="tweets_with_replies_toggle"]').click()
-		time.sleep(10)
-
-	def id(self, screen_name):
-		for each in self.api.user_timeline(screen_name):
-			id = each.id
-			text = each.text
-			self.list.append({'id':id,'text':text})
-		return self.list
+	def do_comment(self, uid, tid, text):
+		driver = self.launcher.login()
+		screen_name = self.launcher.get_user(uid)
+		post_url = 'https://twitter.com/' + screen_name + '/status/' + tid
+		driver.get(post_url)
+		time.sleep(1)
+		current_url = driver.current_url
+		pattern = re.compile('status/(\d+)')
+		primary_id = ''.join(re.findall(pattern,current_url)).strip()
+		driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).click()
+		driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).send_keys(text)
+		time.sleep(1)
+		driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
 
 
 
 if __name__ == '__main__':
 	operation = Operation('18538728360@163.com','zyxing,0513')
-	operation.publish('12.26 test')
+	#operation.publish('12.26 test')
 	#operation.message('lvleilei1',text='test')
+	operation.do_comment('871936760573382658','922897194100826112','.....')
 
 
 

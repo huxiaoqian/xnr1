@@ -15,25 +15,24 @@ class Launcher():
 		self.consumer_secret = 'Bzm94HKmBwkbwlCsPsAwv3wU2PYbuGPO6IfZ4TiaR4bZOBEvMR'
 		self.access_token = '943290911039029250-ZKg5KT0edFDGctuVbHvWCJWoZ9CmV5t'
 		self.access_secret = 'OEcFiPfqUihKUzW61ZR23fOkMY5BIsDRjj5urf8rmYMTt'
-		self.driver = webdriver.Chrome()
-		
+
 	def login(self):
-		self.driver.get('https://twitter.com/login')
+		driver = webdriver.Firefox()
+		driver.get('https://twitter.com/login')
 		time.sleep(3)
-		self.driver.find_element_by_xpath('//input[@class="js-username-field email-input js-initial-focus"]').send_keys(self.username)
-		self.driver.find_element_by_xpath('//input[@class="js-password-field"]').click()
-		#self.driver.find_element_by_xpath('//input[@class="js-password-field"]').send_keys(self.password)
-		self.driver.find_element_by_xpath('//input[@class="js-password-field"]').send_keys(self.password)
-		self.driver.find_element_by_xpath('//button[@class="submit EdgeButton EdgeButton--primary EdgeButtom--medium"]').click()
+		driver.find_element_by_xpath('//input[@class="js-username-field email-input js-initial-focus"]').send_keys(self.username)
+		driver.find_element_by_xpath('//input[@class="js-password-field"]').click()
+		driver.find_element_by_xpath('//input[@class="js-password-field"]').send_keys(self.password)
+		driver.find_element_by_xpath('//button[@class="submit EdgeButton EdgeButton--primary EdgeButtom--medium"]').click()
 		time.sleep(1)
 		req = requests.Session()
-		cookies = self.driver.get_cookies()
+		cookies = driver.get_cookies()
 		for cookie in cookies:
 			req.cookies.set(cookie['name'],cookie['value'])
 		headers = {
 			'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:56.0) Gecko/20100101 Firefox/56.0'
 		}
-		return self.driver
+		return driver
 
 	def api(self):
 		auth = OAuthHandler(self.consumer_key,self.consumer_secret)
@@ -41,6 +40,10 @@ class Launcher():
 		api = tweepy.API(auth)
 		return api
 
+	def get_user(self, uid):
+		api = self.api()
+		screen_name = api.get_user(uid).screen_name
+		return screen_name
 
 if __name__ == '__main__':
 	launcher = Launcher('18538728360@163.com','zyxing,0513')
