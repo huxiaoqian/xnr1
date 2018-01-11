@@ -56,7 +56,7 @@ function weibo(data) {
                         name=item.uid;
                     }else {
                         name=item.nick_name;
-                    };;
+                    };
                     if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
                     }else {

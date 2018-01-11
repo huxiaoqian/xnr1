@@ -290,7 +290,7 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
         item['content']=json.loads(item['content'])
         if user_uid in user_uid_list:
             old_user=[user for user in warming_list if user['uid'] == user_uid][0]
-            new_warming_list = [user for user in warming_list if user['uid'] != user_uid][0]
+            new_warming_list = [user for user in warming_list if user['uid'] != user_uid]
             old_user['content'].extend(item['content'])
             old_user['user_sensitive']=old_user['user_sensitive']+item['user_sensitive']
             new_warming_list.append(old_user)
