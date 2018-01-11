@@ -1,6 +1,6 @@
 var operateType='info_warning';
 var time2=Date.parse(new Date())/1000;
-var timeUrl='/twitter_xnr_warning/show_date_warning/?account_name='+admin+'&start_time=0&end_time='+time2;
+var timeUrl='/twitter_xnr_warning/show_date_warning/?account_name='+admin+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
