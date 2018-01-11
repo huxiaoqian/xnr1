@@ -5,13 +5,24 @@ from selenium import webdriver
 import time
 import requests
 import json
+from pyvirtualdisplay import Display
 
 class Launcher():
 	def __init__(self, username, password):
 		self.username = username
 		self.password = password
-		#self.driver = webdriver.Firefox()
-		self.driver = webdriver.Chrome()
+		#模拟窗口
+		# self.display = Display(visible=0,size=(1024,768))
+		# self.display.start()
+		#self.driver = webdriver.Chrome()
+		'''
+		self.firefoxProfile = webdriver.FirefoxProfile()
+		self.firefoxProfile.set_preference('permissions.default.stylesheet',2)
+		self.firefoxProfile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so','false')
+		self.firefoxProfile.set_preference('permissions.default.image',2)
+		self.driver = webdriver.Firefox(firefox_profile=self.firefoxProfile)
+		'''
+		self.driver = webdriver.Firefox()
 		self.req = requests.Session()
 
 	def login(self):
@@ -236,6 +247,10 @@ class Launcher():
 
 	def target_page(self, uid):
 		self.driver.get('https://www.facebook.com/'+uid)
+		return self.driver
+
+	def target_post(self, uid, fid):
+		self.driver.get('https://www.facebook.com/'+uid)		
 		time.sleep(3)
 		self.driver.execute_script("""
 			(function () {
@@ -262,32 +277,12 @@ class Launcher():
 			else:
 				time.sleep(3)
 
-		return self.driver
 
-
-	def target_post(self, uid):
-		driver = self.target_page(uid)
-		id_list = []
-		content_list = []
-		for each in driver.find_elements_by_xpath('//div[@class="_4-u2 mbm _4mrt _5jmm _5pat _5v3q _4-u8"]/div/div[2]/div[1]/div[2]/div[2]'):
-			if not len(each.text) == 0:
-				content = each.text
-				content_list.append(content)
-			else:
-				content = 'None'
-				content_list.append(content)
-		for each in driver.find_elements_by_xpath('//div[@class="_4-u2 mbm _4mrt _5jmm _5pat _5v3q _4-u8"]'):
-			id = each.get_attribute('id')
-			id_list.append(id)
-		z = zip(id_list,content_list)
-		result = dict({id,content} for id,content in z)
-		return result
 
 if __name__ == '__main__':
-	launcher = Launcher('8617078448226','xnr123456')
+	launcher = Launcher('8618348831412','Z1290605918')
+	#print("login start")
 	launcher.login()
-	#list = launcher.get_like_list()
-	#list = launcher.get_comment_list()
-	#driver = launcher.target_page('100022568024116')
-	#result = launcher.target_post('100022568024116')
+	#launcher.target_page("100011257748826")
+	launcher.target_post('100022568024116')
 

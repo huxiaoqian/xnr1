@@ -273,3 +273,24 @@ es.indices.delete(index='user_bought')
 
 # es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
 
+query_body = {
+	'query':{
+		'match_all':{}
+	},
+	'size':'1000'
+}
+
+results = es.search(index='facebook_user',doc_type='user',body=query_body)['hits']['hits']
+
+_id_list = []
+
+for result in results:
+
+	result = result['_source']
+
+	_id = result['uid']
+
+	_id_list.append(_id)
+
+print '_id_list...',_id_list
+
