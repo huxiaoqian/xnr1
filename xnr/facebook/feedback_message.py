@@ -36,14 +36,13 @@ class Message():
 			self.list.append({'nick_name':sx['name'],'text':mes})
 		return self.list
 
-	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+	def save(self, indexName, typeName, list):
+		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	message = Message('8617078448226','xnr123456')
 	list = message.get_message()
-	message.save('facebook_feedback_private_2017-11-13','text',list)
+	message.save('facebook_feedback_private','text',list)
 
 
 

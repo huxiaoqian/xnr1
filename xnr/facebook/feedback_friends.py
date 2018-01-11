@@ -41,24 +41,23 @@ class Friend():
 				time.sleep(3)
 		self.es = Es_fb()
 		self.list = []
+		self.current_ts = int(time.time())
+		self.update_time = self.current_ts
 
 	def get_friend(self):
 		for each in self.driver.find_elements_by_xpath('//div[@class="_5h60 _30f"]//ul//li'):
 			try:
 				pic_url = each.find_element_by_xpath('./div/a/img').get_attribute('src')
-				print(pic_url)
 				name = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').text
-				print(name)
 				user_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('data-hovercard')))
-				print(user_id)
+				update_time = self.update_time
 			except Exception as e:
 				pass
-			self.list.append({'photo_url':pic_url,'nick_name':name,'uid':user_id})
+			self.list.append({'photo_url':pic_url,'nick_name':name,'uid':user_id,'update_time':update_time})
 		return self.list
 
 	def save(self, indexName, typeName, list):
-		for item in list:
-			self.es.executeES(indexName, typeName, item)
+		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	friend = Friend('8617078448226','xnr123456')

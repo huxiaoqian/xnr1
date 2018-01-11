@@ -227,12 +227,13 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_detail['user_sensitive']=user['sensitive']
         user_lookup_id=user['uid']
         print user_lookup_id
-        try:
-            #user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
-            user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=user['uid'])['_source']
-            user_detail['user_name']=user_result['nick_name']
-        except:
-            user_detail['user_name']=''
+        # try:
+        #     #user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
+        #     user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=user['uid'])['_source']
+        #     user_detail['user_name']=user_result['nick_name']
+        # except:
+        #     user_detail['user_name']=''
+        user_detail['user_name']=get_user_nickname(user['uid'])
 
         query_body={
             'query':{

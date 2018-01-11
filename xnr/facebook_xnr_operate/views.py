@@ -14,7 +14,8 @@ from utils import get_submit_tweet, fb_save_to_tweet_timing_list, get_recommend_
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate, get_private_operate
+				get_unfollow_operate, get_private_operate, get_add_friends, get_confirm_friends,\
+                get_delete_friend
 
 mod = Blueprint('facebook_xnr_operate', __name__, url_prefix='/facebook_xnr_operate')
 
@@ -236,3 +237,44 @@ def ajax_private_operate():
     mark = get_private_operate(task_detail)
 
     return json.dumps(mark)
+
+# 添加好友
+@mod.route('/add_friends/')    
+def ajax_add_friends():
+
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['uid'] = request.args.get('uid','')
+
+    mark = get_add_friends(task_detail)
+
+    return json.dumps(mark)
+
+
+# 确认好友请求
+@mod.route('/confirm_friends/')
+def ajax_confirm_friends():
+
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['uid'] = request.args.get('uid','')
+
+    mark = get_confirm_friends(task_detail)
+    
+    return json.dumps(mark)
+
+
+# 删除好友
+@mod.route('/delete_friend/')
+def ajax_delete_friend():
+
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['uid'] = request.args.get('uid','')
+
+    mark = get_delete_friend(task_detail)
+    
+    return json.dumps(mark)
+
+
+
