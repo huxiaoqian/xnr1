@@ -172,7 +172,6 @@
 <!-- JS文件 -->
 {% block js %}
 <script src="/static/js/jquery-3.1.1.min.js"></script>
-<!--<script src="/static/js/jquery.cookie.js"></script>-->
 <script src="/static/js/bootstrap.min.js"></script>
 <script src="/static/js/bootstrap-table.min.js"></script>
 <script src="/static/js/bootstrap-table-zh-CN.min.js"></script>
@@ -182,7 +181,7 @@
 <script src="/static/echarts/china.js"></script>
 <script>
     //登录用户名
-    var admin='admin@qq.com';
+    var admin='{{g.user}}';
     //登出
     $('#logout').on('click',function () {
         $.ajax({
@@ -268,10 +267,33 @@
     function letter(_this) {
         var uid = $(_this).parents('.center_rel').find('.uid').text();
         var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-        var post_url_6='/twitter_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
+        var post_url_letter='/twitter_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
             '&text='+txt;
-        public_ajax.call_request('get',post_url_6,postYES)
+        public_ajax.call_request('get',post_url_letter,postYES)
     }
+    //机器人回复
+    function robot(_this) {
+        var uid = $(_this).parents('.center_rel').find('.uid').text();
+    }
+    //加入预警库
+    function getInfo(_this) {
+        var alldata=[];
+        var uid = $(_this).parents('.center_rel').find('.uid').text();alldata.push(uid);
+        var mid = $(_this).parents('.center_rel').find('.mid').text();alldata.push(mid);
+        var txt=$(_this).parents('.center_rel').find('.center_2').text().toString().replace(/#/g,'%23').replace(/&/g,'%26');alldata.push(txt);
+        var timestamp = $(_this).parents('.center_rel').find('.timestamp').text();alldata.push(timestamp);
+        var forwarding = $(_this).parents('.center_rel').find('.forwarding').text();alldata.push(forwarding);
+        var comment = $(_this).parents('.center_rel').find('.comment').text();alldata.push(comment);
+        var sensitive = $(_this).parents('.center_rel').find('.sensitive').text();alldata.push(sensitive);
+        var sensitiveWords = $(_this).parents('.center_rel').find('.sensitiveWords').text().toString().replace(/&/g,'%26');alldata.push(sensitiveWords);
+        return alldata;
+    };
+    function joinPolice(_this) {
+        var info=getInfo(_this);
+        var police_url='/weibo_xnr_warming/addto_speech_warming/?xnr_user_no='+ID_Num+'&uid='+info[0]+'&text='+info[2]+
+            '&mid='+info[1]+'&timestamp='+info[3]+'&retweeted='+info[4]+'&comment='+info[5]+'&like=0';
+        public_ajax.call_request('get',police_url,postYES)
+    };
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {
