@@ -462,7 +462,7 @@ function weiboData(data) {
                         name=row.nick_name;
                     };
                     if (row.geo==''||row.geo=='null'||row.geo=='unknown'){
-                        location='未命名';
+                        location='未知';
                     }else {
                         location=row.geo.replace(/&/g,' ');
                     };
@@ -516,10 +516,11 @@ function weiboData(data) {
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
                         '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
