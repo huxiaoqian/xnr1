@@ -15,7 +15,6 @@ $('#container .title .tit-2 .allMY').on('click',function () {
 var theme_url='/weibo_xnr_knowledge_base_management/show_corpus/?corpus_type=主题语料';
 public_ajax.call_request('get',theme_url,themeWord);
 function themeWord(data) {
-    console.log(data);
     $('#theme').bootstrapTable('load', data);
     $('#theme').bootstrapTable({
         data:data,

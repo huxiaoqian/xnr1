@@ -57,7 +57,6 @@ body {
 }
 #container .weiboContent .everySpeak .speak_center {
     position: relative;
-    
     background:#06162d;
     margin-bottom: 10px;
 }
@@ -87,19 +86,20 @@ body {
 }
 #container .everySpeak .speak_center .center_3 span {
     display: inline-block;
-    width: 16%;
+    width: 11%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
+#container .everySpeak .speak_center .center_3 span:nth-child(6),
 #container .everySpeak .speak_center .center_3 span:nth-child(2),
 #container .everySpeak .speak_center .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-#container .everySpeak .speak_center .center_3 span:nth-child(6) {
+#container .everySpeak .speak_center .center_3 span:nth-child(8) {
     border-left:1px solid slategrey;
 }
 #container .everySpeak .speak_center .center_3 span:hover {
