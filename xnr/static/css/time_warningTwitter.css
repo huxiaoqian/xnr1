@@ -104,7 +104,7 @@ body {
 }
 #container .everySpeak .speak_center .center_3 span {
     display: inline-block;
-    width: 19%;
+    width: 11%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -112,13 +112,14 @@ body {
     font-size: 12px;
 }
 #container .everySpeak .speak_center .center_3 span:nth-child(2),
-#container .everySpeak .speak_center .center_3 span:nth-child(4) {
+#container .everySpeak .speak_center .center_3 span:nth-child(4),
+#container .everySpeak .speak_center .center_3 span:nth-child(6) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
-/*#container .everySpeak .speak_center .center_3 span:nth-child(4) {*/
-    /*border-left:1px solid slategrey;*/
-/*}*/
+#container .everySpeak .speak_center .center_3 span:nth-child(8) {
+    border-left:1px solid slategrey;
+}
 #container .everySpeak .speak_center .center_3 span:hover {
     color:#eb7350;
 }

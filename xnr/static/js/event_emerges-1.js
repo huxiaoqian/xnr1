@@ -88,7 +88,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -153,7 +153,7 @@ function weibo(data){
                         // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         // '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
-                        '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
+                        '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
                         '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -225,7 +225,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -287,7 +287,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -356,7 +356,7 @@ function weibo(data){
                 // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                 // '                </label>'+
                 '                <img src="/static/images/post-6.png" class="center_icon">'+
-                '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                 '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                 '            </div>'+
                 '            <div class="centerdetails" style="padding-left:40px;">'+
