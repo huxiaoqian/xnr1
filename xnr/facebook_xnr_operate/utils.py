@@ -18,7 +18,9 @@ from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
 					fb_bci_index_name_pre, fb_bci_index_type
 
 
-from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_follow, fb_unfollow, fb_like, fb_mention, fb_message
+from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_follow, fb_unfollow, \
+                                    fb_like, fb_mention, fb_message, fb_add_friend, fb_confirm, fb_delete_friend
+
 from xnr.utils import fb_uid2nick_name_photo
 
 def get_submit_tweet(task_detail):
@@ -654,8 +656,97 @@ def get_private_operate(task_detail):
 
     if account_name:
         mark = fb_message(account_name, password,  text, uid)
+        print 'private!!'
+        #mark = fb_message('8618348831412','Z1290605918',  text, uid)
 
     else:
         mark = False
 
     return mark
+
+
+def get_add_friends(task_detail):
+
+    xnr_user_no = task_detail['xnr_user_no']
+    uid = task_detail['uid']
+
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
+
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
+
+    if account_name:
+        mark = fb_add_friend(account_name, password, uid)
+        
+        #mark = fb_message('8618348831412','Z1290605918',  text, uid)
+
+    else:
+        mark = False
+
+    return mark
+
+
+def get_confirm_friends(task_detail):
+
+    xnr_user_no = task_detail['xnr_user_no']
+    uid = task_detail['uid']
+
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
+
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
+
+    if account_name:
+        mark = fb_confirm(account_name, password, uid)
+        #mark = fb_message('8618348831412','Z1290605918',  text, uid)
+
+    else:
+        mark = False
+
+    return mark
+
+
+def get_delete_friend(task_detail):
+
+    xnr_user_no = task_detail['xnr_user_no']
+    uid = task_detail['uid']
+
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
+
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
+
+    if account_name:
+        mark = fb_delete_friend(account_name, password, uid)
+        
+        #mark = fb_message('8618348831412','Z1290605918',  text, uid)
+
+    else:
+        mark = False
+
+    return mark
+
