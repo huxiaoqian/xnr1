@@ -485,8 +485,9 @@ function weiboData(data) {
                                 all='none';
                             }
                             for (var f of keyword_d){
-                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            txt2=rrr;
                         }else {
                             txt=row.text;
                             if (txt.length>=160){
