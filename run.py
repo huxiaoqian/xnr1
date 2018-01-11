@@ -20,7 +20,6 @@ from flask_security import Security, SQLAlchemyUserDatastore, \
 #from flask.ext.login import LoginManager, login_user, login_required, logout_user, session, current_user
 from flask_login import LoginManager, login_user, login_required, logout_user
 
-
 from xnr.extensions import db, user_datastore
 from xnr.time_utils import ts2datetime,datetime2ts
 from xnr.global_utils import es_xnr,weibo_log_management_index_name,weibo_log_management_index_type
