@@ -186,6 +186,10 @@ def facebook_speech_warning_mappings():
 					},
 					'favorite':{
 						'type':'long'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -295,7 +299,7 @@ if __name__ == '__main__':
 	facebook_speech_warning_mappings()
 
 	if S_TYPE == 'test':
-		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE)
+		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE) - DAY
 	else:
 		today_datetime=int(time.time()) - DAY
 	date_result=lookup_date_info(today_datetime)
