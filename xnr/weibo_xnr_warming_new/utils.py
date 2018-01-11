@@ -311,9 +311,11 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
     }
 
     speech_warming_list=get_xnr_warming_index_listname(weibo_speech_warning_index_name_pre,start_time,end_time)
-    
+    # print 'speech_warming_list:',speech_warming_list
+    # print show_condition_list[0]
     try:
         temp_results=es_xnr.search(index=speech_warming_list,doc_type=weibo_speech_warning_index_type,body=query_body)['hits']['hits']
+        # print 'temp_results',temp_results
         results=[]
         for item in temp_results:
             results.append(item['_source'])
@@ -377,7 +379,7 @@ def show_speech_warming(xnr_user_no,show_type,start_time,end_time):
         start_datetime = datetime2ts(ts2datetime(start_time))
 
     speech_warming=[]
-    #print 'start_time:',start_time,'end_time:',end_time
+    print 'start_time:',start_time,'end_time:',end_time
     if today_datetime > end_datetime :
         speech_warming = lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time)
     else:
@@ -744,20 +746,23 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                     main_user_info=[]
                     user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
                     for item in user_es_result:
-     
+                        # print 'item:',item
                         user_dict=dict()
-                        if item['found']:
-                            user_dict['photo_url']=item['_source']['photo_url']
-                            user_dict['uid']=item['_id']
-                            user_dict['nick_name']=item['_source']['nick_name']
-                            user_dict['favoritesnum']=item['_source']['favoritesnum']
-                            user_dict['fansnum']=item['_source']['fansnum']
+                        if item.has_key('found'):
+                            if item['found']:
+                                user_dict['photo_url']=item['_source']['photo_url']
+                                user_dict['uid']=item['_id']
+                                user_dict['nick_name']=item['_source']['nick_name']
+                                user_dict['favoritesnum']=item['_source']['favoritesnum']
+                                user_dict['fansnum']=item['_source']['fansnum']
+                            else:
+                                user_dict['photo_url']=''
+                                user_dict['uid']=item['_id']
+                                user_dict['nick_name']=''
+                                user_dict['favoritesnum']=0
+                                user_dict['fansnum']=0
                         else:
-                            user_dict['photo_url']=''
-                            user_dict['uid']=item['_id']
-                            user_dict['nick_name']=''
-                            user_dict['favoritesnum']=0
-                            user_dict['fansnum']=0
+                            pass
                         main_user_info.append(user_dict)
                     event_warming_content['main_user_info']=json.dumps(main_user_info)
 
