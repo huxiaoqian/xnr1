@@ -302,6 +302,7 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
     for item in user_warming:
         user_uid=item['uid']
         item['content']=json.loads(item['content'])
+
         if user_uid in user_uid_list:
             old_user=[user for user in warming_list if user['uid'] == user_uid][0]
             new_warming_list = [user for user in warming_list if user['uid'] != user_uid]
@@ -314,12 +315,12 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
             warming_list.append(item)
             user_uid_list.append(user_uid)
 
-    if user_warming:
-        user_warming.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
+    if warming_list:
+        warming_list.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
     else:
         pass
 
-    return user_warming
+    return warming_list
 
 ###################################################################
 ###################       speech warning       ##################
