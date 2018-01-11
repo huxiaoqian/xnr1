@@ -1,5 +1,5 @@
 var time2=Date.parse(new Date())/1000;
-var timeUrl='/weibo_xnr_warming_new/show_date_warming/?account_name='+ID_Num+'&start_time=0&end_time='+time2;
+var timeUrl='/weibo_xnr_warming_new/show_date_warming/?account_name='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
 //
 $('.choosetime .demo-label input').on('click',function () {
