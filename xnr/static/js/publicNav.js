@@ -325,7 +325,6 @@ function addXnr(data) {
     $('#choosePerson .identity').html(str);
 }
 $('#choosePerson .sure_in').on('click',function () {
-    console.log(loadingType)
     if (loadingType=='QQ'){
         var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');

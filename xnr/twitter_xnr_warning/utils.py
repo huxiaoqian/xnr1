@@ -19,8 +19,18 @@ from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_da
                              twitter_event_warning_index_name_pre,twitter_event_warning_index_type
 
 
-from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE
+from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE,\
+                          FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from xnr.global_config import S_TYPE,TWITTER_FLOW_START_DATE
+
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
 
 
 ##获取索引
@@ -181,7 +191,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         if user_sensitive > 0:
             user_dict=dict()
             user_dict['uid']=first_sum_result[i]['key']
-            user_dict['sensitive']=user_sensitive
+            followers_mark=judge_user_type(user_dict['uid'],followers_list)
+            user_dict['sensitive']=user_sensitive*followers_mark
             top_userlist.append(user_dict)
         else:
             pass
@@ -195,11 +206,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_detail['user_sensitive']=user['sensitive']
         user_lookup_id=user['uid']
         print user_lookup_id
-        try:
-            user_result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=user['uid'])['_source']
-            user_detail['user_name']=user_result['nick_name']
-        except:
-            user_detail['user_name']=''
+        #查询用户昵称
+        user_detail['user_name']=get_user_nickname(user['uid'])
 
         query_body={
             'query':{
@@ -226,7 +234,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         s_result=[]
         for item in second_result:
             #查询三个指标字段
-            tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+            tid_result=lookup_tid_attend_index(item['_source']['tid'],start_time)
             if tid_result:
                 item['_source']['comment']=tid_result['comment']
                 item['_source']['share']=tid_result['share']
@@ -234,7 +242,10 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0  
+                item['_source']['favorite']=0 
+            
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid']) 
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
@@ -293,9 +304,10 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
         item['content']=json.loads(item['content'])
         if user_uid in user_uid_list:
             old_user=[user for user in warming_list if user['uid'] == user_uid][0]
-            new_warming_list = [user for user in warming_list if user['uid'] != user_uid][0]
+            new_warming_list = [user for user in warming_list if user['uid'] != user_uid]
             old_user['content'].extend(item['content'])
             old_user['user_sensitive']=old_user['user_sensitive']+item['user_sensitive']
+            # print 'new_warming_list:',type(new_warming_list)
             new_warming_list.append(old_user)
             warming_list = new_warming_list
         else:          
@@ -378,7 +390,7 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
         results=es_flow_text.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         for item in results:
             #查询三个指标字段
-            tid_result=lookup_tid_attend_index(item['_source']['tid'],today_datetime)
+            tid_result=lookup_tid_attend_index(item['_source']['tid'],start_time)
             if tid_result:
                 item['_source']['comment']=tid_result['comment']
                 item['_source']['share']=tid_result['share']
@@ -386,7 +398,10 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0   
+                item['_source']['favorite']=0 
+
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])   
             result.append(item['_source'])
     except:
         result=[]
@@ -558,7 +573,9 @@ def lookup_todaytwitter_date_warming(keywords,today_datetime):
             else:
                 item['_source']['comment']=0
                 item['_source']['share']=0
-                item['_source']['favorite']=0    
+                item['_source']['favorite']=0 
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])    
             date_result.append(item['_source'])
     except:
             date_result=[]
@@ -739,6 +756,9 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['share']+item['_source']['favorite'])*(1+item['_source']['sensitive'])
                 followers_value=judge_user_type(item['_source']['uid'],followers_list)
                 item['_source']['twitter_influence_value']=origin_influence_value*followers_value
+                
+                #查询用户昵称
+                item['_source']['nick_name']=get_user_nickname(item['_source']['uid']) 
                 twitter_result.append(item['_source'])
 
                 #统计影响力、时间
@@ -836,9 +856,9 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 def judge_user_type(uid,user_list):
     number=set_intersection(uid,user_list)
     if number > 0:
-        mark=1.2
+        mark=FOLLOWER_INFLUENCE_MAX_JUDGE
     else:
-        mark=0.8
+        mark=NOFOLLOWER_INFLUENCE_MIN_JUDGE
     return mark
 
 def union_dict(*objs):
@@ -900,21 +920,50 @@ def show_event_warming(xnr_user_no,start_time,end_time):
     warming_list=[]
     event_name_list=[]
     #new_waining_list=[]
+
+    # print 'event_warming:', event_warming[0].keys(), len(event_warming)
+
     for item in event_warming:
         event_name=item['event_name']
         item['main_user_info']=json.loads(item['main_user_info'])
         item['main_twitter_info']=json.loads(item['main_twitter_info']) 
-        if event_name in event_name_list:
+
+        if event_name not in event_name_list:
+            print 'event_name !!!!', event_name
+
+            event_name_list.append(event_name)
+            warming_list.append(item)
+        else:
             old_event=[event for event in warming_list if event['event_name'] == event_name][0]
             new_warming_list = [event for event in warming_list if event['event_name'] != event_name]
-            old_event['main_user_info'].extend(item['main_user_info'])
-            old_event['main_twitter_info'].extend(item['main_twitter_info'])
+            
+            old_main_user_info = [event['main_user_info'] for event in warming_list if event['event_name'] == event_name][0]
+            old_main_user_uids = [user['uid'] for user in old_main_user_info]
+            now_uids = [u['uid'] for u in item['main_user_info']]
+            new_uids = list(set(old_main_user_uids) - (set(old_main_user_uids) & set(now_uids)))
+            print 'new_uid:',new_uids
+            
+            new_main_user_info = []
+            for uid in new_uids:
+                uid_info = [u for u in item['main_user_info'] if u['uid'] == uid]
+                new_main_user_info.append(uid_info[0])
+            old_event['main_user_info'].extend(new_main_user_info)
+
+            old_main_twitter_info = [event['main_twitter_info'] for event in warming_list if event['event_name'] == event_name][0]
+            old_main_tids = [content['tid'] for content in old_main_twitter_info]
+            now_tids = [c['tid'] for c in item['main_twitter_info']]
+            new_tids = list(set(old_main_tids) - (set(old_main_tids) & set(now_tids)))
+            print 'new_tids',new_tids
+
+            new_main_twitter_info = []
+            for tid in new_tids:
+                tid_info = [t for t in item['main_twitter_info'] if t['tid'] == tid]
+                new_main_twitter_info.append(tid_info[0])
+            old_event['main_twitter_info'].extend(new_main_twitter_info)
+
             old_event['event_influence']=old_event['event_influence']+item['event_influence']
             new_warming_list.append(old_event)
             warming_list = new_warming_list
-        else:          
-            warming_list.append(item)
-            event_name_list.append(event_name)
 
     if warming_list:
         warming_list.sort(key=lambda k:(k.get('event_influence',0)),reverse=True)

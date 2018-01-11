@@ -454,7 +454,7 @@ function weiboData(data) {
                 formatter: function (value, row, index) {
                     var name,location,txt,img;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        name='未命名';
+                        name=row.uid;
                     }else {
                         name=row.nick_name;
                     };

@@ -144,10 +144,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,img,txt2,all='';
-                    if (row.name==''||row.name=='null'||row.name=='unknown'||!row.name){
-                        name='未命名';
-                    }else {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
                         name=row.uid;
+                    }else {
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -190,7 +190,7 @@ function hotPost(data) {
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
-                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
+                        '           <i class="tid" style="display: none;">'+row.tid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
@@ -203,13 +203,17 @@ function hotPost(data) {
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
-                        '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
+                        '               <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
                         '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '           <div class="emailDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="infor" placeholder="私信内容"/>'+
+                        '               <span class="sureEmail" onclick="letter(this)">发送</span>'+
                         '           </div>'+
                         '       </div>'+
                         '    </div>'+
@@ -222,12 +226,7 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-//翻译
-function translateWord(_this) {
-    $(_this).parents('.center_rel').find('.tsWord').text(3152351);
-    $(_this).parents('.center_rel').find('._translate').show();
 
-}
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     var classify_id=$('#user-1 input:radio[name="deadio"]:checked').val();
@@ -441,10 +440,10 @@ function showInput(_this) {
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
     if (txt!=''){
-        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+        var post_url_3='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
         public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
@@ -453,28 +452,21 @@ function comMent(_this){
 }
 //转发
 function retweet(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_fid='+fid+'&r_uid='+uid;
+    // var txt = $(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    // var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
+    var post_url_2='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+'&tid='+tid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
 //点赞
 function thumbs(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&r_fid='+fid+'&r_uid='+uid;
-    public_ajax.call_request('get',post_r_s_url,postYES);
+    var tid = $(_this).parents('.post_perfect').find('.tid').text();
+    var post_url_4='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+        '&tid='+tid+'&uid='+uid;
+    public_ajax.call_request('get',post_url_4,postYES);
 };
 
-//关注该用户
-function focusThis(_this) {
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var post_url_6='/weibo_xnr_monitor/attach_fans_follow/?xnr_user_no='+ID_Num+'&uid='+uid;
-    public_ajax.call_request('get',post_url_6,postYES)
-}
 
 //加入语料库
 var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;

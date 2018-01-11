@@ -21,7 +21,6 @@ $('.title .perTime .demo-label input').on('click',function () {
 });
 //选择时间范围
 $('.timeSure').on('click',function () {
-    $('#content-1-word p').show();
     var from = $('.start').val();
     var to = $('.end').val();
     from_ts=Date.parse(new Date(from))/1000;
@@ -46,6 +45,17 @@ require.config({
         echarts: '/static/js/echarts-2/build/dist',
     }
 });
+function test(func){
+
+    var start = new Date().getTime();//起始时间
+
+    func();//执行待测函数
+
+    var end = new Date().getTime();//接受时间
+
+    return (end - start)+"ms";//返回函数执行需要时间
+
+}
 function wordCloud(data) {
     if (data.length==0||isEmptyObject(data)){
        $('#content-1-word').css({textAlign:"center",lineHeight:"300px",fontSize:'24px'}).text('暂无数据');
@@ -120,7 +130,7 @@ function hotPost(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -143,10 +153,10 @@ function hotPost(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,txt,txt2,img;
-                    if (row.uid==''||row.uid=='null'||row.uid=='unknown'){
-                        name='未命名';
-                    }else {
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
                         name=row.uid;
+                    }else {
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -186,7 +196,7 @@ function hotPost(data) {
 
                     };
                     var str=
-                        '<div class="post_perfect" style="margin: 20px auto;width:920px;">'+
+                        '<div class="post_perfect" style="margin-bottom:10px;width:920px;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+

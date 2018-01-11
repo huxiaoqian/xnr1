@@ -25,11 +25,11 @@ function recommendlist(data) {
     }
     $('#user_recommend .user_example_list li a').on('click',function(){
         var t1=$(this).text();
-        $('#post-2-content').append('@'+t1);
+        $('#post-2-content').append('@'+t1+' ');
     });
     $('#moreThing .moreCon ul li a').on('click',function(){
         var t2=$(this).text();
-        $('#post-2-content').append('@'+t2);
+        $('#post-2-content').append('@'+t2+' ');
     });
 }
 //------

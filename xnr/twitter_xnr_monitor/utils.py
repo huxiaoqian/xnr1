@@ -20,7 +20,15 @@ from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_
                           MAX_HOT_POST_SIZE
 from xnr.global_config import S_TYPE,S_DATE_TW
 
-
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)
+        user_name=result['_source']['username']
+    except:
+        user_name=''
+    return user_name
+    
 #查询虚拟人的关注用户列表
 def lookup_xnr_concernedusers(xnr_user_no):
     try:
@@ -149,7 +157,7 @@ def lookup_tid_attend_index(tid,from_ts,to_ts):
     }
     try:
         result=es_xnr.search(index=twitter_count_index_name,doc_type=twitter_count_index_type,body=query_body)['hits']['hits']
-        print result
+        # print 'result:',result,twitter_count_index_name
         tid_result=[]
         for item in result:
             tid_result.append(item['_source'])
@@ -169,11 +177,11 @@ def lookup_hot_posts(from_ts,to_ts,xnr_id,classify_id,order_id):
 
     from_date_ts=datetime2ts(ts2datetime(from_ts))
     to_date_ts=datetime2ts(ts2datetime(to_ts))
-    print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
-    print from_date_ts,to_date_ts
+    # print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
+    # print from_date_ts,to_date_ts
 
     flow_text_index_name_list=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,from_ts,to_ts)
-
+    # print 'flow_text_index_name:',flow_text_index_name_list
     userslist=lookup_xnr_concernedusers(xnr_id)
     #全部用户 0，好友 1，非好友-1
     range_time_list={'range':{'timestamp':{'gte':int(from_ts),'lt':int(to_ts)}}}
@@ -213,6 +221,8 @@ def lookup_hot_posts(from_ts,to_ts,xnr_id,classify_id,order_id):
             item['_source']['comment']=0
             item['_source']['share']=0
             item['_source']['favorite']=0 
+        #查询用户昵称
+        item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
         hot_result.append(item['_source'])
     # except:
         # hot_result=[]
