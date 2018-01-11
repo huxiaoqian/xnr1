@@ -21,6 +21,15 @@ from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
 from xnr.global_config import S_TYPE, S_DATE,S_DATE_BCI
 
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        result=es_xnr.get(index=profile_index_name,doc_type=profile_index_type,id=uid)
+        user_name=result['_source']['nick_name']
+    except:
+        user_name=''
+    return user_name
+
 #lookup weibo_xnr concerned users
 def lookup_weiboxnr_concernedusers(weiboxnr_id):
     try:
@@ -218,6 +227,7 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
             body=query_body)['hits']['hits']
         hot_result=[]
         for item in es_result:
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
             hot_result.append(item['_source'])
     except:
         hot_result=[]
