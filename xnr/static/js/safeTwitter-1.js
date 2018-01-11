@@ -1,4 +1,4 @@
-var end_time=Date.parse(new Date())/1000;
+var end_time=Date.parse(new Date())/1000;var operateType='info_detect';
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
@@ -452,14 +452,14 @@ function weiboData(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,location,txt,img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                    var name,location,txt,txt2,all='',img;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
                         name=row.uid;
                     }else {
                         name=row.nick_name;
                     };
-                    if (row.geo==''||row.geo=='null'||row.geo=='unknown'){
-                        location='未命名';
+                    if (row.geo==''||row.geo=='null'||row.geo=='unknown'||!row.geo){
+                        location='未知';
                     }else {
                         location=row.geo.replace(/&/g,' ');
                     };
@@ -471,29 +471,63 @@ function weiboData(data) {
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        txt=row.text;
+                        if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
+                            var keyword_d=row.sensitive_words_string.split('&');
+                            for (var f of keyword_d){
+                                txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                            var rrr=row.text;
+                            if (rrr.length>=50){
+                                rrr=rrr.substring(0,50)+'...';
+                                all='inline-block';
+                            }else {
+                                rrr=row.text;
+                                all='none';
+                            }
+                            for (var f of keyword_d){
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                            }
+                        }else {
+                            txt=row.text;
+                            if (txt.length>=160){
+                                txt2=txt.substring(0,160)+'...';
+                                all='inline-block';
+                            }else {
+                                txt2=txt;
+                                all='none';
+                            }
+                        };
                     };
                     var str=
-                        '<div class="post_center-every" style="text-align: left;">'+
+                        '<div class="post_center-every safeft" style="text-align: left;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
-                        '           <span class="time" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left: 20px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
-                        '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left: 20px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <span class="time" style="font-weight:700;color:#f6a38e;display: inline-block;margin-left:5px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
+                        // '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left:5px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
+                        '           <i class="tid" style="display: none;">'+row.tid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
-                        '           <div class="center_2" style="margin: 5px 0;">'+txt+
-                        '           </div>'+
+                        '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                        '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                        '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                        '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-1" title="转推" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" title="回复" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" title="喜欢" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                        '               <span class="cen3-4" title="私信" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
+                        '               <span class="cen3-5" title="翻译" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
+                        '               <span class="cen3-9" title="机器人回复" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" title="加入语料库" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
                         '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '           </div>'+
+                        '           <div class="emailDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="infor" placeholder="私信内容"/>'+
+                        '               <span class="sureEmail" onclick="letter(this)">发送</span>'+
                         '           </div>'+
                         '       </div>'+
                         '   </div>'+
@@ -508,14 +542,16 @@ function weiboData(data) {
 }
 //评论
 function showInput(_this) {
-    $(_this).parents('.post_center-every').find('.commentDown').show();
+    $(_this).parents('.center_rel').find('.commentDown').show();
 };
 function comMent(_this){
     var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
+    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    var tid = $(_this).parents('.center_rel').find('.tid').text();
     if (txt!=''){
-        var post_url_1='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
-        public_ajax.call_request('get',post_url_1,postYES)
+        var post_url_3='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&tid='+tid+'&uid='+uid;
+        public_ajax.call_request('get',post_url_3,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
@@ -523,19 +559,21 @@ function comMent(_this){
 }
 //转发
 function retweet(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
-    var uid = $(_this).parents('.post_center-every').find('.uid').text();
-    var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type=行为评估'+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&mid='+mid;
+    // var txt = $(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    // var uid = $(_this).parents('.post_perfect').find('.uid').text();
+    var tid = $(_this).parents('.center_rel').find('.tid').text();
+    var post_url_2='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+'&tid='+tid;
     public_ajax.call_request('get',post_url_2,postYES)
 }
 //点赞
 function thumbs(_this) {
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
-    var post_url_3='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
-    public_ajax.call_request('get',post_url_3,postYES)
+    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    var tid = $(_this).parents('.center_rel').find('.tid').text();
+    var post_url_4='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
+        '&tid='+tid+'&uid='+uid;
+    public_ajax.call_request('get',post_url_4,postYES);
 };
+
 var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
 function joinlab(_this) {
     wordMid = $(_this).parents('.post_perfect').find('.mid').text();
