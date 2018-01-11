@@ -44,14 +44,13 @@ class Like():
 				self.list.append(item)
 		return self.list
 
-	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+	def save(self, indexName, typeName, list):
+		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	like = Like('8617078448226','xnr123456')
 	list = like.get_like()
-	like.save('facebook_feedback_like_2017-11-13','text',list)
+	like.save('facebook_feedback_like','text',list)
 
 	
 

@@ -45,10 +45,9 @@ class Comment():
 		return self.list
 
 	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName, typeName, item)
+		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	comment = Comment('8617078448226','xnr123456')
 	list = comment.get_comment()
-	comment.save('facebook_feedback_comment_2017-11-13','text',list)
+	comment.save('facebook_feedback_comment','text',list)

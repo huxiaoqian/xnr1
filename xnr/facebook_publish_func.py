@@ -195,7 +195,8 @@ def fb_mention(account_name,password, user_name, text, xnr_user_no, tweet_type):
 
 # 私信
 def fb_message(account_name,password, text, uid):
-
+    print 'account_name...',account_name
+    print 'password.......',password
     operation = Operation(account_name,password)
     
     #try:
@@ -206,6 +207,44 @@ def fb_message(account_name,password, text, uid):
 
     return mark
 
+
+
+def fb_add_friend(account_name,password, uid):
+
+    operation = Operation(account_name,password)
+    
+    try:
+        print operation.add_friend(uid)
+        mark = True
+    except:
+        mark = False
+
+    return mark
+
+def fb_confirm(account_name,password, uid):
+
+    operation = Operation(account_name,password)
+    
+    try:
+        print operation.confirm(uid)
+        mark = True
+    except:
+        mark = False
+
+    return mark
+
+
+def fb_delete_friend(account_name,password, uid):
+
+    operation = Operation(account_name,password)
+    
+    #try:
+    print operation.delete_friend(uid)
+    mark = True
+    # except:
+    #     mark = False
+
+    return mark
 
 '''
 operation = Operation('8617078448226','xnr123456')

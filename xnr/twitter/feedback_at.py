@@ -38,13 +38,12 @@ class At():
 		return self.list
 
 	def save(self, indexName, typeName, list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+		self.es.executeES(indexName,typeName, list)
 
 if __name__ == '__main__':
 	at = At('18538728360@163.com','zyxing,0513')
 	list = at.get_mention()
-	at.save('twitter_feedback_at_2017-11-13','text',list)
+	at.save('twitter_feedback_at','text',list)
 
 
 

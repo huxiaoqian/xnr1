@@ -43,9 +43,7 @@ class Operation():
 
 	def follow(self, uid):
 		driver = self.launcher.target_page(uid)
-		print 'follow!!!!'
-		print driver.find_element_by_xpath('//a[@class="_42ft _4jy0 _4jy4 _517h _51sy"]').click()
-		print 'follow over!!'
+		driver.find_element_by_xpath('//a[@class="_42ft _4jy0 _4jy4 _517h _51sy"]').click()
 
 	def not_follow(self, uid):
 		driver = self.launcher.target_page(uid)
@@ -58,10 +56,16 @@ class Operation():
 	def send_message(self, uid, text):
 		#发送给未关注的用户
 		driver = self.launcher.target_page(uid)
-		url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[2]').get_attribute('href')
+		try:
+			url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[2]').get_attribute('href')
+			#print 'message1'
+		except:
+			url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[1]').get_attribute('href')			
+			#print 'message2'
 		driver.get(url)
-		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(text)
-		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(Keys.ENTER)
+		time.sleep(5)
+		driver.find_element_by_xpath('//div[@aria-label="输入消息..."]').send_keys(text)
+		driver.find_element_by_xpath('//div[@aria-label="输入消息..."]').send_keys(Keys.ENTER)
 # 私信(已关注)
 	def send_message2(self, uid, text):
 		#发送给已关注的用户
@@ -73,52 +77,85 @@ class Operation():
 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(text)
 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(Keys.ENTER)
 
-# 测试id
-#id = 'tl_unit_-8182132709408758851'
+#########
 
-	def like(self, id, uid):
-		driver = self.launcher.target_page(uid)
-		_id = 'tl_unit_-' + str(id)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[1]/div/a'%_id).click()
-
-
-	def comment(self, id, uid, text):
-		driver = self.launcher.target_page(uid)
-		_id = 'tl_unit_-' + str(id)
-
+# 点赞
+	def like(self, uid, fid):
+		post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
+		video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
+		self.driver.get(post_url)
+		time.sleep(5)
 		try:
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).click()
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).send_keys(text)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[2]/div/div[2]/div/div/div/div/div'%_id).send_keys(Keys.ENTER)
+			self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+			self.driver.get(video_url)
+			time.sleep(2)
+			for each in self.driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
+				try:
+					each.click()
+				except:
+					pass
 		except:
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).click()
+			for each in self.driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
+				try:
+					each.click()
+				except:
+					pass
+
+# 评论
+	def comment(self, uid, fid, text):
+		post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
+		video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
+		self.driver.get(post_url)
+		time.sleep(3)
+		try:
+			self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+			self.driver.get(video_url)
 			time.sleep(3)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).send_keys(text)
-			time.sleep(3)
-			driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[2]/div/div[4]/div/div[2]/div/div/div/div'%_id).send_keys(Keys.ENTER)
-	
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(text)
+			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(Keys.ENTER)
+		except:
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(text)
+			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(Keys.ENTER)
 
 # 分享
-	def share(self, id, uid, text):
-		driver = self.launcher.target_page(uid)
-		#action_chains = ActionChains(driver)
-		_id = 'tl_unit_-' + str(id)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]//span'%_id).click()
+	def share(self, uid, fid, text):
+		post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
+		video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
+		self.driver.get(post_url)
 		time.sleep(3)
-		driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]/div/span'%_id).click()
-		#action_chains.key_down(Keys.CONTROL).click(el)
-		#driver.find_element_by_xpath('//div[@id="%s"]/div/div[2]/div[2]/form/div[1]/div[1]/div/div[1]/div/div/div/span[3]/div/span'%id).click()
-		time.sleep(3)
-		driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
-		time.sleep(3)
-		driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').click()
-		time.sleep(3)
-		driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div/div/div').send_keys(text)
-		time.sleep(3)
-		driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
-
+		try:
+			self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+			self.driver.get(video_url)
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+			time.sleep(3)
+			self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
+			time.sleep(3)
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').click()
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').send_keys(text)
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
+		except:
+			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+			time.sleep(3)
+			self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
+			time.sleep(3)
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').click()
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').send_keys(text)
+			time.sleep(1)
+			self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
+	
 
 # 好友
+	'''
 	def friends(self,uid):
 		self.driver.get('https://www.facebook.com/'+ uid +'/friends')
 		self.driver.execute_script("""
@@ -153,15 +190,35 @@ class Operation():
 				id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('data-hovercard')))
 			except Exception as e:
 				pass
+	'''
+
+
+#添加好友
+	def add_friend(self, uid):
+		driver = self.launcher.target_page(uid)
+		driver.find_element_by_xpath('//button[@class="_42ft _4jy0 FriendRequestAdd addButton _4jy4 _517h _9c6"]').click()
+
+#确认好友请求
+	def confirm(self, uid):
+		driver = self.launcher.target_page(uid)
+		time.sleep(1)
+		driver.find_element_by_xpath('//div[@class="incomingButton"]/button').click()
+		time.sleep(1)
+		driver.find_element_by_xpath('//li[@data-label="确认"]/a').click()
+
+#删除好友
+	def delete_friend(self, uid):
+		driver = self.launcher.target_page(uid)
+		time.sleep(1)
+		driver.find_element_by_xpath('//div[@id="pagelet_timeline_profile_actions"]/div/a').click()
+		time.sleep(2)
+		driver.find_element_by_xpath('//li[@data-label="删除好友"]/a').click()
 
 if __name__ == '__main__':
-	operation = Operation('8617078448226','xnr123456')
-	#operation.publish('01.08 test')
-	operation.send_message('100022934584514','01.08 test')
-	#operation.mention('xerxes','12.24 test')
-	#operation.follow('100022568024116')
-	#operation.not_follow('100022568024116')
-	#operation.like('tl_unit_-8182132709408758851','100022568024116')
-	#operation.comment('tl_unit_-8182132709408758851','100022568024116','12.26 test')
-	#operation.share('tl_unit_-8182132709408758851','100022568024116','12.26 test')
+	operation = Operation('8618348831412','Z1290605918')
+	time.sleep(1)
+	#operation.confirm('100023782959440')
+	#operation.like('100011257748826','475400189511902')
+	#operation.comment('100011257748826','475400189511902','...')
+	#operation.share('100011257748826','475400189511902','...')
 
