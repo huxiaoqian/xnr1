@@ -36,6 +36,7 @@ from xnr.wx_xnr_monitor.views import mod as wxxnrmonitorModule
 from xnr.wx_xnr_assessment.views import mod as wxxnrassessmentModule
 from xnr.wx_xnr_report_manage.views import mod as wxxnrreportmanageModule
 from xnr.wx_xnr_warning.views import mod as wxxnrwarningModule
+from xnr.wx_xnr_trans.views import mod as wxxnrtransModule
 
 from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
 from xnr.facebook_xnr_monitor.views import mod as facebookxnrmonitorModule
@@ -95,6 +96,7 @@ def create_app():
     app.register_blueprint(wxxnrassessmentModule)
     app.register_blueprint(wxxnrreportmanageModule)
     app.register_blueprint(wxxnrwarningModule)
+    app.register_blueprint(wxxnrtransModule)
     # the debug toolbar is only enabled in debug mode
 
     app.register_blueprint(facebookxnrwarningModule)
