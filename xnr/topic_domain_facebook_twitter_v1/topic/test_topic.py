@@ -111,23 +111,70 @@ def topic_classfiy(uid_list,uid_weibo):#话题分类主函数
 
 if __name__ == '__main__':
 
-    uid_list, uid_weibo, topic_dict = input_data('TID')
+    # uid_list, uid_weibo, topic_dict = input_data('TID')
     
-    my_uid_list = uid_list[:3]
-    my_uid_weibo = {}
-    for uid in my_uid_list:
-        my_uid_weibo[uid] = uid_weibo[uid]
-    my_topic_dict = {}
-    for uid in my_uid_list:
-        my_topic_dict[uid] = topic_dict[uid]
+    # my_uid_list = uid_list[:3]
+    # my_uid_weibo = {}
+    # for uid in my_uid_list:
+    #     my_uid_weibo[uid] = uid_weibo[uid]
+    # my_topic_dict = {}
+    # for uid in my_uid_list:
+    #     my_topic_dict[uid] = topic_dict[uid]
 
-    print 'my_uid_list: ', my_uid_list
-    print 'my_uid_weibo: ', my_uid_weibo
-    print 'my_topic_dict: ', my_topic_dict
-    result_data,uid_topic = topic_classfiy(my_uid_list, my_uid_weibo)
-    print result_data
-    print uid_topic
-
+    # print 'my_uid_list: ', my_uid_list
+    # print 'my_uid_weibo: ', my_uid_weibo
+    # print 'my_topic_dict: ', my_topic_dict
+    # result_data,uid_topic = topic_classfiy(my_uid_list, my_uid_weibo)
+    # print result_data
+    # print uid_topic
+    
+    data = {
+      u'139819436047050': {
+        'life': 0.00010221216734826073,
+        'law': 0.00013977955349282154,
+        'computer': 5.963407179718062e-05,
+        'house': 0.00011238687826906112,
+        'peace': 0.0003407565081419985,
+        'politics': 0.00032407369571857723,
+        'fear-of-violence': 0.00019908614960790797,
+        'sports': 0.0002958251099946697,
+        'environment': 0.00021867854540642237,
+        'religion': 0.00036401730198506755,
+        'economic': 0.0003282436405055251,
+        'traffic': 6.668831341206706e-05,
+        'anti-corruption': 0.00016871189195860555,
+        'military': 0.00011692240504074539,
+        'medicine': 8.21364955405293e-05,
+        'art': 0.0002306790798914899,
+        'education': 0.00014142385613232555,
+        'employment': 9.450582849864567e-05,
+        'social-security': 8.829319602489132e-05
+      },
+      u'716502715155445': {
+        'life': 0.00010221216734826073,
+        'law': 0.00013977955349282154,
+        'computer': 5.963407179718062e-05,
+        'house': 0.00011238687826906112,
+        'peace': 0.0003407565081419985,
+        'politics': 0.00032407369571857723,
+        'fear-of-violence': 0.00019908614960790797,
+        'sports': 0.0002958251099946697,
+        'environment': 0.00021867854540642237,
+        'religion': 0.00036401730198506755,
+        'economic': 0.0003282436405055251,
+        'traffic': 6.668831341206706e-05,
+        'anti-corruption': 0.00016871189195860555,
+        'military': 0.00011692240504074539,
+        'medicine': 8.21364955405293e-05,
+        'art': 0.0002306790798914899,
+        'education': 0.00014142385613232555,
+        'employment': 9.450582849864567e-05,
+        'social-security': 8.829319602489132e-05
+      }
+    }    
+    for uid, d in data.items():
+        print uid
+        print rank_result(d)
 
 
 
