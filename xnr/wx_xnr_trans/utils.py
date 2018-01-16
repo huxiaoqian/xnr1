@@ -7,10 +7,9 @@ from xnr.global_utils import es_xnr,wx_xnr_index_name,wx_xnr_index_type,\
 from xnr.parameter import MAX_VALUE, DAY
 from xnr.time_utils import get_wx_groupmessage_index_list, ts2datetime, datetime2ts
 from xnr.wx.control_bot import load_wxxnr_redis_data
-from xnr.cron.trans.trans import trans as text_trans
 import sys
-sys.path.append('../cron')
-from trans.trans import trans, traditional2simplified
+sys.path.append('../cron/trans')
+from trans import trans as text_trans
 
 
 def utils_text_trans(q):
