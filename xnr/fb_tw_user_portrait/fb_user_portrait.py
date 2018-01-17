@@ -456,8 +456,8 @@ def update_topic(uid_list=[]):
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
     user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
-    print 'user_topic_data'
-    print user_topic_data
+    # print 'user_topic_data'
+    # print user_topic_data
     user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
 
     
@@ -472,7 +472,8 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
+                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps({}),    #所有的topic字典都是一样的？？？？？
                 'topic_string': user_topic_string[uid]
             }
         else:
@@ -494,11 +495,8 @@ def update_all():
     print 'total num: ', len(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
-    
-    print 'update_keywords:', update_keywords(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
 
+    #日更新
     print 'update_hashtag: ', update_hashtag(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
@@ -511,52 +509,24 @@ def update_all():
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_sentiment: ', update_sentiment(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+    #周更新
+    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+        print 'update_keywords:', update_keywords(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
+        
+        print 'update_sentiment: ', update_sentiment(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_domain: ', update_domain(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+        print 'update_domain: ', update_domain(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_topic: ', update_topic(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+        print 'update_topic: ', update_topic(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    time_list = []
-    time_list.append(time.time())
-
-    uid_list = load_uid_list()
-    print 'total num: ', len(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+    update_all()
     
-    # print 'update_keywords:', update_keywords(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-
-    # print 'update_hashtag: ', update_hashtag(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-    
-    # print 'update_influence: ', update_influence(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-
-    # print 'update_sensitive: ', update_sensitive(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-
-    # print 'update_sentiment: ', update_sentiment(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-
-    # print 'update_domain: ', update_domain(uid_list)
-    # time_list.append(time.time())
-    # print 'time used: ', time_list[-1] - time_list[-2]
-    
-    print 'update_topic: ', update_topic(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
