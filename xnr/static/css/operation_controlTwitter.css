@@ -1,17 +1,3 @@
-/*!*内容样式*!*/
-/*.coverbody .option1, .coverbody .option2{*/
-/*margin-top:20px;*/
-/*}*/
-/*.coverbody .option1 span, .coverbody .option2 span {*/
-/*font-weight: 800;*/
-/*font-size: 18px;*/
-/*}*/
-/*.coverbody .option1 .identity, .coverbody .option2 .showType {*/
-/*padding: 20px 0 0 32px;*/
-/*}*/
-/*.coverbody .option1 .radio-inline, .coverbody .option2 .radio-inline {*/
-/*width: 120px;*/
-/*}*/
 /*=====*/
 body.modal-open {
     /*overflow-y: auto !important;*/
@@ -151,7 +137,7 @@ body {
 }
 #container #content .post_perfect .center_3 span {
     display: inline-block;
-    width: 20%;
+    width: 16%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
@@ -169,7 +155,7 @@ body {
 }
 #container #content .historyCenter .center_3 span:nth-child(4),
 #container #content .myweibo .center_3 span:nth-child(5),
-#container #content .commentCOT .center_3 span:nth-child(6){
+#container #content .commentCOT .center_3 span:nth-child(7){
     border-left:1px solid slategrey;
 }
 #container #content .post_perfect .center_3 span:hover {

@@ -116,14 +116,15 @@ body {
 }
 #container .everyEvent .event_center .center_3 span {
     display: inline-block;
-    width: 32%;
+    width: 19%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
-#container .everyEvent .event_center .center_3 span:nth-child(2) {
+#container .everyEvent .event_center .center_3 span:nth-child(2),
+#container .everyEvent .event_center .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
 }
