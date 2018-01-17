@@ -12,16 +12,8 @@ class Launcher():
 		self.username = username
 		self.password = password
 		#模拟窗口
-		# self.display = Display(visible=0,size=(1024,768))
-		# self.display.start()
-		#self.driver = webdriver.Chrome()
-		'''
-		self.firefoxProfile = webdriver.FirefoxProfile()
-		self.firefoxProfile.set_preference('permissions.default.stylesheet',2)
-		self.firefoxProfile.set_preference('dom.ipc.plugins.enabled.libflashplayer.so','false')
-		self.firefoxProfile.set_preference('permissions.default.image',2)
-		self.driver = webdriver.Firefox(firefox_profile=self.firefoxProfile)
-		'''
+		self.display = Display(visible=0,size=(1024,768))
+		self.display.start()
 		self.driver = webdriver.Firefox()
 		self.req = requests.Session()
 
@@ -36,7 +28,8 @@ class Launcher():
 			self.driver.find_element_by_xpath('//a[@action="cancel"]').click()
 		except Exception as e:
 			pass
-		self.driver.find_element_by_xpath('//div[@role="navigation"]/div/div[2]/div/a').click()
+		time.sleep(2)
+		self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
 
 		# 将cookie保存在req中
 		cookies = self.driver.get_cookies()
@@ -82,7 +75,7 @@ class Launcher():
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
+			if type == "like" or type == "like_tagged" or type == "feedback_reaction_generic":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				like_list.append(url)
 			if type == "story_reshare":
