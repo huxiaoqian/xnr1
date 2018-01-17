@@ -183,7 +183,7 @@ def save_and_trans(text_dict):
                 count = count*1.1
                 print 'sleep over, next try ...'
         try:
-            for i in range(len(trans_result)):
+            for i in range(len(untranslated_text_list)):
                 mid = untranslated_mids[i]
                 text = trans_result[i]
                 text_dict[mid] = text
@@ -205,16 +205,17 @@ def get_filter_keywords(fb_flow_text_index_list, uid_list):
         #如果没有结果则对其进行翻译，得到最终结果；反之，不用进行翻译直接进行重新计算得到最终结果
         text_dict = content['text_dict']
         #text_dict = {'mid1': text1, 'mid2': text2, ...}
-        
+       
         sample_num = min([int(0.1*len(text_dict)), 20])
         if len(text_dict):  #如果有内容的话，至少抽取一篇
             if not sample_num:
                 sample_num = 1
-
             sample_text_keys = random.sample(text_dict, sample_num)
             sample_text_list = []
+            
             for key in sample_text_keys:
                 sample_text_list.append(text_dict[key])
+            
             if get_weibo(sample_text_list):
                 result = get_weibo(text_dict.values())
             else:
