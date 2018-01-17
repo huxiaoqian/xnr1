@@ -28,24 +28,59 @@ class TopkHeap(object):
 
 def com_p(word_list,domain_dict,domain_count,len_dict,total):
 
+
+    print 'com_p'
     p = 0
     test_word = set(word_list.keys())
+
+
+    test_word_encode = []
+    for word in test_word :
+        test_word_encode.append(word.encode('utf8'))
+    test_word_encode = set(test_word_encode)
+
     train_word = set(domain_dict.keys())
-    c_set = test_word & train_word 
+    # print 'test_word'
+    # print test_word
+    # print 'train_word'
+    # print train_word
+    # c_set = test_word & train_word
+    c_set = test_word_encode & train_word
+    print 'c_set'
+    print c_set
+    for k in c_set:
+        print 'domain_dict[k]'
+        print domain_dict[k]
+        print 'word_list[k]'
+        print word_list[k]
+    print 'domain_count'
+    print domain_count
     p = sum([float(domain_dict[k])*float(word_list[k])/float(domain_count) for k in c_set])
     return p
 
 def load_weibo(uid_weibo):
-
+    print 'load_weibo'
+    print 'uid_weibo'
+    print uid_weibo
     result_data = dict()
     p_data = dict()
     for k,v in uid_weibo.iteritems():
         domain_p = TOPIC_DICT
         for d_k in domain_p.keys():
             domain_p[d_k] = com_p(v,DOMAIN_DICT[d_k],DOMAIN_COUNT[d_k],LEN_DICT[d_k],TOTAL)#计算文档属于每一个类的概率
+            print 'd_k'
+            print d_k
+            print 'domain_p[d_k]'
+            print domain_p[d_k]
             end_time = time.time()        
+        
         result_data[k] = domain_p
         p_data[k] = rank_result(domain_p)
+        print 'result_data[k]'
+        print result_data[k]
+        print 'p_data[k]'
+        print p_data[k]
+
     return result_data,p_data
 
 def rank_dict(has_word):
@@ -87,16 +122,20 @@ def topic_classfiy(uid_list,uid_weibo):#话题分类主函数
         result_data = dict()
         uid_topic = dict()
         for uid in uid_list:
+            print 'AAA'
             result_data[uid] = TOPIC_DICT
             uid_topic[uid] = ['life']
         return result_data,uid_topic
     elif len(uid_weibo) and not len(uid_list):
+        print 'BBB'
         uid_list = uid_weibo.keys()
     elif not len(uid_weibo) and not len(uid_list):
+        print 'CCC'
         result_data = dict()
         uid_topic = dict()
         return result_data,uid_topic
     else:
+        print 'DDD'
         pass        
         
     result_data,uid_topic = load_weibo(uid_weibo)#话题分类主函数
@@ -127,7 +166,7 @@ if __name__ == '__main__':
     # result_data,uid_topic = topic_classfiy(my_uid_list, my_uid_weibo)
     # print result_data
     # print uid_topic
-    
+    '''
     data = {
       u'139819436047050': {
         'life': 0.00010221216734826073,
@@ -175,6 +214,37 @@ if __name__ == '__main__':
     for uid, d in data.items():
         print uid
         print rank_result(d)
+    '''
+    from elasticsearch import Elasticsearch
+    import json
+    ES_CLUSTER_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
+                       '219.224.134.215:9205']
+
+    es_translation = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+    index_name = 'fb_user_portrait'
+    index_type = 'user'
+    ids = ['544481513', '100010212181419']
+
+    uid_list = []
+    uid_weibo = {}
+    res = es_translation.mget(index=index_name, doc_type=index_type, body={'ids': ids})['docs']
+    for r in res:
+        uid = r['_id']
+        keywords = json.loads(r['_source']['filter_keywords'])
+        uid_list.append(uid)
+        uid_weibo[uid] = keywords
+    print uid_weibo
+    result_data,uid_topic = topic_classfiy(uid_list, uid_weibo)
+    print result_data
+    print uid_topic
+
+
+
+
+
+
+
+
 
 
 
