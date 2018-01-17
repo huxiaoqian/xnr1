@@ -17,12 +17,12 @@ class Follower():
 		except Exception as e:
 			print "no uid"
 
-	def get_follower(self):
+	def get_follow(self):
 		try:
-			for each in self.api.followers(self.uid):
-				name = each.name
-				screen_name = each.screen_name
-				id = each.id
+			for each in self.api.friends_ids(self.uid):
+				id = each
+				name = self.api.get_user(each).name
+				screen_name = self.api.get_user(each).screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
@@ -31,10 +31,10 @@ class Follower():
 				}
 				self.list.append(item)
 		except Exception as e:
-			for each in self.api.followers():
-				name = each.name
-				screen_name = each.screen_name
-				id = each.id
+			for each in self.api.friends_ids():
+				id = each
+				name = self.api.get_user(each).name
+				screen_name = self.api.get_user(each).screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
@@ -44,16 +44,14 @@ class Follower():
 				self.list.append(item)
 		return self.list
 
-
 	def save(self, indexName, typeName, list):
 		self.es.executeES(indexName, typeName, list)
 
 
 if __name__ == '__main__':
 	current_ts = int(time.time())
-	follower = Follower('18538728360@163.com','zyxing,0513',current_ts,"902921493155217409") #传uid
+	follower = Follower('8617078448226','xnr123456',current_ts,"902921493155217409") #传uid
 	
-	list = follower.get_follower()
-	follower.save('twitter_feedback_fans', 'text', list)
-
+	list = follower.get_follow()
+	follower.save('twitter_feedback_follow', 'text', list)
 
