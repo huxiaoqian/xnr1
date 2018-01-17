@@ -456,13 +456,10 @@ def update_topic(uid_list=[]):
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
     user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
-
-    print 'len(user_topic_data)'
-    print len(user_topic_data)
-
+    print 'user_topic_data'
+    print user_topic_data
     user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
-    print 'len(user_topic_dict)'
-    print len(user_topic_dict)
+
     
     user_topic_string = {}
     for uid, topic_list in user_topic_list.items():
@@ -475,13 +472,13 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
                 'topic_string': user_topic_string[uid]
             }
         else:
             user_topic[uid] = {
                 'filter_keywords': json.dumps({}),
-                # 'topic': json.dumps({}),
+                'topic': json.dumps({}),
                 'topic_string': ''
             }
     return save_data2es(user_topic)
