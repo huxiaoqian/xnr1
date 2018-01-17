@@ -328,3 +328,8 @@ body.modal-open {
 .pagination>li>a:focus, .pagination>li>a:hover {
     color: white;
 }
+.disableCss{
+    pointer-events:none;
+    color:#afafaf!important;
+    cursor:not-allowed!important;
+}
