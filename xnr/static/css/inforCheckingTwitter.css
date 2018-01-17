@@ -86,20 +86,18 @@ body {
 }
 #container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span {
     display: inline-block;
-    width: 16%;
+    width: 13%;
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
+#container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span:nth-child(6),
 #container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span:nth-child(2),
 #container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span:nth-child(4) {
     border-left:1px solid slategrey;
     border-right:1px solid slategrey;
-}
-#container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span:nth-child(6) {
-    border-left:1px solid slategrey;
 }
 #container .content-2 .hot-2 .post_perfect .post_center-hot .center_3 span:hover {
     color:#eb7350;

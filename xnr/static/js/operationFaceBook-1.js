@@ -743,10 +743,11 @@ function historyNews(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+retNum+'）</b></span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论<b style="'+C3+'">（'+row.comment+'）</b></span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)" style="display:'+showHide2+';"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         // '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
                         '               <span class="cen3-5" onclick="dialogue(this)" style="display:'+showHide4+';"><i class="icon icon-book"></i>&nbsp;&nbsp;查看对话</span>'+
                         '               <span class="cen3-6" onclick="showInput(this)" style="display:'+showHide4+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+

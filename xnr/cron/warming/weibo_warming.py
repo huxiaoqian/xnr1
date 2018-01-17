@@ -24,6 +24,14 @@ from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fa
                          weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
                          es_user_profile,profile_index_name,profile_index_type
 
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+        user_name=user_result['nick_name']
+    except:
+        user_name=''
+    return user_name
 
 def get_user_xnr_list(user_account):
     query_body={
@@ -169,6 +177,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
             #if ((sensitive_words==tem_word_one) or (sensitive_words==tem_word_two)):
             #    pass
             #else:
+            #查询用户昵称
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
             s_result.append(item['_source'])
 
         s_result.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)

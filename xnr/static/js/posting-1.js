@@ -50,6 +50,9 @@ $('#container .type_page #myTabs a').on('click',function () {
         $('.post_post').hide();
         public_ajax.call_request('get',flow_faw_url,flow_faw);
         public_ajax.call_request('get',focus_main_url,focus_main);
+    }else {
+        arrowName='@用户推荐';
+        operateType='intel_post';
     }
     if (arrow!='#reportNote'){
         $('.post_post').show();
@@ -329,7 +332,7 @@ function _judge() {
         $('.reportNote-2 span.del_user').removeClass('disableCss');
     }
 
-}
+};
 $('.reportNote-2 span.del_user').on('click',function () {
     var del_url='/weibo_xnr_operate/un_trace_follow/?xnr_user_no='+ID_Num+'&uid_string='+mainUserUid.join('，');
     public_ajax.call_request('get',del_url,postYES)
@@ -385,16 +388,10 @@ var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='origin';
-        // recommendUrl='/weibo_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
-        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t=='r'){
         operateType='retweet';
-        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
-        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }else if (t== 'c'){
         operateType='comment';
-        // recommendUrl='/weibo_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
-        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
@@ -524,7 +521,7 @@ function defalutWords(data) {
                 formatter: function (value, row, index) {
                     var name,txt,img;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        name='未命名';
+                        name=row.uid;
                     }else {
                         name=row.nick_name;
                     };
@@ -559,11 +556,12 @@ function defalutWords(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-5" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -731,14 +729,15 @@ function hotWeibo(data) {
                         // '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         // '           </div>'+
                         '           <div class="center_3">'+
-                        '               <span onclick="joinlab(this)"><i class="icon icon-upload-alt" title="加入语料库"></i>&nbsp;&nbsp;加入语料库</span>'+
                         // '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似微博"></i>&nbsp;&nbsp;相似微博</span>'+
                         // '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
-                        '               <span onclick="related(this)"><i class="icon icon-stethoscope" title="事件子观点及相关微博"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
-                        '               <span onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
-                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="转发数"></i>&nbsp;&nbsp;转发&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
-                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="赞"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span title="事件子观点及相关微博" onclick="related(this)"><i class="icon icon-stethoscope"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
+                        '               <span title="复制" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
+                        '               <span title="转发数" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span title="评论数" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '               <span title="赞" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span title="机器人回复" class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span title="加入语料库" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -1037,7 +1036,7 @@ function businessWeibo(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 2,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,20,25],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -1096,11 +1095,12 @@ function businessWeibo(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-5" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
@@ -1263,7 +1263,9 @@ eventList([{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:
 function lookType(showType) {
     $('#intelligenceTabs li').eq(0).removeClass('active');
     $('.radyType1').addClass('active').show();
+    $('.radyType2').show();
     $('.radyType3').show();
+    $('.radyType4').show();
     $('.radyType5').show();
     $('.radyType6').show();
     $('#z-0').eq(0).removeClass('active');

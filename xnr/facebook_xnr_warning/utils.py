@@ -200,14 +200,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_detail=dict()
         user_detail['uid']=user['uid']
         user_detail['user_sensitive']=user['sensitive']
-        user_lookup_id=user['uid']
-        print user_lookup_id
-        try:
-            #user_result=es_xnr.get(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,id=user_lookup_id)['_source']
-            user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=user['uid'])['_source']
-            user_detail['user_name']=user_result['nick_name']
-        except:
-            user_detail['user_name']=''
+        user_detail['user_name']=get_user_nickname(user['uid'])
 
         query_body={
             'query':{
@@ -313,12 +306,12 @@ def show_personnal_warning(xnr_user_no,start_time,end_time):
             warming_list.append(item)
             user_uid_list.append(user_uid)
 
-    if user_warming:
-        user_warming.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
+    if warming_list:
+        warming_list.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
     else:
         pass
 
-    return user_warming
+    return warming_list
 
 ###################################################################
 ###################       speech warning       ##################
