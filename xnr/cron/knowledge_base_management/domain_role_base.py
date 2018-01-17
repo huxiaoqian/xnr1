@@ -231,8 +231,7 @@ def get_flow_text_datetime_list(date_range_end_ts):
 # output：近期微博包含上述关键词的微博用户群体的画像数据
 def detect_by_keywords(keywords,datetime_list):
     keyword_list = keywords
-    print 'keyword_list:::',keyword_list
-    print 'datetime_list::',datetime_list
+
     group_uid_list = set()
 
     if datetime_list == []:

@@ -5,11 +5,12 @@ from launcher import Launcher
 from es import Es_twitter
 
 class Follower():
-	def __init__(self, username, password, *args):
+	def __init__(self, username, password, current_ts, *args):
 		self.launcher = Launcher(username, password)
 		self.driver = self.launcher.login()
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
+		self.update_time = current_ts
 		self.list = []
 		try:
 			self.uid = uid
@@ -25,7 +26,8 @@ class Follower():
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
-					'uid':id
+					'uid':id,
+					'update_time':self.update_time
 				}
 				self.list.append(item)
 		except Exception as e:
@@ -36,21 +38,20 @@ class Follower():
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
-					'uid':id
+					'uid':id,
+					'update_time':self.update_time
 				}
 				self.list.append(item)
-
 		return self.list
 
-	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+	def save(self, indexName, typeName, list):
+		self.es.executeES(indexName, typeName, list)
 
 
 if __name__ == '__main__':
 	follower = Follower('18538728360@163.com','zyxing,0513') #传uid
 	list = follower.get_follower()
 	print(list)
-	follower.save('twitter_feedback_fans_2017-11-13','text',list)
+	follower.save('twitter_feedback_fans','text',list)
 
 

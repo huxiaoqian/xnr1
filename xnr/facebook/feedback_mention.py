@@ -31,11 +31,10 @@ class Mention():
 				self.list.append(item)
 		return self.list
 
-	def save(self,indexName,typeName,list):
-		for item in list:
-			es.executeES(indexName,typeName,item)
+	def save(self, indexName, typeName, list):
+		es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	mention = Mention('8617078448226','xnr123456')
 	list = mention.get_mention()
-	mention.save('facebook_feedback_at_2017-11-13','text',list)
+	mention.save('facebook_feedback_at','text',list)

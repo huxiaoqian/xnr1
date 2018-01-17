@@ -1,6 +1,6 @@
 var operateType='info_warning';
 var time2=Date.parse(new Date())/1000;
-var timeUrl='/twitter_xnr_warning/show_date_warning/?account_name='+admin+'&start_time=0&end_time='+time2;
+var timeUrl='/twitter_xnr_warning/show_date_warning/?account_name='+admin+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',timeUrl,calendar);
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
@@ -36,7 +36,7 @@ $('#sure').on('click',function () {
 var contentList = {};
 function calendar(data){
     $.each(data,function (index,item) {
-        contentList['exo_'+index]=item['facebook_date_warming_content'];
+        contentList['exo_'+index]=item['twitter_date_warming_content'];
     })
 
     // $('#input-table').css('display', 'block');
@@ -602,8 +602,9 @@ function weibo(idx,data,words) {
                                 all='none';
                             }
                             for (var f of keywords){
-                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            txt2=rrr;
                         }else {
                             txt=item.text;
                             if (txt.length>=160){
@@ -637,6 +638,8 @@ function weibo(idx,data,words) {
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
+                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+

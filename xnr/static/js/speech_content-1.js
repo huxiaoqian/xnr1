@@ -56,7 +56,7 @@ function weibo(data) {
                         name=item.uid;
                     }else {
                         name=item.nick_name;
-                    };;
+                    };
                     if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                         img='/static/images/unknown.png';
                     }else {
@@ -82,8 +82,9 @@ function weibo(data) {
                                 all='none';
                             }
                             for (var f of keywords){
-                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            text2=rrr;
                         }else {
                             text=item.text;
                             if (text.length>=160){
@@ -127,6 +128,7 @@ function weibo(data) {
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
@@ -145,7 +147,6 @@ function weibo(data) {
 
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
-    
     var _val = $(this).val();
     var valCH=$('#typelist input:radio[name="focus"]:checked').val();
     if (_val == 'mize') {
@@ -208,30 +209,10 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-//获取信息
-function getInfo(_this) {
-    var alldata=[];
-    var uid = $(_this).parents('.everySpeak').find('.uid').text();alldata.push(uid);
-    var mid = $(_this).parents('.everySpeak').find('.mid').text();alldata.push(mid);
-    var txt=$(_this).parents('.everySpeak').find('.center_2').text().toString().replace(/#/g,'%23').replace(/&/g,'%26');alldata.push(txt);
-    var timestamp = $(_this).parents('.everySpeak').find('.timestamp').text();alldata.push(timestamp);
-    var forwarding = $(_this).parents('.everySpeak').find('.forwarding').text();alldata.push(forwarding);
-    var comment = $(_this).parents('.everySpeak').find('.comment').text();alldata.push(comment);
-    var sensitive = $(_this).parents('.everySpeak').find('.sensitive').text();alldata.push(sensitive);
-    var sensitiveWords = $(_this).parents('.everySpeak').find('.sensitiveWords').text().toString().replace(/&/g,'%26');alldata.push(sensitiveWords);
-    return alldata;
-}
-//加入预警
-function joinPolice(_this) {
-    var info=getInfo(_this);
-    var police_url='/weibo_xnr_warming/addto_speech_warming/?xnr_user_no='+ID_Num+'&uid='+info[0]+'&text='+info[2]+
-        '&mid='+info[1]+'&timestamp='+info[3]+'&retweeted='+info[4]+'&comment='+info[5]+'&like=0';
-    public_ajax.call_request('get',police_url,postYES)
-}
+
 //一键上报
 function oneUP(_this) {
     var info=getInfo(_this);
-    console.log(info)
     var allMent=[];
     allMent.push(info[1]);
     var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);

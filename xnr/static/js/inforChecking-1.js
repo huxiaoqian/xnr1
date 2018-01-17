@@ -214,6 +214,7 @@ function hotPost(data) {
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+

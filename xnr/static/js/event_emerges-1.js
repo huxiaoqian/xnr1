@@ -1,5 +1,5 @@
 var time2=Date.parse(new Date())/1000;
-var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time=0&end_time='+time2;
+var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
 
 //时间选择
@@ -88,7 +88,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -153,7 +153,7 @@ function weibo(data){
                         // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         // '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
-                        '                <a class="center_1">'+dataArray[i].event_name+'</a>'+
+                        '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
                         '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -225,7 +225,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -287,7 +287,7 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                     '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -356,7 +356,7 @@ function weibo(data){
                 // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                 // '                </label>'+
                 '                <img src="/static/images/post-6.png" class="center_icon">'+
-                '                <a class="center_1">'+dataArray[i+a].event_name+'</a>'+
+                '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
                 '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                 '            </div>'+
                 '            <div class="centerdetails" style="padding-left:40px;">'+
@@ -510,10 +510,10 @@ function mainWeibo(_data,idx) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var text,text2,time,img,all='',name;
-                    if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
-                        name=item.uid;
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
+                        name=row.uid;
                     }else {
-                        name=item.nick_name;
+                        name=row.nick_name;
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
                         img='/static/images/unknown.png';
@@ -539,8 +539,9 @@ function mainWeibo(_data,idx) {
                                 all='none';
                             }
                             for (var f of keywords){
-                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            text2=rrr;
                         }else {
                             text=row.text;
                             if (text.length>=160){
@@ -583,6 +584,8 @@ function mainWeibo(_data,idx) {
                         '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
                         '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '       <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '       <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+
                         '        <input type="text" class="comtnt" placeholder="评论内容"/>'+

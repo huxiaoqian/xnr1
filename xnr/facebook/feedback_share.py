@@ -30,11 +30,10 @@ class Share():
 				self.list.append(item)
 		return self.list
 		
-	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+	def save(self, indexName, typeName, list):
+		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
 	share = Share('8617078448226','xnr123456')
 	list = share.get_share()
-	share.save('facebook_feedback_retweet_2017-11-13','text',list)
+	share.save('facebook_feedback_retweet','text',list)
