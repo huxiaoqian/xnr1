@@ -3,19 +3,19 @@
 
 from launcher import Launcher
 from es import Es_twitter
+import time
 
 class Follower():
 	def __init__(self, username, password, current_ts, *args):
 		self.launcher = Launcher(username, password)
-		self.driver = self.launcher.login()
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
 		self.update_time = current_ts
 		self.list = []
 		try:
-			self.uid = uid
+			self.uid = args[0]
 		except Exception as e:
-			pass
+			print "no uid"
 
 	def get_follower(self):
 		try:
@@ -44,14 +44,16 @@ class Follower():
 				self.list.append(item)
 		return self.list
 
+
 	def save(self, indexName, typeName, list):
 		self.es.executeES(indexName, typeName, list)
 
 
 if __name__ == '__main__':
-	follower = Follower('18538728360@163.com','zyxing,0513') #传uid
+	current_ts = int(time.time())
+	follower = Follower('18538728360@163.com','zyxing,0513',current_ts,"902921493155217409") #传uid
+	
 	list = follower.get_follower()
-	print(list)
-	follower.save('twitter_feedback_fans','text',list)
+	follower.save('twitter_feedback_fans', 'text', list)
 
 

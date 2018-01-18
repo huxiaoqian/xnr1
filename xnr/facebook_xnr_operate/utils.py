@@ -11,7 +11,7 @@ from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
 					fb_xnr_timing_list_index_name, fb_xnr_timing_list_index_type,\
 					fb_xnr_retweet_timing_list_index_name, fb_xnr_retweet_timing_list_index_type,\
 					facebook_flow_text_index_name_pre, facebook_flow_text_index_type,\
-					facebook_user_index_name, facebook_user_index_type, fb_social_sensing_index_name, \
+					facebook_user_index_name, facebook_user_index_type, fb_social_sensing_index_name_pre, \
 					fb_social_sensing_index_type, fb_hot_keyword_task_index_name, fb_hot_keyword_task_index_type,\
 					fb_hot_subopinion_results_index_name, fb_hot_subopinion_results_index_type, \
 					es_fb_user_portrait, fb_portrait_index_name, fb_portrait_index_type, \
@@ -235,6 +235,8 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         'size':TOP_WEIBOS_LIMIT
     }
 
+    fb_social_sensing_index_name = fb_social_sensing_index_name_pre + ts2datetime(time.time())
+
     es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,body=query_body)['hits']['hits']
 
     if not es_results:    
@@ -250,6 +252,7 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         result['photo_url'] = photo_url
         results_all.append(result)
     return results_all
+    
 
 def push_keywords_task(task_detail):
 
