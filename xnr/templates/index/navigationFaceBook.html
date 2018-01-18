@@ -342,6 +342,32 @@
 <script src="/static/js/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
     function getLocalTime(nS) {
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
     }
@@ -384,7 +410,7 @@
     },function () {
         $(this).attr('src','/static/images/weiboload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=weibo';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=weibo';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
         $.fn.fullpage.setAutoScrolling(false);
         $('#loadingJump').modal('show');
@@ -399,7 +425,7 @@
     },function () {
         $(this).attr('src','/static/images/QQload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=qq';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=qq';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
         $.fn.fullpage.setAutoScrolling(false);
         $('#loadingJump').modal('show');
@@ -414,7 +440,7 @@
     },function () {
         $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=weixin';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
         $.fn.fullpage.setAutoScrolling(false);
         $('#loadingJump').modal('show');
@@ -429,7 +455,7 @@
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weixin&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=twitter';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
         $.fn.fullpage.setAutoScrolling(false);
         $('#loadingJump').modal('show');
@@ -494,7 +520,7 @@
     //登录类型
     var admin='admin@qq.com';
     //虚拟人列表
-    var oneTrue=1;
+    var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
@@ -502,18 +528,28 @@
         dataType: "json",
         success: function (data) {
             var str='';
+            var sameid=localStorage.getItem('sameXnr');
             for (var k in data){
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
                 }
                 var isChecked='';
-                if (oneTrue=='1'){
+                if (sameid==k){
                     isChecked='checked';
-                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
-                    localStorage.setItem('user',encodeURI(k));
-                    localStorage.setItem('userRelName',encodeURI(data[k]));
-                    localStorage.setItem('userName',encodeURI(data[k]));
-                };
+                    sameID=sameid;
+                    downXnr(k,data[k]);
+                }else if (oneTrue==1){
+                    isChecked='checked';
+                    sameID=sameid
+                    downXnr(k,data[k]);
+                }
+//                if (oneTrue=='1'){
+//                    isChecked='checked';
+//                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
+//                    localStorage.setItem('user',encodeURI(k));
+//                    localStorage.setItem('userRelName',encodeURI(data[k]));
+//                    localStorage.setItem('userName',encodeURI(data[k]));
+//                };
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
                     '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
@@ -524,6 +560,17 @@
             $('#choosePerson .identity').html(str);
         }
     });
-
+    function downXnr(k1,k2) {
+        $('#xnrName').text(k2+'（'+k1+'）').attr('title',k2+'（'+k1+'）');
+        localStorage.setItem('user',encodeURI(k1));
+        localStorage.setItem('userRelName',encodeURI(k2));
+        localStorage.setItem('userName',encodeURI(k2));
+    }
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
+        }
+    }
 </script>
 {% endblock %}

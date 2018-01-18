@@ -164,13 +164,13 @@ def tw_like(account_name,password, _id):
     # uid: 原贴用户id
     operation = Operation(account_name,password)
     
-    #try:
+    try:
 
-    operation.do_favourite(_id)
+        operation.do_favourite(long(_id))
 
-    #     mark = True
-    # except:
-    #     mark = False
+        mark = True
+    except:
+        mark = False
 
    
     return mark
@@ -199,12 +199,12 @@ def tw_mention(account_name,password, text, xnr_user_no, tweet_type):
     return mark
 
 # 私信
-def tw_message(account_name,password, text, screen_name):
+def tw_message(account_name,password, text, uid):
 
     operation = Operation(account_name,password)
     
     #try:
-    print operation.message(screen_name, text)
+    print operation.message(uid, text)
     mark = True
     # except:
     #     mark = False
