@@ -97,6 +97,7 @@ def domain_main(user_data):#facebook用户身份分类主函数
     '''
     user_label={}
     uid_list = user_data.keys()
+    
     if len(uid_list) == 0:
         return {}
     else:
@@ -105,8 +106,6 @@ def domain_main(user_data):#facebook用户身份分类主函数
         while True:              
             if user_label:
                 len_user_label = len(user_label)
-            print len(user_data)
-            print len_user_label
             if len(user_data) == len_user_label:
                 return user_label
             else:   
@@ -116,7 +115,6 @@ def domain_main(user_data):#facebook用户身份分类主函数
 def get_domain(user_data, user_label, count):
     for k,v in user_data.iteritems():
         if k not in user_label:
-            print k
             label = 'other'
             try:
                 category = v['category']
