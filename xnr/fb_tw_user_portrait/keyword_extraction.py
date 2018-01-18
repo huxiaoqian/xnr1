@@ -19,7 +19,7 @@ from global_utils import es_fb_user_portrait as es, \
                          fb_bci_index_name_pre, fb_bci_index_type, \
                          es_translation, translation_index_name, translation_index_type
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
-from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH
+from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH, DAY, WEEK
 
 sys.path.append('../cron')
 from trans.trans import trans, traditional2simplified
