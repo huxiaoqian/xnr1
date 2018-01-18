@@ -398,7 +398,7 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
     #         }
     #     }
     # }
-
+    #social_sensing_index_name = ''
     es_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,body=query_body)['hits']['hits']
     #print 'topic_field_en:::',topic_field_en
     #print 'es_results::',es_results

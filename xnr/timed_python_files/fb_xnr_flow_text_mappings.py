@@ -128,7 +128,10 @@ def fb_xnr_flow_text_mappings(index_name):
                             },
                         'retweeted':{
                             'type':'long'
-                            }
+                            },
+                        'like':{   # 点赞
+                            'type':'long' 
+                        }
                         }
                     }
                 }
