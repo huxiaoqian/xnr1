@@ -29,58 +29,84 @@ class TopkHeap(object):
 def com_p(word_list,domain_dict,domain_count,len_dict,total):
 
 
-    print 'com_p'
+    # print 'com_p'
     p = 0
     test_word = set(word_list.keys())
 
 
-    test_word_encode = []
-    for word in test_word :
-        test_word_encode.append(word.encode('utf8'))
-    test_word_encode = set(test_word_encode)
+    # test_word_encode = []
+    # for word in test_word :
+    #     test_word_encode.append(word.encode('utf8'))
+    # test_word_encode = set(test_word_encode)
 
     train_word = set(domain_dict.keys())
     # print 'test_word'
     # print test_word
     # print 'train_word'
     # print train_word
-    # c_set = test_word & train_word
-    c_set = test_word_encode & train_word
-    print 'c_set'
-    print c_set
-    for k in c_set:
-        print 'domain_dict[k]'
-        print domain_dict[k]
-        print 'word_list[k]'
-        print word_list[k]
-    print 'domain_count'
-    print domain_count
+    c_set = test_word & train_word
+    # c_set = test_word_encode & train_word
+    # print 'c_set'
+    # print c_set
+    # for k in c_set:
+    #     print 'domain_dict[k]'
+    #     print domain_dict[k]
+    #     print 'word_list[k]'
+    #     print word_list[k]
+    # print 'domain_count'
+    # print domain_count
     p = sum([float(domain_dict[k])*float(word_list[k])/float(domain_count) for k in c_set])
+    # print 'p'
+    # print p
     return p
 
 def load_weibo(uid_weibo):
-    print 'load_weibo'
-    print 'uid_weibo'
-    print uid_weibo
-    result_data = dict()
-    p_data = dict()
-    for k,v in uid_weibo.iteritems():
+    # print 'load_weibo'
+    # print 'uid_weibo'
+    # print uid_weibo
+    result_data = {}
+    p_data = {}
+    res = {}
+    h = []
+    m = []
+    for k,v in uid_weibo.items():
+        #转换编码格式
+        v_temp = {}
+        for kk, vv in v.items():
+            v_temp[kk.encode('utf8')] = vv*100
+        v = v_temp
+
         domain_p = TOPIC_DICT
         for d_k in domain_p.keys():
             domain_p[d_k] = com_p(v,DOMAIN_DICT[d_k],DOMAIN_COUNT[d_k],LEN_DICT[d_k],TOTAL)#计算文档属于每一个类的概率
-            print 'd_k'
-            print d_k
-            print 'domain_p[d_k]'
-            print domain_p[d_k]
-            end_time = time.time()        
-        
+        #     print 'd_k'
+        #     print d_k
+        #     print 'domain_p[d_k]'
+        #     print domain_p[d_k]      
+        # print '========================='
+        # print 'domain_p'
+        # print domain_p
+        # print '========================='
         result_data[k] = domain_p
         p_data[k] = rank_result(domain_p)
-        print 'result_data[k]'
-        print result_data[k]
-        print 'p_data[k]'
-        print p_data[k]
-
+        
+    #     print 'result_data[k]'
+    #     print result_data[k]
+    #     print 'p_data[k]'
+    #     print p_data[k]
+    #     # res[k] = domain_p
+    #     print 'k'
+    #     print k
+    #     if k not in res:
+    #         res[k] = domain_p
+    #     h.append(k)
+    #     m.append(domain_p)
+    #     print 'resAAAAA'
+    #     print res
+    # print 'hhhhhhhhhh'
+    # print h
+    # print 'mmmmmmmmmm'
+    # print m
     return result_data,p_data
 
 def rank_dict(has_word):
@@ -122,20 +148,20 @@ def topic_classfiy(uid_list,uid_weibo):#话题分类主函数
         result_data = dict()
         uid_topic = dict()
         for uid in uid_list:
-            print 'AAA'
+            # print 'AAA'
             result_data[uid] = TOPIC_DICT
             uid_topic[uid] = ['life']
         return result_data,uid_topic
     elif len(uid_weibo) and not len(uid_list):
-        print 'BBB'
+        # print 'BBB'
         uid_list = uid_weibo.keys()
     elif not len(uid_weibo) and not len(uid_list):
-        print 'CCC'
+        # print 'CCC'
         result_data = dict()
         uid_topic = dict()
         return result_data,uid_topic
     else:
-        print 'DDD'
+        # print 'DDD'
         pass        
         
     result_data,uid_topic = load_weibo(uid_weibo)#话题分类主函数
