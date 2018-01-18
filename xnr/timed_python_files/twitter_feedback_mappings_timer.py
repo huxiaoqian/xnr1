@@ -34,6 +34,10 @@ def twitter_feedback_like_mappings(twitter_feedback_like_index_name):
 						'type':'string',
 						'index':'not_analyzed'
 					},
+					'user_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
 					'nick_name':{
 						'type':'string',
 						'index':'not_analyzed'
@@ -99,6 +103,10 @@ def twitter_feedback_retweet_mappings(twitter_feedback_retweet_index_name):
 						'type':'string',
 						'index':'not_analyzed'
 					},
+					'user_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
 					'nick_name':{
 						'type':'string',
 						'index':'not_analyzed'
@@ -128,6 +136,18 @@ def twitter_feedback_retweet_mappings(twitter_feedback_retweet_index_name):
 						'index':'not_analyzed'
 					},
 					'root_uid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'root_user_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'root_nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'root_text':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -169,6 +189,10 @@ def twitter_feedback_at_mappings(twitter_feedback_at_index_name):
 						'index':'not_analyzed'
 					},
 					'photo_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'user_name':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -235,6 +259,10 @@ def twitter_feedback_comment_mappings(twitter_feedback_comment_index_name):
 						'index':'not_analyzed'
 					},
 					'photo_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'user_name':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -308,6 +336,10 @@ def twitter_feedback_private_mappings(twitter_feedback_private_index_name):
 						'type':'string',
 						'index':'not_analyzed'
 					},
+					'user_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
 					'nick_name':{
 						'type':'string',
 						'index':'not_analyzed'
@@ -374,6 +406,10 @@ def twitter_feedback_fans_mappings():  ## 粉丝提醒及回粉
 						'index':'not_analyzed'
 					},
 					'photo_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'user_name':{
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -461,6 +497,10 @@ def twitter_feedback_follow_mappings():  ## 粉丝提醒及回粉
 						'index':'not_analyzed'
 					},
 					'photo_url':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'user_name':{
 						'type':'string',
 						'index':'not_analyzed'
 					},

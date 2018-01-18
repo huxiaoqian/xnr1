@@ -71,13 +71,10 @@ class Operation():
 		 	print(e)
 
 	def do_favourite(self, tid):
-		#try:
-		print 'do_favourite1111'
-		print self.api.create_favorite(id)
-		print 'do_favourite2222'
-
-		# except Exception as e:
-		# 	print(e)
+		try:
+			self.api.create_favorite(id)
+		except Exception as e:
+			print(e)
 
 	def do_comment(self, uid, tid, text):
 		driver = self.launcher.login()

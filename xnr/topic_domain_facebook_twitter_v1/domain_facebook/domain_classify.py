@@ -6,6 +6,7 @@ import scws
 import sys
 import csv
 import opencc
+import time
 from global_utils_do import *
 
 sys.path.append('../../cron')
@@ -51,7 +52,8 @@ def classify_by_biostring(bio_string, flag):#根据用户bio_string划分
             bio_string_s = '_'.join(trans(bio_list))
         except Exception,e:
             print e
-            bio_string_s = '_'.join(bio_list)
+            # bio_string_s = '_'.join(bio_list)
+            return False
 
     # bio_string_s = cc.convert(bio_string.decode('utf-8'))
     kwdlist = cut(s, bio_string_s.encode('utf-8'))
@@ -61,7 +63,6 @@ def classify_by_biostring(bio_string, flag):#根据用户bio_string划分
     mediaw_weight = sum([1 for keyword in kwdlist if keyword in mediaw]) # 媒体人士
     businessw_weight = sum([1 for keyword in kwdlist if keyword in businessw]) # 商业人士
 
-    print lawyer_weight, adminw_weight, mediaw_weight, businessw_weight
     max_weight = 0
     if max_weight < businessw_weight:
         max_weight = businessw_weight
@@ -94,51 +95,71 @@ def domain_main(user_data):#facebook用户身份分类主函数
         输出数据：
         user_label用户身份字典:{'uid':label,'uid':label...}
     '''
-    if len(user_data) == 0:
+    user_label={}
+    uid_list = user_data.keys()
+    if len(uid_list) == 0:
         return {}
-
-    user_label = dict()
+    else:
+        count = 1.0
+        len_user_label = 0
+        while True:              
+            if user_label:
+                len_user_label = len(user_label)
+            print len(user_data)
+            print len_user_label
+            if len(user_data) == len_user_label:
+                return user_label
+            else:   
+                user_label = get_domain(user_data, user_label, count)
+                count = 1.1*count   #时间逐渐加长，以避免设置的sleep时间过短而无法结束
+        
+def get_domain(user_data, user_label, count):
     for k,v in user_data.iteritems():
-        label = 'other'
-        try:
-            category = v['category']
-        except KeyError:
-            category = ''
-        try:
-            bio_string = v['bio_str']
-        except KeyError:
-            bio_string = ''        
-        try:
-            number_of_text = v['number_of_text']
-        except KeyError:
-            number_of_text = 0
+        if k not in user_label:
+            print k
+            label = 'other'
+            try:
+                category = v['category']
+            except KeyError:
+                category = ''
+            try:
+                bio_string = v['bio_str']
+            except KeyError:
+                bio_string = ''        
+            try:
+                number_of_text = v['number_of_text']
+            except KeyError:
+                number_of_text = 0
 
-        #根据category划分
-        if category:
-            label = classify_by_category(category)
+            #根据category划分
+            if category:
+                label = classify_by_category(category)
 
-        if label != 'other':
-            user_label[k] = label
-            continue
-
-        #根据bio_string划分
-        #不翻译时
-        if bio_string:
-            label = classify_by_biostring(bio_string, flag=1)   #转成简体
-        if label != 'other':
-            user_label[k] = label
-            continue
-        else:
-            label = classify_by_biostring(bio_string, flag=3)   #翻译
             if label != 'other':
                 user_label[k] = label
                 continue
 
-        #根据发帖数量判定
-        if number_of_text >= ACTIVE_COUNT:
-            label = 'active'
-        user_label[k] = label
+            #根据bio_string划分
+            #不翻译时
+            if bio_string:
+                label = classify_by_biostring(bio_string, flag=1)   #转成简体
+            if label != 'other':
+                user_label[k] = label
+                continue
+            else:
+                label = classify_by_biostring(bio_string, flag=3)   #翻译
+                if not label:   #翻译出错，请求频次太快
+                    print 'sleep start'
+                    time.sleep(count)
+                    print 'sleep over'
+                    continue
+                    print 'should never come out'
+                if label != 'other':
+                    user_label[k] = label
+                    continue
 
+            #根据发帖数量判定
+            if number_of_text >= ACTIVE_COUNT:
+                label = 'active'
+            user_label[k] = label
     return user_label
-      
-        

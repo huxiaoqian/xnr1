@@ -6,7 +6,7 @@ from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import weibo_date_remind_index_name,weibo_date_remind_index_type,\
 						weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
-						weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
+						weibo_hidden_expression_index_name,weibo_hidden_expression_index_type
 
 def weibo_date_remind_mappings():
 	index_info = {
@@ -117,9 +117,9 @@ def weibo_hidden_expression_mappings():
 
 if __name__ == '__main__':
 
-	#weibo_date_remind_mappings()
-	#weibo_sensitive_words_mappings()
-	#weibo_hidden_expression_mappings()
+	weibo_date_remind_mappings()
+	weibo_sensitive_words_mappings()
+	weibo_hidden_expression_mappings()
 	#es.indices.put_mapping(index=weibo_hidden_expression_index_name, doc_type=weibo_hidden_expression_index_type, body={"properties": {"submitter" : {"type": "string", "index":"not_analyzed"}}})
 	#es.indices.put_mapping(index=weibo_sensitive_words_index_name, doc_type=weibo_sensitive_words_index_type, body={"properties": {"submitter" : {"type": "string", "index":"not_analyzed"}}})
 	#es.indices.put_mapping(index=weibo_date_remind_index_name, doc_type=weibo_date_remind_index_type, body={"properties": {"submitter" : {"type": "string", "index":"not_analyzed"}}})

@@ -55,12 +55,34 @@ def load_timestamp(type='test'):
     return timestamp
 
 def save_data2es(data):
+    update_uid_list = []
+    create_uid_list = []
     try:
         for uid, d in data.items():
             if es.exists(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, id=uid):
-                es.update(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body={'doc': d}, id=uid)
+                update_uid_list.append(uid)
             else:
-                es.index(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body=d, id=uid)
+                create_uid_list.append(uid)
+        #bulk create
+        bulk_create_action = []
+        if create_uid_list:
+            for uid in create_uid_list:
+                create_action = {'index':{'_id': uid}}
+                bulk_create_action.extend([create_action, data[uid]])
+            result = es.bulk(bulk_create_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            if result['errors'] :
+                print result
+                return False
+        #bulk update
+        if update_uid_list:
+            bulk_update_action = []
+            for uid in update_uid_list:
+                update_action = {'update':{'_id': uid}}
+                bulk_update_action.extend([update_action, {'doc': data[uid]}])
+            result = es.bulk(bulk_update_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            if result['errors'] :
+                print result
+                return False
     except Exception,e:
         print e
         return False
@@ -97,20 +119,26 @@ def update_keywords(uid_list=[]):
                     user_keywords[uid] = {
                         'keywords': {}
                     }
-                if content['keywords_dict'][0]:
+                if content.has_key('keywords_dict'):
                     user_keywords[uid]['keywords'] = merge_dict(user_keywords[uid]['keywords'], json.loads(content['keywords_dict'][0]))
         except Exception,e:
             print e
-
-    for uid, content in user_keywords.items():
-        temp_keywords = {}
-        if len(content['keywords']) >= 50:
-            for item in sorted(content['keywords'].items(), lambda x, y: cmp(x[1], y[1]), reverse=True)[:50]:
-                temp_keywords[item[0]] = item[1]
+    for uid in uid_list:
+        if uid in user_keywords:
+            content = user_keywords[uid]
+            temp_keywords = {}
+            if len(content['keywords']) >= 50:
+                for item in sorted(content['keywords'].items(), lambda x, y: cmp(x[1], y[1]), reverse=True)[:50]:
+                    temp_keywords[item[0]] = item[1]
+            else:
+                temp_keywords = content['keywords']
+            user_keywords[uid]['keywords'] = json.dumps(temp_keywords)
+            user_keywords[uid]['keywords_string'] = '&'.join(temp_keywords.keys())
         else:
-            temp_keywords = content['keywords']
-        user_keywords[uid]['keywords'] = json.dumps(temp_keywords)
-        user_keywords[uid]['keywords_string'] = '&'.join(temp_keywords.keys())
+            user_keywords[uid] = {
+                'keywords': json.dumps({}),
+                'keywords_string': ''   
+            }
     return save_data2es(user_keywords)
 
 
@@ -143,15 +171,26 @@ def update_hashtag(uid_list=[]):
                 uid = content['uid'][0]
                 if not uid in user_hashtag:
                     user_hashtag[uid] = {
-                        'hashtag': {}
+                        'hashtag_list': []
                     }
-                if content['hashtag'][0]:
-                    user_hashtag[uid]['hashtag'] = merge_dict(user_hashtag[uid]['hashtag'], json.loads(content['hashtag'][0]))
+                if content.has_key('hashtag'):
+                    hashtag = content['hashtag'][0]
+                    if hashtag:
+                        hashtag_list = hashtag.split('&') 
+                        user_hashtag[uid]['hashtag_list'].extend(hashtag_list)
         except Exception,e:
             print e
-
-    for uid, content in user_hashtag.items():
-        user_hashtag[uid]['hashtag'] = json.dumps(content['hashtag'])
+    for uid in uid_list:
+        if uid in user_hashtag:
+            content = user_hashtag[uid]
+            hashtag_list = user_hashtag[uid]['hashtag_list']
+            user_hashtag[uid] = {
+                'hashtag': '&'.join(list(set(hashtag_list)))
+            }
+        else:
+            user_hashtag[uid] = {
+                'hashtag': ''
+            }
     return save_data2es(user_hashtag)
 
 def update_influence(uid_list=[]):
@@ -185,18 +224,23 @@ def update_influence(uid_list=[]):
                     user_influence[uid] = {
                         'influence_list': []
                     }
-                influence = content.get('influence')[0]
-                if influence:
-                    user_influence[uid]['influence_list'].append(float(influence))
+                if content.has_key('influence'):
+                    user_influence[uid]['influence_list'].append(float(content.get('influence')[0]))
         except Exception,e:
             print e
-    for uid, content in user_influence.items():
-        if not sum(content['influence_list']):
-            influence = 0.0
+    for uid in uid_list:
+        if uid in user_influence:
+            content = user_influence[uid]
+            if not sum(content['influence_list']):
+                influence = 0.0
+            else:
+                influence = float(sum(content['influence_list']))/len(content['influence_list'])
+            content['influence'] = influence
+            content.pop('influence_list')
         else:
-            influence = float(sum(content['influence_list']))/len(content['influence_list'])
-        content['influence'] = influence
-        content.pop('influence_list')
+            user_influence[uid] = {
+                'influence': 0.0
+            } 
     return save_data2es(user_influence)
 
 def update_sensitive(uid_list=[]):
@@ -231,23 +275,31 @@ def update_sensitive(uid_list=[]):
                         'sensitive_dict': {},
                         'sensitive_list': []
                     }
-                if content['sensitive_words_dict'][0]:
+                if content.has_key('sensitive_words_dict'):
                     user_sensitive[uid]['sensitive_dict'] = merge_dict(user_sensitive[uid]['sensitive_dict'], json.loads(content['sensitive_words_dict'][0]))
-                sensitive = content.get('sensitive')[0]
-                if sensitive:
-                    user_sensitive[uid]['sensitive_list'].append(float(sensitive))
+                if content.has_key('sensitive'):
+                    user_sensitive[uid]['sensitive_list'].append(float(content.get('sensitive')[0]))
         except Exception,e:
             print e
-    for uid, content in user_sensitive.items():
-        user_sensitive[uid]['sensitive_string'] = '&'.join(content['sensitive_dict'].keys())
-        user_sensitive[uid]['sensitive_dict'] = json.dumps(content['sensitive_dict'])
-        if not sum(content['sensitive_list']):
-            sensitive = 0.0
+    for uid in uid_list:
+        if uid in user_sensitive:
+            content = user_sensitive[uid]
+            user_sensitive[uid]['sensitive_string'] = '&'.join(content['sensitive_dict'].keys())
+            user_sensitive[uid]['sensitive_dict'] = json.dumps(content['sensitive_dict'])
+            if not sum(content['sensitive_list']):
+                sensitive = 0.0
+            else:
+                sensitive = float(sum(content['sensitive_list']))/len(content['sensitive_list'])
+            content['sensitive'] = sensitive
+            user_sensitive[uid]['sensitive'] = sensitive
+            content.pop('sensitive_list')
         else:
-            sensitive = float(sum(content['sensitive_list']))/len(content['sensitive_list'])
-        content['sensitive'] = sensitive
-        user_sensitive[uid]['sensitive'] = sensitive
-        content.pop('sensitive_list')
+            user_sensitive[uid] = {
+                'sensitive': 0,
+                'sensitive_string': '',
+                'sensitive_dict': json.dumps({})
+
+            }
     return save_data2es(user_sensitive)
 
 def update_sentiment(uid_list=[]):
@@ -285,43 +337,57 @@ def update_sentiment(uid_list=[]):
                     user_sentiment[uid] = {
                         'sentiment_list': []
                     }
-                sentiment = content.get('sentiment')[0]
-                if sentiment:
-                    user_sentiment[uid]['sentiment_list'].append(int(sentiment))        
+                if content.has_key('sentiment'):
+                    user_sentiment[uid]['sentiment_list'].append(int(content.get('sentiment')[0]))        
         except Exception,e:
             print e
-    for uid, content in user_sentiment.items():
-        if content['sentiment_list']:
-            sentiment = Counter(content['sentiment_list']).most_common(1)[0][0]
+    for uid in uid_list:
+        if uid in user_sentiment:
+            content = user_sentiment[uid]
+            if content['sentiment_list']:
+                sentiment = Counter(content['sentiment_list']).most_common(1)[0][0]
+            else:
+                sentiment = 0
+            content['sentiment'] = sentiment
+            content.pop('sentiment_list')
         else:
-            sentiment = 0
-        content['sentiment'] = sentiment
-        content.pop('sentiment_list')
+            user_sentiment[uid] = {
+                'sentiment': 0
+            }
     return save_data2es(user_sentiment)
 
+def count_text_num(uid_list, fb_flow_text_index_list):
+    count_result = {}
+    #QQ那边好像就是按照用户来count的    https://github.com/huxiaoqian/xnr1/blob/82ff9704792c84dddc3e2e0f265c46f3233a786f/xnr/qq_xnr_manage/qq_history_count_timer.py
+    for uid in uid_list:
+        textnum_query_body = {
+            'query':{
+                "filtered":{
+                    "filter": {
+                        "bool": {
+                            "must": [
+                                {"term": {"uid": uid}},
+                            ]
+                         }
+                    }
+                }
+            }
+        }
+        text_num = 0
+        for index_name in fb_flow_text_index_list:
+            result = es.count(index=index_name, doc_type=facebook_flow_text_index_type,body=textnum_query_body)
+            if result['_shards']['successful'] != 0:
+                text_num += result['count']
+        count_result[uid] = text_num
+    return count_result
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#未完成
 def update_domain(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
     user_domain_data = {}
+    #load num of text
+    count_result = count_text_num(uid_list, fb_flow_text_index_list)
     #load baseinfo
     fb_user_query_body = {
         'query':{
@@ -344,82 +410,153 @@ def update_domain(uid_list=[]):
             content = item['fields']
             uid = content['uid'][0]
             if not uid in user_domain_data:
+                text_num = count_result[uid]
                 user_domain_data[uid] = {
-                    'bio_str': '',
+                    'bio_str': [],
                     'category': '',
+                    'number_of_text': text_num
                 }
-            category = content.get('category')[0]
-            description = content.get('description')[0]
-            quotes = content.get('quotes')[0]
-            bio = content.get('bio')[0]
-            about = content.get('about')[0]
-            if not category:
+            if content.has_key('category'):
+                category = content.get('category')[0]
+            else:
                 category = ''
-            if not description:
+            if content.has_key('description'):
+                description = content.get('description')[0]
+            else:
                 description = ''
-            if not quotes:
+            if content.has_key('quotes'):
+                quotes = content.get('quotes')[0]
+            else:
                 quotes = ''
-            if not bio:
+            if content.has_key('bio'):
+                bio = content.get('bio')[0]
+            else:
                 bio = ''
-            if not about:
-                about = ''
-            user_domain_data[uid] = {
-                'bio_str': [quotes, bio, about, description],
-                'category': category
-            }
+            if content.has_key('about'):
+                about = content.get('about')[0]
+            else:
+                about = ''    
+            user_domain_data[uid]['bio_str'] = [quotes, bio, about, description]
+            user_domain_data[uid]['category'] = category
     except Exception,e:
         print e
-    #load num of text
-    textnum_query_body = {
-        'query':{
-            "filtered":{
-                "filter": {
-                    "bool": {
-                        "must": [
-                            {"terms": {"uid": uid_list}},
-                        ]
-                     }
-                }
+    user_domain_temp = domain_main(user_domain_data)    #16个
+    user_domain = {}
+    for uid in uid_list:
+        if uid in user_domain_temp:
+            user_domain[uid] = {
+                'domain': user_domain_temp[uid]
             }
-        },
-        'size': MAX_SEARCH_SIZE,
-        "fields": ["uid"],
-    }
-    for index_name in fb_flow_text_index_list:
-        try:
-            search_results = es.search(index=index_name, doc_type=facebook_flow_text_index_type, body=textnum_query_body)['hits']['hits']
-            content = item['fields']
-            uid = content['uid'][0]
-            if not uid in user_domain_data:
-                user_domain_data[uid] = {
-                    'number_of_text': 0
-                }
-            user_domain_data[uid]['number_of_text'] += 1
-        except Exception,e:
-            print e
-    return user_domain_data
-
-
-def update_baseinfo(uid_list=[]):
-    pass
-
-
-
-
-
+        else:
+            user_domain[uid] = 'other'
+    return save_data2es(user_domain)
 
 def update_topic(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
-    get_filter_keywords(fb_flow_text_index_list, uid_list)
+    user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
+    print 'user_topic_data'
+    print user_topic_data
+    user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
+
+    
+    user_topic_string = {}
+    for uid, topic_list in user_topic_list.items():
+        li = []
+        for t in topic_list:
+            li.append(zh_data[name_list.index(t)].decode('utf8'))
+        user_topic_string[uid] = '&'.join(li)
+    user_topic = {}
+    for uid in uid_list:
+        if uid in user_topic_dict:
+            user_topic[uid] = {
+                'filter_keywords': json.dumps(user_topic_data[uid]),
+                'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
+                'topic_string': user_topic_string[uid]
+            }
+        else:
+            user_topic[uid] = {
+                'filter_keywords': json.dumps({}),
+                'topic': json.dumps({}),
+                'topic_string': ''
+            }
+    return save_data2es(user_topic)
+
+def update_baseinfo(uid_list=[]):
     pass
 
+def update_all():
+    time_list = []
+    time_list.append(time.time())
+
+    uid_list = load_uid_list()
+    print 'total num: ', len(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+    
+    print 'update_keywords:', update_keywords(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_hashtag: ', update_hashtag(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_influence: ', update_influence(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_sensitive: ', update_sensitive(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_sentiment: ', update_sentiment(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_domain: ', update_domain(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_topic: ', update_topic(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # print update_keywords(uid_list=['139819436047050'])
-    # print update_hashtag(uid_list=['139819436047050'])
-    # print update_influence(uid_list=['443835769306299'])
-    # print update_sensitive(uid_list=['780790723'])
-    # print update_sentiment(uid_list=['100013649473166'])
-    print update_domain(uid_list=['139819436047050', '716502715155445'])
+    # update_all()
+    time_list = []
+    time_list.append(time.time())
+
+    uid_list = load_uid_list()
+    print 'total num: ', len(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+    
+    # print 'update_keywords:', update_keywords(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+
+    # print 'update_hashtag: ', update_hashtag(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+    
+    # print 'update_influence: ', update_influence(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+
+    # print 'update_sensitive: ', update_sensitive(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+
+    # print 'update_sentiment: ', update_sentiment(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+
+    # print 'update_domain: ', update_domain(uid_list)
+    # time_list.append(time.time())
+    # print 'time used: ', time_list[-1] - time_list[-2]
+    
+    print 'update_topic: ', update_topic(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
