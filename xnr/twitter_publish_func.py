@@ -71,14 +71,16 @@ def tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    #try:
+    try:
         #screen_name = 'zhu0588'
     #operation.target(nick_name)
     # print 'comment...',operation.do_comment(_id, uid,text)
-    operation.do_comment(uid,_id,text)
-    mark = True
-    # except:
-    #     mark = False
+        operation.do_comment(uid,_id,text)
+    
+        mark = True
+        
+    except:
+        mark = False
 
     message_type = 2 # 评论
     
@@ -139,20 +141,20 @@ def tw_follow(account_name, password, screen_name, uid, xnr_user_no, trace_type)
 
 
 # 取消关注
-def tw_unfollow(account_name, password, screen_name, xnr_user_no):
+def tw_unfollow(account_name, password, uid, xnr_user_no):
 
     operation = Operation(account_name,password)
     
     try:
-        operation.destroy_friendship(screen_name)
+        operation.destroy_friendship(uid)
         mark = True
     except:
         mark = False
 
     #save_type = 'friends'
-    follow_type = 'unfollow'
+    #follow_type = 'unfollow'
     # trace_type = 'trace_follow' or 'ordinary_follow'
-    trace_type = 'trace_follow'
+    #trace_type = 'trace_follow'
 
     # tw_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type)
     #tw_save_to_fans_follow_ES(xnr_user_no,screen_name,follow_type,trace_type)
@@ -164,14 +166,11 @@ def tw_like(account_name,password, _id):
     # uid: 原贴用户id
     operation = Operation(account_name,password)
     
-    #try:
-
-    operation.do_favourite(_id)
-
-    #     mark = True
-    # except:
-    #     mark = False
-
+    try:
+        operation.do_favourite(long(_id))
+        mark = True
+    except:
+        mark = False
    
     return mark
 
@@ -199,15 +198,15 @@ def tw_mention(account_name,password, text, xnr_user_no, tweet_type):
     return mark
 
 # 私信
-def tw_message(account_name,password, text, screen_name):
+def tw_message(account_name,password, text, uid):
 
     operation = Operation(account_name,password)
     
-    #try:
-    print operation.message(screen_name, text)
-    mark = True
-    # except:
-    #     mark = False
+    try:
+        operation.message(uid, text)
+        mark = True
+    except:
+        mark = False
 
     return mark
 
