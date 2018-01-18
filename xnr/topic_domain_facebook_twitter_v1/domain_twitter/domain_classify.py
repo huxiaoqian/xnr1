@@ -17,7 +17,7 @@ s = load_scws()
 def classify_by_biostring(bio_string):#根据用户bio_string划分
 
     # bio_string_s = cc.convert(bio_string.decode('utf-8'))
-    bio_string_s = traditional2simplified(bio_string.decode('utf-8'))
+    bio_string_s = bio_string.decode('utf-8')
     
 
     kwdlist = bio_string_s.encode('utf-8')#cut(s, bio_string_s.encode('utf-8'))
@@ -112,7 +112,8 @@ def classify_by_biostring(bio_string):#根据用户bio_string划分
 
 def classify_inner_outer(location):
 
-    bio_string_s = traditional2simplified(location.decode('utf-8'))
+    # bio_string_s = traditional2simplified(location.decode('utf-8'))
+    bio_string_s = location.decode('utf-8')
     new_location = bio_string_s.encode('utf-8')
     flag = 0
     for city in inner_city:

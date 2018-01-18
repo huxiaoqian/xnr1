@@ -381,6 +381,19 @@ def count_text_num(uid_list, fb_flow_text_index_list):
         count_result[uid] = text_num
     return count_result
 
+def trans_bio_data(bio_data):
+    count = 1.0
+    while True:
+        translated_bio_data = trans(bio_data)
+        if len(translated_bio_data) == len(bio_data):
+            break
+        else:
+            print 'sleep start ...'
+            time.sleep(count)
+            count = count*1.1
+            print 'sleep over ...'
+    return translated_bio_data
+
 def update_domain(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
@@ -412,43 +425,64 @@ def update_domain(uid_list=[]):
             if not uid in user_domain_data:
                 text_num = count_result[uid]
                 user_domain_data[uid] = {
-                    'bio_str': [],
+                    'bio_str': '',
+                    'bio_list': [],
                     'category': '',
                     'number_of_text': text_num
                 }
+            #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
             if content.has_key('category'):
                 category = content.get('category')[0]
             else:
                 category = ''
             if content.has_key('description'):
-                description = content.get('description')[0]
+                description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
             else:
                 description = ''
             if content.has_key('quotes'):
-                quotes = content.get('quotes')[0]
+                quotes = content.get('quotes')[0][:1000]
             else:
                 quotes = ''
             if content.has_key('bio'):
-                bio = content.get('bio')[0]
+                bio = content.get('bio')[0][:1000]
             else:
                 bio = ''
             if content.has_key('about'):
-                about = content.get('about')[0]
+                about = content.get('about')[0][:1000]
             else:
                 about = ''    
-            user_domain_data[uid]['bio_str'] = [quotes, bio, about, description]
+            user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
             user_domain_data[uid]['category'] = category
     except Exception,e:
         print e
-
-    '''
     #由于一个用户请求一次翻译太耗时，所以统一批量翻译
-    translated_bio_data = {}
-    bio_list = {}
-    for uid in uid_list:
-    '''
-    
-    user_domain_temp = domain_main(user_domain_data)    #16个
+    trans_uid_list = []
+    untrans_bio_data = []
+    cut = 100
+    n = len(user_domain_data)/cut
+    for uid, content in user_domain_data.items():
+        trans_uid_list.append(uid)
+        untrans_bio_data.extend(content['bio_list'])
+        content.pop('bio_list')
+        if n:
+            if len(trans_uid_list)%cut == 0:
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+                n = n - 1
+        else:
+            if len(trans_uid_list) == (len(user_domain_data)%cut):
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+    #domian计算
+    user_domain_temp = domain_main(user_domain_data)    
     user_domain = {}
     for uid in uid_list:
         if uid in user_domain_temp:
@@ -537,4 +571,19 @@ def update_all():
 
 if __name__ == '__main__':
     update_all()
-    
+# total num:  92
+# time used:  0.0138351917267
+# update_hashtag:  True
+# time used:  0.219952821732
+# update_influence:  True
+# time used:  0.145478010178
+# update_sensitive:  True
+# time used:  0.242365121841
+# update_keywords: True
+# time used:  1.23831295967
+# update_sentiment:  True
+# time used:  0.215330123901
+# update_domain:  True
+# time used:  62.3806529045
+# update_topic:  True
+# time used:  11.7983570099
