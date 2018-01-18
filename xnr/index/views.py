@@ -60,8 +60,8 @@ def ajax_create_account():
 def text_trans():
     q_str = request.args.get('q', '')
     if q_str:
-        q = q_str.split(',')
-        res = utils_text_trans(q)
+        # q = q_str.split(',')
+        res = utils_text_trans(q_str)
         if res:
             return json.dumps(res)
     return None 
