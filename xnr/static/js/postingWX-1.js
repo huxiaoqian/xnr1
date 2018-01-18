@@ -96,7 +96,7 @@ function personEarly(personEarly_QQ) {
                     };
                     var chatContent;//摘要内容
                     if(row._source.msg_type == 'Text'){//文本信息
-                        chatContent = row._source.text;
+                        chatContent = '<span class="chat-content">' + row._source.text +'</span>'+ '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;" onclick="transLate(\''+row._source.text+'\',event)">文本翻译</button>';
                     }else if(row._source.msg_type == 'Picture'){//图片信息
                         // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;cursor:pointer;" />';
                         chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
@@ -138,6 +138,29 @@ function personEarly(personEarly_QQ) {
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物微信号码（回车搜索）');
 };
+// 文本翻译
+var this_targ;
+function transLate(txt,e){
+    $('#loadingJump').modal('show');//显示加载
+    // console.log(txt);
+    this_targ = e.target;
+    var transLate_url = '/wx_xnr_trans/text_trans/?q='+txt;
+    // console.log(transLate_url);
+    public_ajax.call_request('get',transLate_url,trans_Late);
+}
+function trans_Late(data){
+    if(data){
+        $('#loadingJump').modal('hide');//消失加载
+        // console.log(data);
+        // console.log(this_targ);
+        var chat_content_data = '';
+        for(var i=0;i<data.length;i++){
+            chat_content_data += data[i]+' ';
+            // chat_content_data += data[i];
+        }
+        $(this_targ).prev('.chat-content').text(chat_content_data)
+    }
+}
 // 显示大图
 function showThis(e){
     var targ = e.target;
