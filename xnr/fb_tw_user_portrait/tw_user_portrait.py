@@ -141,7 +141,6 @@ def update_keywords(uid_list=[]):
             }
     return save_data2es(user_keywords)
 
-'''
 def update_hashtag(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
@@ -192,7 +191,61 @@ def update_hashtag(uid_list=[]):
                 'hashtag': ''
             }
     return save_data2es(user_hashtag)
-'''
+
+
+def update_sentiment(uid_list=[]):
+    '''
+    SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
+         '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
+    '''
+    if not uid_list:
+        uid_list = load_uid_list()
+    tw_flow_text_index_list = get_twitter_flow_text_index_list(load_timestamp())
+    sentiment_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "sort": {"timestamp": {"order": "desc"}},
+        "fields": ["sentiment", "uid"]
+    }
+    user_sentiment = {}
+    for index_name in tw_flow_text_index_list:
+        try:
+            search_results = es.search(index=index_name, doc_type=twitter_flow_text_index_type, body=sentiment_query_body)['hits']['hits']
+            for item in search_results:
+                content = item['fields']
+                uid = content['uid'][0]
+                if not uid in user_sentiment:
+                    user_sentiment[uid] = {
+                        'sentiment_list': []
+                    }
+                if content.has_key('sentiment'):
+                    user_sentiment[uid]['sentiment_list'].append(int(content.get('sentiment')[0]))        
+        except Exception,e:
+            print e
+    for uid in uid_list:
+        if uid in user_sentiment:
+            content = user_sentiment[uid]
+            if content['sentiment_list']:
+                sentiment = Counter(content['sentiment_list']).most_common(1)[0][0]
+            else:
+                sentiment = 0
+            content['sentiment'] = sentiment
+            content.pop('sentiment_list')
+        else:
+            user_sentiment[uid] = {
+                'sentiment': 0
+            }
+    return save_data2es(user_sentiment)
 
 def update_influence(uid_list=[]):
     if not uid_list:
@@ -243,6 +296,65 @@ def update_influence(uid_list=[]):
                 'influence': 0.0
             } 
     return save_data2es(user_influence)
+
+def update_sensitive(uid_list=[]):
+    if not uid_list:
+        uid_list = load_uid_list()
+    tw_flow_text_index_list = get_twitter_flow_text_index_list(load_timestamp())
+    sensitive_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "sort": {"timestamp": {"order": "desc"}},
+        "fields": ["sensitive_words_dict", "sensitive", "uid"]
+    }
+    user_sensitive = {}
+    for index_name in tw_flow_text_index_list:
+        try:
+            search_results = es.search(index=index_name, doc_type=twitter_flow_text_index_type, body=sensitive_query_body)['hits']['hits']
+            for item in search_results:
+                content = item['fields']
+                uid = content['uid'][0]
+                if not uid in user_sensitive:
+                    user_sensitive[uid] = {
+                        'sensitive_dict': {},
+                        'sensitive_list': []
+                    }
+                if content.has_key('sensitive_words_dict'):
+                    user_sensitive[uid]['sensitive_dict'] = merge_dict(user_sensitive[uid]['sensitive_dict'], json.loads(content['sensitive_words_dict'][0]))
+                if content.has_key('sensitive'):
+                    user_sensitive[uid]['sensitive_list'].append(float(content.get('sensitive')[0]))
+        except Exception,e:
+            print e
+    for uid in uid_list:
+        if uid in user_sensitive:
+            content = user_sensitive[uid]
+            user_sensitive[uid]['sensitive_string'] = '&'.join(content['sensitive_dict'].keys())
+            user_sensitive[uid]['sensitive_dict'] = json.dumps(content['sensitive_dict'])
+            if not sum(content['sensitive_list']):
+                sensitive = 0.0
+            else:
+                sensitive = float(sum(content['sensitive_list']))/len(content['sensitive_list'])
+            content['sensitive'] = sensitive
+            user_sensitive[uid]['sensitive'] = sensitive
+            content.pop('sensitive_list')
+        else:
+            user_sensitive[uid] = {
+                'sensitive': 0,
+                'sensitive_string': '',
+                'sensitive_dict': json.dumps({})
+
+            }
+    return save_data2es(user_sensitive)
 
 def count_text_num(uid_list, tw_flow_text_index_list):
     count_result = {}
@@ -382,9 +494,28 @@ def update_all():
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
+    print 'update_hashtag: ', update_hashtag(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_sensitive: ', update_sensitive(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+
+
+    print 'update_sentiment: ', update_sentiment(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+
     #周更新
     if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
         print 'update_domain: ', update_domain(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
+
+        print 'update_sentiment: ', update_sentiment(uid_list)
         time_list.append(time.time())
         print 'time used: ', time_list[-1] - time_list[-2]
 

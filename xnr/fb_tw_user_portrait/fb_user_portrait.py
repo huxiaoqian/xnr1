@@ -13,7 +13,7 @@ from global_utils import es_fb_user_portrait as es, \
                          facebook_flow_text_index_name_pre, facebook_flow_text_index_type, \
                          fb_bci_index_name_pre, fb_bci_index_type
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
-from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH
+from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH, DAY, WEEK
 
 sys.path.append('../cron')
 from trans.trans import trans
@@ -440,6 +440,14 @@ def update_domain(uid_list=[]):
             user_domain_data[uid]['category'] = category
     except Exception,e:
         print e
+
+    '''
+    #由于一个用户请求一次翻译太耗时，所以统一批量翻译
+    translated_bio_data = {}
+    bio_list = {}
+    for uid in uid_list:
+    '''
+    
     user_domain_temp = domain_main(user_domain_data)    #16个
     user_domain = {}
     for uid in uid_list:
