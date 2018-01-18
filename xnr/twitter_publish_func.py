@@ -67,18 +67,18 @@ def tw_publish(account_name, password, text, tweet_type, xnr_user_no):
 
 
 # 评论
-def tw_comment(account_name, password, _id, nick_name, text, tweet_type, xnr_user_no):
+def tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     operation = Operation(account_name,password)
     
-    try:
+    #try:
         #screen_name = 'zhu0588'
-        operation.target(nick_name)
-        # print 'comment...',operation.do_comment(_id, uid,text)
-        operation.do_comment(_id,text)
-        mark = True
-    except:
-        mark = False
+    #operation.target(nick_name)
+    # print 'comment...',operation.do_comment(_id, uid,text)
+    operation.do_comment(uid,_id,text)
+    mark = True
+    # except:
+    #     mark = False
 
     message_type = 2 # 评论
     
