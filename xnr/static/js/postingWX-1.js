@@ -144,7 +144,7 @@ function transLate(txt,e){
     $('#loadingJump').modal('show');//显示加载
     // console.log(txt);
     this_targ = e.target;
-    var transLate_url = '/wx_xnr_trans/text_trans/?q='+txt;
+    var transLate_url = '/index/text_trans/?q='+txt;
     // console.log(transLate_url);
     public_ajax.call_request('get',transLate_url,trans_Late);
 }
