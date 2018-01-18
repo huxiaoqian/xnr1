@@ -381,6 +381,19 @@ def count_text_num(uid_list, tw_flow_text_index_list):
         count_result[uid] = text_num
     return count_result
 
+def trans_bio_data(bio_data):
+    count = 1.0
+    while True:
+        translated_bio_data = trans(bio_data)
+        if len(translated_bio_data) == len(bio_data):
+            break
+        else:
+            print 'sleep start ...'
+            time.sleep(count)
+            count = count*1.1
+            print 'sleep over ...'
+    return translated_bio_data
+    
 def update_domain(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
@@ -422,7 +435,7 @@ def update_domain(uid_list=[]):
             else:
                 location = ''
             if content.has_key('description'):
-                description = content.get('description')[0]
+                description = content.get('description')[0][:1000]
             else:
                 description = ''
             if content.has_key('username'):
@@ -434,6 +447,34 @@ def update_domain(uid_list=[]):
             user_domain_data[uid]['description'] = description
     except Exception,e:
         print e
+    #由于一个用户请求一次翻译太耗时，所以统一批量翻译
+    trans_uid_list = []
+    untrans_bio_data = []
+    cut = 100
+    n = len(user_domain_data)/cut
+    for uid, content in user_domain_data.items():
+        trans_uid_list.append(uid)
+        untrans_bio_data.extend([content['location'] ,content['description']])
+        if n:
+            if len(trans_uid_list)%cut == 0:
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                    user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
+                trans_uid_list = []
+                untrans_bio_data = []
+                n = n - 1
+        else:
+            if len(trans_uid_list) == (len(user_domain_data)%cut):
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                    user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
+                trans_uid_list = []
+                untrans_bio_data = []
+    #domian计算         
     user_domain_temp = domain_main(user_domain_data)    
     user_domain = {}
     for uid in uid_list:
@@ -528,5 +569,6 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
+    # update_all()
+    update_domain(load_uid_list())
     
