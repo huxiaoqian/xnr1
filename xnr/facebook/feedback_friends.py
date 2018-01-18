@@ -13,7 +13,7 @@ class Friend():
 		time.sleep(2)
 		self.driver.find_element_by_xpath('//a[@title="个人主页"]').click()
 		time.sleep(3)
-		self.driver.find_element_by_xpath('//ul[@id="u_jsonp_2_8"]/li[3]/a').click()
+		self.driver.find_element_by_xpath('//ul[@data-referrer="timeline_light_nav_top"]/li[3]/a').click()
 		time.sleep(1)
 		self.driver.execute_script("""
 			(function () {
@@ -60,7 +60,7 @@ class Friend():
 		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
-	friend = Friend('8617078448226','xnr123456')
+	friend = Friend('8618348831412','Z1290605918')
 	list = friend.get_friend()
 	friend.save('facebook_feedback_friends','text',list)
 

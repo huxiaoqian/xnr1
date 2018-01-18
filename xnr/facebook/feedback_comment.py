@@ -40,7 +40,7 @@ class Comment():
 					content = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[2]/span/span/span/span').text
 				except:
 					content = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[2]/span/span/span/span').text					
-				ti = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[4]/a/abbr').get_attribute('data-utime')
+				ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[4]/a/abbr').get_attribute('data-utime'))
 				self.list.append({'nick_name':author_name,'uid':author_id,'photo_url':pic_url,'text':content,'timestamp':ti})
 		return self.list
 
@@ -48,6 +48,6 @@ class Comment():
 		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
-	comment = Comment('8617078448226','xnr123456')
+	comment = Comment('8618348831412','Z1290605918')
 	list = comment.get_comment()
 	comment.save('facebook_feedback_comment','text',list)
