@@ -309,6 +309,7 @@ fb_index_sensing = "fb_manage_sensing_task"
 fb_type_sensing = "task"
 fb_id_sensing = "fb_social_sensing_task"
 fb_social_sensing_index_name = 'fb_social_sensing_text'
+fb_social_sensing_index_name_pre = 'fb_social_sensing_text_'
 fb_social_sensing_index_type = 'text'
 
 #use to save fb xnr personal information
@@ -411,6 +412,7 @@ tw_index_sensing = "tw_manage_sensing_task"
 tw_type_sensing = "task"
 tw_id_sensing = "tw_social_sensing_task"
 tw_social_sensing_index_name = 'tw_social_sensing_text'
+tw_social_sensing_index_name_pre = 'tw_social_sensing_text_'
 tw_social_sensing_index_type = 'text'
 
 #use to save tw xnr personal information
