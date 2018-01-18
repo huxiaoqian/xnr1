@@ -44,6 +44,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 #     }
 # }
 
+# 导出
 # query_body= {
 #     'query':{
 #         'match_all':{}
@@ -60,12 +61,13 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 #     _id = result_item['_id']
 #     result_json[_id] = result_item
 # #print 'result_json::',result_json
+
 # with open("./retweet_tweet_timing.json","w") as dump_f:
 #     # for item in result:
 #     json.dump(result_json,dump_f)
 #     print '@'
 
-
+# 导入
 # with open("./retweet_tweet_timing.json","r") as load_f:
 #     #print 'load_f::',load_f
 #     load_dict = json.load(load_f)
@@ -140,7 +142,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'monitor_keywords':'民运,民运人士,民主运动'}})
 
-es.indices.delete(index='user_bought')
+# es.indices.delete(index='user_bought')
 # es.indices.delete(index='weibo_feedback_comment_2017*')
 # es.indices.delete(index='weibo_feedback_at_2017*')
 # es.indices.delete(index='weibo_feedback_private_2017*')
@@ -273,24 +275,24 @@ es.indices.delete(index='user_bought')
 
 # es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
 
-query_body = {
-	'query':{
-		'match_all':{}
-	},
-	'size':'1000'
-}
+# query_body = {
+# 	'query':{
+# 		'match_all':{}
+# 	},
+# 	'size':'1000'
+# }
 
-results = es.search(index='facebook_user',doc_type='user',body=query_body)['hits']['hits']
+# results = es.search(index='facebook_user',doc_type='user',body=query_body)['hits']['hits']
 
-_id_list = []
+# _id_list = []
 
-for result in results:
+# for result in results:
 
-	result = result['_source']
+# 	result = result['_source']
 
-	_id = result['uid']
+# 	_id = result['uid']
 
-	_id_list.append(_id)
+# 	_id_list.append(_id)
 
-print '_id_list...',_id_list
+# print '_id_list...',_id_list
 
