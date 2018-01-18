@@ -4,6 +4,7 @@
 from launcher import Launcher
 import time
 from es import Es_fb
+import re
 
 class Message():
 	def __init__(self,username, password):
@@ -25,7 +26,6 @@ class Message():
 	def get_message(self):
 		sx_list = self.get_list()
 		for sx in sx_list:
-			#print(sx['name'])
 			self.driver.get(sx['message_url'])
 			time.sleep(1)
 			for message in self.driver.find_elements_by_xpath('//div[@class="_41ud"]'):
@@ -33,14 +33,20 @@ class Message():
 					mes = message.find_element_by_xpath('./div/div/div/span').text
 				except Exception as e:
 					mes = 'None'
-			self.list.append({'nick_name':sx['name'],'text':mes})
+			try:
+				ti = [each for each in self.driver.find_elements_by_xpath('//div[@aria-label="消息"]//time')][-1].text
+				ti = '-'.join([i for i in re.findall(re.compile('(\d+)年(\d+)月(\d+)日'),ti)[0]])
+				timestamp = int(time.mktime(time.strptime(ti,"%Y-%m-%d")))
+			except:
+				timestamp = int(time.time())
+			self.list.append({'nick_name':sx['name'],'text':mes,'timestamp':timestamp})
 		return self.list
 
 	def save(self, indexName, typeName, list):
 		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
-	message = Message('8617078448226','xnr123456')
+	message = Message('8618348831412','Z1290605918')
 	list = message.get_message()
 	message.save('facebook_feedback_private','text',list)
 

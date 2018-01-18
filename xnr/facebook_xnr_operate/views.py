@@ -76,14 +76,14 @@ def ajax_recommend_at_user():
     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 
 
-# 日常语料推荐
-# fb 暂无？？？？
-@mod.route('/daily_recommend_tweets/')
-def ajax_daily_recommend_tweets():
-    theme = request.args.get('theme','') # 默认日常兴趣主题
-    sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, retweeted-按热度
-    tweets = get_daily_recommend_tweets(theme,sort_item)
-    return json.dumps(tweets)
+# # 日常语料推荐
+# # fb 暂无？？？？  # 遵照微博的url
+# @mod.route('/daily_recommend_tweets/')
+# def ajax_daily_recommend_tweets():
+#     theme = request.args.get('theme','') # 默认日常兴趣主题
+#     sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, retweeted-按热度
+#     tweets = get_daily_recommend_tweets(theme,sort_item)
+#     return json.dumps(tweets)
 
 '''
 热点跟随
