@@ -469,8 +469,8 @@ def get_comment_operate(task_detail):
 	xnr_user_no = task_detail['xnr_user_no']
 	_id = task_detail['r_fid']
 	#_id = ??????
-	# uid = task_detail['r_uid']
-	nick_name = task_detail['nick_name']
+	uid = task_detail['r_uid']
+	#nick_name = task_detail['nick_name']
 
 	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
@@ -486,8 +486,8 @@ def get_comment_operate(task_detail):
 		account_name = False
 
 	if account_name:
-		mark = tw_comment(account_name, password, _id, nick_name, text, tweet_type, xnr_user_no)
-
+		print '123'
+		mark = tw_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
 	else:
 		mark = False
 
