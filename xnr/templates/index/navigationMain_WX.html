@@ -474,9 +474,8 @@
         async: true,
         dataType: "json",
         success: function (data) {
-            var str='';
+            var str='';var sameid=localStorage.getItem('sameXnr');
             $.each(data,function (index,item) {
-                var sameid=localStorage.getItem('sameXnr');
                 var name,isChecked='';
                 if (item.wx_id==''||item.wx_id=='unknown'||!item.wx_id){
                     name='无昵称';

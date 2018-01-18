@@ -72,7 +72,7 @@ class Operation():
 
 	def do_favourite(self, tid):
 		try:
-			self.api.create_favorite(id)
+			self.api.create_favorite(tid)
 		except Exception as e:
 			print(e)
 
