@@ -234,7 +234,7 @@ def ajax_private_operate():
 
     task_detail= dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['nick_name'] = request.args.get('nick_name','')
+    task_detail['uid'] = request.args.get('uid','')
     task_detail['text'] = request.args.get('text','')
 
     mark = get_private_operate(task_detail)
