@@ -344,6 +344,19 @@ function radar(data) {
     var radarData=[],radarVal=[];
     for (var k in data){
         if (k=='radar'){
+            if (isEmptyObject(data[k])){
+                radarVal=[0,0,0,0,0];
+                var p;
+                if (t=='area'){p=$('#field input')}else {p=$('#userField input')};
+                for(var s=0;s<5;s++){
+                    radarData.push({name:$(p[s]).val(), max:1});
+                }
+            }else {
+                for(var m in data[k]){
+                    radarData.push({name:m, max:1});
+                    radarVal.push(data[k][m]);
+                }
+            }
             for(var m in data[k]){
                 radarData.push({name:m, max:1});
                 radarVal.push(data[k][m]);
