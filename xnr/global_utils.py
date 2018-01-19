@@ -78,13 +78,13 @@ portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
 
 #fb user portrait
-# es_fb_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_fb_user_profile = Elasticsearch(ES_CLUSTER_HOST, timeout = 600)
 es_fb_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 fb_portrait_index_name = 'fb_user_portrait'
 fb_portrait_index_type = 'user'
 
 #tw user portrait
-# es_tw_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_tw_user_profile = Elasticsearch(ES_CLUSTER_HOST, timeout = 600)
 es_tw_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 tw_portrait_index_name = 'tw_user_portrait'
 tw_portrait_index_type = 'user'
@@ -131,9 +131,15 @@ es_comment = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 weibo_domain_index_name = 'weibo_domain'
 weibo_domain_index_type = 'group'
 
+fb_domain_index_name = 'facebook_domain'
+fb_domain_index_type = 'group'
+
 #use to save role info
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
+
+fb_role_index_name = 'fb_role'
+fb_role_index_type = 'role'
 
 # use to save example model
 weibo_example_model_index_name = 'weibo_example_model'
