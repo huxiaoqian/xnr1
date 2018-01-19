@@ -178,6 +178,15 @@ domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroa
 task_source_ch2en = {u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
                     u'跟随转发':'trace_post',u'智能发帖':'intel_post'}
 
+#facebook
+fb_domain_ch2en_dict = {u'高校':'university',u'机构':'admin',u'媒体':'media',u'民间组织':'folkorg',\
+                        u'法律机构及人士':'lawyer',u'政府机构及人士':'politician',u'媒体人士':'mediaworker',\
+                        u'活跃人士':'activer',u'其他':'other',u'商业人士':'business'}
+                        
+fb_domain_en2ch_dict = {'university':u'高校','admin':u'机构','media':u'媒体',\
+                        'folkorg':u'民间组织','lawyer':u'法律机构及人士','politician':u'政府机构及人士',\
+                        'mediaworker':u'媒体人士','activer':u'活跃人士','other':u'其他','business':u'商业人士'}               
+
 # 敏感词等级评分, string类型
 sensitive_score_dict = {
     "1": 1,
