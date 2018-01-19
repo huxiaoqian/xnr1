@@ -466,7 +466,7 @@ $('#sure_post').on('click',function () {
 // }
 
 //语料推荐
-var defalutWeiboUrl='/facebook_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
+var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
 public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
 $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     //var d=$('.everyday-2 .ed-2-2 .demo-radio');
@@ -474,14 +474,14 @@ $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     $('#defaultWeibo p').show();
     var the=$(this).val();
     var theSort=$('.everyday-2 .ed-2-2 input:radio[name="th"]:checked').val();
-    var the_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+theSort;
+    var the_url='/weibo_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+theSort;
     public_ajax.call_request('get',the_url,defalutWords)
 });
 $('.everyday-2 .ed-2-2 .demo-radio').on('click',function () {
     $('#defaultWeibo p').show();
     var TH=$(this).val();
     var the=$('.everyday-2 .ed-2-1 input:radio[name="theme"]:checked').val();
-    var TH_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+TH;
+    var TH_url='/weibo_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+TH;
     public_ajax.call_request('get',TH_url,defalutWords)
 });
 function defalutWords(data) {
