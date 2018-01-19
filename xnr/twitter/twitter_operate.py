@@ -54,12 +54,14 @@ class Operation():
 
 	def follow(self, uid):
 		try:
+			print 'follow..uid..',uid
 			self.api.create_friendship(uid)
 		except Exception as e:
 			print(e)
 
 	def destroy_friendship(self, uid):
 		try:
+			print 'unfollow..uid..',uid
 			self.api.destroy_friendship(uid)
 		except Exception as e:
 			print(e)
@@ -72,7 +74,7 @@ class Operation():
 
 	def do_favourite(self, tid):
 		try:
-			self.api.create_favorite(id)
+			self.api.create_favorite(tid)
 		except Exception as e:
 			print(e)
 

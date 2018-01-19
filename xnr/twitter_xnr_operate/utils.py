@@ -640,7 +640,7 @@ def get_private_operate(task_detail):
 
 	xnr_user_no = task_detail['xnr_user_no']
 	text = task_detail['text']
-	nick_name = task_detail['nick_name']
+	uid = task_detail['uid']
 
 	es_xnr_result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
 
@@ -656,7 +656,7 @@ def get_private_operate(task_detail):
 		account_name = False
 
 	if account_name:
-		mark = tw_message(account_name, password,  text, nick_name)
+		mark = tw_message(account_name, password,  text, uid)
 
 	else:
 		mark = False
