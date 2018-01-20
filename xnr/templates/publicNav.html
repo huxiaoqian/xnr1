@@ -257,9 +257,26 @@
         }
     }
     //翻译
+    function Check(s) {
+        var str = s.replace(/%/g, "%25").replace(/\+/g, "%2B").replace(/\s/g, "+"); // % + \s 3
+        str = str.replace(/-/g, "%2D").replace(/\*/g, "%2A").replace(/\//g, "%2F"); // - * / 4
+        str = str.replace(/\&/g, "%26").replace(/!/g, "%21").replace(/\=/g, "%3D"); // & ! = 5
+        str = str.replace(/\?/g, "%3F").replace(/:/g, "%3A").replace(/\|/g, "%7C"); // ? : | 6
+        str = str.replace(/\,/g, "%2C").replace(/\./g, "%2E").replace(/#/g, "%23"); // , . # 7
+        return str;
+    }
+    var translateWordThis='';
     function translateWord(_this) {
-        $(_this).parents('.center_rel').find('.tsWord').text('==============测试翻译============');
-        $(_this).parent().prev('._translate').show();
+        var t=$(_this).parents('.center_rel').find('.center_2').text();
+        var txt=Check(t);
+        translateWordThis=_this;
+        var translate_url='/index/text_trans/?q='+txt;
+        public_ajax.call_request('get',translate_url,transSUCCESS)
+    }
+    function transSUCCESS(data) {
+        if (data.length==0){data='暂无翻译内容';}
+        $(translateWordThis).parents('.center_rel').find('.tsWord').text(data);
+        $(translateWordThis).parent().prev('._translate').show();
     }
     //私信该用户
     function emailThis(_this) {
