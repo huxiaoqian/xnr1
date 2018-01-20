@@ -1,7 +1,6 @@
 var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=influence';
 public_ajax.call_request('get',relatedUrl,related);
 function related(data) {
-    $('#influence p').show();
     $.each(data,function (index,item) {
         detList[item.uid]=item;
     });
@@ -101,7 +100,8 @@ function related(data) {
         ],
     });
     $('.influence .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
-    $('#influence p').slideUp(700);
+    $('#influe p').slideUp(700);
+    $('.influence').show();
 }
 $('#influence').bootstrapTable('hideColumn', 'sensitive');
 function showHide(_tp$) {
@@ -114,6 +114,8 @@ function showHide(_tp$) {
 $('#container .suggestion #myTabs li').on('click',function () {
     var ty=$(this).attr('tp');
     //idNAME=ty;
+    $('.influence').hide();
+    $('#influe p').show();
     var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
     public_ajax.call_request('get',relatedUrl,related);
     showHide(ty);
@@ -127,6 +129,8 @@ $('.findSure').on('click',function () {
     }else {
         ids=ids.replace(/,/g,'，');
         idNAME='searchResult';
+        $('.influence').hide();
+        $('#influe p').show();
         var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=influence&uids='+ids;
         public_ajax.call_request('get',searchUrl,related);
         $('.searchResult').slideDown(30);
