@@ -425,8 +425,6 @@ function obtain(t) {
         operateType='hot_post';
     }else if (t== 'c'){
         operateType='business_post';
-        // recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
-        // public_ajax.call_request('get',recommendUrl,recommendlist);
     }
 }
 $('#sure_post').on('click',function () {
@@ -468,7 +466,7 @@ $('#sure_post').on('click',function () {
 // }
 
 //语料推荐
-var defalutWeiboUrl='/facebook_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
+var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
 public_ajax.call_request('get',defalutWeiboUrl,defalutWords);
 $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     //var d=$('.everyday-2 .ed-2-2 .demo-radio');
@@ -476,14 +474,14 @@ $('.everyday-2 .ed-2-1 input:radio[name="theme"]').on('click',function () {
     $('#defaultWeibo p').show();
     var the=$(this).val();
     var theSort=$('.everyday-2 .ed-2-2 input:radio[name="th"]:checked').val();
-    var the_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+theSort;
+    var the_url='/weibo_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+theSort;
     public_ajax.call_request('get',the_url,defalutWords)
 });
 $('.everyday-2 .ed-2-2 .demo-radio').on('click',function () {
     $('#defaultWeibo p').show();
     var TH=$(this).val();
     var the=$('.everyday-2 .ed-2-1 input:radio[name="theme"]:checked').val();
-    var TH_url='/facebook_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+TH;
+    var TH_url='/weibo_xnr_operate/daily_recommend_tweets/?theme='+the+'&sort_item='+TH;
     public_ajax.call_request('get',TH_url,defalutWords)
 });
 function defalutWords(data) {
@@ -548,6 +546,7 @@ function defalutWords(data) {
                         '               <span class="cen3-4" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
                         '               <span class="cen3-5" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '               <span class="cen3-6" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-7" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
@@ -703,13 +702,14 @@ function hotWeibo(data) {
                         // '               <span onclick="joinlab(this)"><i class="icon icon-upload-alt" ></i>&nbsp;&nbsp;加入语料库</span>'+
                         // '               <span onclick="simliar(this)"><i class="icon icon-check" title="相似推文"></i>&nbsp;&nbsp;相似推文</span>'+
                         // '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
-                        '               <span onclick="related(this)"><i class="icon icon-stethoscope" title="事件子观点及相关微博"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
-                        '               <span onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
-                        '               <span onclick="retweet(this)"><i class="icon icon-share" title="分享数"></i>&nbsp;&nbsp;分享&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
-                        '               <span onclick="showInput(this)"><i class="icon icon-comments-alt" title="评论数"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '               <span onclick="thumbs(this)"><i class="icon icon-thumbs-up" title="喜欢"></i>&nbsp;&nbsp;喜欢</span>'+
-                        '               <span class="cen3-5" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
-                        '               <span class="cen3-6" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
+                        '               <span onclick="related(this)" title="事件子观点及相关微博"><i class="icon icon-stethoscope"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
+                        '               <span onclick="copyPost(this)" title="复制"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
+                        '               <span onclick="retweet(this)" title="分享数"><i class="icon icon-share"></i>&nbsp;&nbsp;分享&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span onclick="showInput(this)" title="评论数"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '               <span onclick="thumbs(this)" title="喜欢"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                        '               <span class="cen3-5" title="私信" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
+                        '               <span class="cen3-6" title="翻译" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
+                        '               <span class="cen3-9" title="机器人回复" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-7" onclick="joinlab(this)" title="加入语料库"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+

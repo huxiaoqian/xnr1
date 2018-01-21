@@ -9,7 +9,6 @@ import time
 class Message():
 	def __init__(self,username, password):
 		self.launcher = Launcher(username, password)
-		self.driver = self.launcher.login()
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
 		self.list = []
@@ -32,10 +31,9 @@ class Message():
 		return self.list
 
 	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+		self.es.executeES(indexName,typeName,list)
 
 if __name__ == '__main__':
-	message = Message('18538728360@163.com','zyxing,0513')
+	message = Message('8617078448226','xnr123456')
 	list = message.get_message()
-	message.save('twitter_feedback_private_2017-11-13','text',list)
+	message.save('twitter_feedback_private','text',list)

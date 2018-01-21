@@ -89,6 +89,11 @@ es_tw_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 tw_portrait_index_name = 'tw_user_portrait'
 tw_portrait_index_type = 'user'
 
+#es: translations
+es_translation = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+translation_index_name = 'translation'
+translation_index_type = 'record'
+
 #use to identify the qq document task redis list
 qq_document_task_name = 'qq_document'
 
@@ -307,6 +312,7 @@ fb_index_sensing = "fb_manage_sensing_task"
 fb_type_sensing = "task"
 fb_id_sensing = "fb_social_sensing_task"
 fb_social_sensing_index_name = 'fb_social_sensing_text'
+fb_social_sensing_index_name_pre = 'fb_social_sensing_text_'
 fb_social_sensing_index_type = 'text'
 
 #use to save fb xnr personal information
@@ -409,6 +415,7 @@ tw_index_sensing = "tw_manage_sensing_task"
 tw_type_sensing = "task"
 tw_id_sensing = "tw_social_sensing_task"
 tw_social_sensing_index_name = 'tw_social_sensing_text'
+tw_social_sensing_index_name_pre = 'tw_social_sensing_text_'
 tw_social_sensing_index_type = 'text'
 
 #use to save tw xnr personal information

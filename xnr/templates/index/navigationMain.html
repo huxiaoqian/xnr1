@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
 <link rel="stylesheet" href="/static/css/navigationMain.css">
 <style>
+    .disableCss{
+        pointer-events:none;
+        color:#afafaf!important;
+        cursor:not-allowed!important;
+    }
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
     .demo-radio{display:none!important;}
     .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
@@ -143,12 +148,9 @@
         <img src="/static/images/QQload.png" title="QQ登录" class="qq">
         <img src="/static/images/WXload.png" title="微信登录" class="wx">
         <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
-        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter ">
     </div>
     <p class="p11" style="font-size: 16px;text-align: center;">
-        <!--社交网络信息平台拥有庞大的用户群，其社会舆情直接体现。随着我国的崛起，我们面临着日益复杂的国际关系和来自广袤的网络空间的安全挑战。-->
-        <!--通过网络虚拟人对涉及到的领域用户识别及画像、敏感信息监测预警、自动应答等领域的工作，及时捕获网络重大突发事件和苗头性敏感信息，-->
-        <!--及时预警和回应疏导舆论焦点已成为舆情管理的重要内容之一。-->
         虚拟人指挥管理系统通过微博、QQ群、微信群、facebook、twitter五个渠道，以虚拟人定制培养、统一管理、实时控制和联合指挥为目标，
         实现了不同领域虚拟人身份画像定制、舆情信息实时监测浏览、网络社交行为半自动化辅助及模拟，使监管手段更具主动性和智能化。
     </p>
@@ -254,6 +256,85 @@
         </div>
     </div>
 </div>
+<!--加载-->
+<style>
+    #loadingJump {margin-top: 130px;}
+    #loadingJump .modal-content {
+        box-shadow: none!important;
+        border: none!important;
+    }
+    .spinner {
+        margin: 100px auto;
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .spinner > div {
+        /*background-color: #67CF22;*/
+        background-color: #fff;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+        animation: stretchdelay 1.2s infinite ease-in-out;
+    }
+
+    .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+
+    .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    .spinner .rect4 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    .spinner .rect5 {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+
+    @-webkit-keyframes stretchdelay {
+        0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+        20% { -webkit-transform: scaleY(1.0) }
+    }
+
+    @keyframes stretchdelay {
+        0%, 40%, 100% {
+            transform: scaleY(0.4);
+            -webkit-transform: scaleY(0.4);
+        }  20% {
+               transform: scaleY(1.0);
+               -webkit-transform: scaleY(1.0);
+           }
+    }
+</style>
+<div class="modal fade" id="loadingJump" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background: transparent;">
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--<h4 class="modal-title"></h4>-->
+            <!--</div>-->
+            <div class="modal-body" style="background: transparent!important;">
+                <div class="spinner">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -328,12 +409,12 @@
     }).on('click',function () {
         var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=qq';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $('#pormpt h4').text('跳转提示');
-        $('#pormpt p').text('准备跳转中...请稍后...');
-        $('#pormpt').modal('show');
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
         setTimeout(function () {
             window.location.href='/index/navigationQQ/';
-            $('#pormpt').modal('hide');
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
         },1000);
     });
     $('.facebook').hover(function () {
@@ -343,12 +424,12 @@
     }).on('click',function () {
         var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=facebook';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $('#pormpt h4').text('跳转提示');
-        $('#pormpt p').text('准备跳转中...请稍后...');
-        $('#pormpt').modal('show');
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
         setTimeout(function () {
             window.location.href='/index/navigationFaceBook/';
-            $('#pormpt').modal('hide');
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
         },1000);
     });
     $('.twitter').hover(function () {
@@ -358,12 +439,12 @@
     }).on('click',function () {
         var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=twitter';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $('#pormpt h4').text('跳转提示');
-        $('#pormpt p').text('准备跳转中...请稍后...');
-        $('#pormpt').modal('show');
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
         setTimeout(function () {
             window.location.href = '/index/navigationTwitter/';
-            $('#pormpt').modal('hide');
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
         },1000);
     });
 
@@ -374,12 +455,12 @@
     }).on('click',function () {
         var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no='+sameID+'&new_platform=weixin';
         public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $('#pormpt h4').text('跳转提示');
-        $('#pormpt p').text('准备跳转中...请稍后...');
-        $('#pormpt').modal('show');
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
         setTimeout(function () {
             window.location.href='/index/navigationWX/';
-            $('#pormpt').modal('hide');
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
         },1000);
     });
 
@@ -455,7 +536,7 @@
                 }
                 if (sameid==k){
                     isChecked='checked';
-                    sameID=sameid
+                    sameID=sameid;
                     downXnr(k,data[k]);
                 }else if (oneTrue==1){
                     isChecked='checked';

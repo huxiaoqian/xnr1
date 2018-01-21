@@ -18,15 +18,14 @@ class Share():
 		for ea in self.driver.find_elements_by_xpath('//div[@id="repost_view_permalink"]/div/div[1]/div'):
 			for each in ea.find_elements_by_xpath('./div'):
 				author_name = each.find_element_by_xpath('./div/div[2]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/h5/span/span/span/a').text
-				print(author_name)
 				author_id = re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div[2]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/h5/span/span/span/a').get_attribute('data-hovercard'))
 				pic_url = each.find_element_by_xpath('./div/div[2]/div/div[2]/div/div/a/div/img').get_attribute('src')
 				try:
 					content = each.find_element_by_xpath('./div/div[2]/div/div[2]/div[2]//p').text
 				except Exception as e:
 					content = 'None'
-				time = each.find_element_by_xpath('./div/div[2]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
-				item = {'nick_name':author_name,'uid':author_id,'photo_url':pic_url,'text':content,'timestamp':time}
+				timestamp = int(each.find_element_by_xpath('./div/div[2]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime'))
+				item = {'nick_name':author_name,'uid':author_id,'photo_url':pic_url,'text':content,'timestamp':timestamp}
 				self.list.append(item)
 		return self.list
 		
@@ -34,6 +33,6 @@ class Share():
 		self.es.executeES(indexName, typeName, list)
 
 if __name__ == '__main__':
-	share = Share('8617078448226','xnr123456')
+	share = Share('8618348831412','Z1290605918')
 	list = share.get_share()
 	share.save('facebook_feedback_retweet','text',list)

@@ -91,7 +91,6 @@ function historyTotal(data) {
     historyTotalTable(data[0]);
     historyTotalLine(data[1]);
 }
-
 function historyTotalLine(data) {
     var time=[],fansDate=[],totalPostData=[],dailyPost=[],
         hotData=[],businessData=[],traceData=[],influeData=[],pentData=[],safeData=[];
@@ -408,8 +407,7 @@ function historyTotalTable(dataTable) {
         ],
     });
     $('#history-2 p').slideUp(700);
-}
-
+};
 //定时发送任务列表
 var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',timingTask_url,timingTask);
@@ -460,21 +458,6 @@ function timingTask(data) {
                     };
                 }
             },
-            // {
-            //     title: "操作类型",//标题
-            //     field: "operate_type",//键名
-            //     sortable: true,//是否可排序
-            //     order: "desc",//默认排序方式
-            //     align: "center",//水平
-            //     valign: "middle",//垂直
-            //     formatter: function (value, row, index) {
-            //         if (row.operate_type==''||row.operate_type=='null'||row.operate_type=='unknown'||!row.operate_type){
-            //             return '未知';
-            //         }else {
-            //             return TYPE[row.operate_type];
-            //         };
-            //     }
-            // },
             {
                 title: "提交时间",//标题
                 field: "create_time",//键名
@@ -752,10 +735,11 @@ function historyNews(data) {
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-1" onclick="retweet(this)" style="display: '+showHide2+';"><i class="icon icon-share"></i>&nbsp;&nbsp;转发 <b style="'+C3+'">（'+retNum+'）</b></span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" style="display:'+showHide2+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论<b style="'+C3+'">（'+row.comment+'）</b></span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" style="display:'+showHide2+';"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)" style="display:'+showHide2+';"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)" style="display:'+showHide1+'"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         // '               <span class="cen3-3" onclick="collect(this)" style="display:'+showHide3+';"><i class="icon icon-legal"></i>&nbsp;&nbsp;收藏</span>'+
                         '               <span class="cen3-5" onclick="dialogue(this)" style="display:'+showHide4+';"><i class="icon icon-book"></i>&nbsp;&nbsp;查看对话</span>'+
                         '               <span class="cen3-6" onclick="showInput(this)" style="display:'+showHide4+';"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复</span>'+

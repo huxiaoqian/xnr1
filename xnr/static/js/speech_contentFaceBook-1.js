@@ -108,7 +108,6 @@ function weibo(data) {
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
                             text=s;
-
                             var rrr=item.text;
                             if (rrr.length>=160){
                                 rrr=rrr.substring(0,160)+'...';
@@ -118,8 +117,9 @@ function weibo(data) {
                                 all='none';
                             }
                             for (var f of keywords){
-                                text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
+                            text2=rrr;
                         }else {
                             text=item.text;
                             if (text.length>=160){
@@ -164,7 +164,8 @@ function weibo(data) {
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
-                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
@@ -212,26 +213,6 @@ function comMent(_this){
         $('#pormpt p').text('评论内容不能为空。');
         $('#pormpt').modal('show');
     }
-}
-//获取信息
-function getInfo(_this) {
-    var alldata=[];
-    var uid = $(_this).parents('.everySpeak').find('.uid').text();alldata.push(uid);
-    var mid = $(_this).parents('.everySpeak').find('.mid').text();alldata.push(mid);
-    var txt=$(_this).parents('.everySpeak').find('.center_2').text().toString().replace(/#/g,'%23').replace(/&/g,'%26');alldata.push(txt);
-    var timestamp = $(_this).parents('.everySpeak').find('.timestamp').text();alldata.push(timestamp);
-    var forwarding = $(_this).parents('.everySpeak').find('.forwarding').text();alldata.push(forwarding);
-    var comment = $(_this).parents('.everySpeak').find('.comment').text();alldata.push(comment);
-    var sensitive = $(_this).parents('.everySpeak').find('.sensitive').text();alldata.push(sensitive);
-    var sensitiveWords = $(_this).parents('.everySpeak').find('.sensitiveWords').text().toString().replace(/&/g,'%26');alldata.push(sensitiveWords);
-    return alldata;
-}
-//加入预警
-function joinPolice(_this) {
-    var info=getInfo(_this);
-    var police_url='/weibo_xnr_warming/addto_speech_warming/?xnr_user_no='+ID_Num+'&uid='+info[0]+'&text='+info[2]+
-        '&mid='+info[1]+'&timestamp='+info[3]+'&retweeted='+info[4]+'&comment='+info[5]+'&like=0';
-    public_ajax.call_request('get',police_url,postYES)
 }
 //一键上报
 function oneUP(_this) {

@@ -252,6 +252,86 @@
         </div>
     </div>
 </div>
+
+<!--加载-->
+<style>
+    #loadingJump {margin-top: 130px;}
+    #loadingJump .modal-content {
+        box-shadow: none!important;
+        border: none!important;
+    }
+    .spinner {
+        margin: 100px auto;
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .spinner > div {
+        /*background-color: #67CF22;*/
+        background-color: #fff;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+        animation: stretchdelay 1.2s infinite ease-in-out;
+    }
+
+    .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+
+    .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    .spinner .rect4 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    .spinner .rect5 {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+
+    @-webkit-keyframes stretchdelay {
+        0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+        20% { -webkit-transform: scaleY(1.0) }
+    }
+
+    @keyframes stretchdelay {
+        0%, 40%, 100% {
+            transform: scaleY(0.4);
+            -webkit-transform: scaleY(0.4);
+        }  20% {
+               transform: scaleY(1.0);
+               -webkit-transform: scaleY(1.0);
+           }
+    }
+</style>
+<div class="modal fade" id="loadingJump" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background: transparent;">
+            <!--<div class="modal-header">-->
+            <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+            <!--<h4 class="modal-title"></h4>-->
+            <!--</div>-->
+            <div class="modal-body" style="background: transparent!important;">
+                <div class="spinner">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}
@@ -262,6 +342,32 @@
 <script src="/static/js/jquery-ui.min.js"></script>
 <script src="/static/js/jquery.fullPage.min.js"></script>
 <script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
     function getLocalTime(nS) {
         return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月|\//g, "-").replace(/日|上午|下午/g, " ");
     }
@@ -304,28 +410,60 @@
     },function () {
         $(this).attr('src','/static/images/weiboload.png');
     }).on('click',function () {
-        window.location.href='/index/navigation/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=weibo';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigation/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);
     });
     $('.qq').hover(function () {
         $(this).attr('src','/static/images/clickQQ.png');
     },function () {
         $(this).attr('src','/static/images/QQload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationQQ/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=qq';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationQQ/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);
     });
     $('.wx').hover(function () {
         $(this).attr('src','/static/images/clickWX.png');
     },function () {
         $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
-        window.location.href='/index/navigationWX/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationWX/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);
     });
     $('.twitter').hover(function () {
         $(this).attr('src','/static/images/twitterclick.png');
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        window.location.href = '/index/navigationTwitter/';
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=facebook&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href = '/index/navigationTwitter/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);
     });
 
     //页面跳转
@@ -382,7 +520,7 @@
     //登录类型
     var admin='admin@qq.com';
     //虚拟人列表
-    var oneTrue=1;
+    var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
         url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
@@ -390,18 +528,28 @@
         dataType: "json",
         success: function (data) {
             var str='';
+            var sameid=localStorage.getItem('sameXnr');
             for (var k in data){
                 if (data[k]==''||data[k]=='unknown'){
                     data[k]='无昵称';
                 }
                 var isChecked='';
-                if (oneTrue=='1'){
+                if (sameid==k){
                     isChecked='checked';
-                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
-                    localStorage.setItem('user',encodeURI(k));
-                    localStorage.setItem('userRelName',encodeURI(data[k]));
-                    localStorage.setItem('userName',encodeURI(data[k]));
-                };
+                    sameID=sameid;
+                    downXnr(k,data[k]);
+                }else if (oneTrue==1){
+                    isChecked='checked';
+                    sameID=sameid
+                    downXnr(k,data[k]);
+                }
+//                if (oneTrue=='1'){
+//                    isChecked='checked';
+//                    $('#xnrName').text(data[k]+'（'+k+'）').attr('title',data[k]+'（'+k+'）');
+//                    localStorage.setItem('user',encodeURI(k));
+//                    localStorage.setItem('userRelName',encodeURI(data[k]));
+//                    localStorage.setItem('userName',encodeURI(data[k]));
+//                };
                 str+=
                     '<label class="demo-label" title="'+data[k]+'">'+
                     '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
@@ -412,6 +560,17 @@
             $('#choosePerson .identity').html(str);
         }
     });
-
+    function downXnr(k1,k2) {
+        $('#xnrName').text(k2+'（'+k1+'）').attr('title',k2+'（'+k1+'）');
+        localStorage.setItem('user',encodeURI(k1));
+        localStorage.setItem('userRelName',encodeURI(k2));
+        localStorage.setItem('userName',encodeURI(k2));
+    }
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
+        }
+    }
 </script>
 {% endblock %}

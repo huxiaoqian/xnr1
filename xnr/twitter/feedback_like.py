@@ -21,7 +21,7 @@ class Like():
 			type = li.get_attribute('data-component-context')
 			if type == "favorite_activity":
 				user_name = li.find_element_by_xpath('./div/div/div/div[2]/div[1]/a/strong').text
-				time = li.find_element_by_xpath('./div/div/div/div[2]/div[1]/div[1]/div/span').get_attribute('data-time')
+				timestamp = li.find_element_by_xpath('./div/div/div/div[2]/div[1]/div[1]/div/span').get_attribute('data-time')
 				user_id = li.find_element_by_xpath('./div/div/div/div[2]/div[1]/a').get_attribute('data-user-id')
 				root_user_name = li.find_element_by_xpath('./div/div/div/div[2]/div[2]/div/div/div/div/div/div[1]/b').text
 				root_user_screen_name = li.find_element_by_xpath('./div/div/div/div[2]/div[2]/div/div/div/div/div/div[1]/span[3]/b').text
@@ -30,7 +30,7 @@ class Like():
 
 				item = {
 					'nick_name':user_name,
-					'timestamp':time,
+					'timestamp':int(timestamp),
 					'uid':user_id,
 					'root_user_name':root_user_name,
 					'root_nick_name':root_user_screen_name,
@@ -42,13 +42,12 @@ class Like():
 		return self.list
 
 	def save(self,indexName,typeName,list):
-		for item in list:
-			self.es.executeES(indexName,typeName,item)
+		self.es.executeES(indexName,typeName,list)
 
 if __name__ == '__main__':
-	like = Like('18538728360@163.com','zyxing,0513')
+	like = Like('8617078448226','xnr123456')
 	list = like.get_like()
-	like.save('twitter_feedback_like_2017-11-13','text',list)
+	like.save('twitter_feedback_like','text',list)
 
 
 

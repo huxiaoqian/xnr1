@@ -6,16 +6,18 @@ import tweepy
 from tweepy import OAuthHandler
 import requests
 import time
+from pyvirtualdisplay import Display
 
 class Launcher():
 	def __init__(self,username,password):
 		self.username = username
 		self.password = password
-		self.consumer_key = 'v87gW3XqF49PL13xRYGsdVTXX'
-		self.consumer_secret = 'Bzm94HKmBwkbwlCsPsAwv3wU2PYbuGPO6IfZ4TiaR4bZOBEvMR'
-		self.access_token = '943290911039029250-ZKg5KT0edFDGctuVbHvWCJWoZ9CmV5t'
-		self.access_secret = 'OEcFiPfqUihKUzW61ZR23fOkMY5BIsDRjj5urf8rmYMTt'
-
+		self.consumer_key = 'N1Z4pYYHqwcy9JI0N8quoxIc1'
+		self.consumer_secret = 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2'
+		self.access_token = '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr'
+		self.access_secret = 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9'
+		self.display = Display(visible=0,size=(1024,768))
+		self.display.start()
 	def login(self):
 		driver = webdriver.Firefox()
 		driver.get('https://twitter.com/login')
@@ -46,7 +48,7 @@ class Launcher():
 		return screen_name
 
 if __name__ == '__main__':
-	launcher = Launcher('18538728360@163.com','zyxing,0513')
+	launcher = Launcher('8617078448226','xnr123456')
 	driver = launcher.login()
 	api = launcher.api()
 
