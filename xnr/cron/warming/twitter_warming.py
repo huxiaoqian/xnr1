@@ -669,16 +669,16 @@ def create_twitter_warning():
         #print xnr_list
         xnr_list=['TXNR0001']
         for xnr_user_no in xnr_list:
-            #人物行为预警
-            # personal_mark=create_personal_warning(xnr_user_no,today_datetime)
-            #言论内容预警
-            # speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            # 人物行为预警
+            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            # 言论内容预警
+            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
-    # date_mark=create_date_warning(today_datetime)
+    date_mark=create_date_warning(today_datetime)
 
     return True
 
