@@ -54,12 +54,14 @@ class Operation():
 
 	def follow(self, uid):
 		try:
+			print 'follow..uid..',uid
 			self.api.create_friendship(uid)
 		except Exception as e:
 			print(e)
 
 	def destroy_friendship(self, uid):
 		try:
+			print 'unfollow..uid..',uid
 			self.api.destroy_friendship(uid)
 		except Exception as e:
 			print(e)
@@ -71,13 +73,10 @@ class Operation():
 		 	print(e)
 
 	def do_favourite(self, tid):
-		#try:
-		print 'do_favourite1111'
-		print self.api.create_favorite(id)
-		print 'do_favourite2222'
-
-		# except Exception as e:
-		# 	print(e)
+		try:
+			self.api.create_favorite(tid)
+		except Exception as e:
+			print(e)
 
 	def do_comment(self, uid, tid, text):
 		driver = self.launcher.login()

@@ -118,7 +118,7 @@ def facebook_flow_text_mappings(index_name):
                     },
                     'tweets_num':{
                         'type':'long'
-                    },
+                    }
 				}
 			}
 		}

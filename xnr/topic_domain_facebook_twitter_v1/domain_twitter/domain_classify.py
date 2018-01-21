@@ -8,12 +8,18 @@ import csv
 import opencc
 from global_utils_do import *
 
-cc = opencc.OpenCC('t2s', opencc_path='/usr/bin/opencc')
+sys.path.append('../../cron')
+from trans.trans import trans, traditional2simplified
+
+# cc = opencc.OpenCC('t2s', opencc_path='/usr/bin/opencc')
 s = load_scws()
 
 def classify_by_biostring(bio_string):#根据用户bio_string划分
 
-    bio_string_s = cc.convert(bio_string.decode('utf-8'))
+    # bio_string_s = cc.convert(bio_string.decode('utf-8'))
+    bio_string_s = bio_string.decode('utf-8')
+    
+
     kwdlist = bio_string_s.encode('utf-8')#cut(s, bio_string_s.encode('utf-8'))
     lawyerw_weight = sum([1 for keyword in lawyerw if keyword in kwdlist]) # 律师
     adminw_weight = sum([1 for keyword in adminw if keyword in kwdlist]) # 组织
@@ -106,7 +112,8 @@ def classify_by_biostring(bio_string):#根据用户bio_string划分
 
 def classify_inner_outer(location):
 
-    bio_string_s = cc.convert(location.decode('utf-8'))
+    # bio_string_s = traditional2simplified(location.decode('utf-8'))
+    bio_string_s = location.decode('utf-8')
     new_location = bio_string_s.encode('utf-8')
     flag = 0
     for city in inner_city:

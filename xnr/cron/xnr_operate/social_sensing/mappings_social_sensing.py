@@ -183,7 +183,7 @@ def manage_sensing_task():
 
     es.indices.create(index="manage_sensing_task", body=index_info, ignore=400)
 
-def mappings_social_sensing_text():
+def mappings_social_sensing_text(index_name):
     index_info = {
         "settings":{
             "number_of_replicas": 0
@@ -270,12 +270,14 @@ def mappings_social_sensing_text():
         }
     }
 
-    es.indices.create(index="social_sensing_text",body=index_info, ignore=400)
+    es.indices.create(index=index_name,body=index_info, ignore=400)
 
 
 if __name__ == "__main__":
     #manage_sensing_task()
     #mappings_sensing_task("social_sensing")
-    mappings_social_sensing_text()
+    index_name = 'social_sensing_text_' + ts2datetime(time.time())
+
+    mappings_social_sensing_text(index_name)
 
 
