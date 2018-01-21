@@ -48,3 +48,6 @@ def weibo_report_management_mappings():
 
 if __name__ == '__main__':
 	weibo_report_management_mappings()
+	es.indices.put_mapping(index=weibo_report_management_index_name, doc_type=weibo_report_management_index_type, \
+            body={'properties':{'nick_name': {'type': 'string','index':'not_analyzed'}\
+            }}, ignore=400)

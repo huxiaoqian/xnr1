@@ -25,12 +25,16 @@ from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                          weibo_date_remind_index_name,weibo_date_remind_index_type,\
                          weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
-                         weibo_log_management_index_name,weibo_log_management_index_type
+                         weibo_log_management_index_name,weibo_log_management_index_type,\
+                         qq_xnr_index_name,qq_xnr_index_type,\
+                         qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,\
+                         qq_report_management_index_name,qq_report_management_index_type
 
 
 #连接数据库,获取账户列表
 def get_user_account_list():     
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    # cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr_0110/xnr1/xnr/flask-admin.db")
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
@@ -38,7 +42,7 @@ def get_user_account_list():
     return user_info
 
 
-#根据账户名称查询所管理的虚拟人
+#根据账户名称查询所管理的微博虚拟人
 def get_user_xnr_list(user_account):
     query_body={
         'query':{
@@ -59,7 +63,8 @@ def get_user_xnr_list(user_account):
         xnr_user_no_list=[]
     return xnr_user_no_list
 
-#获取虚拟人的uidlist
+
+#获取微博虚拟人的uidlist
 def get_xnr_uid_list(user_account):
     query_body={
         'query':{
@@ -86,7 +91,7 @@ def get_xnr_uid_list(user_account):
     return xnr_uid_list
 
 
-##日志文件操作内容模块
+##微博日志文件操作内容模块
 #创建虚拟人
 def create_xnr_number(user_account,start_time,end_time):
     query_body={
@@ -389,6 +394,107 @@ def count_create_business(user_account,start_time,end_time,index_name,index_type
         number=0
     return number
 
+##QQ
+#根据账户名称查询所管理的微博虚拟人
+def get_user_qqxnr_list(user_account):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'submitter':user_account}
+                }
+            }
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
+
+
+##QQ创建虚拟人
+def create_qqxnr_number(user_account,start_time,end_time):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'submitter':user_account}},
+                            {'range':{'create_ts':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    number=len(xnr_user_no_list)
+    return number
+
+
+##QQ操作统计-今日发言量
+def count_qqxnr_daily_post(date_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no_list}},
+                            {'term':{'date_time':date_time}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        user_result=es_xnr.search(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,body=query_body)['hits']['hits']
+        number=0
+        for item in user_result:
+            number=number+item['_source']['daily_post_num']
+    except:
+        number=0
+    return number 
+
+#QQ上报
+def count_qq_report_number(start_time,end_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'xnr_user_no':xnr_user_no_list}},
+                            {'range':{'report_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=qq_report_management_index_name,doc_type=qq_report_management_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
 
 #日志生成文件组织
 def create_user_log():
@@ -412,10 +518,14 @@ def create_user_log():
         print log_id
         log_content_dict=dict()
 
+###########################################################################
+#微博部分日志
+###########################################################################
+
         #账户是否创建虚拟人
         xnr_number=create_xnr_number(user_account,start_time,end_time)
         if xnr_number > 0:
-            log_content_dict[u'创建微信虚拟人']=xnr_number
+            log_content_dict[u'创建微博虚拟人']=xnr_number
         else:
             pass
 
@@ -428,7 +538,7 @@ def create_user_log():
         daily_post_type='daily_post'
         daily_post_num=count_type_posting(daily_post_type,operate_date,xnr_user_no_list)
         if daily_post_num > 0:
-            log_content_dict[u'日常发帖']=daily_post_num
+            log_content_dict[u'微博-日常发帖']=daily_post_num
         else:
             pass
 
@@ -436,7 +546,7 @@ def create_user_log():
         business_post_type='business_post'
         business_post_num=count_type_posting(business_post_type,operate_date,xnr_user_no_list)
         if business_post_num > 0:
-            log_content_dict[u'业务发帖']=business_post_num
+            log_content_dict[u'微博-业务发帖']=business_post_num
         else:
             pass
 
@@ -444,14 +554,14 @@ def create_user_log():
         hot_post_type='hot_post'
         hot_post_num=count_type_posting(hot_post_type,operate_date,xnr_user_no_list)
         if hot_post_num > 0:
-            log_content_dict[u'热点跟随']=hot_post_num
+            log_content_dict[u'微博-热点跟随']=hot_post_num
         else:
             pass
 
         #跟踪转发
         retweet_timing_num=count_tweet_retweet(start_time,end_time,xnr_user_no_list)
         if retweet_timing_num > 0:
-            log_content_dict[u'跟踪转发']=retweet_timing_num
+            log_content_dict[u'微博-跟踪转发']=retweet_timing_num
         else:
             pass
 
@@ -460,7 +570,7 @@ def create_user_log():
         retweet_type='3'
         retweet_num=count_retweet_comment_operate(retweet_type,operate_date,xnr_uid_list)
         if retweet_num > 0:
-            log_content_dict[u'转发']=retweet_num
+            log_content_dict[u'微博-转发']=retweet_num
         else:
             pass
 
@@ -468,51 +578,54 @@ def create_user_log():
         comment_type='2'
         comment_num=count_retweet_comment_operate(comment_type,operate_date,xnr_uid_list)
         if comment_num > 0:
-            log_content_dict[u'评论']=comment_num
+            log_content_dict[u'微博-评论']=comment_num
         else:
             pass
 
         #点赞
         like_num=count_like_operate(start_time,end_time,xnr_uid_list)
         if like_num > 0:
-            log_content_dict[u'点赞']=like_num
+            log_content_dict[u'微博-点赞']=like_num
         else:
             pass
 
         #私信
         private_message_num=count_private_message(start_time,end_time,xnr_uid_list)
         if private_message_num > 0:
-            log_content_dict[u'私信']=private_message_num
+            log_content_dict[u'微博-私信']=private_message_num
         else:
             pass
 
         ##################加入语料#################
         add_corpus_num=count_add_corpus(start_time,end_time,xnr_user_no_list)
         if add_corpus_num > 0:
-            log_content_dict[u'加入语料']=add_corpus_num
+            log_content_dict[u'微博-加入语料']=add_corpus_num
         else:
             pass
 
         ##################上报操作#################
         report_num=count_report_type(start_time,end_time,xnr_user_no_list)
         if report_num > 0:
-            log_content_dict[u'上报']=report_num
+            log_content_dict[u'微博-上报']=report_num
         else:
             pass
 
         ##################加入预警库#################
         add_warming_num=count_add_warming_speech(start_time,end_time,xnr_user_no_list)
         if add_warming_num > 0:
-            log_content_dict[u'加入预警库']=add_warming_num
+            log_content_dict[u'微博-加入预警库']=add_warming_num
         else:
             pass
 
         ##################定时任务#################
         timing_task_num=count_add_timing_task(start_time,end_time,xnr_user_no_list)
         if timing_task_num > 0:
-            log_content_dict[u'创建定时任务']=timing_task_num
+            log_content_dict[u'微博-创建定时任务']=timing_task_num
         else:
             pass
+
+###########################################################################
+###########################################################################
 
         ##################领域创建#################
         create_domain_num=count_create_domain(user_account,start_time,end_time)
@@ -542,6 +655,34 @@ def create_user_log():
             log_content_dict[u'创建隐喻式表达']=create_hidden_expression_num
         else:
             pass
+
+
+###########################################################################
+#QQ部分日志
+###########################################################################
+        #账户是否创建QQ虚拟人
+        qq_xnr_number=create_qqxnr_number(user_account,start_time,end_time)
+        if qq_xnr_number > 0:
+            log_content_dict[u'创建QQ虚拟人']=qq_xnr_number
+        else:
+            pass
+
+        qq_xnr_user_no_list=get_user_qqxnr_list(user_account)
+
+        #今日发帖量
+        qqxnr_daily_post = count_qqxnr_daily_post(operate_date,qq_xnr_user_no_list)
+        if qqxnr_daily_post > 0:
+            log_content_dict[u'QQ-发言']=qqxnr_daily_post
+        else:
+            pass
+
+        #上报数量
+        qq_report_number=count_qq_report_number(start_time,end_time,qq_xnr_user_no_list)
+        if qq_report_number > 0:
+            log_content_dict[u'QQ-上报']=qq_report_number
+        else:
+            pass
+            
 
         log_content=json.dumps(log_content_dict)
 

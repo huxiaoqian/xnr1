@@ -426,7 +426,7 @@ def show_speech_warning(xnr_user_no,show_type,start_time,end_time):
         end_datetime = datetime2ts(ts2datetime(end_time))
         start_datetime = datetime2ts(ts2datetime(start_time))
     
-    #print start_time,end_time
+    print 'time:',start_time,end_time
     speech_warming=[]
     if today_datetime > end_datetime :
         speech_warming = lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time)
