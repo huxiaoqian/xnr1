@@ -506,8 +506,7 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
-                'topic': json.dumps({}),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps(user_topic_dict[uid]),
                 'topic_string': user_topic_string[uid]
             }
         else:
@@ -519,7 +518,77 @@ def update_topic(uid_list=[]):
     return save_data2es(user_topic)
 
 def update_baseinfo(uid_list=[]):
-    pass
+    user_baseinfo = {}
+    fb_user_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "fields": ["location", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
+    }
+    search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=fb_user_query_body)['hits']['hits']
+    for item in search_results:
+        content = item['fields']
+        uid = content['uid'][0]
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'location': '',
+                'verified':'',
+                'statusnum': 0,
+                'friendsnum': 0,
+                'fansnum': 0,
+                'photo_url': '',
+            }
+        location = ''
+        if content.has_key('location'):
+            location = content.get('location')[0]
+        uname = ''
+        if content.has_key('username'):
+            uname = content.get('username')[0]
+        photo_url = ''
+        if content.has_key('original_profile_image_url'):
+            photo_url = content.get('original_profile_image_url')[0]
+        verified = ''
+        if content.has_key('is_verified'):
+            verified = str(content.get('is_verified')[0])
+        statusnum = ''
+        if content.has_key('status_count'):
+            statusnum = content.get('status_count')[0]
+        friendsnum = ''
+        if content.has_key('friends_count'):
+            friendsnum = content.get('friends_count')[0]
+        fansnum = ''
+        if content.has_key('followers_count'):
+            fansnum = content.get('followers_count')[0]
+
+        user_baseinfo[uid]['location'] = location
+        user_baseinfo[uid]['uname'] = uname
+        user_baseinfo[uid]['photo_url'] = photo_url
+        user_baseinfo[uid]['verified'] = verified
+        user_baseinfo[uid]['statusnum'] = statusnum
+        user_baseinfo[uid]['friendsnum'] = friendsnum
+        user_baseinfo[uid]['fansnum'] = fansnum
+    for uid in uid_list:
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'location': '',
+                'verified':'',
+                'statusnum': 0,
+                'friendsnum': 0,
+                'fansnum': 0,
+                'photo_url': '',
+            }
+    return save_data2es(user_baseinfo)
 
 def update_all():
     time_list = []
@@ -551,24 +620,24 @@ def update_all():
 
 
     #周更新
-    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
-        print 'update_domain: ', update_domain(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    # if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
+    print 'update_domain: ', update_domain(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_sentiment: ', update_sentiment(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_sentiment: ', update_sentiment(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_topic: ', update_topic(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_topic: ', update_topic(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_keywords:', update_keywords(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_keywords:', update_keywords(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    update_domain(load_uid_list())
+    update_all()
+    # print update_baseinfo(load_uid_list())
     
