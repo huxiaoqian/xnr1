@@ -145,6 +145,9 @@ fb_role_index_type = 'role'
 weibo_example_model_index_name = 'weibo_example_model'
 weibo_example_model_index_type = 'model'
 
+##facebook
+fb_example_model_index_name = 'facebook_example_model'
+fb_example_model_index_type = 'model'
 
 # use to publish tweet at future time
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'
@@ -532,6 +535,9 @@ def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
 r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
+
+fb_target_domain_detect_queue_name = 'facebook_target_domain_detect_task'
+fb_target_domain_analysis_queue_name = 'facebook_target_domain_analysis_task'
 
 # social sensing redis
 R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)

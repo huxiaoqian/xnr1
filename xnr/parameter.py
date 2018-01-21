@@ -149,7 +149,6 @@ daily_ch2en = {u'旅游':'travel',u'美食':'food',u'汽车':'cars',u'游戏':'g
 
 topic_value_dict = {"art": 1, "computer":2, "economic":7, "education":7.5, "environment":8.7, "medicine":7.8,"military":7.4, "politics":10, "sports":4, "traffic":6.9, "life":1.8, "anti-corruption":9.5, "employment":6, "fear-of-violence":9.3, "house":6.4, "law":8.6, "peace":5.5, "religion":7.6, "social-security":8.6}
 
-
 topic_en2ch_dict = {'art':u'文体类_娱乐','computer':u'科技类','economic':u'经济类', \
                     'education':u'教育类','environment':u'民生类_环保', 'medicine':u'民生类_健康',\
                     'military':u'军事类','politics':u'政治类_外交','sports':u'文体类_体育',\
@@ -187,6 +186,20 @@ fb_domain_en2ch_dict = {'university':u'高校','admin':u'机构','media':u'媒�
                         'folkorg':u'民间组织','lawyer':u'法律机构及人士','politician':u'政府机构及人士',\
                         'mediaworker':u'媒体人士','activer':u'活跃人士','other':u'其他','business':u'商业人士'}               
 
+#facebook&twitter
+fb_tw_topic_en2ch_dict = {'life':u'其他类','law':u'民生类_法律','computer':u'科技类','house':u'民生类_住房',\
+                        'peace':u'政治类_地区和平','politics':u'政治类_民主','fear-of-violence':u'政治类_暴恐',\
+                        'sports':u'文体类_体育','environment':u'民生类_环保','religion':u'政治类_宗教',\
+                        'economic':u'经济类','traffic':u'民生类_交通','anti-corruption':u'政治类_反腐',\
+                        'military':u'军事类','medicine':u'民生类_健康','art':u'文体类_娱乐',\
+                        'education':u'教育类','employment':u'民生类_就业','social-security':u'民生类_社会保障'}
+
+fb_tw_topic_ch2en_dict={'其他类':u'life','民生类_法律':u'law','科技类':u'computer','民生类_住房':u'house',\
+                        '政治类_地区和平':u'peace','政治类_民主':u'politics','政治类_暴恐':u'fear-of-violence',\
+                        '文体类_体育':u'sports','民生类_环保':u'environment','政治类_宗教':u'religion',\
+                        '经济类':u'economic','民生类_交通':u'traffic','政治类_反腐':u'anti-corruption',\
+                        '军事类':u'military','民生类_健康':u'medicine','文体类_娱乐':u'art',\
+                        '教育类':u'education','民生类_就业':u'employment','民生类_社会保障':u'social-security',}
 # 敏感词等级评分, string类型
 sensitive_score_dict = {
     "1": 1,
