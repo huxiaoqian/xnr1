@@ -296,3 +296,58 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # print '_id_list...',_id_list
 
+
+# # agg 
+# def count_statis():
+
+# 	query_body = {
+# 		'query':{	
+# 			'bool':{
+# 				'must':[
+# 					{'range':{'update_time':{'gt':1507774875,'lte':1507812886}}}
+# 				]
+# 			}
+# 		},
+# 		'aggs':{
+# 			'all_fids':{
+# 				'terms':{
+# 					'field':'fid',
+# 					'order':{'stats_share.max':'desc'},
+# 					'size':100
+# 				},
+# 				'aggs':{
+# 					'stats_share':{
+# 						'stats':{
+# 							'field':'share'
+# 						}
+# 					}
+# 				}
+
+# 			}
+# 		}
+# 	}
+
+# 	results = es.search(index='facebook_count_2017-10-12',doc_type='text',\
+# 		body=query_body)['aggregations']['all_fids']['buckets']
+
+# 	import copy
+# 	results_origin = copy.deepcopy(results)
+
+# 	fid_share_dict = {}
+# 	results.sort(key=lambda x:(x['stats_share']['max']-x['stats_share']['min']),reverse=True)
+	
+# 	fid_list = [item['key'] for item in results if (item['stats_share']['max']-item['stats_share']['min']) > 10]
+
+# 	TOP_HOT_FB = 100
+
+# 	if len(fid_list) < TOP_HOT_FB:
+
+# 		fid_list_2 = [item['key'] for item in results_origin[:TOP_HOT_FB - len(fid_list)]]
+
+# 		fid_list.extend(fid_list_2)
+
+
+#count_statis()
+# results =  es.search(index='twitter_flow_text_2017-10-25',doc_type='text',body={'query':{'match_all':{}},'size':100})['hits']['hits']
+# tid_list = [item['_source']['tid'] for item in results]
+# print 'tid_list',tid_list
