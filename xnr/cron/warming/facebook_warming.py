@@ -330,7 +330,8 @@ def create_date_warning(today_datetime):
                 item['_source']['validity']=0
                 item['_source']['timestamp']=today_datetime   
 
-                task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)    
+                # task_id=str(item['_source']['create_time'])+'_'+str(today_datetime)
+                task_id=date_time+'_'+str(today_datetime) 
                 #print 'task_id',task_id
                 #print 'date_warming',date_warming
                 print 'type:',type(item['_source'])
@@ -339,7 +340,7 @@ def create_date_warning(today_datetime):
                 facebook_timing_warning_index_name=facebook_timing_warning_index_name_pre+warming_date
                 
                 if date_warming:
-                    print facebook_timing_warning_index_name
+                    print 'facebook_timing_warning_index_name:',facebook_timing_warning_index_name,task_id
                     try:
                         es_xnr.index(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_type,body=item['_source'],id=task_id)
                         mark=True
@@ -580,11 +581,13 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             event_warming_content['validity']=0
             event_warming_content['timestamp']=today_datetime
             now_time=int(time.time())
-            task_id=xnr_user_no+'_'+str(now_time) 
+            # task_id=xnr_user_no+'_'+str(now_time) 
+            task_id=xnr_user_no+'_'+event_warming_content['event_name']
         
             #写入数据库           
             if write_mark:
                 # print 'today_datetime:::',ts2datetime(today_datetime)
+                print 'task_id_event:',task_id
                 mark=write_envent_warming(today_datetime,event_warming_content,task_id)
                 event_warming_list.append(mark)
             else:
@@ -664,9 +667,9 @@ def create_facebook_warning():
         for xnr_user_no in xnr_list:
             print 'xnr_user_no:',xnr_user_no
             #人物行为预警
-            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            # personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            # speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
             create_event_warning(xnr_user_no,today_datetime,write_mark=True)

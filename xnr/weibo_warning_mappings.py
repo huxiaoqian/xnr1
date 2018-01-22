@@ -12,7 +12,8 @@ from global_utils import weibo_user_warning_index_name_pre,weibo_user_warning_in
 						weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
 						weibo_speech_warning_index_name_pre,weibo_speech_warning_index_type,\
 						weibo_timing_warning_index_name_pre,weibo_timing_warning_index_type,\
-						weibo_date_remind_index_name,weibo_date_remind_index_type
+						weibo_date_remind_index_name,weibo_date_remind_index_type,\
+						weibo_warning_corpus_index_name,weibo_warning_corpus_index_type
 
 NOW_DATE=ts2datetime(int(time.time())-DAY)
 
@@ -212,6 +213,10 @@ def weibo_speech_warning_mappings():
 					'root_mid':{
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
@@ -321,11 +326,131 @@ def lookup_date_info(today_datetime):
     return date_result
 
 
+def weibo_warning_corpus_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5,
+			'analysis':{
+				'analyzer':{
+					'my_analyzer':{
+					'type': 'pattern',
+					'pattern': '&'
+						}
+					}
+				}
+		},
+		'mappings':{
+			weibo_warning_corpus_index_type:{
+				'properties':{
+					'xnr_user_no':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'warning_source':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'create_time':{
+						'type':'long'
+					},
+					'content_type':{  # unfollow - 未关注，follow - 已关注
+						'type':'string',
+						'index':'not_analyzed'
+					},					
+					'validity':{   #预警有效性，有效1，无效-1
+						'type':'long'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'comment':{
+						'type':'long'
+					},
+					'directed_uid':{
+						'type':'long'
+					},
+					'uid':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},	
+					'sentiment':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'root_uid':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'sensitive_words_string':{
+						'type': 'string',
+						'analyzer': 'my_analyzer'
+					},
+					'text':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'user_fansnum':{
+						'type':'long'
+					},
+					'mid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'keywords_string':{
+						'type': 'string',
+						'analyzer': 'my_analyzer'
+					},
+					'sensitive':{
+						'type':'long'
+					},
+					'sensitive_words_dict':{
+						'type': 'string',
+						'index': 'not_analyzed'
+					},
+					'keywords_dict':{
+						'type': 'string',
+						'index': 'not_analyzed'
+					},
+					'ip':{  
+						'type':'string',
+						'index':'not_analyzed'
+					},	
+					'directed_uname':{
+						'type': 'string',
+						'index': 'not_analyzed'
+					},
+					'geo':{
+						'type': 'string',
+						'analyzer': 'my_analyzer'
+					},
+					'message_type':{
+						'type':'long'
+					},
+					'retweeted':{
+						'type':'long'
+					},
+					'root_mid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					}
+				}
+			}
+		}
+	}
+	if not es.indices.exists(index=weibo_warning_corpus_index_name):
+		es.indices.create(index=weibo_warning_corpus_index_name,body=index_info,ignore=400)
+
 
 if __name__ == '__main__':	
 	weibo_user_warning_mappings()
 	weibo_event_warning_mappings()
 	weibo_speech_warning_mappings()
+	weibo_warning_corpus_mappings()
 
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(S_DATE_WARMING) - DAY

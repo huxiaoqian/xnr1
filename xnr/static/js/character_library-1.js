@@ -39,7 +39,7 @@ function allDataFun(_this) {
     public_ajax.call_request('get',allData_url,allDataChart);
 }
 //默认
-var default_allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name=维权群体&role_name=政府机构及人士';
+var default_allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name=维权群体&role_name=其他';
 public_ajax.call_request('get',default_allData_url,allDataChart);
 //=======
 function allDataChart(data) {
