@@ -78,13 +78,13 @@ portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
 
 #fb user portrait
-# es_fb_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_fb_user_profile = Elasticsearch(ES_CLUSTER_HOST, timeout = 600)
 es_fb_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 fb_portrait_index_name = 'fb_user_portrait'
 fb_portrait_index_type = 'user'
 
 #tw user portrait
-# es_tw_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_tw_user_profile = Elasticsearch(ES_CLUSTER_HOST, timeout = 600)
 es_tw_user_portrait = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 tw_portrait_index_name = 'tw_user_portrait'
 tw_portrait_index_type = 'user'
@@ -131,14 +131,23 @@ es_comment = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
 weibo_domain_index_name = 'weibo_domain'
 weibo_domain_index_type = 'group'
 
+fb_domain_index_name = 'facebook_domain'
+fb_domain_index_type = 'group'
+
 #use to save role info
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
+
+fb_role_index_name = 'fb_role'
+fb_role_index_type = 'role'
 
 # use to save example model
 weibo_example_model_index_name = 'weibo_example_model'
 weibo_example_model_index_type = 'model'
 
+##facebook
+fb_example_model_index_name = 'facebook_example_model'
+fb_example_model_index_type = 'model'
 
 # use to publish tweet at future time
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'
@@ -529,6 +538,9 @@ def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
 r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
+
+fb_target_domain_detect_queue_name = 'facebook_target_domain_detect_task'
+fb_target_domain_analysis_queue_name = 'facebook_target_domain_analysis_task'
 
 # social sensing redis
 R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
