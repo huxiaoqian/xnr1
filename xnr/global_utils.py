@@ -320,7 +320,7 @@ wx_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
 fb_index_sensing = "fb_manage_sensing_task"
 fb_type_sensing = "task"
 fb_id_sensing = "fb_social_sensing_task"
-fb_social_sensing_index_name = 'fb_social_sensing_text'
+#fb_social_sensing_index_name = 'fb_social_sensing_text'
 fb_social_sensing_index_name_pre = 'fb_social_sensing_text_'
 fb_social_sensing_index_type = 'text'
 
@@ -549,6 +549,8 @@ weibo_social_sensing_task_queue_name = 'weibo_social_sensing_task'
 # content recommendation sub opinion TASK
 R_RECOMMEND_SUBOPINION_KEYWORD_TASK = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywords_task_queue'
+fb_recommend_subopinion_keywords_task_queue_name = 'fb_recommend_subopnion_keywords_task_queue'
+tw_recommend_subopinion_keywords_task_queue_name = 'tw_recommend_subopnion_keywords_task_queue'
 
 # use to save follower every day
 R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)

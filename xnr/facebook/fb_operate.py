@@ -14,7 +14,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import *
 import sys
 reload(sys)
-sys.setdefaultencoding('utf-8')
+sys.setdefaultencoding('utf8')
 from launcher import Launcher
 
 class Operation():
@@ -24,11 +24,21 @@ class Operation():
 
 	def publish(self, text):
 		time.sleep(1)
-		self.driver.find_element_by_xpath('//div[@class="_4bl9 _42n-"]').click()
-		time.sleep(4)
-		#self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
-		self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]/div/div/div[2]/div').send_keys(text)
-		self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_4bl9 _42n-"]').click()
+		except:
+			self.driver.find_element_by_xpath('//div[@class="_4bl9"]').click()
+		time.sleep(2)
+		try:
+			self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
+			self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
+		except:
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
+			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
+		try:
+			self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
+		except:
+			self.driver.find_element_by_xpath('//button[@class="_42ft _4jy0 _ej1 _4jy3 _4jy1 selected _51sy"]').click()
 
 	def mention(self, username, text):
 		self.driver.find_element_by_xpath('//div[@class="_4bl9 _42n-"]').click()
@@ -56,16 +66,12 @@ class Operation():
 	def send_message(self, uid, text):
 		#发送给未关注的用户
 		driver = self.launcher.target_page(uid)
-		try:
-			url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[2]').get_attribute('href')
-			#print 'message1'
-		except:
-			url = driver.find_element_by_xpath('//div[@class="_51xa _2yfv _3y89"]/a[1]').get_attribute('href')			
-			#print 'message2'
-		driver.get(url)
+		message_url = 'https://www.facebook.com/messages/t/' + uid
+		driver.get(message_url)
 		time.sleep(5)
 		driver.find_element_by_xpath('//div[@aria-label="输入消息..."]').send_keys(text)
 		driver.find_element_by_xpath('//div[@aria-label="输入消息..."]').send_keys(Keys.ENTER)
+
 # 私信(已关注)
 	def send_message2(self, uid, text):
 		#发送给已关注的用户
@@ -113,13 +119,13 @@ class Operation():
 			time.sleep(3)
 			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
 			time.sleep(1)
-			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(text)
-			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(Keys.ENTER)
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').send_keys(text)
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').send_keys(Keys.ENTER)
 		except:
 			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
 			time.sleep(1)
-			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(text)
-			self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]/div').send_keys(Keys.ENTER)
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').send_keys(text)
+			self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').send_keys(Keys.ENTER)
 
 # 分享
 	def share(self, uid, fid, text):
@@ -144,15 +150,21 @@ class Operation():
 		except:
 			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
 			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
-			time.sleep(3)
+			time.sleep(5)
 			self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
-			time.sleep(3)
-			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').click()
-			time.sleep(1)
-			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').send_keys(text)
-			time.sleep(1)
+			time.sleep(5)
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
+				time.sleep(1)
+				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
+				time.sleep(1)
+			except:
+				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+				time.sleep(1)
+				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+				time.sleep(1)
 			self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
-	
+
 
 # 好友
 	'''
@@ -200,11 +212,14 @@ class Operation():
 
 #确认好友请求
 	def confirm(self, uid):
-		driver = self.launcher.target_page(uid)
-		time.sleep(1)
-		driver.find_element_by_xpath('//div[@class="incomingButton"]/button').click()
-		time.sleep(1)
-		driver.find_element_by_xpath('//li[@data-label="确认"]/a').click()
+		try:
+			driver = self.launcher.target_page(uid)
+			time.sleep(5)
+			driver.find_element_by_xpath('//div[@class="incomingButton"]/button').click()
+			time.sleep(1)
+			driver.find_element_by_xpath('//li[@data-label="确认"]/a').click()
+		except Exception,e:
+			print e
 
 #删除好友
 	def delete_friend(self, uid):
