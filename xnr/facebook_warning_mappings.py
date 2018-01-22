@@ -15,8 +15,9 @@ from global_utils import facebook_user_warning_index_name_pre,facebook_user_warn
 						weibo_date_remind_index_name,weibo_date_remind_index_type
 
 NOW_DATE=ts2datetime(int(time.time()))
+print 'NOW_DATE:',NOW_DATE
 
-def facebook_user_warning_mappings():
+def facebook_user_warning_mappings(TODAY_DATE):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -54,15 +55,12 @@ def facebook_user_warning_mappings():
 			}
 		}
 	}
-	if S_TYPE == 'test':
-		facebook_user_warning_index_name=facebook_user_warning_index_name_pre + FACEBOOK_FLOW_START_DATE
-	else:
-		facebook_user_warning_index_name=facebook_user_warning_index_name_pre + NOW_DATE
+	facebook_user_warning_index_name=facebook_user_warning_index_name_pre + TODAY_DATE
 	if not es.indices.exists(index=facebook_user_warning_index_name):
 		es.indices.create(index=facebook_user_warning_index_name,body=index_info,ignore=400)
 
 
-def facebook_event_warning_mappings():
+def facebook_event_warning_mappings(TODAY_DATE):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -104,15 +102,12 @@ def facebook_event_warning_mappings():
 			}
 		}
 	}
-	if S_TYPE == 'test':
-		facebook_event_warning_index_name = facebook_event_warning_index_name_pre + FACEBOOK_FLOW_START_DATE
-	else:
-		facebook_event_warning_index_name = facebook_event_warning_index_name_pre + NOW_DATE
+	facebook_event_warning_index_name = facebook_event_warning_index_name_pre + TODAY_DATE
 	if not es.indices.exists(index=facebook_event_warning_index_name):
 		es.indices.create(index=facebook_event_warning_index_name,body=index_info,ignore=400)
 
 
-def facebook_speech_warning_mappings():
+def facebook_speech_warning_mappings(TODAY_DATE):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
@@ -195,10 +190,7 @@ def facebook_speech_warning_mappings():
 			}
 		}
 	}
-	if S_TYPE == 'test':
-		facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + FACEBOOK_FLOW_START_DATE
-	else:
-		facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + NOW_DATE
+	facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + TODAY_DATE
 	print facebook_speech_warning_index_name
 	if not es.indices.exists(index=facebook_speech_warning_index_name):
 		es.indices.create(index=facebook_speech_warning_index_name,body=index_info,ignore=400)
@@ -294,9 +286,14 @@ def lookup_date_info(today_datetime):
 
 
 if __name__ == '__main__':
-	facebook_user_warning_mappings()
-	facebook_event_warning_mappings()
-	facebook_speech_warning_mappings()
+	if S_TYPE == 'test':
+		datename = ts2datetime(datetime2ts(FACEBOOK_FLOW_START_DATE) - DAY)
+	else:
+		datename = NOW_DATE
+	print 'today_date:',datename
+	facebook_user_warning_mappings(datename)
+	facebook_event_warning_mappings(datename)
+	facebook_speech_warning_mappings(datename)
 
 	if S_TYPE == 'test':
 		today_datetime=datetime2ts(FACEBOOK_FLOW_START_DATE) - DAY

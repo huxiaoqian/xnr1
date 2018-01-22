@@ -381,6 +381,19 @@ def count_text_num(uid_list, tw_flow_text_index_list):
         count_result[uid] = text_num
     return count_result
 
+def trans_bio_data(bio_data):
+    count = 1.0
+    while True:
+        translated_bio_data = trans(bio_data)
+        if len(translated_bio_data) == len(bio_data):
+            break
+        else:
+            print 'sleep start ...'
+            time.sleep(count)
+            count = count*1.1
+            print 'sleep over ...'
+    return translated_bio_data
+    
 def update_domain(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
@@ -422,7 +435,7 @@ def update_domain(uid_list=[]):
             else:
                 location = ''
             if content.has_key('description'):
-                description = content.get('description')[0]
+                description = content.get('description')[0][:1000]
             else:
                 description = ''
             if content.has_key('username'):
@@ -434,6 +447,34 @@ def update_domain(uid_list=[]):
             user_domain_data[uid]['description'] = description
     except Exception,e:
         print e
+    #由于一个用户请求一次翻译太耗时，所以统一批量翻译
+    trans_uid_list = []
+    untrans_bio_data = []
+    cut = 100
+    n = len(user_domain_data)/cut
+    for uid, content in user_domain_data.items():
+        trans_uid_list.append(uid)
+        untrans_bio_data.extend([content['location'] ,content['description']])
+        if n:
+            if len(trans_uid_list)%cut == 0:
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                    user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
+                trans_uid_list = []
+                untrans_bio_data = []
+                n = n - 1
+        else:
+            if len(trans_uid_list) == (len(user_domain_data)%cut):
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                    user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
+                trans_uid_list = []
+                untrans_bio_data = []
+    #domian计算         
     user_domain_temp = domain_main(user_domain_data)    
     user_domain = {}
     for uid in uid_list:
@@ -465,8 +506,7 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
-                'topic': json.dumps({}),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps(user_topic_dict[uid]),
                 'topic_string': user_topic_string[uid]
             }
         else:
@@ -478,7 +518,77 @@ def update_topic(uid_list=[]):
     return save_data2es(user_topic)
 
 def update_baseinfo(uid_list=[]):
-    pass
+    user_baseinfo = {}
+    fb_user_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "fields": ["location", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
+    }
+    search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=fb_user_query_body)['hits']['hits']
+    for item in search_results:
+        content = item['fields']
+        uid = content['uid'][0]
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'location': '',
+                'verified':'',
+                'statusnum': 0,
+                'friendsnum': 0,
+                'fansnum': 0,
+                'photo_url': '',
+            }
+        location = ''
+        if content.has_key('location'):
+            location = content.get('location')[0]
+        uname = ''
+        if content.has_key('username'):
+            uname = content.get('username')[0]
+        photo_url = ''
+        if content.has_key('original_profile_image_url'):
+            photo_url = content.get('original_profile_image_url')[0]
+        verified = ''
+        if content.has_key('is_verified'):
+            verified = str(content.get('is_verified')[0])
+        statusnum = ''
+        if content.has_key('status_count'):
+            statusnum = content.get('status_count')[0]
+        friendsnum = ''
+        if content.has_key('friends_count'):
+            friendsnum = content.get('friends_count')[0]
+        fansnum = ''
+        if content.has_key('followers_count'):
+            fansnum = content.get('followers_count')[0]
+
+        user_baseinfo[uid]['location'] = location
+        user_baseinfo[uid]['uname'] = uname
+        user_baseinfo[uid]['photo_url'] = photo_url
+        user_baseinfo[uid]['verified'] = verified
+        user_baseinfo[uid]['statusnum'] = statusnum
+        user_baseinfo[uid]['friendsnum'] = friendsnum
+        user_baseinfo[uid]['fansnum'] = fansnum
+    for uid in uid_list:
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'location': '',
+                'verified':'',
+                'statusnum': 0,
+                'friendsnum': 0,
+                'fansnum': 0,
+                'photo_url': '',
+            }
+    return save_data2es(user_baseinfo)
 
 def update_all():
     time_list = []
@@ -510,23 +620,24 @@ def update_all():
 
 
     #周更新
-    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
-        print 'update_domain: ', update_domain(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    # if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
+    print 'update_domain: ', update_domain(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_sentiment: ', update_sentiment(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_sentiment: ', update_sentiment(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_topic: ', update_topic(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_topic: ', update_topic(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
-        print 'update_keywords:', update_keywords(uid_list)
-        time_list.append(time.time())
-        print 'time used: ', time_list[-1] - time_list[-2]
+    print 'update_keywords:', update_keywords(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
     update_all()
+    # print update_baseinfo(load_uid_list())
     

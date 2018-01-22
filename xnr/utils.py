@@ -86,6 +86,14 @@ def user_no2wxbot_id(user_no):
     task_id = 'WXXNR'+str('%04d'%user_no)  #X位数 WXXNR0001
     return task_id
 
+def user_no2fb_id(user_no):
+    task_id = 'FXNR'+str('%04d'%user_no)  #五位数 FXNR0001
+    return task_id
+
+def user_no2tw_id(user_no):
+    task_id = 'TXNR'+str('%04d'%user_no)  #五位数 FXNR0001
+    return task_id
+
 def wxbot_id2user_no(task_id):
     user_no_string = filter(str.isdigit,task_id)
     user_no = int(user_no_string)

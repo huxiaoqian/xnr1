@@ -8,14 +8,18 @@ url = 'http://fanyi-api.baidu.com/api/trans/vip/translate'
 appid = 20170921000084362
 secretKey = 'uKPwOwSfMDG4Byrq1ey7'
 
-def translate(q):
+def translate(q, target_language):
+    if target_language == 'zh-cn':
+        target_lang = 'zh'
+    elif target_language == 'en':
+        target_lang = 'en'
     q = '\n'.join(q)
     salt = random.randint(100000, 999999)
     sign = hashlib.md5(str(appid) + q + str(salt) + secretKey).hexdigest()
     data = {
         'q': q,
         'from': 'auto',
-        'to': 'zh',
+        'to': target_lang,
         'appid': appid,
         'salt': salt,
         'sign':sign
