@@ -398,7 +398,6 @@ fb_hot_subopinion_results_index_type = 'subopinion'
 fb_daily_interest_index_name_pre = 'fb_daily_inerest_flow_text_'
 fb_daily_interest_index_type = 'text'
 
-
 #预警
 facebook_user_warning_index_name_pre = 'facebook_user_warning_'
 facebook_user_warning_index_type = 'text'
