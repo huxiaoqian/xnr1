@@ -141,7 +141,7 @@ def ajax_show_group():
 # 热门@用户推荐
 @mod.route('/hot_sensitive_recommend_at_user/')
 def ajax_hot_sensitive_recommend_at_user():
-    sort_item = request.args.get('sort_item','')  # retweeted- 热点跟随  sensitive- 业务发帖
+    sort_item = request.args.get('sort_item','')  # share- 热点跟随  sensitive- 业务发帖
     uid_nick_name_dict = get_hot_sensitive_recommend_at_user(sort_item)
     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 

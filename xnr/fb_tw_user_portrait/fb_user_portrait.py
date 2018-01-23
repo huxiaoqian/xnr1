@@ -38,7 +38,6 @@ def merge_dict(x, y):
 def load_uid_list():
     uid_list = []
     uid_list_query_body = {'size': MAX_SEARCH_SIZE}
-    # uid_list_query_body = {'size': 3}
     try:
         search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=uid_list_query_body)['hits']['hits']
         for item in search_results:
@@ -514,8 +513,7 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
-                'topic': json.dumps({}),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps(user_topic_dict[uid]),
                 'topic_string': user_topic_string[uid]
             }
         else:
@@ -526,8 +524,67 @@ def update_topic(uid_list=[]):
             }
     return save_data2es(user_topic)
 
+def get_user_location(location_dict):
+    if location_dict.has_key('name'):
+        location = location_dict['name']
+    elif location_dict.has_key('country') and location_dict.has_key('city'):
+        location = location_dict['city'] + ', ' + location_dict['country']
+    else:
+        location = ''
+    return location
+
 def update_baseinfo(uid_list=[]):
-    pass
+    user_baseinfo = {}
+    fb_user_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "fields": ["location", "gender", "name", "uid"]
+    }
+    search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
+    for item in search_results:
+        content = item['fields']
+        uid = content['uid'][0]
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'gender': 0,
+                'location': '',
+            }
+        location = ''
+        if content.has_key('location'):
+            location_dict = json.loads(content.get('location')[0])
+            location = get_user_location(location_dict)
+        gender = 0
+        if content.has_key('gender'):
+            gender_str = content.get('gender')[0]
+            if gender_str == 'male':
+                gender = 1
+            elif gender_str == 'female':
+                gender = 2
+        uname = ''
+        if content.has_key('name'):
+            uname = content.get('name')[0]
+        user_baseinfo[uid]['location'] = location
+        user_baseinfo[uid]['gender'] = gender
+        user_baseinfo[uid]['uname'] = uname
+    for uid in uid_list:
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'gender': 0,
+                'location': '',
+            }
+    return save_data2es(user_baseinfo)
 
 def update_all():
     time_list = []
@@ -539,6 +596,10 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #日更新
+    print 'update_baseinfo: ', update_baseinfo(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
     print 'update_hashtag: ', update_hashtag(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]

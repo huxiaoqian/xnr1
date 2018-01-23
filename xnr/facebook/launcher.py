@@ -15,6 +15,7 @@ class Launcher():
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
 		self.driver = webdriver.Firefox()
+		#self.driver = webdriver.Chrome()
 		self.req = requests.Session()
 
 	def login(self):

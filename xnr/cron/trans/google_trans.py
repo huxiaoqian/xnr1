@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from googletrans import Translator
 
-def translate(q):
+def translate(q, target_language):
     res = []
     try:
         translator = Translator()
-        results = translator.translate(q, 'zh-cn')
+        results = translator.translate(q, target_language)
         for result in results:
             res.append(result.text)
         return res

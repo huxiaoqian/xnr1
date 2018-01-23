@@ -45,7 +45,7 @@ def fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text, message_type):
 
 # 发帖
 def fb_publish(account_name, password, text, tweet_type, xnr_user_no):
-
+    print 'account_name,password..',account_name,password
     operation = Operation(account_name,password)
     
     #try:
@@ -73,7 +73,7 @@ def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
     operation = Operation(account_name,password)
     
     #try:
-    print operation.comment(_id, uid,text)
+    print operation.comment(uid,_id,text)
     mark = True
     # except:
     #     mark = False
@@ -92,10 +92,11 @@ def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 # 转发
 def fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
+    print 'account_name,password....',account_name,password
     operation = Operation(account_name,password)
     
     #try:
-    print operation.share(_id, uid,text)
+    print operation.share(uid,_id,text)
     mark = True
     # except:
     #     mark = False
@@ -158,7 +159,7 @@ def fb_like(account_name,password, _id, uid):
     operation = Operation(account_name,password)
     
     #try:
-    operation.like(_id,uid)
+    operation.like(uid,_id)
     mark = True
     # except:
     #     mark = False

@@ -22,6 +22,8 @@ from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_fol
                                     fb_like, fb_mention, fb_message, fb_add_friend, fb_confirm, fb_delete_friend
 
 from xnr.utils import fb_uid2nick_name_photo
+from xnr.time_utils import datetime2ts, ts2datetime
+from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP
 
 def get_submit_tweet(task_detail):
 
@@ -94,7 +96,7 @@ def get_recommend_at_user(xnr_user_no):
     nest_query_list = []
     daily_interests_list = daily_interests.split('&')
 
-    es_results_daily = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,\
+    es_results_daily = es.search(index=index_name,doc_type=facebook_flow_text_index_type,\
                         body={'query':{'match_all':{}},'size':200,\
                         'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
 
@@ -106,7 +108,7 @@ def get_recommend_at_user(xnr_user_no):
 
     ## 根据uid，从weibo_user中得到 nick_name
     uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-    es_results_user = es_flow_text.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':uid_list})['docs']
+    es_results_user = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
 
@@ -156,7 +158,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
         now_ts = int(time.time())
     datetime = ts2datetime(now_ts-24*3600)
 
-    sort_item = 'sensitive'
+    #sort_item = 'sensitive'
     sort_item_2 = 'timestamp'
     index_name = facebook_flow_text_index_name_pre + datetime
 
@@ -174,7 +176,7 @@ def get_hot_sensitive_recommend_at_user(sort_item):
     # else:
     #     sort_item_2 = 'retweeted'
 
-    es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
     
     uid_fansnum_dict = dict()
     if es_results:
@@ -196,13 +198,13 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 
     ## 根据uid，从weibo_user中得到 nick_name
     uid_nick_name_dict = dict()  # uid不会变，而nick_name可能会变
-    es_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':uid_list})['docs']
+    es_results_user = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':uid_list})['docs']
     i = 0
     for result in es_results_user:
         if result['found'] == True:
             result = result['_source']
             uid = result['uid']
-            nick_name = result['nick_name']
+            nick_name = result['name']
             if nick_name:
                 i += 1
                 uid_nick_name_dict[uid] = nick_name
@@ -214,35 +216,40 @@ def get_hot_sensitive_recommend_at_user(sort_item):
 def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
 
     topic_field_en = topic_ch2en_dict[topic_field]
-
-
-    query_body = {
-        'query':{
-            'bool':{
-                'must':[
-                    {
-                        'filtered':{
-                            'filter':{
-                                'term':{'topic_field':topic_field_en}
+    if sort_item != 'compute_status':
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {
+                            'filtered':{
+                                'filter':{
+                                    'term':{'topic_field':topic_field_en}
+                                }
                             }
                         }
-                    }
-                ]
-            }
+                    ]
+                }
+                
+            },
+            'sort':{sort_item:{'order':'desc'}},
+            'size':TOP_WEIBOS_LIMIT
+        }
+        
+        current_time = time.time()
+
+        if S_TYPE == 'test':
+            current_time = datetime2ts(S_DATE_FB)
             
-        },
-        'sort':{sort_item:{'order':'desc'}},
-        'size':TOP_WEIBOS_LIMIT
-    }
 
-    fb_social_sensing_index_name = fb_social_sensing_index_name_pre + ts2datetime(time.time())
+        fb_social_sensing_index_name = fb_social_sensing_index_name_pre + ts2datetime(current_time)
 
-    es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,body=query_body)['hits']['hits']
+        es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,body=query_body)['hits']['hits']
 
-    if not es_results:    
-        es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,\
-                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
-                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+        if not es_results:    
+            es_results = es.search(index=fb_social_sensing_index_name,doc_type=fb_social_sensing_index_type,\
+                                    body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                    'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
     for result in es_results:
         result = result['_source']
@@ -294,7 +301,7 @@ def get_hot_subopinion(xnr_user_no,task_id):
                                 id=task_id_new)['_source']
 
             if es_result:
-                contents = json.loads(es_result['subopinion_weibo'])
+                contents = json.loads(es_result['subopinion_fb'])
             
                 return contents    
 
@@ -347,10 +354,10 @@ def get_tweets_from_flow(monitor_keywords_list,sort_item_new):
 
     index_name = facebook_flow_text_index_name_pre + datetime
 
-    es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
 
     if not es_results:
-        es_results = es_flow_text.search(index=index_name,doc_type=facebook_flow_text_index_type,\
+        es_results = es.search(index=index_name,doc_type=facebook_flow_text_index_type,\
                                 body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
                                 'sort':{sort_item_new:{'order':'desc'}}})['hits']['hits']
     results_all = []
@@ -417,7 +424,7 @@ def uid_lists2fb_from_flow_text(monitor_keywords_list,uid_list):
 
     index_name_flow = facebook_flow_text_index_name_pre + datetime
 
-    es_results = es_flow_text.search(index=index_name_flow,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+    es_results = es.search(index=index_name_flow,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
 
     results_all = []
     for result in es_results:
@@ -450,7 +457,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
         'size':BCI_USER_NUMBER
     }
 
-    es_results_bci = es_flow_text.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
+    es_results_bci = es.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
     #print 'es_results_bci::',es_results_bci
     #print 'index_name::',index_name
     #print ''

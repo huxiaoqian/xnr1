@@ -21,7 +21,7 @@ from global_utils import R_SOCIAL_SENSING as r
 from global_utils import es_xnr
 from time_utils import ts2datetime, datetime2ts, ts2date
 
-from parameter import topic_value_dict
+from parameter import topic_value_dict, signal_sensitive_variation
 AVERAGE_COUNT = 4000
 MEAN_COUNT = 100
 
