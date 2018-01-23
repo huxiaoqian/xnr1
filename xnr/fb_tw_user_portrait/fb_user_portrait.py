@@ -497,10 +497,7 @@ def update_topic(uid_list=[]):
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
     user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
-    # print 'user_topic_data'
-    # print user_topic_data
     user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
-
     
     user_topic_string = {}
     for uid, topic_list in user_topic_list.items():
@@ -522,6 +519,7 @@ def update_topic(uid_list=[]):
                 'topic': json.dumps({}),
                 'topic_string': ''
             }
+    print user_topic
     return save_data2es(user_topic)
 
 def get_user_location(location_dict):
@@ -631,7 +629,8 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
+    # update_all()
+    update_topic(load_uid_list())
 # total num:  92
 # time used:  0.0138351917267
 # update_hashtag:  True
