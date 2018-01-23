@@ -138,7 +138,7 @@ function weibo(data) {
                     };
                     var rel_str=
                         '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
-                        '        <div class="speak_center">'+
+                        '        <div class="speak_center everyUser">'+
                         '            <div class="center_rel">'+
                         // '                <label class="demo-label">'+
                         // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
@@ -164,9 +164,9 @@ function weibo(data) {
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
-                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-5" onclick="joinPolice(this,\'言论\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                         '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
-                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
+                        '                    <span class="cen3-6" onclick="oneUP(this,\'言论\')"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="回复内容"/>'+

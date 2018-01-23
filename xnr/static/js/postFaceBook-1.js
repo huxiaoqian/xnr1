@@ -537,6 +537,7 @@ function defalutWords(data) {
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
@@ -691,6 +692,7 @@ function hotWeibo(data) {
                         '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         // '           <div class="center_3_top" >' +
@@ -759,30 +761,6 @@ function conViews(data) {
     }
     $('#pormpt p').text(x);
     $('#pormpt').modal('show');
-}
-//加入语料库
-var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
-function joinlab(_this) {
-    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
-    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
-    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
-    $('#wordcloud').modal('show');
-}
-function joinWord() {
-    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
-    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='11';
-    if (corpus_type=='主题语料'){tt=22};
-    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
-        theme_daily_name.push($(this).val());
-    });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num +
-        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
-        '&like=0&create_type='+create_type;
-    public_ajax.call_request('get',corpus_url,postYES);
 }
 //内容推荐
 function contantREM(_this) {
@@ -1052,6 +1030,7 @@ function businessWeibo(data) {
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+

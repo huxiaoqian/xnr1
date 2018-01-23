@@ -525,6 +525,7 @@ function weiboData(data) {
                         // '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left:5px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
                         '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                         '           <p class="allall1" style="display:none;">'+txt+'</p>'+
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
@@ -581,28 +582,6 @@ function thumbs(_this) {
     var post_url_3='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
     public_ajax.call_request('get',post_url_3,postYES)
 };
-var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
-function joinlab(_this) {
-    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
-    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
-    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
-    $('#wordcloud').modal('show');
-}
-function joinWord() {
-    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
-    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='';
-    if (corpus_type=='主题语料'){tt=2};
-    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
-        theme_daily_name.push($(this).val());
-    });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
-        '&like=0&create_type='+create_type;
-    public_ajax.call_request('get',corpus_url,postYES);
-}
 //操作返回结果
 function postYES(data) {
     var f='';
