@@ -14,7 +14,7 @@ from utils import get_submit_tweet, tw_save_to_tweet_timing_list, get_recommend_
 				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate , get_private_operate
+				get_unfollow_operate , get_private_operate, get_hot_recommend_tweets
 
 mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
@@ -66,36 +66,40 @@ def ajax_submit_timing_post_task():
 
     return json.dumps(mark)  # True False
 
-# 日常@用户推荐
-@mod.route('/daily_recommend_at_user/')
-def ajax_recommend_at_user():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    uid_nick_name_dict = get_recommend_at_user(xnr_user_no)
-    return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
+# # 日常@用户推荐
+# @mod.route('/daily_recommend_at_user/')
+# def ajax_recommend_at_user():
+#     xnr_user_no = request.args.get('xnr_user_no','')
+#     uid_nick_name_dict = get_recommend_at_user(xnr_user_no)
+#     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 
 
-# 日常语料推荐
-# tw 暂无？？？？
-@mod.route('/daily_recommend_tweets/')
-def ajax_daily_recommend_tweets():
-    theme = request.args.get('theme','') # 默认日常兴趣主题
-    sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, retweeted-按热度
-    tweets = get_daily_recommend_tweets(theme,sort_item)
-    return json.dumps(tweets)
+# # 日常语料推荐
+# # tw 暂无？？？？
+# @mod.route('/daily_recommend_tweets/')
+# def ajax_daily_recommend_tweets():
+#     theme = request.args.get('theme','') # 默认日常兴趣主题
+#     sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, retweeted-按热度
+#     tweets = get_daily_recommend_tweets(theme,sort_item)
+#     return json.dumps(tweets)
 
 '''
 热点跟随
 '''
 
 # 热门@用户推荐
+# http://219.224.134.213:9999/twitter_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share
+
 @mod.route('/hot_sensitive_recommend_at_user/')
 def ajax_hot_sensitive_recommend_at_user():
-    sort_item = request.args.get('sort_item','')  # retweeted- 热点跟随  sensitive- 业务发帖  # 先按     sort_item = 'sensitive', sort_item_2 = 'timestamp'
+    sort_item = request.args.get('sort_item','')  # share- 热点跟随  sensitive- 业务发帖  # 先按     sort_item = 'sensitive', sort_item_2 = 'timestamp'
     uid_nick_name_dict = get_hot_sensitive_recommend_at_user(sort_item)
     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 
 
 # 热点跟随帖子推荐
+# http://219.224.134.213:9999/twitter_xnr_operate/hot_recommend_tweets/?xnr_user_no=TXNR0001&topic_field=军事类&sort_item=sensitive
+
 @mod.route('/hot_recommend_tweets/')
 def ajax_hot_recommend_tweets():
 
@@ -106,6 +110,8 @@ def ajax_hot_recommend_tweets():
     return json.dumps(tweets)
 
 # 热点跟随子观点分析的提交关键词任务
+#http://219.224.134.213:9999/twitter_xnr_operate/submit_hot_keyword_task/?xnr_user_no=TXNR0001&task_id=922902332089630721&keywords_string=中国，独裁，民主&submit_user=admin@qq.com
+
 @mod.route('/submit_hot_keyword_task/')
 def ajax_submit_hot_keyword_task():
     #mark = True
@@ -124,6 +130,8 @@ def ajax_submit_hot_keyword_task():
 
 
 # 子观点分析
+#http://219.224.134.213:9999/twitter_xnr_operate/hot_subopinion/?xnr_user_no=TXNR0001&task_id=922902332089630721
+
 @mod.route('/hot_subopinion/')
 def ajax_hot_hot_subopinion():
     xnr_user_no = request.args.get('xnr_user_no','')  # 当前虚拟人
@@ -210,7 +218,7 @@ def ajax_follow_operate():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
-    task_detail['nick_name'] = request.args.get('nick_name','')
+    #task_detail['nick_name'] = request.args.get('nick_name','')
     task_detail['trace_type'] = request.args.get('trace_type','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
     mark = get_follow_operate(task_detail)
 

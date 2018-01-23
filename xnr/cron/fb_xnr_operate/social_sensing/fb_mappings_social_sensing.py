@@ -193,19 +193,7 @@ def mappings_social_sensing_text(index_name):
         "mappings":{
             "text":{
                 "properties":{
-                    "trendline":{
-                        "type": "string",
-                        "index": "no"
-                    },
                     "duplicate":{
-                        "type": "float",
-                        "index": "no"
-                    },
-                    "uid_prediction":{
-                        "type": "float",
-                        "index": "no"
-                    },
-                    "weibo_prediction":{
                         "type": "float",
                         "index": "no"
                     },
@@ -239,14 +227,6 @@ def mappings_social_sensing_text(index_name):
                         "type": "string",
                         "index": "no"
                     },
-                    "geo":{
-                        "type": "string",
-                        "index": "no"
-                    },
-                    "ip":{
-                        "type": "string",
-                        "index": "no"
-                    },
                     "timestamp":{
                         "type": "long"
                     },
@@ -272,13 +252,14 @@ def mappings_social_sensing_text(index_name):
         }
     }
 
-    es.indices.create(index=index_name,body=index_info, ignore=400)
+    if not es.indices.exists(index=index_name):
+        es.indices.create(index=index_name,body=index_info, ignore=400)
 
 
 if __name__ == "__main__":
     #manage_sensing_task()
     #mappings_sensing_task("social_sensing")
-    index_name = 'social_sensing_text_' + ts2datetime(time.time())
+    index_name = 'fb_social_sensing_text_' + ts2datetime(time.time())
     mappings_social_sensing_text(index_name)
 
 

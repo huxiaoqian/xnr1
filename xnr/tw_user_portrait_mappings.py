@@ -4,7 +4,7 @@ import json
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from global_utils import es_tw_user_portrait as es
-from global_utils import tw_portrait_index_name, tw_portrait_index_name
+from global_utils import tw_portrait_index_name, tw_portrait_index_type
 
 def tw_user_portrait_mappings(index_name=tw_portrait_index_name):
     index_info = {
@@ -21,7 +21,7 @@ def tw_user_portrait_mappings(index_name=tw_portrait_index_name):
                 }
         },
         "mappings": {
-          tw_portrait_index_name: {
+          tw_portrait_index_type: {
             "properties": {
               "activeness": {
                 "type": "double"

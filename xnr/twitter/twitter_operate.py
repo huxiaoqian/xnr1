@@ -68,7 +68,8 @@ class Operation():
 
 	def do_retweet(self, tid):
 		try:
-			self.api.retweet(id)
+			print 'tid..',tid
+			self.api.retweet(tid)
 		except Exception as e:
 		 	print(e)
 
@@ -79,18 +80,21 @@ class Operation():
 			print(e)
 
 	def do_comment(self, uid, tid, text):
-		driver = self.launcher.login()
-		screen_name = self.launcher.get_user(uid)
-		post_url = 'https://twitter.com/' + screen_name + '/status/' + tid
-		driver.get(post_url)
-		time.sleep(1)
-		current_url = driver.current_url
-		pattern = re.compile('status/(\d+)')
-		primary_id = ''.join(re.findall(pattern,current_url)).strip()
-		driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).click()
-		driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).send_keys(text)
-		time.sleep(1)
-		driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
+		try:
+			driver = self.launcher.login()
+			screen_name = self.launcher.get_user(uid)
+			post_url = 'https://twitter.com/' + screen_name + '/status/' + tid
+			driver.get(post_url)
+			time.sleep(1)
+			current_url = driver.current_url
+			pattern = re.compile('status/(\d+)')
+			primary_id = ''.join(re.findall(pattern,current_url)).strip()
+			driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).click()
+			driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).send_keys(text)
+			time.sleep(1)
+			driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
+		except Exception as e:
+			print(e)
 
 
 
