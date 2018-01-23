@@ -85,7 +85,7 @@ def ajax_addto_warning_corpus():
 #事件涌现预警上报report_content=[user_list,weibo_list]
 #test:http://219.224.134.213:9209/weibo_xnr_warming/report_warming_content/?report_type=事件&xnr_user_no=WXNR0002&event_name=杨振宁95岁生日恢复中国国籍&user_info=5537979196,兰德科特,100,200*3969238480,后会无期25799,88,179*3302557313,东南老曹,600,50&weibo_info=4044828436797896,'欢迎杨振宁先生恢复中国国籍',1503450000,1071,250,55*4044828486221158,'欢迎杨振宁先生恢复中国国籍，转为中科院资深',1503450000,1071,250,55*4044828503513100,'欢迎杨振宁先生恢复中国国籍，转为中科院资深',1503450000,1071,250,55
 #备注：text中的'#'字符用'%23'代替
-@mod.route('/report_warming_content/')
+@mod.route('/report_warming_content/', methods=['POST'])
 def ajax_report_warming_content():
 	task_detail=dict()
 	task_detail['report_type']=request.args.get('report_type','') #预警类型
