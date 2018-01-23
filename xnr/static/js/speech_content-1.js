@@ -108,7 +108,7 @@ function weibo(data) {
                         '                <img src="'+img+'" alt="" class="center_icon">'+
                         '                <a class="center_1 centerNAME" style="color:#f98077;">'+name+'</a>'+
                         '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                        '                <a class="uid mainUID" style="display: none;">'+item.uid+'</a>'+
+                        '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <a class="_id" style="display: none;">'+item._id+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
@@ -139,7 +139,6 @@ function weibo(data) {
     });
     $('#weiboContent p').slideUp(300);
 };
-
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
     var _val = $(this).val();

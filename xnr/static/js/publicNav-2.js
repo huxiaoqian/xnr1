@@ -98,15 +98,15 @@ function robot(_this) {
 //加入预警库
 function getInfo(_this) {
     var alldata=[];
-    var uid = $(_this).parents('.center_rel').find('.uid').text();alldata.push(uid);
-    var mid = $(_this).parents('.center_rel').find('.mid').text();alldata.push(mid);
-    var timestamp = $(_this).parents('.center_rel').find('.timestamp').text();alldata.push(timestamp);
+    var uid = $(_this).parents('.center_rel').eq(0).find('.uid').text();alldata.push(uid);
+    var mid = $(_this).parents('.center_rel').eq(0).find('.mid').text();alldata.push(mid);
+    var timestamp = $(_this).parents('.center_rel').eq(0).find('.timestamp').text();alldata.push(timestamp);
     return alldata;
 };
 function joinPolice(_this,type) {
     var info=getInfo(_this);
     var police_url='/weibo_xnr_warming_new/addto_warning_corpus/?xnr_user_no='+ID_Num+'&uid='+info[0]+
-        '&mid='+info[1]+'&timestamp='+info[3]+'&warning_source='+type;
+        '&mid='+info[1]+'&timestamp='+info[2]+'&warning_source='+type;
     public_ajax.call_request('get',police_url,operatSuccess)
 };
 //加入语料库
@@ -147,12 +147,20 @@ function oneUP(_this,type) {
         // var once_url='/weibo_xnr_warming/report_warming_content/?report_type='+type+'&xnr_user_no='+ID_Num+
         //     '&event_name='+mainNAME+'&uid='+mainUID+'&report_id='+_id+'&user_info='+uidList+
         //     '&weibo_info='+weibo_info;
+        if (type=='人物'){
+            mainNAME='';
+        }else if (type=='言论'||type=='时间'){
+            mainNAME='';mainUID='';
+        }else if (type=='事件'){
+            mainUID='';
+        }
         var job={
             'report_type':type,
             'xnr_user_no':ID_Num,
+            'report_id':_id,
+            //=========
             'event_name':mainNAME,
             'uid':mainUID,
-            'report_id':_id,
             'user_info':uidList,
             'weibo_info':weibo_info,
         }
