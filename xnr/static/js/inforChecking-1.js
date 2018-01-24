@@ -418,7 +418,6 @@ function createRandomItemStyle() {
         }
     };
 }
-//加入语料库  data-toggle="modal" data-target="#wordcloud"
 //查看网民详情
 function networkPeo(_id) {
     var detail_url='/weibo_xnr_monitor/weibo_user_detail/?user_id='+_id;
@@ -469,31 +468,6 @@ function focusThis(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var post_url_6='/weibo_xnr_monitor/attach_fans_follow/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',post_url_6,postYES)
-}
-
-//加入语料库
-var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
-function joinlab(_this) {
-    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
-    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
-    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
-    $('#wordcloud').modal('show');
-}
-function joinWord() {
-    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
-    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='';
-    if (corpus_type=='主题语料'){tt=2};
-    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
-        theme_daily_name.push($(this).val());
-    });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num +
-        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
-        '&like=0&create_type='+create_type;
-    public_ajax.call_request('get',corpus_url,postYES);
 }
 
 //操作返回结果
