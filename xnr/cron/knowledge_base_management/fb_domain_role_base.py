@@ -4,62 +4,206 @@ import json
 import time
 import sys
 from flask import Blueprint, url_for, render_template, request, abort, flash, session, redirect
-
-
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 import sys
 reload(sys)
 sys.path.append('../../')
 from global_utils import r,fb_target_domain_detect_queue_name,fb_target_domain_analysis_queue_name,\
-                        es_xnr as es, es_xnr, facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
-                        fb_domain_index_name, fb_domain_index_type
-from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS
+                        es_xnr as es, es_xnr, facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
+                        facebook_flow_text_index_type as flow_text_index_type,\
+                        fb_domain_index_name, fb_domain_index_type, facebook_user_index_name, facebook_user_index_type,\
+                        fb_role_index_name, fb_role_index_type
+from global_config import S_TYPE,S_DATE_FB as S_DATE
+from time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list,ts2datetime,datetime2ts
 es_flow_text = es
-
+from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH,\
+                    DAY, WEEK, fb_tw_topic_en2ch_dict as topic_en2ch_dict, SENTIMENT_DICT_NEW, SORT_FIELD,\
+                    TOP_KEYWORDS_NUM,TOP_WEIBOS_LIMIT,WEEK_TIME,DAY,DAY_HOURS,HOUR
 sys.path.append('../../cron/trans/')
 from trans import trans, simplified2traditional, traditional2simplified
 
+sys.path.append(FB_TW_TOPIC_ABS_PATH)
+from test_topic import topic_classfiy
+from config import name_list, zh_data
 
+sys.path.append(FB_DOMAIN_ABS_PATH)
+from domain_classify import domain_main
 
-
+sys.path.append('../../fb_tw_user_portrait/')
+from keyword_extraction import get_filter_keywords
 
 
 
 ## 引入各个分类器
 from political.political_main import political_classify
-from domain.test_domain_v2 import domain_classfiy
-from topic.test_topic import topic_classfiy
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 from character.test_ch_sentiment import classify_sentiment
-
 from collections import Counter
 import numpy as np
-
 from utils import split_city
 
 
 
-from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
-                        TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW,\
-                        WHITE_UID_PATH, WHITE_UID_FILE_NAME
 
-from global_utils import r,weibo_target_domain_detect_queue_name,weibo_target_domain_analysis_queue_name,\
-                        es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
-                        portrait_index_name,portrait_index_type
-from global_utils import es_xnr,weibo_domain_index_name,weibo_domain_index_type,\
-                        weibo_role_index_name,weibo_role_index_type
-
+ 
 from global_utils import es_retweet, retweet_index_name_pre, retweet_index_type,\
                          be_retweet_index_name_pre, be_retweet_index_type
 from global_utils import es_comment, comment_index_name_pre, comment_index_type,\
                          be_comment_index_name_pre, be_comment_index_type
-
-from global_config import R_BEGIN_TIME,S_TYPE,S_DATE
-
-from time_utils import get_flow_text_index_list,ts2datetime,datetime2ts
-
+from global_config import R_BEGIN_TIME
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
+
+
+
+
+
+
+
+
+
+
+def my_topic_classfiy(uid_list, datetime_list):
+    fb_flow_text_index_list = []
+    for datetime in datetime_list:
+        fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+    user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
+    user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
+    return user_topic_dict, user_topic_list
+
+def count_text_num(uid_list, fb_flow_text_index_list):
+    count_result = {}
+    #QQ那边好像就是按照用户来count的    https://github.com/huxiaoqian/xnr1/blob/82ff9704792c84dddc3e2e0f265c46f3233a786f/xnr/qq_xnr_manage/qq_history_count_timer.py
+    for uid in uid_list:
+        textnum_query_body = {
+            'query':{
+                "filtered":{
+                    "filter": {
+                        "bool": {
+                            "must": [
+                                {"term": {"uid": uid}},
+                            ]
+                         }
+                    }
+                }
+            }
+        }
+        text_num = 0
+        for index_name in fb_flow_text_index_list:
+            result = es.count(index=index_name, doc_type=flow_text_index_type,body=textnum_query_body)
+            if result['_shards']['successful'] != 0:
+                text_num += result['count']
+        count_result[uid] = text_num
+    return count_result
+
+def trans_bio_data(bio_data):
+    count = 1.0
+    while True:
+        translated_bio_data = trans(bio_data)
+        if len(translated_bio_data) == len(bio_data):
+            break
+        else:
+            print 'sleep start ...'
+            time.sleep(count)
+            count = count*1.1
+            print 'sleep over ...'
+    return translated_bio_data
+
+def my_domain_classfiy(uid_list, datetime_list):
+    fb_flow_text_index_list = []
+    for datetime in datetime_list:
+        fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+
+    user_domain_data = {}
+    #load num of text
+    count_result = count_text_num(uid_list, fb_flow_text_index_list)
+    #load baseinfo
+    fb_user_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "fields": ["bio", "about", "description", "quotes", "category", "uid"]
+    }
+    try:
+        search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
+        for item in search_results:
+            content = item['fields']
+            uid = content['uid'][0]
+            if not uid in user_domain_data:
+                text_num = count_result[uid]
+                user_domain_data[uid] = {
+                    'bio_str': '',
+                    'bio_list': [],
+                    'category': '',
+                    'number_of_text': text_num
+                }
+            #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
+            if content.has_key('category'):
+                category = content.get('category')[0]
+            else:
+                category = ''
+            if content.has_key('description'):
+                description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
+            else:
+                description = ''
+            if content.has_key('quotes'):
+                quotes = content.get('quotes')[0][:1000]
+            else:
+                quotes = ''
+            if content.has_key('bio'):
+                bio = content.get('bio')[0][:1000]
+            else:
+                bio = ''
+            if content.has_key('about'):
+                about = content.get('about')[0][:1000]
+            else:
+                about = ''    
+            user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
+            user_domain_data[uid]['category'] = category
+    except Exception,e:
+        print e
+    #由于一个用户请求一次翻译太耗时，所以统一批量翻译
+    trans_uid_list = []
+    untrans_bio_data = []
+    cut = 100
+    n = len(user_domain_data)/cut
+    for uid, content in user_domain_data.items():
+        trans_uid_list.append(uid)
+        untrans_bio_data.extend(content['bio_list'])
+        content.pop('bio_list')
+        if n:
+            if len(trans_uid_list)%cut == 0:
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+                n = n - 1
+        else:
+            if len(trans_uid_list) == (len(user_domain_data)%cut):
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+    #domian计算
+    user_domain = domain_main(user_domain_data)    
+    for uid in uid_list:
+        if not uid in user_domain:
+            user_domain[uid] = 'other'
+    return user_domain
+
 
 '''
 领域知识库计算
@@ -80,6 +224,7 @@ def save_detect_results(detect_results, decect_task_information):
         item_exist['compute_status'] = 1  # 存入uid
         es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
+        print e
         item_exist = dict()
         item_exist['xnr_user_no'] = decect_task_information['xnr_user_no']
         item_exist['domain_pinyin'] = decect_task_information['domain_pinyin']
@@ -103,13 +248,13 @@ def save_group_description_results(group_results,decect_task_information):
     task_id = decect_task_information['domain_pinyin']
 
     try:
-        item_exist = es_xnr.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id)['_source']
+        item_exist = es_xnr.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id)['_source']
         item_exist['role_distribute'] = json.dumps(group_results['role_distribute'])
         item_exist['top_keywords'] = json.dumps(group_results['top_keywords'])
         item_exist['political_side'] = json.dumps(group_results['political_side'])
         item_exist['topic_preference'] = json.dumps(group_results['topic_preference'])
         item_exist['compute_status'] = 2  # 存入群体描述
-        es_xnr.update(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body={'doc':item_exist})
+        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
         item_exist = dict()
 
@@ -126,7 +271,7 @@ def save_group_description_results(group_results,decect_task_information):
         item_exist['political_side'] = json.dumps(group_results['political_side'])
         item_exist['topic_preference'] = json.dumps(group_results['topic_preference'])
         item_exist['compute_status'] = 2  # 存入群体描述
-        es_xnr.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body=item_exist)
+        es_xnr.index(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body=item_exist)
     
     mark = True
 
@@ -138,7 +283,7 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
     mark = False
 
     try:
-        item_exist = es_xnr.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=role_id)['_source']
+        item_exist = es_xnr.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id)['_source']
         item_exist['role_pinyin'] = role_id
         item_exist['role_name'] = role_label
         item_exist['domains'] = domain
@@ -151,11 +296,11 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['member_uids'] = json.dumps(role_results['member_uids'])
 
     
-        es_xnr.update(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=role_id,body={'doc':item_exist})
-    	
-    	item_domain = dict()
-    	item_domain['compute_status'] = 3  # 存入角色分析结果
-    	es_xnr.update(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body={'doc':item_domain})
+        es_xnr.update(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id,body={'doc':item_exist})
+        
+        item_domain = dict()
+        item_domain['compute_status'] = 3  # 存入角色分析结果
+        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_domain})
     
     except Exception, e:
         item_exist = dict()
@@ -170,11 +315,11 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['psy_feature'] = json.dumps(role_results['psy_feature'])
         item_exist['member_uids'] = json.dumps(role_results['member_uids'])
        
-        es_xnr.index(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=role_id,body=item_exist)
+        es_xnr.index(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id,body=item_exist)
         
         item_domain = dict()
-    	item_domain['compute_status'] = 3  # 存入角色分析结果
-    	es_xnr.update(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=task_id,body={'doc':item_domain})
+        item_domain['compute_status'] = 3  # 存入角色分析结果
+        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_domain})
     
     mark =True
 
@@ -186,13 +331,13 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
 def change_process_proportion(task_id, proportion):
     mark = False
     try:
-        task_exist_result = es_xnr.get(index=weibo_domain_index_name, doc_type=weibo_domain_index_type, id=task_id)['_source']
+        task_exist_result = es_xnr.get(index=fb_domain_index_name, doc_type=fb_domain_index_type, id=task_id)['_source']
     except:
         task_exist_result = {}
         return 'task is not exist'
     if task_exist_result != {}:
         task_exist_result['compute_status'] = proportion
-        es_xnr.update(index=weibo_domain_index_name, doc_type=weibo_domain_index_type, id=task_id, body={'doc':task_exist_result})
+        es_xnr.update(index=fb_domain_index_name, doc_type=fb_domain_index_type, id=task_id, body={'doc':task_exist_result})
         mark = True
 
     return mark
@@ -249,7 +394,7 @@ def detect_by_keywords(keywords,datetime_list):
     
     flow_text_index_name_list = []
     for datetime in datetime_list:
-        flow_text_index_name = facebook_flow_text_index_name_pre + datetime
+        flow_text_index_name = flow_text_index_name_pre + datetime
         flow_text_index_name_list.append(flow_text_index_name)
 
     nest_query_list = []
@@ -274,9 +419,9 @@ def detect_by_keywords(keywords,datetime_list):
             }
         },
         'size':count,
-        'sort':[{'user_fansnum':{'order':'desc'}}]
+        # 'sort':[{'user_fansnum':{'order':'desc'}}]
     }
-    es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=facebook_flow_text_index_type,\
+    es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
                 body=query_body)['hits']['hits']
     for i in range(len(es_results)):
         uid = es_results[i]['_source']['uid']
@@ -398,34 +543,32 @@ def political_classify_sort(uids_list,uid_weibo_keywords_dict):
     political_side_set = ['mid','left','right']
     political_side_count = dict()
     for side in political_side_set:
-    	try:
-        	side_count = political_side_list.count(side)
-        	political_side_count[side] = side_count
+        try:
+            side_count = political_side_list.count(side)
+            political_side_count[side] = side_count
         except:
-        	political_side_count[side] = 0
+            political_side_count[side] = 0
 
     political_side_count_sort = sorted(political_side_count.items(),key=lambda x:x[1], reverse=True)
 
     return political_side_count_sort 
 
-def topic_classfiy_sort(uids_list,uid_weibo_keywords_dict):
+def topic_classfiy_sort(uids_list,datetime_list):
 
-    result_data,uid_topic = topic_classfiy(uids_list,uid_weibo_keywords_dict)
-    #print 'uid_weibo_keywords_dict::::::',uid_weibo_keywords_dict
-    #print 'uid_topic::::::',uid_topic
+    result_data,uid_topic = my_topic_classfiy(uids_list,datetime_list)
 
     topic_list = []
     for uid,topic in uid_topic.iteritems():
         topic_list = topic_list + topic
     topic_count_dict = dict()
-    #topic_set = set(topic_list)
+
     topic_set = topic_en2ch_dict.keys()
     for topic in topic_set:
-    	try:
-        	topic_count = topic_list.count(topic)
-        	topic_count_dict[topic] = topic_count
+        try:
+            topic_count = topic_list.count(topic)
+            topic_count_dict[topic] = topic_count
         except:
-        	topic_count_dict[topic] = 0
+            topic_count_dict[topic] = 0
 
     topic_count_dict_sort = sorted(topic_count_dict.items(),key=lambda x:x[1],reverse=True)
 
@@ -438,7 +581,7 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
     uid_weibo = [] # [[uid1,text1,ts1],[uid2,text2,ts2],...]
 
     for datetime in datetime_list:
-        flow_text_index_name = facebook_flow_text_index_name_pre + datetime
+        flow_text_index_name = flow_text_index_name_pre + datetime
         query_body = {
             'query':{
                 'filtered':{
@@ -451,13 +594,15 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
             },
             'size':MAX_SEARCH_SIZE
         }
-        es_weibo_results = es_flow_text.search(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,\
+        es_weibo_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                                             body=query_body)['hits']['hits']
         print len(es_weibo_results)
         for i in range(len(es_weibo_results)):
             uid = es_weibo_results[i]['_source']['uid']
-            keywords_dict = es_weibo_results[i]['_source']['keywords_dict']
-            keywords_dict = json.loads(keywords_dict)
+            keywords_dict = {}
+            if es_weibo_results[i]['_source'].has_key('keywords_dict'):
+                keywords_dict = es_weibo_results[i]['_source']['keywords_dict']
+                keywords_dict = json.loads(keywords_dict)
             if i % 1000 == 0:
                 print i
             if label == 'character':
@@ -508,7 +653,8 @@ def group_description_analysis(detect_results,datetime_list):
     
     r_domain = dict()
 
-    domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    # domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
+    r_domain = my_domain_classfiy(uids_list, datetime_list)
 
 
     role_list = r_domain.values()
@@ -524,15 +670,13 @@ def group_description_analysis(detect_results,datetime_list):
     role_uids_dict = dict()
 
     for uid, role in r_domain.iteritems():
-    	#print 'role::::',role
-    	#print 'role_type:::::',type(role)
         try:
             role_uids_dict[role].append(uid)
         except:
             role_uids_dict[role] = [uid]
 
     ## 群体话题偏好
-    topic_count_dict_sort = topic_classfiy_sort(uids_list,uid_weibo_keywords_dict)
+    topic_count_dict_sort = topic_classfiy_sort(uids_list,datetime_list)
 
     group_description_analysis_results['role_distribute'] = role_count_dict_sort
     group_description_analysis_results['top_keywords'] = keywords_dict_all_users_sort
@@ -554,7 +698,6 @@ def cityTopic(uids_list,flow_text_index_name,n_limit=TOP_WEIBOS_LIMIT):
         
         province_dict = {}
         
-        #first_item = {}
 
         query_body = {   
             'query':{
@@ -570,17 +713,13 @@ def cityTopic(uids_list,flow_text_index_name,n_limit=TOP_WEIBOS_LIMIT):
             'size':n_limit
             }
         mtype_weibo = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-        #save_ws_results(topic, end_ts, during, n_limit, mtype_weibo)    
-        #微博直接保存下来
-        #if len(mtype_weibo) == 0:
-        #    continue
-        #first_item = mtype_weibo[0]['_source']
-        #数每个地方的不同类型的数量
-        
+       
         for weibo in mtype_weibo:  #对于每条微博
             
             try:
                 geo = weibo['_source']['geo'].encode('utf8')
+                print 'geo'
+                print geo
             except:
                 continue
             #print geo,type(geo)
@@ -704,7 +843,7 @@ def get_psy_feature_sort(uids_list,create_time):
     sentiment_dict = dict()
 
     for item in es_sentiment_counts:
-        sen_no = item['key']
+        sen_no = str(item['key'])
         sen_count = item['doc_count']
         sen_zh = SENTIMENT_DICT_NEW[sen_no]
         sentiment_dict[sen_zh] = sen_count
@@ -729,7 +868,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     political_side_count_sort = political_classify_sort(uids_list,uid_weibo_keywords_dict)
 
     ## 话题偏好
-    topic_count_dict_sort = topic_classfiy_sort(uids_list,uid_weibo_keywords_dict)
+    topic_count_dict_sort = topic_classfiy_sort(uids_list,datetime_list)
 
     ## 心理特征
 
@@ -766,15 +905,6 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     geo_cityTopic_results_merge = dict()
 
     for datetime,province_city_dict in geo_cityTopic_results.iteritems():
-        '''
-        for province in province_set:
-            
-            try:
-                geo_cityTopic_results_merge = dict(Counter(geo_cityTopic_results_merge[province])+Counter(province_city_dict[province]))
-                
-            except:
-                geo_cityTopic_results_merge[province] = province_city_dict[province]
-        '''
         ## 利用for循环
         for province, city_dict in province_city_dict.iteritems():
             if province in geo_cityTopic_results_merge.keys():
@@ -897,5 +1027,5 @@ if __name__ == '__main__':
     
     print 'start_time::',time.ctime()
     print 'start!'
-    # compute_domain_base()
+    compute_domain_base()
     print 'end_time::',time.ctime()
