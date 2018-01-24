@@ -38,7 +38,6 @@ def merge_dict(x, y):
 def load_uid_list():
     uid_list = []
     uid_list_query_body = {'size': MAX_SEARCH_SIZE}
-    # uid_list_query_body = {'size': 3}
     try:
         search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=uid_list_query_body)['hits']['hits']
         for item in search_results:
@@ -381,6 +380,19 @@ def count_text_num(uid_list, fb_flow_text_index_list):
         count_result[uid] = text_num
     return count_result
 
+def trans_bio_data(bio_data):
+    count = 1.0
+    while True:
+        translated_bio_data = trans(bio_data)
+        if len(translated_bio_data) == len(bio_data):
+            break
+        else:
+            print 'sleep start ...'
+            time.sleep(count)
+            count = count*1.1
+            print 'sleep over ...'
+    return translated_bio_data
+
 def update_domain(uid_list=[]):
     if not uid_list:
         uid_list = load_uid_list()
@@ -412,43 +424,64 @@ def update_domain(uid_list=[]):
             if not uid in user_domain_data:
                 text_num = count_result[uid]
                 user_domain_data[uid] = {
-                    'bio_str': [],
+                    'bio_str': '',
+                    'bio_list': [],
                     'category': '',
                     'number_of_text': text_num
                 }
+            #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
             if content.has_key('category'):
                 category = content.get('category')[0]
             else:
                 category = ''
             if content.has_key('description'):
-                description = content.get('description')[0]
+                description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
             else:
                 description = ''
             if content.has_key('quotes'):
-                quotes = content.get('quotes')[0]
+                quotes = content.get('quotes')[0][:1000]
             else:
                 quotes = ''
             if content.has_key('bio'):
-                bio = content.get('bio')[0]
+                bio = content.get('bio')[0][:1000]
             else:
                 bio = ''
             if content.has_key('about'):
-                about = content.get('about')[0]
+                about = content.get('about')[0][:1000]
             else:
                 about = ''    
-            user_domain_data[uid]['bio_str'] = [quotes, bio, about, description]
+            user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
             user_domain_data[uid]['category'] = category
     except Exception,e:
         print e
-
-    '''
     #由于一个用户请求一次翻译太耗时，所以统一批量翻译
-    translated_bio_data = {}
-    bio_list = {}
-    for uid in uid_list:
-    '''
-    
-    user_domain_temp = domain_main(user_domain_data)    #16个
+    trans_uid_list = []
+    untrans_bio_data = []
+    cut = 100
+    n = len(user_domain_data)/cut
+    for uid, content in user_domain_data.items():
+        trans_uid_list.append(uid)
+        untrans_bio_data.extend(content['bio_list'])
+        content.pop('bio_list')
+        if n:
+            if len(trans_uid_list)%cut == 0:
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+                n = n - 1
+        else:
+            if len(trans_uid_list) == (len(user_domain_data)%cut):
+                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                for i in range(len(trans_uid_list)):
+                    uid = trans_uid_list[i]
+                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                trans_uid_list = []
+                untrans_bio_data = []
+    #domian计算
+    user_domain_temp = domain_main(user_domain_data)    
     user_domain = {}
     for uid in uid_list:
         if uid in user_domain_temp:
@@ -480,8 +513,7 @@ def update_topic(uid_list=[]):
         if uid in user_topic_dict:
             user_topic[uid] = {
                 'filter_keywords': json.dumps(user_topic_data[uid]),
-                # 'topic': json.dumps(user_topic_dict[uid]),    #所有的topic字典都是一样的？？？？？
-                'topic': json.dumps({}),    #所有的topic字典都是一样的？？？？？
+                'topic': json.dumps(user_topic_dict[uid]),
                 'topic_string': user_topic_string[uid]
             }
         else:
@@ -492,8 +524,67 @@ def update_topic(uid_list=[]):
             }
     return save_data2es(user_topic)
 
+def get_user_location(location_dict):
+    if location_dict.has_key('name'):
+        location = location_dict['name']
+    elif location_dict.has_key('country') and location_dict.has_key('city'):
+        location = location_dict['city'] + ', ' + location_dict['country']
+    else:
+        location = ''
+    return location
+
 def update_baseinfo(uid_list=[]):
-    pass
+    user_baseinfo = {}
+    fb_user_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ]
+                     }
+                }
+            }
+        },
+        'size': MAX_SEARCH_SIZE,
+        "fields": ["location", "gender", "name", "uid"]
+    }
+    search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
+    for item in search_results:
+        content = item['fields']
+        uid = content['uid'][0]
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'gender': 0,
+                'location': '',
+            }
+        location = ''
+        if content.has_key('location'):
+            location_dict = json.loads(content.get('location')[0])
+            location = get_user_location(location_dict)
+        gender = 0
+        if content.has_key('gender'):
+            gender_str = content.get('gender')[0]
+            if gender_str == 'male':
+                gender = 1
+            elif gender_str == 'female':
+                gender = 2
+        uname = ''
+        if content.has_key('name'):
+            uname = content.get('name')[0]
+        user_baseinfo[uid]['location'] = location
+        user_baseinfo[uid]['gender'] = gender
+        user_baseinfo[uid]['uname'] = uname
+    for uid in uid_list:
+        if not uid in user_baseinfo:
+            user_baseinfo[uid] = {
+                'uname': '',
+                'gender': 0,
+                'location': '',
+            }
+    return save_data2es(user_baseinfo)
 
 def update_all():
     time_list = []
@@ -505,6 +596,10 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #日更新
+    print 'update_baseinfo: ', update_baseinfo(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
     print 'update_hashtag: ', update_hashtag(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
@@ -537,4 +632,19 @@ def update_all():
 
 if __name__ == '__main__':
     update_all()
-    
+# total num:  92
+# time used:  0.0138351917267
+# update_hashtag:  True
+# time used:  0.219952821732
+# update_influence:  True
+# time used:  0.145478010178
+# update_sensitive:  True
+# time used:  0.242365121841
+# update_keywords: True
+# time used:  1.23831295967
+# update_sentiment:  True
+# time used:  0.215330123901
+# update_domain:  True
+# time used:  62.3806529045
+# update_topic:  True
+# time used:  11.7983570099

@@ -9,7 +9,8 @@ import sys
 reload(sys)
 sys.path.append('../../')
 from timed_python_files.system_log_create import get_user_account_list
-from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH,MAX_SEARCH_SIZE,MAX_WARMING_SIZE,USER_XNR_NUM
+from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH,MAX_SEARCH_SIZE,MAX_WARMING_SIZE,USER_XNR_NUM,\
+                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING,S_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime
 from global_utils import R_CLUSTER_FLOW2 as r_cluster
@@ -123,7 +124,8 @@ def create_personal_warning(xnr_user_no,today_datetime):
         if user_sensitive > 0:
             user_dict=dict()
             user_dict['uid']=first_sum_result[i]['key']
-            user_dict['sensitive']=user_sensitive
+            followers_mark=judge_user_type(user_dict['uid'],followers_list)
+            user_dict['sensitive']=user_sensitive*followers_mark
             top_userlist.append(user_dict)
         else:
             pass
@@ -138,14 +140,14 @@ def create_personal_warning(xnr_user_no,today_datetime):
         user_detail=dict()
         user_detail['uid']=user['uid']
         user_detail['user_sensitive']=user['sensitive']
-        user_lookup_id=xnr_uid+'_'+user['uid']
-        print user_lookup_id
-        try:
-            #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
-            user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
-            user_detail['user_name']=user_result['nick_name']
-        except:
-            user_detail['user_name']=''
+        # user_lookup_id=xnr_uid+'_'+user['uid']
+        # print user_lookup_id
+        # try:
+        #     #user_result=es_xnr.get(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,id=user_lookup_id)['_source']
+        #     user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=user['uid'])['_source']
+        #     user_detail['user_name']=user_result['nick_name']
+        # except:
+        user_detail['user_name']=get_user_nickname(user['uid'])
 
         query_body={
             'query':{
@@ -231,6 +233,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
     results=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
     result=[]
     for item in results:
+        item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
         if item['_source']['uid'] in followers_list:
             item['_source']['content_type']='follow'
         else:
@@ -261,54 +264,84 @@ def create_speech_warning(xnr_user_no,today_datetime):
 #（3）根据虚拟人编号查找粉丝和关注人的uid，统计事件名称相关的微博数据中粉丝、关注人出现的频次，如果既是关注人又是粉丝则频次相加。取频次前三用户
 #（4）计算微博数据的转发数、评论数、敏感等级，得到微博影响力的初始值,
 #计算微博影响力的值=初始影响力值X（粉丝值（是1.2，否0.8）+关注值（是1.2，否0.8）
-def get_hashtag(now_time):
+# def get_hashtag(now_time):
 
-    uid_list = []
-    hashtag_list = {}
+#     uid_list = []
+#     hashtag_list = {}
 
-    with open(UID_TXT_PATH+'/uid_sensitive.txt','rb') as f:
-        for line in f:
-            uid = line.strip()
-            uid_list.append(uid)
+#     with open(UID_TXT_PATH+'/uid_sensitive.txt','rb') as f:
+#         for line in f:
+#             uid = line.strip()
+#             uid_list.append(uid)
 
-    for uid in uid_list:
-        if S_TYPE == 'test':
-            hashtag = r_cluster.hget('hashtag_' + str(datetime2ts(S_DATE_WARMING)-DAY),uid)
-            #hashtag = r_cluster.hget('hashtag_'+str(datetime2ts(S_DATE)+7*DAY),uid)
-        else:
-            hashtag = r_cluster.hget('hashtag_' + str(now_time),uid)
-            #hashtag = r_cluster.hget('hashtag_'+str((time.time()-DAY)),uid)
+#     for uid in uid_list:
+#         if S_TYPE == 'test':
+#             hashtag = r_cluster.hget('hashtag_' + str(datetime2ts(S_DATE_WARMING)-DAY),uid)
+#             #hashtag = r_cluster.hget('hashtag_'+str(datetime2ts(S_DATE)+7*DAY),uid)
+#         else:
+#             hashtag = r_cluster.hget('hashtag_' + str(now_time),uid)
+#             #hashtag = r_cluster.hget('hashtag_'+str((time.time()-DAY)),uid)
 
-        if hashtag != None:
-            hashtag = hashtag.encode('utf8')
-            hashtag = json.loads(hashtag)
+#         if hashtag != None:
+#             hashtag = hashtag.encode('utf8')
+#             hashtag = json.loads(hashtag)
 
-            for k,v in hashtag.iteritems():
-                try:
-                    hashtag_list[k] += v
-                except:
-                    hashtag_list[k] = v
-        #r_cluster.hget('hashtag_'+str(a))
+#             for k,v in hashtag.iteritems():
+#                 try:
+#                     hashtag_list[k] += v
+#                 except:
+#                     hashtag_list[k] = v
+#         #r_cluster.hget('hashtag_'+str(a))
 
-    hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:80]
+#     hashtag_list = sorted(hashtag_list.items(),key=lambda x:x[1],reverse=True)[:80]
 
-    return hashtag_list
+#     return hashtag_list
 
 
-#查询事件内容
-def lookup_event_content(event_name,today_datetime):
+#事件预警
+def get_hashtag(today_datetime):
+    
+    weibo_flow_text_index_name=get_day_flow_text_index_list(today_datetime)
     query_body={
         'query':{
-            'bool':{
-                'should':{'wildcard':{'text':'*'+event_name+'*'}},
-                'must':{'range':{'sensitive':{'gte':1}}}
+            'filtered':{
+                'filter':{
+                'bool':{
+                    'must':[
+                        {'range':{'sensitive':{'gte':1}}}
+                    ]
+                }}
             }
         },
-        'size':MAX_WARMING_SIZE,
-        'sort':{'sensitive':{'order':'desc'}}
+        'aggs':{
+            'all_hashtag':{
+                'terms':{'field':'hashtag'},
+                'aggs':{'sum_sensitive':{
+                    'sum':{'field':'sensitive'}
+                }
+                }
+            }
+        },
+        'size':EVENT_OFFLINE_COUNT
     }
-    flow_text_index_name = get_day_flow_text_index_list(today_datetime)
-    return True
+    weibo_text_exist=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,\
+                body=query_body)['aggregations']['all_hashtag']['buckets']
+    
+    hashtag_list = []
+    for item in weibo_text_exist:
+        event_dict=dict()
+        if item['key']:
+            # print item['key']
+            event_dict['event_name'] = item['key']
+            event_dict['event_count'] = item['doc_count']
+            event_dict['event_sensitive'] = item['sum_sensitive']['value']
+            hashtag_list.append(event_dict)
+        else:
+            pass
+
+    hashtag_list.sort(key=lambda k:(k.get('event_sensitive',0),k.get('event_count',0)),reverse=True)
+    # print hashtag_list
+    return hashtag_list
 
 
 def create_event_warning(xnr_user_no,today_datetime,write_mark):
@@ -341,9 +374,19 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
         event_time_sum=0       
         query_body={
             'query':{
-                'bool':{
-                    'must':[{'wildcard':{'text':'*'+event_item[0]+'*'}},
-                    {'range':{'sensitive':{'gte':1}}}]
+                # 'bool':{
+                #     'must':[{'wildcard':{'text':'*'+event_item[0]+'*'}},
+                #     {'range':{'sensitive':{'gte':1}}}]
+                # }
+                'filtered':{
+                    'filter':{
+                        'bool':{
+                            'must':[
+                                {'term':{'hashtag':event_item['event_name']}},
+                                {'range':{'sensitive':{'gte':1}}}
+                            ]
+                        }
+                    }
                 }
             },
             'size':MAX_WARMING_SIZE,
@@ -359,38 +402,25 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             print 'sencond_time:::',int(time.time())
             for item in event_results:
                 #print 'event_content:',item['_source']['text']          
-                event_sensitive_count=event_sensitive_count+1
+                
                 #统计用户信息
                 if alluser_num_dict.has_key(str(item['_source']['uid'])):
-                    alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
-                else:
-                    alluser_num_dict[str(item['_source']['uid'])]=1
-                    
-                fans_mark=set_intersection(item['_source']['uid'],fans_list)
-                # for fans_uid in fans_list:                    
-                if fans_mark > 0:
-                    if fans_num_dict.has_key(str(item['_source']['uid'])):
-                        fans_num_dict[str(item['_source']['uid'])]=fans_num_dict[str(item['_source']['uid'])]+1
+                    followers_mark=set_intersection(item['_source']['uid'],followers_list)
+                    if followers_mark > 0:
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1*2
                     else:
-                        fans_num_dict[str(item['_source']['uid'])]=1
+                        alluser_num_dict[str(item['_source']['uid'])]=alluser_num_dict[str(item['_source']['uid'])]+1
                 else:
-                    pass
-                
-                followers_mark=set_intersection(item['_source']['uid'],followers_list)
-                # for followers_uid in followers_list:
-                if followers_mark > 0:
-                    if followers_num_dict.has_key(str(item['_source']['uid'])):
-                        followers_num_dict[str(item['_source']['uid'])]=followers_num_dict[str(item['_source']['uid'])]+1
-                    else:
-                        followers_num_dict[str(item['_source']['uid'])]=1
-                else:
-                    pass
+                    alluser_num_dict[str(item['_source']['uid'])]=1                
 
                 #计算影响力
                 origin_influence_value=(1+item['_source']['comment']+item['_source']['retweeted'])*(1+item['_source']['sensitive'])
-                fans_value=judge_user_type(item['_source']['uid'],fans_list)
+                # fans_value=judge_user_type(item['_source']['uid'],fans_list)
                 followers_value=judge_user_type(item['_source']['uid'],followers_list)
-                item['_source']['weibo_influence_value']=origin_influence_value*(fans_value+followers_value)
+                item['_source']['weibo_influence_value']=origin_influence_value*(followers_value)
+                
+                item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+
                 weibo_result.append(item['_source'])
 
                 #统计影响力、时间
@@ -413,38 +443,34 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
         #     event_warming_content['event_time']=0
         
         # try:
-            if event_sensitive_count > 0:
-        #对用户进行排序
-                temp_userid_dict=union_dict(fans_num_dict,followers_num_dict)
-                main_userid_dict=union_dict(temp_userid_dict,alluser_num_dict)
-                main_userid_dict=sorted(main_userid_dict.items(),key=lambda d:d[1],reverse=True)
-                main_userid_list=[]
-                for i in xrange(0,len(main_userid_dict)):
-                    main_userid_list.append(main_userid_dict[i][0])
+            #对用户进行排序
+            alluser_num_dict=sorted(alluser_num_dict.items(),key=lambda d:d[1],reverse=True)
+            main_userid_list=[]
+            for i in xrange(0,len(alluser_num_dict)):
+                main_userid_list.append(alluser_num_dict[i][0])
 
-            #主要参与用户信息
-                main_user_info=[]
-                user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
-                for item in user_es_result:
+        #主要参与用户信息
+            main_user_info=[]
+            user_es_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':main_userid_list})['docs']
+            for item in user_es_result:
 
-                    user_dict=dict()
-                    if item['found']:
-                        user_dict['photo_url']=item['_source']['photo_url']
-                        user_dict['uid']=item['_id']
-                        user_dict['nick_name']=item['_source']['nick_name']
-                        user_dict['favoritesnum']=item['_source']['favoritesnum']
-                        user_dict['fansnum']=item['_source']['fansnum']
-                    else:
-                        user_dict['photo_url']=''
-                        user_dict['uid']=item['_id']
-                        user_dict['nick_name']=''
-                        user_dict['favoritesnum']=0
-                        user_dict['fansnum']=0
-                    main_user_info.append(user_dict)
-                event_warming_content['main_user_info']=json.dumps(main_user_info)
+                user_dict=dict()
+                if item['found']:
+                    user_dict['photo_url']=item['_source']['photo_url']
+                    user_dict['uid']=item['_id']
+                    user_dict['nick_name']=item['_source']['nick_name']
+                    user_dict['favoritesnum']=item['_source']['favoritesnum']
+                    user_dict['fansnum']=item['_source']['fansnum']
+                else:
+                    user_dict['photo_url']=''
+                    user_dict['uid']=item['_id']
+                    user_dict['nick_name']=''
+                    user_dict['favoritesnum']=0
+                    user_dict['fansnum']=0
+                main_user_info.append(user_dict)
+            event_warming_content['main_user_info']=json.dumps(main_user_info)
 
-            else:
-                event_warming_content['main_user_info']=''
+
         # except:
             # event_warming_content['main_user_info']=[]
             print 'fourth_time:::',int(time.time())
@@ -454,17 +480,14 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             now_time=int(time.time())
             task_id=xnr_user_no+'_'+str(now_time) 
         
-            if event_sensitive_count > 0:
-                print 'event_sensitive_count:::',event_sensitive_count
-                #写入数据库           
-                if write_mark:
-                    print 'today_datetime:::',ts2datetime(today_datetime)
-                    mark=write_envent_warming(today_datetime,event_warming_content,task_id)
-                    event_warming_list.append(mark)
-                else:
-                    event_warming_list.append(event_warming_content)
+          
+            if write_mark:
+                print 'today_datetime:::',ts2datetime(today_datetime)
+                mark=write_envent_warming(today_datetime,event_warming_content,task_id)
+                event_warming_list.append(mark)
             else:
-                pass
+                event_warming_list.append(event_warming_content)
+
         else:
         	pass
         print 'fifth_time:::',int(time.time())
@@ -485,9 +508,9 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
 def judge_user_type(uid,user_list):
     number=set_intersection(uid,user_list)
     if number > 0:
-        mark=1.2
+        mark=FOLLOWER_INFLUENCE_MAX_JUDGE
     else:
-        mark=0.8
+        mark=NOFOLLOWER_INFLUENCE_MIN_JUDGE
     return mark
 
 def union_dict(*objs):
@@ -586,6 +609,7 @@ def lookup_weibo_date_warming(keywords,today_datetime):
         temp_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in temp_result:
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
             date_result.append(item['_source'])
         #except:
         #        date_result=[]

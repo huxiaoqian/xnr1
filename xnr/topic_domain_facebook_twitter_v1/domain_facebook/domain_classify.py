@@ -37,26 +37,10 @@ def classify_by_category(category):#根据用户category划分
 
     return label
 
-def classify_by_biostring(bio_string, flag):#根据用户bio_string划分
-    bio_list = bio_string
-
-    if flag == 0: #原文
-        bio_string_s = '_'.join(bio_list)
-    elif flag == 1: #繁体转简体
-        simplified_bio_list = []
-        for text in bio_list: 
-            simplified_bio_list.append(traditional2simplified(text))
-        bio_string_s = '_'.join(simplified_bio_list)
-    else: #翻译
-        try:
-            bio_string_s = '_'.join(trans(bio_list))
-        except Exception,e:
-            print e
-            # bio_string_s = '_'.join(bio_list)
-            return False
-
+def classify_by_biostring(bio_string):#根据用户bio_string划分
     # bio_string_s = cc.convert(bio_string.decode('utf-8'))
-    kwdlist = cut(s, bio_string_s.encode('utf-8'))
+    # kwdlist = cut(s, bio_string_s.encode('utf-8'))
+    kwdlist = cut(s, bio_string.encode('utf-8'))
 
     lawyer_weight = sum([1 for keyword in kwdlist if keyword in lawyerw]) # 律师
     adminw_weight = sum([1 for keyword in kwdlist if keyword in adminw]) # 政府官员
@@ -101,18 +85,11 @@ def domain_main(user_data):#facebook用户身份分类主函数
     if len(uid_list) == 0:
         return {}
     else:
-        count = 1.0
-        len_user_label = 0
-        while True:              
-            if user_label:
-                len_user_label = len(user_label)
-            if len(user_data) == len_user_label:
-                return user_label
-            else:   
-                user_label = get_domain(user_data, user_label, count)
-                count = 1.1*count   #时间逐渐加长，以避免设置的sleep时间过短而无法结束
+        user_label = get_domain(user_data, user_label)
+        return user_label
+
         
-def get_domain(user_data, user_label, count):
+def get_domain(user_data, user_label):
     for k,v in user_data.iteritems():
         if k not in user_label:
             label = 'other'
@@ -138,23 +115,11 @@ def get_domain(user_data, user_label, count):
                 continue
 
             #根据bio_string划分
-            #不翻译时
             if bio_string:
-                label = classify_by_biostring(bio_string, flag=1)   #转成简体
+                label = classify_by_biostring(bio_string) 
             if label != 'other':
                 user_label[k] = label
                 continue
-            else:
-                label = classify_by_biostring(bio_string, flag=3)   #翻译
-                if not label:   #翻译出错，请求频次太快
-                    print 'sleep start'
-                    time.sleep(count)
-                    print 'sleep over'
-                    continue
-                    print 'should never come out'
-                if label != 'other':
-                    user_label[k] = label
-                    continue
 
             #根据发帖数量判定
             if number_of_text >= ACTIVE_COUNT:

@@ -31,9 +31,14 @@ def opinion_main(weibo_data,k_cluster):
     weibo_new = []
     for i in range(0,len(weibo_data)):
         text = weibo_data[i]
+        
+        #print 'text..',text
+        #print 'type..text..',type(text)
+        text = text.encode('utf-8')
         n = str(text).count('@')
         if n >= 5:
             continue
+        
         value = cut_filter(text)
         if len(value) > 0:
             if text != '转发微博':
