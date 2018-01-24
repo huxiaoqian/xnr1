@@ -482,7 +482,7 @@ def update_domain(uid_list=[]):
                 'domain': user_domain_temp[uid]
             }
         else:
-            user_domain[uid] = 'other'
+            user_domain[uid] = {'domain': 'other'}
     return save_data2es(user_domain)
 
 def update_topic(uid_list=[]):
