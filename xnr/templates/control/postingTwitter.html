@@ -65,7 +65,8 @@
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
-    th.bs-checkbox {width: 10%!important;}
+    th.bs-checkbox {width: 1%!important;}
+    .focus_main .bootstrap-table .table thead>tr>th {width: 5%!important;}
     .fixed-table-container tbody .selected td {
         background-color: #2a556f!important;
     }
@@ -159,7 +160,7 @@
                 </div>
                 <!--cols="101" rows="6"-->
                 <div id="post-2-content" class="content" contentEditable="true"
-                     style="width: 736px;height: 132px;">
+                     style="width:100%;height: 132px;">
                 </div>
                 <img src='' alt='' id='imgimg' style="display: none;"/>
                 <div class="add_thing">
@@ -168,7 +169,7 @@
                     <form action='' method='' name='myform' style="display: none;">
                         <input type='file' id='iptfileupload' onchange='show()' value=''/>
                     </form>
-                    <div style="margin-left:40px;">
+                    <div class="dingshi" style="margin-left:20%;">
                         <label class="demo-label timingss" style="margin: 5px 7px;">
                             <input class="demo-radio timing" type="checkbox" name="demo">
                             <span class="demo-checkbox demo-radioInput"></span> 定时
@@ -189,7 +190,7 @@
                     <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
                 </div>
             </div>
-            <div id="user_recommend">
+            <div id="user_recommend" style="display: none;">
                 <p class="tit" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">@用户推荐</p>
                 <ul class="user_example_list" style="padding: 10px 20px;">
 
@@ -968,203 +969,6 @@
         </div>
     </div>
 </div>
-<!--语料选择-->
-<style>
-    #wordcloud .demo-label {
-        width:90px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin: 5px 10px;
-    }
-</style>
-<div class="modal fade" id="wordcloud" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">语料选择</h4>
-            </div>
-            <div class="modal-body">
-                <div class="xnr_choose" style="margin: 10px;">
-                    <span style="position: relative;top:-3px;">虚拟人选择：</span>
-                    <label class="demo-label" style="margin-bottom:0;">
-                        <input class="demo-radio" type="radio" name="xnr" value='my_xnrs' checked>
-                        <span class="demo-checkbox demo-radioInput"></span> 私有
-                    </label>
-                    <label class="demo-label" style="margin-bottom:0;">
-                        <input class="demo-radio" type="radio" name="xnr" value='all_xnrs'>
-                        <span class="demo-checkbox demo-radioInput"></span> 共享
-                    </label>
-                </div>
-                <div class="word-1" style="margin: 10px;">
-                    <span style="position: relative;top:-3px;">语料分类：</span>
-                    <label class="demo-label" style="margin-bottom:0;">
-                        <input class="demo-radio" type="radio" name="theday" value='日常语料' checked>
-                        <span class="demo-checkbox demo-radioInput"></span> 日常语料
-                    </label>
-                    <label class="demo-label" style="margin-bottom:0;">
-                        <input class="demo-radio" type="radio" name="theday" value='主题语料'>
-                        <span class="demo-checkbox demo-radioInput"></span> 主题语料
-                    </label>
-                </div>
-                <div id="cloud-1">
-                    <label class="demo-label" title="旅游">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='旅游' checked>
-                        <span class="demo-checkbox demo-radioInput"></span> 旅游
-                    </label>
-                    <label class="demo-label" title="美食">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='美食'>
-                        <span class="demo-checkbox demo-radioInput"></span> 美食
-                    </label>
-                    <label class="demo-label" title="汽车">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='汽车'>
-                        <span class="demo-checkbox demo-radioInput"></span> 汽车
-                    </label>
-                    <label class="demo-label" title="游戏">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='游戏'>
-                        <span class="demo-checkbox demo-radioInput"></span> 游戏
-                    </label>
-                    <label class="demo-label" title="星座">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='星座'>
-                        <span class="demo-checkbox demo-radioInput"></span> 星座
-                    </label>
-                    <label class="demo-label" title="摄影">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='摄影'>
-                        <span class="demo-checkbox demo-radioInput"></span> 摄影
-                    </label>
-                    <label class="demo-label" title="音乐">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='音乐'>
-                        <span class="demo-checkbox demo-radioInput"></span> 音乐
-                    </label>
-                    <label class="demo-label" title="电影">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='电影'>
-                        <span class="demo-checkbox demo-radioInput"></span> 电影
-                    </label>
-                    <label class="demo-label" title="运动">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='运动'>
-                        <span class="demo-checkbox demo-radioInput"></span> 运动
-                    </label>
-                    <label class="demo-label" title="搞笑">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='搞笑'>
-                        <span class="demo-checkbox demo-radioInput"></span> 搞笑
-                    </label>
-                    <label class="demo-label" title="数码">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='数码'>
-                        <span class="demo-checkbox demo-radioInput"></span> 数码
-                    </label>
-                    <label class="demo-label" title="军事">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='军事'>
-                        <span class="demo-checkbox demo-radioInput"></span> 军事
-                    </label>
-                    <label class="demo-label" title="历史">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='历史'>
-                        <span class="demo-checkbox demo-radioInput"></span> 历史
-                    </label>
-                    <label class="demo-label" title="萌宠">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='萌宠'>
-                        <span class="demo-checkbox demo-radioInput"></span> 萌宠
-                    </label>
-                    <label class="demo-label" title="动漫">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='动漫'>
-                        <span class="demo-checkbox demo-radioInput"></span> 动漫
-                    </label>
-                    <label class="demo-label" title="情感">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='情感'>
-                        <span class="demo-checkbox demo-radioInput"></span> 情感
-                    </label>
-                    <label class="demo-label" title="时尚">
-                        <input class="demo-radio" type="checkbox" name="theme11" value='时尚'>
-                        <span class="demo-checkbox demo-radioInput"></span> 时尚
-                    </label>
-                </div>
-                <div id="cloud-2" style="display: none;">
-                    <label class="demo-label" title="民生类_法律">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_法律' checked>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
-                    </label>
-                    <label class="demo-label" title="文体类_娱乐">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_娱乐'>
-                        <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
-                    </label>
-                    <label class="demo-label" title="科技类">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='科技类'>
-                        <span class="demo-checkbox demo-radioInput"></span> 科技类
-                    </label>
-                    <label class="demo-label" title="经济类">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='经济类'>
-                        <span class="demo-checkbox demo-radioInput"></span> 经济类
-                    </label>
-                    <label class="demo-label" title="教育类">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='教育类'>
-                        <span class="demo-checkbox demo-radioInput"></span> 教育类
-                    </label>
-                    <label class="demo-label" title="民生类_环保">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_环保'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
-                    </label>
-                    <label class="demo-label" title="民生类_健康">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_健康'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
-                    </label>
-                    <label class="demo-label" title="军事类">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='军事类'>
-                        <span class="demo-checkbox demo-radioInput"></span> 军事类
-                    </label>
-                    <label class="demo-label" title="政治类_外交">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_外交'>
-                        <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
-                    </label>
-                    <label class="demo-label" title="文体类_体育">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_体育'>
-                        <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
-                    </label>
-                    <label class="demo-label" title="民生类_交通">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_交通'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
-                    </label>
-                    <label class="demo-label" title="其他类">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='其他类'>
-                        <span class="demo-checkbox demo-radioInput"></span> 其他类
-                    </label>
-                    <label class="demo-label" title="政治类_反腐">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_反腐'>
-                        <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
-                    </label>
-                    <label class="demo-label" title="民生类_就业">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_就业'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
-                    </label>
-                    <label class="demo-label" title="政治类_暴恐">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_暴恐'>
-                        <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
-                    </label>
-                    <label class="demo-label" title="民生类_住房">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_住房'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
-                    </label>
-                    <label class="demo-label" title="政治类_地区和平">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_地区和平'>
-                        <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
-                    </label>
-                    <label class="demo-label" title="政治类_宗教">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_宗教'>
-                        <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
-                    </label>
-                    <label class="demo-label" title="民生类_社会保障">
-                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_社会保障'>
-                        <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="joinWord()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!--添加重点用户-->
 <div class="modal fade" id="addHeavyUser" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -1209,16 +1013,6 @@
     $('.nav_type').text('(twitter)');
     judgmentTwitter('2');
     //===============
-    $('#wordcloud .word-1 .demo-label .demo-radio').on('click',function () {
-        var _val=$(this).val();
-        if (_val=='日常语料'){
-            $('#cloud-1').show();
-            $('#cloud-2').hide();
-        }else {
-            $('#cloud-1').hide();
-            $('#cloud-2').show();
-        }
-    })
     function selectFile(){
         $("#iptfileupload").trigger("click");
     }

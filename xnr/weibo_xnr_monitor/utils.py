@@ -370,6 +370,27 @@ def addto_weibo_corpus(task_detail):
         result=False
     return result
 
+
+#task_detail=(corpus_type,theme_daily_name,create_type,xnr_user_no,mid,uid,timestamp,create_time)
+def new_addto_weibo_corpus(task_detail):
+    flow_text_index_name = flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        corpus_result = es_flow_text.get(index=flow_text_index_name,doc_type=flow_text_index_type,id=task_detail['mid'])['_source']
+        task_detail['text']=corpus_result['text']
+        task_detail['retweeted']=corpus_result['retweeted']
+        task_detail['comment']=corpus_result['comment']
+        task_detail['like']=corpus_result['like']
+    except:
+        mark=False
+
+    try:
+        es_xnr.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=task_detail['mid'],body=task_detail)
+        mark=True
+    except:
+        mark=False
+    return mark
+
+
 ###############################################################
 #批量添加关注
 def attach_fans_batch(xnr_user_no_list,fans_id_list,trace_type):
@@ -483,8 +504,8 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
                 if item['_source']['influence']>=INFLUENCE_MIN:
                     results.append(item['_source'])
                 '''
-        except Exception,e:
-            raise e
+        except:
+            results=[]
 
     return results
 
@@ -533,7 +554,7 @@ def count_maxweibouser_influence(end_time):
         for item in max_result:
            max_user_index=item['_source']['user_index']
     except:
-        max_user_index=0
+        max_user_index=1
     return max_user_index
 
 def count_weibouser_index(uid,end_time):

@@ -7,21 +7,24 @@ import random
 appKey = '3026da95302fe406'
 secretKey = 'D6Sueb74kdW3nj6qjSaMTGGQTngoHMjW'
 
-def translate(q):
+def translate(q, target_language):
     res = []
     for item in q:
-        r = single_translate(item)
+        r = single_translate(item, target_language)
         if r:
             res.append(r)
         else:
             return False
     return res
 
-def single_translate(q):
+def single_translate(q, target_language):
+    if target_language == 'zh-cn':
+        toLang = 'zh-CHS'
+    elif target_language == 'en':
+        toLang = 'EN'
     httpClient = None
     myurl = '/api'
     fromLang = 'auto'
-    toLang = 'zh-CHS'
     salt = random.randint(1, 65536)
     
     sign = appKey+q+str(salt)+secretKey

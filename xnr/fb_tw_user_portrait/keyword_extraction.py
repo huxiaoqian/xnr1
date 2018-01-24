@@ -134,7 +134,7 @@ def load_fb_flow_text(fb_flow_text_index_list, uid_list):
                     fb_flow_text[uid] = {
                         'text_dict': {}
                     }
-                fb_flow_text[uid]['text_dict'][item['_id']] = traditional2simplified(content['text'][0])
+                fb_flow_text[uid]['text_dict'][item['_id']] = traditional2simplified(content['text'][0][:1800]) #对文本内容长度做出限制[:1800]，以免翻译时麻烦
         except Exception,e:
             print e
     #如果没有某个uid对应的记录值，则添上一条空的数据

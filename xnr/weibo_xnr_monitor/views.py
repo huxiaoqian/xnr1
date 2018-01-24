@@ -9,7 +9,7 @@ from flask import Blueprint,url_for,render_template,request,\
 from xnr.global_utils import es_flow_text
 from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_weibouser,\
                   weibo_user_detail,addto_weibo_corpus,get_weibohistory_retweet,get_weibohistory_comment,\
-                  get_weibohistory_like,attach_fans_follow,addto_weibo_corpus,attach_fans_batch
+                  get_weibohistory_like,attach_fans_follow,addto_weibo_corpus,attach_fans_batch,new_addto_weibo_corpus
 
 mod=Blueprint('weibo_xnr_monitor',__name__,url_prefix='/weibo_xnr_monitor')
 
@@ -109,6 +109,23 @@ def ajax_addto_weibo_corpus():
     task_detail=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type,xnr_user_no]
     results=addto_weibo_corpus(task_detail)
     return json.dumps(results)
+
+
+#加入语料库新方法
+@mod.route('/new_addto_weibo_corpus/')
+def ajax_new_addto_weibo_corpus():
+    task_detail=dict()
+    task_detail['corpus_type']=request.args.get('corpus_type','')
+    task_detail['theme_daily_name']=request.args.get('theme_daily_name','').split(',')
+    task_detail['uid']=request.args.get('uid','')
+    task_detail['mid']=request.args.get('mid','')
+    task_detail['timestamp']=int(request.args.get('timestamp',''))
+    task_detail['create_type']=request.args.get('create_type','')
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['create_time']=int(time.time())
+    results=new_addto_weibo_corpus(task_detail)
+    return json.dumps(results)
+
 
 #批量添加关注
 #http://219.224.134.213:9209/weibo_xnr_monitor/attach_fans_batch/?xnr_user_no_list=WXNR0004&fans_id_list=5115675150,2738743113
