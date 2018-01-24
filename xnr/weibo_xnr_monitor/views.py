@@ -119,7 +119,7 @@ def ajax_new_addto_weibo_corpus():
     task_detail['theme_daily_name']=request.args.get('theme_daily_name','').split(',')
     task_detail['uid']=request.args.get('uid','')
     task_detail['mid']=request.args.get('mid','')
-    task_detail['timestamp']=int(request.args.get())
+    task_detail['timestamp']=int(request.args.get('timestamp',''))
     task_detail['create_type']=request.args.get('create_type','')
     task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
     task_detail['create_time']=int(time.time())

@@ -130,8 +130,6 @@ function weibo(data) {
                                 '   <a class="tid" style="display: none;">'+item.tid+'</a>'+
                                 '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                                '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
-                                '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                                 '   <span class="time" style="font-weight:900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                                 '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                                 '   <p class="allall1" style="display:none;">'+txt+'</p>'+
@@ -143,7 +141,7 @@ function weibo(data) {
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（<b class="comment">'+item.comment+'</b>）</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                                 '       <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
-                                '       <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                                '       <span class="cen3-5" onclick="joinPolice(this,\'人物\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                                 '       <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                                 '       <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                                 '    </div>'+
@@ -173,9 +171,10 @@ function weibo(data) {
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '                <a class="center_1" href="###">'+nameuid+'</a>'+
+                        '                <a class="center_1 centerNAME" href="###">'+nameuid+'</a>'+
                         '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
-                        '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                        '                <a class="_id" style="display: none;">'+row._id+'</a>'+
+                        '                <a onclick="oneUP(this,\'人物\')" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '           <div>'+str+'</div>'+
                         '        </div>'+
@@ -218,33 +217,6 @@ function comMent(_this){
         public_ajax.call_request('get',post_url,postYES)
     }else {
         $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-//一键上报
-function oneUP(_this) {
-    //[mid,text,timestamp,retweeted,like,comment]
-    var len=$(_this).parents('.everyUser').find('.center_rel');
-    if (len){
-        var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
-        var dataStr='';
-        for (var i=0;i<len.length;i++){
-            var alldata=[];
-            var mid = $(len[i]).find('.mid').text();alldata.push(mid);
-            var txt=$(len[i]).find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');alldata.push(txt);
-            var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
-            var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
-            var comment = $(len[i]).find('.comment').text();alldata.push(comment);
-            var sensitive = $(len[i]).find('.sensitive').text();alldata.push(sensitive);
-            var sensitiveWords = $(len[i]).find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
-            dataStr+=alldata.join(',').toString();
-            if (i!=len.length-1){dataStr+='*'}
-        }
-        var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
-            '&weibo_info='+dataStr;
-        public_ajax.call_request('get',once_url,postYES);
-    }else {
-        $('#pormpt p').text('微博内容为空，无法上报。');
         $('#pormpt').modal('show');
     }
 }
