@@ -64,27 +64,20 @@ if(flagType == 3){//微信
             $('#pormpt').modal('show');
         }else {
             reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
-            console.log(reportDefaul_url)
         }
     });
-
     weiboORqq('WX');
-    console.log(ID_Num);
     reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
-    console.log('最近7天的上报记录----'+reportDefaul_url)
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if(flagType == 1){//微博
     weiboORqq('weibo');
-    console.log(ID_Num);
     reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
-    console.log(ID_Num);
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
-    console.log(reportDefaul_url)
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }
 
@@ -92,7 +85,6 @@ if(flagType == 3){//微信
 // public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 var currentData={},wordCurrentData={},currentDataPrival={};
 function reportDefaul(data) {
-    console.log(data)
     $.each(data,function (index,item) {
         currentDataPrival[item.report_time]=item;
     });
@@ -124,80 +116,84 @@ function reportDefaul(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var artical=row.report_content.weibo_list,str='';
-                    $.each(artical,function (index,item) {
-                        var text,time,name,img,row;
-                        if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
-                            name=item.uid||'未命名';
-                        }else {
-                            name=item.name;
-                        };
-                        if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
-                            img='/static/images/unknown.png';
-                        }else {
-                            img=item.photo_url;
-                        };
-                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                            text='暂无内容';
-                        }else {
-                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                var s=item.text;
-                                var keywords=item.sensitive_words_string.split('&');
-                                for (var f=0;f<keywords.length;f++){
-                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
-                                }
-                                text=s;
-
-                                var rrr=item.text;
-                                if (rrr.length>=160){
-                                    rrr=rrr.substring(0,160)+'...';
-                                    all='inline-block';
-                                }else {
-                                    rrr=item.text;
-                                    all='none';
-                                }
-                                for (var f of keywords){
-                                    text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
-                                }
+                    if (artical.length==0){
+                        str='<p style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</p>';
+                    }else {
+                        $.each(artical,function (index,item) {
+                            var text,time,name,img,row;
+                            if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                                name=item.uid||'未命名';
                             }else {
-                                text=item.text;
-                                if (txt.length>=160){
-                                    text2=txt.substring(0,160)+'...';
-                                    all='inline-block';
-                                }else {
-                                    text2=txt;
-                                    all='none';
-                                }
+                                name=item.name;
                             };
-                        };
-                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
-                            time='未知';
-                        }else {
-                            time=getLocalTime(item.timestamp);
-                        };
-                        var sye_1='',sye_2='';
-                        if (Number(item.sensitive) < 50){
-                            sye_1='border-color: transparent transparent #131313';
-                            sye_2='color: yellow';
-                        }
-                        str+=
-                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                            '   <img src="'+img+'" alt="" class="center_icon">'+
-                            '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
-                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                            '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
-                            '   <p class="allall1" style="display:none;">'+text+'</p>'+
-                            '   <p class="allall2" style="display:none;">'+text2+'</p>'+
-                            '   <span class="center_2">'+text2+'</span>'+
-                            '   <div class="center_3">'+
-                            '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            '    </div>'+
-                            '</div>'
-                    });
+                            if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                                img='/static/images/unknown.png';
+                            }else {
+                                img=item.photo_url;
+                            };
+                            if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                                text='暂无内容';
+                            }else {
+                                if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                    var s=item.text;
+                                    var keywords=item.sensitive_words_string.split('&');
+                                    for (var f=0;f<keywords.length;f++){
+                                        s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                    }
+                                    text=s;
+
+                                    var rrr=item.text;
+                                    if (rrr.length>=160){
+                                        rrr=rrr.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        rrr=item.text;
+                                        all='none';
+                                    }
+                                    for (var f of keywords){
+                                        text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                    }
+                                }else {
+                                    text=item.text;
+                                    if (txt.length>=160){
+                                        text2=txt.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        text2=txt;
+                                        all='none';
+                                    }
+                                };
+                            };
+                            if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
+                                time='未知';
+                            }else {
+                                time=getLocalTime(item.timestamp);
+                            };
+                            var sye_1='',sye_2='';
+                            if (Number(item.sensitive) < 50){
+                                sye_1='border-color: transparent transparent #131313';
+                                sye_2='color: yellow';
+                            }
+                            str+=
+                                '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                                '   <img src="'+img+'" alt="" class="center_icon">'+
+                                '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
+                                '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                                '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                                '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                                '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                                '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                                '   <span class="center_2">'+text2+'</span>'+
+                                // '   <div class="center_3">'+
+                                // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                                // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                                // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                                // '    </div>'+
+                                '</div>'
+                        });
+                    }
                     var nameuid,time,report_type,xnr;
                     if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
                         nameuid = row.uid;
@@ -516,7 +512,6 @@ $('#output1').click(function(){
         return;
     JSONToExcelConvertor(data.data, "Report", data.title);
 });
-
 function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
     //先转化json
     var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
@@ -546,7 +541,6 @@ function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
     }
 
     excel += "</table>";
-
     var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
     excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
     excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
@@ -589,8 +583,39 @@ function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
 };
 //导出word
 $('#output2').on('click',function () {
-    tableExport('person', 'Report', 'doc');
+    changeImgToDataurl();
 });
+var img64str=''
+function changeImgToDataurl(){
+    var img = "/static/images/everybody_bg.jpg";
+    var image = new Image();
+    image.src = img;
+    image.onload = function(){
+        img64str = getBase64Image(image);
+
+        tableExport('person', 'Report', 'doc');
+    }
+}
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
+function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+    var dataURL = canvas.toDataURL("image/"+ext);
+    return dataURL;
+}
+
+
 
 
 

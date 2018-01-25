@@ -406,18 +406,7 @@ $('.userList .addFocus').on('click',function () {
     var add_url='/weibo_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
     public_ajax.call_request('get',add_url,postYES);
 })
-//-------------------颜色----------------------
-function createRandomItemStyle() {
-    return {
-        normal: {
-            color: 'rgb(' + [
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127)
-            ].join(',') + ')'
-        }
-    };
-}
+
 //查看网民详情
 function networkPeo(_id) {
     var detail_url='/weibo_xnr_monitor/weibo_user_detail/?user_id='+_id;
