@@ -21,8 +21,8 @@ from global_utils import es_fb_user_portrait as es, \
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH, DAY, WEEK
 
-sys.path.append('../cron')
-from trans.trans import trans, traditional2simplified
+sys.path.append('../cron/trans')
+from trans import trans, traditional2simplified
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
@@ -35,6 +35,9 @@ def load_black_words():
     return one_words
 
 black = load_black_words()
+# 为了避免其他文件调用该.py文件的其他函数时，black.txt找不到，在get_filter_keywords()里面加载black。
+# 因为目前外部只调用get_filter_keywords()函数。
+# 好吧还是避免不了……拷贝一份到被调用的地方得了
 
 def cut_filter(text):
     pattern_list = [r'\（分享自 .*\）', r'http://\w*']
@@ -197,6 +200,8 @@ def save_and_trans(text_dict):
     return text_dict.values()
 
 def get_filter_keywords(fb_flow_text_index_list, uid_list):
+    global black
+    black = load_black_words()
     filter_keywords_result = {}
     fb_flow_text = load_fb_flow_text(fb_flow_text_index_list, uid_list)
 
@@ -227,15 +232,16 @@ def get_filter_keywords(fb_flow_text_index_list, uid_list):
     return filter_keywords_result
     
 if __name__ == '__main__':
-    uid_list = ['100010739386824']
-    type = 'test'
-    if type == 'test':
-        timestamp =  datetime2ts(S_DATE_FB)
-    else:
-        timestamp = time.time()
-    fb_flow_text_index_list = get_facebook_flow_text_index_list(timestamp)    #获取不包括今天在内的最近7天的表的index_name
-    res = get_filter_keywords(fb_flow_text_index_list, uid_list)
-    for uid, filter_keywords in res.items():
-        print uid
-        for key, val in filter_keywords.items():
-            print key, val
+    # uid_list = ['100010739386824']
+    # type = 'test'
+    # if type == 'test':
+    #     timestamp =  datetime2ts(S_DATE_FB)
+    # else:
+    #     timestamp = time.time()
+    # fb_flow_text_index_list = get_facebook_flow_text_index_list(timestamp)    #获取不包括今天在内的最近7天的表的index_name
+    # res = get_filter_keywords(fb_flow_text_index_list, uid_list)
+    # for uid, filter_keywords in res.items():
+    #     print uid
+    #     for key, val in filter_keywords.items():
+    #         print key, val
+    load_black_words()

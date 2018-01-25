@@ -3,6 +3,7 @@
 import re
 import opencc
 import os
+import sys
 import time
 import csv
 from gensim import corpora
@@ -15,10 +16,18 @@ AB_PATH = os.path.join(abs_path, './data')
 
 cut_str = load_scws()
 
-cc = opencc.OpenCC('s2t', opencc_path='/usr/bin/opencc')
+# cc = opencc.OpenCC('s2t', opencc_path='/usr/bin/opencc')
+sys.path.append('../../trans/')
+from trans import trans, simplified2traditional, traditional2simplified
+
+
+
+
 emotions_words = load_emotion_words()
 emotions_words = [unicode(e, 'utf-8') for e in emotions_words]
-t_emotions_words = [cc.convert(e) for e in emotions_words]
+# t_emotions_words = [cc.convert(e) for e in emotions_words]
+t_emotions_words = [simplified2traditional(e) for e in emotions_words]
+
 emotions_words.extend(t_emotions_words)
 emotions_words = [w.encode('utf-8') for w in emotions_words]
 emotions_words_set = set(emotions_words)
