@@ -253,12 +253,14 @@ weibo_xnr_assessment_index_name= 'weibo_xnr_assessment'
 weibo_xnr_assessment_index_type = 'score'
 
 # 业务知识库
+weibo_date_remind_index_name_test = 'weibo_date_remind_test'
 weibo_date_remind_index_name = 'weibo_date_remind'
 weibo_date_remind_index_type = 'remind'
 
 weibo_sensitive_words_index_name = 'weibo_sensitive_words'
 weibo_sensitive_words_index_type = 'sensitive_words'
 
+weibo_hidden_expression_index_name_test = 'weibo_hidden_expression_test'
 weibo_hidden_expression_index_name = 'weibo_hidden_expression'
 weibo_hidden_expression_index_type = 'hidden_expression'
 
