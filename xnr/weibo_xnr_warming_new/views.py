@@ -91,6 +91,7 @@ def ajax_report_warming_content():
 	if request.method == 'POST':
 		print 'post method !!'
 		data = json.loads(request.data)
+		print 'data:',data
 		task_detail['report_type']=data['report_type'] #预警类型
 		# print 'report_type:',task_detail['report_type']
 		task_detail['report_time']=int(time.time())

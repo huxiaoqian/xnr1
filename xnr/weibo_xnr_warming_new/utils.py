@@ -615,19 +615,19 @@ def lookup_history_event_warming(xnr_user_no,start_time,end_time):
 def get_hashtag(today_datetime):
     
     weibo_flow_text_index_name=get_day_flow_text_index_list(today_datetime)
-    query_body_test={
-        'query':{
-            'match_all':{}
-        },
-        'size':999
-    }
-    weibo_result_test=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,body=query_body_test)['hits']['hits']
-    for item in weibo_result_test:
-        print 'item:',item['_source']
-        if item['_source']['hashtag']:
-            print 'hashtag_mark:',item['_source']['hashtag']
-        else:
-            pass
+    # query_body_test={
+    #     'query':{
+    #         'match_all':{}
+    #     },
+    #     'size':999
+    # }
+    # weibo_result_test=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,body=query_body_test)['hits']['hits']
+    # for item in weibo_result_test:
+    #     print 'item:',item['_source']
+    #     if item['_source']['hashtag']:
+    #         print 'hashtag_mark:',item['_source']['hashtag']
+    #     else:
+    #         pass
     query_body={
         'query':{
             'filtered':{
@@ -1031,6 +1031,7 @@ def report_warming_content(task_detail):
                 weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
                 try:
                     weibo_speech_result=es_xnr.get(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['mid'])['_source']
+                    report_dict['uid']=weibo_speech_result['uid']
                     weibo_list.append(weibo_speech_result)
                 except:
                     # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
@@ -1078,13 +1079,17 @@ def report_warming_content(task_detail):
     report_content['weibo_list']=weibo_list
 
     report_dict['report_content']=json.dumps(report_content)
-
+    
+    report_id=''
     if task_detail['report_type'] == u'言论':
         report_id=weibo_info[0]['mid']
     elif task_detail['report_type'] == u'人物':
-        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']+'_'+str(task_detail['report_time'])
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
     elif task_detail['report_type'] == u'事件':
-        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']+str(task_detail['report_time'])
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
+    elif task_detail['report_type'] == u'时间':
+        # print weibo_info
+        report_id=weibo_info[0]['mid']
 
 
     if weibo_list:
