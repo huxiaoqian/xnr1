@@ -42,7 +42,6 @@
     //获取dom文本
     var getText = function( el ){
         var s = el.textContent || el.innerText;
-        console.log(s)
         return s == null ? "" : s.replace( /^\s*(.*?)\s+$/, "$1");
     };
     view.tableExport = function(tableId, filename, type){
