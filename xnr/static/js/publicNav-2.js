@@ -1,3 +1,15 @@
+//-------------------颜色----------------------
+function createRandomItemStyle() {
+    return {
+        normal: {
+            color: 'rgb(' + [
+                Math.round(Math.random() * 128+127),
+                Math.round(Math.random() * 128+127),
+                Math.round(Math.random() * 128+127)
+            ].join(',') + ')'
+        }
+    };
+}
 function getDaysBefore($time) {
     var a=new Date(new Date(new Date().setDate(new Date().getDate()-Number($time))).setHours(0,0,0,0));
     var b=Date.parse(a)/1000;

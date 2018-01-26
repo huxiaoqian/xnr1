@@ -45,7 +45,7 @@
         return s == null ? "" : s.replace( /^\s*(.*?)\s+$/, "$1");
     };
     view.tableExport = function(tableId, filename, type){
-        var relDiv=$('#'+tableId).find('.post_center-every');
+        //var relDiv=$('#'+tableId).find('.post_center-every');
         var table=[];
         // $.each(relDiv,function (index,item) {
         //     if ($(item).find("input[name='printData']").is(':checked')){
@@ -56,7 +56,7 @@
         for (var t in wordCurrentData){
             table.push(wordCurrentData[t]);
         }
-        console.log(table)
+
         var doc = view.document,
             //table = doc.getElementById(tableId),
             charSet = doc.characterSet
@@ -151,13 +151,12 @@
                 mapb = [['<th>', '</th>'],['<td>', '</td>']],
                 flag = +!table.tHead,
                 com = 1 - flag;
-
             // for(var i=0, row; row = table.rows[i]; i++){
             for(var i=0, row; row = table[i]; i++){
                 flag = i > com ? 2 : flag;
                 office += maph[flag][0];
                 for(var j =0, col; col = row.cells[j]; j++){
-                    office += mapb[+!!flag][0]+ getText(col) +mapb[+!!flag][1];
+                    office += mapb[+!!flag][0]+ col.innerText.replace( /^\s*(.*?)\s+$/, "$1") +mapb[+!!flag][1];
                 }
                 office += maph[flag][1];
                 flag++;
