@@ -99,9 +99,9 @@ def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
     operation = Operation(account_name,password)
     
     try:
-    #print operation.share(_id, uid,text)
     
-        operation.do_retweet(_id)
+        #operation.do_retweet(_id)
+        operation.do_retweet(_id,text)
     
         mark = True
     except:
@@ -118,15 +118,15 @@ def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
     return mark
 
 # 关注
-def tw_follow(account_name, password, screen_name, uid, xnr_user_no, trace_type):
+def tw_follow(account_name, password, uid, xnr_user_no, trace_type):
 
     operation = Operation(account_name,password)
     
-    #try:
-    print operation.follow(screen_name)
-    mark = True
-    # except:
-    #     mark = False
+    try:
+        operation.follow(uid)
+        mark = True
+    except:
+        mark = False
     ###
     # ?????????  screen_name ? uid
     ####

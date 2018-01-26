@@ -16,7 +16,8 @@ from xnr.global_utils import es_xnr,weibo_user_warning_index_name_pre,weibo_user
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
-                             weibo_warning_corpus_index_name,weibo_warning_corpus_index_type
+                             weibo_warning_corpus_index_name,weibo_warning_corpus_index_type,\
+                             weibo_report_management_index_name,weibo_report_management_index_type
 
 
 
@@ -1003,9 +1004,10 @@ def report_warming_content(task_detail):
 
     weibo_list=[]
     user_list=[]
-
-    weibo_info=json.loads(task_detail['weibo_info'])
+    # print 'type:',type(task_detail['weibo_info']),task_detail['weibo_info']
+    weibo_info=task_detail['weibo_info']
     for item in weibo_info:
+        item['timestamp'] = int(item['timestamp'])
         flow_text_index_name = flow_text_index_name_pre + ts2datetime(item['timestamp'])
         try:
             weibo_result=es_flow_text.get(index=flow_text_index_name,doc_type=flow_text_index_type,id=item['mid'])['_source']
@@ -1028,7 +1030,7 @@ def report_warming_content(task_detail):
             elif task_detail['report_type']==u'言论':
                 weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
                 try:
-                    weibo_speech_result=es_xnr.get(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,id=item['mid'])['_source']
+                    weibo_speech_result=es_xnr.get(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['mid'])['_source']
                     weibo_list.append(weibo_speech_result)
                 except:
                     # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
@@ -1048,7 +1050,7 @@ def report_warming_content(task_detail):
                     print 'event_error!'
 
 
-    user_info=json.loads(task_detail['user_info'])
+    user_info=task_detail['user_info']
     if user_info:
         for uid in user_info:
             user=dict()
@@ -1084,9 +1086,14 @@ def report_warming_content(task_detail):
     elif task_detail['report_type'] == u'事件':
         report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']+str(task_detail['report_time'])
 
+
+    if weibo_list:
+        report_mark=True
+    else:
+        report_mark=False
     #预警上报后不再显示问题
 
-    if report_id:
+    if report_id and report_mark:
         try:
             es_xnr.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=report_id,body=report_dict)
             mark=True

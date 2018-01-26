@@ -781,29 +781,6 @@ function dialogue_show(data) {
         $('#successfail').modal('show');
     }
 }
-//加入语料库
-var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
-function joinlab(_this) {
-    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
-    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
-    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
-    $('#wordcloud').modal('show');
-}
-function joinWord() {
-    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
-    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='';
-    if (corpus_type=='主题语料'){tt=2};
-    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
-        theme_daily_name.push($(this).val());
-    });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num+
-        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+'&text='+wordTxt+
-        '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+'&like=0&create_type='+create_type;
-    public_ajax.call_request('get',corpus_url,postYES)
-}
 //评论
 function showInput(_this) {
     $(_this).parents('.post_perfect').find('.commentDown').show();

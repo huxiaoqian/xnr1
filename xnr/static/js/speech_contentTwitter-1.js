@@ -138,20 +138,19 @@ function weibo(data) {
                         time=getLocalTime(item.timestamp);
                     };
                     var rel_str=
-                        '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
-                        '        <div class="speak_center">'+
+                        '<div class="everySpeak " style="margin: 0 auto;width: 950px;text-align: left;">'+
+                        '        <div class="speak_center everyUser">'+
                         '            <div class="center_rel">'+
                         // '                <label class="demo-label">'+
                         // '                    <input class="demo-radio" type="checkbox" name="demo-checkbox">'+
                         // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         // '                </label>'+
                         '                <img src="'+img+'" alt="" class="center_icon">'+
-                        '                <a class="center_1" href="###">'+name+'</a>'+
+                        '                <a class="center_1 centerNAME" href="###">'+name+'</a>'+
                         '                <a class="tid" style="display: none;">'+item.tid+'</a>'+
-                        '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                        '                <a class="uid mainUID" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                        '                <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
-                        '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
+                        '                <a class="_id" style="display: none;">'+item._id+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '                <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                         '                <p class="allall1" style="display:none;">'+text+'</p>'+
@@ -166,9 +165,9 @@ function weibo(data) {
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
-                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-5" onclick="joinPolice(this,\'言论\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                         '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
-                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
+                        '                    <span class="cen3-6" onclick="oneUP(this,\'言论\')"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="回复内容"/>'+
@@ -216,20 +215,7 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-//一键上报
-function oneUP(_this) {
-    var info=getInfo(_this);
-    var allMent=[];
-    allMent.push(info[1]);
-    var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);
-    allMent.push(info[3]);allMent.push(info[4]);allMent.push(0);allMent.push(info[5]);
-    allMent.push(info[6]);allMent.push(info[7]);
 
-//[mid,text,timestamp,retweeted,like,comment
-    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=言论&xnr_user_no='+ID_Num+
-        '&uid='+info[0]+'&weibo_info='+allMent.join(',');
-    public_ajax.call_request('get',once_url,postYES)
-}
 //操作返回结果
 function postYES(data) {
     var f='操作成功';

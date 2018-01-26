@@ -15,7 +15,7 @@ from utils import get_submit_tweet, fb_save_to_tweet_timing_list, get_recommend_
 				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
 				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
 				get_unfollow_operate, get_private_operate, get_add_friends, get_confirm_friends,\
-                get_delete_friend
+                get_delete_friend, get_hot_recommend_tweets
 
 mod = Blueprint('facebook_xnr_operate', __name__, url_prefix='/facebook_xnr_operate')
 
@@ -33,7 +33,7 @@ def ajax_submit_daily_tweet():
 	#u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
     #u'跟随转发':'trace_post',u'智能发帖':'intel_post', u'信息监测':'info_detect'，u'预警': 'info_warning'
 	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-	task_detail['text'] = request.args.get('text','').encode('utf-8')
+	task_detail['text'] = request.args.get('text','').decode('utf-8')
 
 	mark = get_submit_tweet(task_detail)
 
@@ -68,12 +68,12 @@ def ajax_submit_timing_post_task():
 
     return json.dumps(mark)  # True False
 
-# 日常@用户推荐
-@mod.route('/daily_recommend_at_user/')
-def ajax_recommend_at_user():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    uid_nick_name_dict = get_recommend_at_user(xnr_user_no)
-    return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
+# # 日常@用户推荐
+# @mod.route('/daily_recommend_at_user/')
+# def ajax_recommend_at_user():
+#     xnr_user_no = request.args.get('xnr_user_no','')
+#     uid_nick_name_dict = get_recommend_at_user(xnr_user_no)
+#     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 
 
 # # 日常语料推荐
@@ -90,24 +90,30 @@ def ajax_recommend_at_user():
 '''
 
 # 热门@用户推荐
+#http://219.224.134.213:9999/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share
+
 @mod.route('/hot_sensitive_recommend_at_user/')
 def ajax_hot_sensitive_recommend_at_user():
-    sort_item = request.args.get('sort_item','')  # retweeted- 热点跟随  sensitive- 业务发帖  # 先按     sort_item = 'sensitive', sort_item_2 = 'timestamp'
+    sort_item = request.args.get('sort_item','')  # share- 热点跟随  sensitive- 业务发帖  # 先按     sort_item = 'sensitive', sort_item_2 = 'timestamp'
     uid_nick_name_dict = get_hot_sensitive_recommend_at_user(sort_item)
     return json.dumps(uid_nick_name_dict)  # {'uid1':'nick_name1','uid2':'nick_name2',...}
 
 
 # 热点跟随帖子推荐
+#http://219.224.134.213:9999/facebook_xnr_operate/hot_recommend_tweets/?xnr_user_no=FXNR0003&topic_field=军事类&sort_item=sensitive
+
 @mod.route('/hot_recommend_tweets/')
 def ajax_hot_recommend_tweets():
 
     xnr_user_no = request.args.get('xnr_user_no','') # 当前虚拟人 
     topic_field = request.args.get('topic_field','') # 默认...
-    sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, compute_status-按事件完成度
+    sort_item = request.args.get('sort_item','timestamp')  # timestamp-按时间, sensitive-按敏感度
     tweets = get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item)
     return json.dumps(tweets)
 
 # 热点跟随子观点分析的提交关键词任务
+#http://219.224.134.213:9999/facebook_xnr_operate/submit_hot_keyword_task/?xnr_user_no=FXNR0003&task_id=894173877414829&keywords_string=中共&submit_user=admin@qq.com
+
 @mod.route('/submit_hot_keyword_task/')
 def ajax_submit_hot_keyword_task():
     #mark = True
@@ -126,6 +132,8 @@ def ajax_submit_hot_keyword_task():
 
 
 # 子观点分析
+#http://219.224.134.213:9999/facebook_xnr_operate/hot_subopinion/?xnr_user_no=FXNR0003&task_id=894173877414829
+
 @mod.route('/hot_subopinion/')
 def ajax_hot_hot_subopinion():
     xnr_user_no = request.args.get('xnr_user_no','')  # 当前虚拟人
@@ -155,7 +163,7 @@ def ajax_comment_operate():
     task_detail = dict()
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['text'] = request.args.get('text','').encode('utf-8')
+    task_detail['text'] = request.args.get('text','').decode('utf-8')
     task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
@@ -169,7 +177,7 @@ def ajax_retweet_operate():
     task_detail = dict()
     task_detail['tweet_type'] = request.args.get('tweet_type','')
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['text'] = request.args.get('text','').encode('utf-8')
+    task_detail['text'] = request.args.get('text','').decode('utf-8')
     task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
