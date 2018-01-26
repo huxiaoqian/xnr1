@@ -5,9 +5,9 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from utils import show_personnal_warming,show_speech_warming,show_date_warming,show_event_warming,addto_warning_corpus	           
-				   
-				  #,report_warming_content,get_hashtag
+from utils import show_personnal_warming,show_speech_warming,show_date_warming,show_event_warming,addto_warning_corpus,\
+				  report_warming_content
+				  #,get_hashtag
 
 
 mod = Blueprint('weibo_xnr_warming_new', __name__, url_prefix='/weibo_xnr_warming_new')
@@ -85,22 +85,27 @@ def ajax_addto_warning_corpus():
 #事件涌现预警上报report_content=[user_list,weibo_list]
 #test:http://219.224.134.213:9209/weibo_xnr_warming/report_warming_content/?report_type=事件&xnr_user_no=WXNR0002&event_name=杨振宁95岁生日恢复中国国籍&user_info=5537979196,兰德科特,100,200*3969238480,后会无期25799,88,179*3302557313,东南老曹,600,50&weibo_info=4044828436797896,'欢迎杨振宁先生恢复中国国籍',1503450000,1071,250,55*4044828486221158,'欢迎杨振宁先生恢复中国国籍，转为中科院资深',1503450000,1071,250,55*4044828503513100,'欢迎杨振宁先生恢复中国国籍，转为中科院资深',1503450000,1071,250,55
 #备注：text中的'#'字符用'%23'代替
-@mod.route('/report_warming_content/')
+@mod.route('/report_warming_content/', methods=['POST'])
 def ajax_report_warming_content():
 	task_detail=dict()
-	task_detail['report_type']=request.args.get('report_type','') #预警类型
-	task_detail['report_time']=int(time.time())
-	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
-	task_detail['event_name']=request.args.get('event_name','')    #事件名称
-	task_detail['uid']=request.args.get('uid','')                  #人物预警uid
+	if request.method == 'POST':
+		print 'post method !!'
+		data = json.loads(request.data)
+		task_detail['report_type']=data['report_type'] #预警类型
+		# print 'report_type:',task_detail['report_type']
+		task_detail['report_time']=int(time.time())
+		task_detail['xnr_user_no']=data['xnr_user_no']
+		task_detail['event_name']=data['event_name']    #事件名称
+		task_detail['uid']=data['uid']                 #人物预警uid
 
-	task_detail['report_id']=request.args.get('report_id','')    #上报内容的id
+		task_detail['report_id']=data['report_id']   #上报内容的id
 
-	#获取主要参与用户信息
-	task_detail['user_info']=request.args.get('user_info','')   #user_info=[uid,uid,……]	
-	#获取典型微博信息
-	task_detail['weibo_info']=request.args.get('weibo_info','')   #weibo_info=[{'mid':*,'timestamp':*},{'mid':*,'timestamp':*},……]
+		#获取主要参与用户信息
+		task_detail['user_info']=data['user_info']   #user_info=[uid,uid,……]	
+		#获取典型微博信息
+		task_detail['weibo_info']=data['weibo_info']   #weibo_info=[{'mid':*,'timestamp':*},{'mid':*,'timestamp':*},……]
 
+	# print 'type',type(task_detail),task_detail
 	results=report_warming_content(task_detail)
 	return json.dumps(results)
 

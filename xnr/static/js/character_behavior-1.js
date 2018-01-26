@@ -99,8 +99,6 @@ function weibo(data) {
                                 '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
                                 '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
                                 '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                                '   <a class="sensitive" style="display: none;">'+item.sensitive+'</a>'+
-                                '   <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                                 '   <span class="cen3-1" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;&nbsp;'+
                                 '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                                 '   <p class="allall1" style="display:none;">'+text+'</p>'+
@@ -110,7 +108,7 @@ function weibo(data) {
                                 '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
                                 '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                                 '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                                '       <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                                '       <span class="cen3-5" onclick="joinPolice(this,\'人物\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                                 '       <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                                 '    </div>'+
                                 '    <div class="commentDown" style="width: 100%;display: none;">'+
@@ -135,9 +133,10 @@ function weibo(data) {
                         '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '                <a class="center_1" href="###">'+nameuid+'</a>'+
+                        '                <a class="center_1 centerNAME" href="###">'+nameuid+'</a>'+
                         '                <a class="mainUID" style="display: none;">'+row.uid+'</a>'+
-                        '                <a onclick="oneUP(this)" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                        '                <a class="_id" style="display: none;">'+row._id+'</a>'+
+                        '                <a onclick="oneUP(this,\'人物\')" class="report" style="margin-left: 50px;cursor: pointer;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '           <div>'+str+'</div>'+
                         '        </div>'+
@@ -150,19 +149,7 @@ function weibo(data) {
     });
     $('#weiboContent p').slideUp(30);
 };
-//查看全文
-// function allWord(_this) {
-//     var a=$(_this).attr('data-all');
-//     if (a==0){
-//         $(_this).text('收起');
-//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().html());
-//         $(_this).attr('data-all','1');
-//     }else {
-//         $(_this).text('查看全文');
-//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().next().html());
-//         $(_this).attr('data-all','0');
-//     }
-// }
+
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
     $('#weiboContent p').show();
@@ -192,8 +179,6 @@ $('#sure').on('click',function () {
         public_ajax.call_request('get',weiboUrl,weibo);
     }
 });
-
-
 // 转发===评论===点赞
 function retComLike(_this) {
     var mid=$(_this).parents('.center_rel').find('.mid').text();
@@ -226,33 +211,7 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-//一键上报
-function oneUP(_this) {
-    //[mid,text,timestamp,retweeted,like,comment]
-    var len=$(_this).parents('.everyUser').find('.center_rel');
-    if (len){
-        var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
-        var dataStr='';
-        for (var i=0;i<len.length;i++){
-            var alldata=[];
-            var mid = $(len[i]).find('.mid').text();alldata.push(mid);
-            var txt=$(len[i]).find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');alldata.push(txt);
-            var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
-            var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
-            var comment = $(len[i]).find('.comment').text();alldata.push(comment);
-            var sensitive = $(len[i]).find('.sensitive').text();alldata.push(sensitive);
-            var sensitiveWords = $(len[i]).find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
-            dataStr+=alldata.join(',').toString();
-            if (i!=len.length-1){dataStr+='*'}
-        }
-        var once_url='/weibo_xnr_warming/report_warming_content/?report_type=人物&xnr_user_no='+ID_Num+'&uid='+mainUID+
-            '&weibo_info='+dataStr;
-        public_ajax.call_request('get',once_url,postYES);
-    }else {
-        $('#pormpt p').text('微博内容为空，无法上报。');
-        $('#pormpt').modal('show');
-    }
-}
+
 //操作返回结果
 function postYES(data) {
     var f='';
@@ -263,65 +222,4 @@ function postYES(data) {
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
-}
-
-//导出文件
-function exportTableToCSV(filename) {
-    var str =  '';
-    for (var k in currentData){
-        var name='',time='',type='',user='',uid='',txt='';
-        if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
-            name='暂无';
-        }else {
-            name=currentData[k].event_name;
-        };
-        if (currentData[k].report_time==''||currentData[k].report_time=='unknown'||currentData[k].report_time=='null'){
-            time='暂无';
-        }else {
-            time=getLocalTime(currentData[k].report_time);
-        };
-        if (currentData[k].report_type==''||currentData[k].report_type=='unknown'||currentData[k].report_type=='null'){
-            type='暂无';
-        }else {
-            type=currentData[k].report_type;
-        };
-        if (currentData[k].uid==''||currentData[k].uid=='unknown'||currentData[k].uid=='null'){
-            uid='暂无';
-        }else {
-            uid=currentData[k].uid;
-        };
-        if (currentData[k].xnr_user_no==''||currentData[k].xnr_user_no=='unknown'||currentData[k].xnr_user_no=='null'){
-            user='暂无';
-        }else {
-            user=currentData[k].xnr_user_no;
-        };
-        if (currentData[k].report_content['weibo_list'].length==0){
-            txt='暂无内容';
-        }else {
-            $.each(currentData[k].report_content['weibo_list'],function (index,item) {
-                if (item.text==''||item.text=='null'||item.text=='unknown'){
-                    txt='暂无内容';
-                }else {
-                    txt=item.text;
-                };
-            })
-        };
-        str+='上报名称：'+name+'\n上报时间：'+time+'\n上报类型：'+type+'\n虚拟人：'+user+'\n人物UID：'+uid+
-            '\n'+'上报内容：'+txt+'\n\n\n';
-    };
-
-    str =  encodeURIComponent(str);
-    csvData = "data:text/csv;charset=utf-8,\ufeff"+str;
-    $(this).attr({
-        'download': filename,
-        'href': csvData,
-        'target': '_blank'
-    });
-    // $('#pormpt p').text('素材导出成功。');
-    // $('#pormpt').modal('show');
-}
-
-$("a[id='output1']").on('click', function (event) {
-    filename="上报数据列表EXCEL.csv";
-    exportTableToCSV.apply(this, [filename]);
-});
+};

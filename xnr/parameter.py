@@ -130,9 +130,9 @@ PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
 #FB & TW 属性计算
-FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_facebook'
-TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/domain_twitter'
-FB_TW_TOPIC_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/topic_domain_facebook_twitter_v1/topic'
+FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
+TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'
+FB_TW_TOPIC_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/topic'
 
 MID_VALUE = 500      #查询活跃用户数量
 
@@ -180,11 +180,11 @@ task_source_ch2en = {u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'�
 #facebook
 fb_domain_ch2en_dict = {u'高校':'university',u'机构':'admin',u'媒体':'media',u'民间组织':'folkorg',\
                         u'法律机构及人士':'lawyer',u'政府机构及人士':'politician',u'媒体人士':'mediaworker',\
-                        u'活跃人士':'activer',u'其他':'other',u'商业人士':'business'}
+                        u'活跃人士':'active',u'其他':'other',u'商业人士':'business'}
                         
 fb_domain_en2ch_dict = {'university':u'高校','admin':u'机构','media':u'媒体',\
                         'folkorg':u'民间组织','lawyer':u'法律机构及人士','politician':u'政府机构及人士',\
-                        'mediaworker':u'媒体人士','activer':u'活跃人士','other':u'其他','business':u'商业人士'}               
+                        'mediaworker':u'媒体人士','active':u'活跃人士','other':u'其他','business':u'商业人士'}               
 
 #facebook&twitter
 fb_tw_topic_en2ch_dict = {'life':u'其他类','law':u'民生类_法律','computer':u'科技类','house':u'民生类_住房',\
