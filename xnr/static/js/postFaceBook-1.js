@@ -1,7 +1,7 @@
 var xnrUser=ID_Num;
 //@用户推荐
-var recommendUrl='/facebook_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
-public_ajax.call_request('get',recommendUrl,recommendlist);
+// var recommendUrl='/facebook_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+// public_ajax.call_request('get',recommendUrl,recommendlist);
 function recommendlist(data) {
     var str1='',str2='',b=0;
     for(var a in data){
@@ -36,14 +36,24 @@ function recommendlist(data) {
 $('#container .type_page #myTabs a').on('click',function () {
     var arrow=$(this).attr('href'),arrowName='';
     if (arrow == '#everyday'){
-        arrowName='@用户推荐';
-        recommendUrl='/facebook_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
+        //arrowName='@用户推荐';
+        // recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?xnr_user_no='+xnrUser;
+        //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=timestamp';
+        $('#container .post_post .post-2 #post-2-content').width('100%');
+        $('.dingshi').css({'marginLeft':'20%'});
+        $('#user_recommend').hide();
     }else if (arrow=='#hot'){
         arrowName='@用户推荐';
+        $('#container .post_post .post-2 #post-2-content').width('736px');
+        $('.dingshi').css({'marginLeft':'15px'});
+        $('#user_recommend').show();
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
-        recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=retweeted';
+        recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share';
     }else if (arrow=='#business'){
         arrowName='@敏感用户推荐';
+        $('#container .post_post .post-2 #post-2-content').width('736px');
+        $('.dingshi').css({'marginLeft':'15px'});
+        $('#user_recommend').show();
         public_ajax.call_request('get',busWeiboUrl,businessWeibo);
         recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
     }else if (arrow=='#reportNote'){
@@ -417,7 +427,7 @@ function addSuccess(data) {
 
 //=======正常发帖=============
 //
-var operateType;
+var operateType,actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='daily_post';
@@ -426,6 +436,7 @@ function obtain(t) {
     }else if (t== 'c'){
         operateType='business_post';
     }
+    actType=$('#myTabs li.active a').text().toString().trim();
 }
 $('#sure_post').on('click',function () {
     obtain('o');
@@ -439,7 +450,7 @@ $('#sure_post').on('click',function () {
         $('#pormpt').modal('show');
         return false;
     };
-    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+txt;
+    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&xnr_user_no='+xnrUser+'&text='+txt;
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
@@ -537,11 +548,12 @@ function defalutWords(data) {
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
                         '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
                         '               <span class="cen3-1" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
-                        '               <span class="cen3-2" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span class="cen3-2" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-4" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
                         '               <span class="cen3-5" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
@@ -668,7 +680,7 @@ function hotWeibo(data) {
                 formatter: function (value, row, index) {
                     var name,txt,img;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
-                        name=row.uid;
+                        name=row.fid;
                     }else {
                         name=row.nick_name;
                     };
@@ -689,8 +701,9 @@ function hotWeibo(data) {
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
                         '           <span class="time" style="font-weight: 900;color: blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         // '           <div class="center_3_top" >' +
@@ -704,7 +717,7 @@ function hotWeibo(data) {
                         // '               <span onclick="contantREM(this)"><i class="icon icon-reorder" title="内容推荐"></i>&nbsp;&nbsp;内容推荐</span>'+
                         '               <span onclick="related(this)" title="事件子观点及相关微博"><i class="icon icon-stethoscope"></i>&nbsp;&nbsp;事件子观点及相关微博</span>'+
                         '               <span onclick="copyPost(this)" title="复制"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
-                        '               <span onclick="retweet(this)" title="分享数"><i class="icon icon-share"></i>&nbsp;&nbsp;分享&nbsp;（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span onclick="retweet(this)" title="分享数"><i class="icon icon-share"></i>&nbsp;&nbsp;分享&nbsp;（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '               <span onclick="showInput(this)" title="评论数"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论&nbsp;（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span onclick="thumbs(this)" title="喜欢"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
                         '               <span class="cen3-5" title="私信" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
@@ -739,7 +752,7 @@ function hotWeibo(data) {
 
 //新建内容推荐  和  提交子观点
 function submitViews(_this) {
-    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var taskID=$(_this).parents('.post_perfect').find('.fid').text();
     var vale=$(_this).prev().val();
     if (vale==''){
         $('#pormpt p').text('观点不能为空。');
@@ -747,7 +760,7 @@ function submitViews(_this) {
     }else {
         var conViewsUrl='/facebook_xnr_operate/submit_hot_keyword_task/?xnr_user_no='+xnrUser+'&task_id='+taskID+'&keywords_string='+vale.toString().replace(/,/g,'，')+
             '&submit_user='+admin;
-        public_ajax.call_request('get',conViewsUrl,conViews);
+            public_ajax.call_request('get',conViewsUrl,conViews);
     }
 }
 function conViews(data) {
@@ -760,33 +773,9 @@ function conViews(data) {
     $('#pormpt p').text(x);
     $('#pormpt').modal('show');
 }
-//加入语料库
-var wordUid,wordMid,wordTxt,wordRetweeted,wordComment;
-function joinlab(_this) {
-    wordMid = $(_this).parents('.post_perfect').find('.mid').text();
-    wordUid = $(_this).parents('.post_perfect').find('.uid').text();
-    wordTxt = $(_this).parents('.post_perfect').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    wordRetweeted = $(_this).parents('.post_perfect').find('.forwarding').text();
-    wordComment = $(_this).parents('.post_perfect').find('.comment').text();
-    $('#wordcloud').modal('show');
-}
-function joinWord() {
-    var create_type=$('#wordcloud input:radio[name="xnr"]:checked').val();
-    var corpus_type=$('#wordcloud input:radio[name="theday"]:checked').val();
-    var theme_daily_name=[],tt='11';
-    if (corpus_type=='主题语料'){tt=22};
-    $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
-        theme_daily_name.push($(this).val());
-    });
-    var corpus_url='/weibo_xnr_monitor/addto_weibo_corpus/?xnr_user_no='+ID_Num +
-        '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&text='+wordTxt+ '&uid='+wordUid+'&mid='+wordMid+'&retweeted='+wordRetweeted+'&comment='+wordComment+
-        '&like=0&create_type='+create_type;
-    public_ajax.call_request('get',corpus_url,postYES);
-}
 //内容推荐
 function contantREM(_this) {
-    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var taskID=$(_this).parents('.post_perfect').find('.fid').text();
     var calNot_url='/facebook_xnr_operate/hot_content_recommend/?xnr_user_no='+xnrUser+'&task_id='+taskID;
     public_ajax.call_request('get',calNot_url,calNot);
 }
@@ -909,7 +898,7 @@ function simliar(_this) {
 }
 //事件子观点及相关微博
 function related(_this) {
-    var taskID=$(_this).parents('.post_perfect').find('.mid').text();
+    var taskID=$(_this).parents('.post_perfect').find('.fid').text();
     var relatedUrl='/facebook_xnr_operate/hot_subopinion/?xnr_user_no='+xnrUser+'&task_id='+taskID;
     public_ajax.call_request('get',relatedUrl,relatedWEIbo);
 }
@@ -1050,14 +1039,15 @@ function businessWeibo(data) {
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>：'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="center_2">'+txt+
                         '           </span>'+
                         '           <div class="center_3">'+
                         // '               <span class="cen3-4" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-5" onclick="copyPost(this)"><i class="icon icon-copy"></i>&nbsp;&nbsp;复制</span>'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+row.share+'</b>）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
                         '               <span class="cen3-5" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
@@ -1229,7 +1219,9 @@ eventList([{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:'test'},{a:
 function lookType(showType) {
     $('#intelligenceTabs li').eq(0).removeClass('active');
     $('.radyType1').addClass('active').show();
+    $('.radyType2').show();
     $('.radyType3').show();
+    $('.radyType4').show();
     $('.radyType5').show();
     $('.radyType6').show();
     $('#z-0').eq(0).removeClass('active');

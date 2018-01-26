@@ -8,7 +8,9 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
                         fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
                         facebook_user_index_name,facebook_user_index_type,\
-                        twitter_user_index_name, twitter_user_index_type
+                        twitter_user_index_name, twitter_user_index_type,\
+                        fb_bci_index_name_pre, fb_bci_index_type,\
+                        facebook_flow_text_index_name_pre
 from parameter import MAX_SEARCH_SIZE,DAY
 from global_config import S_TYPE,S_DATE_BCI
 from time_utils import ts2datetime
@@ -84,6 +86,14 @@ def user_no2_id(user_no):
 
 def user_no2wxbot_id(user_no):
     task_id = 'WXXNR'+str('%04d'%user_no)  #X位数 WXXNR0001
+    return task_id
+
+def user_no2fb_id(user_no):
+    task_id = 'FXNR'+str('%04d'%user_no)  #五位数 FXNR0001
+    return task_id
+
+def user_no2tw_id(user_no):
+    task_id = 'TXNR'+str('%04d'%user_no)  #五位数 FXNR0001
     return task_id
 
 def wxbot_id2user_no(task_id):
@@ -326,6 +336,29 @@ def get_influence_relative(uid,influence):
     influence_relative = influence/user_index_max
 
     return influence_relative
+
+## facebook得到影响力相对值
+def get_fb_influence_relative(uid,influence):
+    if S_TYPE == 'test':
+        datetime = S_DATE_BCI
+    else:
+        datetime = ts2datetime(time.time()-DAY)
+    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    fb_bci_index_name = fb_bci_index_name_pre + new_datetime
+    
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{'user_index':{'order':'desc'}}
+    }
+    results = es_xnr.search(index=fb_bci_index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
+    user_index_max = results[0]['_source']['user_index']
+    if not user_index_max:  #最大的为0，所有的都为0
+        return 0
+    else:
+        influence_relative = influence/user_index_max
+        return influence_relative
 
 def fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
 

@@ -80,7 +80,7 @@ function weibo(data){
             {                                                          //循环打印数组值
                 oTBody.insertRow(i);
                 html_c =
-                    '<div class="everyEvent" style="margin:0 auto;text-align: left;">'+
+                    '<div class="everyEvent everyUser" style="margin:0 auto;text-align: left;">'+
                     '        <div class="event_center">'+
                     '            <div style="margin:10px;">'+
                     // '                <label class="demo-label">'+
@@ -88,8 +88,9 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
-                    '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                    '                <a class="center_1 centerNAME">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
+                    '                <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
+                    '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
                     '                <div class="event-1">'+
@@ -145,7 +146,7 @@ function weibo(data){
                 {                                                          //循环打印数组值
                     oTBody.insertRow(i);
                     html_c =
-                        '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
+                        '<div class="everyEvent everyUser" style="margin:0 auto 20px;text-align: left;">'+
                         '        <div class="event_center">'+
                         '            <div style="margin:10px;">'+
                         // '                <label class="demo-label">'+
@@ -153,8 +154,9 @@ function weibo(data){
                         // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                         // '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
-                        '                <a class="center_1">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
-                        '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                        '                <a class="center_1 centerNAME">'+dataArray[i].event_name.replace(/&/g,'#')+'</a>'+
+                        '                <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
+                        '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
                         '            <div class="centerdetails" style="padding-left:40px;">'+
                         '                <div class="event-1">'+
@@ -217,7 +219,7 @@ function weibo(data){
                 oTBody.insertRow(i);
                 oTBody.rows[i].insertCell(0);
                 html_c =
-                    '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
+                    '<div class="everyEvent everyUser" style="margin:0 auto 20px;text-align: left;">'+
                     '        <div class="event_center">'+
                     '            <div style="margin:10px;">'+
                     // '                <label class="demo-label">'+
@@ -225,8 +227,9 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
-                    '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                    '                <a class="center_1 centerNAME">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
+                    '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
+                    '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
                     '                <div class="event-1">'+
@@ -279,7 +282,7 @@ function weibo(data){
                 oTBody.insertRow(i);
                 oTBody.rows[i].insertCell(0);
                 html_c =
-                    '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
+                    '<div class="everyEvent everyUser" style="margin:0 auto 20px;text-align: left;">'+
                     '        <div class="event_center">'+
                     '            <div style="margin:10px;">'+
                     // '                <label class="demo-label">'+
@@ -287,8 +290,9 @@ function weibo(data){
                     // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                     // '                </label>'+
                     '                <img src="/static/images/post-6.png" class="center_icon">'+
-                    '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
-                    '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                    '                <a class="center_1 centerNAME">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
+                    '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
+                    '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
                     '            <div class="centerdetails" style="padding-left:40px;">'+
                     '                <div class="event-1">'+
@@ -348,7 +352,7 @@ function weibo(data){
             oTBody.insertRow(i);
             oTBody.rows[i].insertCell(0);
             html_c =
-                '<div class="everyEvent" style="margin:0 auto 20px;text-align: left;">'+
+                '<div class="everyEvent everyUser" style="margin:0 auto 20px;text-align: left;">'+
                 '        <div class="event_center">'+
                 '            <div style="margin:10px;">'+
                 // '                <label class="demo-label">'+
@@ -356,8 +360,9 @@ function weibo(data){
                 // '                    <span class="demo-checkbox demo-radioInput"></span>'+
                 // '                </label>'+
                 '                <img src="/static/images/post-6.png" class="center_icon">'+
-                '                <a class="center_1">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
-                '                <a class="report" onclick="oneUP(this)" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
+                '                <a class="center_1 centerNAME">'+dataArray[i+a].event_name.replace(/&/g,'#')+'</a>'+
+                '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
+                '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                 '            </div>'+
                 '            <div class="centerdetails" style="padding-left:40px;">'+
                 '                <div class="event-1">'+
@@ -574,8 +579,6 @@ function mainWeibo(_data,idx) {
                         '   <a class="mid" style="display: none;">'+row.mid+'</a>'+
                         '   <a class="uid" style="display: none;">'+row.uid+'</a>'+
                         '   <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
-                        '   <a class="sensitive" style="display: none;">'+row.sensitive+'</a>'+
-                        '   <a class="sensitiveWords" style="display: none;">'+row.sensitive_words_string+'</a>'+
                         '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                         '   <p class="allall1" style="display:none;">'+text+'</p>'+
                         '   <p class="allall2" style="display:none;">'+text2+'</p>'+
@@ -627,50 +630,6 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-
-//上报
-function oneUP(_this) {
-// #user_dict=[uid,nick_name,fansnum,friendsnum]
-// #weibo_dict=[mid,text,timestamp,retweeted,like,comment]
-    var event_name=$(_this).prev().text();
-    //人物  没有找到匹配的记录
-    var user=$(_this).parents('.everyEvent').find('.mainJoin').children('tbody').children('tr');
-    var userString='';
-    if ($(user).eq(0).children('td').eq(0).text()!='没有找到匹配的记录'){
-        for (var i=0;i<user.length;j++){
-            var alldata=[];
-            var uid = $(user[i]).children('td').eq(1);alldata.push(uid);
-            var nick_name=$(user[i]).children('td').eq(2);alldata.push(nick_name);
-            var fansnum = $(user[i]).children('td').eq(4);alldata.push(fansnum);
-            var friendsnum = $(user[i]).children('td').eq(5);alldata.push(friendsnum);
-            weiboString+=alldata.join(',').toString();
-            if (i!=user.length-1){userString+='*'}
-        }
-    }
-    //微博
-    var ss=$(_this).parents('.everyEvent').find('.mainWeibo').children('tbody').children('tr');
-    var len=$(_this).parents('.everyEvent').find('.mainWeibo').find('.center_rel');
-    var weiboString='';
-    if ($(ss).eq(0).children('td').eq(0).text()!='没有找到匹配的记录'){
-        for (var i=0;i<len.length;i++){
-            var alldata=[];
-            var mid = $(len[i]).find('.mid').text();alldata.push(mid);
-            var txt=$(len[i]).find('.center_2').text().toString().replace(/\#/g,'%23').replace(/\&/g,'%26');alldata.push(txt);
-            var timestamp = $(len[i]).find('.timestamp').text();alldata.push(timestamp);
-            var forwarding = $(len[i]).find('.forwarding').text();alldata.push(forwarding);alldata.push(0);
-            var comment = $(len[i]).find('.comment').text();alldata.push(comment);
-            var sensitive = $(len[i]).find('.sensitive').text();alldata.push(sensitive);
-            var sensitiveWords = $(len[i]).find('.sensitiveWords').text().toString().replace(/\&/g,'%26');alldata.push(sensitiveWords);
-            weiboString+=alldata.join(',').toString();
-            if (i!=len.length-1){weiboString+='*'}
-        }
-    }
-    //=======URL======
-    var upload_url='/weibo_xnr_warming/report_warming_content/?report_type=事件'+'&xnr_user_no='+ID_Num+'&event_name='+
-        event_name+'&user_info='+userString+'&weibo_info='+weiboString;
-    public_ajax.call_request('get',upload_url,postYES);
-}
-
 //操作返回结果
 function postYES(data) {
     var f='';

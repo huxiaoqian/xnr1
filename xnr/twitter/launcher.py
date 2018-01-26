@@ -20,6 +20,7 @@ class Launcher():
 		self.display.start()
 	def login(self):
 		driver = webdriver.Firefox()
+		#driver = webdriver.Chrome()
 		driver.get('https://twitter.com/login')
 		time.sleep(3)
 		driver.find_element_by_xpath('//input[@class="js-username-field email-input js-initial-focus"]').send_keys(self.username)

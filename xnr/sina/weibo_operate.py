@@ -330,7 +330,7 @@ def execute():
     输入发布内容（和rank）
     :return:
     """
-    xnr = SinaLauncher('weiboxnr04@126.com', 'xnr123456')
+    xnr = SinaLauncher('weiboxnr04@126.com', 'xnr1234567')
     xnr.login()
 
     user = SinaOperateAPI(xnr.uid)
