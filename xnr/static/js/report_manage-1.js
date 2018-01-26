@@ -51,7 +51,6 @@ if(flagType == 3){//微信
             $('#end_1').hide();
             $('.sureTime').hide();
             reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
-            console.log(reportDefaul_url)
             public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
         }
     });
@@ -93,7 +92,7 @@ function reportDefaul(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,25,35],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -117,10 +116,10 @@ function reportDefaul(data) {
                 formatter: function (value, row, index) {
                     var artical=row.report_content.weibo_list,str='';
                     if (artical.length==0){
-                        str='<p style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</p>';
+                        str='<div style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</div>';
                     }else {
                         $.each(artical,function (index,item) {
-                            var text,time,name,img,row;
+                            var text,time,name,img,row,text2,all;
                             if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
                                 name=item.uid||'未命名';
                             }else {
@@ -151,8 +150,9 @@ function reportDefaul(data) {
                                         all='none';
                                     }
                                     for (var f of keywords){
-                                        text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                        rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                                     }
+                                    text2=rrr;
                                 }else {
                                     text=item.text;
                                     if (txt.length>=160){
@@ -249,6 +249,7 @@ function reportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.person p').slideUp(300);
 }
 // 复制了一份上面的函数给微信
 function WXreportDefaul(data) {
@@ -260,7 +261,7 @@ function WXreportDefaul(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,25,35],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -355,6 +356,7 @@ function WXreportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.person p').slideUp(300);
 }
 //=========
 
@@ -400,6 +402,7 @@ function deltPointData(_this) {
 //切换类型
 var types=[];
 $('.type2 .demo-label').on('click',function () {
+    $('.person p').show();
     var thisType=$(this).attr('value');
     $(".type2 input:checkbox:checked").each(function (index,item) {
         types.push($(this).val());
@@ -407,36 +410,6 @@ $('.type2 .demo-label').on('click',function () {
     var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
-
-//转发===评论===点赞
-// function retComLike(_this) {
-//     var mid=$(_this).parents('.post_center-every').find('.mid').text();
-//     var middle=$(_this).attr('type');
-//     var opreat_url;
-//     if (middle=='get_weibohistory_like'){
-//         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
-//         public_ajax.call_request('get',opreat_url,postYES);
-//     }else if (middle=='get_weibohistory_comment'){
-//         $(_this).parents('.post_center-every').find('.commentDown').show();
-//     }else {
-//         var txt=$(_this).parents('.post_center-every').find('.center_2').text();
-//         if (txt=='暂无内容'){txt=''};
-//         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
-//         public_ajax.call_request('get',opreat_url,postYES);
-//     }
-// }
-// function comMent(_this){
-//     var txt = $(_this).prev().val();
-//     var mid = $(_this).parents('.post_center-every').find('.mid').text();
-//     if (txt!=''){
-//         var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
-//         public_ajax.call_request('get',post_url,postYES)
-//     }else {
-//         $('#pormpt p').text('评论内容不能为空。');
-//         $('#pormpt').modal('show');
-//     }
-// }
-
 //操作返回结果
 function postYES(data) {
     var f='';
@@ -583,7 +556,9 @@ function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
 };
 //导出word
 $('#output2').on('click',function () {
-    changeImgToDataurl();
+    // location.href='/static/test.docx'
+    window.open('/static/test.docx');
+    // changeImgToDataurl();
 });
 var img64str=''
 function changeImgToDataurl(){
