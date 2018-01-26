@@ -44,14 +44,14 @@ $('#container .type_page #myTabs a').on('click',function () {
     }else if (arrow=='#hot'){
         arrowName='@用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
-        $('.dingshi').css({'marginLeft':'50px'});
+        $('.dingshi').css({'marginLeft':'15px'});
         $('#user_recommend').show();
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
         recommendUrl='/twitter_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share';
     }else if (arrow=='#business'){
         arrowName='@敏感用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
-        $('.dingshi').css({'marginLeft':'50px'});
+        $('.dingshi').css({'marginLeft':'15px'});
         $('#user_recommend').show();
         public_ajax.call_request('get',busWeiboUrl,businessWeibo);
         recommendUrl='/twitter_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
