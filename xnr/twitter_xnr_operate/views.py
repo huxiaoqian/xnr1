@@ -181,7 +181,7 @@ def ajax_retweet_operate():
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
     mark = get_retweet_operate(task_detail)
-
+    print 'task_detail...',task_detail
     return json.dumps(mark)
 
 
