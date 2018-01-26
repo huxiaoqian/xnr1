@@ -255,13 +255,13 @@ function seeDesGroup(name,midUrl_1,midUrl_2) {
     $('.titleMain').text(name);
 }
 function DesGroup_1(data) {
-    var desc=data['description'],des='';
-    if (desc==''||desc=='null'||desc=='unknown'||!desc){
-        des='无描述';
-    }else {
-        des = desc;
-    };
-    $('.allGroup_div #_gd').text(des);
+    //var desc=data['description'],des='';
+    // if (desc==''||desc=='null'||desc=='unknown'||!desc){
+    //     des='无描述';
+    // }else {
+    //     des = desc;
+    // };
+    //$('.allGroup_div #_gd').text(des);
     character_topic(data['role_distribute'],'gd-2','角色分类');
     character_topic(data['topic_preference'],'gd-3','话题偏好');
     words(data['word_preference']);
@@ -330,17 +330,6 @@ function character_topic(data,box,title) {
     myChart.setOption(option);
 }
 //话题偏好
-function createRandomItemStyle() {
-    return {
-        normal: {
-            color: 'rgb(' + [
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160),
-                Math.round(Math.random() * 160)
-            ].join(',') + ')'
-        }
-    };
-}
 function words(data) {
     var word=[];
     $.each(data,function (index,item) {
@@ -556,9 +545,9 @@ function refresh(domainName,description,remark,create_type,word_user) {
 }
 function sureResh() {
     $$new='1';
-    var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?domain_name='+rr$_1+
+    var upNew_url='/weibo_xnr_knowledge_base_management/update_domain/?domain_name='+rr$_1+
         '&description='+rr$_2+'&submitter='+admin+'&remark='+rr$_3+
-        '&create_type='+rr$_4+'&'+labType_list[create_type]+'='+rr$_5;
+        '&create_type='+rr$_4+'&'+labType_list[rr$_4]+'='+rr$_5;
     public_ajax.call_request('get',upNew_url,successFail);
 }
 //删除

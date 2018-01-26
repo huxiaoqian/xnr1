@@ -86,10 +86,16 @@ def get_role_sort_list(domain_name):
     domain_pinyin = pinyin.get(domain_name, format='strip',delimiter='_')
     try:
         es_result = es.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=domain_pinyin)['_source']
+        print 'es_result'
+        print es_result
         role_sort_list_en = json.loads(es_result['role_distribute'])
+        print 'role_sort_list_en'
+        print role_sort_list_en
         role_sort_list_zh = []
         for item in role_sort_list_en:
             role_zh = fb_domain_en2ch_dict[item[0]]
+            print 'role_zh'
+            print role_zh
             role_sort_list_zh.append(role_zh)
         return role_sort_list_zh
     except:

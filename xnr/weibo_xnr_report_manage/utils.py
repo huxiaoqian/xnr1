@@ -28,6 +28,7 @@ def show_report_content():
     results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
     result=[]
     for item in results:
+        item['_source']['_id']=item['_id']
         item['_source']['report_content']=json.loads(item['_source']['report_content'])
         result.append(item['_source'])
     return result
@@ -55,6 +56,7 @@ def show_report_typecontent(report_type):
         results=es_xnr.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
         result=[]
         for item in results:
+            item['_source']['_id']=item['_id']    
             item['_source']['report_content']=json.loads(item['_source']['report_content'])
             result.append(item['_source'])
     else:

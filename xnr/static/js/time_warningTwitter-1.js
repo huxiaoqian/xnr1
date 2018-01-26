@@ -500,31 +500,6 @@ function comMent(_this){
         $('#pormpt').modal('show');
     }
 }
-
-//上报
-function oneUP(_this) {
-// #user_dict=[uid,nick_name,fansnum,friendsnum]
-// #weibo_dict=[mid,text,timestamp,retweeted,like,comment]
-    var info=[];
-    var uid = $(_this).parents('.center_rel_weibo').find('.uid').text();info.push(uid);
-    var mid = $(_this).parents('.center_rel_weibo').find('.mid').text();info.push(mid);
-    var txt=$(_this).parents('.center_rel_weibo').find('.center_2').text().toString().replace(/\&/g,'%26').replace(/\#/g,'%23');info.push(txt);
-    var timestamp = $(_this).parents('.center_rel_weibo').find('.timestamp').text();info.push(timestamp);
-    var forwarding = $(_this).parents('.center_rel_weibo').find('.forwarding').text();info.push(forwarding);
-    var comment = $(_this).parents('.center_rel_weibo').find('.comment').text();info.push(comment);
-    var sensitive = $(_this).parents('.center_rel_weibo').find('.sensitive').text();info.push(sensitive);
-    var sensitiveWords = $(_this).parents('.center_rel_weibo').find('.sensitiveWords').text().toString().replace(/\&/g,'%26');info.push(sensitiveWords);
-    //=======URL======
-    var allMent=[];
-    allMent.push(info[1]);
-    var txt=info[2].toString().replace(/#/g,'%23');allMent.push(txt);
-    allMent.push(info[3]);allMent.push(info[4]);allMent.push(0);allMent.push(info[5]);
-    allMent.push(info[6]);allMent.push(info[7]);
-    var once_url='/weibo_xnr_warming/report_warming_content/?report_type=言论&xnr_user_no='+ID_Num+
-        '&uid='+info[0]+'&weibo_info='+allMent.join(',');
-    public_ajax.call_request('get',once_url,postYES);
-}
-
 //操作返回结果
 function postYES(data) {
     var f='';
@@ -638,10 +613,10 @@ function weibo(idx,data,words) {
                         '                    <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
                         '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
-                        '                    <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
+                        '                    <span class="cen3-5" onclick="joinPolice(this,\'言论\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                         '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
-                        '                    <span class="cen3-6" onclick="oneUP(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
+                        '                    <span class="cen3-6" onclick="oneUP(this,\'言论\')"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
                         '               <div class="commentDown" style="width: 100%;display: none;">'+
                         '                   <input type="text" class="comtnt" placeholder="评论内容"/>'+
