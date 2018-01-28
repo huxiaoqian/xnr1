@@ -22,6 +22,12 @@ retweet_index_name_pre = '1225_retweet_' # retweet: 'retweet_1' or 'retweet_2'
 retweet_index_type = 'user'
 be_retweet_index_name_pre = '1225_be_retweet_' #be_retweet: 'be_retweet_1'/'be_retweet_2'
 be_retweet_index_type = 'user'
+
+fb_be_retweet_index_name_pre = 'fb_be_retweet_' #be_retweet: 'fb_be_retweet_1'/'fb_be_retweet_2'
+fb_be_retweet_index_type = 'user'
+
+tw_be_retweet_index_name_pre = 'tw_be_retweet_' #be_retweet: 'tw_be_retweet_1'/'tw_be_retweet_2'
+tw_be_retweet_index_type = 'user'
 # week comment/be_comment relation es
 comment_index_name_pre = '1225_comment_'
 comment_index_type = 'user'

@@ -12,7 +12,7 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         fb_bci_index_name_pre, fb_bci_index_type,\
                         facebook_flow_text_index_name_pre
 from parameter import MAX_SEARCH_SIZE,DAY
-from global_config import S_TYPE,S_DATE_BCI
+from global_config import S_TYPE,S_DATE_BCI, S_DATE_FB
 from time_utils import ts2datetime
 
 def nickname2uid(nickname_list):
@@ -340,20 +340,21 @@ def get_influence_relative(uid,influence):
 ## facebook得到影响力相对值
 def get_fb_influence_relative(uid,influence):
     if S_TYPE == 'test':
-        datetime = S_DATE_BCI
+        datetime = S_DATE_FB
     else:
         datetime = ts2datetime(time.time()-DAY)
-    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    # new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    new_datetime = datetime
     fb_bci_index_name = fb_bci_index_name_pre + new_datetime
     
     query_body = {
         'query':{
             'match_all':{}
         },
-        'sort':{'user_index':{'order':'desc'}}
+        'sort':{'influence':{'order':'desc'}}
     }
     results = es_xnr.search(index=fb_bci_index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
-    user_index_max = results[0]['_source']['user_index']
+    user_index_max = results[0]['_source']['influence']
     if not user_index_max:  #最大的为0，所有的都为0
         return 0
     else:

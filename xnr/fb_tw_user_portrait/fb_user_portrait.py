@@ -15,8 +15,8 @@ from global_utils import es_fb_user_portrait as es, \
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH, DAY, WEEK
 
-sys.path.append('../cron')
-from trans.trans import trans
+sys.path.append('../cron/trans/')
+from trans import trans
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
@@ -553,6 +553,7 @@ def update_baseinfo(uid_list=[]):
         uid = content['uid'][0]
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'gender': 0,
                 'location': '',
@@ -577,6 +578,7 @@ def update_baseinfo(uid_list=[]):
     for uid in uid_list:
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'gender': 0,
                 'location': '',
@@ -629,7 +631,7 @@ def update_all():
 
 if __name__ == '__main__':
     # update_all()
-    update_topic(load_uid_list())
+    update_baseinfo(load_uid_list())
 # total num:  92
 # time used:  0.0138351917267
 # update_hashtag:  True
