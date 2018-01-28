@@ -113,6 +113,8 @@ ACTIVE_UID = '2919766227'
 #MAX_PRIVATE = 100
 #MAX_AT = 1000
 
+WORD2VEC_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/word2vec/news_12g_baidubaike_20g_novel_90g_embedding_64.bin'
+
 WHITE_UID_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/'
 
 WHITE_UID_FILE_NAME = 'white_uid.txt'
@@ -194,12 +196,12 @@ fb_tw_topic_en2ch_dict = {'life':u'其他类','law':u'民生类_法律','compute
                         'military':u'军事类','medicine':u'民生类_健康','art':u'文体类_娱乐',\
                         'education':u'教育类','employment':u'民生类_就业','social-security':u'民生类_社会保障'}
 
-fb_tw_topic_ch2en_dict={'其他类':u'life','民生类_法律':u'law','科技类':u'computer','民生类_住房':u'house',\
-                        '政治类_地区和平':u'peace','政治类_民主':u'politics','政治类_暴恐':u'fear-of-violence',\
-                        '文体类_体育':u'sports','民生类_环保':u'environment','政治类_宗教':u'religion',\
-                        '经济类':u'economic','民生类_交通':u'traffic','政治类_反腐':u'anti-corruption',\
-                        '军事类':u'military','民生类_健康':u'medicine','文体类_娱乐':u'art',\
-                        '教育类':u'education','民生类_就业':u'employment','民生类_社会保障':u'social-security',}
+fb_tw_topic_ch2en_dict={u'其他类':'life',u'民生类_法律':'law',u'科技类':'computer',u'民生类_住房':'house',\
+                        u'政治类_地区和平':'peace',u'政治类_民主':'politics',u'政治类_暴恐':'fear-of-violence',\
+                        u'文体类_体育':'sports',u'民生类_环保':'environment',u'政治类_宗教':'religion',\
+                        u'经济类':'economic',u'民生类_交通':'traffic',u'政治类_反腐':'anti-corruption',\
+                        u'军事类':'military',u'民生类_健康':'medicine',u'文体类_娱乐':'art',\
+                        u'教育类':'education',u'民生类_就业':'employment',u'民生类_社会保障':'social-security',}
 # 敏感词等级评分, string类型
 sensitive_score_dict = {
     "1": 1,
