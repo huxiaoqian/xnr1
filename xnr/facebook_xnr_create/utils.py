@@ -12,7 +12,7 @@ import pandas as pd
 from collections import Counter
 import numpy as np
 import random
-from xnr.global_config import S_TYPE,S_DATE
+from xnr.global_config import S_TYPE, S_DATE_FB as S_DATE
 from xnr.global_utils import es_xnr as es
 #facebook_user
 from xnr.global_utils import es_fb_user_profile as es_user_profile, \
@@ -147,10 +147,18 @@ def get_recommend_step_two(task_detail):
         if result['found'] == True:
             result = result['_source'] 
             person_url = "https://www.facebook.com/profile.php?id=" + str(result['uid'])
-            nick_name = result['nick_name']
-            nick_name_list.append(nick_name)
-            sex_list.append(result['sex'])
-            description_list.append(result['description'])
+            if result.has_key('name'):
+                nick_name = result['name']
+                nick_name_list.append(nick_name)
+            if result.has_key('gender'):
+                if result['gender'] == 'male':
+                    sex = 1
+                elif result['gender'] == 'female':
+                    sex = 2
+                sex_list.append(sex)
+            if result.has_key('description'):
+                description_list.append(result['description'])
+
             role_example_dict[result['uid']] = [nick_name,person_url]
             count += 1
             if count > NICK_NAME_TOP:
@@ -168,8 +176,10 @@ def get_recommend_step_two(task_detail):
     day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
     recommend_results['day_post_num_average'] = day_post_num_average
     
-    sex_list_count = Counter(sex_list)
-    sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]  
+    sex_sort = ''
+    if sex_list:
+        sex_list_count = Counter(sex_list)
+        sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]  
     recommend_results['nick_name'] = '&'.join(nick_name_list)
     recommend_results['role_example'] = recommend_results['role_example']
     recommend_results['sex'] = sex_sort
@@ -237,8 +247,8 @@ def get_modify_userinfo(task_detail):
 
 def get_recommend_follows(task_detail):
     recommend_results = dict()
-    daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
-    monitor_keywords_list = task_detail['monitor_keywords'].encode('utf-8').split('，')
+    daily_interests_list = task_detail['daily_interests'].split('，')
+    monitor_keywords_list = task_detail['monitor_keywords'].split('，')
     create_time = time.time()        
     if S_TYPE == 'test':
         create_time = datetime2ts(S_DATE)
@@ -253,7 +263,7 @@ def get_recommend_follows(task_detail):
                     }
                 }
             },
-            'sort':{'user_fansnum':{'order':'desc'}},
+            # 'sort':{'user_fansnum':{'order':'desc'}},
             'size':DAILY_INTEREST_TOP_USER,
             '_source':['uid']
         }
@@ -274,7 +284,8 @@ def get_recommend_follows(task_detail):
                 continue
         recommend_results['daily_interests'] = nick_name_dict
 
-    except:
+    except Exception,e:
+        print e
         print '没有找到日常兴趣相符的用户'
         recommend_results['daily_interests'] = {}
 
@@ -295,11 +306,11 @@ def get_recommend_follows(task_detail):
     try:
         query_body_monitor = {
             'query':{
-                        'bool':{
-                            'must':nest_query_list
-                        }     
+                'bool':{
+                    'must':nest_query_list
+                }     
             },
-            'sort':{'user_fansnum':{'order':'desc'}},
+            # 'sort':{'user_fansnum':{'order':'desc'}},
             'size':MONITOR_TOP_USER,
             '_source':['uid']
         }
@@ -320,7 +331,8 @@ def get_recommend_follows(task_detail):
             else:
                 continue
         recommend_results['monitor_keywords'] = nick_name_dict
-    except:
+    except Exception,e:
+        print e
         print '没有找到监测词相符的用户'
         recommend_results['monitor_keywords'] = {}
     return recommend_results
@@ -335,6 +347,8 @@ def get_save_step_one(task_detail):
         user_no_current = 1
     task_detail['user_no'] = user_no_current
     task_id = user_no2fb_id(user_no_current)  #五位数 WXNR0001
+    print 'task_id'
+    print task_id
     try:    
         item_exist = dict()
         item_exist['user_no'] = task_detail['user_no']
@@ -363,7 +377,7 @@ def get_save_step_two(task_detail):
         user_no_current = 1
 
     task_detail['user_no'] = user_no_current
-    task_id = user_no2fb_id(user_no_current)  #五位数 WXNR0001
+    task_id = user_no2fb_id(user_no_current)  #五位数 FXNR0001
     
     item_exist = dict()
     item_exist['submitter'] = task_detail['submitter']
