@@ -427,7 +427,7 @@ function addSuccess(data) {
 
 //=======正常发帖=============
 //
-var operateType,actType;
+var operateType;
 function obtain(t) {
     if (t == 'o'){
         operateType='daily_post';
@@ -436,7 +436,7 @@ function obtain(t) {
     }else if (t== 'c'){
         operateType='business_post';
     }
-    actType=$('#myTabs li.active a').text().toString().trim();
+    //actType=$('#myTabs li.active a').text().toString().trim();
 }
 $('#sure_post').on('click',function () {
     obtain('o');
@@ -450,7 +450,7 @@ $('#sure_post').on('click',function () {
         $('#pormpt').modal('show');
         return false;
     };
-    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&xnr_user_no='+xnrUser+'&text='+txt;
+    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+txt;
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
@@ -785,7 +785,7 @@ function sureTiming(_this) {
     var t=$(_this).parent().prev().text();
     var CNpost_url='';
     if (a=='zhi'){
-        CNpost_url='/facebook_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
+        CNpost_url='/facebook_xnr_operate/submit_tweet/?tweet_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
     }else {
         var m =$('#recommend-2 .START').val();
         var n =$('#recommend-2 .ENDING').val();

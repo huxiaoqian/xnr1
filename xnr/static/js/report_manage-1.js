@@ -120,10 +120,10 @@ function reportDefaul(data) {
                     }else {
                         $.each(artical,function (index,item) {
                             var text,time,name,img,row,text2,all;
-                            if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                                 name=item.uid||'未命名';
                             }else {
-                                name=item.name;
+                                name=item.nick_name;
                             };
                             if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                                 img='/static/images/unknown.png';
