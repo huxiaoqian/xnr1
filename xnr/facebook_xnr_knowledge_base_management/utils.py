@@ -3,7 +3,7 @@
 import json
 import pinyin
 import numpy as np
-from xnr.global_config import S_TYPE,S_DATE
+from xnr.global_config import S_TYPE,S_DATE_FB as S_DATE
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import fb_role_index_name, fb_role_index_type
 #facebook_user
@@ -58,7 +58,7 @@ def get_user_location(location_dict):
 
 def get_generate_example_model(domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = domain_pinyin + '_' + role_en
     es_result = es.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=task_id)['_source']
     item = es_result
@@ -116,9 +116,9 @@ def get_generate_example_model(domain_name,role_name):
     for mget_item in mget_results_user:
         if mget_item['found']:
             content = mget_item['_source']
-            item['username'] = ''
+            item['nick_name'] = ''
             if content.has_key('name'):
-                item['username'] = content['name']
+                item['nick_name'] = content['name']
             item['location'] = ''
             if content.has_key('location'):
                 item['location'] = get_user_location(json.loads(content['location']))
@@ -172,7 +172,7 @@ def get_show_example_model():
 
 def get_export_example_model(domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = 'fb_' + domain_pinyin + '_' + role_en
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     with open(example_model_file_name,"r") as dump_f:
@@ -189,7 +189,7 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
     elif create_type == 'by_seed_users':
         create_type_new['by_seed_users'] = seed_users.encode('utf-8').split('，')
     else:
-        create_type_new['all_users'] = all_users.encode('utf-8').split('，')
+        create_type_new['by_all_users'] = all_users.encode('utf-8').split('，')
     return create_type_new
 
 def domain_create_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
@@ -330,7 +330,7 @@ def get_show_domain_description(domain_name):
 
 def get_show_domain_role_info(domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = domain_pinyin + '_' + role_en
     es_result = es.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=task_id)['_source']
     return es_result
