@@ -100,8 +100,8 @@ def tw_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
     
     try:
     
-        #operation.do_retweet(_id)
-        operation.do_retweet(_id,text)
+        operation.do_retweet(_id)
+        #operation.do_retweet(_id,text)
     
         mark = True
     except:

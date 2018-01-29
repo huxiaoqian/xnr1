@@ -144,6 +144,7 @@ class Operation():
 
 # 分享
 	def share(self, uid, fid, text):
+		print 'uid, fid, text...',uid, fid, text
 		post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
 		video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
 		self.driver.get(post_url)
