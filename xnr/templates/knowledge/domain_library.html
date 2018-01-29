@@ -187,6 +187,12 @@
 {% block my_js %}
 <script>
     judgment('8');
+    var flag='{{flag}}',urlTotal;
+    if (flag==1){
+        urlTotal='/weibo_xnr_knowledge_base_management';
+    }else if (flag==4){
+        urlTotal='/fb_xnr_knowledge_base_management';
+    }
 </script>
 <script src="/static/js/worldcloud.min.js"></script>
 <script src="/static/js/dark.js"></script>

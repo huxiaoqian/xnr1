@@ -39,7 +39,7 @@ $('.addBuild').on('click',function () {
         word_user=filesUID;
     }
     if (domainName||description||word_user){
-        var creat_url='/weibo_xnr_knowledge_base_management/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
+        var creat_url=urlTotal+'/create_domain/?xnr_user_no='+ID_Num+'&domain_name='+domainName+
             '&description='+description+'&submitter='+admin+'&remark='+remark+
             '&create_type='+param[0]+'&'+param[1]+'='+word_user;
         public_ajax.call_request('get',creat_url,successFail);
@@ -51,7 +51,9 @@ $('.addBuild').on('click',function () {
 })
 function successFail(data) {
     var f='操作成功';
-    if(!data){f='操作失败'}else {public_ajax.call_request('get',libGroup_url,group)};
+    if(!data){f='操作失败'}else{setTimeout(function () {
+        public_ajax.call_request('get',libGroup_url,group)
+    },700)};
     if ($$new=='0'&&data=='domain name exists!'){
         f='该领域名称已经存在了，请换一个。';
     }else {
@@ -60,7 +62,8 @@ function successFail(data) {
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }
-var libGroup_url='/weibo_xnr_knowledge_base_management/show_domain_group_summary/?submitter='+admin;
+var libGroup_url=urlTotal+'/show_domain_group_summary/?submitter='+admin;
+console.log(libGroup_url)
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
     var person=eval(data);
@@ -243,14 +246,14 @@ function group(data) {
 var g='',$domain='';
 // function seeDesGroup(name,midUrl) {
 //     g=midUrl;$domain=name;
-//     var seeDesGroup_url='/weibo_xnr_knowledge_base_management/'+midUrl+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
+//     var seeDesGroup_url=urlTotal+'/'+midUrl+'/?xnr_user_no='+ID_Num+'&domain_name='+name;
 //     public_ajax.call_request('get',seeDesGroup_url,DesGroup)
 // }
 function seeDesGroup(name,midUrl_1,midUrl_2) {
     $domain=name;
-    var seeDesGroup_url_1='/weibo_xnr_knowledge_base_management/'+midUrl_1+'/?domain_name='+name;
+    var seeDesGroup_url_1=urlTotal+'/'+midUrl_1+'/?domain_name='+name;
     public_ajax.call_request('get',seeDesGroup_url_1,DesGroup_1)
-    var seeDesGroup_url_2='/weibo_xnr_knowledge_base_management/'+midUrl_2+'/?domain_name='+name;
+    var seeDesGroup_url_2=urlTotal+'/'+midUrl_2+'/?domain_name='+name;
     public_ajax.call_request('get',seeDesGroup_url_2,groupList);
     $('.titleMain').text(name);
 }
@@ -268,26 +271,6 @@ function DesGroup_1(data) {
     $('.allGroup_div').show();
     // $('.loadGO').hide();
 }
-// function DesGroup(data) {
-//     console.log(data);
-//     if (g=='show_domain_description'){
-//         var desc=data['description'],des='';
-//         if (desc==''||desc=='null'||desc=='unknown'||!desc){
-//             des='无描述';
-//         }else {
-//             des = desc;
-//         };
-//         $('#groupDepict #gd-1').text(des);
-//         character_topic(data['role_distribute'],'gd-2','词汇偏好');
-//         character_topic(data['topic_preference'],'gd-3','角色分类');
-//         words(data['word_preference']);
-//         $('#groupDepict').modal('show');
-//     }else {
-//         groupList(data);
-//         $('#allGroup').modal('show');
-//     }
-// }
-//角色分类-----词汇偏好
 function character_topic(data,box,title) {
     var leg=[],every=[];
     $.each(data,function (index,item) {
@@ -538,14 +521,14 @@ function refresh(domainName,description,remark,create_type,word_user) {
     rr$_1=domainName;rr$_2=description,rr$_3=remark;
     rr$_4=create_type;rr$_5=word_user;
     $('#update').modal('show');
-    // var upNew_url='/weibo_xnr_knowledge_base_management/create_domain/?domain_name='+domainName+
+    // var upNew_url=urlTotal+'/create_domain/?domain_name='+domainName+
     //     '&description='+description+'&submitter='+admin+'&remark='+remark+
     //     '&create_type='+create_type+'&'+labType_list[create_type]+'='+word_user;
     // public_ajax.call_request('get',upNew_url,successFail);
 }
 function sureResh() {
     $$new='1';
-    var upNew_url='/weibo_xnr_knowledge_base_management/update_domain/?domain_name='+rr$_1+
+    var upNew_url=urlTotal+'/update_domain/?domain_name='+rr$_1+
         '&description='+rr$_2+'&submitter='+admin+'&remark='+rr$_3+
         '&create_type='+rr$_4+'&'+labType_list[rr$_4]+'='+rr$_5;
     public_ajax.call_request('get',upNew_url,successFail);
@@ -557,6 +540,6 @@ function deltDomain(domain) {
     $('#delt').modal('show');
 }
 function delt() {
-    var delte_url='/weibo_xnr_knowledge_base_management/delete_domain/?domain_name='+del_Domain_id;
+    var delte_url=urlTotal+'/delete_domain/?domain_name='+del_Domain_id;
     public_ajax.call_request('get',delte_url,successFail);
 }

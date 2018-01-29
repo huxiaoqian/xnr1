@@ -142,6 +142,14 @@
 {% block my_js %}
 <script>
     judgment('8');
+    var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
+    if (flag==1){
+        urlTotal='/weibo_xnr_knowledge_base_management';
+        defalutDomain='维权群体';defalutRole='其他';
+    }else if (flag==4){
+        urlTotal='/fb_xnr_knowledge_base_management';
+        defalutDomain='脸书测试1';defalutRole='民间组织'
+    }
 </script>
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/character_library-1.js"></script>

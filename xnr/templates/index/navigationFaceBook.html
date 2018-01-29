@@ -510,9 +510,9 @@
             }else {
                 id_or_name=userName;
             }
-            localStorage.setItem('user',encodeURI(userID));
-            localStorage.setItem('userRelName',encodeURI(userName));
-            localStorage.setItem('userName',encodeURI(id_or_name));
+            localStorage.setItem('userFB',encodeURI(userID));
+            localStorage.setItem('userFBRelName',encodeURI(userName));
+            localStorage.setItem('userFBName',encodeURI(id_or_name));
             $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     });
@@ -523,7 +523,7 @@
     var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
-        url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
+        url: "/facebook_xnr_create/show_fb_xnr/?submitter="+admin,
         async: true,
         dataType: "json",
         success: function (data) {
@@ -562,9 +562,9 @@
     });
     function downXnr(k1,k2) {
         $('#xnrName').text(k2+'（'+k1+'）').attr('title',k2+'（'+k1+'）');
-        localStorage.setItem('user',encodeURI(k1));
-        localStorage.setItem('userRelName',encodeURI(k2));
-        localStorage.setItem('userName',encodeURI(k2));
+        localStorage.setItem('userFB',encodeURI(k1));
+        localStorage.setItem('userFBRelName',encodeURI(k2));
+        localStorage.setItem('userFBName',encodeURI(k2));
     }
     function sameXnrPoint(data) {
         for (var k in data[0]){
