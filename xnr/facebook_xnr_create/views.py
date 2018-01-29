@@ -71,7 +71,7 @@ def ajax_modify_userinfo():
     task_detail['age'] = request.args.get('age','')
     task_detail['description'] = request.args.get('description','')
     task_detail['location'] = request.args.get('location','')
-    task_detail['gender'] = request.args.get('gender','')
+    # task_detail['gender'] = request.args.get('gender','')
     task_detail['career'] = request.args.get('career','')
     results = get_modify_userinfo(task_detail)
     return json.dumps(results)
@@ -138,7 +138,6 @@ def ajax_save_step_three_2():
     task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编码，如：WXNR0001
     task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称
     task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
-    # print 'task_detail::',task_detail
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
 
@@ -147,7 +146,6 @@ def ajax_get_xnr_info():
     xnr_user_no = request.args.get('xnr_user_no','')
     result = get_xnr_info_new(xnr_user_no)
     return json.dumps(result)
-
 
 @mod.route('/modify_base_info/')
 def ajax_modify_base_info():
