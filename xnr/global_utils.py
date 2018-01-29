@@ -608,3 +608,5 @@ tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
 
+R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2, db=3)
+operate_queue_name = 'operate'

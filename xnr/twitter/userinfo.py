@@ -21,14 +21,27 @@ class Userinfo():
 		time.sleep(1)
 		screen_name = driver.find_element_by_xpath('//div[@class="ProfileHeaderCard"]/h2//b').text
 		uid = api.get_user(screen_name).id
-		description = api.get_user(screen_name).description
-		location = api.get_user(screen_name).location
+		try:
+			description = api.get_user(screen_name).description
+		except:
+			description = None
+		try:
+			location = api.get_user(screen_name).location
+		except:
+			location = None
 		today = int(time.strftime('%Y',time.localtime(int(time.time()))))
-		birth  = driver.find_element_by_xpath('//span[@class="ProfileHeaderCard-birthdateText u-dir"]/span').text
+		try:
+			birth = driver.find_element_by_xpath('//span[@class="ProfileHeaderCard-birthdateText u-dir"]/span').text
+		except:
+			birth = False
 		pattern = re.compile(u'(\d+)年')
-		birthday = int(re.findall(pattern,birth)[0])
-		age = today - birthday
+		if birth:
+			birthday = int(re.findall(pattern,birth)[0])
+			age = today - birthday
+		else:
+			age = None
 		dict = {'uid':uid,'desccription':description,'location':location,'age':age}
+		print(dict)
 		return dict
 		
 if __name__ == '__main__':
