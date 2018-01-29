@@ -701,6 +701,8 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
     keywords_dict_all_users = dict()
     uid_weibo = [] # [[uid1,text1,ts1],[uid2,text2,ts2],...]
 
+    ts_up_limit = datetime2ts(datetime_list[0]) + 24*3600
+    ts_down_limit = datetime2ts(datetime_list[-1])
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
         query_body = {
@@ -717,7 +719,7 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
         }
         es_weibo_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                                             body=query_body)['hits']['hits']
-        print len(es_weibo_results)
+        
         for i in range(len(es_weibo_results)):
             uid = es_weibo_results[i]['_source']['uid']
             keywords_dict = {}
@@ -729,7 +731,9 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
             if label == 'character':
                 text = es_weibo_results[i]['_source']['text']
                 timestamp = es_weibo_results[i]['_source']['timestamp']
-                uid_weibo.append([uid,text,timestamp])
+
+                if timestamp >=ts_down_limit and timestamp < ts_up_limit:  #确保时间戳确实在datetime_list范围内，因为真的有存储错误的记录。。。
+                    uid_weibo.append([uid,text,timestamp])
 
 #keywords需要进行转成简体中文的操作？
             ## 统计用户所有词频

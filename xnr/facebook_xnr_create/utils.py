@@ -15,7 +15,7 @@ import random
 from xnr.global_config import S_TYPE, S_DATE_FB as S_DATE
 from xnr.global_utils import es_xnr as es
 #facebook_user
-from xnr.global_utils import es_fb_user_profile as es_user_profile, \
+from xnr.global_utils import r, es_fb_user_profile as es_user_profile, \
                             facebook_user_index_type as profile_index_type, \
                             facebook_user_index_name as profile_index_name
 from xnr.global_utils import r, fb_xnr_index_name, fb_xnr_index_type,\
@@ -31,11 +31,15 @@ trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
 
+fb_abspath = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook'
+sys.path.append(fb_abspath)
+from userinfo import Userinfo
+from fb_operate import Operation
 
-from xnr.facebook.fb_operate import Operation as FbOperateAPI
-from xnr.sina.userinfo import SinaOperateAPI
+# from xnr.facebook.fb_operate import Operation as FbOperateAPI
+# from xnr.sina.userinfo import SinaOperateAPI
 from xnr.sina.change_userinfo import change_userinfo
-from xnr.sina.tools.Launcher import SinaLauncher
+# from xnr.sina.tools.Launcher import SinaLauncher
 es_flow_text = es
 
 def get_nick_name_unique(nick_name):
@@ -247,12 +251,13 @@ def get_modify_userinfo(task_detail):
 
 def get_recommend_follows(task_detail):
     recommend_results = dict()
-    daily_interests_list = task_detail['daily_interests'].split('，')
+    # daily_interests_list = task_detail['daily_interests'].split('，')
     monitor_keywords_list = task_detail['monitor_keywords'].split('，')
     create_time = time.time()        
     if S_TYPE == 'test':
         create_time = datetime2ts(S_DATE)
     index_name_list = get_flow_text_index_list(create_time)
+    '''#FB flow_text中没有daily_interests字段
     ## 日常兴趣关注
     try:
         query_body = {
@@ -288,7 +293,7 @@ def get_recommend_follows(task_detail):
         print e
         print '没有找到日常兴趣相符的用户'
         recommend_results['daily_interests'] = {}
-
+    '''
     ## 监测词关注
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
@@ -366,16 +371,23 @@ def get_save_step_one(task_detail):
         mark = False
     return mark
 
-def get_save_step_two(task_detail):
-    #task_id = task_detail['task_id']
-    es_results = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'query':{'match_all':{}},\
+def get_fb_xnr_no():
+    fb_xnr_max_no = 'fb_xnr_max_no'
+    user_no_max = 0
+    if not r.exists(fb_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
+        es_results = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'query':{'match_all':{}},\
                     'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1 
-    else:
-        user_no_current = 1
-
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+    else:   #如果当前redis有记录，则取用并更新
+        user_no_max = int(r.get(fb_xnr_max_no))
+    #update
+    user_no_current = user_no_max + 1
+    r.set(fb_xnr_max_no, user_no_current)
+    return user_no_current
+    
+def get_save_step_two(task_detail):
+    user_no_current = get_fb_xnr_no()
     task_detail['user_no'] = user_no_current
     task_id = user_no2fb_id(user_no_current)  #五位数 FXNR0001
     
@@ -423,48 +435,38 @@ def get_add_other_info(task_detail):
     password = task_detail['password']
     nick_name = str(task_detail['nick_name'])
     try:
-        user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-    except:
-        return 'nick_name error'
-
+        user = Userinfo(account_name, password)
+        info_dict = user.getUserinfo()
+    except Exception,e:
+        print e
+        return 'account error'
     item_dict = {}
     if user:
-        item_dict['nick_name'] = user['screen_name']
-        item_dict['location'] = user['location']
-        if user['gender']=='m':
-            item_dict['gender'] = u'男'
-        elif user['gender']=='f':
-            item_dict['gender'] = u'女'
-        item_dict['age'] = '0'
-        item_dict['description'] = user['description']
-        item_dict['career'] = ''
+        item_dict['nick_name'] = nick_name
+        item_dict['id'] = info_dict['id']
+        item_dict['location'] = info_dict['location']
+        item_dict['age'] = info_dict['age']
+        item_dict['description'] = info_dict['description']
+        item_dict['career'] = info_dict['career']
     new_task_detail = dict(task_detail,**item_dict)
     return new_task_detail
 
 def get_save_step_three_1(task_detail):
-    nick_name = task_detail['nick_name'].encode('utf-8')
-    operate = SinaOperateAPI()
-    user_info = operate.getUserShow(screen_name=nick_name)
-    uid = user_info['id']
-    try:
-        if task_detail['fb_mail_account']:
-            uname = task_detail['fb_mail_account']
-        else:
-            uname = task_detail['fb_phone_account']
-        xnr = SinaLauncher(uname, task_detail['password'])
-        xnr.login()
-        uid = xnr.uid
-    except:
-        return '账户名或密码输入错误，请检查后输入！！'
-    query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    task_id = task_detail['task_id']
+    # query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
+    # es_result = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
+    # task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id)['_source']
-    item_exist['uid'] = uid
+    
+    item_exist['uid'] = task_detail['id']
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['fb_mail_account'] = task_detail['fb_mail_account']
     item_exist['fb_phone_account'] = task_detail['fb_phone_account']
     item_exist['password'] = task_detail['password']
+    item_exist['career'] = task_detail['career']
+    item_exist['description'] = task_detail['description']
+    item_exist['age'] = task_detail['age']
+    item_exist['location'] = task_detail['location']
     item_exist['create_status'] = 2 # 创建完成
     # 更新 fb_xnr表
     print es.update(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id,body={'doc':item_exist})        
@@ -483,7 +485,6 @@ def get_save_step_three_2(task_detail):
         mark = True
     except:        
         mark = False
-
     return mark        
 
 def get_xnr_info_new(xnr_user_no):
@@ -498,7 +499,7 @@ def get_modify_base_info(task_detail):
         if res[0]['found']:
             item_exists['active_time'] = task_detail['active_time']
             item_exists['day_post_average'] = task_detail['day_post_average']
-            item_exists['daily_interests'] = task_detail['daily_interests']
+            # item_exists['daily_interests'] = task_detail['daily_interests']
             item_exists['monitor_keywords'] = task_detail['monitor_keywords']
             es.update(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
             mark = True
@@ -524,6 +525,7 @@ def union_dict(*objs):
     return _total
 
 if __name__ == '__main__':
+    '''
     domain_name =  '维权群体'
     
     #domain_name =  '乌镇'
@@ -533,4 +535,5 @@ if __name__ == '__main__':
     submitter = 'admin@qq.com'
     remark = '这是备注'
     domain_create_task(domain_name,create_type,create_time,submitter,remark,compute_status=0)
-
+    '''
+    print get_fb_xnr_no()
