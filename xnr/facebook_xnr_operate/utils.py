@@ -15,7 +15,8 @@ from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
 					fb_social_sensing_index_type, fb_hot_keyword_task_index_name, fb_hot_keyword_task_index_type,\
 					fb_hot_subopinion_results_index_name, fb_hot_subopinion_results_index_type, \
 					es_fb_user_portrait, fb_portrait_index_name, fb_portrait_index_type, \
-					fb_bci_index_name_pre, fb_bci_index_type
+					fb_bci_index_name_pre, fb_bci_index_type, fb_xnr_fans_followers_index_name, \
+                    fb_xnr_fans_followers_index_type
 
 
 from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_follow, fb_unfollow, \
@@ -23,9 +24,17 @@ from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_fol
 
 from xnr.utils import fb_uid2nick_name_photo
 from xnr.time_utils import datetime2ts, ts2datetime
-from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP
+from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP,\
+                    USER_POETRAIT_NUMBER, BCI_USER_NUMBER
 
-def get_submit_tweet(task_detail):
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question')
+#from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
+from tuling_test import get_message_from_tuling
+
+def get_robot_reply(question):
+    return get_message_from_tuling(question)
+
+def get_submit_tweet_fb(task_detail):
 
 	text = task_detail['text']
 	tweet_type = task_detail['tweet_type']
@@ -67,7 +76,7 @@ def fb_save_to_tweet_timing_list(task_detail):
     item_detail['remark'] = task_detail['remark']
     #item_detail['task_status'] = 0 
 
-    task_id = task_detail['xnr_user_no'] + '_'+str(item_detail['create_time'])+'_'+ str(task_detail['post_time'])
+    task_id = task_detail['xnr_user_no'] + '_'+str(item_detail['create_time'])
     # task_id: uid_提交时间_发帖时间
 
     try:
@@ -322,10 +331,10 @@ def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
         sort_item_new = 'sensitive'
         es_results = get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new)  
     elif sort_item == 'influence_info':
-        sort_item_new = 'retweeted'
+        sort_item_new = 'share'
         es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'influence_user':
-        sort_item_new = 'user_index'
+        sort_item_new = 'influence'
         es_results = get_tweets_from_bci(monitor_keywords_list,sort_item_new)
         
     return es_results            
@@ -386,8 +395,10 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
 
     if es_results_portrait:
         for result in es_results_portrait:
-            result = result['_source']
-            uid = result['uid']
+            uid = result['_id']
+            # result = result['_source']
+            # #print 'result....',result.keys()
+            # uid = result['uid']
             uid_set.add(uid)
     uid_list = list(uid_set)
 
@@ -445,7 +456,8 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
         now_ts = int(time.time())
 
     datetime = ts2datetime(now_ts-24*3600)
-    datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    # datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    datetime_new = datetime
 
     index_name = fb_bci_index_name_pre + datetime_new
 
@@ -474,7 +486,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
     return es_results
 
 
-def get_comment_operate(task_detail):
+def get_comment_operate_fb(task_detail):
 
 	text = task_detail['text']
 	tweet_type = task_detail['tweet_type']
@@ -504,7 +516,7 @@ def get_comment_operate(task_detail):
 
 	return mark
 
-def get_retweet_operate(task_detail):
+def get_retweet_operate_fb(task_detail):
 
 	text = task_detail['text']
 	tweet_type = task_detail['tweet_type']
@@ -535,7 +547,7 @@ def get_retweet_operate(task_detail):
 	return mark
 
 
-def get_at_operate(task_detail):
+def get_at_operate_fb(task_detail):
 	
 	text = task_detail['text']
 	tweet_type = task_detail['tweet_type']
@@ -563,7 +575,7 @@ def get_at_operate(task_detail):
 
 	return mark
 
-def get_like_operate(task_detail):
+def get_like_operate_fb(task_detail):
 
 	xnr_user_no = task_detail['xnr_user_no']
 	_id = task_detail['r_fid']
@@ -591,7 +603,7 @@ def get_like_operate(task_detail):
 
 	return mark
 
-def get_follow_operate(task_detail):
+def get_follow_operate_fb(task_detail):
 
 	trace_type = task_detail['trace_type']
 	xnr_user_no = task_detail['xnr_user_no']
@@ -618,7 +630,7 @@ def get_follow_operate(task_detail):
 
 	return mark
 
-def get_unfollow_operate(task_detail):
+def get_unfollow_operate_fb(task_detail):
 
 	xnr_user_no = task_detail['xnr_user_no']
 	uid = task_detail['uid']
@@ -645,7 +657,7 @@ def get_unfollow_operate(task_detail):
 	return mark
 
 
-def get_private_operate(task_detail):
+def get_private_operate_fb(task_detail):
 
     xnr_user_no = task_detail['xnr_user_no']
     text = task_detail['text']
@@ -759,4 +771,225 @@ def get_delete_friend(task_detail):
         mark = False
 
     return mark
+
+def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+    
+    results = es.search(index=fb_xnr_retweet_timing_list_index_name,\
+        doc_type=fb_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+    # print 'results:::',results
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_alls
+
+
+def get_show_retweet_timing_list_future(xnr_user_no):
+
+    start_ts = int(time.time())
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+    # print 'query_body!!',query_body
+    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
+        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
+
+
+
+def get_show_trace_followers(xnr_user_no):
+    
+    es_get_result = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)['_source']
+
+    trace_follow_list = es_get_result['trace_follow_list']
+
+    weibo_user_info = []
+
+    if trace_follow_list:
+        mget_results = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,\
+                            body={'ids':trace_follow_list})['docs']
+        # print 'mget_results::',mget_results
+        for result in mget_results:
+            if result['found']:
+                weibo_user_info.append(result['_source'])
+            else:
+                uid = result['_id']
+
+                weibo_user_info.append({'uid':uid,'statusnum':0,'fansnum':0,'friendsnum':0,'photo_url':'','sex':'','nick_name':uid,'user_location':''})
+    else:
+        weibo_user_info = []
+
+    return weibo_user_info
+
+
+def get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es.search(index=facebook_user_index_name,doc_type=facebook_user_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
+
+        try:
+            trace_follow_list = result['trace_follow_list']
+        except:
+            trace_follow_list = []
+
+        try:
+            followers_list = result['fans_list']
+        except:
+            followers_list = []
+
+        trace_follow_list = list(set(trace_follow_list) | set(uid_list))
+
+        followers_list = list(set(followers_list)|set(uid_list))
+
+        es.update(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list,'fans_list':followers_list}})
+
+        mark = True
+    
+    except:
+
+        item_exists = {}
+
+        item_exists['xnr_user_no'] = xnr_user_no
+        item_exists['trace_follow_list'] = uid_list
+        item_exists['fans_list'] = uid_list
+
+        es.index(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body=item_exists)
+
+        mark = True
+
+    return [mark,fail_nick_name_list]    
+
+
+def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    fail_uids = []
+
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es.search(index=facebook_user_index_name,doc_type=facebook_user_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)['_source']
+        
+        trace_follow_list = result['trace_follow_list']
+
+        # 共同uids
+        comment_uids = list(set(trace_follow_list).intersection(set(uid_list)))
+
+        # 取消失败uid
+        fail_uids = list(set(comment_uids).difference(set(uid_list)))
+
+        # 求差
+        trace_follow_list = list(set(trace_follow_list).difference(set(uid_list))) 
+
+
+        es.update(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list}})
+
+        mark = True
+    except:
+        mark = False
+
+    return [mark,fail_uids,fail_nick_name_list]    
 
