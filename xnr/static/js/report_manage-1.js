@@ -286,27 +286,11 @@ function WXreportDefaul(data) {
                     var text = row.report_content;
                     var str =
                         '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                        // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                        // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                        // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '   <span class="center_2">'+text+'</span>'+
-                        // '   <div class="center_3">'+
-                        // '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                        // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                        // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        // '    </div>'+
                         '</div>';
 
                     var nameuid,time,report_type,xnr;
-                    // if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
-                    //     nameuid = row.uid;
-                    // }else {
-                    //     nameuid = row.event_name;
-                    // };
                     nameuid='未知';//上报名称暂时设为未知。。。11-17
-
-
                     if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
                         time = '未知';
                     }else {
@@ -410,17 +394,6 @@ $('.type2 .demo-label').on('click',function () {
     var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
-//操作返回结果
-function postYES(data) {
-    var f='';
-    if (data[0]){
-        f='操作成功';
-    }else {
-        f='操作失败';
-    }
-    $('#pormpt p').text(f);
-    $('#pormpt').modal('show');
-}
 //导出excel
 $('#output1').click(function(){
     var all=[];
@@ -469,7 +442,6 @@ $('#output1').click(function(){
             ]
         )
     };
-
     var data = {
         "title":[
             {"value":"上报名称", "type":"ROW_HEADER_HEADER", "datatype":"string"},
@@ -556,8 +528,13 @@ function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
 };
 //导出word
 $('#output2').on('click',function () {
+    var _ids=[];
+    for(var k in currentData){
+        _ids.push(currentData[k]['_id']);
+    }
+    console.log(_ids)
     // window.open('/static/test.docx');
-    tableExport('person', 'Report', 'doc');
+    // tableExport('person', 'Report', 'doc');
 });
 
 
