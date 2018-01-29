@@ -19,11 +19,11 @@ class Es_twitter():
 		for list_data in data_list:
 
 			if indexName == 'twitter_feedback_fans':
-				es.index(index=indexName, doc_type=typeName, body=list_data)
+				es.index(index=indexName, doc_type=typeName, id=list_data['uid'], body=list_data)
 
 
 			elif indexName == 'twitter_feedback_follow':
-				es.index(index=indexName, doc_type=typeName, body=list_data)
+				es.index(index=indexName, doc_type=typeName, id=list_data['uid'], body=list_data)
 
 
 			elif indexName == 'twitter_feedback_retweet':

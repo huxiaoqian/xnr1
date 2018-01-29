@@ -352,34 +352,44 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # tid_list = [item['_source']['tid'] for item in results]
 # print 'tid_list',tid_list
 
-def search():
+# def search():
     
-    white_uid_list = ['123']
-    query_item = 'keywords_string'
+#     white_uid_list = ['123']
+#     query_item = 'keywords_string'
     
-    nest_query_list = []
-    keyword_list = [u'载人飞船',u'领袖',u'黄金',u'原油']
-    for keyword in keyword_list:
-        #nest_query_list.append({'match':{query_item:keyword}})
-        nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+#     nest_query_list = []
+#     keyword_list = [u'载人飞船',u'领袖',u'黄金',u'原油']
+#     for keyword in keyword_list:
+#         #nest_query_list.append({'match':{query_item:keyword}})
+#         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
 
-    SHOULD_PERCENT = 3
+#     SHOULD_PERCENT = 3
 
-    query_body = {
-        'query':{
-            'bool':{
-                'should':nest_query_list,
-                "minimum_should_match": SHOULD_PERCENT,
-                'must_not':{'terms':{'uid':white_uid_list}}
-            }
-        },
-        'size':20,
-        'sort':[{'user_fansnum':{'order':'desc'}}]
-    }
+#     query_body = {
+#         'query':{
+#             'bool':{
+#                 'should':nest_query_list,
+#                 "minimum_should_match": SHOULD_PERCENT,
+#                 'must_not':{'terms':{'uid':white_uid_list}}
+#             }
+#         },
+#         'size':20,
+#         'sort':[{'user_fansnum':{'order':'desc'}}]
+#     }
     
-    es_results = es_flow_text.search(index='flow_text_2016-11-19',doc_type='text',\
-                body=query_body)['hits']['hits']
+#     es_results = es_flow_text.search(index='flow_text_2016-11-19',doc_type='text',\
+#                 body=query_body)['hits']['hits']
 
-    print 'results...',es_results
+#     print 'results...',es_results
 
-search()       
+#search()       
+
+# item = {'fid':'6679197029855974713','uid':'100018797745111','timestamp':1508934020,'text':u'周五！'}
+# es.index(index='facebook_flow_text_2017-10-25',doc_type='text',body=item,id='6679197029855974713')
+
+# item_dict = {'tid':'956863562332475392','uid':'935416088380153856','timestamp':1508934030,'text':'hahaha'}
+# es.index(index='twitter_flow_text_2017-10-25',doc_type='text',body=item_dict,id='956863562332475392')
+
+# es.delete(index='tw_xnr_fans_followers',doc_type='uids',id='FXNR0003')
+
+es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
