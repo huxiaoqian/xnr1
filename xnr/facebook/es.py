@@ -19,7 +19,7 @@ class Es_fb():
 		for list_data in data_list:
 
 				if indexName == 'facebook_feedback_friends':
-					es.index(index=indexName, doc_type=typeName, body=list_data)
+					es.index(index=indexName, doc_type=typeName, id=list_data['uid'], body=list_data)
 
 				elif indexName == 'facebook_feedback_retweet':
 					date_time = self.ts2datetime(list_data['timestamp'])

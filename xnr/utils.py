@@ -11,6 +11,7 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         twitter_user_index_name, twitter_user_index_type,\
                         fb_bci_index_name_pre, fb_bci_index_type,\
                         facebook_flow_text_index_name_pre
+from global_utils import R_OPERATE_QUEUE as r_operate_queue, operate_queue_name                         
 from parameter import MAX_SEARCH_SIZE,DAY
 from global_config import S_TYPE,S_DATE_BCI, S_DATE_FB
 from time_utils import ts2datetime
@@ -469,6 +470,26 @@ def tw_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
             return False
 
     return True
+
+
+def add_operate2redis(item_dict):
+
+    queue_dict = {}
+
+    queue_dict['channel'] = item_dict['channel'] # weibo、facebook、twitter
+    queue_dict['operate_type'] = item_dict['operate_type']  
+    # publish-发帖、retweet-转发、comment-评论、like-点赞、follow-关注、unfollow-取消关注、at-提到、private-私信
+    # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
+
+    queue_dict['content'] = item_dict['content']
+
+    try:
+        content = r_operate_queue.lpush(operate_queue_name,json.dumps(queue_dict))
+        mark = True
+    except:
+        mark = False
+
+    return mark
 
 
 if __name__ == '__main__':
