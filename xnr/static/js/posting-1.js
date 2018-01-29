@@ -395,7 +395,7 @@ function obtain(t) {
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
-$('#sure_postRel').on('click',function () {
+$('#sure_post').on('click',function () {
     //
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
