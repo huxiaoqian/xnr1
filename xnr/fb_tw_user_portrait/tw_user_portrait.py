@@ -15,8 +15,8 @@ from global_utils import es_tw_user_portrait as es, \
 from time_utils import get_twitter_flow_text_index_list, get_tw_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, TW_DOMAIN_ABS_PATH, DAY, WEEK
 
-sys.path.append('../cron')
-from trans.trans import trans
+sys.path.append('../cron/trans/')
+from trans import trans
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
@@ -537,6 +537,7 @@ def update_baseinfo(uid_list=[]):
         uid = content['uid'][0]
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'location': '',
                 'verified':'',
@@ -577,6 +578,7 @@ def update_baseinfo(uid_list=[]):
     for uid in uid_list:
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'location': '',
                 'verified':'',
@@ -635,5 +637,6 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
+    # update_all()
+    update_baseinfo(load_uid_list())
     
