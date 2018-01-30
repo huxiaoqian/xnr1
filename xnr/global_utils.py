@@ -303,6 +303,7 @@ weibo_xnr_corpus_index_name = 'weibo_corpus'
 weibo_xnr_corpus_index_type = 'text'
 
 ## 上报管理
+weibo_report_management_index_name_pre = 'weibo_report_management_'
 weibo_report_management_index_name = 'weibo_report_management'
 weibo_report_management_index_type = 'report'
 
