@@ -16,7 +16,7 @@ import tweepy
 from tweepy import OAuthHandler
 from elasticsearch import Elasticsearch
 from launcher import Launcher
-from es import Es_twitter
+from Elasticsearch_tw import Es_twitter
 
 class Operation():
 	def __init__(self, username, password):
