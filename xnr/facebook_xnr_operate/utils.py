@@ -25,7 +25,7 @@ from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_fol
 from xnr.utils import fb_uid2nick_name_photo
 from xnr.time_utils import datetime2ts, ts2datetime
 from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP,\
-                    USER_POETRAIT_NUMBER, BCI_USER_NUMBER
+                    USER_POETRAIT_NUMBER, BCI_USER_NUMBER,MAX_SEARCH_SIZE
 
 sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question')
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
@@ -822,8 +822,8 @@ def get_show_retweet_timing_list_future(xnr_user_no):
         ]
     }
     # print 'query_body!!',query_body
-    results = es.search(index=weibo_xnr_retweet_timing_list_index_name,\
-        doc_type=weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+    results = es.search(index=fb_xnr_retweet_timing_list_index_name,\
+        doc_type=fb_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
 
     result_all = []
 
@@ -839,8 +839,10 @@ def get_show_trace_followers(xnr_user_no):
     
     es_get_result = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
                     id=xnr_user_no)['_source']
-
-    trace_follow_list = es_get_result['trace_follow_list']
+    try:
+        trace_follow_list = es_get_result['trace_follow_list']
+    except:
+        trace_follow_list = []
 
     weibo_user_info = []
 
