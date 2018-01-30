@@ -21,7 +21,8 @@ from xnr.global_utils import r, es_tw_user_profile as es_user_profile, \
 from xnr.global_utils import r, tw_xnr_index_name, tw_xnr_index_type,\
                             tw_domain_index_name, tw_domain_index_type,\
                             tw_role_index_name, tw_role_index_type, \
-                            tw_xnr_fans_followers_index_name, tw_xnr_fans_followers_index_type
+                            tw_xnr_fans_followers_index_name, tw_xnr_fans_followers_index_type,\
+                            tw_xnr_max_no
 from xnr.parameter import tw_domain_ch2en_dict,tw_domain_en2ch_dict
 from xnr.parameter import ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
@@ -31,8 +32,7 @@ trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
 
-tw_abspath = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter'
-sys.path.append(tw_abspath)
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/twitter/'))
 from userinfo import Userinfo
 from twitter_operate import Operation
 
@@ -335,7 +335,6 @@ def get_recommend_follows(task_detail):
     return recommend_results
 
 def get_tw_xnr_no():
-    tw_xnr_max_no = 'tw_xnr_max_no'
     user_no_max = 0
     if not r.exists(tw_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
         es_results = es.search(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body={'query':{'match_all':{}},\

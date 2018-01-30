@@ -21,7 +21,8 @@ from xnr.global_utils import r, es_fb_user_profile as es_user_profile, \
 from xnr.global_utils import r, fb_xnr_index_name, fb_xnr_index_type,\
                             fb_domain_index_name, fb_domain_index_type,\
                             fb_role_index_name, fb_role_index_type, \
-                            fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type
+                            fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type,\
+                            fb_xnr_max_no
 from xnr.parameter import fb_domain_ch2en_dict,fb_domain_en2ch_dict
 from xnr.parameter import ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
@@ -31,8 +32,7 @@ trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
 
-fb_abspath = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook'
-sys.path.append(fb_abspath)
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/facebook/'))
 from userinfo import Userinfo
 from fb_operate import Operation
 
@@ -128,7 +128,7 @@ def get_role2feature_info(domain_name,role_name):
 def get_recommend_step_two(task_detail):
     domain_name = task_detail['domain_name']
     role_name = task_detail['role_name']
-    daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
+    # daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     role_name_en = fb_domain_ch2en_dict[role_name]
@@ -362,7 +362,7 @@ def get_save_step_one(task_detail):
         item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
         item_exist['political_side'] = task_detail['political_side']
         item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
-        item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
+        # item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
         item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
         item_exist['create_status'] = 0 # 第一步完成
         print es.index(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id,body=item_exist)
@@ -372,7 +372,6 @@ def get_save_step_one(task_detail):
     return mark
 
 def get_fb_xnr_no():
-    fb_xnr_max_no = 'fb_xnr_max_no'
     user_no_max = 0
     if not r.exists(fb_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
         es_results = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'query':{'match_all':{}},\
@@ -399,7 +398,7 @@ def get_save_step_two(task_detail):
     item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
     item_exist['political_side'] = task_detail['political_side']
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
-    item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
+    # item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = ','.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
 
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
