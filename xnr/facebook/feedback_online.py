@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #encoding: utf-8
 
-from es import Es_fb
+from Elasticsearch_fb import Es_fb
 from launcher import Launcher
 
 class Online():
