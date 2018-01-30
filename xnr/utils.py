@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
-
+import json
+import time
 from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
