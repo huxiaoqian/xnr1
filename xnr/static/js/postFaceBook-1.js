@@ -71,9 +71,9 @@ $('#container .type_page #myTabs a').on('click',function () {
     }
 })
 //=========跟踪转发===========
-var flow_faw_url='/facebook_xnr_operate/show_retweet_timing_list_future/?xnr_user_no='+ID_Num+'&start_ts='+todayTimetamp()+
+var flow_faw_url='/facebook_xnr_operate/show_retweet_timing_list_future/?xnr_user_no=FXNR0003'+'&start_ts='+todayTimetamp()+
     '&end_ts='+(Date.parse(new Date())/1000);
-var focus_main_url='/facebook_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
+var focus_main_url='/facebook_xnr_operate/show_trace_followers/?xnr_user_no=FXNR0003'//+ID_Num;
 $('.choosetime .demo-label input[name="time1"]').on('click',function () {
     var _val=$(this).val();
     var flow_faw_url;
@@ -339,19 +339,19 @@ function focus_main(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
             },
-            {
-                title: "操作",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter:function (value, row, index) {
-                    return '<span style="display: inline-block;"><i class="icon icon-file-alt" title="查看详情"></i></span>'+
-                        '<span style="margin: 0 10px;"><i class="icon icon-eye-close" title="取消关注"></i></span>'+
-                        '<span style="display: inline-block;"><i class="icon icon-trash" title="删除"></i></span>'
-                }
-            },
+            // {
+            //     title: "操作",//标题
+            //     field: "",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter:function (value, row, index) {
+            //         return  '<span style="display: inline-block;"><i class="icon icon-file-alt" title="查看详情"></i></span>'+
+            //             '<span style="margin: 0 10px;" title="取消关注" onclick="cancelFOCUS(\''+row.uid+'\')"><i class="icon icon-eye-close"></i></span>'+
+            //             '<span style="display: inline-block;" title="删除"><i class="icon icon-trash"></i></span>'
+            //     }
+            // },
         ],
         onCheck:function (row) {
             mainUserUid.push(row.uid);_judge()
@@ -376,6 +376,10 @@ function _judge() {
     }
 
 }
+// function cancelFOCUS(_id) {
+//     var cancel_url='/facebook_xnr_operate/unfollow_operate/?xnr_user_no='+ID_Num+'&uid='+_id;
+//     public_ajax.call_request('get',cancel_url,postYES)
+// }
 $('.reportNote-2 span.del_user').on('click',function () {
     var del_url='/facebook_xnr_operate/un_trace_follow/?xnr_user_no='+ID_Num+'&uid_string='+mainUserUid.join('，');
     public_ajax.call_request('get',del_url,postYES)

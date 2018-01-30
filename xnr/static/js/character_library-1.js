@@ -3,6 +3,8 @@ if (flag==1){
     field_user_url='/weibo_xnr_operate/show_domain_second/';
 }else if (flag==4){
     field_user_url='/facebook_xnr_create/show_domain/';
+}else if (flag==5){
+    field_user_url='/twitter_xnr_create/show_domain/';
 }
 public_ajax.call_request('get',field_user_url,field_user);
 var domainName='';
