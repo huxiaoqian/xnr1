@@ -29,7 +29,6 @@ from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_
                            ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
-from caculate_history_info import create_xnr_history_info_count
 from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
 
 ##获取索引
