@@ -3,23 +3,29 @@ import os
 import json
 import time
 import sys
+import gensim
 from flask import Blueprint, url_for, render_template, request, abort, flash, session, redirect
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
-import sys
+from collections import Counter
+import numpy as np
 reload(sys)
 sys.path.append('../../')
 from global_utils import r,fb_target_domain_detect_queue_name,fb_target_domain_analysis_queue_name,\
                         es_xnr as es, es_xnr, facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
                         facebook_flow_text_index_type as flow_text_index_type,\
                         fb_domain_index_name, fb_domain_index_type, facebook_user_index_name, facebook_user_index_type,\
-                        fb_role_index_name, fb_role_index_type
-from global_config import S_TYPE,S_DATE_FB as S_DATE
-from time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list,ts2datetime,datetime2ts
-es_flow_text = es
+                        fb_role_index_name, fb_role_index_type,\
+                        fb_portrait_index_name, fb_portrait_index_type,\
+                        fb_be_retweet_index_name_pre as be_retweet_index_name_pre, fb_be_retweet_index_type as be_retweet_index_type
+from global_config import S_TYPE,S_DATE_FB as S_DATE, R_BEGIN_TIME
 from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH,\
                     DAY, WEEK, fb_tw_topic_en2ch_dict as topic_en2ch_dict, SENTIMENT_DICT_NEW, SORT_FIELD,\
-                    TOP_KEYWORDS_NUM,TOP_WEIBOS_LIMIT,WEEK_TIME,DAY,DAY_HOURS,HOUR
+                    TOP_KEYWORDS_NUM,TOP_WEIBOS_LIMIT,WEEK_TIME,DAY,DAY_HOURS,HOUR,\
+                    fb_tw_topic_ch2en_dict as topic_ch2en_dict, WORD2VEC_PATH
+from time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list,ts2datetime,datetime2ts
+from utils import split_city    #fb 没有geo信息 不可用
+
 sys.path.append('../../cron/trans/')
 from trans import trans, simplified2traditional, traditional2simplified
 
@@ -34,41 +40,106 @@ sys.path.append('../../fb_tw_user_portrait/')
 from keyword_extraction import get_filter_keywords
 
 
-
 ## 引入各个分类器
 from political.political_main import political_classify
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 from character.test_ch_sentiment import classify_sentiment
-from collections import Counter
-import numpy as np
-from utils import split_city
 
-
-
-
- 
-from global_utils import es_retweet, retweet_index_name_pre, retweet_index_type,\
-                         be_retweet_index_name_pre, be_retweet_index_type
-from global_utils import es_comment, comment_index_name_pre, comment_index_type,\
-                         be_comment_index_name_pre, be_comment_index_type
-from global_config import R_BEGIN_TIME
+#
+es_flow_text = es
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
 
-
-
-
-
-
-
-
+def save_data2es(data):
+    update_uid_list = []
+    create_uid_list = []
+    try:
+        for uid, d in data.items():
+            if es.exists(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, id=uid):
+                update_uid_list.append(uid)
+            else:
+                create_uid_list.append(uid)
+        #bulk create
+        bulk_create_action = []
+        if create_uid_list:
+            for uid in create_uid_list:
+                create_action = {'index':{'_id': uid}}
+                bulk_create_action.extend([create_action, data[uid]])
+            result = es.bulk(bulk_create_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            if result['errors'] :
+                print result
+                return False
+        #bulk update
+        if update_uid_list:
+            bulk_update_action = []
+            for uid in update_uid_list:
+                update_action = {'update':{'_id': uid}}
+                bulk_update_action.extend([update_action, {'doc': data[uid]}])
+            result = es.bulk(bulk_update_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            if result['errors'] :
+                print result
+                return False
+    except Exception,e:
+        print e
+        return False
+    return True
 
 def my_topic_classfiy(uid_list, datetime_list):
-    fb_flow_text_index_list = []
-    for datetime in datetime_list:
-        fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
-    user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
-    user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
+    topic_dict_results = {}
+    topic_string_results = {}
+    #将处理后的结果保存到数据库中，并在处理前查询数据库中是否已经有了相应内容之前存储的结果，以提高效率
+    uids = uid_list
+    unresolved_uids = []
+    res = es.mget(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body={'ids': uids})['docs']
+    for r in res:
+        uid = r['_id']
+        if r.has_key('found'): 
+            found = r['found']
+            if found and r['_source'].has_key('topic'):
+                topic = r['_source']['topic']
+                topic_string = r['_source']['topic_string']
+                topic_dict_results[uid] = json.loads(topic)
+                topic_string_results[uid] = [topic_ch2en_dict[ch_topic] for ch_topic in topic_string.split('&')]
+            else:
+                unresolved_uids.append(uid)
+        else:   #es表中目前无任何记录 
+            unresolved_uids.append(uid)
+
+    #未在数据库中的进行计算并存储
+    user_topic_dict = {}
+    user_topic_list = {}
+    if unresolved_uids:
+        fb_flow_text_index_list = []
+        for datetime in datetime_list:
+            fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+        user_topic_data = get_filter_keywords(fb_flow_text_index_list, unresolved_uids)
+        user_topic_dict, user_topic_list = topic_classfiy(unresolved_uids, user_topic_data)
+
+        user_topic_string = {}
+        for uid, topic_list in user_topic_list.items():
+            li = []
+            for t in topic_list:
+                li.append(zh_data[name_list.index(t)].decode('utf8'))
+            user_topic_string[uid] = '&'.join(li)
+        user_topic = {}
+        for uid in unresolved_uids:
+            if uid in user_topic_dict:
+                user_topic[uid] = {
+                    'filter_keywords': json.dumps(user_topic_data[uid]),
+                    'topic': json.dumps(user_topic_dict[uid]),
+                    'topic_string': user_topic_string[uid]
+                }
+            else:
+                user_topic[uid] = {
+                    'filter_keywords': json.dumps({}),
+                    'topic': json.dumps({}),
+                    'topic_string': ''
+                }
+        save_data2es(user_topic)
+
+    #整合
+    user_topic_dict.update(topic_dict_results)
+    user_topic_list.update(topic_string_results)
     return user_topic_dict, user_topic_list
 
 def count_text_num(uid_list, fb_flow_text_index_list):
@@ -110,99 +181,126 @@ def trans_bio_data(bio_data):
     return translated_bio_data
 
 def my_domain_classfiy(uid_list, datetime_list):
-    fb_flow_text_index_list = []
-    for datetime in datetime_list:
-        fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+    domain_results = {}
+    #将处理后的结果保存到数据库中，并在处理前查询数据库中是否已经有了相应内容之前存储的结果，以提高效率
+    uids = uid_list
+    unresolved_uids = []
+    res = es.mget(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body={'ids': uids})['docs']
+    for r in res:
+        uid = r['_id']
+        if r.has_key('found'): 
+            found = r['found']
+            if found and r['_source'].has_key('domain'):
+                domain = r['_source']['domain']
+                domain_results[uid] = domain
+            else:
+                unresolved_uids.append(uid)
+        else:   #es表中目前无任何记录 
+            unresolved_uids.append(uid)
 
-    user_domain_data = {}
-    #load num of text
-    count_result = count_text_num(uid_list, fb_flow_text_index_list)
-    #load baseinfo
-    fb_user_query_body = {
-        'query':{
-            "filtered":{
-                "filter": {
-                    "bool": {
-                        "must": [
-                            {"terms": {"uid": uid_list}},
-                        ]
-                     }
+    #未在数据库中的进行计算并存储
+    user_domain = {}
+    user_domain_temp = {}
+    if unresolved_uids:
+        fb_flow_text_index_list = []
+        for datetime in datetime_list:
+            fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+
+        user_domain_data = {}
+        #load num of text
+        count_result = count_text_num(unresolved_uids, fb_flow_text_index_list)
+        #load baseinfo
+        fb_user_query_body = {
+            'query':{
+                "filtered":{
+                    "filter": {
+                        "bool": {
+                            "must": [
+                                {"terms": {"uid": unresolved_uids}},
+                            ]
+                         }
+                    }
                 }
-            }
-        },
-        'size': MAX_SEARCH_SIZE,
-        "fields": ["bio", "about", "description", "quotes", "category", "uid"]
-    }
-    try:
-        search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
-        for item in search_results:
-            content = item['fields']
-            uid = content['uid'][0]
-            if not uid in user_domain_data:
-                text_num = count_result[uid]
-                user_domain_data[uid] = {
-                    'bio_str': '',
-                    'bio_list': [],
-                    'category': '',
-                    'number_of_text': text_num
-                }
-            #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
-            if content.has_key('category'):
-                category = content.get('category')[0]
+            },
+            'size': MAX_SEARCH_SIZE,
+            "fields": ["bio", "about", "description", "quotes", "category", "uid"]
+        }
+        try:
+            search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
+            for item in search_results:
+                content = item['fields']
+                uid = content['uid'][0]
+                if not uid in user_domain_data:
+                    text_num = count_result[uid]
+                    user_domain_data[uid] = {
+                        'bio_str': '',
+                        'bio_list': [],
+                        'category': '',
+                        'number_of_text': text_num
+                    }
+                #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
+                if content.has_key('category'):
+                    category = content.get('category')[0]
+                else:
+                    category = ''
+                if content.has_key('description'):
+                    description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
+                else:
+                    description = ''
+                if content.has_key('quotes'):
+                    quotes = content.get('quotes')[0][:1000]
+                else:
+                    quotes = ''
+                if content.has_key('bio'):
+                    bio = content.get('bio')[0][:1000]
+                else:
+                    bio = ''
+                if content.has_key('about'):
+                    about = content.get('about')[0][:1000]
+                else:
+                    about = ''    
+                user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
+                user_domain_data[uid]['category'] = category
+        except Exception,e:
+            print e
+        #由于一个用户请求一次翻译太耗时，所以统一批量翻译
+        trans_uid_list = []
+        untrans_bio_data = []
+        cut = 100
+        n = len(user_domain_data)/cut
+        for uid, content in user_domain_data.items():
+            trans_uid_list.append(uid)
+            untrans_bio_data.extend(content['bio_list'])
+            content.pop('bio_list')
+            if n:
+                if len(trans_uid_list)%cut == 0:
+                    temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                    for i in range(len(trans_uid_list)):
+                        uid = trans_uid_list[i]
+                        user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                    trans_uid_list = []
+                    untrans_bio_data = []
+                    n = n - 1
             else:
-                category = ''
-            if content.has_key('description'):
-                description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
+                if len(trans_uid_list) == (len(user_domain_data)%cut):
+                    temp_trans_bio_data = trans_bio_data(untrans_bio_data)
+                    for i in range(len(trans_uid_list)):
+                        uid = trans_uid_list[i]
+                        user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                    trans_uid_list = []
+                    untrans_bio_data = []
+        #domian计算
+        user_domain_temp = domain_main(user_domain_data)    
+        for uid in unresolved_uids:
+            if uid in user_domain_temp:
+                user_domain[uid] = {'domain': user_domain_temp[uid]}
             else:
-                description = ''
-            if content.has_key('quotes'):
-                quotes = content.get('quotes')[0][:1000]
-            else:
-                quotes = ''
-            if content.has_key('bio'):
-                bio = content.get('bio')[0][:1000]
-            else:
-                bio = ''
-            if content.has_key('about'):
-                about = content.get('about')[0][:1000]
-            else:
-                about = ''    
-            user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
-            user_domain_data[uid]['category'] = category
-    except Exception,e:
-        print e
-    #由于一个用户请求一次翻译太耗时，所以统一批量翻译
-    trans_uid_list = []
-    untrans_bio_data = []
-    cut = 100
-    n = len(user_domain_data)/cut
-    for uid, content in user_domain_data.items():
-        trans_uid_list.append(uid)
-        untrans_bio_data.extend(content['bio_list'])
-        content.pop('bio_list')
-        if n:
-            if len(trans_uid_list)%cut == 0:
-                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
-                for i in range(len(trans_uid_list)):
-                    uid = trans_uid_list[i]
-                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
-                trans_uid_list = []
-                untrans_bio_data = []
-                n = n - 1
-        else:
-            if len(trans_uid_list) == (len(user_domain_data)%cut):
-                temp_trans_bio_data = trans_bio_data(untrans_bio_data)
-                for i in range(len(trans_uid_list)):
-                    uid = trans_uid_list[i]
-                    user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
-                trans_uid_list = []
-                untrans_bio_data = []
-    #domian计算
-    user_domain = domain_main(user_domain_data)    
-    for uid in uid_list:
-        if not uid in user_domain:
-            user_domain[uid] = 'other'
-    return user_domain
+                user_domain_temp[uid] = 'other'
+                user_domain[uid] = {'domain': 'other'}
+        save_data2es(user_domain)
+    #整合
+    user_domain_temp.update(domain_results)
+    return user_domain_temp
 
 
 '''
@@ -385,13 +483,18 @@ def get_flow_text_datetime_list(date_range_end_ts):
 # input：关键词，任务创建时间
 # output：近期微博包含上述关键词的微博用户群体的画像数据
 def detect_by_keywords(keywords,datetime_list):
-    keywords_list = keywords
+    keywords_list = []
+    model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
+    for word in keywords:
+        simi_list = model.most_similar(word,topn=20)
+        for simi_word in simi_list:
+            keywords_list.append(simi_word[0])
 
     group_uid_list = set()
-
     if datetime_list == []:
         return []
-    
+
+    query_item = 'text'
     flow_text_index_name_list = []
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
@@ -406,36 +509,51 @@ def detect_by_keywords(keywords,datetime_list):
         
         if len(en_keywords_list) == len(keywords_list): #确保翻译没出错
             en_keyword = en_keywords_list[i]
-            nest_query_list.append({'wildcard':{'keywords_string':'*'+en_keyword+'*'}})
+            nest_query_list.append({'wildcard':{query_item:'*'+en_keyword+'*'}})
         
-        nest_query_list.append({'wildcard':{'keywords_string':'*'+keyword+'*'}})
-        nest_query_list.append({'wildcard':{'keywords_string':'*'+traditional_keyword+'*'}})
+        nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+        nest_query_list.append({'wildcard':{query_item:'*'+traditional_keyword+'*'}})
 
     count = MAX_DETECT_COUNT
+    if len(nest_query_list) == 1:
+        SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
+    else:
+        SHOULD_PERCENT = '3'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+
     query_body = {
         'query':{
             'bool':{
                 'should':nest_query_list,
+                'minimum_should_match': SHOULD_PERCENT,
+                # 'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
-        'size':count,
-        # 'sort':[{'user_fansnum':{'order':'desc'}}]
+        'aggs':{
+            'all_uids':{
+                'terms':{
+                    'field':'uid',
+                    'order':{'_count':'desc'},
+                    'size':count
+                }
+            }
+        }
     }
     es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-                body=query_body)['hits']['hits']
+                body=query_body,request_timeout=999999)['aggregations']['all_uids']['buckets']
+
     for i in range(len(es_results)):
-        uid = es_results[i]['_source']['uid']
+        uid = es_results[i]['key']
         group_uid_list.add(uid)
     group_uid_list = list(group_uid_list)
     return group_uid_list
 
+
 ### 根据种子用户
 # input：种子用户uid，任务创建时间
 # output：近期与种子用户有转发和评论关系的微博用户群体的画像数据
-
 def detect_by_seed_users(seed_users):
-    retweet_mark = 1
-    comment_mark = 1
+    retweet_mark = 1 #目前只有部分数据
+    comment_mark = 0 #暂无数据
 
     group_uid_list = set()
     all_union_result_dict = {}
@@ -445,37 +563,40 @@ def detect_by_seed_users(seed_users):
 
     #step1: mget retweet and be_retweet
     if retweet_mark == 1:
-        retweet_index_name = retweet_index_name_pre + str(db_number)
+        # retweet_index_name = retweet_index_name_pre + str(db_number)
         be_retweet_index_name = be_retweet_index_name_pre + str(db_number)
         #mget retwet
+        '''
         try:
-            retweet_result = es_retweet.mget(index=retweet_index_name, doc_type=retweet_index_type, \
+            retweet_result = es.mget(index=retweet_index_name, doc_type=retweet_index_type, \
                                              body={'ids':seed_users}, _source=True)['docs']
         except:
             retweet_result = []
+        '''
         #mget be_retweet
         try:
-            be_retweet_result = es_retweet.mget(index=be_retweet_index_name, doc_type=be_retweet_type, \
+            be_retweet_result = es.mget(index=be_retweet_index_name, doc_type=be_retweet_index_type, \
                                                 body={'ids':seed_users} ,_source=True)['docs']
         except:
             be_retweet_result = []
+    '''
     #step2: mget comment and be_comment
     if comment_mark == 1:
         comment_index_name = comment_index_name_pre + str(db_number)
         be_comment_index_name = be_comment_index_name_pre + str(db_number)
         #mget comment
         try:
-            comment_result = es_comment.mget(index=comment_index_name, doc_type=comment_index_type, \
+            comment_result = es.mget(index=comment_index_name, doc_type=comment_index_type, \
                                              body={'ids':seed_users}, _source=True)['docs']
         except:
             comment_result = []
         #mget be_comment
         try:
-            be_comment_result = es_comment.mget(index=be_comment_index_name, doc_type=be_comment_index_type, \
+            be_comment_result = es.mget(index=be_comment_index_name, doc_type=be_comment_index_type, \
                                             body={'ids':seed_users}, _source=True)['docs']
         except:
             be_comment_result = []
-    
+    '''
     #step3: union retweet/be_retweet/comment/be_comment result
     union_count = 0
     
@@ -580,6 +701,8 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
     keywords_dict_all_users = dict()
     uid_weibo = [] # [[uid1,text1,ts1],[uid2,text2,ts2],...]
 
+    ts_up_limit = datetime2ts(datetime_list[0]) + 24*3600
+    ts_down_limit = datetime2ts(datetime_list[-1])
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
         query_body = {
@@ -596,7 +719,7 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
         }
         es_weibo_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                                             body=query_body)['hits']['hits']
-        print len(es_weibo_results)
+        
         for i in range(len(es_weibo_results)):
             uid = es_weibo_results[i]['_source']['uid']
             keywords_dict = {}
@@ -608,7 +731,9 @@ def uid_list_2_uid_keywords_dict(uids_list,datetime_list,label='other'):
             if label == 'character':
                 text = es_weibo_results[i]['_source']['text']
                 timestamp = es_weibo_results[i]['_source']['timestamp']
-                uid_weibo.append([uid,text,timestamp])
+
+                if timestamp >=ts_down_limit and timestamp < ts_up_limit:  #确保时间戳确实在datetime_list范围内，因为真的有存储错误的记录。。。
+                    uid_weibo.append([uid,text,timestamp])
 
 #keywords需要进行转成简体中文的操作？
             ## 统计用户所有词频
@@ -985,7 +1110,7 @@ def compute_domain_base():
                 detect_results = detect_by_keywords(keywords,datetime_list)
             elif create_type['by_seed_users']:
                 seed_users = create_type['by_seed_users']
-                detect_results = detect_by_seed_users(seed_users,datetime_list)
+                detect_results = detect_by_seed_users(seed_users)
             elif create_type['by_all_users']:
                 all_users = create_type['by_all_users']
                 detect_results = detect_by_all_users(all_users)
@@ -1029,3 +1154,9 @@ if __name__ == '__main__':
     print 'start!'
     compute_domain_base()
     print 'end_time::',time.ctime()
+    # uid_list = ['1140849537', '443835769306299', '288733581614500']
+    # create_time = datetime2ts(S_DATE)
+    # datetime_list = get_flow_text_datetime_list(create_time)
+    # # my_domain_classfiy(uid_list, datetime_list)
+
+    # print detect_by_keywords([u'中国', u'党'], datetime_list)

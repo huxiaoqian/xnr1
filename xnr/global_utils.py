@@ -22,6 +22,12 @@ retweet_index_name_pre = '1225_retweet_' # retweet: 'retweet_1' or 'retweet_2'
 retweet_index_type = 'user'
 be_retweet_index_name_pre = '1225_be_retweet_' #be_retweet: 'be_retweet_1'/'be_retweet_2'
 be_retweet_index_type = 'user'
+
+fb_be_retweet_index_name_pre = 'fb_be_retweet_' #be_retweet: 'fb_be_retweet_1'/'fb_be_retweet_2'
+fb_be_retweet_index_type = 'user'
+
+tw_be_retweet_index_name_pre = 'tw_be_retweet_' #be_retweet: 'tw_be_retweet_1'/'tw_be_retweet_2'
+tw_be_retweet_index_type = 'user'
 # week comment/be_comment relation es
 comment_index_name_pre = '1225_comment_'
 comment_index_type = 'user'
@@ -134,6 +140,9 @@ weibo_domain_index_type = 'group'
 fb_domain_index_name = 'facebook_domain'
 fb_domain_index_type = 'group'
 
+tw_domain_index_name = 'twitter_domain'
+tw_domain_index_type = 'group'
+
 #use to save role info
 weibo_role_index_name = 'weibo_role'
 weibo_role_index_type = 'role'
@@ -141,6 +150,8 @@ weibo_role_index_type = 'role'
 fb_role_index_name = 'fb_role'
 fb_role_index_type = 'role'
 
+tw_role_index_name = 'tw_role'
+tw_role_index_type = 'role'
 # use to save example model
 weibo_example_model_index_name = 'weibo_example_model'
 weibo_example_model_index_type = 'model'
@@ -148,6 +159,10 @@ weibo_example_model_index_type = 'model'
 ##facebook
 fb_example_model_index_name = 'facebook_example_model'
 fb_example_model_index_type = 'model'
+
+##twitter
+tw_example_model_index_name = 'twitter_example_model'
+tw_example_model_index_type = 'model'
 
 # use to publish tweet at future time
 weibo_xnr_timing_list_index_name = 'tweet_timing_list'
@@ -544,6 +559,9 @@ weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 fb_target_domain_detect_queue_name = 'facebook_target_domain_detect_task'
 fb_target_domain_analysis_queue_name = 'facebook_target_domain_analysis_task'
 
+tw_target_domain_detect_queue_name = 'twitter_target_domain_detect_task'
+tw_target_domain_analysis_queue_name = 'twitter_target_domain_analysis_task'
+
 # social sensing redis
 R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 weibo_social_sensing_task_queue_name = 'weibo_social_sensing_task'
@@ -603,3 +621,11 @@ tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
 
+R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2, db=3)
+operate_queue_name = 'operate'
+
+
+#各类虚拟人从redis中获取编号时所对应的key
+fb_xnr_max_no = 'fb_xnr_max_no'
+tw_xnr_max_no = 'tw_xnr_max_no'
+wx_xnr_max_no = 'wx_xnr_max_no'
