@@ -1,9 +1,10 @@
 #-*-coding:utf-8-*-
 import os
 import json
-
+import time
 from global_utils import es_xnr as es
-from global_utils import weibo_report_management_index_name,weibo_report_management_index_type
+from global_utils import weibo_report_management_index_name_pre,weibo_report_management_index_type
+from time_utils import ts2datetime
 
 # 上报管理
 def weibo_report_management_mappings():
@@ -37,17 +38,19 @@ def weibo_report_management_mappings():
 					'uid':{ #人物id
 						'type':'string',
 						'index':'not_analyzed'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
 					}
 				}
 			}
 		}
 	}
-
+	now_time=int(time.time())
+	weibo_report_management_index_name = weibo_report_management_index_name_pre + ts2datetime(now_time)
 	if not es.indices.exists(index=weibo_report_management_index_name):
 		es.indices.create(index=weibo_report_management_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
 	weibo_report_management_mappings()
-	es.indices.put_mapping(index=weibo_report_management_index_name, doc_type=weibo_report_management_index_type, \
-            body={'properties':{'nick_name': {'type': 'string','index':'not_analyzed'}\
-            }}, ignore=400)
