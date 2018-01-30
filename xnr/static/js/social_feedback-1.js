@@ -60,7 +60,7 @@ $('#container .type_page #myTabs a').on('click',function () {
     }
     if (start&&end){
         var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
-            '&start_ts='+start+'&end_ts='+end;
+            '&start_ts='+(Date.parse(new Date(start))/1000)+'&end_ts='+(Date.parse(new Date(end))/1000);
         public_ajax.call_request('get',comURL,com);
     }else {
         $('#pormpt p').text('时间不能为空。');
@@ -191,15 +191,11 @@ function com(data) {
                             '            <span class="com-2-tent">'+txt+'</span>'+
                             '        </div>'+
                             '        <div class="com com-3" style="overflow: hidden;">'+
-                            // '            <span class="com-3-time">2017-11-11 11:11</span>'+
-                            // '            <span>来自<span class="com-3-source">'+user+'</span></span>'+
                             '            <a class="com-3-reply copyFinish" datatype="commentClone" onclick="showInput(this)">回复</a>'+
                             '        </div>'+
                             '        <div class="commentClone">'+
                             '            <input type="text" class="clone-1" placeholder=""/>'+
                             '            <div class="clone-2">'+
-                            // '                <img src="/static/images/post-1.png" class="clone-2-1">'+
-                            // '                <img src="/static/images/post-2.png" class="clone-2-2">'+
                             '                <label class="demo-label">'+
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+

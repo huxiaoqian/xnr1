@@ -60,7 +60,7 @@ $('#container .type_page #myTabs a').on('click',function () {
     }
     if (start&&end){
         var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
-            '&start_ts='+start+'&end_ts='+end;
+            '&start_ts='+(Date.parse(new Date(start))/1000)+'&end_ts='+(Date.parse(new Date(end))/1000);
         public_ajax.call_request('get',comURL,com);
     }else {
         $('#pormpt p').text('时间不能为空。');
@@ -92,7 +92,7 @@ var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=t
 public_ajax.call_request('get',comURL,com);
 function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
-        var mid;
+        var mid,;
         if (idbox=='comment-1'){mid='reply_comment'}else {mid='reply_retweet'}
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
