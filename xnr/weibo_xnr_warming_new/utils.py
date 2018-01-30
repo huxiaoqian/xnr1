@@ -17,7 +17,7 @@ from xnr.global_utils import es_xnr,weibo_user_warning_index_name_pre,weibo_user
                              weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
                              weibo_warning_corpus_index_name,weibo_warning_corpus_index_type,\
-                             weibo_report_management_index_name,weibo_report_management_index_type
+                             weibo_report_management_index_name_pre,weibo_report_management_index_type
 
 
 
@@ -25,6 +25,8 @@ from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY,WARMING_DAY
 from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING,S_DATE_WARMING
 from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
+
+from xnr.weibo_report_management_mappings import weibo_report_management_mappings
 
 #查询用户昵称
 def get_user_nickname(uid):
@@ -529,8 +531,8 @@ def lookup_todayweibo_date_warming(keywords,today_datetime):
         'query':{
             'bool':
             {
-                'should':keyword_query_list,
-                'must':{'range':{'sensitive':{'gte':1}}}
+                'should':keyword_query_list
+                # 'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -1027,6 +1029,7 @@ def report_warming_content(task_detail):
                         	pass
                 except:
                     print 'user_error!'
+
             elif task_detail['report_type']==u'言论':
                 weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
                 try:
@@ -1036,6 +1039,7 @@ def report_warming_content(task_detail):
                 except:
                     # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
                     print 'speech_error!'
+
             elif task_detail['report_type']==u'事件':
                 weibo_event_warning_index_name = weibo_event_warning_index_name_pre + ts2datetime(item['timestamp'])
                 event_warning_id = task_detail['xnr_user_no']+'_'+task_detail['event_name']
@@ -1049,6 +1053,22 @@ def report_warming_content(task_detail):
                             pass
                 except:
                     print 'event_error!'
+
+            elif task_detail['report_type']==u'时间':
+                year = ts2yeartime(item['timestamp'])
+                weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
+                try:
+                    time_result=es_xnr.search(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
+                    time_content=[]
+                    for timedata in time_result:
+                        for data in timedata['weibo_date_warming_content']:
+                            if data['mid'] == item['mid']:
+                                weibo_list.append(data)
+                            else:
+                                pass
+                except:
+                    print 'time_error!'               
+
 
 
     user_info=task_detail['user_info']
@@ -1089,7 +1109,10 @@ def report_warming_content(task_detail):
         report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
     elif task_detail['report_type'] == u'时间':
         # print weibo_info
-        report_id=weibo_info[0]['mid']
+        if weibo_info:
+            report_id=weibo_info[0]['mid']
+        else:
+            report_id=str(task_detail['report_time'])
 
 
     if weibo_list:
@@ -1097,6 +1120,13 @@ def report_warming_content(task_detail):
     else:
         report_mark=False
     #预警上报后不再显示问题
+
+    now_time=int(time.time())
+    weibo_report_management_index_name = weibo_report_management_index_name_pre + ts2datetime(now_time)
+    if es_xnr.indices.exists(index=weibo_report_management_index_name):
+        pass
+    else:
+        weibo_report_management_mappings() 
 
     if report_id and report_mark:
         try:

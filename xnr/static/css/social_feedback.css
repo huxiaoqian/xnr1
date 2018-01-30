@@ -43,7 +43,6 @@ body {
 }
 #container .type_page #content .letterEvery {
     background:transparent;
-    padding:10px 10px 30px 80px;
 }
 #container .type_page #content .focusEvery {
     /*width: 100%;*/
@@ -164,6 +163,55 @@ body {
 #container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover{
     background:rgba(5, 23, 55, 0.45);
 }
+#container .type_page #content .commentEvery .socOper {
+    margin: 10px 0;
+    text-align:center;
+    border-top: 1px solid slategrey;
+    padding-top:5px;
+}
+#container .type_page #content .commentEvery .socOper span {
+    display: inline-block;
+    width: 48%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container .type_page #content .commentEvery .socOper span:hover {
+    color:#eb7350;
+}
+#container .type_page #content .commentEvery .socOper span:nth-child(2) {
+    border-left:1px solid slategrey;
+}
+#container .forwardingDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .forwardingDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .forwardingDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .forwardingDown span:hover {
+    background: #333333;
+}
+/**/
 #container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover i,
 #container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover i {
     color:#f77911;
@@ -229,6 +277,7 @@ body {
 #container .type_page #content .letterClone .clone-2 {
     display: inline-block;
     margin-left: 15px;
+    vertical-align: middle;
 }
 #container .type_page #content .replyClone .clone-2 {
     margin: 10px 0;

@@ -590,7 +590,7 @@ function weibo(idx,data,words) {
                         };
                     };
                     str_new+=
-                        '<div class="everySpeak">'+
+                        '<div class="everySpeak everyUser">'+
                         '        <div class="speak_center">'+
                         // '            <img src="'+img+'" alt="" class="center_icon">'+
                         '            <div class="center_rel center_rel_weibo" style="text-align: left;">'+

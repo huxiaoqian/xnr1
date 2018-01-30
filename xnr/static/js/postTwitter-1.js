@@ -778,7 +778,7 @@ function sureTiming(_this) {
     var t=$(_this).parent().prev().text();
     var CNpost_url='';
     if (a=='zhi'){
-        CNpost_url='/twitter_xnr_operate/submit_tweet/?tweet_type='+actType+'&operate_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
+        CNpost_url='/twitter_xnr_operate/submit_tweet/?tweet_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+t;
     }else {
         var m =$('#recommend-2 .START').val();
         var n =$('#recommend-2 .ENDING').val();
