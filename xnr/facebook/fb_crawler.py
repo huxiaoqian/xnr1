@@ -3,7 +3,7 @@
 
 import time
 from launcher import Launcher
-from es import Es_fb
+from Elasticsearch_fb import Es_fb
 from feedback_comment import Comment
 from feedback_friends import Friend
 from feedback_like import Like

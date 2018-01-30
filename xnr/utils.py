@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
-
+import json
+import time
 from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
@@ -10,9 +11,10 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         facebook_user_index_name,facebook_user_index_type,\
                         twitter_user_index_name, twitter_user_index_type,\
                         fb_bci_index_name_pre, fb_bci_index_type,\
-                        facebook_flow_text_index_name_pre
+                        facebook_flow_text_index_name_pre, tw_bci_index_name_pre, tw_bci_index_type
+from global_utils import R_OPERATE_QUEUE as r_operate_queue, operate_queue_name                         
 from parameter import MAX_SEARCH_SIZE,DAY
-from global_config import S_TYPE,S_DATE_BCI
+from global_config import S_TYPE,S_DATE_BCI, S_DATE_FB, S_DATE_TW
 from time_utils import ts2datetime
 
 def nickname2uid(nickname_list):
@@ -93,7 +95,7 @@ def user_no2fb_id(user_no):
     return task_id
 
 def user_no2tw_id(user_no):
-    task_id = 'TXNR'+str('%04d'%user_no)  #五位数 FXNR0001
+    task_id = 'TXNR'+str('%04d'%user_no)  #五位数 TXNR0001
     return task_id
 
 def wxbot_id2user_no(task_id):
@@ -340,26 +342,51 @@ def get_influence_relative(uid,influence):
 ## facebook得到影响力相对值
 def get_fb_influence_relative(uid,influence):
     if S_TYPE == 'test':
-        datetime = S_DATE_BCI
+        datetime = S_DATE_FB
     else:
         datetime = ts2datetime(time.time()-DAY)
-    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    # new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    new_datetime = datetime
     fb_bci_index_name = fb_bci_index_name_pre + new_datetime
     
     query_body = {
         'query':{
             'match_all':{}
         },
-        'sort':{'user_index':{'order':'desc'}}
+        'sort':{'influence':{'order':'desc'}}
     }
     results = es_xnr.search(index=fb_bci_index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
-    user_index_max = results[0]['_source']['user_index']
+    user_index_max = results[0]['_source']['influence']
     if not user_index_max:  #最大的为0，所有的都为0
         return 0
     else:
         influence_relative = influence/user_index_max
         return influence_relative
 
+## twitter得到影响力相对值
+def get_tw_influence_relative(uid,influence):
+    if S_TYPE == 'test':
+        datetime = S_DATE_TW
+    else:
+        datetime = ts2datetime(time.time()-DAY)
+    # new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    new_datetime = datetime
+    tw_bci_index_name = tw_bci_index_name_pre + new_datetime
+    
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'sort':{'influence':{'order':'desc'}}
+    }
+    results = es_xnr.search(index=tw_bci_index_name,doc_type=tw_bci_index_type,body=query_body)['hits']['hits']
+    user_index_max = results[0]['_source']['influence']
+    if not user_index_max:  #最大的为0，所有的都为0
+        return 0
+    else:
+        influence_relative = influence/user_index_max
+        return influence_relative
+        
 def fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
 
  
@@ -468,6 +495,26 @@ def tw_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
             return False
 
     return True
+
+
+def add_operate2redis(item_dict):
+
+    queue_dict = {}
+
+    queue_dict['channel'] = item_dict['channel'] # weibo、facebook、twitter
+    queue_dict['operate_type'] = item_dict['operate_type']  
+    # publish-发帖、retweet-转发、comment-评论、like-点赞、follow-关注、unfollow-取消关注、at-提到、private-私信
+    # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
+
+    queue_dict['content'] = item_dict['content']
+
+    try:
+        content = r_operate_queue.lpush(operate_queue_name,json.dumps(queue_dict))
+        mark = True
+    except:
+        mark = False
+
+    return mark
 
 
 if __name__ == '__main__':
