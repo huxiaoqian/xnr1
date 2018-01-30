@@ -18,8 +18,8 @@ function bindSF(data) {
             txt='昵称输入错误，请检查昵称。';
         }else {
             txt='绑定成功';
-            var listURL='/weibo_xnr_create/recommend_follows/?monitor_keywords='+basicData_1.monitorKeywords+
-                '&daily_interests='+basicData_1.daily;
+            var listURL=WFT_url+'/recommend_follows/?monitor_keywords='+basicData_1.monitorKeywords;
+            if (flag==1){listURL+='&daily_interests='+basicData_1.daily}
             public_ajax.call_request('get',listURL,list);
         }
     }else {
@@ -33,8 +33,14 @@ function bindSF(data) {
 }
 function userLIST() {
     var taskID=JSON.parse(localStorage.getItem('buildNewXnr'));
-    var bind_url='/weibo_xnr_create/save_step_three_1/?task_id='+taskID+'&weibo_mail_account='+name1 +
-        '&weibo_phone_account='+name2+'&nick_name='+name3+'&password='+password;
+    var url1='weibo_mail_account',url2='weibo_phone_account'
+    if(flag==4){
+        url1='fb_mail_account',url2='fb_phone_account';
+    }else if (flag==5){
+        url1='tw_mail_account',url2='tw_phone_account';
+    }
+    var bind_url=WFT_url+'/save_step_three_1/?task_id='+taskID+'&'+url1+'='+name1 +
+        '&'+url2+'='+name2+'&nick_name='+name3+'&password='+password;
     public_ajax.call_request('get',bind_url,bindSF);
 }
 function list(person) {
@@ -71,17 +77,20 @@ $('#back').on('click',function () {
     window.open('/personalCenter/individual/');
 });
 $('.backTWO').on('click',function () {
-    window.location.href='/registered/virtualCreated/';
+    window.location.href='/registered/virtualCreated/?flag='+flag;
 })
 $('#release').on('click',function () {
-    window.open('/registered/posting/');
+    var t='';
+    if (flag==1){t='posting'}else if (flag==4){t='postingTwitter'}
+    else if(flag==5){t='postingFaceBook'};
+    window.open('/control/'+t+'/');
 });
 function surefocus() {
     let people=[];
     $("[name=someone]:checkbox:checked").each(function (index,item) {
         people.push($(this).val());
     });
-    let focus_url='/weibo_xnr_create/save_step_three_2/?nick_name='+basicData_2.nick_name+'&followers_uids='+people.join(',');
+    let focus_url=WFT_url+'/save_step_three_2/?nick_name='+basicData_2.nick_name+'&followers_uids='+people.join(',');
     public_ajax.call_request('get',focus_url,focusSF);
 }
 function focusSF(data) {

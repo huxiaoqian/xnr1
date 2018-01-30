@@ -35,10 +35,16 @@ function weiboORqq(type) {
             nowUser=decodeURI(ID_name);
         }
     }else if(type=="twitter") {
-        ID_Num='TXNR0001';
-        REL_name='TXNR0001';
-        ID_name='TXNR0001';
-        nowUser=decodeURI('TXNR0001');
+        // ID_Num='TXNR0001';
+        // REL_name='TXNR0001';
+        // ID_name='TXNR0001';
+        // nowUser=decodeURI('TXNR0001');
+        ID_Num=localStorage.getItem('userTW');
+        REL_name=localStorage.getItem('userTWRelName');
+        ID_name=localStorage.getItem('userTWName');
+        if (ID_name){
+            nowUser=decodeURI(ID_name);
+        }
     }
 }
 
@@ -283,6 +289,8 @@ $('.change').on('click',function () {
         THEmid='/wx_xnr_manage/show/';
     }else if(loadingType=='faceBook'){
         THEmid='/facebook_xnr_create/show_fb_xnr/';
+    }else if(loadingType=='twitter'){
+        THEmid='/twitter_xnr_create/show_tw_xnr/';
     }
     var THEurl=THEmid+"?submitter="+admin;
     public_ajax.call_request('GET',THEurl,addXnr)
@@ -330,6 +338,17 @@ function addXnr(data) {
                 '</label>';
         });
     }else if (loadingType=='faceBook'){
+        for (var k in data){
+            if (data[k]==''||data[k]=='unknown'){
+                data[k]='无昵称';
+            }
+            str+=
+                '<label class="demo-label" title="'+data[k]+'">'+
+                '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                '</label>';
+        }
+    }else if (loadingType=='twitter'){
         for (var k in data){
             if (data[k]==''||data[k]=='unknown'){
                 data[k]='无昵称';
