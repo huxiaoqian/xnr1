@@ -105,7 +105,26 @@ function letter(_this) {
 }
 //机器人回复
 function robot(_this) {
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    // var uid = $(_this).parents('.center_rel').find('.uid').text();
+    $('#robotBack .questionVal').val('');
+    $('#robotBack .QC').hide();
+    $('#robotBack').modal('show');
+}
+function getRobot() {
+    var s=$('#robotBack .questionVal').val();
+    if (!s){
+        $('#pormpt p').text('请输入问题。');
+        $('#pormpt').modal('show');
+    }else {
+        var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
+        public_ajax.call_request('get',robot_url,robotTxt)
+    }
+}
+function robotTxt(data) {
+    var txt=data;
+    if (!data){txt='暂无内容'};
+    $('#robotBack .showRob').text(txt);
+    $('#robotBack .QC').show();
 }
 //加入预警库
 function getInfo(_this) {

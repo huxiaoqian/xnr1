@@ -339,19 +339,19 @@ function focus_main(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
             },
-            {
-                title: "操作",//标题
-                field: "",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter:function (value, row, index) {
-                    return '<span style="display: inline-block;"><i class="icon icon-file-alt" title="查看详情"></i></span>'+
-                        '<span style="margin: 0 10px;"><i class="icon icon-eye-close" title="取消关注"></i></span>'+
-                        '<span style="display: inline-block;"><i class="icon icon-trash" title="删除"></i></span>'
-                }
-            },
+            // {
+            //     title: "操作",//标题
+            //     field: "",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            //     formatter:function (value, row, index) {
+            //         return '<span style="display: inline-block;"><i class="icon icon-file-alt" title="查看详情"></i></span>'+
+            //             '<span style="margin: 0 10px;"><i class="icon icon-eye-close" title="取消关注"></i></span>'+
+            //             '<span style="display: inline-block;"><i class="icon icon-trash" title="删除"></i></span>'
+            //     }
+            // },
         ],
         onCheck:function (row) {
             mainUserUid.push(row.uid);_judge()
