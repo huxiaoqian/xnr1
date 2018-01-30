@@ -622,3 +622,9 @@ qiniu = Auth(qiniu_access_key, qiniu_secret_key)
 
 R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2, db=3)
 operate_queue_name = 'operate'
+
+
+#各类虚拟人从redis中获取编号时所对应的key
+fb_xnr_max_no = 'fb_xnr_max_no'
+tw_xnr_max_no = 'tw_xnr_max_no'
+wx_xnr_max_no = 'wx_xnr_max_no'
