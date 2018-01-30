@@ -405,7 +405,7 @@ def get_add_other_info(task_detail):
     item_dict = {}
     if user:
         item_dict['nick_name'] = nick_name
-        item_dict['id'] = info_dict['uid']
+        item_dict['uid'] = info_dict['id']
         item_dict['location'] = info_dict['location']
         item_dict['age'] = info_dict['age']
         item_dict['description'] = info_dict['description']
@@ -416,12 +416,11 @@ def get_save_step_three_1(task_detail):
     task_id = task_detail['task_id']
     item_exist = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=task_id)['_source']
     
-    item_exist['uid'] = task_detail['id']
+    item_exist['uid'] = task_detail['uid']
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['tw_mail_account'] = task_detail['tw_mail_account']
     item_exist['tw_phone_account'] = task_detail['tw_phone_account']
     item_exist['password'] = task_detail['password']
-    item_exist['career'] = task_detail['career']
     item_exist['description'] = task_detail['description']
     item_exist['age'] = task_detail['age']
     item_exist['location'] = task_detail['location']
@@ -451,18 +450,20 @@ def get_xnr_info_new(xnr_user_no):
 
 def get_modify_base_info(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
-    res = es.mget(index=tw_xnr_index_name, doc_type=tw_xnr_index_type, body={'ids': [xnr_user_no]})['docs']
-    mark = False
+    item_exists = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+    if task_detail.has_key('active_time'):
+        item_exists['active_time'] = task_detail['active_time']
+    if task_detail.has_key('day_post_average'): 
+        day_post_average = task_detail['day_post_average'].split('-')
+        item_exists['day_post_average'] = json.dumps(day_post_average)
+    if task_detail.has_key('monitor_keywords'): 
+        item_exists['monitor_keywords'] = task_detail['monitor_keywords']
     try:
-        if res[0]['found']:
-            item_exists['active_time'] = task_detail['active_time']
-            item_exists['day_post_average'] = task_detail['day_post_average']
-            # item_exists['daily_interests'] = task_detail['daily_interests']
-            item_exists['monitor_keywords'] = task_detail['monitor_keywords']
-            es.update(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
-            mark = True
-    except Exception,e :
+        es.update(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
+        mark = True
+    except Exception,e:
         print e
+        mark = False
     return mark
 
 def get_domain_info(domain_pinyin):
