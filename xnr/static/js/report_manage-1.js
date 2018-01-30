@@ -1,5 +1,7 @@
 var reportDefaul_url;
-if(flagType == 3){//微信
+var time2=Date.parse(new Date())/1000;
+if(flagType == 3){
+    //微信
     //===============时间搜索添加11---21 ===============
     var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
         +'<label class="demo-label">'
@@ -70,13 +72,13 @@ if(flagType == 3){//微信
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if(flagType == 1){//微博
     weiboORqq('weibo');
-    reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
+    reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=&start_time='+todayTimetamp()+'&end_time='+time2;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
+    reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }
 
@@ -391,9 +393,58 @@ $('.type2 .demo-label').on('click',function () {
     $(".type2 input:checkbox:checked").each(function (index,item) {
         types.push($(this).val());
     });
-    var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
+    var time=$('.choosetime input:radio[name="time"]:checked').val();
+    var time1=getDaysBefore(time);
+    if (time=='mize'){
+        var s=$('.choosetime').find('#start').val();
+        var d=$('.choosetime').find('#end').val();
+        if (s==''||d==''){
+            $('#pormpt p').text('时间不能为空。');
+            $('#pormpt').modal('show');
+            return false;
+        }else {
+            time1=(Date.parse(new Date(s))/1000);
+            time2=(Date.parse(new Date(d))/1000);
+        }
+    }
+    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+thisType+
+        '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
+//时间选择
+var valCH=[];
+$('.choosetime .demo-label input').on('click',function () {
+    $('.person p').show();
+    $(".type2 input:checkbox:checked").each(function (index,item) {
+        valCH.push($(this).val());
+    });
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,reportDefaul);
+    }//show_reportcontent_new
+});
+$('#sure').on('click',function () {
+    $('.person p').show();
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+
+            '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,reportDefaul);
+    }
+});
+
 //导出excel
 $('#output1').click(function(){
     var all=[];
