@@ -2,17 +2,17 @@
 
 import sys
 
-sys.append('../../')
+sys.path.append('../../')
 from global_utils import R_OPERATE_QUEUE as r, operate_queue_name
 from utils import add_operate2redis
 
-sys.append('../facebook_xnr_operate/')
+sys.path.append('../facebook_xnr_operate/')
 from utils import get_submit_tweet_fb, get_comment_operate_fb, get_retweet_operate_fb, get_at_operate_fb,\
 				get_like_operate_fb,get_private_operate_fb, get_add_friends, get_confirm_friends, \
 				get_delete_friend 
 
 
-sys.append('../twitter_xnr_operate/')
+sys.path.append('../twitter_xnr_operate/')
 from utils import get_submit_tweet_tw, get_comment_operate_tw, get_retweet_operate_tw, get_at_operate_tw,\
 				get_like_operate_tw,get_private_operate_tw, get_follow_operate_tw, get_unfollow_operate_tw
 
