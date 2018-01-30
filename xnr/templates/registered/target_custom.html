@@ -2,7 +2,6 @@
 {% block title %}<title>虚拟人定制 - 目标定制</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/target_custom.css">
-
 <link rel="stylesheet" href="/static/css/target_custom-2.css">
 <link rel="stylesheet" href="/static/css/target_custom-3.css">
 <style>
@@ -432,12 +431,20 @@
 {% block my_js %}
 <script>
     judgment('6');
+    localStorage.removeItem('firstStep');
+//    localStorage.removeItem('secondStep');
+    var flag='{{flag}}',urlTotal;
+    if (flag==1){
+        urlTotal='/weibo_xnr_knowledge_base_management';
+    }else if (flag==4){
+        urlTotal='/fb_xnr_knowledge_base_management';
+    }
     $('.buildNew').on('click',function () {
-        window.open('/knowledge/domainLibrary/');
+        window.open('/knowledge/domainLibrary/?flag='+flag);
     });
     function importModal(){
 //        $("#example_modal").trigger("click");
-        var filesList='/weibo_xnr_knowledge_base_management/show_example_model/';
+        var filesList=jumpFlagUrl+'/show_example_model/';
         public_ajax.call_request('get',filesList,$file);
     };
     function $file(data) {
@@ -461,7 +468,7 @@
         var a=$(_this).find('.m-1').text();
         var b=$(_this).find('.m-2').text();
         domainName=a;roleName=b;
-        var showModal_url='/weibo_xnr_knowledge_base_management/export_example_model/?domain_name='+a+
+        var showModal_url=jumpFlagUrl+'/export_example_model/?domain_name='+a+
             '&role_name='+b+'&xnr_user_no='+ID_Num;
         public_ajax.call_request('get',showModal_url,inModalData);
         $('#modalList').modal('hide');

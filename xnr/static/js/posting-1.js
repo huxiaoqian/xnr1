@@ -395,7 +395,7 @@ function obtain(t) {
     }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
-$('#sure_postRel').on('click',function () {
+$('#sure_post').on('click',function () {
     //
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
@@ -425,7 +425,7 @@ $('#sure_postRel').on('click',function () {
 });
 function postYES22(data) {
     var f='发帖内容提交失败';
-    if (data[0]){
+    if (data[0]||data){
         f='发帖内容提交成功';
     }
     $('#pormpt p').text(f);
@@ -437,7 +437,7 @@ var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&orig
 public_ajax.call_request('get',roadInforurl,roadInfor);
 function roadInfor(data) {
     var data=data[0];
-    ///nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
+    //nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
     //nameAndGroup(data['weixin_xnr_name'],data['weixin_xnr_user_no'],'#sameRoad .wxlist .weixinName',data['weixin_groups'],'#sameRoad .wxlist .weixinGroup')
     nameAndGroup(data['facebook_xnr_name'],data['facebook_xnr_user_no'],'#sameRoad .fblist .fbName',data['facebook_groups'],'#sameRoad .fblist .fbGroup')
     nameAndGroup(data['twitter_xnr_name'],data['twitter_xnr_user_no'],'#sameRoad .twlist .twName',data['twitter_groups'],'#sameRoad .twlist .twGroup')
