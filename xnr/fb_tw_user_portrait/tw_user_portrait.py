@@ -529,7 +529,7 @@ def update_baseinfo(uid_list=[]):
             }
         },
         'size': MAX_SEARCH_SIZE,
-        "fields": ["location", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
+        "fields": ["location", "userscreenname", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
     }
     search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=fb_user_query_body)['hits']['hits']
     for item in search_results:
@@ -545,6 +545,7 @@ def update_baseinfo(uid_list=[]):
                 'friendsnum': 0,
                 'fansnum': 0,
                 'photo_url': '',
+                'screenname': ''
             }
         location = ''
         if content.has_key('location'):
@@ -567,6 +568,9 @@ def update_baseinfo(uid_list=[]):
         fansnum = ''
         if content.has_key('followers_count'):
             fansnum = content.get('followers_count')[0]
+        screenname = ''
+        if content.has_key('userscreenname'):
+            screenname = content.get('userscreenname')[0]
 
         user_baseinfo[uid]['location'] = location
         user_baseinfo[uid]['uname'] = uname
@@ -575,6 +579,7 @@ def update_baseinfo(uid_list=[]):
         user_baseinfo[uid]['statusnum'] = statusnum
         user_baseinfo[uid]['friendsnum'] = friendsnum
         user_baseinfo[uid]['fansnum'] = fansnum
+        user_baseinfo[uid]['screenname'] = screenname
     for uid in uid_list:
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
@@ -586,6 +591,7 @@ def update_baseinfo(uid_list=[]):
                 'friendsnum': 0,
                 'fansnum': 0,
                 'photo_url': '',
+                'screenname': ''
             }
     return save_data2es(user_baseinfo)
 
