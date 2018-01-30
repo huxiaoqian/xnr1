@@ -105,7 +105,9 @@ def ajax_report_warming_content():
 		task_detail['user_info']=data['user_info']   #user_info=[uid,uid,……]	
 		#获取典型微博信息
 		task_detail['weibo_info']=data['weibo_info']   #weibo_info=[{'mid':*,'timestamp':*},{'mid':*,'timestamp':*},……]
-
+        
+        #仅时间预警需要，其他的设为空
+        task_detail['date_time']=data['date_time']
 	# print 'type',type(task_detail),task_detail
 	results=report_warming_content(task_detail)
 	return json.dumps(results)

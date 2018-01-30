@@ -24,10 +24,16 @@ function weiboORqq(type) {
             nowUser=decodeURI(ID_name);
         }
     }else if(type=="faceBook") {
-        ID_Num='FXNR0001';
-        REL_name='FXNR0001';
-        ID_name='FXNR0001';
-        nowUser=decodeURI('FXNR0001');
+        // ID_Num='FXNR0001';
+        // REL_name='FXNR0001';
+        // ID_name='FXNR0001';
+        // nowUser=decodeURI('FXNR0001');
+        ID_Num=localStorage.getItem('userFB');
+        REL_name=localStorage.getItem('userFBRelName');
+        ID_name=localStorage.getItem('userFBName');
+        if (ID_name){
+            nowUser=decodeURI(ID_name);
+        }
     }else if(type=="twitter") {
         ID_Num='TXNR0001';
         REL_name='TXNR0001';
@@ -103,16 +109,16 @@ setTimeout(function(){
             window.open('/behavioGauge/influeAssess/');
         });
         $('#knowledge').on('click',function () {
-            window.open('/registered/targetCustom/')
+            window.open('/registered/targetCustom/?flag=1')
         });
         $('#reportedmange').on('click',function () {
-            window.open('/reportManage/management/?flag=3');
+            window.open('/reportManage/management/?flag=1');
         });
         $('#knowledgebase').on('click',function () {
-            window.open('/knowledge/domainLibrary/?flag=3');
+            window.open('/knowledge/domainLibrary/?flag=1');
         });
         $('#system').on('click',function () {
-            window.open('/systemManage/daily/?flag=3');
+            window.open('/systemManage/daily/?flag=1');
         });
     }else if (loadingType=='WX'){
         InloginName('微信虚拟人');
@@ -194,7 +200,7 @@ setTimeout(function(){
             window.open('/behavioGauge/influeAssessTwitter/');
         });
         $('#knowledge').on('click',function () {
-            window.open('/registered/targetCustom/')
+            window.open('/registered/targetCustom/?flag=5')
         });
         $('#reportedmange').on('click',function () {
             window.open('/reportManage/management/?flag=5');
@@ -242,7 +248,7 @@ setTimeout(function(){
             window.open('/behavioGauge/influeAssessFaceBook/');
         });
         $('#knowledge').on('click',function () {
-            window.open('/registered/targetCustom/')
+            window.open('/registered/targetCustom/?flag=4')
         });
         $('#reportedmange').on('click',function () {
             window.open('/reportManage/management/?flag=4');
@@ -275,6 +281,8 @@ $('.change').on('click',function () {
         THEmid='/qq_xnr_manage/show_qq_xnr/';
     }else if(loadingType=='WX'){
         THEmid='/wx_xnr_manage/show/';
+    }else if(loadingType=='faceBook'){
+        THEmid='/facebook_xnr_create/show_fb_xnr/';
     }
     var THEurl=THEmid+"?submitter="+admin;
     public_ajax.call_request('GET',THEurl,addXnr)
@@ -321,6 +329,17 @@ function addXnr(data) {
                 '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.wxbot_id+'）'+
                 '</label>';
         });
+    }else if (loadingType=='faceBook'){
+        for (var k in data){
+            if (data[k]==''||data[k]=='unknown'){
+                data[k]='无昵称';
+            }
+            str+=
+                '<label class="demo-label" title="'+data[k]+'">'+
+                '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+'>'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                '</label>';
+        }
     }
     $('#choosePerson .identity').html(str);
 }
@@ -350,9 +369,6 @@ $('#choosePerson .sure_in').on('click',function () {
         var userID=$('input:radio[name="ID"]:checked').attr('valueID');
         var userName=$('input:radio[name="ID"]:checked').attr('valueName');
         var userType=$('input:radio[name="choose"]:checked').val();
-        console.log(userID)
-        console.log(userName)
-        console.log(userType)
         if (!userID||!userName||!userType){
             $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
             $('#pormpt').modal('show');
@@ -387,6 +403,25 @@ $('#choosePerson .sure_in').on('click',function () {
             localStorage.setItem('userWXRelName',encodeURI(userWXName));
             // localStorage.setItem('userQQnum',encodeURI(userQQnum));
             localStorage.setItem('userWXName',encodeURI(id_or_name));
+        }
+    }else if (loadingType=='faceBook'){
+        var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userName=$('input:radio[name="ID"]:checked').attr('valueName');
+        var userType=$('input:radio[name="choose"]:checked').val();
+        if (!userID||!userName||!userType){
+            $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+            $('#pormpt').modal('show');
+        }else {
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userID;
+            }else {
+                id_or_name=userName;
+            }
+            localStorage.setItem('userFB',encodeURI(userID));
+            localStorage.setItem('userFBRelName',encodeURI(userName));
+            localStorage.setItem('userFBName',encodeURI(id_or_name));
+            $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     }
     location.reload();
