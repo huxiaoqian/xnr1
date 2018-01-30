@@ -186,7 +186,17 @@ fb_domain_ch2en_dict = {u'高校':'university',u'机构':'admin',u'媒体':'medi
                         
 fb_domain_en2ch_dict = {'university':u'高校','admin':u'机构','media':u'媒体',\
                         'folkorg':u'民间组织','lawyer':u'法律机构及人士','politician':u'政府机构及人士',\
-                        'mediaworker':u'媒体人士','active':u'活跃人士','other':u'其他','business':u'商业人士'}               
+                        'mediaworker':u'媒体人士','active':u'活跃人士','other':u'其他','business':u'商业人士'}         
+
+#twitter
+tw_domain_en2ch_dict = {'university':u'高校','admin':u'组织','inner_admin':u'境内组织','outer_admin':u'境外组织',\
+                        'media':u'媒体','inner_media':u'境内媒体','outer_media':u'境外媒体',\
+                        'lawyer':u'法律机构及人士','politician':u'政府机构及人士','mediaworker':u'媒体人士',\
+                        'active':u'活跃人士','other':u'其他','business':u'商业人士'}
+tw_domain_ch2en_dict = {u'高校':'university',u'组织':'admin',u'境内组织':'inner_admin',u'境外组织':'outer_admin',\
+                        u'媒体':'media',u'境内媒体':'inner_media',u'境外媒体':'outer_media',\
+                        u'法律机构及人士':'lawyer',u'政府机构及人士':'politician',u'媒体人士':'mediaworker',\
+                        u'活跃人士':'active',u'其他':'other',u'商业人士':'business'}
 
 #facebook&twitter
 fb_tw_topic_en2ch_dict = {'life':u'其他类','law':u'民生类_法律','computer':u'科技类','house':u'民生类_住房',\
