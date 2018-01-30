@@ -11,20 +11,20 @@ from collections import Counter
 import numpy as np
 reload(sys)
 sys.path.append('../../')
-from global_utils import r,fb_target_domain_detect_queue_name,fb_target_domain_analysis_queue_name,\
-                        es_xnr as es, es_xnr, facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
-                        facebook_flow_text_index_type as flow_text_index_type,\
-                        fb_domain_index_name, fb_domain_index_type, facebook_user_index_name, facebook_user_index_type,\
-                        fb_role_index_name, fb_role_index_type,\
-                        fb_portrait_index_name, fb_portrait_index_type,\
-                        fb_be_retweet_index_name_pre as be_retweet_index_name_pre, fb_be_retweet_index_type as be_retweet_index_type
-from global_config import S_TYPE,S_DATE_FB as S_DATE, R_BEGIN_TIME
-from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH,\
+from global_utils import r,tw_target_domain_detect_queue_name,tw_target_domain_analysis_queue_name,\
+                        es_xnr as es, es_xnr, twitter_flow_text_index_name_pre as flow_text_index_name_pre,\
+                        twitter_flow_text_index_type as flow_text_index_type,\
+                        tw_domain_index_name, tw_domain_index_type, twitter_user_index_name, twitter_user_index_type,\
+                        tw_role_index_name, tw_role_index_type,\
+                        tw_portrait_index_name, tw_portrait_index_type,\
+                        tw_be_retweet_index_name_pre as be_retweet_index_name_pre, tw_be_retweet_index_type as be_retweet_index_type
+from global_config import S_TYPE,S_DATE_TW as S_DATE, R_BEGIN_TIME
+from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, TW_DOMAIN_ABS_PATH,\
                     DAY, WEEK, fb_tw_topic_en2ch_dict as topic_en2ch_dict, SENTIMENT_DICT_NEW, SORT_FIELD,\
                     TOP_KEYWORDS_NUM,TOP_WEIBOS_LIMIT,WEEK_TIME,DAY,DAY_HOURS,HOUR,\
                     fb_tw_topic_ch2en_dict as topic_ch2en_dict, WORD2VEC_PATH
-from time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list,ts2datetime,datetime2ts
-from utils import split_city    #fb 没有geo信息 不可用
+from time_utils import get_twitter_flow_text_index_list as get_flow_text_index_list,ts2datetime,datetime2ts
+from utils import split_city    #tw 没有geo信息 不可用
 
 sys.path.append('../../cron/trans/')
 from trans import trans, simplified2traditional, traditional2simplified
@@ -33,7 +33,7 @@ sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
 from config import name_list, zh_data
 
-sys.path.append(FB_DOMAIN_ABS_PATH)
+sys.path.append(TW_DOMAIN_ABS_PATH)
 from domain_classify import domain_main
 
 sys.path.append('../../fb_tw_user_portrait/')
@@ -55,7 +55,7 @@ def save_data2es(data):
     create_uid_list = []
     try:
         for uid, d in data.items():
-            if es.exists(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, id=uid):
+            if es.exists(index=tw_portrait_index_name, doc_type=tw_portrait_index_type, id=uid):
                 update_uid_list.append(uid)
             else:
                 create_uid_list.append(uid)
@@ -65,7 +65,7 @@ def save_data2es(data):
             for uid in create_uid_list:
                 create_action = {'index':{'_id': uid}}
                 bulk_create_action.extend([create_action, data[uid]])
-            result = es.bulk(bulk_create_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            result = es.bulk(bulk_create_action, index=tw_portrait_index_name, doc_type=tw_portrait_index_type)
             if result['errors'] :
                 print result
                 return False
@@ -75,7 +75,7 @@ def save_data2es(data):
             for uid in update_uid_list:
                 update_action = {'update':{'_id': uid}}
                 bulk_update_action.extend([update_action, {'doc': data[uid]}])
-            result = es.bulk(bulk_update_action, index=fb_portrait_index_name, doc_type=fb_portrait_index_type)
+            result = es.bulk(bulk_update_action, index=tw_portrait_index_name, doc_type=tw_portrait_index_type)
             if result['errors'] :
                 print result
                 return False
@@ -90,7 +90,7 @@ def my_topic_classfiy(uid_list, datetime_list):
     #将处理后的结果保存到数据库中，并在处理前查询数据库中是否已经有了相应内容之前存储的结果，以提高效率
     uids = uid_list
     unresolved_uids = []
-    res = es.mget(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body={'ids': uids})['docs']
+    res = es.mget(index=tw_portrait_index_name, doc_type=tw_portrait_index_type, body={'ids': uids})['docs']
     for r in res:
         uid = r['_id']
         if r.has_key('found'): 
@@ -109,10 +109,10 @@ def my_topic_classfiy(uid_list, datetime_list):
     user_topic_dict = {}
     user_topic_list = {}
     if unresolved_uids:
-        fb_flow_text_index_list = []
+        tw_flow_text_index_list = []
         for datetime in datetime_list:
-            fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
-        user_topic_data = get_filter_keywords(fb_flow_text_index_list, unresolved_uids)
+            tw_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+        user_topic_data = get_filter_keywords(tw_flow_text_index_list, unresolved_uids)
         user_topic_dict, user_topic_list = topic_classfiy(unresolved_uids, user_topic_data)
 
         user_topic_string = {}
@@ -142,7 +142,7 @@ def my_topic_classfiy(uid_list, datetime_list):
     user_topic_list.update(topic_string_results)
     return user_topic_dict, user_topic_list
 
-def count_text_num(uid_list, fb_flow_text_index_list):
+def count_text_num(uid_list, tw_flow_text_index_list):
     count_result = {}
     #QQ那边好像就是按照用户来count的    https://github.com/huxiaoqian/xnr1/blob/82ff9704792c84dddc3e2e0f265c46f3233a786f/xnr/qq_xnr_manage/qq_history_count_timer.py
     for uid in uid_list:
@@ -160,7 +160,7 @@ def count_text_num(uid_list, fb_flow_text_index_list):
             }
         }
         text_num = 0
-        for index_name in fb_flow_text_index_list:
+        for index_name in tw_flow_text_index_list:
             result = es.count(index=index_name, doc_type=flow_text_index_type,body=textnum_query_body)
             if result['_shards']['successful'] != 0:
                 text_num += result['count']
@@ -185,7 +185,7 @@ def my_domain_classfiy(uid_list, datetime_list):
     #将处理后的结果保存到数据库中，并在处理前查询数据库中是否已经有了相应内容之前存储的结果，以提高效率
     uids = uid_list
     unresolved_uids = []
-    res = es.mget(index=fb_portrait_index_name, doc_type=fb_portrait_index_type, body={'ids': uids})['docs']
+    res = es.mget(index=tw_portrait_index_name, doc_type=tw_portrait_index_type, body={'ids': uids})['docs']
     for r in res:
         uid = r['_id']
         if r.has_key('found'): 
@@ -202,15 +202,15 @@ def my_domain_classfiy(uid_list, datetime_list):
     user_domain = {}
     user_domain_temp = {}
     if unresolved_uids:
-        fb_flow_text_index_list = []
+        tw_flow_text_index_list = []
         for datetime in datetime_list:
-            fb_flow_text_index_list.append(flow_text_index_name_pre + datetime)
+            tw_flow_text_index_list.append(flow_text_index_name_pre + datetime)
 
         user_domain_data = {}
         #load num of text
-        count_result = count_text_num(unresolved_uids, fb_flow_text_index_list)
+        count_result = count_text_num(unresolved_uids, tw_flow_text_index_list)
         #load baseinfo
-        fb_user_query_body = {
+        tw_user_query_body = {
             'query':{
                 "filtered":{
                     "filter": {
@@ -223,44 +223,36 @@ def my_domain_classfiy(uid_list, datetime_list):
                 }
             },
             'size': MAX_SEARCH_SIZE,
-            "fields": ["bio", "about", "description", "quotes", "category", "uid"]
+            "fields": ["location", "username", "description", "uid"]
         }
         try:
-            search_results = es.search(index=facebook_user_index_name, doc_type=facebook_user_index_type, body=fb_user_query_body)['hits']['hits']
+            search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=tw_user_query_body)['hits']['hits']
             for item in search_results:
                 content = item['fields']
                 uid = content['uid'][0]
                 if not uid in user_domain_data:
                     text_num = count_result[uid]
                     user_domain_data[uid] = {
-                        'bio_str': '',
-                        'bio_list': [],
-                        'category': '',
+                        'location': '',
+                        'username': '',
+                        'description': '',
                         'number_of_text': text_num
                     }
-                #对于长文本，Goslate 会在标点换行等分隔处把文本分拆为若干接近 2000 字节的子文本，再一一查询，最后将翻译结果拼接后返回用户。通过这种方式，Goslate 突破了文本长度的限制。
-                if content.has_key('category'):
-                    category = content.get('category')[0]
+                if content.has_key('location'):
+                    location = content.get('location')[0]
                 else:
-                    category = ''
+                    location = ''
                 if content.has_key('description'):
-                    description = content.get('description')[0][:1000]  #有的用户描述信息之类的太长了……3000+，没有卵用，而且翻译起来会出现一些问题，截取一部分就行了
+                    description = content.get('description')[0][:1000]
                 else:
                     description = ''
-                if content.has_key('quotes'):
-                    quotes = content.get('quotes')[0][:1000]
+                if content.has_key('username'):
+                    username = content.get('username')[0]
                 else:
-                    quotes = ''
-                if content.has_key('bio'):
-                    bio = content.get('bio')[0][:1000]
-                else:
-                    bio = ''
-                if content.has_key('about'):
-                    about = content.get('about')[0][:1000]
-                else:
-                    about = ''    
-                user_domain_data[uid]['bio_list'] = [quotes, bio, about, description]
-                user_domain_data[uid]['category'] = category
+                    username = '' 
+                user_domain_data[uid]['location'] = location
+                user_domain_data[uid]['username'] = username
+                user_domain_data[uid]['description'] = description
         except Exception,e:
             print e
         #由于一个用户请求一次翻译太耗时，所以统一批量翻译
@@ -270,14 +262,14 @@ def my_domain_classfiy(uid_list, datetime_list):
         n = len(user_domain_data)/cut
         for uid, content in user_domain_data.items():
             trans_uid_list.append(uid)
-            untrans_bio_data.extend(content['bio_list'])
-            content.pop('bio_list')
+            untrans_bio_data.extend([content['location'] ,content['description']])
             if n:
                 if len(trans_uid_list)%cut == 0:
                     temp_trans_bio_data = trans_bio_data(untrans_bio_data)
                     for i in range(len(trans_uid_list)):
                         uid = trans_uid_list[i]
-                        user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                        user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                        user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
                     trans_uid_list = []
                     untrans_bio_data = []
                     n = n - 1
@@ -286,7 +278,8 @@ def my_domain_classfiy(uid_list, datetime_list):
                     temp_trans_bio_data = trans_bio_data(untrans_bio_data)
                     for i in range(len(trans_uid_list)):
                         uid = trans_uid_list[i]
-                        user_domain_data[uid]['bio_str'] = '_'.join(temp_trans_bio_data[4*i : 4*i+4])
+                        user_domain_data[uid]['location'] = '_'.join(temp_trans_bio_data[2*i])
+                        user_domain_data[uid]['description'] = '_'.join(temp_trans_bio_data[2*i+1])
                     trans_uid_list = []
                     untrans_bio_data = []
         #domian计算
@@ -302,7 +295,6 @@ def my_domain_classfiy(uid_list, datetime_list):
     user_domain_temp.update(domain_results)
     return user_domain_temp
 
-
 '''
 领域知识库计算
 
@@ -316,11 +308,11 @@ def save_detect_results(detect_results, decect_task_information):
     task_id = decect_task_information['domain_pinyin']
 
     try:
-        item_exist = es_xnr.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id)['_source']
+        item_exist = es_xnr.get(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id)['_source']
         item_exist['group_size'] = len(detect_results)
         item_exist['member_uids'] = detect_results
         item_exist['compute_status'] = 1  # 存入uid
-        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_exist})
+        es_xnr.update(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
         print e
         item_exist = dict()
@@ -335,24 +327,23 @@ def save_detect_results(detect_results, decect_task_information):
         item_exist['group_size'] = len(detect_results)
         item_exist['member_uids'] = detect_results
         item_exist['compute_status'] = 1  # 存入uid
-        es_xnr.index(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body=item_exist)
+        es_xnr.index(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body=item_exist)
     mark = True
     return mark
 
 ## 保存群体分析结果
-
 def save_group_description_results(group_results,decect_task_information):
     mark = False   
     task_id = decect_task_information['domain_pinyin']
 
     try:
-        item_exist = es_xnr.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id)['_source']
+        item_exist = es_xnr.get(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id)['_source']
         item_exist['role_distribute'] = json.dumps(group_results['role_distribute'])
         item_exist['top_keywords'] = json.dumps(group_results['top_keywords'])
         item_exist['political_side'] = json.dumps(group_results['political_side'])
         item_exist['topic_preference'] = json.dumps(group_results['topic_preference'])
         item_exist['compute_status'] = 2  # 存入群体描述
-        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_exist})
+        es_xnr.update(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body={'doc':item_exist})
     except Exception, e:
         item_exist = dict()
 
@@ -369,7 +360,7 @@ def save_group_description_results(group_results,decect_task_information):
         item_exist['political_side'] = json.dumps(group_results['political_side'])
         item_exist['topic_preference'] = json.dumps(group_results['topic_preference'])
         item_exist['compute_status'] = 2  # 存入群体描述
-        es_xnr.index(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body=item_exist)
+        es_xnr.index(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body=item_exist)
     
     mark = True
 
@@ -381,7 +372,7 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
     mark = False
 
     try:
-        item_exist = es_xnr.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id)['_source']
+        item_exist = es_xnr.get(index=tw_role_index_name,doc_type=tw_role_index_type,id=role_id)['_source']
         item_exist['role_pinyin'] = role_id
         item_exist['role_name'] = role_label
         item_exist['domains'] = domain
@@ -394,11 +385,11 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['member_uids'] = json.dumps(role_results['member_uids'])
 
     
-        es_xnr.update(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id,body={'doc':item_exist})
+        es_xnr.update(index=tw_role_index_name,doc_type=tw_role_index_type,id=role_id,body={'doc':item_exist})
         
         item_domain = dict()
         item_domain['compute_status'] = 3  # 存入角色分析结果
-        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_domain})
+        es_xnr.update(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body={'doc':item_domain})
     
     except Exception, e:
         item_exist = dict()
@@ -413,11 +404,11 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
         item_exist['psy_feature'] = json.dumps(role_results['psy_feature'])
         item_exist['member_uids'] = json.dumps(role_results['member_uids'])
        
-        es_xnr.index(index=fb_role_index_name,doc_type=fb_role_index_type,id=role_id,body=item_exist)
+        es_xnr.index(index=tw_role_index_name,doc_type=tw_role_index_type,id=role_id,body=item_exist)
         
         item_domain = dict()
         item_domain['compute_status'] = 3  # 存入角色分析结果
-        es_xnr.update(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=task_id,body={'doc':item_domain})
+        es_xnr.update(index=tw_domain_index_name,doc_type=tw_domain_index_type,id=task_id,body={'doc':item_domain})
     
     mark =True
 
@@ -429,13 +420,13 @@ def save_role_feature_analysis(role_results,role_label,domain,role_id,task_id):
 def change_process_proportion(task_id, proportion):
     mark = False
     try:
-        task_exist_result = es_xnr.get(index=fb_domain_index_name, doc_type=fb_domain_index_type, id=task_id)['_source']
+        task_exist_result = es_xnr.get(index=tw_domain_index_name, doc_type=tw_domain_index_type, id=task_id)['_source']
     except:
         task_exist_result = {}
         return 'task is not exist'
     if task_exist_result != {}:
         task_exist_result['compute_status'] = proportion
-        es_xnr.update(index=fb_domain_index_name, doc_type=fb_domain_index_type, id=task_id, body={'doc':task_exist_result})
+        es_xnr.update(index=tw_domain_index_name, doc_type=tw_domain_index_type, id=task_id, body={'doc':task_exist_result})
         mark = True
 
     return mark
@@ -651,7 +642,7 @@ def detect_by_all_users(all_users):
 def add_task_2_queue(decect_task_information):
     status = True
     try:
-        r.lpush(fb_target_domain_detect_queue_name,json.dumps(decect_task_information))
+        r.lpush(tw_target_domain_detect_queue_name,json.dumps(decect_task_information))
     except:
         status = False
     return status
@@ -1018,6 +1009,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
         character_result_dict[character] = character_count
     character_result_dict_sort = sorted(character_result_dict.items(),key=lambda x:x[1], reverse=True)
 
+
     ## 地理位置
     geo_cityTopic_results = dict()
     province_set = set()
@@ -1078,7 +1070,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
 def get_detect_information():
     task_information_dict = {}
     try:
-        task_information_string = r.rpop(fb_target_domain_detect_queue_name)
+        task_information_string = r.rpop(tw_target_domain_detect_queue_name)
     except:
         task_information_string = ''
     if task_information_string:
