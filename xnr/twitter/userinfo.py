@@ -35,8 +35,12 @@ class Userinfo():
 		except:
 			birth = False
 		pattern = re.compile(u'(\d+)年')
+		pattern1 = re.compile(', (\d+)')
 		if birth:
-			birthday = int(re.findall(pattern,birth)[0])
+			try:
+				birthday = int(re.findall(pattern,birth)[0])
+			except:
+				birthday = int(re.findall(pattern1,birth)[0])
 			age = today - birthday
 		else:
 			age = None
@@ -45,5 +49,6 @@ class Userinfo():
 		return dict
 		
 if __name__ == '__main__':
-	userinfo = Userinfo('8617078448226','xnr123456')
+	#userinfo = Userinfo('8617078448226','xnr123456')
+	userinfo = Userinfo('feifanhanmc@163.com', 'han8528520258')
 	userinfo.getUserinfo()
