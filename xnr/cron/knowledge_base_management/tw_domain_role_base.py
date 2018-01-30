@@ -926,7 +926,10 @@ def active_time_compute(uids_list,datetime):
         else:
             print 'es_weibo_counts error'
             hour_counts = 0
-        day_hour_counts.append(hour_counts)                    
+        if len(uids_list):
+            day_hour_counts.append(hour_counts/float(len(uids_list)))  
+        else:
+            day_hour_counts.append(0) 
     # [21,32,213,42,...] 一维数组，24个元素
     return day_hour_counts                                   
 
