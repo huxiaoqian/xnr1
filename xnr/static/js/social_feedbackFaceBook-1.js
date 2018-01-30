@@ -60,7 +60,7 @@ $('#container .type_page #myTabs a').on('click',function () {
     }
     if (start&&end){
         var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
-            '&start_ts='+start+'&end_ts='+end;
+            '&start_ts='+(Date.parse(new Date(start))/1000)+'&end_ts='+(Date.parse(new Date(end))/1000);
         public_ajax.call_request('get',comURL,com);
     }else {
         $('#pormpt p').text('时间不能为空。');
