@@ -158,10 +158,16 @@ class Operation():
 			time.sleep(3)
 			self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
 			time.sleep(3)
-			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').click()
-			time.sleep(1)
-			self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]').send_keys(text)
-			time.sleep(1)
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
+				time.sleep(1)
+				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
+				time.sleep(1)
+			except:
+				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+				time.sleep(1)
+				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+				time.sleep(1)
 			self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
 		except:
 			self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()

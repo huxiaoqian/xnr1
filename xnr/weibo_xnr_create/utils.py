@@ -332,8 +332,7 @@ def get_recommend_step_two(task_detail):
     recommend_results['active_time'] = active_time_list_np_sort
     
     day_post_num = json.loads(es_result['day_post_num'])
-    day_post_num_new = []
-    #day_post_num_new = pd.Series(day_post_num)
+    day_post_num_new = pd.Series(day_post_num)
     day_post_num_new = day_post_num_new.fillna(0)
     day_post_num_new = list(day_post_num_new)
     day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
