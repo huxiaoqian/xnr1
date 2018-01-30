@@ -615,7 +615,6 @@ if __name__ == '__main__':
 
 	current_time = int(time.time())
 	datetime = ts2datetime(current_time)
-
 	weibo_feedback_retweet_mappings(datetime)
 	weibo_feedback_comment_mappings(datetime)
 	weibo_feedback_at_mappings(datetime)
