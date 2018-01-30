@@ -7,7 +7,7 @@ import sys
 import json
 import xlwt
 import time
-from xnr.global_utils import es_xnr,weibo_report_management_index_name,weibo_report_management_index_type,\
+from xnr.global_utils import es_xnr,weibo_report_management_index_name_pre,weibo_report_management_index_name,weibo_report_management_index_type,\
 							 weibo_xnr_index_name,weibo_xnr_index_type,weibo_xnr_fans_followers_index_name,\
                              weibo_xnr_fans_followers_index_type
 
@@ -62,6 +62,64 @@ def show_report_typecontent(report_type):
     else:
         result=show_report_content()
     return result
+
+
+
+##获取索引
+def get_xnr_reportment_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
+    index_name_list=[]
+    if ts2datetime(date_range_start_ts) != ts2datetime(date_range_end_ts):
+        iter_date_ts=date_range_end_ts
+        while iter_date_ts >= date_range_start_ts:
+            date_range_start_date=ts2datetime(iter_date_ts)
+            index_name=index_name_pre+date_range_start_date
+            if es_xnr.indices.exists(index=index_name):
+                index_name_list.append(index_name)
+            else:
+                pass
+            iter_date_ts=iter_date_ts-DAY
+    else:
+        date_range_start_date=ts2datetime(date_range_start_ts)
+        index_name=index_name_pre+date_range_start_date
+        if es_xnr.indices.exists(index=index_name):
+            index_name_list.append(index_name)
+        else:
+            pass
+    return index_name_list
+
+
+def show_reportcontent_new(report_type,start_time,end_time):
+    query_condition=[]
+    if report_type:
+    	query_condition.append({'terms':{'report_type':report_type}})
+    else:
+    	pass
+    query_condition.append({'range':{'report_time':{'gte':start_time,'lte':'end_time'}}})
+    query_body={
+    	'query':{
+    		'filtered':{
+    			'filter':{
+    				'bool':{
+    					'must':query_condition
+    				}
+    			}
+    		}
+    	},
+    	'size':MAX_SEARCH_SIZE,
+    	'sort':{'report_time':{'order':'desc'}}
+    }
+    report_management_index_name = get_xnr_reportment_index_listname(weibo_report_management_index_name_pre,start_time,end_time)
+    result=[]
+    try:
+        results=es_xnr.search(index=report_management_index_name,doc_type=weibo_report_management_index_type,body=query_body)['hits']['hits']
+        for item in results:
+            item['_source']['_id']=item['_id']    
+            item['_source']['report_content']=json.loads(item['_source']['report_content'])
+            result.append(item['_source'])
+    except:
+        result=[]
+    return result
+
 
 #pubic function:like ,retweet ,comment
 #################微博操作##########
@@ -156,32 +214,7 @@ def get_weibohistory_like(task_detail):
 
     return mark,save_mark
 
-#export into excel
-#step 1: get the data ----获取数据，当前页面显示的数据
-#step 2: write to excle file -----将数据按行列写入excel文件
-#step 3: download the file ----下载文件
-def get_data_toExcel(create_type):
-    result=show_report_typecontent(create_type)
-    return result
 
-def export_data_toExcel(create_type):
-    data_result=get_data_toExcel(create_type)
-
-    #实例化一个workbook对象（即excel文件）
-    wbk=xlwt.Workbook()    
-
-    sheet=wbk.add_sheet('Sheet1',cell_overwrite_ok=True)
-    #设置excel名
-    get_time=int(time.time())
-    time_name=ts2date(get_time)
-
-    for i in xrange(len(result)):
-        for j in xrange(len(result[i])):
-            sheet.write(i,j,result[i][j])
-    
-    filename=str(time_name)+'xlsx'
-    mark=wbk.save(filename)
-    return mark 
 
 
 

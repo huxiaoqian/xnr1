@@ -9,7 +9,7 @@ from flask import Blueprint,url_for,render_template,request,\
 from xnr.global_utils import es_xnr
 from utils import show_report_content,show_report_typecontent,\
 				  get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
-                  export_data_toExcel
+                  show_reportcontent_new
 
 mod=Blueprint('weibo_xnr_report_manage',__name__,url_prefix='/weibo_xnr_report_manage')
 
@@ -32,6 +32,15 @@ def ajax_show_report_typecontent():
 	results=show_report_typecontent(report_type)
 	return json.dumps(results)
 
+
+#上报新方法
+@mod.route('/show_reportcontent_new/')
+def ajax_show_reportcontent_new():
+    report_type=request.args.get('report_type','').split(',')
+    start_time=int(request.args.get('start_time',''))
+    end_time=int(request.args.get('end_time',''))
+    results=show_reportcontent_new(report_type,start_time,end_time)
+    return json.dumps(results)    
 
 #############微博相关操作########
 
@@ -75,10 +84,3 @@ def ajax_get_weibohistory_like():
 
 
 
-#导出excel文件
-#http://219.224.134.213:9209/weibo_xnr_report_manage/export_data_toExcel/?create_type=all_xnrs
-@mod.route('/export_data_toExcel/')
-def ajax_export_data_toExcel():
-    create_type=request.args.get('create_type','')
-    results=export_data_toExcel(create_type)
-    return json.dumps(results)
