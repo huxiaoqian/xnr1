@@ -33,7 +33,7 @@ def ajax_show_report_typecontent():
 	return json.dumps(results)
 
 
-#上报新方法
+#上报显示新方法
 @mod.route('/show_reportcontent_new/')
 def ajax_show_reportcontent_new():
     report_type=request.args.get('report_type','').split(',')
