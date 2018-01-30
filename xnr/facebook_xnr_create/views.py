@@ -59,7 +59,7 @@ def ajax_recommend_step_two():
     task_detail = dict()
     task_detail['domain_name'] = request.args.get('domain_name','')
     task_detail['role_name'] = request.args.get('role_name','')
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     recommend_results = get_recommend_step_two(task_detail)
     return json.dumps(recommend_results)
 
@@ -96,7 +96,7 @@ def ajax_save_step_two():
     task_detail['psy_feature'] = request.args.get('psy_feature','') # 心理特征，以中文逗号 “，”连接
     task_detail['political_side'] = request.args.get('political_side','') # 政治倾向
     task_detail['business_goal'] = request.args.get('business_goal','') # 业务目标,以中文逗号 “，”连接
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     task_detail['active_time'] = request.args.get('active_time','') 
     # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
