@@ -425,7 +425,7 @@ $('#sure_post').on('click',function () {
 });
 function postYES22(data) {
     var f='发帖内容提交失败';
-    if (data[0]){
+    if (data[0]||data){
         f='发帖内容提交成功';
     }
     $('#pormpt p').text(f);
