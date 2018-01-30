@@ -386,10 +386,10 @@ function deltPointData(_this) {
     if (h==0){$('.filesList').hide()}
 }
 //切换类型
-var types=[];
+
 $('.type2 .demo-label').on('click',function () {
     $('.person p').show();
-    var thisType=$(this).attr('value');
+    var types=[];
     $(".type2 input:checkbox:checked").each(function (index,item) {
         types.push($(this).val());
     });
@@ -407,23 +407,23 @@ $('.type2 .demo-label').on('click',function () {
             time2=(Date.parse(new Date(d))/1000);
         }
     }
-    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+thisType+
+    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+types.join(',')+
         '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
 //时间选择
-var valCH=[];
 $('.choosetime .demo-label input').on('click',function () {
-    $('.person p').show();
-    $(".type2 input:checkbox:checked").each(function (index,item) {
-        valCH.push($(this).val());
-    });
     var _val = $(this).val();
     if (_val == 'mize') {
         $(this).parents('.choosetime').find('#start').show();
         $(this).parents('.choosetime').find('#end').show();
         $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
     } else {
+        $('.person p').show();
+        var valCH=[];
+        $(".type2 input:checkbox:checked").each(function (index,item) {
+            valCH.push($(this).val());
+        });
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
@@ -433,6 +433,10 @@ $('.choosetime .demo-label input').on('click',function () {
 });
 $('#sure').on('click',function () {
     $('.person p').show();
+    var valCH=[];
+    $(".type2 input:checkbox:checked").each(function (index,item) {
+        valCH.push($(this).val());
+    });
     var s=$(this).parents('.choosetime').find('#start').val();
     var d=$(this).parents('.choosetime').find('#end').val();
     if (s==''||d==''){
@@ -584,7 +588,7 @@ $('#output2').on('click',function () {
         _ids.push(currentData[k]['_id']);
     }
     console.log(_ids)
-    // window.open('/static/test.docx');
+    // window.open('/static/doc/test.docx');
     // tableExport('person', 'Report', 'doc');
 });
 

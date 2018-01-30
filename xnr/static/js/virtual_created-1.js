@@ -1,8 +1,9 @@
 //查看推荐
 setTimeout(function () {
     // if (!$two||(go_on=='2')){
-    var recommendURL='/weibo_xnr_create/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
-        $('#character2').text()+'&daily_interests='+$('#character6').text().toString().replace(/,/g,'，');
+    var recommendURL=WFT_url+'/recommend_step_two/?domain_name='+$('#character1').text()+'&role_name='+
+        $('#character2').text();
+    if (flag==1){recommendURL+='&daily_interests='+$('#character6').text().toString().replace(/,/g,'，')};
     public_ajax.call_request('GET',recommendURL,recommendTwo);
 },3000);
 function recommendTwo(data) {
@@ -74,7 +75,7 @@ $('.save_return').on('click',function () {
 function nameJudgment() {
     //判断昵称是否重复
     var nickName=$('#name').val();
-    public_ajax.call_request('GET','/weibo_xnr_create/nick_name_unique/?nick_name='+nickName,repeatNot);
+    public_ajax.call_request('GET',WFT_url+'/nick_name_unique/?nick_name='+nickName,repeatNot);
     // if (go_on==2){
     //     var timelist=[];
     //     $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
@@ -175,7 +176,7 @@ function values() {
     }
     var saveSecond_url;
     if (active_time||day_post_average){
-        saveSecond_url='/weibo_xnr_create/save_step_two/?submitter='+admin+'&task_id='+
+        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+
             '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
             '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
             '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests;
@@ -211,7 +212,7 @@ function values() {
             'business_goal':$('#character5').text(),
             'monitor_keywords':$('#character7').text(),
         };
-        localStorage.setItem('firstStep',JSON.stringify(first));
+        localStorage.setItem(firstStep,JSON.stringify(first));
         public_ajax.call_request('get',saveSecond_url,modSecondSuccess);
     }else if (go_on==1){
         var a=$('#name').val();
@@ -220,16 +221,16 @@ function values() {
         var d=$('#place').val().toString().replace(/,/g,'，');
         var ee=$('#career').val();
         var f=$('#description').val();
-        var modSecond_ur='/weibo_xnr_create/modify_userinfo/?nick_name='+a+'&age='+b+'&gender='+c+
+        var modSecond_ur=WFT_url+'/modify_userinfo/?nick_name='+a+'&age='+b+'&gender='+c+
             '&location='+d+'&career='+ee+'&description='+f;
         public_ajax.call_request('get',modSecond_ur,modSecondSuccess);
     }
 }
 function in_three(data) {
     if (data||data[0]){
-        localStorage.setItem('secondStep',JSON.stringify(second));
+        localStorage.setItem(secondStep,JSON.stringify(second));
         localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
-        window.location.href='/registered/socialAccounts/';
+        window.location.href='/registered/socialAccounts/?flag='+flag;
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
