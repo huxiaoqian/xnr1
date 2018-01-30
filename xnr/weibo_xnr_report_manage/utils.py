@@ -15,6 +15,7 @@ from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tw
 from xnr.parameter import MAX_SEARCH_SIZE
 from xnr.time_utils import ts2date
 from xnr.save_weibooperate_utils import save_xnr_like
+from xnr.utils import add_operate2redis
 
 #show report content default
 def show_report_content():

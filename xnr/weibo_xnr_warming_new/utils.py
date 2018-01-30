@@ -531,7 +531,7 @@ def lookup_todayweibo_date_warming(keywords,today_datetime):
         'query':{
             'bool':
             {
-                'should':keyword_query_list,
+                'should':keyword_query_list
                 # 'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
@@ -1055,7 +1055,8 @@ def report_warming_content(task_detail):
                     print 'event_error!'
 
             elif task_detail['report_type']==u'时间':
-                weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + task_detail['date_time']
+                year = ts2yeartime(item['timestamp'])
+                weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
                 try:
                     time_result=es_xnr.search(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
                     time_content=[]
