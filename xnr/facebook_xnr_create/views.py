@@ -77,10 +77,10 @@ def ajax_modify_userinfo():
     return json.dumps(results)
 
 #第三步绑定账户关注用户推荐
-@mod.route('/recommend_follows/')
+@mod.route('/recommend_follows/')   #fb_flow_text中没有daily_interests字段，所以暂不支持“日常兴趣”推荐关注
 def ajax_recommend_followers():
     task_detail = dict()
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     recommend_results = get_recommend_follows(task_detail)
     return json.dumps(recommend_results)
@@ -123,9 +123,9 @@ def ajax_save_step_three_1():
     task_detail['password'] = request.args.get('password','') # 密码
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     #step2 info
-    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
-    if new_task_detail == 'nick_name error':
-        print 'name error!!'
+    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, age--0, descripriton, career, uid
+    if new_task_detail == 'account error':
+        print 'account error!!'
         return json.dumps(new_task_detail)
     else:
         mark = get_save_step_three_1(new_task_detail)
@@ -153,7 +153,7 @@ def ajax_modify_base_info():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['active_time'] = request.args.get('active_time','')
     task_detail['day_post_average'] = request.args.get('day_post_average','') 
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     mark = get_modify_base_info(task_detail)    
     return json.dumps(mark)
