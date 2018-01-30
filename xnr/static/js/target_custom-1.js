@@ -1,7 +1,13 @@
 //加载
 var domainName='',roleName='';
 //渗透领域
-var field_url='/weibo_xnr_create/show_domain/';
+var WFT_url;
+if (flag==1){
+    WFT_url='/weibo_xnr_create';
+}else if (flag==4){
+    WFT_url='/facebook_xnr_create';
+}
+var field_url=WFT_url+'/show_domain/';
 public_ajax.call_request('get',field_url,field);
 function field(data) {
     var str='';
@@ -16,7 +22,7 @@ function field(data) {
     $('input[name=demo1]').on('click',function () {
         domainName=$(this).parent().attr('title');
         var nameLEN=$(this).attr('name').toString();
-        var creat_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
+        var creat_url=WFT_url+'/domain2role/?domain_name='+domainName;
         public_ajax.call_request('get',creat_url,creat_1)
     });
 }
@@ -26,8 +32,6 @@ if ($one){
     roleName=$one.role_name;
     inModalData($one);
 }
-console.log(domainName)
-console.log(roleName)
 // var goUSER=JSON.parse(localStorage.getItem('goONuser'));
 // if (goUSER){
 //     inModalData(goUSER);
@@ -35,16 +39,15 @@ console.log(roleName)
 //模板导入
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
-    console.log(data)
     modalAllData=data;
     var tt=data.domains||data.domain_name;
     domainName=tt;roleName=data.role_name||data.roleName;
     setTimeout(function () {
         $(".field input[type='radio'][value='"+tt+"']").attr("checked",true);
     },500);
-    var creat_url='/weibo_xnr_create/domain2role/?domain_name='+(data.domains||data.domain_name);
+    var creat_url=WFT_url+'/domain2role/?domain_name='+(data.domains||data.domain_name);
     public_ajax.call_request('get',creat_url,creat_1);
-    var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
+    var creat_url_2=WFT_url+'/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
     public_ajax.call_request('get',creat_url_2,creat_2);
     $$political_side=data.political_side;
     if(data.psy_feature.indexOf('&')>0){
@@ -132,7 +135,7 @@ function addLabel(data,className,name) {
         $('#container .buildOption .'+className).empty().html(_string);
         $('input[name='+name+']').on('click',function () {
             roleName=$(this).parent().attr('title');
-            var creat_url_2='/weibo_xnr_create/role2feature_info/?domain_name='+domainName+'&role_name='+roleName;
+            var creat_url_2=WFT_url+'/role2feature_info/?domain_name='+domainName+'&role_name='+roleName;
             public_ajax.call_request('get',creat_url_2,creat_2)
         });
     }
@@ -195,7 +198,7 @@ $('.nextButton').on('click',function () {
         $('#prompt').modal('show');
     }else {
         daily=dailyInterests.join(',');
-        var saveFirst_url='/weibo_xnr_create/save_step_one/?domain_name='+domainName+'&role_name='+roleName+
+        var saveFirst_url=WFT_url+'/save_step_one/?domain_name='+domainName+'&role_name='+roleName+
         '&psy_feature='+psyFeature.join(',')+'&political_side='+politicalSide+'&business_goal='+businessGoal+
         '&monitor_keywords='+monitorKeywords+'&daily_interests='+daily;
         // window.open('/registered/virtualCreated/?domainName='+domainName+'&roleName='+roleName+'&daily='+daily+
@@ -210,15 +213,14 @@ $('.nextButton').on('click',function () {
             'business_goal':businessGoal,
             'monitor_keywords':monitorKeywords,
         };
-        console.log(first)
         localStorage.setItem('firstStep',JSON.stringify(first));
         //public_ajax.call_request('get',saveFirst_url,in_second);
-        window.open('/registered/virtualCreated/');
+        window.open('/registered/virtualCreated/?flag='+flag);
     }
 });
 function in_second(data) {
     if (data){
-        window.open('/registered/virtualCreated/');
+        window.open('/registered/virtualCreated/?flag='+flag);
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
