@@ -93,7 +93,8 @@ public_ajax.call_request('get',comURL,com);
 function com(data) {
     if (idbox=='comment-1'||idbox=='forwarding-1'){
         var mid,BN1,BN2,repFor;
-        if (idbox=='comment-1'){mid='reply_comment';BN1='block';BN2='none';repFor='回复'}else {mid='reply_retweet';BN1='none';BN2='block';repFor='转发'}
+        if (idbox=='comment-1'){mid='reply_total';BN1='block';BN2='none';repFor='评论';}
+        else {mid='reply_comment';BN1='none';BN2='block';repFor='转发';}
         $('#'+idbox).bootstrapTable('load', data);
         $('#'+idbox).bootstrapTable({
             data:data,
@@ -208,7 +209,7 @@ function com(data) {
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                             '                </label>'+
-                            '                <a href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent(this)">回复</a>'+
+                            '                <a href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent(this)">发送</a>'+
                             '            </div>'+
                             '        </div>'+
                             '    </div>'+
@@ -658,23 +659,12 @@ function comMent(_this){
     var txt = $(_this).parent().prev().val();
     // var middle=$(_this).attr('midurl');
     if (txt!=''){
-        var mid = $(_this).parents('.commentAll').find('.mid').text();
-        var r_mid = $(_this).parents('.commentAll').find('.r_mid').text();
-        var uid = $(_this).parents('.commentAll').find('.uid').text();
+        var mid = $(_this).parents('.infoAll').find('.mid').text();
+        var r_mid = $(_this).parents('.infoAll').find('.r_mid').text();
+        var uid = $(_this).parents('.infoAll').find('.uid').text();
+        var repTP=$(_this).attr('midurl');
         var retweet_option=$($(_this).prev().find('input')[0]).is(':checked');
-        // var comurl;
-        // if (middle!='reply_at'){
-        //     comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&xnr_user_no='+xnrUser;
-        //     if (middle=='reply_private'){
-        //         var uid = $(_this).parent().parent().parent().find('.uid').text();
-        //         comurl+='&uid='+uid;
-        //     }else {
-        //         comurl+='&mid='+mid;
-        //     }
-        // }else {
-        //     comurl='/weibo_xnr_operate/'+middle+'/?text='+txt+'&mid='+mid;
-        // }
-        var comurl='/weibo_xnr_operate/reply_total/?text='+txt+'&mid='+mid+'&r_mid='+r_mid+
+        var comurl='/weibo_xnr_operate/'+repTP+'/?text='+txt+'&mid='+mid+'&r_mid='+r_mid+
         '&xnr_user_no='+ID_Num+'&uid='+uid+'&retweet_option='+retweet_option;
         public_ajax.call_request('get',comurl,postYES);
     }else {
@@ -729,7 +719,8 @@ function focusYES(data) {
     if (data[0]){
         f='操作成功';
         var si=$('input:radio[name="desc"]:checked').val();
-        var ssr='/weibo_xnr_operate/show_fans/?xnr_user_no='+ID_Num+'&sort_item='+si;
+        var ssr='/weibo_xnr_operate/show_fans/?xnr_user_no='+ID_Num+'&sort_item='+si+
+        '&start_ts='+todayTimetamp()+'&end_ts='+end_time;
         setTimeout(function () {
             public_ajax.call_request('get',ssr,focus);
         },500)
