@@ -105,7 +105,26 @@ function letter(_this) {
 }
 //机器人回复
 function robot(_this) {
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
+    // var uid = $(_this).parents('.center_rel').find('.uid').text();
+    $('#robotBack .questionVal').val('');
+    $('#robotBack .QC').hide();
+    $('#robotBack').modal('show');
+}
+function getRobot() {
+    var s=$('#robotBack .questionVal').val();
+    if (!s){
+        $('#pormpt p').text('请输入问题。');
+        $('#pormpt').modal('show');
+    }else {
+        var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
+        public_ajax.call_request('get',robot_url,robotTxt)
+    }
+}
+function robotTxt(data) {
+    var txt=data;
+    if (!data){txt='暂无内容'};
+    $('#robotBack .showRob').text(txt);
+    $('#robotBack .QC').show();
 }
 //加入预警库
 function getInfo(_this) {
@@ -149,6 +168,7 @@ function oneUP(_this,type) {
         var mainUID=$(_this).parents('.everyUser').find('.mainUID').text();
         var mainNAME=$(_this).parents('.everyUser').find('.centerNAME').text();
         var _id=$(_this).parents('.everyUser').find('._id').text();
+        var dateTime='';
         var uidList=[],weibo_info=[];
         for (var i=0;i<len.length;i++){
             var uid=$(len[i]).find('.uid').text();uidList.push(uid);
@@ -161,16 +181,20 @@ function oneUP(_this,type) {
         //     '&weibo_info='+weibo_info;
         if (type=='人物'){
             mainNAME='';
-        }else if (type=='言论'||type=='时间'){
+        }else if (type=='言论'){
             mainNAME='';mainUID='';
         }else if (type=='事件'){
             mainUID='';
+        }else if (type=='时间'){
+            mainNAME='';mainUID='';
+            dateTime=$(_this).parents('.everyUser').find('.timestamp').text();
         }
         var job={
             'report_type':type,
             'xnr_user_no':ID_Num,
             'report_id':_id,
             //=========
+            'date_time':dateTime,
             'event_name':mainNAME,
             'uid':mainUID,
             'user_info':uidList,
