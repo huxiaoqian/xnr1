@@ -432,5 +432,5 @@ def ajax_robot_reply():
     answer = get_robot_reply(question)
 
     # return json.dumps(answer)
-    return answer
+    return json.dumps(answer)
 

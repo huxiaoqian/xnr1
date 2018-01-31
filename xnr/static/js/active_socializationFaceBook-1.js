@@ -210,7 +210,7 @@ function lookDetails(puid) {
 function driectFocus(uid,_this) {
     var foc_url,mid='';
     if (!uid){uid=$(_this).prev().text()}
-    var f=$(_this).find('b').text()||$(_this).text();
+    var f=$(_this).attr('title');
     if (f=='未关注'){
         mid='follow_operate';
     }else {

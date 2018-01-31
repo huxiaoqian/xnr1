@@ -1,11 +1,19 @@
 //加载
 var domainName='',roleName='';
 //渗透领域
-var WFT_url;
+var WFT_url,firstStep,secondStep;
 if (flag==1){
     WFT_url='/weibo_xnr_create';
+    firstStep='WBfirstStep';
+    secondStep='WBsecondStep';
 }else if (flag==4){
     WFT_url='/facebook_xnr_create';
+    firstStep='FBfirstStep';
+    secondStep='FBsecondStep';
+}else if (flag==5){
+    WFT_url='/twitter_xnr_create';
+    firstStep='TWfirstStep';
+    secondStep='TWsecondStep';
 }
 var field_url=WFT_url+'/show_domain/';
 public_ajax.call_request('get',field_url,field);
@@ -26,7 +34,7 @@ function field(data) {
         public_ajax.call_request('get',creat_url,creat_1)
     });
 }
-var $one=JSON.parse(localStorage.getItem('firstStep'));
+var $one=JSON.parse(localStorage.getItem(firstStep));
 if ($one){
     domainName=$one.domain_name;
     roleName=$one.role_name;
@@ -93,7 +101,7 @@ function inModalData(data) {
             'active_time':active_time,
             'day_post_num':day_post_num,
         }
-        localStorage.setItem('secondStep',JSON.stringify(second));
+        localStorage.setItem(secondStep,JSON.stringify(second));
     }
 
 
@@ -213,7 +221,7 @@ $('.nextButton').on('click',function () {
             'business_goal':businessGoal,
             'monitor_keywords':monitorKeywords,
         };
-        localStorage.setItem('firstStep',JSON.stringify(first));
+        localStorage.setItem(firstStep,JSON.stringify(first));
         //public_ajax.call_request('get',saveFirst_url,in_second);
         window.open('/registered/virtualCreated/?flag='+flag);
     }
