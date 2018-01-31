@@ -13,7 +13,7 @@ from xnr.global_utils import es_xnr,weibo_report_management_index_name_pre,weibo
 
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func                             
 from xnr.parameter import MAX_SEARCH_SIZE
-from xnr.time_utils import ts2date
+from xnr.time_utils import ts2datetime
 from xnr.save_weibooperate_utils import save_xnr_like
 from xnr.utils import add_operate2redis
 
