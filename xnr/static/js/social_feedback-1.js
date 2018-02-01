@@ -10,6 +10,8 @@ $('.choosetime .demo-label input').on('click',function () {
         $('#end_1').hide();
         var $m=$('#container .type_page #myTabs li.active').attr('tp');
         idbox=$('#container .type_page #myTabs li.active').attr('idbox');
+        $('.'+idbox).hide();
+        $('.'+idbox).prev().show();
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
         var _val=$(this).val();
         var start=getDaysBefore(_val);
@@ -30,6 +32,8 @@ $('.sureTime').on('click',function () {
     }else {
         var $m=$('#container .type_page #myTabs li.active').attr('tp');
         idbox=$('#container .type_page #myTabs li.active').attr('idbox');
+        $('.'+idbox).hide();
+        $('.'+idbox).prev().show();
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
         var his_task_url='/weibo_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
             '&end_ts='+(Date.parse(new Date(d))/1000);
@@ -49,6 +53,8 @@ $('.copyFinish').on('click',function () {
 $('#container .type_page #myTabs a').on('click',function () {
     var mmarrow=$(this).parent().attr('tp');
     idbox=$(this).parent().attr('idbox');
+    $('.'+idbox).hide();
+    $('.'+idbox).prev().show();
     var not_time=$('.choosetime input:radio[name="time1"]:checked').val();
     var start,end;
     if (not_time=='mize'){
@@ -219,7 +225,8 @@ function com(data) {
                 },
             ],
         });
-        $('#'+idbox+' p').hide();
+        $('.'+idbox).prev().slideUp(300);
+        $('.'+idbox).show();
         $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
     }else if (idbox=='letter-1'){
         letter(data);
@@ -228,6 +235,9 @@ function com(data) {
     }else if (idbox=='focus-1'){
         focus(data);
     }
+    $('.'+idbox).prev().slideUp(300);
+    $('.'+idbox).show();
+    $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //====私信回复====
 function letter(data) {
@@ -339,8 +349,6 @@ function letter(data) {
             },
         ],
     });
-    $('#'+idbox+' p').hide();
-    $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 };
 //=====@回复======
 function reply(data) {
@@ -464,8 +472,6 @@ function reply(data) {
             },
         ],
     });
-    $('#'+idbox+' p').hide();
-    $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 };
 //=====关注回粉--回复======
 function focus(data) {
@@ -612,8 +618,6 @@ function focus(data) {
             },
         ],
     });
-    $('#'+idbox+' p').hide();
-    $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 
 //============================
