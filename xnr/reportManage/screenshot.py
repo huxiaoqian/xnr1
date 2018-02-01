@@ -16,9 +16,10 @@ class Screen():
 		self.login_url = 'https://passport.weibo.cn/signin/login?entry=mweibo&res=wel&wm=3349&r=http%3A%2F%2Fm.weibo.cn%2F%3Fjumpfrom%3Dwapv4%26tip%3D1'
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
+		self.driver = webdriver.Firefox()
 
 	def login(self):
-		driver = webdriver.Firefox()
+		#driver = webdriver.Firefox()
 		driver.get(self.login_url)
 		time.sleep(1)
 		driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(self.username)
@@ -57,13 +58,16 @@ class Screen():
 	def screenShot(self, uid, mid):
 		_mid = self.mid_to_url(mid)
 		url = "http://weibo.com/" + uid + "/" + _mid
-		driver = self.login()
-		time.sleep(2)
-		driver.get(url)
-		time.sleep(1)
-		driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
-		time.sleep(1)
-		driver.quit()
+		self.driver.get(url)
+		time.sleep(5)
+		while True:
+			try:
+				time.sleep(3)
+				self.driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
+				self.driver.quit()
+				break
+			except:
+				continue
 
 
 
