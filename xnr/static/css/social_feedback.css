@@ -30,6 +30,7 @@ body {
     padding: 20px 0;
 }
 /*-----------评论内容--------------*/
+.infoAll {margin: 10px 0;padding-bottom: 15px;}
 #container .type_page #content .commentEvery,
 #container .type_page #content .forwardEvery,
 #container .type_page #content .letterEvery,
@@ -124,6 +125,7 @@ body {
 #container .type_page #content .letterEvery .let,
 #container .type_page #content .replyEvery .rep{
     padding:5px 10px;
+    overflow: hidden;
 }
 #container .type_page #content .letterEvery .let-1 .let-1-time {
     display: inline-block;
@@ -234,7 +236,7 @@ body {
 #container .type_page #content .letterClone,
 #container .type_page #content .replyClone {
     display: none;
-    margin: 15px 0;
+    /*margin: 15px 0;*/
 }
 #container .type_page #content .commentClone .clone-1,
 #container .type_page #content .commentClone .clone-2,
@@ -252,7 +254,6 @@ body {
 #container .type_page #content .letterClone .clone-1,
 #container .type_page #content .replyClone .clone-1{
     width: 93%;
-    height: 30px;
     padding: 4px 7px;
     color: white;
     border: 1px solid silver;
@@ -272,12 +273,12 @@ body {
 }
 #container .type_page #content .letterClone .clone-1 {
     width: 80%;
-    margin: 10px 0;
+    /*margin: 10px 0;*/
 }
 #container .type_page #content .letterClone .clone-2 {
     display: inline-block;
     margin-left: 15px;
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 #container .type_page #content .replyClone .clone-2 {
     margin: 10px 0;
@@ -297,7 +298,7 @@ body {
 #container .type_page #content .replyClone .clone-2 .clone-2-4 {
     color: white;
     font-size: 12px;
-    padding: 3px 8px;
+    padding: 6px 8px;
     border:1px solid silver;
     border-radius: 5px;
     float: right;

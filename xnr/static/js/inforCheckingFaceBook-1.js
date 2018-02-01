@@ -200,17 +200,21 @@ function hotPost(data) {
                         '           <span class="center_2">'+txt2+'</span>'+
                         '           <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推</span>'+
-                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
-                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this,\''+operateType+'\')"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+row.share+'</b>）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+row.favorite+'</b>)</span>'+
                         '               <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '               <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '           </div>'+
+                        '           <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="forwardingIput" placeholder="分享内容"/>'+
+                        '               <span class="sureFor" onclick="forwardingBtn()">分享</span>'+
+                        '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '               <span class="sureCom" onclick="comMent(this,\''+operateType+'\')">评论</span>'+
                         '           </div>'+
                         '           <div class="emailDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="infor" placeholder="私信内容"/>'+
@@ -400,78 +404,12 @@ $('.userList .addFocus').on('click',function () {
     var add_url='/facebook_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
     public_ajax.call_request('get',add_url,postYES);
 })
-//-------------------颜色----------------------
-function createRandomItemStyle() {
-    return {
-        normal: {
-            color: 'rgb(' + [
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127)
-            ].join(',') + ')'
-        }
-    };
-}
-//查看网民详情
-function networkPeo(_id) {
-    var detail_url='/weibo_xnr_monitor/weibo_user_detail/?user_id='+_id;
-    public_ajax.call_request('get',detail_url,networkPeoDetail);
-}
-function networkPeoDetail(data) {
-
-}
-
-//评论
-function showInput(_this) {
-    $(_this).parents('.post_perfect').find('.commentDown').show();
-};
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    if (txt!=''){
-        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&fid='+fid+'&uid='+uid;
-        public_ajax.call_request('get',post_url_3,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-//转发
-function retweet(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&fid='+fid+'&uid='+uid;
-    public_ajax.call_request('get',post_url_2,postYES)
-}
-//点赞
-function thumbs(_this) {
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&fid='+fid+'&uid='+uid;
-    public_ajax.call_request('get',post_url_4,postYES);
-};
 
 //关注该用户
 function focusThis(_this) {
     var uid = $(_this).parents('.post_perfect').find('.uid').text();
     var post_url_6='/weibo_xnr_monitor/attach_fans_follow/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',post_url_6,postYES)
-}
-//私信该用户
-function emailThis(_this) {
-    $(_this).parents('.post_perfect').find('.emailDown').show();
-}
-function letter(_this) {
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var post_url_8='/facebook_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
-        '&text='+txt;
-    public_ajax.call_request('get',post_url_8,postYES)
 }
 //操作返回结果
 function postYES(data) {

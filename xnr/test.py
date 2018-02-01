@@ -392,4 +392,19 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # es.delete(index='tw_xnr_fans_followers',doc_type='uids',id='FXNR0003')
 
-es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
+#es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
+
+query_body = {
+	'query':{
+		'bool':{
+			'must':[
+				{'term':{'uid':'183774741715570'}},
+				{'term':{'text':'明镜新闻网 shared a link.'}}
+			]
+		}
+	}
+}
+
+
+r = es.search(index='facebook_flow_text_2017-10-15',doc_type='text',body=query_body)['hits']['hits']
+print 'r..',r
