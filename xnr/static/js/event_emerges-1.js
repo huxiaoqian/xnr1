@@ -1,7 +1,6 @@
 var time2=Date.parse(new Date())/1000;
 var weiboUrl='/weibo_xnr_warming_new/show_event_warming/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+time2;
 public_ajax.call_request('get',weiboUrl,weibo);
-
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {     
     var _val = $(this).val();
@@ -584,15 +583,19 @@ function mainWeibo(_data,idx) {
                         '   <p class="allall2" style="display:none;">'+text2+'</p>'+
                         '   <span class="center_2">'+text2+'</span>'+
                         '   <div class="center_3">'+
-                        '       <span class="cen3-2" onclick="retComLike(this)" type="get_weibohistory_retweet"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
-                        '       <span class="cen3-3" onclick="retComLike(this)" type="get_weibohistory_comment"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
-                        '       <span class="cen3-4" onclick="retComLike(this)" type="get_weibohistory_like"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '       <span class="cen3-1" onclick="retweet(this,\'预警\')"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+row.retweeted+'</b>）</span>'+
+                        '       <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+row.comment+'</b>）</span>'+
+                        '       <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '       <span class="cen3-5" onclick="joinPolice(this)"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                         '       <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '    </div>'+
+                        '    <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '       <input type="text" class="forwardingIput" placeholder="转发内容"/>'+
+                        '       <span class="sureFor" onclick="forwardingBtn()">转发</span>'+
+                        '    </div>'+
                         '    <div class="commentDown" style="width: 100%;display: none;">'+
                         '        <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '        <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '        <span class="sureCom" onclick="comMent(this,\'预警\')">评论</span>'+
                         '    </div>'+
                         '</div>'
                     return rel_str;
@@ -601,35 +604,6 @@ function mainWeibo(_data,idx) {
         ],
     });
 };
-// 转发===评论===点赞
-function retComLike(_this) {
-    var mid=$(_this).parents('.center_rel').find('.mid').text();
-    var middle=$(_this).attr('type');
-    var opreat_url;
-    if (middle=='get_weibohistory_like'){
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
-        public_ajax.call_request('get',opreat_url,postYES);
-    }else if (middle=='get_weibohistory_comment'){
-        $(_this).parents('.center_rel').find('.commentDown').show();
-    }else {
-        var txt=$(_this).parents('.center_rel').find('.center_2').text();
-        if (txt=='暂无内容'){txt=''};
-        opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
-        public_ajax.call_request('get',opreat_url,postYES);
-    }
-}
-
-function comMent(_this){
-    var txt = $(_this).prev().val();
-    var mid = $(_this).parents('.center_rel').find('.mid').text();
-    if (txt!=''){
-        var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
-        public_ajax.call_request('get',post_url,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
 //操作返回结果
 function postYES(data) {
     var f='';
@@ -640,8 +614,4 @@ function postYES(data) {
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
-}
-//查看详情
-function details() {
-
 }

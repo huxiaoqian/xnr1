@@ -98,33 +98,106 @@ function emailThis(_this) {
 }
 function letter(_this) {
     var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
+    var txt = Check($(_this).prev().val());
     var post_url_letter='/twitter_xnr_operate/private_operate/?xnr_user_no='+ID_Num+'&uid='+uid+
         '&text='+txt;
     public_ajax.call_request('get',post_url_letter,operatSuccess)
 }
-//机器人回复
-function robot(_this) {
-    // var uid = $(_this).parents('.center_rel').find('.uid').text();
-    $('#robotBack .questionVal').val('');
-    $('#robotBack .QC').hide();
-    $('#robotBack').modal('show');
+var urlFirst_zpd='',mft_id,
+    reply_retweet='retweet_operate',reply_comment='comment_operate';
+setTimeout(function () {
+    var ft=$('.nav_type').text();
+    if(ft=='(微博)'){
+        urlFirst_zpd='weibo_xnr_operate';mft_id='mid';
+        reply_retweet='reply_retweet',reply_comment='reply_comment';
+    }else if(ft=='(FaceBook)'){
+        urlFirst_zpd='facebook_xnr_operate';mft_id='fid';
+    }else if(ft=='(twitter)'){
+        urlFirst_zpd='twitter_xnr_operate';mft_id='tid';
+    }
+    console.log(ft)
+},1000)
+//retweet_operate   comment_operate   like_operate
+//转发 分享  转推
+var for_type,for_this;
+function retweet(_this,type) {
+    for_type=type;
+    for_this=_this;
+    $(_this).parents('.center_rel').find('.forwardingDown').show();
 }
-function getRobot() {
-    var s=$('#robotBack .questionVal').val();
-    if (!s){
-        $('#pormpt p').text('请输入问题。');
-        $('#pormpt').modal('show');
+function forwardingBtn() {
+    var txt = $(for_this).parents('.center_rel').find('.forwardingIput').val();
+    if (txt!=''){
+        var MFT = $(for_this).parents('.center_rel').find('.'+mft_id).text();
+        var forPost_url='/'+urlFirst_zpd+'/'+reply_retweet+'/?tweet_type='+for_type+'&xnr_user_no='+ID_Num+
+            '&text='+txt+'&'+mft_id+'='+MFT;
+        if (loadingType!='weibo'){
+            var uid = $(for_this).parents('.center_rel').find('.uid').text();
+            forPost_url+='&uid='+uid;
+        }
+        public_ajax.call_request('get',forPost_url,operatSuccess);
     }else {
-        var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
-        public_ajax.call_request('get',robot_url,robotTxt)
+        $('#pormpt p').text('转发内容不能为空。');
+        $('#pormpt').modal('show');
     }
 }
+//评论
+function showInput(_this) {
+    $(_this).parents('.center_rel').find('.commentDown').show();
+};
+function comMent(_this,type){
+    var txt = $(_this).prev().val();
+    if (txt!=''){
+        var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
+        var comPost_url='/'+urlFirst_zpd+'/'+reply_comment+'/?tweet_type='+type+'&text='+txt+'&xnr_user_no='+
+            ID_Num+'&'+mft_id+'='+MFT;
+        if (loadingType!='weibo'){
+            var uid = $(_this).parents('.center_rel').find('.uid').text();
+            comPost_url+='&uid='+uid;
+        }
+        public_ajax.call_request('get',comPost_url,operatSuccess);
+    }else {
+        $('#pormpt p').text('评论内容不能为空。');
+        $('#pormpt').modal('show');
+    }
+}
+//点赞  喜欢
+function thumbs(_this) {
+    var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
+    var likePost_url='/'+urlFirst_zpd+'/like_operate/?'+mft_id+'='+MFT+'&xnr_user_no='+ID_Num;
+    if (loadingType=='faceBook'){
+        var uid = $(_this).parents('.center_rel').find('.uid').text();
+        likePost_url+='&uid='+uid;
+    }
+    public_ajax.call_request('get',likePost_url,operatSuccess);
+};
+//机器人回复
+var robotThis;
+function robot(_this) {
+    robotThis=_this;
+    $(_this).parents('.center_rel').find('.commentDown').show();
+    var txt= $(_this).parents('.center_rel').find('.center_2').text();
+    var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
+    public_ajax.call_request('get',robot_url,robotTxt)
+    // var uid = $(_this).parents('.center_rel').find('.uid').text();
+    // $('#robotBack .questionVal').val('');
+    // $('#robotBack .QC').hide();
+    // $('#robotBack').modal('show');
+}
+// function getRobot() {
+//     var s=$('.commentDown .questionVal').val();
+//     if (!s){
+//         $('#pormpt p').text('请输入问题。');
+//         $('#pormpt').modal('show');
+//     }else {
+//         var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
+//         public_ajax.call_request('get',robot_url,robotTxt)
+//     }
+// }
 function robotTxt(data) {
     var txt=data;
-    if (!data){txt='暂无内容'};
-    $('#robotBack .showRob').text(txt);
-    $('#robotBack .QC').show();
+    if (!data){txt='机器人无答复'};
+    $(robotThis).parents('.center_rel').find('.commentDown').children('input').val(txt);
 }
 //加入预警库
 function getInfo(_this) {
