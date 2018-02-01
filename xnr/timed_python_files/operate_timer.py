@@ -1,19 +1,21 @@
 # -*-coding:utf-8-*-
-
+import json
 import sys
-
-sys.path.append('../../')
+import os
+sys.path.append('../')
 from global_utils import R_OPERATE_QUEUE as r, operate_queue_name
 from utils import add_operate2redis
 
-sys.path.append('../facebook_xnr_operate/')
-from utils import get_submit_tweet_fb, get_comment_operate_fb, get_retweet_operate_fb, get_at_operate_fb,\
+# sys.path.append('../facebook_xnr_operate/')
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'facebook_xnr_operate/'))
+from fb_op_utils import get_submit_tweet_fb, get_comment_operate_fb, get_retweet_operate_fb, get_at_operate_fb,\
 				get_like_operate_fb,get_private_operate_fb, get_add_friends, get_confirm_friends, \
 				get_delete_friend 
 
 
-sys.path.append('../twitter_xnr_operate/')
-from utils import get_submit_tweet_tw, get_comment_operate_tw, get_retweet_operate_tw, get_at_operate_tw,\
+# sys.path.append('../twitter_xnr_operate/')
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'twitter_xnr_operate/'))
+from tw_op_utils import get_submit_tweet_tw, get_comment_operate_tw, get_retweet_operate_tw, get_at_operate_tw,\
 				get_like_operate_tw,get_private_operate_tw, get_follow_operate_tw, get_unfollow_operate_tw
 
 # publish-发帖、retweet-转发、comment-评论、like-点赞、follow-关注、unfollow-取消关注、at-提到、private-私信
@@ -43,8 +45,9 @@ def operate_out_of_redis():
 			elif operate_type == 'retweet':
 				try:
 				    mark = get_retweet_operate_fb(task_detail)
-				except:
-					add_operate2redis(queue_dict)
+				except Exception,e:
+					print e
+					# add_operate2redis(queue_dict)
 			elif operate_type == 'comment':
 				try:
 				    mark = get_comment_operate_fb(task_detail)

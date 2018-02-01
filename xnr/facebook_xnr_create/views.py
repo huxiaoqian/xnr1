@@ -135,8 +135,8 @@ def ajax_save_step_three_1():
 @mod.route('/save_step_three_2/')
 def ajax_save_step_three_2():
     task_detail = dict()
-    task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编码，如：WXNR0001
-    task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称
+    task_detail['task_id'] = request.args.get('task_id','') #虚拟人编码，如：WXNR0001
+    # task_detail['nick_name'] = request.args.get('nick_name','') # 虚拟人昵称
     task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
@@ -151,10 +151,15 @@ def ajax_get_xnr_info():
 def ajax_modify_base_info():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['active_time'] = request.args.get('active_time','')
-    task_detail['day_post_average'] = request.args.get('day_post_average','') 
-    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
-    task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    active_time = request.args.get('active_time','')
+    day_post_average = request.args.get('day_post_average','')  # 以“-”分隔，如2-4 表示2-4条
+    monitor_keywords = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    if active_time:
+        task_detail['active_time'] = active_time
+    if day_post_average:
+        task_detail['day_post_average'] = day_post_average
+    if monitor_keywords: 
+        task_detail['monitor_keywords'] = monitor_keywords
     mark = get_modify_base_info(task_detail)    
     return json.dumps(mark)
 
