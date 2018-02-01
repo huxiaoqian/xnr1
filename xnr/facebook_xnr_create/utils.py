@@ -312,7 +312,8 @@ def get_recommend_follows(task_detail):
         query_body_monitor = {
             'query':{
                 'bool':{
-                    'must':nest_query_list
+                    # 'must':nest_query_list
+                    'should':nest_query_list
                 }     
             },
             # 'sort':{'user_fansnum':{'order':'desc'}},
@@ -332,7 +333,7 @@ def get_recommend_follows(task_detail):
         for result in es_monitor_keywords_results:
             if result['found'] == True:
                 result = result['_source']
-                nick_name_dict[result['uid']] = result['nick_name']
+                nick_name_dict[result['uid']] = result['name']
             else:
                 continue
         recommend_results['monitor_keywords'] = nick_name_dict
@@ -378,15 +379,16 @@ def get_fb_xnr_no():
                     'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
         if es_results:
             user_no_max = es_results[0]['_source']['user_no']
-    else:   #如果当前redis有记录，则取用并更新
+    else:   #如果当前redis有记录，则取用
         user_no_max = int(r.get(fb_xnr_max_no))
-    #update
-    user_no_current = user_no_max + 1
-    r.set(fb_xnr_max_no, user_no_current)
-    return user_no_current
+    return user_no_max
     
 def get_save_step_two(task_detail):
-    user_no_current = get_fb_xnr_no()
+    #update
+    user_no_max = get_fb_xnr_no()
+    user_no_current = user_no_max + 1
+    r.set(fb_xnr_max_no, user_no_current)
+    
     task_detail['user_no'] = user_no_current
     task_id = user_no2fb_id(user_no_current)  #五位数 FXNR0001
     
