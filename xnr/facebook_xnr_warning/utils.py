@@ -15,13 +15,13 @@ from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              facebook_count_index_name_pre,facebook_count_index_type,\
                              facebook_user_index_name,facebook_user_index_type,\
-                             facebook_event_warning_index_name_pre,facebook_event_warning_index_type
-
+                             facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
+                             facebook_report_management_index_name_pre,facebook_report_management_index_type
 
 from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE,\
                           FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from xnr.global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
-
+from xnr.facebook_report_management_mappings import facebook_report_management_mappings
 #查询用户昵称
 def get_user_nickname(uid):
     try:
@@ -114,6 +114,7 @@ def lookup_history_user_warming(xnr_user_no,start_time,end_time):
         temp_results=es_xnr.search(index=user_warming_list,doc_type=facebook_user_warning_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in temp_results:
+            item['_source']['_id']=item['_id']
             results.append(item['_source'])
         results.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
     except:
@@ -247,6 +248,8 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         user_detail['validity']=0
         user_detail['timestamp']=end_time
 
+        user_detail['_id']=xnr_user_no+'_'+user_detail['uid']
+
         results.append(user_detail)
 
     results.sort(key=lambda k:(k.get('user_sensitive',0)),reverse=True)
@@ -344,6 +347,7 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
     print temp_results
     results=[]
     for item in temp_results:
+        item['_source']['_id']=item['_id']
         results.append(item['_source'])
     #results.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
     # except:
@@ -391,7 +395,8 @@ def lookup_today_speech_warming(xnr_user_no,show_type,start_time,end_time):
                 item['_source']['share']=0
                 item['_source']['favorite']=0
              #查询用户昵称
-            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])    
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+            item['_source']['_id']=xnr_user_no+'_'+item['_source']['fid']   
             result.append(item['_source'])
     except:
         result=[]
@@ -632,6 +637,7 @@ def lookup_history_event_warming(xnr_user_no,start_time,end_time):
     temp_results=es_xnr.search(index=event_warming_list,doc_type=facebook_event_warning_index_type,body=query_body)['hits']['hits']
     results=[]
     for item in temp_results:
+        item['_source']['_id']=item['_id']
         results.append(item['_source'])
     results.sort(key=lambda k:(k.get('event_influence',0)),reverse=True)
     #except:
@@ -820,7 +826,8 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark=False):
             event_warming_content['validity']=0
             event_warming_content['timestamp']=today_datetime
             now_time=int(time.time())
-            task_id=xnr_user_no+'_'+str(now_time) 
+            task_id=xnr_user_no+'_'+event_warming_content['event_name']
+            event_warming_content['_id']=task_id
         
             #写入数据库           
             if write_mark:
@@ -984,6 +991,217 @@ def show_event_warming(xnr_user_no,start_time,end_time):
 
     return warming_list   
 
+
+
+#上报
+def report_warming_content(task_detail):
+    report_dict=dict()
+    report_dict['report_type']=task_detail['report_type']
+    report_dict['report_time']=task_detail['report_time']
+    report_dict['xnr_user_no']=task_detail['xnr_user_no']
+    report_dict['event_name']=task_detail['event_name']
+    report_dict['uid']=task_detail['uid']
+
+    report_dict['nick_name']=get_user_nickname(task_detail['uid'])
+
+    fb_list=[]
+    user_list=[]
+    # print 'type:',type(task_detail['weibo_info']),task_detail['weibo_info']
+    fb_info=task_detail['fb_info']
+    for item in fb_info:
+        lookup_mark=False
+        item['timestamp'] = int(item['timestamp'])
+        if task_detail['report_type']==u'人物':
+            facebook_user_warning_index_name = facebook_user_warning_index_name_pre + ts2datetime(item['timestamp'])
+            facebook_user_warming_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
+            try:
+                facebook_user_result=es_xnr.get(index=facebook_user_warning_index_name,doc_type=facebook_user_warning_index_type,id=facebook_user_warming_id)['_source']
+                user_warning_content=json.dumps(facebook_user_result['content'])
+                for content in user_warning_content:
+                    if content['fid'] == item['fid']:
+                        lookup_mark=True
+                        fb_list.append(content)
+                    else:
+                        pass
+            except:
+                print 'user_error!'
+
+        elif task_detail['report_type']==u'言论':
+            facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
+            try:
+                facebook_speech_result=es_xnr.get(index=facebook_speech_warning_index_name,doc_type=facebook_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['fid'])['_source']
+                report_dict['uid']=facebook_speech_result['uid']
+                lookup_mark=True
+                fb_list.append(facebook_speech_result)
+            except:
+                # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
+                print 'speech_error!'
+
+        elif task_detail['report_type']==u'事件':
+            facebook_event_warning_index_name = facebook_event_warning_index_name_pre + ts2datetime(item['timestamp'])
+            event_warning_id = task_detail['xnr_user_no']+'_'+task_detail['event_name']
+            try:
+                event_result=es_xnr.get(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,id=event_warning_id)['_source']
+                event_content=json.dumps(event_result['main_facebook_info'])
+                for event in event_content:
+                    if event['fid'] == item['fid']:
+                        lookup_mark=True
+                        fb_list.append(event)
+                    else:
+                        pass
+            except:
+                print 'event_error!'
+
+        elif task_detail['report_type']==u'时间':
+            year = ts2yeartime(item['timestamp'])
+            facebook_timing_warning_index_name = facebook_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
+            try:
+                time_result=es_xnr.search(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
+                time_content=[]
+                for timedata in time_result:
+                    for data in timedata['facebook_date_warming_content']:
+                        if data['fid'] == item['fid']:
+                            lookup_mark=True
+                            fb_list.append(data)
+                        else:
+                            pass
+            except:
+                print 'time_error!'               
+
+        if lookup_mark:
+            pass
+        else:
+            flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(item['timestamp'])
+            try:
+                fb_result=es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=item['fid'])['_source']
+                fb_result['nick_name']=get_user_nickname(fb_result['uid'])
+                fid_result=lookup_fid_attend_index(item['fid'],item['timestamp'])
+                if fid_result:
+                    fb_result['comment']=fid_result['comment']
+                    fb_result['share']=fid_result['share']
+                    fb_result['favorite']=fid_result['favorite']
+                else:
+                    fb_result['comment']=0
+                    fb_result['share']=0
+                    fb_result['favorite']=0  
+                fb_list.append(fb_result)
+            except:
+                print 'flow_text error!'
+
+
+    user_info=task_detail['user_info']
+    if user_info:
+        for uid in user_info:
+            user=dict()
+            try:
+                user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)['_source']
+                user_dict['uid']=item['_id']
+                user_dict['username']=user_result['username']
+                if user_result.has_key('talking_about_count'):
+                    user_dict['talking_about_count']=user_result['talking_about_count']
+                else:
+                    user_dict['talking_about_count']=0
+                if user_result.has_key('likes'):
+                    user_dict['likes']=user_result['likes']
+                else:
+                    user_dict['likes']=0
+                if user_result.has_key('category'):
+                    user_dict['category']=user_result['category']
+                else:
+                    user_dict['category']=''
+                user_list.append(user)
+            except:
+                user_dict['uid']=item['_id']
+                user_dict['username']=''
+                user_dict['talking_about_count']=0
+                user_dict['likes']=0
+                user_dict['category']=''
+                user_list.append(user)
+                print 'user_list error!'
+    else:
+        pass
+
+    report_content=dict()
+    report_content['user_list']=user_list
+    report_content['fb_list']=fb_list
+
+    report_dict['report_content']=json.dumps(report_content)
+    
+    report_id=''
+    if task_detail['report_type'] == u'言论':
+        report_id=weibo_info[0]['fid']
+    elif task_detail['report_type'] == u'人物':
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
+    elif task_detail['report_type'] == u'事件':
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
+    elif task_detail['report_type'] == u'时间':
+        # print weibo_info
+        if weibo_info:
+            report_id=weibo_info[0]['fid']
+        else:
+            report_id=str(task_detail['report_time'])
+
+
+    if fb_list:
+        report_mark=True
+    else:
+        report_mark=False
+    #预警上报后不再显示问题
+
+    now_time=int(time.time())
+    facebook_report_management_index_name = facebook_report_management_index_name_pre + ts2datetime(now_time)
+    if es_xnr.indices.exists(index=facebook_report_management_index_name):
+        pass
+    else:
+        facebook_report_management_mappings() 
+
+    if report_id and report_mark:
+        try:
+            es_xnr.index(index=facebook_report_management_index_name,doc_type=facebook_report_management_index_type,id=report_id,body=report_dict)
+            mark=True
+        except:
+            mark=False
+    else:
+        mark=False
+    return mark
+
+
+
+#加入预警库
+def addto_warning_corpus(task_detail):
+    flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        corpus_result = es_flow_text.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
+        corpus_result['xnr_user_no'] = task_detail['xnr_user_no']
+        corpus_result['warning_source'] = task_detail['warning_source']
+        corpus_result['create_time'] = task_detail['create_time']
+        corpus_result['validity'] = 1
+        corpus_result['nick_name'] = get_user_nickname(task_detail['uid'])
+
+        fid_result=lookup_fid_attend_index(task_detail['fid'],task_detail['timestamp'])
+        if fid_result:
+            corpus_result['comment']=fid_result['comment']
+            corpus_result['share']=fid_result['share']
+            corpus_result['favorite']=fid_result['favorite']
+        else:
+            corpus_result['comment']=0
+            corpus_result['share']=0
+            corpus_result['favorite']=0  
+
+        #查询好友列表
+        friends_list=lookup_xnr_friends(task_detail['xnr_user_no'])
+        set_mark = set_intersection(task_detail['uid'],friends_list)
+        if set_mark > 0:
+            corpus_result['content_type']='friends'
+        else:
+            corpus_result['content_type']='unfriends'
+
+        es_xnr.index(index=facebook_warning_corpus_index_name,doc_type=facebook_warning_corpus_index_type,id=task_detail['fid'],body=corpus_result)
+        mark=True
+    except:
+        mark=False
+
+    return mark
 
 
 

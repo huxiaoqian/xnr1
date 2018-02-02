@@ -12,7 +12,9 @@ from xnr.global_utils import es_xnr,weibo_report_management_index_name_pre,weibo
                              weibo_xnr_fans_followers_index_type
 
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func                             
+
 from xnr.parameter import MAX_SEARCH_SIZE,DAY
+
 from xnr.time_utils import ts2datetime
 from xnr.save_weibooperate_utils import save_xnr_like
 from xnr.utils import add_operate2redis
@@ -100,8 +102,9 @@ def show_reportcontent_new(report_type,start_time,end_time):
     	query_condition.append({'terms':{'report_type':report_type}})
     else:
     	pass
-    query_condition.append({'range':{'report_time':{'gte':start_time,'lte':end_time}}})
-    print 'query_condition:',query_condition
+
+    query_condition.append({'range':{'report_time':{'gte':start_time,'lte':'end_time'}}})
+
     query_body={
     	'query':{
     		'filtered':{
