@@ -84,3 +84,21 @@ def ajax_delete_domain():
     domain_name = request.args.get('domain_name','')
     mark = get_delete_domain(domain_name)
     return json.dumps(mark)
+
+#######################################################
+#言论知识库
+#######################################################
+#显示语料库
+@mod.route('/show_corpus_class/')
+def ajax_show_corpus_class():
+    create_type=request.args.get('create_type','')
+    corpus_type=request.args.get('corpus_type','')
+    results=show_corpus_class(create_type,corpus_type)
+    return json.dumps(results)
+
+#删除指定语料
+@mod.route('/delete_corpus/')
+def ajax_delete_corpus():
+    corpus_id=request.args.get('corpus_id','')
+    results=delete_corpus(corpus_id)
+    return json.dumps(results)

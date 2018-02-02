@@ -433,6 +433,17 @@ facebook_timing_warning_index_type = 'text'
 facebook_keyword_count_index_name = 'facebook_keyword_count'
 facebook_keyword_count_index_type = 'text'
 
+## 上报管理
+facebook_report_management_index_name_pre = 'facebook_report_management_'
+facebook_report_management_index_type = 'report'
+
+# 语料库 -- 主题和日常
+facebook_xnr_corpus_index_name = 'facebook_corpus'
+facebook_xnr_corpus_index_type = 'text'
+
+#预警库
+facebook_warning_corpus_index_name = 'facebook_warning_corpus'
+facebook_warning_corpus_index_type = 'text'
 
 # twitter
 

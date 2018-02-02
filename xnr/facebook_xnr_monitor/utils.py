@@ -14,7 +14,8 @@ from xnr.global_utils import es_xnr,facebook_keyword_count_index_name,facebook_k
                              fb_xnr_index_name,fb_xnr_index_type,\
                              facebook_count_index_name_pre,facebook_count_index_type,\
                              fb_bci_index_name_pre,fb_bci_index_type,\
-                             facebook_user_index_name,facebook_user_index_type
+                             facebook_user_index_name,facebook_user_index_type,\
+                             facebook_xnr_corpus_index_name,facebook_xnr_corpus_index_type
 
 from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN,\
                           MAX_HOT_POST_SIZE
@@ -304,3 +305,34 @@ def lookup_active_user(classify_id,xnr_id,start_time,end_time):
     return results
 
 
+#加入语料库
+def addto_facebook_corpus(task_detail):
+    flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
+        task_detail['text']=corpus_result['text']
+        
+        #查询三个指标字段
+        fid_result=lookup_fid_attend_index(task_detail['fid'],task_detail['timestamp'],task_detail['timestamp'])
+        if fid_result:
+            task_detail['comment']=fid_result['comment']
+            task_detail['share']=fid_result['share']
+            task_detail['favorite']=fid_result['favorite']
+        else:
+            task_detail['comment']=0
+            task_detail['share']=0
+            task_detail['favorite']=0 
+            #查询用户昵称
+        task_detail['nick_name']=get_user_nickname(item['_source']['uid'])
+        # task_detail['retweeted']=corpus_result['retweeted']
+        # task_detail['comment']=corpus_result['comment']
+        # task_detail['like']=corpus_result['like']
+    except:
+        mark=False
+
+    try:
+        es_xnr.index(index=facebook_xnr_corpus_index_name,doc_type=facebook_xnr_corpus_index_type,id=task_detail['fid'],body=task_detail)
+        mark=True
+    except:
+        mark=False
+    return mark
