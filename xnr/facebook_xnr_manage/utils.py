@@ -7,30 +7,43 @@ import os
 import time
 import datetime
 import json
-from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
-                             weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                             es_user_profile,profile_index_name,profile_index_type,\
-                             weibo_xnr_timing_list_index_name,weibo_xnr_timing_list_index_type,\
-                             xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
-                             weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_name_pre,weibo_feedback_retweet_index_type,\
-                             weibo_feedback_at_index_name,weibo_feedback_at_index_name_pre,weibo_feedback_at_index_type,\
-                             weibo_feedback_comment_index_name,weibo_feedback_comment_index_name_pre,weibo_feedback_comment_index_type,\
-                             weibo_feedback_like_index_name,weibo_feedback_like_index_name_pre,weibo_feedback_like_index_type,\
-                             weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
+from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
+                             fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
+                             facebook_user_index_name as profile_index_name, facebook_user_index_type as profile_index_type,\
+                             fb_xnr_timing_list_index_name,fb_xnr_timing_list_index_type,\
+                             fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
+                             facebook_feedback_retweet_index_name,facebook_feedback_retweet_index_name_pre,facebook_feedback_retweet_index_type,\
+                             facebook_feedback_at_index_name,facebook_feedback_at_index_name_pre,facebook_feedback_at_index_type,\
+                             facebook_feedback_comment_index_name,facebook_feedback_comment_index_name_pre,facebook_feedback_comment_index_type,\
+                             facebook_feedback_like_index_name,facebook_feedback_like_index_name_pre,facebook_feedback_like_index_type
+es_user_profile = es_xnr                            
+from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
+from xnr.data_utils import num2str
+from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_DATE_FB
+from xnr.time_utils import get_fb_xnr_feedback_index_listname as get_xnr_feedback_index_listname,\
+                            get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
+                           ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
+
+
+
+
+
+from xnr.facebook_publish_func import fb_retweet,fb_comment,fb_like,fb_unfollow,fb_follow
+
+
+
+
+
+from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
+from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
+from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
+from xnr.global_utils import weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
                              portrait_index_name,portrait_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                              weibo_feedback_fans_index_name,weibo_feedback_fans_index_type
-from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
-from xnr.data_utils import num2str
-from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
-                           ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
-from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
-from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
-from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
-
 ##获取索引
 def get_xnr_set_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
     index_name_list=[]
@@ -55,18 +68,18 @@ def get_xnr_set_index_listname(index_name_pre,date_range_start_ts,date_range_end
 
 
 ##########################################
-#	step 2：show weibo_xnr 	information  #
+#	step 2：show fb_xnr 	information  #
 ##########################################
 def get_xnr_detail(xnr_user_no):
 	try:
-		results=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+		results=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 		xnr_info=results
 	except:
 		xnr_info=[]
 	return xnr_info
 
 #step 2.1: show completed weibo_xnr information 
-def show_completed_weiboxnr(account_no,now_time):
+def show_completed_fbxnr(account_no,now_time):
     query_body={
 		'query':{
 			'filtered':{
@@ -84,7 +97,7 @@ def show_completed_weiboxnr(account_no,now_time):
 		'size':MAX_VALUE
     }
     #print 'start_time:',time.time()
-    results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    results=es_xnr.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
     result=[]
     #print 'xnr_search_time:',time.time()
     for item in results:
@@ -122,7 +135,7 @@ def show_completed_weiboxnr(account_no,now_time):
 #计算粉丝数
 def count_fans_num(xnr_user_no):
     try:
-        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        result=es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         followers_list=result['fans_list']
         number=len(followers_list)
     except:
@@ -132,14 +145,13 @@ def count_fans_num(xnr_user_no):
 #计算历史发帖量
 def count_history_post_num(xnr_user_no,now_time):
     #获取检索列表
-    temp_weibo_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
-    weibo_xnr_flow_text_listname=[]
-    for index_name in temp_weibo_xnr_flow_text_listname:
+    temp_fb_xnr_flow_text_listname=get_xnr_feedback_index_listname(xnr_flow_text_index_name_pre,now_time)
+    fb_xnr_flow_text_listname=[]
+    for index_name in temp_fb_xnr_flow_text_listname:
         if es_xnr.indices.exists(index=index_name):
-            weibo_xnr_flow_text_listname.append(index_name)
+            fb_xnr_flow_text_listname.append(index_name)
         else:
             pass
-    #print 'weibo_xnr_flow_text_listname',weibo_xnr_flow_text_listname
     #定义检索规则
     query_body={
         'query':{
@@ -158,7 +170,7 @@ def count_history_post_num(xnr_user_no,now_time):
         }
     }
     try:
-        results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
+        results=es_xnr.search(index=fb_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
             body=query_body)['aggregations']['history_post_num']['buckets']
         number=0
         for item in results:
@@ -171,7 +183,7 @@ def count_history_post_num(xnr_user_no,now_time):
 def count_today_comment_num(xnr_user_no,now_time):
     #对时间进行处理，确定查询范围
     date_time=ts2datetime(now_time)
-    weibo_xnr_flow_text_listname=xnr_flow_text_index_name_pre+date_time
+    fb_xnr_flow_text_listname=xnr_flow_text_index_name_pre+date_time
     star_time=datetime2ts(date_time)
     #定义检索规则
     query_body={
@@ -197,7 +209,7 @@ def count_today_comment_num(xnr_user_no,now_time):
         }
     }
     try:
-        results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
+        results=es_xnr.search(index=fb_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
             body=query_body)['aggregations']['today_post_num']['buckets']
         number=result[0]['doc_count']
     except:
@@ -206,7 +218,7 @@ def count_today_comment_num(xnr_user_no,now_time):
 
 #计算历史评论数
 def count_history_comment_num(uid):
-    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,datetime2ts(S_WEIBO_TEST_DATE),XNR_CENTER_DATE_TIME)
+    fb_feedback_comment_index_name_list = get_xnr_set_index_listname(facebook_feedback_comment_index_name_pre,datetime2ts(S_DATE_FB),XNR_CENTER_DATE_TIME)
     #定义检索规则
     query_body={
         'query':{
@@ -227,7 +239,7 @@ def count_history_comment_num(uid):
         }
     }
     try:
-        result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,\
+        result=es_xnr.search(index=fb_feedback_comment_index_name_list,doc_type=fb_feedback_comment_index_type,\
     		body=query_body)['aggregations']['history_comment_num']['buckets']
     #print result
     # number=0
@@ -238,7 +250,7 @@ def count_history_comment_num(uid):
     return number
 
 #step 2.2: show uncompleted weibo_xnr information 
-def show_uncompleted_weiboxnr(account_no):
+def show_uncompleted_fbxnr(account_no):
 	query_body={
 		'query':{
 			'filtered':{
@@ -262,7 +274,7 @@ def show_uncompleted_weiboxnr(account_no):
 		'size':MAX_VALUE
 	}
 	try:
-		results=es_xnr.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+		results=es_xnr.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
 		result=[]
 		for item in results:
 			result.append(item['_source'])
@@ -277,7 +289,7 @@ def xnr_today_remind(xnr_user_no,now_time):
 	##发帖提醒
 	#当前发帖量
     complete_num=count_today_comment_num(xnr_user_no,now_time)
-    xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    xnr_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
     day_post_average_list=json.loads(xnr_result['day_post_average'])
     #最小目标发帖量
     if day_post_average_list[0].encode('utf-8'):
@@ -1433,11 +1445,11 @@ def change_continue_xnrinfo(xnr_user_no):
 
 
 ###############################
-#	step 6：delete_weibo_xnr  #
+#	step 6：delete_fb_xnr  #
 ###############################
-def delete_weibo_xnr(xnr_user_no):
+def delete_fb_xnr(xnr_user_no):
 	try:
-		es_xnr.delete(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)
+		es_xnr.delete(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)
 		result=True
 	except:
 		result=False
