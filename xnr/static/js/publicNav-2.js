@@ -115,7 +115,6 @@ setTimeout(function () {
     }else if(ft=='(twitter)'){
         urlFirst_zpd='twitter_xnr_operate';mft_id='tid';
     }
-    console.log(ft)
 },1000)
 //retweet_operate   comment_operate   like_operate
 //转发 分享  转推
