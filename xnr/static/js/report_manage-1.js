@@ -1,5 +1,7 @@
 var reportDefaul_url;
-if(flagType == 3){//微信
+var time2=Date.parse(new Date())/1000;
+if(flagType == 3){
+    //微信
     //===============时间搜索添加11---21 ===============
     var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
         +'<label class="demo-label">'
@@ -51,7 +53,6 @@ if(flagType == 3){//微信
             $('#end_1').hide();
             $('.sureTime').hide();
             reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
-            console.log(reportDefaul_url)
             public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
         }
     });
@@ -64,35 +65,26 @@ if(flagType == 3){//微信
             $('#pormpt').modal('show');
         }else {
             reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
-            console.log(reportDefaul_url)
         }
     });
-
     weiboORqq('WX');
-    console.log(ID_Num);
     reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
-    console.log('最近7天的上报记录----'+reportDefaul_url)
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if(flagType == 1){//微博
     weiboORqq('weibo');
-    console.log(ID_Num);
-    reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
+    reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+time2;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
-    console.log(ID_Num);
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
-    console.log(reportDefaul_url)
+    reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }
-
 // var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
 // public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 var currentData={},wordCurrentData={},currentDataPrival={};
 function reportDefaul(data) {
-    console.log(data)
     $.each(data,function (index,item) {
         currentDataPrival[item.report_time]=item;
     });
@@ -101,7 +93,7 @@ function reportDefaul(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,25,35],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -124,80 +116,85 @@ function reportDefaul(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var artical=row.report_content.weibo_list,str='';
-                    $.each(artical,function (index,item) {
-                        var text,time,name,img,row;
-                        if (item.name==''||item.name=='null'||item.name=='unknown'||!item.name){
-                            name=item.uid||'未命名';
-                        }else {
-                            name=item.name;
-                        };
-                        if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
-                            img='/static/images/unknown.png';
-                        }else {
-                            img=item.photo_url;
-                        };
-                        if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                            text='暂无内容';
-                        }else {
-                            if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                var s=item.text;
-                                var keywords=item.sensitive_words_string.split('&');
-                                for (var f=0;f<keywords.length;f++){
-                                    s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
-                                }
-                                text=s;
-
-                                var rrr=item.text;
-                                if (rrr.length>=160){
-                                    rrr=rrr.substring(0,160)+'...';
-                                    all='inline-block';
-                                }else {
-                                    rrr=item.text;
-                                    all='none';
-                                }
-                                for (var f of keywords){
-                                    text2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
-                                }
+                    if (artical.length==0){
+                        str='<div style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</div>';
+                    }else {
+                        $.each(artical,function (index,item) {
+                            var text,time,name,img,row,text2,all;
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
+                                name=item.uid||'未命名';
                             }else {
-                                text=item.text;
-                                if (txt.length>=160){
-                                    text2=txt.substring(0,160)+'...';
-                                    all='inline-block';
-                                }else {
-                                    text2=txt;
-                                    all='none';
-                                }
+                                name=item.nick_name;
                             };
-                        };
-                        if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
-                            time='未知';
-                        }else {
-                            time=getLocalTime(item.timestamp);
-                        };
-                        var sye_1='',sye_2='';
-                        if (Number(item.sensitive) < 50){
-                            sye_1='border-color: transparent transparent #131313';
-                            sye_2='color: yellow';
-                        }
-                        str+=
-                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                            '   <img src="'+img+'" alt="" class="center_icon">'+
-                            '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
-                            '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                            // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                            '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                            '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                            '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
-                            '   <p class="allall1" style="display:none;">'+text+'</p>'+
-                            '   <p class="allall2" style="display:none;">'+text2+'</p>'+
-                            '   <span class="center_2">'+text2+'</span>'+
-                            '   <div class="center_3">'+
-                            '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                            '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                            '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                            '    </div>'+
-                            '</div>'
-                    });
+                            if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
+                                img='/static/images/unknown.png';
+                            }else {
+                                img=item.photo_url;
+                            };
+                            if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                                text='暂无内容';
+                            }else {
+                                if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                    var s=item.text;
+                                    var keywords=item.sensitive_words_string.split('&');
+                                    for (var f=0;f<keywords.length;f++){
+                                        s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                    }
+                                    text=s;
+
+                                    var rrr=item.text;
+                                    if (rrr.length>=160){
+                                        rrr=rrr.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        rrr=item.text;
+                                        all='none';
+                                    }
+                                    for (var f of keywords){
+                                        rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                    }
+                                    text2=rrr;
+                                }else {
+                                    text=item.text;
+                                    if (txt.length>=160){
+                                        text2=txt.substring(0,160)+'...';
+                                        all='inline-block';
+                                    }else {
+                                        text2=txt;
+                                        all='none';
+                                    }
+                                };
+                            };
+                            if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
+                                time='未知';
+                            }else {
+                                time=getLocalTime(item.timestamp);
+                            };
+                            var sye_1='',sye_2='';
+                            if (Number(item.sensitive) < 50){
+                                sye_1='border-color: transparent transparent #131313';
+                                sye_2='color: yellow';
+                            }
+                            str+=
+                                '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                                '   <img src="'+img+'" alt="" class="center_icon">'+
+                                '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
+                                '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
+                                '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
+                                '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                                '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                                '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                                '   <span class="center_2">'+text2+'</span>'+
+                                // '   <div class="center_3">'+
+                                // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
+                                // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                                // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                                // '    </div>'+
+                                '</div>'
+                        });
+                    }
                     var nameuid,time,report_type,xnr;
                     if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
                         nameuid = row.uid;
@@ -253,6 +250,8 @@ function reportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.personContent p').slideUp(300);
+    $('.person').show();
 }
 // 复制了一份上面的函数给微信
 function WXreportDefaul(data) {
@@ -264,7 +263,7 @@ function WXreportDefaul(data) {
         data:data,
         search: true,//是否搜索
         pagination: true,//是否分页
-        pageSize: 3,//单页记录数
+        pageSize: 5,//单页记录数
         pageList: [15,25,35],//分页步进值
         sidePagination: "client",//服务端分页
         searchAlign: "left",
@@ -289,27 +288,11 @@ function WXreportDefaul(data) {
                     var text = row.report_content;
                     var str =
                         '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                        // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                        // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                        // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '   <span class="center_2">'+text+'</span>'+
-                        // '   <div class="center_3">'+
-                        // '       <span class="cen3-1"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                        // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                        // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                        // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        // '    </div>'+
                         '</div>';
 
                     var nameuid,time,report_type,xnr;
-                    // if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
-                    //     nameuid = row.uid;
-                    // }else {
-                    //     nameuid = row.event_name;
-                    // };
                     nameuid='未知';//上报名称暂时设为未知。。。11-17
-
-
                     if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
                         time = '未知';
                     }else {
@@ -359,6 +342,8 @@ function WXreportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
+    $('.personContent p').slideUp(300);
+    $('.person').show();
 }
 //=========
 
@@ -402,195 +387,104 @@ function deltPointData(_this) {
     if (h==0){$('.filesList').hide()}
 }
 //切换类型
-var types=[];
+
 $('.type2 .demo-label').on('click',function () {
-    var thisType=$(this).attr('value');
+    $('.person p').show();
+    var types=[];
     $(".type2 input:checkbox:checked").each(function (index,item) {
         types.push($(this).val());
     });
-    var newReport_url='/weibo_xnr_report_manage/show_report_typecontent/?report_type='+thisType;
+    var time=$('.choosetime input:radio[name="time"]:checked').val();
+    var time1=getDaysBefore(time);
+    if (time=='mize'){
+        var s=$('.choosetime').find('#start').val();
+        var d=$('.choosetime').find('#end').val();
+        if (s==''||d==''){
+            $('#pormpt p').text('时间不能为空。');
+            $('#pormpt').modal('show');
+            return false;
+        }else {
+            time1=(Date.parse(new Date(s))/1000);
+            time2=(Date.parse(new Date(d))/1000);
+        }
+    }
+    $('.personContent p').show();
+    $('.person').hide();
+    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+types.join(',')+
+        '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
-
-//转发===评论===点赞
-// function retComLike(_this) {
-//     var mid=$(_this).parents('.post_center-every').find('.mid').text();
-//     var middle=$(_this).attr('type');
-//     var opreat_url;
-//     if (middle=='get_weibohistory_like'){
-//         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid;
-//         public_ajax.call_request('get',opreat_url,postYES);
-//     }else if (middle=='get_weibohistory_comment'){
-//         $(_this).parents('.post_center-every').find('.commentDown').show();
-//     }else {
-//         var txt=$(_this).parents('.post_center-every').find('.center_2').text();
-//         if (txt=='暂无内容'){txt=''};
-//         opreat_url='/weibo_xnr_report_manage/'+middle+'/?xnr_user_no='+ID_Num+'&r_mid='+mid+'&text='+txt;
-//         public_ajax.call_request('get',opreat_url,postYES);
-//     }
-// }
-// function comMent(_this){
-//     var txt = $(_this).prev().val();
-//     var mid = $(_this).parents('.post_center-every').find('.mid').text();
-//     if (txt!=''){
-//         var post_url='/weibo_xnr_report_manage/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
-//         public_ajax.call_request('get',post_url,postYES)
-//     }else {
-//         $('#pormpt p').text('评论内容不能为空。');
-//         $('#pormpt').modal('show');
-//     }
-// }
-
-//操作返回结果
-function postYES(data) {
-    var f='';
-    if (data[0]){
-        f='操作成功';
+//时间选择
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $('.personContent p').show();
+        $('.person').hide();
+        var valCH=[];
+        $(".type2 input:checkbox:checked").each(function (index,item) {
+            valCH.push($(this).val());
+        });
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('get',weiboUrl,reportDefaul);
+    }//show_reportcontent_new
+});
+$('#sure').on('click',function () {
+    $('.personContent p').show();
+    $('.person').hide();
+    var valCH=[];
+    $(".type2 input:checkbox:checked").each(function (index,item) {
+        valCH.push($(this).val());
+    });
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
     }else {
-        f='操作失败';
+        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+
+            '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
-    $('#pormpt p').text(f);
-    $('#pormpt').modal('show');
-}
+});
+
 //导出excel
 $('#output1').click(function(){
-    var all=[];
-    for (var k in currentData){
-        var name='',time='',type='',user='',uid='',txt='';
-        if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
-            name='暂无';
-        }else {
-            name=currentData[k].event_name;
-        };
-        if (currentData[k].report_time==''||currentData[k].report_time=='unknown'||currentData[k].report_time=='null'){
-            time='暂无';
-        }else {
-            time=getLocalTime(currentData[k].report_time);
-        };
-        if (currentData[k].report_type==''||currentData[k].report_type=='unknown'||currentData[k].report_type=='null'){
-            type='暂无';
-        }else {
-            type=currentData[k].report_type;
-        };
-        if (currentData[k].uid==''||currentData[k].uid=='unknown'||currentData[k].uid=='null'){
-            uid='暂无';
-        }else {
-            uid=currentData[k].uid;
-        };
-        if (currentData[k].xnr_user_no==''||currentData[k].xnr_user_no=='unknown'||currentData[k].xnr_user_no=='null'){
-            user='暂无';
-        }else {
-            user=currentData[k].xnr_user_no;
-        };
-        if (currentData[k].report_content['weibo_list'].length==0){
-            txt='暂无内容';
-        }else {
-            $.each(currentData[k].report_content['weibo_list'],function (index,item) {
-                txt+=item.text;
-            });
-        };
-        all.push(
-            [
-                {"value":name, "type":"ROW_HEADER"},
-                {"value":time, "type":"ROW_HEADER"},
-                {"value":type, "type":"ROW_HEADER"},
-                {"value":user, "type":"ROW_HEADER"},
-                {"value":uid, "type":"ROW_HEADER"},
-                {"value":txt, "type":"ROW_HEADER"},
-            ]
-        )
-    };
-
-    var data = {
-        "title":[
-            {"value":"上报名称", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报时间", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报类型", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"虚拟人", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"人物UID", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报内容", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-        ],
-        "data":all
-    };
-    if(data == '')
-        return;
-    JSONToExcelConvertor(data.data, "Report", data.title);
+    outputFun($(this).attr('type'));
 });
-
-function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
-    //先转化json
-    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-
-    var excel = '<table>';
-
-    //设置表头
-    var row = "<tr>";
-    for (var i = 0, l = ShowLabel.length; i < l; i++) {
-        row += "<td>" + ShowLabel[i].value + '</td>';
-    }
-
-    //换行
-    excel += row + "</tr>";
-
-    //设置数据
-    for (var i = 0; i < arrData.length; i++) {
-        var row = "<tr>";
-        for (var index in arrData[i]) {
-            var value = arrData[i][index].value === "." ? "" : arrData[i][index].value;
-            if (value){
-                row += '<td>' + value + '</td>';
-            }
-        }
-
-        excel += row + "</tr>";
-    }
-
-    excel += "</table>";
-
-    var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
-    excelFile += '; charset=UTF-8">';
-    excelFile += "<head>";
-    excelFile += "<!--[if gte mso 9]>";
-    excelFile += "<xml>";
-    excelFile += "<x:ExcelWorkbook>";
-    excelFile += "<x:ExcelWorksheets>";
-    excelFile += "<x:ExcelWorksheet>";
-    excelFile += "<x:Name>";
-    excelFile += "{worksheet}";
-    excelFile += "</x:Name>";
-    excelFile += "<x:WorksheetOptions>";
-    excelFile += "<x:DisplayGridlines/>";
-    excelFile += "</x:WorksheetOptions>";
-    excelFile += "</x:ExcelWorksheet>";
-    excelFile += "</x:ExcelWorksheets>";
-    excelFile += "</x:ExcelWorkbook>";
-    excelFile += "</xml>";
-    excelFile += "<![endif]-->";
-    excelFile += "</head>";
-    excelFile += "<body>";
-    excelFile += excel;
-    excelFile += "</body>";
-    excelFile += "</html>";
-
-
-    var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
-
-    var link = document.createElement("a");
-    link.href = uri;
-
-    link.style = "visibility:hidden";
-    link.download = FileName + ".xls";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
 //导出word
 $('#output2').on('click',function () {
-    tableExport('person', 'Report', 'doc');
+    outputFun($(this).attr('type'));
 });
+function outputFun(_type) {
+    var _ids=[],times=[];
+    for(var k in currentData){
+        _ids.push(currentData[k]['_id']);
+        times.push(k);
+    }
+    $('#loadingDown .downInfo').show();
+    $('#loadingDown').modal('show');
+    var output_url='/weibo_xnr_report_manage/output_excel_word/?id_list='+_ids.join(',')+
+        '&out_type='+_type+'&report_timelist='+times.join(',');
+    public_ajax.call_request('get',output_url,outputRead);
+}
+function outputRead(data) {
+    $('#loadingDown .downInfo').hide();
+    $('#loadingDown').modal('hide');
+    var path=data.substring(3);
+    var a = document.getElementById("downFile");
+    a.href=path;
+    a.download=data.substring(15);
+    a.click();
+}
+
+
 
 
 

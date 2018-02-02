@@ -138,8 +138,22 @@
 {% block my_js %}
 <script>
     judgment('6');
-    var basicData_1=JSON.parse(localStorage.getItem('firstStep'));
-    var basicData_2=JSON.parse(localStorage.getItem('secondStep'));
+    var flag='{{flag}}',WFT_url,firstStep,secondStep;
+    if (flag==1){
+        WFT_url='/weibo_xnr_create';
+        firstStep='WBfirstStep';
+        secondStep='WBsecondStep';
+    }else if (flag==4){
+        WFT_url='/facebook_xnr_create';
+        firstStep='FBfirstStep';
+        secondStep='FBsecondStep';
+    }else if (flag==5){
+        WFT_url='/twitter_xnr_create';
+        firstStep='TWfirstStep';
+        secondStep='TWsecondStep';
+    }
+    var basicData_1=JSON.parse(localStorage.getItem(firstStep));
+    var basicData_2=JSON.parse(localStorage.getItem(secondStep));
 //    $("#user_id").attr('title',basicData_2.task_id).text(basicData_2.task_id);
     $("#uname").attr('title',basicData_2.nick_name).text(basicData_2.nick_name);
     $("#age").attr('title',basicData_2.age).text(basicData_2.age);

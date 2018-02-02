@@ -12,30 +12,34 @@ import pandas as pd
 from collections import Counter
 import numpy as np
 import random
-from xnr.global_config import S_TYPE,S_DATE
+from xnr.global_config import S_TYPE, S_DATE_FB as S_DATE
 from xnr.global_utils import es_xnr as es
 #facebook_user
-from xnr.global_utils import es_fb_user_profile as es_user_profile, \
+from xnr.global_utils import r, es_fb_user_profile as es_user_profile, \
                             facebook_user_index_type as profile_index_type, \
                             facebook_user_index_name as profile_index_name
 from xnr.global_utils import r, fb_xnr_index_name, fb_xnr_index_type,\
                             fb_domain_index_name, fb_domain_index_type,\
                             fb_role_index_name, fb_role_index_type, \
-                            fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type
+                            fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type,\
+                            fb_xnr_max_no
 from xnr.parameter import fb_domain_ch2en_dict,fb_domain_en2ch_dict
 from xnr.parameter import ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
 from xnr.time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list, datetime2ts
-from xnr.utils import user_no2fb_id
+from xnr.utils import user_no2fb_id, add_operate2redis
 trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
 
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/facebook/'))
+from userinfo import Userinfo
+from fb_operate import Operation
 
-from xnr.facebook.fb_operate import Operation as FbOperateAPI
-from xnr.sina.userinfo import SinaOperateAPI
+# from xnr.facebook.fb_operate import Operation as FbOperateAPI
+# from xnr.sina.userinfo import SinaOperateAPI
 from xnr.sina.change_userinfo import change_userinfo
-from xnr.sina.tools.Launcher import SinaLauncher
+# from xnr.sina.tools.Launcher import SinaLauncher
 es_flow_text = es
 
 def get_nick_name_unique(nick_name):
@@ -86,10 +90,16 @@ def get_role_sort_list(domain_name):
     domain_pinyin = pinyin.get(domain_name, format='strip',delimiter='_')
     try:
         es_result = es.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=domain_pinyin)['_source']
+        print 'es_result'
+        print es_result
         role_sort_list_en = json.loads(es_result['role_distribute'])
+        print 'role_sort_list_en'
+        print role_sort_list_en
         role_sort_list_zh = []
         for item in role_sort_list_en:
             role_zh = fb_domain_en2ch_dict[item[0]]
+            print 'role_zh'
+            print role_zh
             role_sort_list_zh.append(role_zh)
         return role_sort_list_zh
     except:
@@ -118,7 +128,7 @@ def get_role2feature_info(domain_name,role_name):
 def get_recommend_step_two(task_detail):
     domain_name = task_detail['domain_name']
     role_name = task_detail['role_name']
-    daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
+    # daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
 
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     role_name_en = fb_domain_ch2en_dict[role_name]
@@ -141,10 +151,18 @@ def get_recommend_step_two(task_detail):
         if result['found'] == True:
             result = result['_source'] 
             person_url = "https://www.facebook.com/profile.php?id=" + str(result['uid'])
-            nick_name = result['nick_name']
-            nick_name_list.append(nick_name)
-            sex_list.append(result['sex'])
-            description_list.append(result['description'])
+            if result.has_key('name'):
+                nick_name = result['name']
+                nick_name_list.append(nick_name)
+            if result.has_key('gender'):
+                if result['gender'] == 'male':
+                    sex = 1
+                elif result['gender'] == 'female':
+                    sex = 2
+                sex_list.append(sex)
+            if result.has_key('description'):
+                description_list.append(result['description'])
+
             role_example_dict[result['uid']] = [nick_name,person_url]
             count += 1
             if count > NICK_NAME_TOP:
@@ -162,8 +180,10 @@ def get_recommend_step_two(task_detail):
     day_post_num_average = sum(day_post_num_new)/float(len(day_post_num_new))
     recommend_results['day_post_num_average'] = day_post_num_average
     
-    sex_list_count = Counter(sex_list)
-    sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]  
+    sex_sort = ''
+    if sex_list:
+        sex_list_count = Counter(sex_list)
+        sex_sort = sorted(sex_list_count.items(),key=lambda x:x[1],reverse=True)[:1][0][0]  
     recommend_results['nick_name'] = '&'.join(nick_name_list)
     recommend_results['role_example'] = recommend_results['role_example']
     recommend_results['sex'] = sex_sort
@@ -231,12 +251,13 @@ def get_modify_userinfo(task_detail):
 
 def get_recommend_follows(task_detail):
     recommend_results = dict()
-    daily_interests_list = task_detail['daily_interests'].encode('utf-8').split('，')
-    monitor_keywords_list = task_detail['monitor_keywords'].encode('utf-8').split('，')
+    # daily_interests_list = task_detail['daily_interests'].split('，')
+    monitor_keywords_list = task_detail['monitor_keywords'].split('，')
     create_time = time.time()        
     if S_TYPE == 'test':
         create_time = datetime2ts(S_DATE)
     index_name_list = get_flow_text_index_list(create_time)
+    '''#FB flow_text中没有daily_interests字段
     ## 日常兴趣关注
     try:
         query_body = {
@@ -247,7 +268,7 @@ def get_recommend_follows(task_detail):
                     }
                 }
             },
-            'sort':{'user_fansnum':{'order':'desc'}},
+            # 'sort':{'user_fansnum':{'order':'desc'}},
             'size':DAILY_INTEREST_TOP_USER,
             '_source':['uid']
         }
@@ -268,10 +289,11 @@ def get_recommend_follows(task_detail):
                 continue
         recommend_results['daily_interests'] = nick_name_dict
 
-    except:
+    except Exception,e:
+        print e
         print '没有找到日常兴趣相符的用户'
         recommend_results['daily_interests'] = {}
-
+    '''
     ## 监测词关注
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
@@ -289,11 +311,12 @@ def get_recommend_follows(task_detail):
     try:
         query_body_monitor = {
             'query':{
-                        'bool':{
-                            'must':nest_query_list
-                        }     
+                'bool':{
+                    # 'must':nest_query_list
+                    'should':nest_query_list
+                }     
             },
-            'sort':{'user_fansnum':{'order':'desc'}},
+            # 'sort':{'user_fansnum':{'order':'desc'}},
             'size':MONITOR_TOP_USER,
             '_source':['uid']
         }
@@ -310,11 +333,12 @@ def get_recommend_follows(task_detail):
         for result in es_monitor_keywords_results:
             if result['found'] == True:
                 result = result['_source']
-                nick_name_dict[result['uid']] = result['nick_name']
+                nick_name_dict[result['uid']] = result['name']
             else:
                 continue
         recommend_results['monitor_keywords'] = nick_name_dict
-    except:
+    except Exception,e:
+        print e
         print '没有找到监测词相符的用户'
         recommend_results['monitor_keywords'] = {}
     return recommend_results
@@ -329,6 +353,8 @@ def get_save_step_one(task_detail):
         user_no_current = 1
     task_detail['user_no'] = user_no_current
     task_id = user_no2fb_id(user_no_current)  #五位数 WXNR0001
+    print 'task_id'
+    print task_id
     try:    
         item_exist = dict()
         item_exist['user_no'] = task_detail['user_no']
@@ -337,7 +363,7 @@ def get_save_step_one(task_detail):
         item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
         item_exist['political_side'] = task_detail['political_side']
         item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
-        item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
+        # item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
         item_exist['monitor_keywords'] = '&'.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
         item_exist['create_status'] = 0 # 第一步完成
         print es.index(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id,body=item_exist)
@@ -346,18 +372,25 @@ def get_save_step_one(task_detail):
         mark = False
     return mark
 
-def get_save_step_two(task_detail):
-    #task_id = task_detail['task_id']
-    es_results = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'query':{'match_all':{}},\
+def get_fb_xnr_no():
+    user_no_max = 0
+    if not r.exists(fb_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
+        es_results = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'query':{'match_all':{}},\
                     'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1 
-    else:
-        user_no_current = 1
-
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+    else:   #如果当前redis有记录，则取用
+        user_no_max = int(r.get(fb_xnr_max_no))
+    return user_no_max
+    
+def get_save_step_two(task_detail):
+    #update
+    user_no_max = get_fb_xnr_no()
+    user_no_current = user_no_max + 1
+    r.set(fb_xnr_max_no, user_no_current)
+    
     task_detail['user_no'] = user_no_current
-    task_id = user_no2fb_id(user_no_current)  #五位数 WXNR0001
+    task_id = user_no2fb_id(user_no_current)  #五位数 FXNR0001
     
     item_exist = dict()
     item_exist['submitter'] = task_detail['submitter']
@@ -367,7 +400,7 @@ def get_save_step_two(task_detail):
     item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
     item_exist['political_side'] = task_detail['political_side']
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
-    item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
+    # item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = ','.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
 
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
@@ -403,48 +436,38 @@ def get_add_other_info(task_detail):
     password = task_detail['password']
     nick_name = str(task_detail['nick_name'])
     try:
-        user = SinaOperateAPI().getUserShow(screen_name=nick_name)
-    except:
-        return 'nick_name error'
-
+        user = Userinfo(account_name, password)
+        info_dict = user.getUserinfo()
+    except Exception,e:
+        print e
+        return 'account error'
     item_dict = {}
     if user:
-        item_dict['nick_name'] = user['screen_name']
-        item_dict['location'] = user['location']
-        if user['gender']=='m':
-            item_dict['gender'] = u'男'
-        elif user['gender']=='f':
-            item_dict['gender'] = u'女'
-        item_dict['age'] = '0'
-        item_dict['description'] = user['description']
-        item_dict['career'] = ''
+        item_dict['nick_name'] = nick_name
+        item_dict['id'] = info_dict['id']
+        item_dict['location'] = info_dict['location']
+        item_dict['age'] = info_dict['age']
+        item_dict['description'] = info_dict['description']
+        item_dict['career'] = info_dict['career']
     new_task_detail = dict(task_detail,**item_dict)
     return new_task_detail
 
 def get_save_step_three_1(task_detail):
-    nick_name = task_detail['nick_name'].encode('utf-8')
-    operate = SinaOperateAPI()
-    user_info = operate.getUserShow(screen_name=nick_name)
-    uid = user_info['id']
-    try:
-        if task_detail['fb_mail_account']:
-            uname = task_detail['fb_mail_account']
-        else:
-            uname = task_detail['fb_phone_account']
-        xnr = SinaLauncher(uname, task_detail['password'])
-        xnr.login()
-        uid = xnr.uid
-    except:
-        return '账户名或密码输入错误，请检查后输入！！'
-    query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
-    es_result = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    task_id = task_detail['task_id']
+    # query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
+    # es_result = es.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
+    # task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id)['_source']
-    item_exist['uid'] = uid
+    
+    item_exist['uid'] = task_detail['id']
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['fb_mail_account'] = task_detail['fb_mail_account']
     item_exist['fb_phone_account'] = task_detail['fb_phone_account']
     item_exist['password'] = task_detail['password']
+    item_exist['career'] = task_detail['career']
+    item_exist['description'] = task_detail['description']
+    item_exist['age'] = task_detail['age']
+    item_exist['location'] = task_detail['location']
     item_exist['create_status'] = 2 # 创建完成
     # 更新 fb_xnr表
     print es.update(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=task_id,body={'doc':item_exist})        
@@ -453,18 +476,30 @@ def get_save_step_three_1(task_detail):
 
 def get_save_step_three_2(task_detail):
     task_id = task_detail['task_id']
-    nick_name = task_detail['nick_name']
+    # nick_name = task_detail['nick_name']
     try:
         item_fans_followers = dict()
         followers_uids = list(set(task_detail['followers_uids'].split('，')))
         item_fans_followers['followers_list'] = followers_uids
         item_fans_followers['xnr_user_no'] = task_id
         print es.index(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=task_id,body=item_fans_followers)
+        #把关注任务加到redis队列中
+        for followers_uid in followers_uids:
+            queue_dict = {
+                'channel': 'facebook',
+                'operate_type': 'add',
+                'content': {
+                    'xnr_user_no': task_id,
+                    'uid': followers_uid
+                }
+            }
+            if not add_operate2redis(queue_dict):
+                mark = False
+                return mark
         mark = True
     except:        
         mark = False
-
-    return mark        
+    return mark
 
 def get_xnr_info_new(xnr_user_no):
     results = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
@@ -472,18 +507,20 @@ def get_xnr_info_new(xnr_user_no):
 
 def get_modify_base_info(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
-    res = es.mget(index=fb_xnr_index_name, doc_type=fb_xnr_index_type, body={'ids': [xnr_user_no]})['docs']
-    mark = False
+    item_exists = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+    if task_detail.has_key('active_time'):
+        item_exists['active_time'] = task_detail['active_time']
+    if task_detail.has_key('day_post_average'): 
+        day_post_average = task_detail['day_post_average'].split('-')
+        item_exists['day_post_average'] = json.dumps(day_post_average)
+    if task_detail.has_key('monitor_keywords'): 
+        item_exists['monitor_keywords'] = task_detail['monitor_keywords']
     try:
-        if res[0]['found']:
-            item_exists['active_time'] = task_detail['active_time']
-            item_exists['day_post_average'] = task_detail['day_post_average']
-            item_exists['daily_interests'] = task_detail['daily_interests']
-            item_exists['monitor_keywords'] = task_detail['monitor_keywords']
-            es.update(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
-            mark = True
-    except Exception,e :
+        es.update(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
+        mark = True
+    except Exception,e:
         print e
+        mark = False
     return mark
 
 def get_domain_info(domain_pinyin):
@@ -504,6 +541,7 @@ def union_dict(*objs):
     return _total
 
 if __name__ == '__main__':
+    '''
     domain_name =  '维权群体'
     
     #domain_name =  '乌镇'
@@ -513,4 +551,5 @@ if __name__ == '__main__':
     submitter = 'admin@qq.com'
     remark = '这是备注'
     domain_create_task(domain_name,create_type,create_time,submitter,remark,compute_status=0)
-
+    '''
+    print get_fb_xnr_no()

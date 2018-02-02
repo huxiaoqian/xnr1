@@ -165,8 +165,8 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # uid_list = []
 # for result in es_result:
-# 	result = result['_source']
-# 	uid_list.append(result['uid'])
+#     result = result['_source']
+#     uid_list.append(result['uid'])
 
 # print 'uid_list::',uid_list
 
@@ -256,15 +256,15 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # def processinfo(x):
 
-# 	process_list = psutil.get_process_list() #获取进程列表
-# 	for r in process_list:
-# 	    aa = str(r)
-# 	    f = re.compile(x,re.I)
-# 	    print 'aa::',aa
-# 	    print 'f::',f
-# 	    if f.search(aa):
-# 	        print aa.split('pid=')[1].split(',')[0]  
-# 	        print aa.split('pid=')
+#     process_list = psutil.get_process_list() #获取进程列表
+#     for r in process_list:
+#         aa = str(r)
+#         f = re.compile(x,re.I)
+#         print 'aa::',aa
+#         print 'f::',f
+#         if f.search(aa):
+#             print aa.split('pid=')[1].split(',')[0]  
+#             print aa.split('pid=')
 
 # processinfo(sys.argv[1])
 
@@ -276,10 +276,10 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.delete(index='weibo_example_model',doc_type='model',id='wei_quan_qun_ti_lawyer')
 
 # query_body = {
-# 	'query':{
-# 		'match_all':{}
-# 	},
-# 	'size':'1000'
+#     'query':{
+#         'match_all':{}
+#     },
+#     'size':'1000'
 # }
 
 # results = es.search(index='facebook_user',doc_type='user',body=query_body)['hits']['hits']
@@ -288,11 +288,11 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # for result in results:
 
-# 	result = result['_source']
+#     result = result['_source']
 
-# 	_id = result['uid']
+#     _id = result['uid']
 
-# 	_id_list.append(_id)
+#     _id_list.append(_id)
 
 # print '_id_list...',_id_list
 
@@ -300,54 +300,111 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # # agg 
 # def count_statis():
 
-# 	query_body = {
-# 		'query':{	
-# 			'bool':{
-# 				'must':[
-# 					{'range':{'update_time':{'gt':1507774875,'lte':1507812886}}}
-# 				]
-# 			}
-# 		},
-# 		'aggs':{
-# 			'all_fids':{
-# 				'terms':{
-# 					'field':'fid',
-# 					'order':{'stats_share.max':'desc'},
-# 					'size':100
-# 				},
-# 				'aggs':{
-# 					'stats_share':{
-# 						'stats':{
-# 							'field':'share'
-# 						}
-# 					}
-# 				}
+#     query_body = {
+#         'query':{    
+#             'bool':{
+#                 'must':[
+#                     {'range':{'update_time':{'gt':1507774875,'lte':1507812886}}}
+#                 ]
+#             }
+#         },
+#         'aggs':{
+#             'all_fids':{
+#                 'terms':{
+#                     'field':'fid',
+#                     'order':{'stats_share.max':'desc'},
+#                     'size':100
+#                 },
+#                 'aggs':{
+#                     'stats_share':{
+#                         'stats':{
+#                             'field':'share'
+#                         }
+#                     }
+#                 }
 
-# 			}
-# 		}
-# 	}
+#             }
+#         }
+#     }
 
-# 	results = es.search(index='facebook_count_2017-10-12',doc_type='text',\
-# 		body=query_body)['aggregations']['all_fids']['buckets']
+#     results = es.search(index='facebook_count_2017-10-12',doc_type='text',\
+#         body=query_body)['aggregations']['all_fids']['buckets']
 
-# 	import copy
-# 	results_origin = copy.deepcopy(results)
+#     import copy
+#     results_origin = copy.deepcopy(results)
 
-# 	fid_share_dict = {}
-# 	results.sort(key=lambda x:(x['stats_share']['max']-x['stats_share']['min']),reverse=True)
-	
-# 	fid_list = [item['key'] for item in results if (item['stats_share']['max']-item['stats_share']['min']) > 10]
+#     fid_share_dict = {}
+#     results.sort(key=lambda x:(x['stats_share']['max']-x['stats_share']['min']),reverse=True)
+    
+#     fid_list = [item['key'] for item in results if (item['stats_share']['max']-item['stats_share']['min']) > 10]
 
-# 	TOP_HOT_FB = 100
+#     TOP_HOT_FB = 100
 
-# 	if len(fid_list) < TOP_HOT_FB:
+#     if len(fid_list) < TOP_HOT_FB:
 
-# 		fid_list_2 = [item['key'] for item in results_origin[:TOP_HOT_FB - len(fid_list)]]
+#         fid_list_2 = [item['key'] for item in results_origin[:TOP_HOT_FB - len(fid_list)]]
 
-# 		fid_list.extend(fid_list_2)
+#         fid_list.extend(fid_list_2)
 
 
 #count_statis()
 # results =  es.search(index='twitter_flow_text_2017-10-25',doc_type='text',body={'query':{'match_all':{}},'size':100})['hits']['hits']
 # tid_list = [item['_source']['tid'] for item in results]
 # print 'tid_list',tid_list
+
+# def search():
+    
+#     white_uid_list = ['123']
+#     query_item = 'keywords_string'
+    
+#     nest_query_list = []
+#     keyword_list = [u'载人飞船',u'领袖',u'黄金',u'原油']
+#     for keyword in keyword_list:
+#         #nest_query_list.append({'match':{query_item:keyword}})
+#         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
+
+#     SHOULD_PERCENT = 3
+
+#     query_body = {
+#         'query':{
+#             'bool':{
+#                 'should':nest_query_list,
+#                 "minimum_should_match": SHOULD_PERCENT,
+#                 'must_not':{'terms':{'uid':white_uid_list}}
+#             }
+#         },
+#         'size':20,
+#         'sort':[{'user_fansnum':{'order':'desc'}}]
+#     }
+    
+#     es_results = es_flow_text.search(index='flow_text_2016-11-19',doc_type='text',\
+#                 body=query_body)['hits']['hits']
+
+#     print 'results...',es_results
+
+#search()       
+
+# item = {'fid':'6679197029855974713','uid':'100018797745111','timestamp':1508934020,'text':u'周五！'}
+# es.index(index='facebook_flow_text_2017-10-25',doc_type='text',body=item,id='6679197029855974713')
+
+# item_dict = {'tid':'956863562332475392','uid':'935416088380153856','timestamp':1508934030,'text':'hahaha'}
+# es.index(index='twitter_flow_text_2017-10-25',doc_type='text',body=item_dict,id='956863562332475392')
+
+# es.delete(index='tw_xnr_fans_followers',doc_type='uids',id='FXNR0003')
+
+#es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
+
+query_body = {
+	'query':{
+		'bool':{
+			'must':[
+				{'term':{'uid':'183774741715570'}},
+				{'term':{'text':'明镜新闻网 shared a link.'}}
+			]
+		}
+	}
+}
+
+
+r = es.search(index='facebook_flow_text_2017-10-15',doc_type='text',body=query_body)['hits']['hits']
+print 'r..',r

@@ -9,8 +9,8 @@ import opencc
 import time
 from global_utils_do import *
 
-sys.path.append('../../cron')
-from trans.trans import trans, traditional2simplified
+sys.path.append('../../trans')
+from trans import trans, traditional2simplified
 
 # cc = opencc.OpenCC('t2s', opencc_path='/usr/bin/opencc')
 s = load_scws()

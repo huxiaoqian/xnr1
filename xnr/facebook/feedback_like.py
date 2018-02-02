@@ -3,7 +3,7 @@
 
 from launcher import Launcher
 import time
-from es import Es_fb
+from Elasticsearch_fb import Es_fb
 import re
 
 class Like():

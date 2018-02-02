@@ -254,8 +254,8 @@ def ajax_show_comment():
     task_detail['end_ts'] = request.args.get('end_ts','')
 
     if S_TYPE == 'test':
-        task_detail['start_ts'] = datetime2s('2017-10-01')
-        task_detail['end_ts'] = datetime2s('2017-10-07')
+        task_detail['start_ts'] = datetime2ts('2017-10-01')
+        task_detail['end_ts'] = datetime2ts('2017-10-07')
 
     results = get_show_comment(task_detail)
     return json.dumps(results)
@@ -283,8 +283,8 @@ def ajax_show_retweet():
     task_detail['end_ts'] = request.args.get('end_ts','')
 
     if S_TYPE == 'test':
-        task_detail['start_ts'] = datetime2s('2017-10-01')
-        task_detail['end_ts'] = datetime2s('2017-10-07')
+        task_detail['start_ts'] = datetime2ts('2017-10-01')
+        task_detail['end_ts'] = datetime2ts('2017-10-07')
 
     results = get_show_retweet(task_detail)
     return json.dumps(results)
@@ -311,8 +311,8 @@ def ajax_show_private():
     task_detail['end_ts'] = request.args.get('end_ts','')
 
     if S_TYPE == 'test':
-        task_detail['start_ts'] = datetime2s('2017-10-01')
-        task_detail['end_ts'] = datetime2s('2017-10-07')
+        task_detail['start_ts'] = datetime2ts('2017-10-01')
+        task_detail['end_ts'] = datetime2ts('2017-10-07')
 
 
     results = get_show_private(task_detail)

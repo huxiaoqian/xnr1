@@ -59,7 +59,7 @@ def ajax_recommend_step_two():
     task_detail = dict()
     task_detail['domain_name'] = request.args.get('domain_name','')
     task_detail['role_name'] = request.args.get('role_name','')
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     recommend_results = get_recommend_step_two(task_detail)
     return json.dumps(recommend_results)
 
@@ -71,16 +71,16 @@ def ajax_modify_userinfo():
     task_detail['age'] = request.args.get('age','')
     task_detail['description'] = request.args.get('description','')
     task_detail['location'] = request.args.get('location','')
-    task_detail['gender'] = request.args.get('gender','')
+    # task_detail['gender'] = request.args.get('gender','')
     task_detail['career'] = request.args.get('career','')
     results = get_modify_userinfo(task_detail)
     return json.dumps(results)
 
 #第三步绑定账户关注用户推荐
-@mod.route('/recommend_follows/')
+@mod.route('/recommend_follows/')   #fb_flow_text中没有daily_interests字段，所以暂不支持“日常兴趣”推荐关注
 def ajax_recommend_followers():
     task_detail = dict()
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     recommend_results = get_recommend_follows(task_detail)
     return json.dumps(recommend_results)
@@ -96,7 +96,7 @@ def ajax_save_step_two():
     task_detail['psy_feature'] = request.args.get('psy_feature','') # 心理特征，以中文逗号 “，”连接
     task_detail['political_side'] = request.args.get('political_side','') # 政治倾向
     task_detail['business_goal'] = request.args.get('business_goal','') # 业务目标,以中文逗号 “，”连接
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
+    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
     task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
     task_detail['active_time'] = request.args.get('active_time','') 
     # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
@@ -123,9 +123,9 @@ def ajax_save_step_three_1():
     task_detail['password'] = request.args.get('password','') # 密码
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     #step2 info
-    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
-    if new_task_detail == 'nick_name error':
-        print 'name error!!'
+    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, age--0, descripriton, career, uid
+    if new_task_detail == 'account error':
+        print 'account error!!'
         return json.dumps(new_task_detail)
     else:
         mark = get_save_step_three_1(new_task_detail)
@@ -135,10 +135,9 @@ def ajax_save_step_three_1():
 @mod.route('/save_step_three_2/')
 def ajax_save_step_three_2():
     task_detail = dict()
-    task_detail['task_id'] = request.args.get('task_id','') # 微博虚拟人编码，如：WXNR0001
-    task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人昵称
+    task_detail['task_id'] = request.args.get('task_id','') #虚拟人编码，如：WXNR0001
+    # task_detail['nick_name'] = request.args.get('nick_name','') # 虚拟人昵称
     task_detail['followers_uids'] = request.args.get('followers_uids','') # 关注的人，昵称之间以中文逗号分隔“，”
-    # print 'task_detail::',task_detail
     mark = get_save_step_three_2(task_detail)
     return json.dumps(mark)  #True：保存成功  False：保存失败
 
@@ -148,15 +147,19 @@ def ajax_get_xnr_info():
     result = get_xnr_info_new(xnr_user_no)
     return json.dumps(result)
 
-
 @mod.route('/modify_base_info/')
 def ajax_modify_base_info():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['active_time'] = request.args.get('active_time','')
-    task_detail['day_post_average'] = request.args.get('day_post_average','') 
-    task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
-    task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    active_time = request.args.get('active_time','')
+    day_post_average = request.args.get('day_post_average','')  # 以“-”分隔，如2-4 表示2-4条
+    monitor_keywords = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    if active_time:
+        task_detail['active_time'] = active_time
+    if day_post_average:
+        task_detail['day_post_average'] = day_post_average
+    if monitor_keywords: 
+        task_detail['monitor_keywords'] = monitor_keywords
     mark = get_modify_base_info(task_detail)    
     return json.dumps(mark)
 

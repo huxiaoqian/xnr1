@@ -16,7 +16,8 @@ from xnr.global_utils import es_xnr,weibo_user_warning_index_name_pre,weibo_user
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
                              es_user_profile,profile_index_name,profile_index_type,\
-                             weibo_warning_corpus_index_name,weibo_warning_corpus_index_type
+                             weibo_warning_corpus_index_name,weibo_warning_corpus_index_type,\
+                             weibo_report_management_index_name_pre,weibo_report_management_index_type
 
 
 
@@ -24,6 +25,8 @@ from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_
 from xnr.parameter import USER_NUM,MAX_SEARCH_SIZE,USER_CONTENT_NUM,DAY,UID_TXT_PATH,MAX_VALUE,SPEECH_WARMING_NUM,REMIND_DAY,WARMING_DAY
 from xnr.global_config import S_TYPE,S_DATE,S_DATE_BCI,S_DATE_EVENT_WARMING,S_DATE_WARMING
 from xnr.global_utils import R_CLUSTER_FLOW2 as r_cluster
+
+from xnr.weibo_report_management_mappings import weibo_report_management_mappings
 
 #查询用户昵称
 def get_user_nickname(uid):
@@ -528,8 +531,8 @@ def lookup_todayweibo_date_warming(keywords,today_datetime):
         'query':{
             'bool':
             {
-                'should':keyword_query_list,
-                'must':{'range':{'sensitive':{'gte':1}}}
+                'should':keyword_query_list
+                # 'must':{'range':{'sensitive':{'gte':1}}}
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -614,19 +617,19 @@ def lookup_history_event_warming(xnr_user_no,start_time,end_time):
 def get_hashtag(today_datetime):
     
     weibo_flow_text_index_name=get_day_flow_text_index_list(today_datetime)
-    query_body_test={
-        'query':{
-            'match_all':{}
-        },
-        'size':999
-    }
-    weibo_result_test=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,body=query_body_test)['hits']['hits']
-    for item in weibo_result_test:
-        print 'item:',item['_source']
-        if item['_source']['hashtag']:
-            print 'hashtag_mark:',item['_source']['hashtag']
-        else:
-            pass
+    # query_body_test={
+    #     'query':{
+    #         'match_all':{}
+    #     },
+    #     'size':999
+    # }
+    # weibo_result_test=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,body=query_body_test)['hits']['hits']
+    # for item in weibo_result_test:
+    #     print 'item:',item['_source']
+    #     if item['_source']['hashtag']:
+    #         print 'hashtag_mark:',item['_source']['hashtag']
+    #     else:
+    #         pass
     query_body={
         'query':{
             'filtered':{
@@ -1003,9 +1006,10 @@ def report_warming_content(task_detail):
 
     weibo_list=[]
     user_list=[]
-
-    weibo_info=json.loads(task_detail['weibo_info'])
+    # print 'type:',type(task_detail['weibo_info']),task_detail['weibo_info']
+    weibo_info=task_detail['weibo_info']
     for item in weibo_info:
+        item['timestamp'] = int(item['timestamp'])
         flow_text_index_name = flow_text_index_name_pre + ts2datetime(item['timestamp'])
         try:
             weibo_result=es_flow_text.get(index=flow_text_index_name,doc_type=flow_text_index_type,id=item['mid'])['_source']
@@ -1025,14 +1029,17 @@ def report_warming_content(task_detail):
                         	pass
                 except:
                     print 'user_error!'
+
             elif task_detail['report_type']==u'言论':
                 weibo_speech_warning_index_name = weibo_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
                 try:
-                    weibo_speech_result=es_xnr.get(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,id=item['mid'])['_source']
+                    weibo_speech_result=es_xnr.get(index=weibo_speech_warning_index_name,doc_type=weibo_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['mid'])['_source']
+                    report_dict['uid']=weibo_speech_result['uid']
                     weibo_list.append(weibo_speech_result)
                 except:
                     # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
                     print 'speech_error!'
+
             elif task_detail['report_type']==u'事件':
                 weibo_event_warning_index_name = weibo_event_warning_index_name_pre + ts2datetime(item['timestamp'])
                 event_warning_id = task_detail['xnr_user_no']+'_'+task_detail['event_name']
@@ -1047,8 +1054,24 @@ def report_warming_content(task_detail):
                 except:
                     print 'event_error!'
 
+            elif task_detail['report_type']==u'时间':
+                year = ts2yeartime(item['timestamp'])
+                weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
+                try:
+                    time_result=es_xnr.search(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
+                    time_content=[]
+                    for timedata in time_result:
+                        for data in timedata['weibo_date_warming_content']:
+                            if data['mid'] == item['mid']:
+                                weibo_list.append(data)
+                            else:
+                                pass
+                except:
+                    print 'time_error!'               
 
-    user_info=json.loads(task_detail['user_info'])
+
+
+    user_info=task_detail['user_info']
     if user_info:
         for uid in user_info:
             user=dict()
@@ -1076,17 +1099,36 @@ def report_warming_content(task_detail):
     report_content['weibo_list']=weibo_list
 
     report_dict['report_content']=json.dumps(report_content)
-
+    
+    report_id=''
     if task_detail['report_type'] == u'言论':
         report_id=weibo_info[0]['mid']
     elif task_detail['report_type'] == u'人物':
-        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']+'_'+str(task_detail['report_time'])
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
     elif task_detail['report_type'] == u'事件':
-        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']+str(task_detail['report_time'])
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
+    elif task_detail['report_type'] == u'时间':
+        # print weibo_info
+        if weibo_info:
+            report_id=weibo_info[0]['mid']
+        else:
+            report_id=str(task_detail['report_time'])
 
+
+    if weibo_list:
+        report_mark=True
+    else:
+        report_mark=False
     #预警上报后不再显示问题
 
-    if report_id:
+    now_time=int(time.time())
+    weibo_report_management_index_name = weibo_report_management_index_name_pre + ts2datetime(now_time)
+    if es_xnr.indices.exists(index=weibo_report_management_index_name):
+        pass
+    else:
+        weibo_report_management_mappings() 
+
+    if report_id and report_mark:
         try:
             es_xnr.index(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,id=report_id,body=report_dict)
             mark=True
