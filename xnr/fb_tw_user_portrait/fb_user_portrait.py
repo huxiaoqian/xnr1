@@ -15,8 +15,8 @@ from global_utils import es_fb_user_portrait as es, \
 from time_utils import get_facebook_flow_text_index_list, get_fb_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, FB_DOMAIN_ABS_PATH, DAY, WEEK
 
-sys.path.append('../cron')
-from trans.trans import trans
+sys.path.append('../cron/trans/')
+from trans import trans
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
@@ -489,7 +489,7 @@ def update_domain(uid_list=[]):
                 'domain': user_domain_temp[uid]
             }
         else:
-            user_domain[uid] = 'other'
+            user_domain[uid] = {'domain': 'other'}
     return save_data2es(user_domain)
 
 def update_topic(uid_list=[]):
@@ -497,10 +497,7 @@ def update_topic(uid_list=[]):
         uid_list = load_uid_list()
     fb_flow_text_index_list = get_facebook_flow_text_index_list(load_timestamp())
     user_topic_data = get_filter_keywords(fb_flow_text_index_list, uid_list)
-    # print 'user_topic_data'
-    # print user_topic_data
     user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
-
     
     user_topic_string = {}
     for uid, topic_list in user_topic_list.items():
@@ -556,6 +553,7 @@ def update_baseinfo(uid_list=[]):
         uid = content['uid'][0]
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'gender': 0,
                 'location': '',
@@ -580,6 +578,7 @@ def update_baseinfo(uid_list=[]):
     for uid in uid_list:
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'gender': 0,
                 'location': '',
@@ -631,7 +630,8 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
+    # update_all()
+    update_baseinfo(load_uid_list())
 # total num:  92
 # time used:  0.0138351917267
 # update_hashtag:  True

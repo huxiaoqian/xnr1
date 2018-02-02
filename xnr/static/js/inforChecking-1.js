@@ -199,16 +199,20 @@ function hotPost(data) {
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
                         '           <span class="center_2">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-1" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this,\'信息监测\')"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '               <span class="cen3-4" onclick="focusThis(this)"><i class="icon icon-heart-empty"></i>&nbsp;&nbsp;关注该用户</span>'+
                         '               <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-5" onclick="joinlab(this)"><i class="icon icon-signin"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
+                        '           <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="forwardingIput" placeholder="转发内容"/>'+
+                        '               <span class="sureFor" onclick="forwardingBtn()">转发</span>'+
+                        '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '               <span class="sureCom" onclick="comMent(this,\'信息监测\')">评论</span>'+
                         '           </div>'+
                         '       </div>'+
                         '    </div>'+
@@ -221,19 +225,6 @@ function hotPost(data) {
     $('#hot_post p').slideUp(700);
     $('.hot_post .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-// //查看全文
-// function allWord(_this) {
-//     var a=$(_this).attr('data-all');
-//     if (a==0){
-//         $(_this).text('收起');
-//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().html());
-//         $(_this).attr('data-all','1');
-//     }else {
-//         $(_this).text('查看全文');
-//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().next().html());
-//         $(_this).attr('data-all','0');
-//     }
-// }
 //活跃用户
 $('#user-1 .demo-radio').on('click',function () {
     $('#userList p').show();
@@ -406,62 +397,6 @@ $('.userList .addFocus').on('click',function () {
     var add_url='/weibo_xnr_monitor/attach_fans_batch/?xnr_user_no_list='+ID_Num+'&fans_id_list='+act_user_list.join(',');
     public_ajax.call_request('get',add_url,postYES);
 })
-//-------------------颜色----------------------
-function createRandomItemStyle() {
-    return {
-        normal: {
-            color: 'rgb(' + [
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127),
-                Math.round(Math.random() * 128+127)
-            ].join(',') + ')'
-        }
-    };
-}
-//查看网民详情
-function networkPeo(_id) {
-    var detail_url='/weibo_xnr_monitor/weibo_user_detail/?user_id='+_id;
-    public_ajax.call_request('get',detail_url,networkPeoDetail);
-}
-function networkPeoDetail(data) {
-
-}
-
-//评论
-function showInput(_this) {
-    $(_this).parents('.post_perfect').find('.commentDown').show();
-};
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    if (txt!=''){
-        var post_url_3='/weibo_xnr_monitor/get_weibohistory_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&r_mid='+mid;
-        public_ajax.call_request('get',post_url_3,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-
-//转发
-function retweet(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var post_url_2='/weibo_xnr_monitor/get_weibohistory_retweet/?xnr_user_no='+ID_Num+
-        '&text='+txt+'&r_mid='+mid;
-    public_ajax.call_request('get',post_url_2,postYES)
-}
-
-//点赞
-function thumbs(_this) {
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var timestamp = $(_this).parents('.post_perfect').find('.timestamp').text();
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var post_r_s_url='/weibo_xnr_monitor/get_weibohistory_like/?xnr_user_no='+ID_Num+'&r_mid='+mid+
-        '&uid='+uid+'&nick_name='+REL_name+'&timestamp='+timestamp+'&text='+txt;
-    public_ajax.call_request('get',post_r_s_url,postYES)
-};
 
 //关注该用户
 function focusThis(_this) {

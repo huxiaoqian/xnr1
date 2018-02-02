@@ -1,4 +1,11 @@
-var field_user_url='/weibo_xnr_operate/show_domain_second/';
+var field_user_url;
+if (flag==1){
+    field_user_url='/weibo_xnr_operate/show_domain_second/';
+}else if (flag==4){
+    field_user_url='/facebook_xnr_create/show_domain/';
+}else if (flag==5){
+    field_user_url='/twitter_xnr_create/show_domain/';
+}
 public_ajax.call_request('get',field_user_url,field_user);
 var domainName='';
 function field_user(data) {
@@ -11,9 +18,11 @@ function field_user(data) {
             '</label>';
     }
     $('#container .tit-2 .field-1').html(str);
+    $('#container .tit-2 .field-1 input[value="'+defalutDomain+'"]').attr('checked','true');
+    $domain(defalutDomain);
 }
 function $domain(_this) {
-    domainName=$(_this).parent().attr('title');
+    domainName=$(_this).parent().attr('title')||_this;
     var domain_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
     public_ajax.call_request('get',domain_url,domain);
 }
@@ -31,15 +40,16 @@ function domain(data) {
         }
     }
     $('#container .tit-3 .field-2').html(str);
+    $('#container .tit-3 .field-2 input[value="'+defalutRole+'"]').attr('checked','true');
     $('#container .tit-3').show();
 }
 function allDataFun(_this) {
     var domain_name = $('.field-1 input:radio[name="chara"]:checked').val();
-    var allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name='+domain_name+'&role_name='+$(_this).val();
+    var allData_url=urlTotal+'/show_domain_role_info/?domain_name='+domain_name+'&role_name='+$(_this).val();
     public_ajax.call_request('get',allData_url,allDataChart);
 }
 //默认
-var default_allData_url='/weibo_xnr_knowledge_base_management/show_domain_role_info/?domain_name=维权群体&role_name=其他';
+var default_allData_url=urlTotal+'/show_domain_role_info/?domain_name='+defalutDomain+'&role_name='+defalutRole;
 public_ajax.call_request('get',default_allData_url,allDataChart);
 //=======
 function allDataChart(data) {
@@ -101,6 +111,11 @@ function character_tendency(data,idClassName,name) {
 
 function locationplace(data,idClassName,name) {
     var data=JSON.parse(data);
+    if (isEmptyObject(data)){
+        $('#'+idClassName).html('<p style="text-align:center;width:100%;line-height:300px;color:white;font-size:20px;">' +
+            '暂无地理数据</p>');
+        return false;
+    }
     var geoCoordMap = {
         '北京':[116.4,39.9],
         '天津':[117.2,39.12],
@@ -621,9 +636,9 @@ function active_daily(data,idClassName,name) {
 //==========--生成实例模板-------
 $('#buildModal').on('click',function(){
     var domain_name=$('.field-1 input:radio[name="chara"]:checked').val();
-    var role_name=$('.field-2 input:radio:checked').val();
+    var role_name=$('.field-2 input:radio:checked').val()||'民间组织';//暂时写死民间组织
     if (domain_name && role_name){
-        var modal_url='/weibo_xnr_knowledge_base_management/generate_example_model/?domain_name='+domain_name+'&role_name='+role_name;
+        var modal_url=urlTotal+'/generate_example_model/?domain_name='+domain_name+'&role_name='+role_name;
         public_ajax.call_request('get',modal_url,success);
     }else {
         $('#pormpt p').text('请检查您选择的领域和身份，如不选择，无法生成模板。');

@@ -15,8 +15,8 @@ from global_utils import es_tw_user_portrait as es, \
 from time_utils import get_twitter_flow_text_index_list, get_tw_bci_index_list, datetime2ts, ts2datetime
 from parameter import MAX_SEARCH_SIZE, FB_TW_TOPIC_ABS_PATH, TW_DOMAIN_ABS_PATH, DAY, WEEK
 
-sys.path.append('../cron')
-from trans.trans import trans
+sys.path.append('../cron/trans/')
+from trans import trans
 
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
 from test_topic import topic_classfiy
@@ -38,7 +38,6 @@ def merge_dict(x, y):
 def load_uid_list():
     uid_list = []
     uid_list_query_body = {'size': MAX_SEARCH_SIZE}
-    # uid_list_query_body = {'size': 3}
     try:
         search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=uid_list_query_body)['hits']['hits']
         for item in search_results:
@@ -483,7 +482,7 @@ def update_domain(uid_list=[]):
                 'domain': user_domain_temp[uid]
             }
         else:
-            user_domain[uid] = 'other'
+            user_domain[uid] = {'domain': 'other'}
     return save_data2es(user_domain)
 
 def update_topic(uid_list=[]):
@@ -491,8 +490,6 @@ def update_topic(uid_list=[]):
         uid_list = load_uid_list()
     tw_flow_text_index_list = get_twitter_flow_text_index_list(load_timestamp())
     user_topic_data = get_filter_keywords(tw_flow_text_index_list, uid_list)
-    # print 'user_topic_data'
-    # print user_topic_data
     user_topic_dict, user_topic_list = topic_classfiy(uid_list, user_topic_data)
 
     user_topic_string = {}
@@ -532,7 +529,7 @@ def update_baseinfo(uid_list=[]):
             }
         },
         'size': MAX_SEARCH_SIZE,
-        "fields": ["location", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
+        "fields": ["location", "userscreenname", "original_profile_image_url", "followers_count", "status_count", "followers_count", "friends_count", "is_verified", "username", "uid"]
     }
     search_results = es.search(index=twitter_user_index_name, doc_type=twitter_user_index_type, body=fb_user_query_body)['hits']['hits']
     for item in search_results:
@@ -540,6 +537,7 @@ def update_baseinfo(uid_list=[]):
         uid = content['uid'][0]
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'location': '',
                 'verified':'',
@@ -547,6 +545,7 @@ def update_baseinfo(uid_list=[]):
                 'friendsnum': 0,
                 'fansnum': 0,
                 'photo_url': '',
+                'screenname': ''
             }
         location = ''
         if content.has_key('location'):
@@ -569,6 +568,9 @@ def update_baseinfo(uid_list=[]):
         fansnum = ''
         if content.has_key('followers_count'):
             fansnum = content.get('followers_count')[0]
+        screenname = ''
+        if content.has_key('userscreenname'):
+            screenname = content.get('userscreenname')[0]
 
         user_baseinfo[uid]['location'] = location
         user_baseinfo[uid]['uname'] = uname
@@ -577,9 +579,11 @@ def update_baseinfo(uid_list=[]):
         user_baseinfo[uid]['statusnum'] = statusnum
         user_baseinfo[uid]['friendsnum'] = friendsnum
         user_baseinfo[uid]['fansnum'] = fansnum
+        user_baseinfo[uid]['screenname'] = screenname
     for uid in uid_list:
         if not uid in user_baseinfo:
             user_baseinfo[uid] = {
+                'uid': str(uid),
                 'uname': '',
                 'location': '',
                 'verified':'',
@@ -587,6 +591,7 @@ def update_baseinfo(uid_list=[]):
                 'friendsnum': 0,
                 'fansnum': 0,
                 'photo_url': '',
+                'screenname': ''
             }
     return save_data2es(user_baseinfo)
 
@@ -620,24 +625,24 @@ def update_all():
 
 
     #周更新
-    # if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
-    print 'update_domain: ', update_domain(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
+        print 'update_domain: ', update_domain(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_sentiment: ', update_sentiment(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+        print 'update_sentiment: ', update_sentiment(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_topic: ', update_topic(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+        print 'update_topic: ', update_topic(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_keywords:', update_keywords(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
+        print 'update_keywords:', update_keywords(uid_list)
+        time_list.append(time.time())
+        print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
-    # print update_baseinfo(load_uid_list())
+    # update_all()
+    update_baseinfo(load_uid_list())
     

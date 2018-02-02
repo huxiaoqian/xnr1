@@ -2,7 +2,7 @@
 #encoding: utf-8
 
 from launcher import Launcher
-from es import Es_twitter
+from Elasticsearch_tw import Es_twitter
 import time
 
 class Like():

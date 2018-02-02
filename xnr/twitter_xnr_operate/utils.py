@@ -15,15 +15,17 @@ from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
                     tw_social_sensing_index_type, tw_hot_keyword_task_index_name, tw_hot_keyword_task_index_type,\
                     tw_hot_subopinion_results_index_name, tw_hot_subopinion_results_index_type, \
                     es_tw_user_portrait, tw_portrait_index_name, tw_portrait_index_type, \
-                    tw_bci_index_name_pre, tw_bci_index_type
+                    tw_bci_index_name_pre, tw_bci_index_type,tw_xnr_fans_followers_index_name,\
+                    tw_xnr_fans_followers_index_type
 
 
 from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention, tw_message
 from xnr.utils import tw_uid2nick_name_photo
-from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP
+from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP,\
+                    BCI_USER_NUMBER, USER_POETRAIT_NUMBER
 from time_utils import datetime2ts, ts2datetime
 
-def get_submit_tweet(task_detail):
+def get_submit_tweet_tw(task_detail):
 
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
@@ -65,7 +67,7 @@ def tw_save_to_tweet_timing_list(task_detail):
     item_detail['remark'] = task_detail['remark']
     #item_detail['task_status'] = 0 
 
-    task_id = task_detail['xnr_user_no'] + '_'+str(item_detail['create_time'])+'_'+ str(task_detail['post_time'])
+    task_id = task_detail['xnr_user_no'] + '_'+str(item_detail['create_time'])
     # task_id: uid_提交时间_发帖时间
 
     try:
@@ -314,10 +316,10 @@ def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
         sort_item_new = 'sensitive'
         es_results = get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new)  
     elif sort_item == 'influence_info':
-        sort_item_new = 'retweeted'
+        sort_item_new = 'share'
         es_results = get_tweets_from_flow(monitor_keywords_list,sort_item_new)
     elif sort_item == 'influence_user':
-        sort_item_new = 'user_index'
+        sort_item_new = 'influence'
         es_results = get_tweets_from_bci(monitor_keywords_list,sort_item_new)
         
     return es_results            
@@ -378,8 +380,9 @@ def get_tweets_from_user_portrait(monitor_keywords_list,sort_item_new):
 
     if es_results_portrait:
         for result in es_results_portrait:
-            result = result['_source']
-            uid = result['uid']
+            uid = result['_id']
+            # result = result['_source']
+            # uid = result['uid']
             uid_set.add(uid)
     uid_list = list(uid_set)
 
@@ -437,7 +440,8 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
         now_ts = int(time.time())
 
     datetime = ts2datetime(now_ts-24*3600)
-    datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    # datetime_new = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    datetime_new = datetime
 
     index_name = tw_bci_index_name_pre + datetime_new
 
@@ -466,7 +470,7 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
     return es_results
 
 
-def get_comment_operate(task_detail):
+def get_comment_operate_tw(task_detail):
 
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
@@ -497,7 +501,7 @@ def get_comment_operate(task_detail):
 
     return mark
 
-def get_retweet_operate(task_detail):
+def get_retweet_operate_tw(task_detail):
 
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
@@ -528,7 +532,7 @@ def get_retweet_operate(task_detail):
     return mark
 
 
-def get_at_operate(task_detail):
+def get_at_operate_tw(task_detail):
     
     text = task_detail['text']
     tweet_type = task_detail['tweet_type']
@@ -556,7 +560,7 @@ def get_at_operate(task_detail):
 
     return mark
 
-def get_like_operate(task_detail):
+def get_like_operate_tw(task_detail):
 
     xnr_user_no = task_detail['xnr_user_no']
     _id = task_detail['r_fid']
@@ -584,7 +588,7 @@ def get_like_operate(task_detail):
 
     return mark
 
-def get_follow_operate(task_detail):
+def get_follow_operate_tw(task_detail):
 
     trace_type = task_detail['trace_type']
     xnr_user_no = task_detail['xnr_user_no']
@@ -613,7 +617,7 @@ def get_follow_operate(task_detail):
 
     return mark
 
-def get_unfollow_operate(task_detail):
+def get_unfollow_operate_tw(task_detail):
 
     xnr_user_no = task_detail['xnr_user_no']
     uid = task_detail['uid']
@@ -640,7 +644,7 @@ def get_unfollow_operate(task_detail):
     return mark
 
 
-def get_private_operate(task_detail):
+def get_private_operate_tw(task_detail):
 
     xnr_user_no = task_detail['xnr_user_no']
     text = task_detail['text']
@@ -667,3 +671,223 @@ def get_private_operate(task_detail):
 
     return mark
 
+def get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts):
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+    
+    results = es.search(index=tw_xnr_retweet_timing_list_index_name,\
+        doc_type=tw_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+    # print 'results:::',results
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_alls
+
+
+def get_show_retweet_timing_list_future(xnr_user_no):
+
+    start_ts = int(time.time())
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}},
+                    {'range':{'timestamp_set':{'gte':start_ts}}}
+                ]
+            }
+        },
+        'size':MAX_SEARCH_SIZE,
+        'sort':[
+            {'compute_status':{'order':'asc'}},   
+            {'timestamp_set':{'order':'desc'}}
+        ]
+    }
+    # print 'query_body!!',query_body
+    results = es.search(index=tw_xnr_retweet_timing_list_index_name,\
+        doc_type=tw_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+
+    result_all = []
+
+    for result in results:
+        result = result['_source']
+        result_all.append(result)
+
+    return result_all
+
+
+
+def get_show_trace_followers(xnr_user_no):
+    
+    es_get_result = es.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)['_source']
+
+    trace_follow_list = es_get_result['trace_follow_list']
+
+    weibo_user_info = []
+
+    if trace_follow_list:
+        mget_results = es.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,\
+                            body={'ids':trace_follow_list})['docs']
+        # print 'mget_results::',mget_results
+        for result in mget_results:
+            if result['found']:
+                weibo_user_info.append(result['_source'])
+            else:
+                uid = result['_id']
+
+                weibo_user_info.append({'uid':uid,'statusnum':0,'fansnum':0,'friendsnum':0,'photo_url':'','sex':'','nick_name':uid,'user_location':''})
+    else:
+        weibo_user_info = []
+
+    return weibo_user_info
+
+
+def get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es.search(index=twitter_user_index_name,doc_type=twitter_user_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
+
+        try:
+            trace_follow_list = result['trace_follow_list']
+        except:
+            trace_follow_list = []
+
+        try:
+            followers_list = result['followers_list']
+        except:
+            followers_list = []
+
+        trace_follow_list = list(set(trace_follow_list) | set(uid_list))
+
+        followers_list = list(set(followers_list)|set(uid_list))
+
+        es.update(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list,'followers_list':followers_list}})
+
+        mark = True
+    
+    except:
+
+        item_exists = {}
+
+        item_exists['xnr_user_no'] = xnr_user_no
+        item_exists['trace_follow_list'] = uid_list
+        item_exists['followers_list'] = uid_list
+
+        es.index(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                    id=xnr_user_no,body=item_exists)
+
+        mark = True
+
+    return [mark,fail_nick_name_list]    
+
+
+def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
+
+    mark = False
+    fail_nick_name_list = []
+    fail_uids = []
+
+    if uid_string:
+        uid_list = uid_string.encode('utf-8').split('，')
+        
+    elif nick_name_string:
+        nick_name_list = nick_name_string.encode('utf-8').split('，')
+        uid_list = []
+        
+        for nick_name in nick_name_list:
+            query_body = {
+                'query':{
+                    'filtered':{
+                        'filter':{
+                            'term':{'nick_name':nick_name}
+                        }
+                    }
+                },
+                '_source':['uid']
+            }
+            try:
+                uid_results = es.search(index=twitter_user_index_name,doc_type=twitter_user_index_type,\
+                            body=query_body)['hits']['hits']
+                
+                uid_result = uid_result[0]['_source']
+                uid = uid_result['uid']
+                uid_list.append(uid)
+
+            except:
+                fail_nick_name_list.append(nick_name)
+
+    try:
+        result = es.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)['_source']
+        
+        trace_follow_list = result['trace_follow_list']
+
+        # 共同uids
+        comment_uids = list(set(trace_follow_list).intersection(set(uid_list)))
+
+        # 取消失败uid
+        fail_uids = list(set(comment_uids).difference(set(uid_list)))
+
+        # 求差
+        trace_follow_list = list(set(trace_follow_list).difference(set(uid_list))) 
+
+
+        es.update(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                            id=xnr_user_no,body={'doc':{'trace_follow_list':trace_follow_list}})
+
+        mark = True
+    except:
+        mark = False
+
+    return [mark,fail_uids,fail_nick_name_list]    

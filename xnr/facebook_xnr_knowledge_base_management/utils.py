@@ -3,45 +3,28 @@
 import json
 import pinyin
 import numpy as np
-from xnr.global_config import S_TYPE,S_DATE
+from xnr.global_config import S_TYPE,S_DATE_FB as S_DATE
 from xnr.global_utils import es_xnr as es
-from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,fb_domain_ch2en_dict,fb_domain_en2ch_dict,\
-                        fb_tw_topic_en2ch_dict, EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
-
 from xnr.global_utils import fb_role_index_name, fb_role_index_type
 #facebook_user
-from xnr.global_utils import es_fb_user_profile as es_user_profile, \
+from xnr.global_utils import r, es_fb_user_profile as es_user_profile, \
                             facebook_user_index_type as profile_index_type, \
                             facebook_user_index_name as profile_index_name
 from xnr.global_utils import es_fb_user_portrait as es_user_portrait,\
-							fb_portrait_index_name as portrait_index_name, \
-							fb_portrait_index_type as portrait_index_type
-from xnr.global_utils import facebook_flow_text_index_name_pre as flow_text_index_name_pre, \
-							facebook_flow_text_index_type as flow_text_index_type
-from xnr.global_utils import fb_example_model_index_name, fb_example_model_index_type,\
-							fb_target_domain_detect_queue_name
-from xnr.utils import fb_uid2nick_name_photo as uid2nick_name_photo
+                            fb_portrait_index_name as portrait_index_name, \
+                            fb_portrait_index_type as portrait_index_type,\
+                            facebook_flow_text_index_name_pre as flow_text_index_name_pre, \
+                            facebook_flow_text_index_type as flow_text_index_type,\
+                            fb_example_model_index_name, fb_example_model_index_type,\
+                            fb_target_domain_detect_queue_name,\
+                            fb_domain_index_name, fb_domain_index_type
+from xnr.utils import fb_uid2nick_name_photo as uid2nick_name_photo,\
+                        get_fb_influence_relative as get_influence_relative
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,fb_domain_ch2en_dict,fb_tw_topic_en2ch_dict,fb_domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
 from xnr.time_utils import ts2datetime,datetime2ts,get_facebook_flow_text_index_list as get_flow_text_index_list
 es_flow_text = es
-
-
-
-
-
-
-
-
-from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_date_remind_index_name,weibo_date_remind_index_type,\
-                            weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
-                            weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
-                            weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
-                            weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
-                            weibo_role_index_type,weibo_example_model_index_name,\
-                            weibo_example_model_index_type,profile_index_name,profile_index_type
-from xnr.utils import judge_sensing_sensor,judge_follow_type,get_influence_relative
 
 
 '''
@@ -65,18 +48,17 @@ def extract_keywords(w_text):
     return k_dict
 
 def get_user_location(location_dict):
-
-	if location_dict.has_key('name'):
-		location = location_dict['name']
-	elif location_dict.has_key('country') and location_dict.has_key('city'):
-		location = location_dict['city'] + ', ' + location_dict['country']
-	else:
-		location = ''
-	return location
+    if location_dict.has_key('name'):
+        location = location_dict['name']
+    elif location_dict.has_key('country') and location_dict.has_key('city'):
+        location = location_dict['city'] + ', ' + location_dict['country']
+    else:
+        location = ''
+    return location
 
 def get_generate_example_model(domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = domain_pinyin + '_' + role_en
     es_result = es.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=task_id)['_source']
     item = es_result
@@ -98,7 +80,7 @@ def get_generate_example_model(domain_name,role_name):
         psy_feature_list.append(psy_feature[i][0])
     item['psy_feature'] = '&'.join(psy_feature_list)
     role_group_uids = json.loads(item['member_uids'])
-    mget_results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,body={'ids':role_group_uids})['docs']
+
     if S_TYPE == 'test':
         current_time  = datetime2ts(S_DATE)
     else:
@@ -132,28 +114,27 @@ def get_generate_example_model(domain_name,role_name):
     mget_results_user = es_user_portrait.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
     item['nick_name'] = []
     for mget_item in mget_results_user:
-        #print 'mget_item:::',mget_item
         if mget_item['found']:
-            # item['nick_name'] = mget_item['_source']['nick_name']
-            item['username'] = mget_item['_source']['username']
-            # item['location'] = mget_item['_source']['user_location']
-            item['location'] = get_user_location(mget_item['_source']['location'])
-            # item['gender'] = mget_item['_source']['sex']
-            item['gender'] = mget_item['_source']['gender']
-            uid = mget_item['_source']['uid']
-            try:
-                profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
-                if profile_results['description']:
-                    item['description'] = profile_results['description']
-                    break
-            except:
-                pass
+            content = mget_item['_source']
+            item['nick_name'] = ''
+            if content.has_key('name'):
+                item['nick_name'] = content['name']
+            item['location'] = ''
+            if content.has_key('location'):
+                item['location'] = get_user_location(json.loads(content['location']))
+            item['gender'] = 0
+            if content.has_key('gender'):
+                gender_str = content['gender']
+                if gender_str == 'male':
+                    gender = 1
+                elif gender_str == 'female':
+                    gender = 2
+            item['description'] = ''
+            if content.has_key('description'):
+                item['description'] = content['description']
 
     item['business_goal'] = u'渗透'
     item['daily_interests'] = u'旅游'
-    # if S_TYPE == 'test':
-    #     user_mget_results = es.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
-    #     if user_mget_results
     item['age'] = 30
     item['career'] = u'自由职业'
 
@@ -170,7 +151,6 @@ def get_generate_example_model(domain_name,role_name):
     try:
         with open(example_model_file_name,"w") as dump_f:
             json.dump(item,dump_f)
-
         item_dict = dict()
         item_dict['domain_name'] = domain_name
         item_dict['role_name'] = role_name
@@ -192,7 +172,7 @@ def get_show_example_model():
 
 def get_export_example_model(domain_name,role_name):
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = 'fb_' + domain_pinyin + '_' + role_en
     example_model_file_name = EXAMPLE_MODEL_PATH + task_id + '.json'
     with open(example_model_file_name,"r") as dump_f:
@@ -209,7 +189,7 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
     elif create_type == 'by_seed_users':
         create_type_new['by_seed_users'] = seed_users.encode('utf-8').split('，')
     else:
-        create_type_new['all_users'] = all_users.encode('utf-8').split('，')
+        create_type_new['by_all_users'] = all_users.encode('utf-8').split('，')
     return create_type_new
 
 def domain_create_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
@@ -228,8 +208,13 @@ def domain_create_task(domain_name,create_type,create_time,submitter,description
             domain_task_dict['description'] = description
             domain_task_dict['remark'] = remark
             domain_task_dict['compute_status'] = compute_status
+            # print 'domain_task_dict'
+            # print domain_task_dict
+            # print 'before: r.lrange'
+            # print r.lrange(fb_target_domain_detect_queue_name,0,100)
             r.lpush(fb_target_domain_detect_queue_name,json.dumps(domain_task_dict))
-
+            # print 'after: r.lrange'
+            # print r.lrange(fb_target_domain_detect_queue_name,0,100)
             item_exist = dict()
             item_exist['domain_pinyin'] = domain_task_dict['domain_pinyin']
             item_exist['domain_name'] = domain_task_dict['domain_name']
@@ -242,8 +227,9 @@ def domain_create_task(domain_name,create_type,create_time,submitter,description
             item_exist['compute_status'] = 0  # 存入创建信息
             print es.index(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
             mark = True
-        except:
-            mark =False
+        except Exception,e:
+            print e
+            mark = False
         return mark
 
 def get_show_domain_group_summary(submitter):
@@ -278,49 +264,59 @@ def get_show_domain_group_detail_portrait(domain_name):
     result_all = []
     for result in es_mget_result:
         item = {}
+        item['uid'] = ''
+        item['nick_name'] = ''
+        # item['photo_url'] = ''
+        item['domain'] = ''
+        item['sensitive'] = ''
+        item['location'] = ''
+        # item['fans_num'] = ''
+        # item['friends_num'] = ''
+        # item['gender'] = ''
+        item['home_page'] = ''
+        # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        item['influence'] = ''
         if result['found']:
             result = result['_source']
             item['uid'] = result['uid']
             item['nick_name'] = result['uname']
-            item['photo_url'] = result['photo_url']
+            # item['photo_url'] = result['photo_url']
             item['domain'] = result['domain']
             item['sensitive'] = result['sensitive']
             item['location'] = result['location']
-            item['fans_num'] = result['fansnum']
-            item['friends_num'] = result['friendsnum']
-            item['gender'] = result['gender']
-            item['home_page'] = 'http://weibo.com/'+result['uid']+'/profile?topnav=1&wvr=6&is_all=1'
+            # item['fans_num'] = result['fansnum']
+            # item['friends_num'] = result['friendsnum']
+            # item['gender'] = result['gender']
+            item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['uid'])
+            # item['home_page'] = 'http://weibo.com/'+result['uid']+'/profile?topnav=1&wvr=6&is_all=1'
             item['influence'] = get_influence_relative(item['uid'],result['influence'])
-        else:
-            item['uid'] = result['_id']
-            item['nick_name'] = ''
-            item['photo_url'] = ''
-            item['domain'] = ''
-            item['sensitive'] = ''
-            item['location'] = ''
-            item['fans_num'] = ''
-            item['friends_num'] = ''
-            item['gender'] = ''
-            item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
-            item['influence'] = ''
+        # else:
+        #     item['uid'] = result['_id']
+        #     item['nick_name'] = ''
+        #     # item['photo_url'] = ''
+        #     item['domain'] = ''
+        #     item['sensitive'] = ''
+        #     item['location'] = ''
+        #     # item['fans_num'] = ''
+        #     # item['friends_num'] = ''
+        #     # item['gender'] = ''
+        #     item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['_id'])
+        #     # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        #     item['influence'] = ''
         result_all.append(item)
-
     return result_all
 
-
 def get_show_domain_description(domain_name):
-
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    es_result = es.get(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,\
+    es_result = es.get(index=fb_domain_index_name,doc_type=fb_domain_index_type,\
                 id=domain_pinyin)['_source']
     item = {}
-
     item['group_size'] = es_result['group_size']
     item['description'] = es_result['description']
     topic_preference_list = json.loads(es_result['topic_preference'])
     topic_preference_list_chinese = []
     for topic_preference_item in topic_preference_list:
-        topic_preference_item_chinese = topic_en2ch_dict[topic_preference_item[0]]
+        topic_preference_item_chinese = fb_tw_topic_en2ch_dict[topic_preference_item[0]]
         topic_preference_list_chinese.append([topic_preference_item_chinese,topic_preference_item[1]])
 
     item['topic_preference'] = topic_preference_list_chinese
@@ -328,7 +324,7 @@ def get_show_domain_description(domain_name):
     role_distribute_list = json.loads(es_result['role_distribute'])
     role_distribute_list_chinese = []
     for role_distribute_item in role_distribute_list:
-        role_distribute_item_chinese = domain_en2ch_dict[role_distribute_item[0]]
+        role_distribute_item_chinese = fb_domain_en2ch_dict[role_distribute_item[0]]
         role_distribute_list_chinese.append([role_distribute_item_chinese,role_distribute_item[1]])
 
     item['role_distribute'] = role_distribute_list_chinese
@@ -341,437 +337,22 @@ def get_show_domain_description(domain_name):
             political_side_list_chinese.append([u'右倾',political_side_item[1]])
         else:
             political_side_list_chinese.append([u'左倾',political_side_item[1]])
-
     item['political_side'] = political_side_list_chinese
-
     return item
 
 def get_show_domain_role_info(domain_name,role_name):
-
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
-    role_en = domain_ch2en_dict[role_name]
-
+    role_en = fb_domain_ch2en_dict[role_name]
     task_id = domain_pinyin + '_' + role_en
-
-    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
-
+    es_result = es.get(index=fb_role_index_name,doc_type=fb_role_index_type,id=task_id)['_source']
     return es_result
 
 def get_delete_domain(domain_name):
-
     domain_pinyin = pinyin.get(domain_name,format='strip',delimiter='_')
     try:
-        es.delete(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=domain_pinyin)
+        es.delete(index=fb_domain_index_name,doc_type=fb_domain_index_type,id=domain_pinyin)
         mark = True
     except:
         mark = False
-
     return mark
 
-###################################################################
-###################   Business Knowledge base    ##################
-###################################################################
-
-###########functional module 1: sensitive words manage  ###########
-
-#step 1:    create sensitive words
-def get_create_sensitive_words(rank,sensitive_words,create_type,create_time,submitter):
-    task_detail = dict()
-    task_detail['rank'] = rank
-    task_detail['sensitive_words'] = sensitive_words
-    task_detail['create_type'] = create_type
-    task_detail['create_time'] = create_time
-    task_detail['submitter'] = submitter
-    task_id = sensitive_words
-    try:
-        es.index(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=task_id,body=task_detail)
-        mark = True
-    except:
-        mark = False
-
-    return mark
-
-#step 2:    show the list of sensitive words
-#step 2.1:  show the list of sensitive words default
-def show_sensitive_words_default():
-    query_body={
-        'query':{
-            'match_all':{}
-        },
-        'size':MAX_SEARCH_SIZE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    result=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-#step 2.2:  show the list of sensitive words according to the condition
-def show_sensitive_words_condition(create_type,rank):
-    show_condition_list=[]
-    if create_type and rank:
-       show_condition_list.append({'term':{'create_type':create_type}})    
-       show_condition_list.append({'term':{'rank':rank}})
-    elif create_type:
-        show_condition_list.append({'term':{'create_type':create_type}})    
-    elif rank:
-        show_condition_list.append({'term':{'rank':rank}})
-
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'bool':{
-                        'must':show_condition_list
-                        }
-                    }
-                
-            }
-
-        },
-        'size':MAX_SEARCH_SIZE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    #print query_    
-    if create_type or rank:
-        results=es.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
-        result=[]
-        for item in results:
-            item['_source']['id']=item['_id']
-            result.append(item['_source'])
-    else:
-        result=show_sensitive_words_default()
-    return result
-
-
-#step 3:    delete the sensitive word
-def delete_sensitive_words(words_id):
-    try:
-        es.delete(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id)
-        result=True
-    except:
-        result=False
-    return result
-
-#step 4:    change the sensitive word
-
-#step 4.2: change the selected sensitive word
-def change_sensitive_words(words_id,change_info):
-    rank=change_info[0]
-    sensitive_words=change_info[1]
-    create_type=change_info[2]
-    create_time=change_info[3]
-    submitter=change_info[4]
-
-    try:
-        es.update(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,id=words_id,\
-            body={"doc":{'rank':rank,'sensitive_words':sensitive_words,'create_type':create_type,'create_time':create_time,'submitter':submitter}})
-        result=True
-    except:
-        result=False
-    return result
-
-
-###########  functional module 2: time alert node manage #########
-
-#step 1:    add time alert node 
-def get_create_date_remind(date_name,timestamp,keywords,create_type,create_time,content_recommend,submitter):
-    task_detail = dict()
-    #task_detail['date_time'] = ts2datetime(int(timestamp))[5:10]
-    task_detail['date_name']=date_name
-    task_detail['date_time']=timestamp[5:10]
-    task_detail['keywords'] = keywords
-    task_detail['create_type'] = create_type
-    task_detail['create_time'] = create_time
-    task_detail['content_recommend']=content_recommend
-    task_detail['submitter']=submitter
-
-    task_id = create_time
-    try:
-        es.index(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,body=task_detail)
-        mark = True
-    except:
-        mark = False
-
-    return mark
-
-#step 2:    show the time alert node list
-def show_date_remind():
-    query_body={
-        'query':{
-            'match_all':{}
-        },
-        'size':MAX_VALUE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-def show_date_remind_condition(create_type):
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'create_type':create_type}
-                }
-            }
-        },
-        'size':MAX_VALUE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
-    # print result
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-#step 3:    change the time alert node
-#explain: Carry out show_select_date_remind before change,carry out step 3.1 & 3.2
-#step 3.1: show the selected time alert node
-def show_select_date_remind(task_id):
-    result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-    return result
-
-#step 3.2: change the selected time alert node
-def change_date_remind(task_id,date_name,keywords,create_type,create_time):
-    date_result=es.get(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)['_source']
-    content_recommend=date_result['content_recommend']
-    date_time=date_result['date_time']
-    submitter=date_result['submitter']
-    #create_type=create_type
-    #keywords=keywords
-    #create_time=create_time
-
-    try:
-        es.update(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id,\
-            body={"doc":{'date_name':date_name,'date_time':date_time,'keywords':keywords,'create_type':create_type,\
-            'create_time':create_time,'content_recommend':content_recommend,'submitter':submitter}})
-        result=True
-    except:
-        result=False
-    return result
-
-
-#step 4:    delete the time alert node
-def delete_date_remind(task_id):
-    try:
-        es.delete(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,id=task_id)
-        result=True
-    except:
-        result=False
-    return result
-
-###########        functional module 3: metaphorical expression     ###########
-
-#step 1:    add metaphorical expression 
-def get_create_hidden_expression(origin_word,evolution_words_string,create_type,create_time,submitter):
-    task_detail = dict()
-    task_detail['origin_word'] = origin_word
-    task_detail['evolution_words_string'] = evolution_words_string
-    task_detail['create_type'] = create_type
-    task_detail['create_time'] = create_time
-    task_detail['submitter']=submitter
-    task_id = origin_word
-    try:
-        es.index(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=task_id,body=task_detail)
-        mark = True
-    except:
-        mark = False
-
-    return mark
-
-#step 2:    show the metaphorical expression list
-def show_hidden_expression():
-    query_body={
-        'query':{
-            'match_all':{}
-        },
-        'size':MAX_VALUE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    result=es.search(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-def show_hidden_expression_condition(create_type):
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'create_type':create_type}
-                }
-            }
-        },
-        'size':MAX_VALUE,
-        'sort':{'create_time':{'order':'desc'}}
-    }
-    result=es.search(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-    
-#step 3:    change the metaphorical expression
-#step 3.1: show the selected hidden expression
-def show_select_hidden_expression(express_id):
-    result=es.get(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id)
-    return result
-
-#step 3.2: change the selected hidden expression
-def change_hidden_expression(express_id,change_info):
-    origin_word=change_info[0]
-    evolution_words_string=change_info[1]
-    create_type=change_info[2]
-    create_time=change_info[3]
-    submitter=change_info[4]
-
-    try:
-        es.update(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id,\
-            body={"doc":{'origin_word':origin_word,'evolution_words_string':evolution_words_string,'create_type':create_type,'create_time':create_time,'submitter':submitter}})
-        result=True
-    except:
-        result=False
-    return result
-
-#step 4:    delete the metaphorical expression
-def delete_hidden_expression(express_id):
-    try:
-        es.delete(index=weibo_hidden_expression_index_name,doc_type=weibo_hidden_expression_index_type,id=express_id)
-        result=True
-    except:
-        result=False
-    return result
-
-
-
-
-###################################################################
-###################   weibo_corpus Knowledge base    ##################
-###################################################################
-
-#step 1:create corpus
-#corpus_info=[corpus_type,theme_daily_name,text,uid,mid,timestamp,retweeted,comment,like,create_type]
-#subject corpus:corpus_type='主题语料'
-#daily corpus:corpus_type='日常语料'
-def create_corpus(corpus_info):
-    corpus_detail=dict()
-    corpus_detail['corpus_type']=corpus_info[0]
-    corpus_detail['theme_daily_name']=corpus_info[1]
-    corpus_detail['text']=corpus_info[2]
-    corpus_detail['uid']=corpus_info[3]
-    corpus_detail['mid']=corpus_info[4]
-    corpus_detail['timestamp']=corpus_info[5]
-    corpus_detail['retweeted']=corpus_info[6]
-    corpus_detail['comment']=corpus_info[7]
-    corpus_detail['like']=corpus_info[8]
-    corpus_detail['create_type']=corpus_info[9]
-    corpus_id=corpus_info[4]  #mid
-    #print corpus_info
-    try:
-        es.index(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,body=corpus_detail)
-        mark=True
-    except:
-        mark=False
-
-    return mark
-
-
-#step 2: show corpus
-def show_corpus(corpus_type):
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'corpus_type':corpus_type}
-                }
-            }
-
-        },
-        'size':MAX_VALUE
-    }
-    result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-
-def show_corpus_class(create_type,corpus_type):
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'term':{'corpus_type':corpus_type},
-                    'term':{'create_type':create_type}
-                }
-            }
-
-        },
-        'size':MAX_VALUE
-    }
-    result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-    
-#step 3: change the corpus
-#explain:carry out show_select_corpus before change,carry out step 3.1 & 3.2
-#step 3.1: show the selected corpus
-def show_select_corpus(corpus_id):
-    result=es.get(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
-    results=[]
-    for item in result:
-        item['_source']['id']=item['_id']
-        results.append(item['_source'])
-    return results
-
-#step 3.2: change the selected corpus
-def change_select_corpus(corpus_id,corpus_type,theme_daily_name,create_type):
-    corpus_result=es.get(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)['_source']
-    text=corpus_result['text']
-    uid=corpus_result['uid']
-    mid=corpus_result['mid']
-    timestamp=corpus_result['timestamp']
-    retweeted=corpus_result['retweeted']
-    comment=corpus_result['comment']
-    like=corpus_result['like']
-
-    corpus_type=corpus_type
-    theme_daily_name=theme_daily_name
-    create_type=create_type
-
-    try:
-        es.update(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id,\
-            body={"doc":{'corpus_type':corpus_type,'theme_daily_name':theme_daily_name,'text':text,\
-            'uid':uid,'mid':mid,'timestamp':timestamp,'retweeted':retweeted,'comment':comment,'like':like,'create_type':create_type}})
-        result=True
-    except:
-        result=False
-    return result
-
-
-#step 4: delete the corpus
-def delete_corpus(corpus_id):
-    try:
-        es.delete(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
-        result=True
-    except:
-        result=False
-    return result

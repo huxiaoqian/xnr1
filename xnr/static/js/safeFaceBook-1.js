@@ -515,17 +515,21 @@ function weiboData(data) {
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
                         '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-1" title="转推" onclick="retweet(this)"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-1" title="分享" onclick="retweet(this,\'info_detect\')"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（'+row.retweeted+'）</span>'+
                         '               <span class="cen3-2" title="回复" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" title="喜欢" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢</span>'+
+                        '               <span class="cen3-3" title="赞" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '               <span class="cen3-4" title="私信" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '               <span class="cen3-5" title="翻译" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '               <span class="cen3-9" title="机器人回复" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-4" title="加入语料库" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
+                        '           <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="forwardingIput" placeholder="分享内容"/>'+
+                        '               <span class="sureFor" onclick="forwardingBtn()">分享</span>'+
+                        '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
+                        '               <span class="sureCom" onclick="comMent(this,\'info_detect\')">评论</span>'+
                         '           </div>'+
                         '           <div class="emailDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="infor" placeholder="私信内容"/>'+
@@ -542,42 +546,6 @@ function weiboData(data) {
     $('#postRelease p').hide();
     $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-
-//评论
-function showInput(_this) {
-    $(_this).parents('.post_perfect').find('.commentDown').show();
-};
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var fid = $(_this).parents('.post_perfect').find('.fid').text();
-    if (txt!=''){
-        var post_url_3='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&fid='+fid+'&uid='+uid;
-        public_ajax.call_request('get',post_url_3,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-var operateType='info_detect';
-//转发
-function retweet(_this) {
-    var txt = $(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var fid = $(_this).parents('.center_rel').find('.fid').text();
-    var post_url_2='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&fid='+fid+'&uid='+uid;
-    public_ajax.call_request('get',post_url_2,postYES)
-}
-//点赞
-function thumbs(_this) {
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var fid = $(_this).parents('.center_rel').find('.fid').text();
-    var post_url_4='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&fid='+fid+'&uid='+uid;
-    public_ajax.call_request('get',post_url_4,postYES);
-};
 //操作返回结果
 function postYES(data) {
     var f='';

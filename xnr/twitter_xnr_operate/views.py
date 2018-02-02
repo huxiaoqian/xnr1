@@ -10,11 +10,15 @@ from flask import Flask, Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_flow_text
 from xnr.global_config import S_TYPE
 from xnr.time_utils import datetime2ts, ts2datetime
-from utils import get_submit_tweet, tw_save_to_tweet_timing_list, get_recommend_at_user,\
-				get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
-				get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate, \
-				get_retweet_operate, get_at_operate, get_like_operate, get_follow_operate, \
-				get_unfollow_operate , get_private_operate, get_hot_recommend_tweets
+from utils import get_submit_tweet_tw, tw_save_to_tweet_timing_list, get_recommend_at_user,\
+                get_daily_recommend_tweets, get_hot_sensitive_recommend_at_user, push_keywords_task, \
+                get_hot_subopinion, get_bussiness_recomment_tweets,get_comment_operate_tw, \
+                get_retweet_operate_tw, get_at_operate_tw, get_like_operate_tw, get_follow_operate_tw, \
+                get_unfollow_operate_tw , get_private_operate_tw, get_hot_recommend_tweets,get_trace_follow_operate, \
+                get_un_trace_follow_operate, get_show_trace_followers, \
+                get_show_retweet_timing_list, get_show_retweet_timing_list_future
+
+from xnr.utils import add_operate2redis
 
 mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
@@ -26,16 +30,22 @@ mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operat
 
 @mod.route('/submit_tweet/')
 def ajax_submit_daily_tweet():
-	task_detail = dict()
-	task_detail['tweet_type'] = request.args.get('tweet_type','')
-	# 参数传对应英文 (以下所有url一样)
-	#u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
+    task_detail = dict()
+    task_detail['tweet_type'] = request.args.get('tweet_type','')
+    # 参数传对应英文 (以下所有url一样)
+    #u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
     #u'跟随转发':'trace_post',u'智能发帖':'intel_post'
-	task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-	task_detail['text'] = request.args.get('text','').encode('utf-8')
-	mark = get_submit_tweet(task_detail)
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['text'] = request.args.get('text','').encode('utf-8')
+    # mark = get_submit_tweet_tw(task_detail)
 
-	return json.dumps(mark)
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'publish'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
+
+    return json.dumps(mark)
 
 
 # 提交定时任务
@@ -145,12 +155,78 @@ def ajax_hot_hot_subopinion():
 '''
 
 # 帖子推荐
+# http://219.224.134.213:9999/twitter_xnr_operate/bussiness_recomment_tweets/?xnr_user_no=TXNR0001&sort_item=timestamp
+# sort_item: 按时间-timestamp， 按信息敏感度 - sensitive_info， 按人物敏感度 - sensitive_user
+#            按信息影响力 - influence_info， 按人物影响力 - influence_user
+
 @mod.route('/bussiness_recomment_tweets/')
 def ajax_bussiness_recomment_tweets():
     xnr_user_no = request.args.get('xnr_user_no','')
     sort_item = request.args.get('sort_item','timestamp')
     tweets = get_bussiness_recomment_tweets(xnr_user_no,sort_item)
     return json.dumps(tweets)
+
+'''
+跟随转发
+'''
+
+# 展示跟随转发定时列表
+# http://219.224.134.213:9090/twitter_xnr_operate/show_retweet_timing_list/?xnr_user_no=TXNR0001
+
+@mod.route('/show_retweet_timing_list/')
+def ajax_show_retweet_timing_list():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    start_ts = request.args.get('start_ts','')
+    end_ts = request.args.get('end_ts','')
+
+    results = get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts)
+
+    return json.dumps(results)
+
+# 展示跟随转发定时列表（未来）
+# http://219.224.134.213:9090/twitter_xnr_operate/show_retweet_timing_list_future/?xnr_user_no=TXNR0001
+
+@mod.route('/show_retweet_timing_list_future/')
+def ajax_show_retweet_timing_list_future():
+    
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_show_retweet_timing_list_future(xnr_user_no)
+
+    return json.dumps(results)
+
+
+# 展示重点关注用户信息
+# http://219.224.134.213:9090/twitter_xnr_operate/show_trace_followers/?xnr_user_no=TXNR0001
+@mod.route('/show_trace_followers/')
+def ajax_show_trace_followers():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_show_trace_followers(xnr_user_no)
+
+    return json.dumps(results)
+
+# 重点关注
+#http://219.224.134.213:9090/twitter_xnr_operate/trace_follow/?xnr_user_no=TXNR0001&uid_string=935416088380153856&nick_name_string=
+@mod.route('/trace_follow/')
+def ajax_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)   # [mark,fail_nick_name_list]  fail_nick_name_list为添加失败，原因是背景信息库没有这些人，请换成对应uid试试。
+
+# 取消重点关注
+#http://219.224.134.213:9090/twitter_xnr_operate/un_trace_follow/?xnr_user_no=TXNR0001&uid_string=935416088380153856&nick_name_string=
+@mod.route('/un_trace_follow/')
+def ajax_un_trace_follow_operate():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    uid_string = request.args.get('uid_string','')    # 不同uid之间用中文逗号“，”隔开
+    nick_name_string = request.args.get('nick_name_string','')  # 不同昵称之间用中文逗号分隔
+    results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
+
+    return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
+
 
 
 # 除发帖外其他操作
@@ -166,7 +242,13 @@ def ajax_comment_operate():
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
     #task_detail['nick_name'] = request.args.get('nick_name','') # 被转发帖子的用户
 
-    mark = get_comment_operate(task_detail)
+    # mark = get_comment_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'comment'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -180,7 +262,13 @@ def ajax_retweet_operate():
     task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
-    mark = get_retweet_operate(task_detail)
+    # mark = get_retweet_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'retweet'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -194,7 +282,12 @@ def ajax_at_operate():
     task_detail['text'] = request.args.get('text','').encode('utf-8')
     task_detail['nick_name'] = request.args.get('nick_name','')
 
-    mark = get_at_operate(task_detail)
+    # mark = get_at_operate(task_detail)
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'at'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -208,7 +301,13 @@ def ajax_like_operate():
     
     #task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
 
-    mark = get_like_operate(task_detail)
+    # mark = get_like_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'like'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)    
 
     return json.dumps(mark)
 
@@ -220,7 +319,14 @@ def ajax_follow_operate():
     task_detail['uid'] = request.args.get('uid','')
     #task_detail['nick_name'] = request.args.get('nick_name','')
     task_detail['trace_type'] = request.args.get('trace_type','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
-    mark = get_follow_operate(task_detail)
+    # mark = get_follow_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'follow'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
+
 
     return json.dumps(mark)
 
@@ -234,7 +340,13 @@ def ajax_unfollow_operate():
     task_detail['trace_type'] = request.args.get('ordinary_follow','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
     
 
-    mark = get_unfollow_operate(task_detail)
+    # mark = get_unfollow_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'unfollow'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)    
 
     return json.dumps(mark)
 
@@ -247,6 +359,12 @@ def ajax_private_operate():
     task_detail['uid'] = request.args.get('uid','')
     task_detail['text'] = request.args.get('text','')
 
-    mark = get_private_operate(task_detail)
+    # mark = get_private_operate(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'twitter'
+    queue_dict['operate_type'] = 'private'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)    
 
     return json.dumps(mark)
