@@ -98,6 +98,7 @@ def show_reportcontent_new(report_type,start_time,end_time):
     else:
     	pass
     query_condition.append({'range':{'report_time':{'gte':start_time,'lte':'end_time'}}})
+
     query_body={
     	'query':{
     		'filtered':{
