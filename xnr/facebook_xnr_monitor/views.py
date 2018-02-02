@@ -50,3 +50,19 @@ def ajax_lookup_active_user():
     to_ts=request.args.get('to_ts','')
     result=lookup_active_user(classify_id,xnr_no,int(from_ts),int(to_ts))
     return json.dumps(result)
+
+
+#加入语料库
+@mod.route('/addto_facebook_corpus/')
+def ajax_addto_facebook_corpus():
+    task_detail=dict()
+    task_detail['corpus_type']=request.args.get('corpus_type','')
+    task_detail['theme_daily_name']=request.args.get('theme_daily_name','').split(',')
+    task_detail['uid']=request.args.get('uid','')
+    task_detail['fid']=request.args.get('fid','')
+    task_detail['timestamp']=int(request.args.get('timestamp',''))
+    task_detail['create_type']=request.args.get('create_type','')
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['create_time']=int(time.time())
+    results=addto_facebook_corpus(task_detail)
+    return json.dumps(results)
