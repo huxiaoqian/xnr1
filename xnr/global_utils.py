@@ -371,6 +371,10 @@ facebook_feedback_like_index_name_pre = 'facebook_feedback_like_'
 facebook_feedback_like_index_name = 'facebook_feedback_like'
 facebook_feedback_like_index_type = 'text'
 
+facebook_feedback_fans_index_name_pre = 'facebook_feedback_fans_'
+facebook_feedback_fans_index_name = 'facebook_feedback_fans'
+facebook_feedback_fans_index_type = 'text'
+
 facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'

@@ -434,3 +434,89 @@ def ajax_robot_reply():
     # return json.dumps(answer)
     return json.dumps(answer)
 
+
+
+
+
+
+
+
+
+
+#####################################################################
+##########################韩梦成负责以下内容###########################
+#####################################################################
+from utils import get_show_comment, get_show_retweet, get_show_private, get_show_at,get_show_fans
+# 评论及回复
+# http://219.224.134.213:6659/facebook_xnr_operate/show_comment/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_comment/')
+def ajax_show_comment():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_comment(task_detail)
+    return json.dumps(results)
+
+
+# 转发及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_retweet/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_retweet/')
+def ajax_show_retweet():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_retweet(task_detail)
+    return json.dumps(results)
+
+# 私信及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_private/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_private/')
+def ajax_show_private():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_private(task_detail)
+    return json.dumps(results)
+
+# @及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_at/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_at/')
+def ajax_show_at():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2s('2017-10-01')
+    #     task_detail['end_ts'] = datetime2s('2017-10-07')   
+    results = get_show_at(task_detail)
+    return json.dumps(results)
+
+# 关注及回粉
+# http://219.224.134.213:6659/weibo_xnr_operate/show_fans/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_fans/')
+def ajax_show_fans():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    results = get_show_fans(task_detail)
+    return json.dumps(results)
+
