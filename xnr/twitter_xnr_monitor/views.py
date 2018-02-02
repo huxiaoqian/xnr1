@@ -51,3 +51,5 @@ def ajax_lookup_active_user():
     to_ts=request.args.get('to_ts','')
     result=lookup_active_user(classify_id,xnr_no,int(from_ts),int(to_ts))
     return json.dumps(result)
+
+

@@ -42,6 +42,7 @@ from xnr.facebook_xnr_warning.views import mod as facebookxnrwarningModule
 from xnr.facebook_xnr_monitor.views import mod as facebookxnrmonitorModule
 from xnr.facebook_xnr_manage.views import mod as facebookxnrmanageModule
 from xnr.facebook_xnr_knowledge_base_management.views import mod as facebookxnrknowledgebasemanagementModule
+from xnr.facebook_xnr_report_manage.views import mod as facebookxnrreportmanageModule
 
 from xnr.twitter_xnr_create.views import mod as twitterxnrcreateModule
 from xnr.twitter_xnr_warning.views import mod as twitterxnrwarningModule
@@ -107,7 +108,8 @@ def create_app():
     app.register_blueprint(facebookxnrwarningModule)
     app.register_blueprint(facebookxnrmonitorModule)
     app.register_blueprint(facebookxnrmanageModule)
-    app.register_blueprint(facebookxnrknowledgebasemanagementModule)    
+    app.register_blueprint(facebookxnrknowledgebasemanagementModule)
+    app.register_blueprint(facebookxnrreportmanageModule)    
 
     app.register_blueprint(twitterxnrcreateModule)
     app.register_blueprint(twitterxnrwarningModule)
