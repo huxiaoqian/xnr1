@@ -507,7 +507,6 @@ def add_operate2redis(item_dict):
     # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
 
     queue_dict['content'] = item_dict['content']
-
     try:
         content = r_operate_queue.lpush(operate_queue_name,json.dumps(queue_dict))
         mark = True
@@ -519,6 +518,8 @@ def add_operate2redis(item_dict):
 
 if __name__ == '__main__':
 
-    save_to_fans_follow_ES('WXNR0004','1496814565','followers')
+    # save_to_fans_follow_ES('WXNR0004','1496814565','followers')
     #es_xnr.delete(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
     #    id='AV4Zi0NasTFJ_K1Z2dDy')
+    print r_operate_queue.lrange(operate_queue_name,0,8)
+    # print r_operate_queue.rpop(operate_queue_name)

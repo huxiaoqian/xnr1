@@ -19,6 +19,9 @@ from xnr.time_utils import ts2datetime
 from xnr.save_weibooperate_utils import save_xnr_like
 from xnr.utils import add_operate2redis
 
+from xnr.reportManage.report import Report
+from xnr.parameter import SCREEN_WEIBO_USERNAME,SCREEN_WEIBO_PASSWORD
+
 #show report content default
 def show_report_content():
     query_body={
@@ -93,10 +96,13 @@ def get_xnr_reportment_index_listname(index_name_pre,date_range_start_ts,date_ra
 
 def show_reportcontent_new(report_type,start_time,end_time):
     query_condition=[]
+    # report_type_content=json.loads(report_type)
+    # print 'report_type_content:',report_type_content
     if report_type:
     	query_condition.append({'terms':{'report_type':report_type}})
     else:
     	pass
+
     query_condition.append({'range':{'report_time':{'gte':start_time,'lte':'end_time'}}})
 
     query_body={
@@ -124,6 +130,22 @@ def show_reportcontent_new(report_type,start_time,end_time):
         result=[]
     return result
 
+
+def output_excel_word(id_list,out_type,report_timelist):
+    index_name_list = []
+    for item in report_timelist:
+        index_name = weibo_report_management_index_name_pre + ts2datetime(int(item))
+        if index_name not in index_name_list:
+            index_name_list.append(index_name)
+        else:
+            pass
+
+    report_condition = Report(id_list,SCREEN_WEIBO_USERNAME,SCREEN_WEIBO_PASSWORD,index_name_list)
+    if out_type == 'word':
+        mark=report_condition.save_word()
+    elif out_type == 'excel':
+        mark=report_condition.save_excel()
+    return mark
 
 #pubic function:like ,retweet ,comment
 #################微博操作##########

@@ -264,6 +264,18 @@ def get_show_domain_group_detail_portrait(domain_name):
     result_all = []
     for result in es_mget_result:
         item = {}
+        item['uid'] = ''
+        item['nick_name'] = ''
+        # item['photo_url'] = ''
+        item['domain'] = ''
+        item['sensitive'] = ''
+        item['location'] = ''
+        # item['fans_num'] = ''
+        # item['friends_num'] = ''
+        # item['gender'] = ''
+        item['home_page'] = ''
+        # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        item['influence'] = ''
         if result['found']:
             result = result['_source']
             item['uid'] = result['uid']
@@ -278,19 +290,19 @@ def get_show_domain_group_detail_portrait(domain_name):
             item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['uid'])
             # item['home_page'] = 'http://weibo.com/'+result['uid']+'/profile?topnav=1&wvr=6&is_all=1'
             item['influence'] = get_influence_relative(item['uid'],result['influence'])
-        else:
-            item['uid'] = result['_id']
-            item['nick_name'] = ''
-            # item['photo_url'] = ''
-            item['domain'] = ''
-            item['sensitive'] = ''
-            item['location'] = ''
-            # item['fans_num'] = ''
-            # item['friends_num'] = ''
-            # item['gender'] = ''
-            item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['_id'])
-            # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
-            item['influence'] = ''
+        # else:
+        #     item['uid'] = result['_id']
+        #     item['nick_name'] = ''
+        #     # item['photo_url'] = ''
+        #     item['domain'] = ''
+        #     item['sensitive'] = ''
+        #     item['location'] = ''
+        #     # item['fans_num'] = ''
+        #     # item['friends_num'] = ''
+        #     # item['gender'] = ''
+        #     item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['_id'])
+        #     # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        #     item['influence'] = ''
         result_all.append(item)
     return result_all
 

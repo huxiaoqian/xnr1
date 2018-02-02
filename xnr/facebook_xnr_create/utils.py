@@ -27,7 +27,7 @@ from xnr.parameter import fb_domain_ch2en_dict,fb_domain_en2ch_dict
 from xnr.parameter import ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
 from xnr.time_utils import get_facebook_flow_text_index_list as get_flow_text_index_list, datetime2ts
-from xnr.utils import user_no2fb_id
+from xnr.utils import user_no2fb_id, add_operate2redis
 trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
@@ -312,7 +312,8 @@ def get_recommend_follows(task_detail):
         query_body_monitor = {
             'query':{
                 'bool':{
-                    'must':nest_query_list
+                    # 'must':nest_query_list
+                    'should':nest_query_list
                 }     
             },
             # 'sort':{'user_fansnum':{'order':'desc'}},
@@ -332,7 +333,7 @@ def get_recommend_follows(task_detail):
         for result in es_monitor_keywords_results:
             if result['found'] == True:
                 result = result['_source']
-                nick_name_dict[result['uid']] = result['nick_name']
+                nick_name_dict[result['uid']] = result['name']
             else:
                 continue
         recommend_results['monitor_keywords'] = nick_name_dict
@@ -378,15 +379,16 @@ def get_fb_xnr_no():
                     'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
         if es_results:
             user_no_max = es_results[0]['_source']['user_no']
-    else:   #如果当前redis有记录，则取用并更新
+    else:   #如果当前redis有记录，则取用
         user_no_max = int(r.get(fb_xnr_max_no))
-    #update
-    user_no_current = user_no_max + 1
-    r.set(fb_xnr_max_no, user_no_current)
-    return user_no_current
+    return user_no_max
     
 def get_save_step_two(task_detail):
-    user_no_current = get_fb_xnr_no()
+    #update
+    user_no_max = get_fb_xnr_no()
+    user_no_current = user_no_max + 1
+    r.set(fb_xnr_max_no, user_no_current)
+    
     task_detail['user_no'] = user_no_current
     task_id = user_no2fb_id(user_no_current)  #五位数 FXNR0001
     
@@ -474,17 +476,30 @@ def get_save_step_three_1(task_detail):
 
 def get_save_step_three_2(task_detail):
     task_id = task_detail['task_id']
-    nick_name = task_detail['nick_name']
+    # nick_name = task_detail['nick_name']
     try:
         item_fans_followers = dict()
         followers_uids = list(set(task_detail['followers_uids'].split('，')))
         item_fans_followers['followers_list'] = followers_uids
         item_fans_followers['xnr_user_no'] = task_id
         print es.index(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=task_id,body=item_fans_followers)
+        #把关注任务加到redis队列中
+        for followers_uid in followers_uids:
+            queue_dict = {
+                'channel': 'facebook',
+                'operate_type': 'add',
+                'content': {
+                    'xnr_user_no': task_id,
+                    'uid': followers_uid
+                }
+            }
+            if not add_operate2redis(queue_dict):
+                mark = False
+                return mark
         mark = True
     except:        
         mark = False
-    return mark        
+    return mark
 
 def get_xnr_info_new(xnr_user_no):
     results = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
@@ -492,18 +507,20 @@ def get_xnr_info_new(xnr_user_no):
 
 def get_modify_base_info(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
-    res = es.mget(index=fb_xnr_index_name, doc_type=fb_xnr_index_type, body={'ids': [xnr_user_no]})['docs']
-    mark = False
+    item_exists = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+    if task_detail.has_key('active_time'):
+        item_exists['active_time'] = task_detail['active_time']
+    if task_detail.has_key('day_post_average'): 
+        day_post_average = task_detail['day_post_average'].split('-')
+        item_exists['day_post_average'] = json.dumps(day_post_average)
+    if task_detail.has_key('monitor_keywords'): 
+        item_exists['monitor_keywords'] = task_detail['monitor_keywords']
     try:
-        if res[0]['found']:
-            item_exists['active_time'] = task_detail['active_time']
-            item_exists['day_post_average'] = task_detail['day_post_average']
-            # item_exists['daily_interests'] = task_detail['daily_interests']
-            item_exists['monitor_keywords'] = task_detail['monitor_keywords']
-            es.update(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
-            mark = True
-    except Exception,e :
+        es.update(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body={'doc':item_exists}, id=xnr_user_no)
+        mark = True
+    except Exception,e:
         print e
+        mark = False
     return mark
 
 def get_domain_info(domain_pinyin):

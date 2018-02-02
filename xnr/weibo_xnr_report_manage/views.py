@@ -9,7 +9,7 @@ from flask import Blueprint,url_for,render_template,request,\
 from xnr.global_utils import es_xnr
 from utils import show_report_content,show_report_typecontent,\
 				  get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
-                  show_reportcontent_new
+                  show_reportcontent_new,output_excel_word
 
 mod=Blueprint('weibo_xnr_report_manage',__name__,url_prefix='/weibo_xnr_report_manage')
 
@@ -40,7 +40,16 @@ def ajax_show_reportcontent_new():
     start_time=int(request.args.get('start_time',''))
     end_time=int(request.args.get('end_time',''))
     results=show_reportcontent_new(report_type,start_time,end_time)
-    return json.dumps(results)    
+    return json.dumps(results)   
+
+
+@mod.route('/output_excel_word/') 
+def ajax_output_excel_word():
+    id_list=request.args.get('id_list','').split(',')
+    out_type=request.args.get('out_type','')
+    report_timelist=request.args.get('report_timelist','').split(',')
+    results=output_excel_word(id_list,out_type,report_timelist)
+    return json.dumps(results)
 
 #############微博相关操作########
 

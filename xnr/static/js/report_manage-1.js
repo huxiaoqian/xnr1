@@ -72,7 +72,7 @@ if(flagType == 3){
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if(flagType == 1){//微博
     weiboORqq('weibo');
-    reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=&start_time='+todayTimetamp()+'&end_time='+time2;
+    reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+time2;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
@@ -81,7 +81,6 @@ if(flagType == 3){
     reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }
-
 // var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
 // public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 var currentData={},wordCurrentData={},currentDataPrival={};
@@ -251,7 +250,8 @@ function reportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
-    $('.person p').slideUp(300);
+    $('.personContent p').slideUp(300);
+    $('.person').show();
 }
 // 复制了一份上面的函数给微信
 function WXreportDefaul(data) {
@@ -342,7 +342,8 @@ function WXreportDefaul(data) {
         }
     });
     $('.person .search .form-control').attr('placeholder','输入关键词快速搜索（回车搜索）');
-    $('.person p').slideUp(300);
+    $('.personContent p').slideUp(300);
+    $('.person').show();
 }
 //=========
 
@@ -407,6 +408,8 @@ $('.type2 .demo-label').on('click',function () {
             time2=(Date.parse(new Date(d))/1000);
         }
     }
+    $('.personContent p').show();
+    $('.person').hide();
     var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+types.join(',')+
         '&start_time='+time1+'&end_time='+time2;
     public_ajax.call_request('get',newReport_url,reportDefaul);
@@ -419,7 +422,8 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#end').show();
         $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
     } else {
-        $('.person p').show();
+        $('.personContent p').show();
+        $('.person').hide();
         var valCH=[];
         $(".type2 input:checkbox:checked").each(function (index,item) {
             valCH.push($(this).val());
@@ -432,7 +436,8 @@ $('.choosetime .demo-label input').on('click',function () {
     }//show_reportcontent_new
 });
 $('#sure').on('click',function () {
-    $('.person p').show();
+    $('.personContent p').show();
+    $('.person').hide();
     var valCH=[];
     $(".type2 input:checkbox:checked").each(function (index,item) {
         valCH.push($(this).val());
@@ -451,146 +456,33 @@ $('#sure').on('click',function () {
 
 //导出excel
 $('#output1').click(function(){
-    var all=[];
-    for (var k in currentData){
-        var name='',time='',type='',user='',uid='',txt='';
-        if (currentData[k].event_name==''||currentData[k].event_name=='unknown'||currentData[k].event_name=='null'){
-            name='暂无';
-        }else {
-            name=currentData[k].event_name;
-        };
-        if (currentData[k].report_time==''||currentData[k].report_time=='unknown'||currentData[k].report_time=='null'){
-            time='暂无';
-        }else {
-            time=getLocalTime(currentData[k].report_time);
-        };
-        if (currentData[k].report_type==''||currentData[k].report_type=='unknown'||currentData[k].report_type=='null'){
-            type='暂无';
-        }else {
-            type=currentData[k].report_type;
-        };
-        if (currentData[k].uid==''||currentData[k].uid=='unknown'||currentData[k].uid=='null'){
-            uid='暂无';
-        }else {
-            uid=currentData[k].uid;
-        };
-        if (currentData[k].xnr_user_no==''||currentData[k].xnr_user_no=='unknown'||currentData[k].xnr_user_no=='null'){
-            user='暂无';
-        }else {
-            user=currentData[k].xnr_user_no;
-        };
-        if (currentData[k].report_content['weibo_list'].length==0){
-            txt='暂无内容';
-        }else {
-            $.each(currentData[k].report_content['weibo_list'],function (index,item) {
-                txt+=item.text;
-            });
-        };
-        all.push(
-            [
-                {"value":name, "type":"ROW_HEADER"},
-                {"value":time, "type":"ROW_HEADER"},
-                {"value":type, "type":"ROW_HEADER"},
-                {"value":user, "type":"ROW_HEADER"},
-                {"value":uid, "type":"ROW_HEADER"},
-                {"value":txt, "type":"ROW_HEADER"},
-            ]
-        )
-    };
-    var data = {
-        "title":[
-            {"value":"上报名称", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报时间", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报类型", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"虚拟人", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"人物UID", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-            {"value":"上报内容", "type":"ROW_HEADER_HEADER", "datatype":"string"},
-        ],
-        "data":all
-    };
-    if(data == '')
-        return;
-    JSONToExcelConvertor(data.data, "Report", data.title);
+    outputFun($(this).attr('type'));
 });
-function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
-    //先转化json
-    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
-
-    var excel = '<table>';
-
-    //设置表头
-    var row = "<tr>";
-    for (var i = 0, l = ShowLabel.length; i < l; i++) {
-        row += "<td>" + ShowLabel[i].value + '</td>';
-    }
-
-    //换行
-    excel += row + "</tr>";
-
-    //设置数据
-    for (var i = 0; i < arrData.length; i++) {
-        var row = "<tr>";
-        for (var index in arrData[i]) {
-            var value = arrData[i][index].value === "." ? "" : arrData[i][index].value;
-            if (value){
-                row += '<td>' + value + '</td>';
-            }
-        }
-
-        excel += row + "</tr>";
-    }
-
-    excel += "</table>";
-    var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
-    excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
-    excelFile += '; charset=UTF-8">';
-    excelFile += "<head>";
-    excelFile += "<!--[if gte mso 9]>";
-    excelFile += "<xml>";
-    excelFile += "<x:ExcelWorkbook>";
-    excelFile += "<x:ExcelWorksheets>";
-    excelFile += "<x:ExcelWorksheet>";
-    excelFile += "<x:Name>";
-    excelFile += "{worksheet}";
-    excelFile += "</x:Name>";
-    excelFile += "<x:WorksheetOptions>";
-    excelFile += "<x:DisplayGridlines/>";
-    excelFile += "</x:WorksheetOptions>";
-    excelFile += "</x:ExcelWorksheet>";
-    excelFile += "</x:ExcelWorksheets>";
-    excelFile += "</x:ExcelWorkbook>";
-    excelFile += "</xml>";
-    excelFile += "<![endif]-->";
-    excelFile += "</head>";
-    excelFile += "<body>";
-    excelFile += excel;
-    excelFile += "</body>";
-    excelFile += "</html>";
-
-
-    var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
-
-    var link = document.createElement("a");
-    link.href = uri;
-
-    link.style = "visibility:hidden";
-    link.download = FileName + ".xls";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-};
 //导出word
 $('#output2').on('click',function () {
-    var _ids=[];
+    outputFun($(this).attr('type'));
+});
+function outputFun(_type) {
+    var _ids=[],times=[];
     for(var k in currentData){
         _ids.push(currentData[k]['_id']);
+        times.push(k);
     }
-    console.log(_ids)
-    // window.open('/static/doc/test.docx');
-    // tableExport('person', 'Report', 'doc');
-});
+    $('#loadingDown .downInfo').show();
+    $('#loadingDown').modal('show');
+    var output_url='/weibo_xnr_report_manage/output_excel_word/?id_list='+_ids.join(',')+
+        '&out_type='+_type+'&report_timelist='+times.join(',');
+    public_ajax.call_request('get',output_url,outputRead);
+}
+function outputRead(data) {
+    $('#loadingDown .downInfo').hide();
+    $('#loadingDown').modal('hide');
+    var path=data.substring(3);
+    var a = document.getElementById("downFile");
+    a.href=path;
+    a.download=data.substring(15);
+    a.click();
+}
 
 
 

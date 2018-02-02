@@ -11,7 +11,7 @@ import urllib2
 import chardet
 
 REQURL = 'http://www.tuling123.com/openapi/api'
-API_KEY = 'd179b7e3170e437ea5c6eb14f7b7caf9'
+API_KEY = '4eae73d664894d648b365ed46b697bbb'#'d179b7e3170e437ea5c6eb14f7b7caf9'
 
 def get_message_from_tuling(massage):#从图灵机器人获取回复
 
