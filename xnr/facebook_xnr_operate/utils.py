@@ -995,3 +995,196 @@ def get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string):
 
     return [mark,fail_uids,fail_nick_name_list]    
 
+
+
+
+
+#####################################################################
+##########################韩梦成负责以下内容###########################
+#####################################################################
+from xnr.global_utils import facebook_feedback_comment_index_name, facebook_feedback_comment_index_type,\
+                            facebook_feedback_retweet_index_name, facebook_feedback_retweet_index_type,\
+                            facebook_feedback_private_index_name, facebook_feedback_private_index_type,\
+                            facebook_feedback_at_index_name, facebook_feedback_at_index_type,\
+                            facebook_feedback_fans_index_name, facebook_feedback_fans_index_type
+from xnr.time_utils import get_timeset_indexset_list
+
+def get_show_comment(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'term':{'comment_type':'receive'}}
+                ]
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+    
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = facebook_feedback_comment_index_name + '_'
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    results_all = []
+    try:
+        es_results = es.search(index=index_name,doc_type=facebook_feedback_comment_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
+
+def get_show_retweet(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}}
+                ]
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = facebook_feedback_retweet_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    results_all = []
+    try:
+        es_results = es.search(index=index_name,doc_type=facebook_feedback_retweet_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
+
+def get_show_private(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'term':{'private_type':'receive'}}
+                ],
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+  
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = facebook_feedback_private_index_name + '_'
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    results_all = []
+    try:
+        es_results = es.search(index=index_name,doc_type=facebook_feedback_private_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
+
+def get_show_at(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+        
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = facebook_feedback_at_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    results_all = []
+    try:
+        es_results = es.search(index=index_name,doc_type=facebook_feedback_at_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
+
+def get_show_fans(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+    results_all = []
+    try:
+        es_results = es.search(index=facebook_feedback_fans_index_name,doc_type=facebook_feedback_fans_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
