@@ -445,6 +445,19 @@ facebook_xnr_corpus_index_type = 'text'
 facebook_warning_corpus_index_name = 'facebook_warning_corpus'
 facebook_warning_corpus_index_type = 'text'
 
+#社区预警
+facebook_community_target_user_index_name_pre = 'facebook_community_target_user_'
+facebook_community_target_user_index_type = 'user'
+
+facebook_select_community_index_name_pre = 'facebook_select_community_'
+facebook_select_community_index_type = 'community'
+
+facebook_detail_community_index_name_pre = 'facebook_detail_community_'
+facebook_detail_community_index_type = 'community'
+
+facebook_trace_community_index_name_pre = 'facebook_trace_community_'
+facebook_trace_community_index_type = 'text'
+
 # twitter
 
 # social sensing
