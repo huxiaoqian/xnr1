@@ -138,7 +138,7 @@ function weibo(data) {
                         time=getLocalTime(item.timestamp);
                     };
                     var rel_str=
-                        '<div class="everySpeak " style="margin: 0 auto;width: 950px;text-align: left;">'+
+                        '<div class="everySpeak" style="margin: 0 auto;width: 950px;text-align: left;">'+
                         '        <div class="speak_center everyUser">'+
                         '            <div class="center_rel">'+
                         '                <img src="'+img+'" alt="" class="center_icon">'+

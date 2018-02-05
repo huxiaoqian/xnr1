@@ -116,6 +116,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -197,6 +198,7 @@ function calendar(data){
                         '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                        '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                         // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -285,6 +287,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -363,6 +366,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -447,6 +451,7 @@ function calendar(data){
                 '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                 '       <div class="center_rel">'+
                 '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                 '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                 // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                 '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -559,12 +564,12 @@ function weibo(idx,data,words) {
                         };
                     };
                     str_new+=
-                        '<div class="everySpeak">'+
+                        '<div class="everySpeak everyUser">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel center_rel_weibo" style="text-align: left;">'+
                         '                <img src="'+img+'" alt="" class="center_icon">'+
                         '                <a class="center_1" style="color: #f98077;">'+name+'</a>'+
-                        '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                        '                <a class="fid" style="display: none;">'+item.fid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
