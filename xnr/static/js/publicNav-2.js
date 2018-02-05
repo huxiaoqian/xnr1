@@ -103,17 +103,20 @@ function letter(_this) {
         '&text='+txt;
     public_ajax.call_request('get',post_url_letter,operatSuccess)
 }
-var urlFirst_zpd='',mft_id,
+var urlFirst_zpd='',mft_id,ft,first_url,reportWaring,reportInfo,
     reply_retweet='retweet_operate',reply_comment='comment_operate';
 setTimeout(function () {
-    var ft=$('.nav_type').text();
+    ft=$('.nav_type').text();
     if(ft=='(微博)'){
-        urlFirst_zpd='weibo_xnr_operate';mft_id='mid';
-        reply_retweet='reply_retweet',reply_comment='reply_comment';
+        urlFirst_zpd='weibo_xnr_operate';mft_id='mid';reportWaring='weibo_xnr_warming_new';
+        reply_retweet='reply_retweet',reply_comment='reply_comment';reportInfo='weibo_info';
+        first_url='/weibo_xnr_monitor/new_addto_weibo_corpus/';
     }else if(ft=='(FaceBook)'){
-        urlFirst_zpd='facebook_xnr_operate';mft_id='fid';
+        urlFirst_zpd='facebook_xnr_operate';mft_id='fid';reportWaring='facebook_xnr_warning';
+        first_url='/facebook_xnr_monitor/addto_facebook_corpus/';reportInfo='fb_info';
     }else if(ft=='(twitter)'){
-        urlFirst_zpd='twitter_xnr_operate';mft_id='tid';
+        urlFirst_zpd='twitter_xnr_operate';mft_id='tid';reportWaring='twitter_xnr_warning';
+        first_url='/twitter_xnr_monitor/addto_facebook_corpus/';reportInfo='tw_info';
     }
 },1000)
 //retweet_operate   comment_operate   like_operate
@@ -208,7 +211,7 @@ function getInfo(_this) {
 };
 function joinPolice(_this,type) {
     var info=getInfo(_this);
-    var police_url='/weibo_xnr_warming_new/addto_warning_corpus/?xnr_user_no='+ID_Num+'&uid='+info[0]+
+    var police_url='/'+reportWaring+'/addto_warning_corpus/?xnr_user_no='+ID_Num+'&uid='+info[0]+
         '&mid='+info[1]+'&timestamp='+info[2]+'&warning_source='+type;
     public_ajax.call_request('get',police_url,operatSuccess)
 };
@@ -228,9 +231,17 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/new_addto_weibo_corpus/?xnr_user_no='+ID_Num +
+    var first_url,mftID;
+    if(ft=='(微博)'){
+        first_url='/weibo_xnr_monitor/new_addto_weibo_corpus/';mftID='mid';
+    }else if(ft=='(FaceBook)'){
+        first_url='/facebook_xnr_monitor/addto_facebook_corpus/';mftID='fid';
+    }else if(ft=='(twitter)'){
+        first_url='/twitter_xnr_monitor/addto_facebook_corpus/';mftID='tid';
+    }
+    var corpus_url= first_url+'?xnr_user_no='+ID_Num +
         '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&uid='+wordUid+'&mid='+wordMid+'&timestamp='+wordTime+'&create_type='+create_type;
+        '&uid='+wordUid+'&'+mft_id+'='+wordMid+'&timestamp='+wordTime+'&create_type='+create_type;
     public_ajax.call_request('get',corpus_url,operatSuccess);
 }
 //一键上报
@@ -244,7 +255,7 @@ function oneUP(_this,type) {
         var uidList=[],weibo_info=[];
         for (var i=0;i<len.length;i++){
             var uid=$(len[i]).find('.uid').text();uidList.push(uid);
-            var mid = $(len[i]).find('.mid').text();
+            var mid = $(len[i]).find('.'+mft_id).text();
             var timestamp = $(len[i]).find('.timestamp').text();
             weibo_info.push({'mid':mid,'timestamp':timestamp});
         }
@@ -270,11 +281,12 @@ function oneUP(_this,type) {
             'event_name':mainNAME,
             'uid':mainUID,
             'user_info':uidList,
-            'weibo_info':weibo_info,
+            // 'weibo_info':weibo_info,
         }
+        job[reportInfo]=weibo_info;
         $.ajax({
             type:'POST',
-            url: '/weibo_xnr_warming_new/report_warming_content/',
+            url: '/'+reportWaring+'/report_warming_content/',
             contentType:"application/json",
             data: JSON.stringify(job),
             dataType: "json",

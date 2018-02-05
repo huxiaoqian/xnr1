@@ -99,7 +99,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+i+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2">'+
+                    '                <div class="event-2 everyUser">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+i+'"></div>'+
@@ -165,7 +165,7 @@ function weibo(data){
                         '                        <div class="mainJoinTable'+i+'"></div>'+
                         '                    </div>'+
                         '                </div>'+
-                        '                <div class="event-2">'+
+                        '                <div class="event-2 everyUser">'+
                         '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                         '                    <div class="mainWeibo">'+
                         '                        <div class="mainWeiboTable'+i+'"></div>'+
@@ -238,7 +238,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2">'+
+                    '                <div class="event-2 everyUser">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
@@ -301,7 +301,7 @@ function weibo(data){
                     '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                     '                    </div>'+
                     '                </div>'+
-                    '                <div class="event-2">'+
+                    '                <div class="event-2 everyUser">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                     '                    <div class="mainWeibo">'+
                     '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
@@ -371,7 +371,7 @@ function weibo(data){
                 '                        <div class="mainJoinTable'+(i+a)+'"></div>'+
                 '                    </div>'+
                 '                </div>'+
-                '                <div class="event-2">'+
+                '                <div class="event-2 everyUser">'+
                 '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 相关典型微博</p>'+
                 '                    <div class="mainWeibo">'+
                 '                        <div class="mainWeiboTable'+(i+a)+'"></div>'+
