@@ -72,7 +72,7 @@
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" title="登录用户"
                     aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a id="login_user">admin@qq.com</a>&nbsp;&nbsp;<span class="down3page"></span>
+                <span class="icon icon-user"></span> <a id="login_user"></a>&nbsp;&nbsp;<span class="down3page"></span>
             </button>
             <span class="xnrShowHide"><b style="color:#333;">虚拟人：</b> <a class="nav_name"></a> <a class="nav_type"></a></span>
             <ul class="dropdown-menu">
@@ -408,7 +408,9 @@
 <script src="/static/echarts/china.js"></script>
 <script>
     //登录用户名
+//    var admin='admin@qq.com';
     var admin='{{g.user}}';
+    $('#login_user').text(admin);
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {

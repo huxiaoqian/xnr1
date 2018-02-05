@@ -454,7 +454,8 @@ $('#sure_post').on('click',function () {
         $('#pormpt').modal('show');
         return false;
     };
-    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+'&xnr_user_no='+xnrUser+'&text='+txt;
+    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+
+        '&xnr_user_no='+xnrUser+'&text='+Check(txt);
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
