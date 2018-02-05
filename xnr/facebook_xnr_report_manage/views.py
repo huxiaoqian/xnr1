@@ -13,7 +13,7 @@ mod=Blueprint('facebook_xnr_report_manage',__name__,url_prefix='/facebook_xnr_re
 
 #上报显示新方法
 @mod.route('/show_report_content/')
-def ajax_show_reportcontent_new():
+def ajax_show_report_content():
     report_type=request.args.get('report_type','').split(',')
     start_time=int(request.args.get('start_time',''))
     end_time=int(request.args.get('end_time',''))
@@ -21,10 +21,10 @@ def ajax_show_reportcontent_new():
     return json.dumps(results)   
 
 
-# @mod.route('/output_excel_word/') 
-# def ajax_output_excel_word():
-#     id_list=request.args.get('id_list','').split(',')
-#     out_type=request.args.get('out_type','')
-#     report_timelist=request.args.get('report_timelist','').split(',')
-#     results=output_excel_word(id_list,out_type,report_timelist)
-#     return json.dumps(results)
+@mod.route('/output_excel_word/') 
+def ajax_output_excel_word():
+    id_list=request.args.get('id_list','').split(',')
+    out_type=request.args.get('out_type','')
+    report_timelist=request.args.get('report_timelist','').split(',')
+    results=output_excel_word(id_list,out_type,report_timelist)
+    return json.dumps(results)
