@@ -358,7 +358,7 @@ function addHeavySure() {
         var useradd_url;
         if(m=='uid_string'){
             var reg = new RegExp("^[0-9]*$");
-            if(reg.test(m)){
+            if(reg.test(uid_name)){
                 useradd_url='/weibo_xnr_operate/trace_follow/?xnr_user_no='+ID_Num+'&'+m+'='+uid_name;
             }else {
                 $('#pormpt p').text('UID为数字。');
@@ -396,7 +396,6 @@ function obtain(t) {
     actType=$('#myTabs li.active a').text().toString().trim();
 }
 $('#sure_post').on('click',function () {
-    //
     obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
     var flag=$('.friends button b').text(),rank='',middle_timing='submit_tweet';
@@ -404,7 +403,7 @@ $('#sure_post').on('click',function () {
     if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
     //原创
     var post_url_1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&operate_type='+operateType+
-        '&xnr_user_no='+xnrUser+'&text='+txt+'&rank='+rank;
+        '&xnr_user_no='+xnrUser+'&text='+Check(txt)+'&rank='+rank;
     if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){

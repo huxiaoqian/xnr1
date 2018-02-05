@@ -1,7 +1,6 @@
 var reportDefaul_url;
 var time2=Date.parse(new Date())/1000;
 if(flagType == 3){
-    //微信
     //===============时间搜索添加11---21 ===============
     var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
         +'<label class="demo-label">'
@@ -79,6 +78,12 @@ if(flagType == 3){
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
+    public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+}else if (flagType == 4){
+    weiboORqq('faceBook');
+    var start_ts=getDaysBefore(7);
+    var end_ts= todayTimetamp();
+    reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论,事件,时间&start_time='+start_ts+'&end_time='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }
 // var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
