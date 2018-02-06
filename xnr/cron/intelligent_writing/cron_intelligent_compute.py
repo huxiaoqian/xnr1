@@ -353,7 +353,12 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         for keyword in opinion_keywords_list:
             nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
         uid_list = []
-                    
+        
+        if len(nest_query_list) == 1:
+            SHOULD_PERCENT = 1
+        else:
+            SHOULD_PERCENT = 2
+
         if intel_type == 'all':
             query_body = {
                 'query':{
@@ -377,7 +382,8 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         				uid_list = follow_result['_source']['followers']
         	except:
         		uid_list = []
-
+                
+            
         	query_body = {
                 'query':{
                     'bool':{
@@ -713,7 +719,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
             	}
 
             	es_sensitive_result = es_xnr.search(index=index_name_list,doc_type='text',\
-                        body=query_body)['aggregations']['uids']['buckets']
+                        body=query_sensitive)['aggregations']['uids']['buckets']
             	for item in es_sensitive_result:
             		uid = item['key']
             		uid_list.append(uid)
