@@ -1,0 +1,265 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 社区预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/time_warning.css">
+<style>
+   /*  .fixed-table-toolbar .search{width: 100%;}
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .fixed-table-container thead th .both {
+        background-image: none!important;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
+    /* .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    th.bs-checkbox {width: 10%!important;}
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    .fixed-table-container thead th .th-inner {padding: 0;}
+    .fixed-table-toolbar .search {width: 100%;margin-bottom: 0;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    #div-button input {
+        border:1px solid silver;
+        border-radius: 5px;
+        padding: 3px 5px;
+        font-size: 10px;
+        background: transparent;
+    }
+    #start,#end,#sure {
+        display:none;
+    }
+    #sure {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    #sure:hover {
+        background: rgba(8,23,44,0.65);
+    } */
+    /* 跟踪社区列表  新增社区列表  边框*/
+    #track-community ,#new-track-community {
+        border-bottom:none;
+    }
+    #track-community thead th ,#new-track-community thead th {
+        border-top:none;
+    }
+    /* 搜索框 */
+    .fixed-table-toolbar .search{
+        width: 100%;
+    }
+    /* 表格样式 */
+    .bootstrap-table .table>thead>tr>th{
+        width: 9%;
+    }
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    /* 社区名称下拉选选项 */
+    #track-community thead th[data-field="b"]:hover{
+        cursor:pointer;
+    }
+    #track-community thead th[data-field="b"] {
+        position:relative;
+    }
+    #track-community thead th[data-field="b"] div.th-inner{
+        position:relative;
+        overflow:visible;
+    }
+    #track-community thead th[data-field="b"] #downbox {
+        position:absolute;
+        /* left:0; */
+        display:none;
+        z-index:9999;
+    }
+    #downbox {
+        background-color: #0a1f3b;
+        width:150px;
+        position:absolute;
+        display:none;
+        z-index:9999;
+    }
+    #downbox li {
+        border: 1px solid silver;
+    }
+    #downbox li:hover{
+        cursor:pointer;
+        background-color: #2a556f;
+    }
+    .community-name-box {
+        position:relative;
+        /* overflow:visible; */
+        cursor:pointer;
+    }
+    .fixed-table-body {
+        overflow:visible;
+    }
+    /* 核心人物列表、关键词、影响力 */
+    .detailed-content {
+        display:none;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd){
+        background-color: transparent;
+    }
+    /* 关键词 */
+    #keyword {
+        height: 300px;
+        width: 100%;
+        display:block;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-calendar note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">社区监测</b>
+        </div>
+    </div>
+    <!-- <div class="choosetime">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='0' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='7'>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start" class="form_datetime" placeholder="开始时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end" class="form_datetime" placeholder="结束时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sure" class="sureTime">确定</span>
+    </div> -->
+    <!-- 社区列表 -->
+    <div class="community-list">
+        <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i> 跟踪社区列表</p>
+        <div id="track-community">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+        <div class="detailed-content">
+            <p class="detailed-content-title" style="font-size: 16px;color:#01b4ff;margin-bottom:18px;"><i class="icon icon-bookmark"></i><span> 核心人物列表</span></p>
+            <!-- 核心人物列表 -->
+            <div id="person-list"></div>
+            <!-- 关键词 -->
+            <div id="keyword"></div>
+            <!-- 敏感度和影响力分布 -->
+            <div id="influence"></div>
+        </div>
+        <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 新发现社区列表</p>
+        <div id="new-track-community">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+    </div>
+
+    <!-- <div class="weiboContent">
+        <div id="group_emotion_loading" style="text-align:center;">正在拼命加载中...</div>
+        <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
+            <table id="input-table" class="In-table" style="width:100%;">
+                <tbody class="In-table" style='width:100%!important;'>
+                </tbody>
+            </table>
+        </div>
+        <div class='fanye' style="width:100%;text-align:center;margin-top: 20px;">
+            <div style="display:none;">
+                每页显示<input type="text" id="PageNo" size="1" value="1" style='text-align:center;border:1px solid #ccc;'/>组
+            </div>
+            <div id="div-button" style="display:inline-block;margin-left:5px;">
+                <input type="button" value="首页" id="F-page">
+                <input type="button" value="上一页" id="Pre-page">
+                <input type="button" value="下一页" id="Nex-page">
+                <input type="button" value="尾页" id="L-page">
+            </div>
+            <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
+            <span style="display:inline-block;">总共<span id="s1"></span>页</span>
+        </div>
+    </div> -->
+</div>
+
+<!--提示弹框-->
+<!-- <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!--模态框-->
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('4');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
+    });
+</script>
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
+<script src="/static/js/community_warning.js"></script>
+{% endblock %}
