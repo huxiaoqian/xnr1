@@ -40,6 +40,11 @@ PATH_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 #config es
 #config xnr user info
+
+ES_INTELLIGENT_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
+                   '219.224.134.215:9205']
+ES_INTELLIGENT_PORT = '9205'
+
 ES_CLUSTER_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
                    '219.224.134.215:9205']
 ES_CLUSTER_PORT = '9205'
