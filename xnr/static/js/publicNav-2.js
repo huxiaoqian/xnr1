@@ -25,6 +25,15 @@ function todayTimetamp() {
     var todayStartTime=Date.parse(start)/1000;
     return todayStartTime;
 }
+//昨天时间到23:59
+function yesterday() {
+    var day = new Date();
+    day.setTime(day.getTime()-24*60*60*1000);
+    var s1 = day.getFullYear()+ "-" + (day.getMonth()+1) + "-" + day.getDate();
+    var s2 = (Date.parse(new Date(new Date(new Date(s1).toLocaleDateString()).getTime()+24*60*60*1000-1)))/1000;
+    return s2;
+}
+
 //时间戳转时间
 function getLocalTime(nS) {
     return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
