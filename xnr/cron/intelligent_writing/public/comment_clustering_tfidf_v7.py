@@ -27,7 +27,7 @@ MIN_CLUSTER_NUM = settings.get("MIN_CLUSTER_NUM")
 MAX_CLUSTER_NUM = settings.get("MAX_CLUSTER_NUM")
 COMMENT_WORDS_CLUSTER_NUM = settings.get("COMMENT_WORDS_CLUSTER_NUM")
 
-AB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), './')
+AB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '')
 
 def freq_word_comment(items):
     '''

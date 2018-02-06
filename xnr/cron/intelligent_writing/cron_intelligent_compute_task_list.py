@@ -16,12 +16,12 @@ from global_utils import writing_task_index_name, writing_task_index_type, writi
 
 def lpush_intelligent_writing_task_list():
 
-	compute_status = 2
-	# es_results = es.search(index=writing_task_index_name,doc_type=writing_task_index_type,\
-	# 						body={'query':{'term':{'compute_status':compute_status}}})['hits']['hits']
-
+	compute_status = 0
 	es_results = es.search(index=writing_task_index_name,doc_type=writing_task_index_type,\
-							body={'query':{'match_all':{}}})['hits']['hits']
+							body={'query':{'term':{'compute_status':compute_status}}})['hits']['hits']
+
+	# es_results = es.search(index=writing_task_index_name,doc_type=writing_task_index_type,\
+	# 						body={'query':{'match_all':{}}})['hits']['hits']
 
 
 	print 'es_results:::',es_results
