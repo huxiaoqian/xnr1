@@ -4,6 +4,7 @@ import os
 import time
 import json
 import random
+import pinyin
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
@@ -340,8 +341,8 @@ def ajax_show_at():
     task_detail['end_ts'] = request.args.get('end_ts','')
 
     if S_TYPE == 'test':
-        task_detail['start_ts'] = datetime2s('2017-10-01')
-        task_detail['end_ts'] = datetime2s('2017-10-07')   
+        task_detail['start_ts'] = datetime2ts('2017-10-01')
+        task_detail['end_ts'] = datetime2ts('2017-10-07')   
 
     results = get_show_at(task_detail)
     return json.dumps(results)
@@ -509,3 +510,5 @@ def ajax_un_trace_follow_operate():
     results = get_un_trace_follow_operate(xnr_user_no,uid_string,nick_name_string)
 
     return json.dumps(results)  # [mark,fail_uids,fail_nick_name_list]  fail_uids - 取消失败的uid  fail_nick_name_list -- 原因同上
+
+

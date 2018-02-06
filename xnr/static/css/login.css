@@ -13,9 +13,6 @@ img {
 }
 /*-------主要内容-------*/
 body {
-    min-width: 1136px;
-    max-width: 1360px;
-    margin: 0 auto;
     /*background: url('../static/images/login.jpg') no-repeat;*/
     /*background-size: 100% 100%;*/
     position: relative;
@@ -28,6 +25,8 @@ body {
     background:url("/static/images/font.png") center center no-repeat;
 }
 #box_body {
+    min-width: 1136px;
+    max-width: 1360px;
     padding: 100px 0;
     position: relative;
     z-index: 10;
@@ -119,10 +118,9 @@ body {
     width:400px;
     padding:20px;
     border-radius: 10px;
-    height:270px;
     background-color: rgba(21, 21, 21, 0.56);
 }
-#email_name,#passwords {
+#email,#password {
     width: 200px;
     height: 25px;
     padding: 5px 5px 5px 10px;
@@ -132,8 +130,9 @@ body {
     background: transparent;
     border: 1px solid white;
     transition: all linear .7s;
+    color: white;
 }
-#submits {
+#submit {
     text-align: center;
     background: transparent;
     color: rgb(255, 255, 255);
@@ -147,9 +146,7 @@ body {
     cursor: pointer;
     transition: all linear .5s;
 }
-#submits:hover {
+#submit:hover {
     background: #fff;
-}
-#submits:hover {
-    color: #000;
+    color: black;
 }

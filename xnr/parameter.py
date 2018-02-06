@@ -17,6 +17,8 @@ MONTH_TIME = 30*24*3600
 EXPIRE_TIME = 8*24*3600
 DAY_HOURS = 24  # 一天24小时
 FLOW_TEXT_START_DATE = 1502553600 # 2017-08-13
+FB_FLOW_TEXT_START_DATE = 1504972800  # 2017-09-10"
+TW_FLOW_TEXT_START_DATE = 1504972800  # 2017-09-10"
 USER_NUM = 50 #人物行为预警返回用户数量
 USER_CONTENT_NUM=50 #人物行为预警每个用户返回的敏感微博数量最大值
 REMIND_DAY=15  #今日提醒中，对时间节点的提前天数
@@ -135,6 +137,9 @@ TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/us
 PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
 
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
+
+#智能写作
+WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
 
 #FB & TW 属性计算
 FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
