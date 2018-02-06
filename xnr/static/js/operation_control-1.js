@@ -730,7 +730,7 @@ function historyNews(data) {
                     }else {
                         time=getLocalTime(row.timestamp);
                     };
-                    f (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
                         row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
                         img='/static/images/unknown.png';
                     }else {
@@ -748,7 +748,6 @@ function historyNews(data) {
                             all='none';
                         }
                     };
-                    console.log(txt)
                     var a=Number(row.retweeted).toString();
                     var b=Number(row.retweet).toString();
                     var retNum=(a||b);
@@ -795,28 +794,83 @@ function historyNews(data) {
     $('#'+boxShoes+' p').slideUp(700);
 }
 //查看全文
-function allWord(_this) {
-    var a=$(_this).attr('data-all');
-    if (a==0){
-        $(_this).text('收起');
-        $(_this).parents('.post_perfect').find('.center_2').html($(_this).next().text());
-        $(_this).attr('data-all','1');
-    }else {
-        $(_this).text('查看全文');
-        $(_this).parents('.post_perfect').find('.center_2').text($(_this).next().text().substring(0,160)+'...');
-        $(_this).attr('data-all','0');
-    }
-}
+// function allWord(_this) {
+//     var a=$(_this).attr('data-all');
+//     if (a==0){
+//         $(_this).text('收起');
+//         $(_this).parents('.center_rel').find('.center_2').html($(_this).next().text());
+//         $(_this).attr('data-all','1');
+//     }else {
+//         $(_this).text('查看全文');
+//         $(_this).parents('.center_rel').find('.center_2').text($(_this).next().text().substring(0,160)+'...');
+//         $(_this).attr('data-all','0');
+//     }
+// }
 //=====评论======
 //查看对话
 function dialogue(_this) {
-    var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var dialogue_url='/weibo_xnr_manage/show_comment_dialog/?mid='+mid;
+    var mid = $(_this).parents('.center_rel').find('.mid').text(),start,end;
+    var timeCH=$('input:radio[name="time3"]:checked').val();
+    if (timeCH!='mize'){
+        start=getDaysBefore(timeCH);end=end_time;
+    }else {
+        var s=$('.choosetime-3 #start_3').val();
+        var d=$('.choosetime-3 #end_3').val();
+        if (s==''||d==''){
+            $('#successfail p').text('时间不能为空。');
+            $('#successfail').modal('show');
+            return false;
+        }else {
+            start=(Date.parse(new Date(s))/1000);end=(Date.parse(new Date(d))/1000);
+        }
+    }
+    var dialogue_url='/weibo_xnr_manage/show_comment_dialog/?mid='+mid+
+        '&start_time='+start+'&end_time='+end;
+    // var dialogue_url='/weibo_xnr_manage/show_comment_dialog/?mid=4201556885068742&start_time=1517155200&end_time=1517298000'
     public_ajax.call_request('get',dialogue_url,dialogue_show)
 };
 function dialogue_show(data) {
     if (data.length!=0){
-
+        var str='';
+        $.each(data,function (index,row) {
+            var name,txt,img,time;
+            if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
+                name=row.uid;
+            }else {
+                name=row.nick_name;
+            };
+            if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
+                img='/static/images/unknown.png';
+            }else {
+                img=row.photo_url;
+            };
+            if (row.text==''||row.text=='null'||row.text=='unknown'){
+                txt='暂无内容';
+            }else {
+                txt=row.text;
+            };
+            if (row.update_time==''||row.update_time=='null'||row.update_time=='unknown'){
+                time='未知';
+            }else {
+                time=getLocalTime(row.update_time);
+            };
+            str+=
+                '<div>'+
+                '   <div class="_dialogue">'+
+                '       <img src="'+img+'" class="center_icon">'+
+                '       <div class="center_rel">'+
+                '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
+                '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
+                '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                '           <span class="center_2">'+txt+ '</span>'+
+                '       </div>'+
+                '   </div>'+
+                '</div>';
+        });
+        $('#lookDialogue .dialogueContent').html(str);
+        $('#lookDialogue').modal('show');
     }else {
         $('#successfail p').text('对话内容为空。');
         $('#successfail').modal('show');
