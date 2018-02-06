@@ -19,7 +19,7 @@ def execute(username, password):
 
 	comment = Comment(username, password)
 	list = comment.get_comment()
-	comment.save('facebook_feedback_comment_2017-11-13','text',list)
+	comment.save('facebook_feedback_comment','text',list)
 
 	friend = Friend(username, password)
 	list = friend.get_friend()
@@ -27,7 +27,7 @@ def execute(username, password):
 
 	like = Like(username, password)
 	list = like.get_like()
-	like.save('facebook_feedback_like_2017-11-13','text',list)
+	like.save('facebook_feedback_like','text',list)
 
 	mention = Mention(username, password)
 	list = mention.get_mention()
