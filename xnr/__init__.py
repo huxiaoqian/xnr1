@@ -109,15 +109,11 @@ def create_app():
     app.register_blueprint(facebookxnrcreateModule)
     app.register_blueprint(facebookxnrwarningModule)
     app.register_blueprint(facebookxnrmonitorModule)
-<<<<<<< HEAD
-    app.register_blueprint(facebookxnrknowledgebasemanagementModule)    
     
-=======
     app.register_blueprint(facebookxnrmanageModule)
     app.register_blueprint(facebookxnrknowledgebasemanagementModule)
     app.register_blueprint(facebookxnrreportmanageModule)    
 
->>>>>>> 5afef8bc9a3b29dd19e8e07f1e2d49378563cff3
     app.register_blueprint(twitterxnrcreateModule)
     app.register_blueprint(twitterxnrwarningModule)
     app.register_blueprint(twitterxnrmonitorModule)
