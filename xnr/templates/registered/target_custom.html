@@ -40,7 +40,7 @@
             <a href="#one" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;&nbsp;虚拟人定制</a>
         </li>
         <li role="presentation">
-            <a href="#two" role="tab" data-toggle="tab"><b class="icon icon-globe"></b>&nbsp;&nbsp;领域定制</a>
+            <a href="#two" role="tab" data-toggle="tab" id="domainYes"><b class="icon icon-globe"></b>&nbsp;&nbsp;领域定制</a>
         </li>
         <li role="presentation">
             <a href="#three" role="tab" data-toggle="tab"><b class="icon icon-github"></b>&nbsp;&nbsp;角色定制</a>
@@ -444,7 +444,10 @@
         defalutDomain='推特测试1';defalutRole='商业人士';
     }
     $('.buildNew').on('click',function () {
-        window.open('/knowledge/domainLibrary/?flag='+flag);
+        //window.open('/knowledge/domainLibrary/?flag='+flag);
+        var e =document.createEvent('MouseEvents');
+        e.initEvent('click',true,true);
+        document.getElementById('domainYes').dispatchEvent(e);
     });
     function importModal(){
 //        $("#example_modal").trigger("click");

@@ -9,7 +9,10 @@ from global_utils import flow_text_index_name_pre,group_message_index_name_pre,x
                         fb_bci_index_name_pre, tw_bci_index_name_pre, facebook_flow_text_index_name_pre,\
                         twitter_flow_text_index_name_pre
 from global_config import R_BEGIN_TIME,S_TYPE
-from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE
+from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE, FB_FLOW_TEXT_START_DATE, TW_FLOW_TEXT_START_DATE
+
+def ts2datetime_full(ts):
+    return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(ts))
 
 def unix2hadoop_date(ts):
     return time.strftime('%Y_%m_%d', time.localtime(ts))
@@ -48,6 +51,10 @@ def ts2HourlyTime(ts, interval):
 
 def ts2datetime_full(ts):
     return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(ts))
+    
+def full_datetime2ts(date):
+    
+    return int(time.mktime(time.strptime(date,'%Y-%m-%d %H:%M:%S')))
 
 def ts2datehour(ts):
     return time.strftime('%Y-%m-%d %H:%M', time.localtime(ts))
@@ -70,9 +77,11 @@ def get_db_num(timestamp):
         db_number = 1
     return db_number
 
-def get_flow_text_index_list(date_range_end_ts):
+def get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -81,9 +90,11 @@ def get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
-def fb_get_flow_text_index_list(date_range_end_ts):
+def fb_get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -92,9 +103,11 @@ def fb_get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
-def tw_get_flow_text_index_list(date_range_end_ts):
+def tw_get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -234,6 +247,38 @@ def get_fb_bci_index_list(date_range_end_ts):
     
     return index_name_list
 
+def get_fb_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):
+    index_name_list=[]
+    date_range_start_ts=FB_FLOW_TEXT_START_DATE
+    if ts2datetime(date_range_start_ts) != ts2datetime(date_range_end_ts):
+        iter_date_ts=date_range_end_ts
+        while iter_date_ts >= date_range_start_ts:
+            date_range_start_date=ts2datetime(iter_date_ts)
+            index_name=index_name_pre+date_range_start_date
+            index_name_list.append(index_name)
+            iter_date_ts=iter_date_ts-DAY
+    else:
+        date_range_start_date=ts2datetime(date_range_start_ts)
+        index_name=index_name_pre+date_range_start_date
+        index_name_list.append(index_name)
+    return index_name_list
+
+def get_tw_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):
+    index_name_list=[]
+    date_range_start_ts=TW_FLOW_TEXT_START_DATE
+    if ts2datetime(date_range_start_ts) != ts2datetime(date_range_end_ts):
+        iter_date_ts=date_range_end_ts
+        while iter_date_ts >= date_range_start_ts:
+            date_range_start_date=ts2datetime(iter_date_ts)
+            index_name=index_name_pre+date_range_start_date
+            index_name_list.append(index_name)
+            iter_date_ts=iter_date_ts-DAY
+    else:
+        date_range_start_date=ts2datetime(date_range_start_ts)
+        index_name=index_name_pre+date_range_start_date
+        index_name_list.append(index_name)
+    return index_name_list
+    
 def get_twitter_flow_text_index_list(date_range_end_ts):
     ## 不包括 date_range_end_ts 这天
     index_name_list = []

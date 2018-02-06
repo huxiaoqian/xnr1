@@ -12,7 +12,8 @@ from global_utils import facebook_user_warning_index_name_pre,facebook_user_warn
 						facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
 						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
 						facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
-						weibo_date_remind_index_name,weibo_date_remind_index_type
+						weibo_date_remind_index_name,weibo_date_remind_index_type,\
+						facebook_warning_corpus_index_name,facebook_warning_corpus_index_type
 
 NOW_DATE=ts2datetime(int(time.time()))
 print 'NOW_DATE:',NOW_DATE
@@ -285,6 +286,104 @@ def lookup_date_info(today_datetime):
     return date_result
 
 
+
+def facebook__warning_corpus_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5,
+			'analysis':{
+				'analyzer':{
+					'my_analyzer':{
+					'type': 'pattern',
+					'pattern': '&'
+						}
+					}
+				}
+		},
+		'mappings':{
+			facebook_warning_corpus_index_type:{
+				'properties':{
+					'xnr_user_no':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'content_type':{  # friends - 好友，unfriends - 非好友
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'warning_source':{       #预警来源
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'create_time':{
+						'type':'long'
+					},				
+					'validity':{   #预警有效性，有效1，无效-1
+						'type':'long'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'uid':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'sensitive':{
+						'type':'long'
+					},	
+					'sentiment':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'sensitive_words_string':{
+						'type': 'string',
+						'analyzer': 'my_analyzer'
+					},
+					'text':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'fid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'keywords_string':{
+						'type': 'string',
+						'analyzer': 'my_analyzer'
+					},
+					'sensitive_words_dict':{
+						'type': 'string',
+						'index': 'not_analyzed'
+					},
+					'keywords_dict':{
+						'type': 'string',
+						'index': 'not_analyzed'
+					},
+					'share':{
+						'type':'long'
+					},
+					'comment':{
+						'type':'long'
+					},
+					'favorite':{
+						'type':'long'
+					},
+					'nick_name':{
+						'type':'string',
+						'index':'not_analyzed'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=facebook_warning_corpus_index_name):
+		es.indices.create(index=facebook_warning_corpus_index_name,body=index_info,ignore=400)
+		print 'finish corpus index'
+
+
+
 if __name__ == '__main__':
 	if S_TYPE == 'test':
 		datename = ts2datetime(datetime2ts(FACEBOOK_FLOW_START_DATE) - DAY)
@@ -302,5 +401,6 @@ if __name__ == '__main__':
 	date_result=lookup_date_info(today_datetime)
 	#print 'date_result:',date_result
 	facebook_timing_warning_mappings(date_result)
+	facebook__warning_corpus_mappings()
 
 
