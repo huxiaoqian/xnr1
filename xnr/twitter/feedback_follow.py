@@ -23,11 +23,13 @@ class Follower():
 				id = each
 				name = self.api.get_user(each).name
 				screen_name = self.api.get_user(each).screen_name
+				root_uid = self.api.me().id
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time
+					'update_time':self.update_time,
+					'root_uid':root_uid
 				}
 				self.list.append(item)
 		except Exception as e:
@@ -35,11 +37,13 @@ class Follower():
 				id = each
 				name = self.api.get_user(each).name
 				screen_name = self.api.get_user(each).screen_name
+				root_uid = self.api.me().id
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time
+					'update_time':self.update_time,
+					'root_uid':root_uid
 				}
 				self.list.append(item)
 		return self.list
@@ -50,7 +54,7 @@ class Follower():
 
 if __name__ == '__main__':
 	current_ts = int(time.time())
-	follower = Follower('8617078448226','xnr123456',current_ts,"902921493155217409") #传uid
+	follower = Follower('8617078448226','xnr123456',current_ts) #传uid
 	
 	list = follower.get_follow()
 	follower.save('twitter_feedback_follow', 'text', list)

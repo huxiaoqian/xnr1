@@ -5,8 +5,8 @@ use to save table info in database
 import redis
 from elasticsearch import Elasticsearch
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
-from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
-                          ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT, \
+from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, ES_INTELLIGENT_PORT, \
+                          ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
                           REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
                           REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
@@ -15,6 +15,7 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT, \
 
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
 #module1.2:config es table---index_name, doc_type
 
 # week retweet/be_retweet relation es
@@ -117,6 +118,32 @@ wx_xnr_data_path = 'xnr/wx/data'
 wx_xnr_qrcode_path = 'xnr/static/images/WX'
 WX_LOGIN_PATH = 'xnr/wx/run_bot.py' #使用命令行开启run_bot()的subprocess的程序地址
 sensitive_words_path = 'xnr/wx/sensitive_words.txt'
+
+'''
+公共mappings
+'''
+
+writing_task_index_name = 'intel_writing_task'
+writing_task_index_type = 'task'
+
+#weibo_topic_index_name = 'task_id'
+weibo_topic_type = 'weibo'
+facebook_topic_type = 'facebook' 
+twitter_topic_type = 'twitter' 
+
+intel_opinion_results_index_name = 'intel_opinion_results'
+intel_type_all = 'all'
+intel_type_follow = 'follow'
+intel_type_influence = 'influence'
+intel_type_sensitive = 'sensitive'
+
+topics_river_index_name = 'topic_river_results'
+topics_river_index_type = 'river'
+
+timeline_index_name = 'timeline_results'
+timeline_index_type = 'timeline'
+
+
 
 '''
 以下为微博相关定义
@@ -246,6 +273,7 @@ index_sensing = "manage_sensing_task"
 type_sensing = "task"
 id_sensing = "social_sensing_task"
 social_sensing_index_name = 'social_sensing_text'
+social_sensing_index_name_pre = 'social_sensing_text_'
 social_sensing_index_type = 'text'
 
 weibo_private_white_uid_index_name = 'weibo_private_white_uid'
@@ -579,6 +607,9 @@ tw_hot_subopinion_results_index_type = 'subopinion'
 #module2.1: init redis
 def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
     return redis.StrictRedis(host, port)
+
+R_WRITING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+writing_task_queue_name = 'intelligent_writing_task'
 
 r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
