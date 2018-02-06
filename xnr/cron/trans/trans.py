@@ -4,6 +4,12 @@ from baidu_trans import translate as baidu_trans
 from youdao_trans import translate as youdao_trans
 from langconv import *
 import time
+import os
+from aip import AipSpeech
+import sys
+sys.path.append('../../')
+sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr'))
+from global_config import BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY
 
 '''
 q为待翻译的语句组成的列表
@@ -42,6 +48,30 @@ def simplified2traditional(sentence):
     sentence = Converter('zh-hant').convert(sentence)  
     return sentence  
 
+# 读取文件
+def get_file_content(filePath):
+    with open(filePath, 'rb') as fp:
+        return fp.read()
+
+#语音转文本
+def voice2text(voice_path):
+    #转换MP3文件为WAV格式文件
+    mp3_file = voice_path
+    wav_file = voice_path.split('.mp3')[0] + '.wav'
+    cmd = ' lame --decode ' + mp3_file + ' ' + wav_file
+    os.popen(cmd)
+    #调用百度语音API，进行识别
+    client = AipSpeech(BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)
+    res = client.asr(speech=get_file_content(wav_file), format='wav', rate=8000, options={'lan': 'zh',})
+    try:
+        if not res['err_no']:   #成功
+            return res['result'][0]
+        else:
+            return res['err_msg']
+    except Exception,e:
+        print e
+    return False
+
 if __name__ == '__main__':
     # '''
     #q = ['안녕하세요.', 'Hello world','test',"Jason Gao shared Joel Wang's post."]
@@ -68,3 +98,7 @@ if __name__ == '__main__':
     for t in ti:
         traditional_sentence = simplified2traditional(t)
         print(traditional_sentence)
+
+    voice_path = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice/2018-01-03/a.mp3'
+    print os.path.isfile(voice_path)
+    print voice2text(voice_path)
