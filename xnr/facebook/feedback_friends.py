@@ -5,6 +5,7 @@ from launcher import Launcher
 import time
 from Elasticsearch_fb import Es_fb
 import re
+import json
 
 class Friend():
 	def __init__(self, username, password):
@@ -39,6 +40,8 @@ class Friend():
 				break
 			else:
 				time.sleep(3)
+		self.data_gt = self.driver.find_element_by_xpath('//div[@id="contentArea"]/div[1]').get_attribute('data-gt')
+		self.root_uid = json.loads(self.data_gt)['profile_owner']
 		self.es = Es_fb()
 		self.list = []
 		self.current_ts = int(time.time())
@@ -53,7 +56,7 @@ class Friend():
 				update_time = self.update_time
 			except Exception as e:
 				pass
-			self.list.append({'photo_url':pic_url,'nick_name':name,'uid':user_id,'update_time':update_time})
+			self.list.append({'root_uid':self.root_uid,'photo_url':pic_url,'nick_name':name,'uid':user_id,'update_time':update_time})
 		return self.list
 
 	def save(self, indexName, typeName, list):

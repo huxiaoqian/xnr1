@@ -8,7 +8,7 @@ from save_utils import save_content_recommendation_results,save_subopnion_result
 
 
 # 引入内容推荐分类器
-from content_recommend.process_summary import summary_main
+#from content_recommend.process_summary import summary_main
 
 # 引入子观点分析分类器
 import sys

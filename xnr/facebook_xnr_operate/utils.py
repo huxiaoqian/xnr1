@@ -25,9 +25,9 @@ from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_fol
 from xnr.utils import fb_uid2nick_name_photo
 from xnr.time_utils import datetime2ts, ts2datetime
 from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP,\
-                    USER_POETRAIT_NUMBER, BCI_USER_NUMBER
+                    USER_POETRAIT_NUMBER, BCI_USER_NUMBER, WRITING_PATH
 
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question')
+sys.path.append(WRITING_PATH)
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
 from tuling_test import get_message_from_tuling
 
