@@ -35,6 +35,7 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_private_white_uid_index_type,daily_interest_index_name_pre,\
                             daily_interest_index_type
 
+
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,\
                             get_timeset_indexset_list
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
@@ -1959,6 +1960,60 @@ def get_add_private_white_uid(xnr_user_no,white_uid_string):
 	return mark
 
 
+def get_follower_opinion_wb(task_detail):
+
+    xnr_user_no = task_detail['xnr_user_no']
+
+    f_list = [] 
+    t_list = []
+
+    try:
+        result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+            id=xnr_user_no)['_source']
+        f_list = result['followers_list']
+
+    except:
+        pass
+        
+    query_body = {
+            'query':{
+                'match_all':{}
+            },
+            'size':100,
+            'sort':{'detect_ts':{'order':'desc'}}
+        }
+
+
+    if S_TYPE != 'test':
+        social_sensing_index_name = social_sensing_index_name + '_' + ts2datetime(int(time.time))
+
+
+    t_results = es.search(index=social_sensing_index_name,doc_type=social_sensing_index_type,\
+        body=query_body)['hits']['hits']
+
+    if t_results:
+        for t_result in t_results:
+            text = t_result['_source']['text']
+            t_list.append(text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
 
 

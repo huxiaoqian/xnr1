@@ -13,6 +13,7 @@ import math
 import numpy as np
 from config import *
 
+
 class TopkHeap(object):
     def __init__(self, k):
         self.k = k

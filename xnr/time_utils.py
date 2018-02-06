@@ -11,6 +11,9 @@ from global_utils import flow_text_index_name_pre,group_message_index_name_pre,x
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE
 
+def ts2datetime_full(ts):
+    return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(ts))
+
 def unix2hadoop_date(ts):
     return time.strftime('%Y_%m_%d', time.localtime(ts))
 
@@ -70,9 +73,11 @@ def get_db_num(timestamp):
         db_number = 1
     return db_number
 
-def get_flow_text_index_list(date_range_end_ts):
+def get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -81,9 +86,11 @@ def get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
-def fb_get_flow_text_index_list(date_range_end_ts):
+def fb_get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -92,9 +99,11 @@ def fb_get_flow_text_index_list(date_range_end_ts):
 
     return index_name_list
 
-def tw_get_flow_text_index_list(date_range_end_ts):
+def tw_get_flow_text_index_list(date_range_end_ts,days=7):
     index_name_list = []
     days_num = MAX_FLOW_TEXT_DAYS
+    if days != 7:
+        days_num = days
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)

@@ -451,10 +451,10 @@ if __name__ == '__main__':
 	#current_time = time.time()
 	#index_name = index_name_pre + ts2datetime(current_time)
 
-	index_name = ''
-	facebook_feedback_like_mappings(index_name)
-	facebook_feedback_retweet_mappings(index_name)
-	facebook_feedback_at_mappings(index_name)
-	facebook_feedback_comment_mappings(index_name)
-	facebook_feedback_private_mappings(index_name)
+	#index_name = ''
+	# facebook_feedback_like_mappings(index_name)
+	# facebook_feedback_retweet_mappings(index_name)
+	# facebook_feedback_at_mappings(index_name)
+	# facebook_feedback_comment_mappings(index_name)
+	# facebook_feedback_private_mappings(index_name)
 	facebook_feedback_friends_mappings()
