@@ -1028,7 +1028,7 @@ def get_show_comment(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'comment_type':'receive'}}
+                    # {'term':{'comment_type':'receive'}}
                 ]
             }
         },
@@ -1224,7 +1224,7 @@ def get_direct_search(task_detail):
 
             
                 if S_TYPE == 'test':
-                    current_time = datetime2ts(S_DATE)
+                    current_time = datetime2ts(S_DATE_FB)
                 else:
                     current_time = int(time.time())
 
@@ -1314,8 +1314,8 @@ def get_related_recommendation(task_detail):
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_traditional_keyword+'*'}})
 
-
     recommend_list_r = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+
     recommend_list = []
     if recommend_list_r.has_key('followers_list'):
         recommend_list = recommend_list_r['followers_list']
@@ -1328,7 +1328,8 @@ def get_related_recommendation(task_detail):
     if sort_item != 'friend':
         uid_list = []
         if sort_item == 'influence':
-            sort_item = 'user_fansnum'
+            # sort_item = 'user_fansnum'
+            sort_item = 'share'
         query_body_rec = {
             'query':{
                 'bool':{
@@ -1344,14 +1345,15 @@ def get_related_recommendation(task_detail):
         }
 
         es_rec_result = es.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        
+  
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)
             
             avg_sort_uid_dict[uid] = {}
 
-            if sort_item == 'user_fansnum':
+            # if sort_item == 'user_fansnum':
+            if sort_item == 'share':
                 avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
             else:
                 avg_sort_uid_dict[uid]['sort_item_value'] = round(item['avg_sort']['value'],2)
@@ -1393,9 +1395,8 @@ def get_related_recommendation(task_detail):
                 
                 avg_sort_uid_dict[uid] = {}
                 avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
-                
-    results_all = []
 
+    results_all = []
     for uid in uid_list:
         query_body = {
             'query':{
@@ -1407,7 +1408,7 @@ def get_related_recommendation(task_detail):
             }
         }
 
-        es_results = es.search(index=facebook_user_index_name,doc_type=facebook_user_index_type,body=query_body)['hits']['hits']
+        es_results = es.search(index=fb_portrait_index_name,doc_type=fb_portrait_index_type,body=query_body)['hits']['hits']
         if es_results:
             for item in es_results:
                 uid = item['_source']['uid']
@@ -1420,19 +1421,34 @@ def get_related_recommendation(task_detail):
                 item['_source']['fb_type'] = fb_type
                 item['_source']['sensor_mark'] = sensor_mark
 
+
+
+
+
+
+
                 if sort_item == 'friend':
                     if S_TYPE == 'test':
-                        item['_source']['fansnum'] = item['_source']['fansnum']
+                        # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
+                        item['_source']['fansnum'] = 0
                     else:
                         item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
                 elif sort_item == 'sensitive':
                     item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
-                    item['_source']['fansnum'] = item['_source']['fansnum']
+                    # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
+                    item['_source']['fansnum'] = 0
                 else:
                     item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
 
+
+
+
+
+
+
+
                 if S_TYPE == 'test':
-                    current_time = datetime2ts(S_DATE)
+                    current_time = datetime2ts(S_DATE_FB)
                 else:
                     current_time = int(time.time())
 
@@ -1442,7 +1458,7 @@ def get_related_recommendation(task_detail):
                         'bool':{
                             'must':[
                                 {'term':{'uid':uid}},
-                                {'terms':{'message_type':[1,3]}}
+                                # {'terms':{'message_type':[1,3]}}
                             ]
                         }
                     },
