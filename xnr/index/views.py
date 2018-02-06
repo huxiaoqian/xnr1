@@ -65,15 +65,13 @@ def text_trans():
             return json.dumps(res)
     return None 
 
-#暂不可用
+#语音转文字
 @mod.route('/voice_trans/')
 def voice_trans():
     voice_path = request.args.get('voice_path', '')
     if voice_path:
-        #get voice
-        voice = None
         #voice trans
-        res = utils_voice_trans(voice)
+        res = utils_voice_trans(voice_path)
         if res:
             return json.dumps(res)
     return None 

@@ -116,6 +116,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -197,6 +198,7 @@ function calendar(data){
                         '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                        '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                         // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -285,6 +287,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -363,6 +366,7 @@ function calendar(data){
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                     '       <div class="center_rel">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                     // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -447,6 +451,7 @@ function calendar(data){
                 '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
                 '       <div class="center_rel">'+
                 '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                 '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
                 // '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="创建日期"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                 '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="距离今天过去多久"><i class="icon icon-bullhorn"></i>&nbsp;&nbsp;'+agoDay+'</span>  &nbsp;&nbsp;'+
@@ -466,39 +471,6 @@ function calendar(data){
 
 function startTable(index,key) {
     weibo(index,contentList['exo_'+index],key);
-}
-
-// 转发===评论===点赞
-function retComLike(_this) {
-    var txt=$(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid=$(_this).parents('.center_rel').find('.uid').text();
-    var fid=$(_this).parents('.center_rel').find('.fid').text();
-    var middle=$(_this).attr('type');
-    var opreat_url;
-    if (middle=='retweet_operate'){
-        opreat_url='/facebook_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&fid='+fid+'&uid='+uid;
-        public_ajax.call_request('get',opreat_url,postYES);
-    }else if (middle=='comment_operate'){
-        $(_this).parents('.center_rel').find('.commentDown').show();
-    }else {
-        opreat_url='/facebook_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-            '&fid='+fid+'&uid='+uid;
-        public_ajax.call_request('get',opreat_url,postYES);
-    }
-}
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var fid = $(_this).parents('.center_rel').find('.fid').text();
-    if (txt!=''){
-        var post_url='/facebook_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&fid='+fid+'&uid='+uid;
-        public_ajax.call_request('get',post_url,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
 }
 //操作返回结果
 function postYES(data) {
@@ -592,12 +564,12 @@ function weibo(idx,data,words) {
                         };
                     };
                     str_new+=
-                        '<div class="everySpeak">'+
+                        '<div class="everySpeak everyUser">'+
                         '        <div class="speak_center">'+
                         '            <div class="center_rel center_rel_weibo" style="text-align: left;">'+
                         '                <img src="'+img+'" alt="" class="center_icon">'+
                         '                <a class="center_1" style="color: #f98077;">'+name+'</a>'+
-                        '                <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                        '                <a class="fid" style="display: none;">'+item.fid+'</a>'+
                         '                <a class="uid" style="display: none;">'+item.uid+'</a>'+
                         '                <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
@@ -607,19 +579,27 @@ function weibo(idx,data,words) {
                         '                <span class="center_2">'+txt2+'</span>'+
                         '                <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '                <div class="center_3">'+
-                        '                    <span class="cen3-2" onclick="retComLike(this)" type="retweet_operate"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.share+'</b>）</span>'+
-                        '                    <span class="cen3-3" onclick="retComLike(this)" type="comment_operate"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                        '                    <span class="cen3-4" onclick="retComLike(this)" type="like_operate"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
+                        '                    <span class="cen3-1" onclick="retweet(this,\''+operateType+'\')"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（<b class="forwarding">'+item.share+'</b>）</span>'+
+                        '                    <span class="cen3-2" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
+                        '                    <span class="cen3-3" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;喜欢(<b class="like">'+item.favorite+'</b>)</span>'+
                         '                    <span class="cen3-4" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
                         '                    <span class="cen3-5" onclick="joinPolice(this,\'言论\')"><i class="icon icon-plus-sign"></i>&nbsp;&nbsp;加入预警库</span>'+
                         '                    <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '                    <span class="cen3-5" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
                         '                    <span class="cen3-6" onclick="oneUP(this,\'言论\')"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;上报</span>'+
                         '                </div>'+
-                        '               <div class="commentDown" style="width: 100%;display: none;">'+
-                        '                   <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '                   <span class="sureCom" onclick="comMent(this)">评论</span>'+
-                        '               </div>'+
+                        '                <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '                    <input type="text" class="forwardingIput" placeholder="分享内容"/>'+
+                        '                    <span class="sureFor" onclick="forwardingBtn()">分享</span>'+
+                        '                </div>'+
+                        '                <div class="commentDown" style="width: 100%;display: none;">'+
+                        '                    <input type="text" class="comtnt" placeholder="评论内容"/>'+
+                        '                    <span class="sureCom" onclick="comMent(this,\''+operateType+'\')">评论</span>'+
+                        '                </div>'+
+                        '                <div class="emailDown" style="width: 100%;display: none;">'+
+                        '                    <input type="text" class="infor" placeholder="私信内容"/>'+
+                        '                    <span class="sureEmail" onclick="letter(this)">发送</span>'+
+                        '                </div>'+
                         '            </div>'+
                         '        </div>';
                     return str_new;

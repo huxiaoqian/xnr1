@@ -523,6 +523,10 @@ function weiboData(data) {
                         '               <span class="cen3-9" title="机器人回复" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '               <span class="cen3-4" title="加入语料库" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
+                        '           <div class="forwardingDown" style="width: 100%;display: none;">'+
+                        '               <input type="text" class="forwardingIput" placeholder="转推内容"/>'+
+                        '               <span class="sureFor" onclick="forwardingBtn()">转推</span>'+
+                        '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
                         '               <span class="sureCom" onclick="comMent(this)">评论</span>'+
@@ -542,39 +546,6 @@ function weiboData(data) {
     $('#postRelease p').hide();
     $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-//评论
-function showInput(_this) {
-    $(_this).parents('.center_rel').find('.commentDown').show();
-};
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var tid = $(_this).parents('.center_rel').find('.tid').text();
-    if (txt!=''){
-        var post_url_3='/twitter_xnr_operate/comment_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+
-            '&text='+txt+'&tid='+tid+'&uid='+uid;
-        public_ajax.call_request('get',post_url_3,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-//转发
-function retweet(_this) {
-    // var txt = $(_this).parents('.center_rel').find('.center_2').text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    // var uid = $(_this).parents('.post_perfect').find('.uid').text();
-    var tid = $(_this).parents('.center_rel').find('.tid').text();
-    var post_url_2='/twitter_xnr_operate/retweet_operate/?tweet_type='+operateType+'&xnr_user_no='+ID_Num+'&tid='+tid;
-    public_ajax.call_request('get',post_url_2,postYES)
-}
-//点赞
-function thumbs(_this) {
-    var uid = $(_this).parents('.center_rel').find('.uid').text();
-    var tid = $(_this).parents('.center_rel').find('.tid').text();
-    var post_url_4='/twitter_xnr_operate/like_operate/?xnr_user_no='+ID_Num+
-        '&tid='+tid+'&uid='+uid;
-    public_ajax.call_request('get',post_url_4,postYES);
-};
 //操作返回结果
 function postYES(data) {
     var f='';

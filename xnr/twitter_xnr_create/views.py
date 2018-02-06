@@ -151,10 +151,15 @@ def ajax_get_xnr_info():
 def ajax_modify_base_info():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['active_time'] = request.args.get('active_time','')
-    task_detail['day_post_average'] = request.args.get('day_post_average','') 
-    # task_detail['daily_interests'] = request.args.get('daily_interests','') # 提交的日常兴趣，以中文逗号分隔“，”
-    task_detail['monitor_keywords'] = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    active_time = request.args.get('active_time','')
+    day_post_average = request.args.get('day_post_average','')  # 以“-”分隔，如2-4 表示2-4条
+    monitor_keywords = request.args.get('monitor_keywords','')  # 提交的关键词，以中文逗号分隔“，”
+    if active_time:
+        task_detail['active_time'] = active_time
+    if day_post_average:
+        task_detail['day_post_average'] = day_post_average
+    if monitor_keywords: 
+        task_detail['monitor_keywords'] = monitor_keywords
     mark = get_modify_base_info(task_detail)    
     return json.dumps(mark)
 

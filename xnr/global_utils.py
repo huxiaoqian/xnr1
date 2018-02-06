@@ -331,6 +331,7 @@ weibo_xnr_corpus_index_name = 'weibo_corpus'
 weibo_xnr_corpus_index_type = 'text'
 
 ## 上报管理
+weibo_report_management_index_name_pre = 'weibo_report_management_'
 weibo_report_management_index_name = 'weibo_report_management'
 weibo_report_management_index_type = 'report'
 
@@ -398,6 +399,10 @@ facebook_feedback_like_index_name_pre = 'facebook_feedback_like_'
 facebook_feedback_like_index_name = 'facebook_feedback_like'
 facebook_feedback_like_index_type = 'text'
 
+facebook_feedback_fans_index_name_pre = 'facebook_feedback_fans_'
+facebook_feedback_fans_index_name = 'facebook_feedback_fans'
+facebook_feedback_fans_index_type = 'text'
+
 facebook_feedback_friends_index_name_pre = 'facebook_feedback_friends_'
 facebook_feedback_friends_index_name = 'facebook_feedback_friends'
 facebook_feedback_friends_index_type = 'text'
@@ -460,6 +465,30 @@ facebook_timing_warning_index_type = 'text'
 facebook_keyword_count_index_name = 'facebook_keyword_count'
 facebook_keyword_count_index_type = 'text'
 
+## 上报管理
+facebook_report_management_index_name_pre = 'facebook_report_management_'
+facebook_report_management_index_type = 'report'
+
+# 语料库 -- 主题和日常
+facebook_xnr_corpus_index_name = 'facebook_corpus'
+facebook_xnr_corpus_index_type = 'text'
+
+#预警库
+facebook_warning_corpus_index_name = 'facebook_warning_corpus'
+facebook_warning_corpus_index_type = 'text'
+
+#社区预警
+facebook_community_target_user_index_name_pre = 'facebook_community_target_user_'
+facebook_community_target_user_index_type = 'user'
+
+facebook_select_community_index_name_pre = 'facebook_select_community_'
+facebook_select_community_index_type = 'community'
+
+facebook_detail_community_index_name_pre = 'facebook_detail_community_'
+facebook_detail_community_index_type = 'community'
+
+facebook_trace_community_index_name_pre = 'facebook_trace_community_'
+facebook_trace_community_index_type = 'text'
 
 # twitter
 

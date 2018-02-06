@@ -6,7 +6,7 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from utils import show_personnal_warning,show_speech_warning,show_date_warning,show_event_warming,\
-                  update_fb_flow_text
+                  report_warming_content,update_fb_flow_text
 
 mod = Blueprint('facebook_xnr_warning', __name__, url_prefix='/facebook_xnr_warning')
 
@@ -56,6 +56,47 @@ def ajax_show_event_warming():
 	return json.dumps(results)
 
 
+#上报
+@mod.route('/report_warming_content/', methods=['POST'])
+def ajax_report_warming_content():
+	task_detail=dict()
+	if request.method == 'POST':
+		# print 'post method !!'
+		data = json.loads(request.data)
+		# print 'data:',data
+		task_detail['report_type']=data['report_type'] #预警类型
+		# print 'report_type:',task_detail['report_type']
+		task_detail['report_time']=int(time.time())
+		task_detail['xnr_user_no']=data['xnr_user_no']
+		task_detail['event_name']=data['event_name']    #事件名称
+		task_detail['uid']=data['uid']                 #人物预警uid
+
+		task_detail['report_id']=data['report_id']   #上报内容的id
+
+		#获取主要参与用户信息
+		task_detail['user_info']=data['user_info']   #user_info=[uid,uid,……]	
+		#获取典型信息
+		task_detail['fb_info']=data['fb_info']   #fb_info=[{'fid':*,'timestamp':*},{'fid':*,'timestamp':*},……]
+        
+        #仅时间预警需要，其他的设为空
+        task_detail['date_time']=data['date_time']
+	# print 'type',type(task_detail),task_detail
+	results=report_warming_content(task_detail)
+	return json.dumps(results)
+
+
+#加入预警库
+@mod.route('/addto_warning_corpus/')
+def ajax_addto_warning_corpus():
+	task_detail=dict()
+	task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	task_detail['warning_source']=request.args.get('warning_source','')
+	task_detail['uid']=request.args.get('uid','')
+	task_detail['fid']=request.args.get('fid','')
+	task_detail['timestamp']=int(request.args.get('timestamp',''))
+	task_detail['create_time']=int(time.time())
+	results=addto_warning_corpus(task_detail)
+	return json.dumps(results)
 
 #http://219.224.134.213:9209/facebook_xnr_warning/update_fb_flow_text
 @mod.route('/update_fb_flow_text/')

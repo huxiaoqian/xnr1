@@ -3,6 +3,8 @@ if (flag==1){
     field_user_url='/weibo_xnr_operate/show_domain_second/';
 }else if (flag==4){
     field_user_url='/facebook_xnr_create/show_domain/';
+}else if (flag==5){
+    field_user_url='/twitter_xnr_create/show_domain/';
 }
 public_ajax.call_request('get',field_user_url,field_user);
 var domainName='';
@@ -16,9 +18,11 @@ function field_user(data) {
             '</label>';
     }
     $('#container .tit-2 .field-1').html(str);
+    $('#container .tit-2 .field-1 input[value="'+defalutDomain+'"]').attr('checked','true');
+    $domain(defalutDomain);
 }
 function $domain(_this) {
-    domainName=$(_this).parent().attr('title');
+    domainName=$(_this).parent().attr('title')||_this;
     var domain_url='/weibo_xnr_create/domain2role/?domain_name='+domainName;
     public_ajax.call_request('get',domain_url,domain);
 }
@@ -36,6 +40,7 @@ function domain(data) {
         }
     }
     $('#container .tit-3 .field-2').html(str);
+    $('#container .tit-3 .field-2 input[value="'+defalutRole+'"]').attr('checked','true');
     $('#container .tit-3').show();
 }
 function allDataFun(_this) {
