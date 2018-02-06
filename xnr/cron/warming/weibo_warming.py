@@ -569,6 +569,7 @@ def create_date_warning(today_datetime):
             
             weibo_timing_warning_index_name=weibo_timing_warning_index_name_pre+warming_date
             print weibo_timing_warning_index_name
+            mark = False
             if date_warming:
                 try:
                     es_xnr.index(index=weibo_timing_warning_index_name,doc_type=weibo_timing_warning_index_type,body=item['_source'],id=task_id)
@@ -586,19 +587,24 @@ def create_date_warning(today_datetime):
     return date_result
 
 
-def lookup_weibo_date_warming(keywords,today_datetime):
+def lookup_weibo_date_warming(keywords, today_datetime):
     keyword_query_list=[]
     for keyword in keywords:
-        keyword_query_list.append({'wildcard':{'text':'*'+keyword.encode('utf-8')+'*'}})
+        # keyword = keyword.encode('utf-8')
+        print 'keyword:',keyword, type(keyword)
+        keyword_query_list.append({'wildcard':{'text': '*'+keyword+'*'}})
+        # keyword_query_list.append({'wildcard':{'text':{'wildcard':'*'+keyword.encode('utf-8')+'*'}}})
 
     flow_text_index_name=get_day_flow_text_index_list(today_datetime)
+    
+    # keyword_query_list.append({'range':{'sensitive':{'gte':1}}})
 
     query_body={
         'query':{
             'bool':
-            {
-                'should':keyword_query_list,
-                'must':{'range':{'sensitive':{'gte':1}}}
+            { 
+                # 'must':[{'range':{'sensitive':{'gte':1}}}],
+                'should': keyword_query_list
             }
         },
         'size':MAX_WARMING_SIZE,
@@ -608,8 +614,10 @@ def lookup_weibo_date_warming(keywords,today_datetime):
         #try:
         temp_result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
+        print keyword_query_list
         for item in temp_result:
-            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+            print 'item-text:', item['_source']['text'], type(item['_source']['text'])
+            # item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
             date_result.append(item['_source'])
         #except:
         #        date_result=[]
@@ -644,13 +652,13 @@ def create_weibo_warning():
             #人物行为预警
             #personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            # speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
             # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
-    #date_mark=create_date_warning(today_datetime)
+    date_mark=create_date_warning(today_datetime)
 
     return True
 

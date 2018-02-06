@@ -176,10 +176,10 @@
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
                         <div class="ttime">
-                            <input type="text" size="22" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                            <input type="text" size="22" id="_timing1" class="form_datetime start disableCss" placeholder="开始时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                            <input type="text" size="22" id="_timing2" class="form_datetime end disableCss" placeholder="结束时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                             <input type="text" size="22" id="_timing3" class="remarks" placeholder="备注信息"
@@ -445,7 +445,7 @@
                     <img src="/static/images/icon.png" alt="">
                     <span style="font-size: 18px;font-weight: 900;color: #fff">重点关注用户</span>
                     <span class="add_user" data-toggle="modal" data-target="#addHeavyUser" title="添加新的重点用户">添加用户</span>
-                    <span class="del_user disableCss" title="请勾选您要删除的用户">删除用户</span>
+                    <span class="del_user disableCss" title="请勾选您要取消关注的用户">取消重点关注用户</span>
                 </div>
                 <div class="focus_main">
                     <div id="focus_main">
@@ -1191,6 +1191,22 @@
         }
     });
     //===================================以上====关于群可见后的操作=========================================
+    var tick_NY='no';
+    $('.timingss input').on('click',function() {
+        if (tick_NY=='no') {
+            tick_NY='yes';
+            $(".form_datetime").removeClass('disableCss');
+        } else {
+            tick_NY='no';
+            $(".form_datetime").addClass('disableCss');
+        }
+    })
+    $(".ttime").on('click',function() {
+        if (tick_NY=='no') {
+            $('#pormpt p').text('请先勾选左侧定时按钮。');
+            $('#pormpt').modal('show');
+        }
+    })
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,

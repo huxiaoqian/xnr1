@@ -217,7 +217,8 @@ def fb_add_friend(account_name,password, uid):
     try:
         print operation.add_friend(uid)
         mark = True
-    except:
+    except Exception,e:
+        print e
         mark = False
 
     return mark
@@ -257,5 +258,9 @@ operation.follow('100022568024116')
 #operation.comment('tl_unit_-8182132709408758851','100022568024116','12.26 test')
 #operation.share('tl_unit_-8182132709408758851','100022568024116','12.26 test')
 '''
-
+if __name__ == '__main__':
+    account_name = 'feifanhanmc@163.com'
+    password = 'han8528520258'
+    uid = '100023849442394'
+    print fb_add_friend(account_name,password, uid)
 

@@ -58,6 +58,22 @@
         margin:0 15px;
         cursor: pointer;
     }
+    #signOut {
+        position: fixed;
+        z-index: 99999;
+        right: 20px;
+        top: 20px;
+        padding: 5px 10px;
+        background: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+    }
+    #signOut a {color: white;}
+    #signOut:hover {
+        background: #2a2b2c;
+    }
     @media screen and (min-width:1370px) and (max-width:1920px) {
         .bg13 .monitor {
             top: 700px!important;
@@ -74,6 +90,9 @@
 </style>
 {% endblock %}
 {% block main %}
+<div id="signOut">
+    <span><i class="icon icon-signout"></i>&nbsp;<a href="/logout/">退出登录</a></span>
+</div>
 <div class="section section1">
 
     <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
@@ -483,7 +502,7 @@
         window.open('/behavioGauge/influeAssessTwitter/');
     });
     $('#knowledge').on('click',function () {
-        window.open('/registered/targetCustom/')
+        window.open('/registered/targetCustom/?flag=5')
     });
     $('#reportedmange').on('click',function () {
         window.open('/reportManage/management/?flag=5');
@@ -510,9 +529,9 @@
             }else {
                 id_or_name=userName;
             }
-            localStorage.setItem('user',encodeURI(userID));
-            localStorage.setItem('userRelName',encodeURI(userName));
-            localStorage.setItem('userName',encodeURI(id_or_name));
+            localStorage.setItem('userTW',encodeURI(userID));
+            localStorage.setItem('userTWRelName',encodeURI(userName));
+            localStorage.setItem('userTWName',encodeURI(id_or_name));
             $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
     });
@@ -523,7 +542,7 @@
     var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
-        url: "/weibo_xnr_create/show_weibo_xnr/?submitter="+admin,
+        url: "/twitter_xnr_create/show_tw_xnr/?submitter="+admin,
         async: true,
         dataType: "json",
         success: function (data) {
@@ -555,9 +574,9 @@
     });
     function downXnr(k1,k2) {
         $('#xnrName').text(k2+'（'+k1+'）').attr('title',k2+'（'+k1+'）');
-        localStorage.setItem('user',encodeURI(k1));
-        localStorage.setItem('userRelName',encodeURI(k2));
-        localStorage.setItem('userName',encodeURI(k2));
+        localStorage.setItem('userTW',encodeURI(k1));
+        localStorage.setItem('userTWRelName',encodeURI(k2));
+        localStorage.setItem('userTWName',encodeURI(k2));
     }
     function sameXnrPoint(data) {
         for (var k in data[0]){

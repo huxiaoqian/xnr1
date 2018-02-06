@@ -58,6 +58,22 @@
         margin:0 15px;
         cursor: pointer;
     }
+    #signOut {
+        position: fixed;
+        z-index: 99999;
+        right: 20px;
+        top: 20px;
+        padding: 5px 10px;
+        background: transparent;
+        border: 1px solid white;
+        border-radius: 5px;
+        cursor: pointer;
+        color: white;
+    }
+    #signOut a {color: white;}
+    #signOut:hover {
+        background: #2a2b2c;
+    }
     @media screen and (min-width:1370px) and (max-width:1920px) {
         .bg13 .monitor {
             top: 700px!important;
@@ -74,6 +90,9 @@
 </style>
 {% endblock %}
 {% block main %}
+<div id="signOut">
+    <span><i class="icon icon-signout"></i>&nbsp;<a href="/logout/">退出登录</a></span>
+</div>
 <div class="section section1">
 
     <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>

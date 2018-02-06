@@ -244,31 +244,51 @@ def get_show_domain_group_detail_portrait(domain_name):
     result_all = []
     for result in es_mget_result:
         item = {}
+        item['uid'] = ''
+        item['nick_name'] = ''
+        item['photo_url'] = ''
+        item['domain'] = ''
+        item['sensitive'] = ''
+        item['location'] = ''
+        item['fans_num'] = ''
+        item['friends_num'] = ''
+        # item['gender'] = ''
+        item['home_page'] = ""
+        item['influence'] = ''
         if result['found']:
-            result = result['_source']
-            item['uid'] = result['uid']
-            item['nick_name'] = result['uname']
-            item['photo_url'] = result['photo_url']
-            item['domain'] = result['domain']
-            item['sensitive'] = result['sensitive']
-            item['location'] = result['location']
-            item['fans_num'] = result['fansnum']
-            item['friends_num'] = result['friendsnum']
-            # item['gender'] = result['gender']
-            item['home_page'] = "https://twitter.com/" + result['screenname']
-            item['influence'] = get_influence_relative(item['uid'],result['influence'])
-        else:
             item['uid'] = result['_id']
-            item['nick_name'] = ''
-            item['photo_url'] = ''
-            item['domain'] = ''
-            item['sensitive'] = ''
-            item['location'] = ''
-            item['fans_num'] = ''
-            item['friends_num'] = ''
-            # item['gender'] = ''
-            item['home_page'] = ""
-            item['influence'] = ''
+            result = result['_source']
+            if result.has_key('uname'):
+                item['nick_name'] = result['uname']
+            if result.has_key('photo_url'):
+                item['photo_url'] = result['photo_url']
+            if result.has_key('domain'):
+                item['domain'] = result['domain']
+            if result.has_key('sensitive'):
+                item['sensitive'] = result['sensitive']
+            if result.has_key('location'):
+                item['location'] = result['location']
+            if result.has_key('fansnum'):
+                item['fans_num'] = result['fansnum']
+            if result.has_key('friends_num'):
+                item['friends_num'] = result['friendsnum']
+            # item['gender'] = result['gender']
+            if result.has_key('screenname'):
+                item['home_page'] = "https://twitter.com/" + result['screenname']
+            if result.has_key('influence'):
+                item['influence'] = get_influence_relative(item['uid'],result['influence'])
+        # else:
+        #     item['uid'] = result['_id']
+        #     item['nick_name'] = ''
+        #     item['photo_url'] = ''
+        #     item['domain'] = ''
+        #     item['sensitive'] = ''
+        #     item['location'] = ''
+        #     item['fans_num'] = ''
+        #     item['friends_num'] = ''
+        #     # item['gender'] = ''
+        #     item['home_page'] = ""
+        #     item['influence'] = ''
         result_all.append(item)
     return result_all
 

@@ -11,7 +11,8 @@ from global_utils import es_flow_text,es_user_profile,profile_index_name,profile
                         facebook_user_index_name,facebook_user_index_type,\
                         twitter_user_index_name, twitter_user_index_type,\
                         fb_bci_index_name_pre, fb_bci_index_type,\
-                        facebook_flow_text_index_name_pre, tw_bci_index_name_pre, tw_bci_index_type
+                        facebook_flow_text_index_name_pre, tw_bci_index_name_pre, tw_bci_index_type,\
+                        fb_index_sensing, fb_type_sensing,tw_index_sensing, tw_type_sensing
 from global_utils import R_OPERATE_QUEUE as r_operate_queue, operate_queue_name                         
 from parameter import MAX_SEARCH_SIZE,DAY
 from global_config import S_TYPE,S_DATE_BCI, S_DATE_FB, S_DATE_TW
@@ -363,6 +364,78 @@ def get_fb_influence_relative(uid,influence):
         influence_relative = influence/user_index_max
         return influence_relative
 
+## facebook判断关注类型
+def judge_fb_follow_type(xnr_user_no,uid):
+    exist_item = es_xnr.exists(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                id=xnr_user_no)
+    if not exist_item:
+        fb_type = 'stranger'
+    else:
+        es_get = es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                id=xnr_user_no)['_source']
+        fans_list = ''
+        if es_get.has_key('fans_list'):
+            fans_list = es_get['fans_list']
+        followers_list = ''
+        if es_get.has_key('followers_list'):
+            followers_list = es_get['followers_list']
+
+        if uid in fans_list:
+            if uid in followers_list:
+                fb_type = 'friends'
+            else:
+                fb_type = 'followed'
+        elif uid in followers_list:
+            fb_type = 'follow'
+        else:
+            fb_type = 'stranger'
+    return fb_type
+
+## 判断是否为敏感人物传感器
+def judge_fb_sensing_sensor(xnr_user_no,uid):
+    try:
+        exist_item = es_xnr.exists(index=fb_index_sensing,doc_type=fb_type_sensing,id=xnr_user_no)
+    except Exception,e:
+        print e
+        return False
+
+    if not exist_item:
+        return False 
+    else:
+        get_result = es_xnr.get(index=fb_index_sensing,doc_type=fb_type_sensing,id=xnr_user_no)['_source']
+        social_sensors = get_result['social_sensors']
+        if uid in social_sensors:
+            return True
+        else:
+            return False
+
+## twitter判断关注类型
+def judge_tw_follow_type(xnr_user_no,uid):
+    exist_item = es_xnr.exists(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                id=xnr_user_no)
+    if not exist_item:
+        tw_type = 'stranger'
+    else:
+        es_get = es_xnr.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                id=xnr_user_no)['_source']
+        fans_list = ''
+        if es_get.has_key('fans_list'):
+            fans_list = es_get['fans_list']
+        followers_list = ''
+        if es_get.has_key('followers_list'):
+            followers_list = es_get['followers_list']
+
+        if uid in fans_list:
+            if uid in followers_list:
+                tw_type = 'friends'
+            else:
+                tw_type = 'followed'
+        elif uid in followers_list:
+            tw_type = 'follow'
+        else:
+            tw_type = 'stranger'
+    return tw_type
+
 ## twitter得到影响力相对值
 def get_tw_influence_relative(uid,influence):
     if S_TYPE == 'test':
@@ -386,7 +459,25 @@ def get_tw_influence_relative(uid,influence):
     else:
         influence_relative = influence/user_index_max
         return influence_relative
+
+ ## 判断是否为敏感人物传感器
+def judge_tw_sensing_sensor(xnr_user_no,uid):
+    try:
+        exist_item = es_xnr.exists(index=tw_index_sensing,doc_type=tw_type_sensing,id=xnr_user_no)
+    except Exception,e:
+        print e
+        return False
         
+    if not exist_item:
+        return False 
+    else:
+        get_result = es_xnr.get(index=tw_index_sensing,doc_type=tw_type_sensing,id=xnr_user_no)['_source']
+        social_sensors = get_result['social_sensors']
+        if uid in social_sensors:
+            return True
+        else:
+            return False
+
 def fb_save_to_fans_follow_ES(xnr_user_no,uid,follow_type,trace_type):
 
  
@@ -507,7 +598,6 @@ def add_operate2redis(item_dict):
     # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
 
     queue_dict['content'] = item_dict['content']
-
     try:
         content = r_operate_queue.lpush(operate_queue_name,json.dumps(queue_dict))
         mark = True
@@ -519,6 +609,8 @@ def add_operate2redis(item_dict):
 
 if __name__ == '__main__':
 
-    save_to_fans_follow_ES('WXNR0004','1496814565','followers')
+    # save_to_fans_follow_ES('WXNR0004','1496814565','followers')
     #es_xnr.delete(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
     #    id='AV4Zi0NasTFJ_K1Z2dDy')
+    print r_operate_queue.lrange(operate_queue_name,0,8)
+    # print r_operate_queue.rpop(operate_queue_name)

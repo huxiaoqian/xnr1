@@ -72,7 +72,7 @@
         <div class="btn-group loadingUser">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" title="登录用户"
                     aria-expanded="false" style="background:transparent;color: black;">
-                <span class="icon icon-user"></span> <a id="login_user">admin@qq.com</a>&nbsp;&nbsp;<span class="down3page"></span>
+                <span class="icon icon-user"></span> <a id="login_user"></a>&nbsp;&nbsp;<span class="down3page"></span>
             </button>
             <span class="xnrShowHide"><b style="color:#333;">虚拟人：</b> <a class="nav_name"></a> <a class="nav_type"></a></span>
             <ul class="dropdown-menu">
@@ -299,6 +299,39 @@
         </div>
     </div>
 </div>
+<!--机器人-->
+<!-- <style>
+    #robotBack .question {
+        padding: 10px 0;
+    }
+    #robotBack .questionVal {
+        width: 60%;
+        border-radius: 5px;
+        text-align: center;
+        padding: 3px 7px;
+        background: transparent;
+        color: white;
+        border:1px solid #fff;
+    }
+</style>
+<div class="modal fade" id="robotBack" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">机器人回复</h4>
+            </div>
+            <div class="modal-body">
+                <div class="question">
+                    <span>问题：</span>
+                    <input type="text" class="questionVal" placeholder="请输入问题内容"/>
+                    <button class="sureQuestion btn btn-primary btn-sm" onclick="getRobot()">确定</button>
+                </div>
+                <p class="QC" style="display: none;">内容：<b class="showRob"></b></p>
+            </div>
+        </div>
+    </div>
+</div> -->
 <!-- 10-12 LL===微博  -->
 <!--选择虚拟人 模态框-->
 <div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
@@ -375,7 +408,9 @@
 <script src="/static/echarts/china.js"></script>
 <script>
     //登录用户名
+//    var admin='admin@qq.com';
     var admin='{{g.user}}';
+    $('#login_user').text(admin);
     //ajax请求
     var public_ajax={
         call_request:function(ajax_method,url,callback) {

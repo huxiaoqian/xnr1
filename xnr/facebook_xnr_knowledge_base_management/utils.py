@@ -18,6 +18,9 @@ from xnr.global_utils import es_fb_user_portrait as es_user_portrait,\
                             fb_example_model_index_name, fb_example_model_index_type,\
                             fb_target_domain_detect_queue_name,\
                             fb_domain_index_name, fb_domain_index_type
+
+from xnr.global_utils import facebook_xnr_corpus_index_name,facebook_xnr_corpus_index_type
+
 from xnr.utils import fb_uid2nick_name_photo as uid2nick_name_photo,\
                         get_fb_influence_relative as get_influence_relative
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
@@ -264,6 +267,18 @@ def get_show_domain_group_detail_portrait(domain_name):
     result_all = []
     for result in es_mget_result:
         item = {}
+        item['uid'] = ''
+        item['nick_name'] = ''
+        # item['photo_url'] = ''
+        item['domain'] = ''
+        item['sensitive'] = ''
+        item['location'] = ''
+        # item['fans_num'] = ''
+        # item['friends_num'] = ''
+        # item['gender'] = ''
+        item['home_page'] = ''
+        # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        item['influence'] = ''
         if result['found']:
             result = result['_source']
             item['uid'] = result['uid']
@@ -278,19 +293,19 @@ def get_show_domain_group_detail_portrait(domain_name):
             item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['uid'])
             # item['home_page'] = 'http://weibo.com/'+result['uid']+'/profile?topnav=1&wvr=6&is_all=1'
             item['influence'] = get_influence_relative(item['uid'],result['influence'])
-        else:
-            item['uid'] = result['_id']
-            item['nick_name'] = ''
-            # item['photo_url'] = ''
-            item['domain'] = ''
-            item['sensitive'] = ''
-            item['location'] = ''
-            # item['fans_num'] = ''
-            # item['friends_num'] = ''
-            # item['gender'] = ''
-            item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['_id'])
-            # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
-            item['influence'] = ''
+        # else:
+        #     item['uid'] = result['_id']
+        #     item['nick_name'] = ''
+        #     # item['photo_url'] = ''
+        #     item['domain'] = ''
+        #     item['sensitive'] = ''
+        #     item['location'] = ''
+        #     # item['fans_num'] = ''
+        #     # item['friends_num'] = ''
+        #     # item['gender'] = ''
+        #     item['home_page'] = "https://www.facebook.com/profile.php?id=" + str(result['_id'])
+        #     # item['home_page'] = 'http://weibo.com/'+result['_id']+'/profile?topnav=1&wvr=6&is_all=1'
+        #     item['influence'] = ''
         result_all.append(item)
     return result_all
 
@@ -344,3 +359,50 @@ def get_delete_domain(domain_name):
         mark = False
     return mark
 
+
+
+#####################################################
+#言论知识库
+######################################################
+def show_corpus_class(create_type,corpus_type):
+    query_condition=[]
+    if create_type and corpus_type:
+        query_condition.append({'filtered':{'filter':{'bool':{'must':[{'term':{'create_type':create_type}},{'term':{'corpus_type':corpus_type}}]}}}})
+    else:
+        if create_type:
+            query_condition.append({'filtered':{'filter':{'bool':{'must':{'term':{'create_type':create_type}}}}}})
+        elif corpus_type:
+            query_condition.append({'filtered':{'filter':{'bool':{'must':{'term':{'corpus_type':corpus_type}}}}}})
+        else:
+            query_condition.append({'match_all':{}})
+
+    print 'query_condition',query_condition
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':query_condition
+                    }
+                }
+            }
+
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+    result=es.search(index=facebook_xnr_corpus_index_name,doc_type=facebook_xnr_corpus_index_type,body=query_body)['hits']['hits']
+    results=[]
+    for item in result:
+        item['_source']['id']=item['_id']
+        results.append(item['_source'])
+    return results
+
+
+
+def delete_corpus(corpus_id):
+    try:
+        es.delete(index=facebook_xnr_corpus_index_name,doc_type=facebook_xnr_corpus_index_type,id=corpus_id)
+        result=True
+    except:
+        result=False
+    return result

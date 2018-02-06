@@ -51,4 +51,4 @@ class Userinfo():
 if __name__ == '__main__':
 	#userinfo = Userinfo('8617078448226','xnr123456')
 	userinfo = Userinfo('feifanhanmc@163.com', 'han8528520258')
-	userinfo.getUserinfo()
+	print userinfo.getUserinfo()

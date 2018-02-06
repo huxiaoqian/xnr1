@@ -30,6 +30,7 @@ body {
     padding: 20px 0;
 }
 /*-----------评论内容--------------*/
+#private_letter .infoAll {margin: 10px 0;padding-bottom: 15px;}
 #container .type_page #content .commentEvery,
 #container .type_page #content .forwardEvery,
 #container .type_page #content .letterEvery,
@@ -124,6 +125,7 @@ body {
 #container .type_page #content .letterEvery .let,
 #container .type_page #content .replyEvery .rep{
     padding:5px 10px;
+    overflow: hidden;
 }
 #container .type_page #content .letterEvery .let-1 .let-1-time {
     display: inline-block;
@@ -163,25 +165,31 @@ body {
 #container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover{
     background:rgba(5, 23, 55, 0.45);
 }
-#container .type_page #content .commentEvery .socOper {
+#container .type_page #content .commentEvery .socOper,
+#container .type_page #content .replyEvery .socOper {
     margin: 10px 0;
     text-align:center;
     border-top: 1px solid slategrey;
     padding-top:5px;
 }
-#container .type_page #content .commentEvery .socOper span {
+#container .type_page #content .commentEvery .socOper span,
+#container .type_page #content .replyEvery .socOper span {
     display: inline-block;
-    width: 48%;
+    /*width: 48%;*/
     padding: 3px 7px;
     color: white;
     cursor: pointer;
     text-align: center;
     font-size: 12px;
 }
-#container .type_page #content .commentEvery .socOper span:hover {
+#container .type_page #content .replyEvery .socOper span {width: 48%;}
+#container .type_page #content .commentEvery .socOper span:hover,
+#container .type_page #content .replyEvery .socOper span:hover{
     color:#eb7350;
 }
-#container .type_page #content .commentEvery .socOper span:nth-child(2) {
+#container .type_page #content .replyEvery .socOper span:nth-child(2),
+#container .type_page #content .commentEvery .socOper span:nth-child(3),
+#container .type_page #content .commentEvery .socOper span:nth-child(4) {
     border-left:1px solid slategrey;
 }
 #container .forwardingDown {
@@ -219,11 +227,11 @@ body {
 #container .type_page #content .replyEvery .rep-3 {
     position: relative;
 }
-#container .type_page #content .replyEvery .rep-3 .rep-3-reply {
-    position: absolute;
-    bottom:0;
-    right: 10px;
-}
+/*#container .type_page #content .replyEvery .rep-3 .rep-3-reply {*/
+    /*position: absolute;*/
+    /*bottom:0;*/
+    /*right: 10px;*/
+/*}*/
 #container .type_page #content .replyEvery .rep-3 .rep-3-img {
     width: 400px;
     height: 200px;
@@ -234,7 +242,7 @@ body {
 #container .type_page #content .letterClone,
 #container .type_page #content .replyClone {
     display: none;
-    margin: 15px 0;
+    /*margin: 15px 0;*/
 }
 #container .type_page #content .commentClone .clone-1,
 #container .type_page #content .commentClone .clone-2,
@@ -252,7 +260,6 @@ body {
 #container .type_page #content .letterClone .clone-1,
 #container .type_page #content .replyClone .clone-1{
     width: 93%;
-    height: 30px;
     padding: 4px 7px;
     color: white;
     border: 1px solid silver;
@@ -272,12 +279,12 @@ body {
 }
 #container .type_page #content .letterClone .clone-1 {
     width: 80%;
-    margin: 10px 0;
+    /*margin: 10px 0;*/
 }
 #container .type_page #content .letterClone .clone-2 {
     display: inline-block;
     margin-left: 15px;
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 #container .type_page #content .replyClone .clone-2 {
     margin: 10px 0;
@@ -297,7 +304,7 @@ body {
 #container .type_page #content .replyClone .clone-2 .clone-2-4 {
     color: white;
     font-size: 12px;
-    padding: 3px 8px;
+    padding: 6px 8px;
     border:1px solid silver;
     border-radius: 5px;
     float: right;

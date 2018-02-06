@@ -164,24 +164,28 @@
         </div>
         <div class="tab-content" id="content">
             <div role="tabpanel" class="tab-pane active" id="comment">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                 <div class="comment-1">
                     <div id="comment-1"></div>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="forwarding">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                 <div class="forwarding-1">
                     <div id="forwarding-1"></div>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="private_letter">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                 <div class="letter-1">
                     <div id="letter-1"></div>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane" id="reply">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                 <div class="reply-1">
                     <div id="reply-1"></div>
                 </div>
@@ -315,38 +319,12 @@
             </div>
             <div class="modal-body">
                 <div class='focusOPT' style="margin: 10px 0;">
-                    <label class="demo-label">
-                        <input class="demo-radio" type="radio" name="fcs" value="trace_follow">
-                        <span class="demo-checkbox demo-radioInput"></span> 重点关注
-                    </label>
-                    <label class="demo-label">
-                        <input class="demo-radio" type="radio" name="fcs" value="ordinary_follow">
-                        <span class="demo-checkbox demo-radioInput"></span> 普通关注
-                    </label>
+
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="focusUserSure()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--取消关注-->
-<div class="modal fade" id="del_focus_modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">取消关注用户</h4>
-            </div>
-            <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">你确定取消关注该用户吗？
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delFocus()">确定</button>
             </div>
         </div>
     </div>

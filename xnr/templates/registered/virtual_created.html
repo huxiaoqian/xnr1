@@ -393,6 +393,20 @@
 {% block my_js %}
 <script id="load_user">
     judgment('6');
+    var flag='{{flag}}',WFT_url,firstStep,secondStep;
+    if (flag==1){
+        WFT_url='/weibo_xnr_create';
+        firstStep='WBfirstStep';
+        secondStep='WBsecondStep';
+    }else if (flag==4){
+        WFT_url='/facebook_xnr_create';
+        firstStep='FBfirstStep';
+        secondStep='FBsecondStep';
+    }else if (flag==5){
+        WFT_url='/twitter_xnr_create';
+        firstStep='TWfirstStep';
+        secondStep='TWsecondStep';
+    }
     var go_on='{{continueUser}}';
     if (go_on=='1'){
         $('#name').removeAttr('readonly');
@@ -407,10 +421,10 @@
     var $id=localStorage.getItem('go_mod_user');
     var basicData;
     if (go_on){
-        var go_url = '/weibo_xnr_create/get_xnr_info/?xnr_user_no='+$id;
+        var go_url = WFT_url+'/get_xnr_info/?xnr_user_no='+$id;
         public_ajax.call_request('GET',go_url,continueData);
     }else {
-        basicData=JSON.parse(localStorage.getItem('firstStep'));
+        basicData=JSON.parse(localStorage.getItem(firstStep));
         filling();
     }
     function continueData(data) {
@@ -418,7 +432,7 @@
         filling();
     }
     //
-    var $two=JSON.parse(localStorage.getItem('secondStep'));
+    var $two=JSON.parse(localStorage.getItem(secondStep));
     if ($two){
         $('#name').val($two.nick_name);
         $('#age').val($two.age);

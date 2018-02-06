@@ -432,5 +432,115 @@ def ajax_robot_reply():
     answer = get_robot_reply(question)
 
     # return json.dumps(answer)
-    return answer
+    return json.dumps(answer)
 
+
+
+
+
+
+
+
+
+
+#####################################################################
+##########################韩梦成负责以下内容###########################
+#####################################################################
+from utils import get_show_comment, get_show_retweet, get_show_private, \
+					get_show_at,get_show_fans,get_direct_search,get_related_recommendation
+# 评论及回复
+# http://219.224.134.213:6659/facebook_xnr_operate/show_comment/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_comment/')
+def ajax_show_comment():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_comment(task_detail)
+    return json.dumps(results)
+
+
+# 转发及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_retweet/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_retweet/')
+def ajax_show_retweet():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_retweet(task_detail)
+    return json.dumps(results)
+
+# 私信及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_private/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_private/')
+def ajax_show_private():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2ts('2017-10-01')
+    #     task_detail['end_ts'] = datetime2ts('2017-10-07')
+    results = get_show_private(task_detail)
+    return json.dumps(results)
+
+# @及回复
+# http://219.224.134.213:6659/weibo_xnr_operate/show_at/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_at/')
+def ajax_show_at():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    # if S_TYPE == 'test':
+    #     task_detail['start_ts'] = datetime2s('2017-10-01')
+    #     task_detail['end_ts'] = datetime2s('2017-10-07')   
+    results = get_show_at(task_detail)
+    return json.dumps(results)
+
+# 关注及回粉
+# http://219.224.134.213:6659/weibo_xnr_operate/show_fans/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_fans/')
+def ajax_show_fans():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','')
+    task_detail['start_ts'] = request.args.get('start_ts','')
+    task_detail['end_ts'] = request.args.get('end_ts','')
+    results = get_show_fans(task_detail)
+    return json.dumps(results)
+
+
+# 直接搜索
+# http://219.224.134.213:6659/facebook_xnr_operate/direct_search/?xnr_user_no=FXNR0003&sort_item=influence&uids=24243234
+@mod.route('/direct_search/')
+def ajax_direct_search():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','influence')
+    uids = request.args.get('uids','').encode('utf-8')
+    uid_list = uids.split('，')
+    task_detail['uid_list'] = uid_list
+    results = get_direct_search(task_detail)
+    return json.dumps(results)
+
+# 相关推荐
+# 现支持influ（share）、sensitive（sensitive）
+@mod.route('/related_recommendation/')
+def ajax_related_recommendation():
+    task_detail = dict()
+    task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
+    task_detail['sort_item'] = request.args.get('sort_item','influence')
+    results = get_related_recommendation(task_detail)
+    return json.dumps(results)

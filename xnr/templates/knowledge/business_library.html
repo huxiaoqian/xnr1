@@ -225,7 +225,17 @@
 
 {% block my_js %}
 <script>
-    judgment('8');
+    var flag='{{flag}}',urlTotal;
+    if (flag==1){
+        judgment('8');
+        urlTotal='/weibo_xnr_knowledge_base_management';
+    }else if (flag==4){
+        judgmentFaceBook('8');
+        urlTotal='/fb_xnr_knowledge_base_management';
+    }else if (flag==5){
+        judgmentTwitter('8');
+        urlTotal='/tw_xnr_knowledge_base_management';
+    }
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd",
         minView:"2",

@@ -40,7 +40,7 @@
             <a href="#one" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;&nbsp;虚拟人定制</a>
         </li>
         <li role="presentation">
-            <a href="#two" role="tab" data-toggle="tab"><b class="icon icon-globe"></b>&nbsp;&nbsp;领域定制</a>
+            <a href="#two" role="tab" data-toggle="tab" id="domainYes"><b class="icon icon-globe"></b>&nbsp;&nbsp;领域定制</a>
         </li>
         <li role="presentation">
             <a href="#three" role="tab" data-toggle="tab"><b class="icon icon-github"></b>&nbsp;&nbsp;角色定制</a>
@@ -431,20 +431,27 @@
 {% block my_js %}
 <script>
     judgment('6');
-    localStorage.removeItem('firstStep');
 //    localStorage.removeItem('secondStep');
-    var flag='{{flag}}',urlTotal;
+    var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
     if (flag==1){
         urlTotal='/weibo_xnr_knowledge_base_management';
+        defalutDomain='维权群体';defalutRole='其他';
     }else if (flag==4){
         urlTotal='/fb_xnr_knowledge_base_management';
+        defalutDomain='脸书测试1';defalutRole='民间组织';
+    }else if (flag==5){
+        urlTotal='/tw_xnr_knowledge_base_management';
+        defalutDomain='推特测试1';defalutRole='商业人士';
     }
     $('.buildNew').on('click',function () {
-        window.open('/knowledge/domainLibrary/?flag='+flag);
+        //window.open('/knowledge/domainLibrary/?flag='+flag);
+        var e =document.createEvent('MouseEvents');
+        e.initEvent('click',true,true);
+        document.getElementById('domainYes').dispatchEvent(e);
     });
     function importModal(){
 //        $("#example_modal").trigger("click");
-        var filesList=jumpFlagUrl+'/show_example_model/';
+        var filesList=urlTotal+'/show_example_model/';
         public_ajax.call_request('get',filesList,$file);
     };
     function $file(data) {
@@ -468,7 +475,7 @@
         var a=$(_this).find('.m-1').text();
         var b=$(_this).find('.m-2').text();
         domainName=a;roleName=b;
-        var showModal_url=jumpFlagUrl+'/export_example_model/?domain_name='+a+
+        var showModal_url=urlTotal+'/export_example_model/?domain_name='+a+
             '&role_name='+b+'&xnr_user_no='+ID_Num;
         public_ajax.call_request('get',showModal_url,inModalData);
         $('#modalList').modal('hide');

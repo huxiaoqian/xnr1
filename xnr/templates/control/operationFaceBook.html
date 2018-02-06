@@ -1,78 +1,78 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>操作控制</title>{% endblock %}
 {% block my_css %}
-<link rel="stylesheet" href="/static/css/operation_controlTwitter.css">
-<style>
-    .fixed-table-toolbar .search {width:100%}
-    .fixed-table-pagination .page-list{display: none;}
-    .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
-    .demo-radio{display:none!important;}
-    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-    #start_1,#end_1,#sure-1,#start_2,#end_2,#sure-2,#start_3,#end_3,#sure-3 {
-        display:none;
-    }
-    #sure-1,#sure-2,#sure-3 {
-        padding:1px 6px;
-        color: white;
-        font-size: 12px;
-        border: 1px solid silver;
-        border-radius: 5px;
-        background:transparent;
-        cursor: pointer;
-    }
-    #sure-1:hover,#sure-2:hover,#sure-3:hover {
-        background: rgba(8,23,44,0.65);
-    }
-    /**/
-    .li-3 .bootstrap-table {
-        margin: 0 auto;
-        height: auto!important;
-    }
-    .li-3 .table-no-bordered,.li-3 .table>tbody>tr>td,.li-3 .fixed-table-container,
-    .li-3 .bootstrap-table .table>thead>tr>th,.li-3 .bootstrap-table .table,.li-3 .table>tbody>tr>td{
-        border: none;
-    }
-    .li-3 .fixed-table-pagination .page-list {
-        display: none!important;
-    }
-    .li-3 .fixed-table-body {
-        height: auto!important;
-        overflow-y: hidden;
-    }
-    .li-3 .bootstrap-table .table:not(.table-condensed),.li-3 .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-    .li-3 .table>tbody>tr>td{
-        padding: 0!important;
-    }
-    .li-3 .fixed-table-container thead th .both{
-        background-image: none!important;
-    }
-    .fixed-table-container {top: 15px;}
-    .table-hover>tbody>tr:hover {
-        background-color: inherit!important;
-    }
-    .fixed-table-toolbar .search {width: 100%;}
-    .form-control {
-        text-align: center;
-        font-size: 14px;
-        color: white;
-        border: 1px solid silver;
-        border-radius: 5px;
-        padding: 4px 7px;
-        background: rgba(8,23,44,0.35);
-    }
-    /*.li-3 .table:not(.table-condensed)>tbody>tr>td {*/
-    /*text-align: left!important;*/
-    /*}*/
-    .history-2 .fixed-table-toolbar {display: none;}
-    /**/
-    .table>thead>tr>th {border-top: none!important;}
-    .li-1 .fixed-table-container thead th .both {background-image: none!important;}
-    .li-1 .bootstrap-table .table:not(.table-condensed) {padding: 0!important;}
-    .li-1 .bootstrap-table .table {border-bottom: none!important;}
-    .li-1 .fixed-table-pagination { display:none!important;}
-</style>
+    <link rel="stylesheet" href="/static/css/operation_control.css">
+    <style>
+        .fixed-table-toolbar .search {width:100%}
+        .fixed-table-pagination .page-list{display: none;}
+        .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
+        .demo-radio{display:none!important;}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        #start_1,#end_1,#sure-1,#start_2,#end_2,#sure-2,#start_3,#end_3,#sure-3 {
+            display:none;
+        }
+        #sure-1,#sure-2,#sure-3 {
+            padding:1px 6px;
+            color: white;
+            font-size: 12px;
+            border: 1px solid silver;
+            border-radius: 5px;
+            background:transparent;
+            cursor: pointer;
+        }
+        #sure-1:hover,#sure-2:hover,#sure-3:hover {
+            background: rgba(8,23,44,0.65);
+        }
+        /**/
+        .li-3 .bootstrap-table {
+            margin: 0 auto;
+            height: auto!important;
+        }
+        .li-3 .table-no-bordered,.li-3 .table>tbody>tr>td,.li-3 .fixed-table-container,
+        .li-3 .bootstrap-table .table>thead>tr>th,.li-3 .bootstrap-table .table,.li-3 .table>tbody>tr>td{
+            border: none;
+        }
+        .li-3 .fixed-table-pagination .page-list {
+            display: none!important;
+        }
+        .li-3 .fixed-table-body {
+            height: auto!important;
+            overflow-y: hidden;
+        }
+        .li-3 .bootstrap-table .table:not(.table-condensed),.li-3 .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+        .li-3 .table>tbody>tr>td{
+            padding: 0!important;
+        }
+        .li-3 .fixed-table-container thead th .both{
+            background-image: none!important;
+        }
+        .fixed-table-container {top: 15px;}
+        .table-hover>tbody>tr:hover {
+            background-color: inherit!important;
+        }
+        .fixed-table-toolbar .search {width: 100%;}
+        .form-control {
+            text-align: center;
+            font-size: 14px;
+            color: white;
+            border: 1px solid silver;
+            border-radius: 5px;
+            padding: 4px 7px;
+            background: rgba(8,23,44,0.35);
+        }
+        /*.li-3 .table:not(.table-condensed)>tbody>tr>td {*/
+            /*text-align: left!important;*/
+        /*}*/
+        .history-2 .fixed-table-toolbar {display: none;}
+        /**/
+        .table>thead>tr>th {border-top: none!important;}
+        .li-1 .fixed-table-container thead th .both {background-image: none!important;}
+        .li-1 .bootstrap-table .table:not(.table-condensed) {padding: 0!important;}
+        .li-1 .bootstrap-table .table {border-bottom: none!important;}
+        .li-1 .fixed-table-pagination { display:none!important;}
+    </style>
 {% endblock %}
 {% block main %}
 <div id="container">
@@ -169,7 +169,7 @@
         </div>
         <div class="li-3 oli">
             <h4><i class="icon icon-lightbulb"></i>&nbsp;历史消息</h4>
-            <div class="choosetime choosetime-3" style="margin: 10px 0;" midurl="show_history_posting" task="historyNews">
+            <div class="choosetime choosetime-3" style="margin: 10px 0;" midurl="new_show_history_posting" task="historyNews">
                 <label class="demo-label">
                     <input class="demo-radio" type="radio" name="time3" value='0' shhi="3" checked>
                     <span class="demo-checkbox demo-radioInput"></span> 今天
@@ -201,7 +201,7 @@
             </div>
             <div class="news">
                 <ul id="myTabs" class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active" midurl="show_history_posting&daily_post&task_source" box="historyCenter">
+                    <li role="presentation" class="active" midurl="new_show_history_posting&1&message_type" box="historyCenter">
                         <a href="#his_post" role="tab" data-toggle="tab"><b class="icon icon-beaker"></b>&nbsp;历史发帖</a>
                     </li>
                     <li role="presentation" midurl="show_at_content&weibo&content_type" box="myweibo">
@@ -218,22 +218,34 @@
                 <div class="tab-content" id="content">
                     <div role="tabpanel" class="tab-pane active" id="his_post">
                         <div class="aa hisnews">
-                            <label class="demo-label" title="日常发帖">
-                                <input class="demo-radio" type="checkbox" name="news" value='daily_post' checked>
-                                <span class="demo-checkbox demo-radioInput"></span> 日常发帖
+                            <label class="demo-label" title="原创">
+                                <input class="demo-radio" type="checkbox" name="news" value='1' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 原创
                             </label>
-                            <label class="demo-label" title="热门发帖">
-                                <input class="demo-radio" type="checkbox" name="news" value='hot_post'>
-                                <span class="demo-checkbox demo-radioInput"></span> 热门跟随
+                            <label class="demo-label" title="转发">
+                                <input class="demo-radio" type="checkbox" name="news" value='2'>
+                                <span class="demo-checkbox demo-radioInput"></span> 转发
                             </label>
-                            <label class="demo-label" title="业务发帖">
-                                <input class="demo-radio" type="checkbox" name="news" value='business_post'>
-                                <span class="demo-checkbox demo-radioInput"></span> 业务发帖
+                            <label class="demo-label" title="评论">
+                                <input class="demo-radio" type="checkbox" name="news" value='3'>
+                                <span class="demo-checkbox demo-radioInput"></span> 评论
                             </label>
-                            <label class="demo-label" title="跟踪转发">
-                                <input class="demo-radio" type="checkbox" name="news" value='trace_follow_tweet'>
-                                <span class="demo-checkbox demo-radioInput"></span> 跟踪转发
-                            </label>
+                            <!--<label class="demo-label" title="日常发帖">-->
+                                <!--<input class="demo-radio" type="checkbox" name="news" value='daily_post' checked>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 日常发帖-->
+                            <!--</label>-->
+                            <!--<label class="demo-label" title="热门发帖">-->
+                                <!--<input class="demo-radio" type="checkbox" name="news" value='hot_post'>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 热门跟随-->
+                            <!--</label>-->
+                            <!--<label class="demo-label" title="业务发帖">-->
+                                <!--<input class="demo-radio" type="checkbox" name="news" value='business_post'>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 业务发帖-->
+                            <!--</label>-->
+                            <!--<label class="demo-label" title="跟踪转发">-->
+                                <!--<input class="demo-radio" type="checkbox" name="news" value='trace_follow_tweet'>-->
+                                <!--<span class="demo-checkbox demo-radioInput"></span> 跟踪转发-->
+                            <!--</label>-->
                         </div>
                         <div class="historyCenter">
                             <div id="historyCenter">
@@ -294,7 +306,7 @@
             </div>
         </div>
         <div class="li-4 oli">
-            <h4><i class="icon icon-lightbulb"></i>&nbsp;好友列表</h4>
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;关注列表</h4>
             <div class="focusSEN" style="margin: 10px 0;">
                 <label class="demo-label">
                     <input class="demo-radio" type="radio" name="focus" value='influence' checked>
@@ -311,24 +323,24 @@
                 </div>
             </div>
         </div>
-        <!--<div class="li-5 oli">-->
-            <!--<h4><i class="icon icon-lightbulb"></i>&nbsp;粉丝列表</h4>-->
-            <!--<div class="fansSEN" style="margin: 10px 0;">-->
-                <!--<label class="demo-label">-->
-                    <!--<input class="demo-radio" type="radio" name="fans" value='influence' checked>-->
-                    <!--<span class="demo-checkbox demo-radioInput"></span> 按影响力-->
-                <!--</label>-->
-                <!--<label class="demo-label">-->
-                    <!--<input class="demo-radio" type="radio" name="fans" value='sensitive'>-->
-                    <!--<span class="demo-checkbox demo-radioInput"></span> 按敏感度-->
-                <!--</label>-->
-            <!--</div>-->
-            <!--<div class="fans">-->
-                <!--<div id="fans">-->
-                    <!--<p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="li-5 oli">
+            <h4><i class="icon icon-lightbulb"></i>&nbsp;粉丝列表</h4>
+            <div class="fansSEN" style="margin: 10px 0;">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='influence' checked>
+                    <span class="demo-checkbox demo-radioInput"></span> 按影响力
+                </label>
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="fans" value='sensitive'>
+                    <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                </label>
+            </div>
+            <div class="fans">
+                <div id="fans">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -403,8 +415,8 @@
                     </div>
                 </div>
                 <div class="details-2" style="margin: 10px 0;">
-                    <span>操作类型：</span>
-                    <div class="dt-2">
+                    <span>操作类型： <b>原创</b></span>
+                    <!-- <div class="dt-2">
                         <label class="demo-label">
                             <input class="demo-radio" type="radio" name="opert" value='origin'>
                             <span class="demo-checkbox demo-radioInput"></span> 原创
@@ -417,10 +429,10 @@
                             <input class="demo-radio" type="radio" name="opert" value='comment'>
                             <span class="demo-checkbox demo-radioInput"></span> 评论
                         </label>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="details-3">
-                    <span>发送时间：</span>
+                    <span>估计发送时间：</span>
                     <div class="dt-3">
                         <input type="text" size="50" id="_timing" class="form_datetime"
                                style="color: white;text-align: center;margin: 10px 0;
@@ -442,7 +454,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureModify()">确定修改</button>
+                <button type="button" class="btn btn-primary __modify" data-dismiss="modal" onclick="sureModify()">确定修改</button>
             </div>
         </div>
     </div>
@@ -465,14 +477,15 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block my_js %}
 <script>
-    var loadingType='faceBook';
-    weiboORqq('faceBook');
-    $('.nav_type').text('(FaceBook)');
-    judgmentFaceBook('2');
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('2');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
         if (_eq==1){
@@ -486,7 +499,6 @@
 //        $('#container .leftWindow').css({"top":_top+"px"});
         $('.li-'+_eq).siblings('.oli').find('i').css({color:'#fff'});
         $('.li-'+_eq+' h4').find('i').css({color:'#70c221'});
-
     });
     $(window).scroll(function(){
         var top = 20+$(window).scrollTop();
@@ -519,5 +531,5 @@
     });
 </script>
 <script src="/static/js/dark.js"></script>
-<script src="/static/js/operationFaceBook-1.js"></script>
+<script src="/static/js/operation_control-1.js"></script>
 {% endblock %}
