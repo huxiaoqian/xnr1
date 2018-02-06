@@ -591,6 +591,11 @@ function judgment(typeNum){
             '    <a class="li_a" href="/monitor/timeWarning/">' +
             '        <i class="icon icon-time"></i>&nbsp;时间预警' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/communityWarning/">' +
+            '        <i class="icon icon-time"></i>&nbsp;社区预警' +
+            '    </a>'+
             '</li>';
     }else if (typeNum==5){
         $('.coorName').text('行为评估');
