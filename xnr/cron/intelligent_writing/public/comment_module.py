@@ -36,30 +36,30 @@ def comments_calculation_v2(comments, logfile=LOG_FILE, cluster_num=COMMENT_WORD
                             clusterid、weight、same_from、duplicate
     """
     # setup logger
-    logger = logging.getLogger()
-    hdlr = logging.FileHandler(logfile)
-    formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-    hdlr.setFormatter(formatter)
-    logger.addHandler(hdlr)
-    logger.setLevel(logging.NOTSET)
-    logger.info('-------------------------------')
-    logger.info('start comments calculation v2')
+    # logger = logging.getLogger()
+    # hdlr = logging.FileHandler(logfile)
+    # formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+    # hdlr.setFormatter(formatter)
+    # logger.addHandler(hdlr)
+    # logger.setLevel(logging.NOTSET)
+    # logger.info('-------------------------------')
+    # logger.info('start comments calculation v2')
 
     # backup copy
     comments_copy = copy.deepcopy(comments)
 
     # 情绪计算
-    logger.info('start comments sentiment calculation')
-    sentiment_results = comments_sentiment_rubbish_calculation(comments, logger)
-    logger.info('end comments sentiment calculation')
+    # logger.info('start comments sentiment calculation')
+    sentiment_results = comments_sentiment_rubbish_calculation(comments)
+    # logger.info('end comments sentiment calculation')
 
     # 观点计算
-    logger.info('start comments clustering calculation')
-    clustering_results = comments_rubbish_clustering_calculation(comments_copy, logger, \
+    # logger.info('start comments clustering calculation')
+    clustering_results = comments_rubbish_clustering_calculation(comments_copy, \
             cluster_num=cluster_num, \
             cluster_eva_min_size=cluster_eva_min_size, \
             version=version)
-    logger.info('end comments clustering calculation')
+    # logger.info('end comments clustering calculation')
 
     sentiment_dict = {r['id']: r for r in sentiment_results['item_infos']}
     clustering_dict = {r['id']: r for r in clustering_results['item_infos']}
@@ -77,12 +77,12 @@ def comments_calculation_v2(comments, logfile=LOG_FILE, cluster_num=COMMENT_WORD
 
         merge_results.append(r)
 
-    logger.info('end comments calculation v2')
+    # logger.info('end comments calculation v2')
 
     return {'cluster_infos': clustering_results['cluster_infos'], 'item_infos': merge_results}
 
 
-def comments_rubbish_clustering_calculation(comments, logger, cluster_num=COMMENT_WORDS_CLUSTER_NUM, \
+def comments_rubbish_clustering_calculation(comments, cluster_num=COMMENT_WORDS_CLUSTER_NUM, \
         cluster_eva_min_size=CLUSTER_EVA_MIN_SIZE, \
         version=COMMENT_CLUSTERING_PROCESS_FOR_CLUTO_VERSION):
     """评论垃圾过滤、聚类
@@ -219,7 +219,7 @@ def comments_rubbish_clustering_calculation(comments, logger, cluster_num=COMMEN
     return {'cluster_infos': clusters_infos, 'item_infos': items_infos}
 
 
-def comments_sentiment_rubbish_calculation(comments, logger):
+def comments_sentiment_rubbish_calculation(comments):
     """输入为一堆comments, 字段包括title、content168
        输出：
            item_infos:单条信息列表, 数据字段：sentiment、same_from、duplicate
