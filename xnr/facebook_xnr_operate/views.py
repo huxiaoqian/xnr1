@@ -536,6 +536,7 @@ def ajax_direct_search():
     return json.dumps(results)
 
 # 相关推荐
+# 现支持influ（share）、sensitive（sensitive）
 @mod.route('/related_recommendation/')
 def ajax_related_recommendation():
     task_detail = dict()
