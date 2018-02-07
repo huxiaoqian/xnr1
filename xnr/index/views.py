@@ -46,7 +46,6 @@ def ajax_create_account():
         db.create_all()
         #role_1 = user_datastore.create_role(name='userrank', description=u'用户排行模块权限')
         user_1 = user_datastore.create_user(email=account_name, password=password)
-
         #user_datastore.add_role_to_user(user_1, role_1)
         #user_datastore.add_role_to_user(user_1, role_2)
         db.session.commit()
@@ -66,15 +65,13 @@ def text_trans():
             return json.dumps(res)
     return None 
 
-#暂不可用
+#语音转文字
 @mod.route('/voice_trans/')
 def voice_trans():
     voice_path = request.args.get('voice_path', '')
     if voice_path:
-        #get voice
-        voice = None
         #voice trans
-        res = utils_voice_trans(voice)
+        res = utils_voice_trans(voice_path)
         if res:
             return json.dumps(res)
     return None 
