@@ -594,7 +594,7 @@ function judgment(typeNum){
             '</li>'+
             '<li class="main_li">'+
             '    <a class="li_a" href="/monitor/communityWarning/">' +
-            '        <i class="icon icon-time"></i>&nbsp;社区预警' +
+            '        <i class="icon icon-building"></i>&nbsp;社区预警' +
             '    </a>'+
             '</li>';
     }else if (typeNum==5){

@@ -1,4 +1,4 @@
-console.log("1111");
+
 
 // 跟踪社区列表
     var track_community_data = [
@@ -273,6 +273,7 @@ console.log("1111");
             '        <li>敏感度和影响力分布</li>'+
             '    </ul>'+
             '</div>';
+    // 鼠标 表头浮动
     // $('#track-community thead th[data-field="b"]').children('div.th-inner').append(str);
     // // $('#track-community thead th[data-field="b"]').click(function(){
     // //     $('#downbox').slideToggle()
@@ -284,13 +285,13 @@ console.log("1111");
     //     $('#downbox').stop().slideUp(400)
     // })
 
-
+    // 鼠标 每行浮动显示
     $('#track-community tbody div.community-name-box').append(str);
     $('#track-community tbody .community-name-box').parent('td').mouseover(function(){
-        $(this).find('#downbox').stop().slideDown(400)
+        $(this).find('#downbox').stop().slideDown('fast');
     })
     $('#track-community tbody .community-name-box').parent('td').mouseout(function(){
-        $(this).find('#downbox').stop().slideUp(400)
+        $(this).find('#downbox').stop().slideUp('fast');
     })
 
     // 核心人物列表
@@ -298,17 +299,9 @@ console.log("1111");
         $('#' + div_name).empty();
         var html = '';
         if(data.length!=0){
-        html += '<table class="table table-striped" style="font-size:10px;margin-bottom:0px;">';
+        html += '<table class="table table-striped table-hover" style="font-size:10px;margin-bottom:0px;">';
         html += '<tr><th style="text-align:center">排名</th><th style="text-align:center">昵称</th><th style="text-align:center">天数</th></tr>';
         for (var i = 0; i < data.length; i++) {
-           // var s = i.toString();
-           // var m = i + 1;
-           // var inid =  data[i][0].split('&')[0]
-           // var uname = data[i][0].split('&')[1];
-           // if(uname == 'unknown'||uname == ''){
-           //    uname = inid;
-           // }
-           // html += '<tr><th style="text-align:center">' + m + '</th><th style="text-align:center">' + uname + '</th><th style="text-align:center">' + data[i][1] + '</th></tr>';
            html += '<tr><th style="text-align:center">' + data[i].id + '</th><th style="text-align:center">' + data[i].name + '</th><th style="text-align:center">' + data[i].day + '</th></tr>';
         };
         html += '</table>';
@@ -330,9 +323,9 @@ console.log("1111");
         return {
             normal: {
                 color: 'rgb(' + [
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160)
+                    Math.round(Math.random() * 500),
+                    Math.round(Math.random() * 500),
+                    Math.round(Math.random() * 500)
                 ].join(',') + ')'
             }
         };
@@ -362,7 +355,7 @@ console.log("1111");
                         }
                     },
                     tooltip: {
-                        show: false
+                        show: true
                     },
                     toolbox:{
                         show:true,
@@ -389,11 +382,12 @@ console.log("1111");
                                 {
                                     name: "我要金蛋",
                                     value: 10000,
-                                    itemStyle: {
-                                        normal: {
-                                            color: 'black'
-                                        }
-                                    }
+                                    // itemStyle: {
+                                    //     normal: {
+                                    //         color: 'black'
+                                    //     }
+                                    // }
+                                    itemStyle: createRandomItemStyle()
                                 },
                                 {
                                     name: "屹农金服",
@@ -499,11 +493,133 @@ console.log("1111");
             }
         );
     }
-    basic_1()
+    // 敏感度和影响力分布
+    function influence_lef(){
+        var myChart = echarts.init(document.getElementById('influence-lef'),'dark');
+        var option = {
+            backgroundColor:'transparent',
+            title: {
+                text: '影响力分布',
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                // data:['最高人数','最低人数']
+            },
+            toolbox: {
+                show: false,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: ['7864-7988','7369-7492'],
+                name:'影响力排名',
+                nameLocation:'end',
+                nameTextStyle:{
+                    color:'#01b4ff'
+                }
+            },
+            grid: {
+                show:true,
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            series: [
+                {
+                    name:'影响力排名',
+                    type:'bar',
+                    data: [1,2]
+                }
+            ]
+        };
+        myChart.setOption(option)
+    }
+    function influence_rig(){
+        var myChart = echarts.init(document.getElementById('influence-rig'),'dark');
+        var option = {
+            backgroundColor:'transparent',
+            title: {
+                text: '身份敏感度分布',
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                // data:['最高人数','最低人数']
+            },
+            toolbox: {
+                show: false,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'value',
+                boundaryGap: [0, 0.01]
+            },
+            yAxis: {
+                type: 'category',
+                data: ['7864-7988','7369-7492'],
+                name:'身份敏感度排名',
+                nameLocation:'end',
+                nameTextStyle:{
+                    color:'#01b4ff'
+                }
+            },
+            grid: {
+                show:true,
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            series: [
+                {
+                    name:'影响力排名',
+                    type:'bar',
+                    data: [1,2]
+                }
+            ]
+        };
+        myChart.setOption(option)
+    }
 
+
+    // 点击下拉框中的li
     $('#downbox li').on('click',function(){
         $('.detailed-content').show();
-        $('.detailed-content p.detailed-content-title span').text($(this).text())
+        $('.detailed-content p.detailed-content-title span').text($(this).text());
+        if($(this).text() == '核心人物列表'){
+            $('#person-list').show().siblings('#keyword').hide().siblings('#influence').hide();
+        }else if($(this).text() == '关键词'){
+            $('#keyword').show().siblings('#person-list').hide().siblings('#influence').hide();
+            basic_1();//关键词 echarts图表
+        }else if($(this).text() == '敏感度和影响力分布'){
+            $('#influence').show().siblings('#person-list').hide().siblings('#keyword').hide();
+            influence_lef();
+            influence_rig();
+        }
     })
 
 

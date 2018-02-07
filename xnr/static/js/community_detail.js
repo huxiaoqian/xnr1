@@ -14,7 +14,7 @@
                 data:['最高人数','最低人数']
             },
             toolbox: {
-                show: true,
+                show: false,
                 feature: {
                     dataZoom: {
                         yAxisIndex: 'none'
@@ -110,7 +110,7 @@
                 data:['最高人数','最低人数']
             },
             toolbox: {
-                show: true,
+                show: false,
                 feature: {
                     dataZoom: {
                         yAxisIndex: 'none'
@@ -205,7 +205,7 @@
                 data:['最高人数','最低人数']
             },
             toolbox: {
-                show: true,
+                show: false,
                 feature: {
                     dataZoom: {
                         yAxisIndex: 'none'
@@ -300,7 +300,7 @@
                 data:['最高人数','最低人数']
             },
             toolbox: {
-                show: true,
+                show: false,
                 feature: {
                     dataZoom: {
                         yAxisIndex: 'none'
@@ -1037,9 +1037,9 @@
         return {
             normal: {
                 color: 'rgb(' + [
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160),
-                    Math.round(Math.random() * 160)
+                    Math.round(Math.random() * 400),
+                    Math.round(Math.random() * 400),
+                    Math.round(Math.random() * 400)
                 ].join(',') + ')'
             }
         };
@@ -1072,7 +1072,7 @@
                         show: false
                     },
                     toolbox:{
-                        show:true,
+                        show:false,
                         feature:{
                             saveAsImage:{
                                 show:false
@@ -1096,11 +1096,12 @@
                                 {
                                     name: "我要金蛋",
                                     value: 10000,
-                                    itemStyle: {
-                                        normal: {
-                                            color: 'black'
-                                        }
-                                    }
+                                    // itemStyle: {
+                                    //     normal: {
+                                    //         color: 'black'
+                                    //     }
+                                    // }
+                                    itemStyle: createRandomItemStyle()
                                 },
                                 {
                                     name: "屹农金服",
@@ -1236,7 +1237,7 @@
                         show: false
                     },
                     toolbox:{
-                        show:true,
+                        show:false,
                         feature:{
                             saveAsImage:{
                                 show:false
@@ -1260,11 +1261,12 @@
                                 {
                                     name: "我要金蛋",
                                     value: 10000,
-                                    itemStyle: {
-                                        normal: {
-                                            color: 'black'
-                                        }
-                                    }
+                                    // itemStyle: {
+                                    //     normal: {
+                                    //         color: 'black'
+                                    //     }
+                                    // }
+                                    itemStyle: createRandomItemStyle()
                                 },
                                 {
                                     name: "屹农金服",
@@ -1518,8 +1520,8 @@
                 var myChart = ec.init(document.getElementById('social-content'),'dark');
                 var option = {
                     title : {
-                        text: '人物关系：乔布斯',
-                        subtext: '数据来自人立方',
+                        // text: '人物关系：乔布斯',
+                        // subtext: '数据来自人立方',
                         x:'right',
                         y:'bottom'
                     },
@@ -1528,7 +1530,7 @@
                         formatter: '{a} : {b}'
                     },
                     toolbox: {
-                        show : true,
+                        show : false,
                         feature : {
                             restore : {show: true},
                             magicType: {show: true, type: ['force', 'chord']},
@@ -1537,7 +1539,10 @@
                     },
                     legend: {
                         x: 'left',
-                        data:['家人','朋友']
+                        data:['家人','朋友'],
+                        textStyle:{
+                            color:'#fff'
+                        }
                     },
                     series : [
                         {
@@ -1560,7 +1565,7 @@
                                     label: {
                                         show: true,
                                         textStyle: {
-                                            color: '#333'
+                                            color: '#fff'
                                         }
                                     },
                                     nodeStyle : {
