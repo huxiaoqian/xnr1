@@ -95,20 +95,20 @@ function personEarly(personEarly_QQ) {
                         name=row._source.group_name;
                     };
                     var chatContent;//摘要内容
-                    if(row._source.msg_type == 'Text'){//文本信息
+                    if(row._source.msg_type == 'Text'){//----文本信息
                         chatContent = '<span class="chat-content">' + row._source.text +'</span>'+ '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;" onclick="transLate(\''+row._source.text+'\',event)">文本翻译</button>';
-                    }else if(row._source.msg_type == 'Picture'){//图片信息
-                        // chatContent ='<img onclick="showThis(event)" src="http://'+row._source.text+'" alt="" style="width:60px;cursor:pointer;" />';
+                    }else if(row._source.msg_type == 'Picture'){//------图片信息
                         chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
-                        // $('.btn-fanyi').hide();
-                    }else if(row._source.msg_type == 'Recording'){//语音信息
-                        chatContent = '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
+                    }else if(row._source.msg_type == 'Recording'){//------语音信息
+                        chatContent = '<span class="chat-content">' +
+                        '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
                           '<source src="'+row._source.text.slice(28)+'"/>'+
                           '<source src="'+row._source.text.slice(28)+'"/>'+
                           '<source src="'+row._source.text.slice(28)+'"/>'+
                           '抱歉，你的浏览器版本过低，请更新！'+
                         '</audio>'+
-                        '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;">语音翻译</button>'
+                        '</span>'+
+                        '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;" onclick="transLatevoice(\''+row._source.text+'\',event)">语音翻译</button>'
                     }else{
                         chatContent = row._source.text;
                     }
@@ -144,9 +144,16 @@ function transLate(txt,e){
     $('#loadingJump').modal('show');//显示加载
     // console.log(txt);
     this_targ = e.target;
-    var transLate_url = '/index/text_trans/?q='+txt;
-    // console.log(transLate_url);
-    public_ajax.call_request('get',transLate_url,trans_Late);
+    if($(this_targ).text() == '文本翻译'){
+        var transLate_url = '/index/text_trans/?q='+txt;
+        // console.log(transLate_url);
+        public_ajax.call_request('get',transLate_url,trans_Late);
+    }else if($(this_targ).text() == '返回原文'){
+        $(this_targ).prev('.chat-content').html(txt);
+        $(this_targ).text('文本翻译');
+        $('#loadingJump').modal('hide');//消失加载
+    }
+
 }
 function trans_Late(data){
     if(data){
@@ -158,9 +165,48 @@ function trans_Late(data){
             chat_content_data += data[i]+' ';
             // chat_content_data += data[i];
         }
-        $(this_targ).prev('.chat-content').text(chat_content_data)
+        $(this_targ).prev('.chat-content').text(chat_content_data);
+        $(this_targ).text('返回原文');
     }
 }
+// 语音翻译
+var this_targ_voice;
+function transLatevoice(txt,e){
+    $('#loadingJump').modal('show');//显示加载
+    // console.log(txt);
+    this_targ_voice = e.target;
+    if($(this_targ_voice).text() == '语音翻译'){
+        var transLate_voice_url = '/index/voice_trans/?voice_path='+txt;
+        // console.log(transLate_voice_url);
+        public_ajax.call_request('get',transLate_voice_url,trans_Late_voice);
+    }else if($(this_targ_voice).text() == '返回原文'){
+        var str = '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
+                          '<source src="'+txt.slice(28)+'"/>'+
+                          '<source src="'+txt.slice(28)+'"/>'+
+                          '<source src="'+txt.slice(28)+'"/>'+
+                          '抱歉，你的浏览器版本过低，请更新！'+
+                        '</audio>'
+        $(this_targ_voice).prev('.chat-content').html(str);
+        $(this_targ_voice).text('语音翻译');
+        $('#loadingJump').modal('hide');//消失加载
+    }
+
+}
+function trans_Late_voice(data){
+    if(data){
+        $('#loadingJump').modal('hide');//消失加载
+        // console.log(data);
+        // // console.log(this_targ);
+        // var chat_content_data = '';
+        // for(var i=0;i<data.length;i++){
+        //     chat_content_data += data[i]+' ';
+        //     // chat_content_data += data[i];
+        // }
+        $(this_targ_voice).prev('.chat-content').text(data);
+        $(this_targ_voice).text('返回原文');
+    }
+}
+
 // 显示大图
 function showThis(e){
     var targ = e.target;
@@ -227,7 +273,7 @@ $('.choosetime .demo-label input').on('click',function () {
         var urlLast='&period='+_val;
         var group_puid=$('.groupName input:radio[name="demo-radio"]:checked').val();
         var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+urlLast;
-        console.log(search_news_url)
+        // console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,personEarly);
     }
 });
@@ -241,7 +287,7 @@ $('.sureTime').on('click',function () {
         $('#pormpt').modal('show');
     }else {
         var search_news_url = '/wx_xnr_operate/searchbygrouppuid/?wxbot_id='+wxbot_id+'&group_puid='+group_puid+'&startdate='+s+'&enddate='+d;
-        console.log(search_news_url)
+        // console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,personEarly);
     }
 });

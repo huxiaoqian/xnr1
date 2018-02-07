@@ -139,6 +139,13 @@
         width: 100%;
         display:block;
     }
+    /* 影响力和敏感度排名 */
+    #influence #influence-lef,#influence #influence-rig{
+        height: 300px;
+        float: left;
+        width: 50%;
+        display:block;
+    }
 </style>
 {% endblock %}
 {% block main %}
@@ -191,9 +198,12 @@
             <!-- 关键词 -->
             <div id="keyword"></div>
             <!-- 敏感度和影响力分布 -->
-            <div id="influence"></div>
+            <div id="influence" class="clearfix">
+                <div id="influence-lef"></div>
+                <div id="influence-rig"></div>
+            </div>
         </div>
-        <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 新发现社区列表</p>
+        <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i> 新发现社区列表</p>
         <div id="new-track-community">
             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
         </div>
