@@ -1502,10 +1502,11 @@ def get_related_recommendation(task_detail):
             es_fb_results = es.search(index=index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
 
             fb_list = []
-            for weibo in es_fb_results:
-                item_else['fansnum'] = fb['_source']['user_fansnum']
+            for fb in es_fb_results:
+                # item_else['fansnum'] = fb['_source']['user_fansnum']    #暂无 
+                item_else['fansnum'] = 0
                 fb = fb['_source']
-                fb_list.append(weibo)
+                fb_list.append(fb)
             item_else['fb_list'] = fb_list
             item_else['friendsnum'] = 0
             item_else['statusnum'] = 0
