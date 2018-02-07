@@ -1,0 +1,104 @@
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_143776ebff14fdd4d2f83d0b7089d25e_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:51208...
+Connection from 127.0.0.1:51208 closed.
+Accept new connection from 127.0.0.1:51210...
+Connection from 127.0.0.1:51210 closed.
+Accept new connection from 127.0.0.1:56583...
+Accept new connection from 127.0.0.1:56586...
+Connection from 127.0.0.1:56586 closed.
+Connection from 127.0.0.1:56583 closed.
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_ef5130ab35f553ceed20eb245fde9f2c_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:57608...
+Connection from 127.0.0.1:57608 closed.
+Accept new connection from 127.0.0.1:57610...
+Connection from 127.0.0.1:57610 closed.
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_9ab092147a311ef354276fa57e8485c8_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:54317...
+Connection from 127.0.0.1:54317 closed.
+Accept new connection from 127.0.0.1:54338...
+Connection from 127.0.0.1:54338 closed.
+get mapping
+wx_group_message_2018-02-06
+{u'acknowledged': True}
+None
+get mapping
+wx_sent_group_message_2018-02-06
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWFre2241COAk33WH1ra', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-02-06'}
+{u'_type': u'record', u'_id': u'AWFre2-RGn9L3Xej21IH', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-02-06'}
+remove ok
+{'PostFix': '', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_a9039c6368bba49253fe96bc5dada449_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:44576...
+Connection from 127.0.0.1:44576 closed.
+Accept new connection from 127.0.0.1:44579...
+Connection from 127.0.0.1:44579 closed.
+get mapping
+wx_group_message_2018-02-07
+{u'acknowledged': True}
+None
+get mapping
+wx_sent_group_message_2018-02-07
+{u'acknowledged': True}
+None
+{u'_type': u'record', u'_id': u'AWFuOzEHGn9L3Xej21IR', u'created': True, u'_version': 1, u'_index': u'wx_sent_group_message_2018-02-07'}
+{u'_type': u'record', u'_id': u'AWFuOzUe1COAk33WH1r7', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-02-07'}
+remove ok
+{'PostFix': 'jpg', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
