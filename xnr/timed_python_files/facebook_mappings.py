@@ -6,7 +6,7 @@ from global_utils import es_xnr as es,facebook_flow_text_index_name_pre,facebook
 								facebook_count_index_name_pre,facebook_count_index_type,\
 							facebook_user_index_name,facebook_user_index_type
 
-def facebook_flow_text_mappings(index_name):
+def facebook_flow_text_mappings(index_name,index_type='text'):
 
 	index_info = {
 		'settings':{
@@ -22,7 +22,7 @@ def facebook_flow_text_mappings(index_name):
 			}
 		},
 		'mappings':{
-			facebook_flow_text_index_type:{
+			index_type:{
 				'properties':{
 					'uid':{
 						'type':'string',
@@ -125,10 +125,10 @@ def facebook_flow_text_mappings(index_name):
 	}
 
 	exist_indice = es.indices.exists(index=index_name)
-
+	print 'index_name...',index_name
 	if not exist_indice:
 		#print 'create...',index_name
-		es.indices.create(index=index_name,body=index_info,ignore=400)
+		print es.indices.create(index=index_name,body=index_info,ignore=400)
 
 
 def facebook_count_mappings(index_name):

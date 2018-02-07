@@ -44,6 +44,7 @@ from xnr.facebook_xnr_manage.views import mod as facebookxnrmanageModule
 from xnr.facebook_xnr_knowledge_base_management.views import mod as facebookxnrknowledgebasemanagementModule
 from xnr.facebook_xnr_report_manage.views import mod as facebookxnrreportmanageModule
 
+
 from xnr.twitter_xnr_create.views import mod as twitterxnrcreateModule
 from xnr.twitter_xnr_warning.views import mod as twitterxnrwarningModule
 from xnr.twitter_xnr_monitor.views import mod as twitterxnrmonitorModule
@@ -52,6 +53,7 @@ from xnr.twitter_xnr_knowledge_base_management.views import mod as twitterxnrkno
 
 from xnr.facebook_xnr_operate.views import mod as facebookxnroperateModule
 from xnr.twitter_xnr_operate.views import mod as twitterxnroperateModule
+from xnr.intelligent_writing.views import mod as intelligentwritingModule
 
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
@@ -107,6 +109,7 @@ def create_app():
     app.register_blueprint(facebookxnrcreateModule)
     app.register_blueprint(facebookxnrwarningModule)
     app.register_blueprint(facebookxnrmonitorModule)
+    
     app.register_blueprint(facebookxnrmanageModule)
     app.register_blueprint(facebookxnrknowledgebasemanagementModule)
     app.register_blueprint(facebookxnrreportmanageModule)    
@@ -116,9 +119,11 @@ def create_app():
     app.register_blueprint(twitterxnrmonitorModule)
     app.register_blueprint(twitterxnrmanageModule)
     app.register_blueprint(twitterxnrknowledgebasemanagementModule)
-
+    
     app.register_blueprint(facebookxnroperateModule)
     app.register_blueprint(twitterxnroperateModule)
+
+    app.register_blueprint(intelligentwritingModule)
 
     app.config['DEBUG'] = True
 
