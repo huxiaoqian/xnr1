@@ -1,4 +1,4 @@
-var end_time=Date.parse(new Date())/1000;
+var end_time=yesterday();
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
@@ -165,9 +165,8 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var end=Date.parse(new Date())/1000;
 var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=safe';
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=safe';
 public_ajax.call_request('get',safe_7day_url,safe_7day);
 function safe_7day(data) {
     $('#near_7_day p').show();
@@ -349,17 +348,13 @@ function radar(data) {
                 var p;
                 if (t=='area'){p=$('#field input')}else {p=$('#userField input')};
                 for(var s=0;s<5;s++){
-                    radarData.push({name:$(p[s]).val(), max:1});
+                    radarData.push({name:$(p[s]).val().replace(/_/g,'\n'), max:1});
                 }
             }else {
                 for(var m in data[k]){
-                    radarData.push({name:m, max:1});
+                    radarData.push({name:m.replace(/_/g,'\n'), max:1});
                     radarVal.push(data[k][m]);
                 }
-            }
-            for(var m in data[k]){
-                radarData.push({name:m, max:1});
-                radarVal.push(data[k][m]);
             }
         }else {
             dashBoard(data[k]);
@@ -556,36 +551,6 @@ function weiboData(data) {
     $('#postRelease p').slideUp(30);
     $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
-//评论
-function showInput(_this) {
-    $(_this).parents('.post_center-every').find('.commentDown').show();
-};
-function comMent(_this){
-    var txt = $(_this).prev().val().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
-    if (txt!=''){
-        var post_url_1='/weibo_xnr_operate/reply_comment/?text='+txt+'&xnr_user_no='+ID_Num+'&mid='+mid;
-        public_ajax.call_request('get',post_url_1,postYES)
-    }else {
-        $('#pormpt p').text('评论内容不能为空。');
-        $('#pormpt').modal('show');
-    }
-}
-//转发
-function retweet(_this) {
-    var txt = $(_this).parent().prev().text().replace(/\&/g,'%26').replace(/\#/g,'%23');
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
-    var uid = $(_this).parents('.post_center-every').find('.uid').text();
-    var post_url_2='/weibo_xnr_operate/reply_retweet/?tweet_type=行为评估'+'&xnr_user_no='+ID_Num+
-        '&text='+txt+'&mid='+mid;
-    public_ajax.call_request('get',post_url_2,postYES)
-}
-//点赞
-function thumbs(_this) {
-    var mid = $(_this).parents('.post_center-every').find('.mid').text();
-    var post_url_3='/weibo_xnr_operate/like_operate/?mid='+mid+'&xnr_user_no='+ID_Num;
-    public_ajax.call_request('get',post_url_3,postYES)
-};
 //操作返回结果
 function postYES(data) {
     var f='';

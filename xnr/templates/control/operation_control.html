@@ -1,78 +1,78 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>操作控制</title>{% endblock %}
 {% block my_css %}
-    <link rel="stylesheet" href="/static/css/operation_control.css">
-    <style>
-        .fixed-table-toolbar .search {width:100%}
-        .fixed-table-pagination .page-list{display: none;}
-        .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
-        .demo-radio{display:none!important;}
-        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-        #start_1,#end_1,#sure-1,#start_2,#end_2,#sure-2,#start_3,#end_3,#sure-3 {
-            display:none;
-        }
-        #sure-1,#sure-2,#sure-3 {
-            padding:1px 6px;
-            color: white;
-            font-size: 12px;
-            border: 1px solid silver;
-            border-radius: 5px;
-            background:transparent;
-            cursor: pointer;
-        }
-        #sure-1:hover,#sure-2:hover,#sure-3:hover {
-            background: rgba(8,23,44,0.65);
-        }
-        /**/
-        .li-3 .bootstrap-table {
-            margin: 0 auto;
-            height: auto!important;
-        }
-        .li-3 .table-no-bordered,.li-3 .table>tbody>tr>td,.li-3 .fixed-table-container,
-        .li-3 .bootstrap-table .table>thead>tr>th,.li-3 .bootstrap-table .table,.li-3 .table>tbody>tr>td{
-            border: none;
-        }
-        .li-3 .fixed-table-pagination .page-list {
-            display: none!important;
-        }
-        .li-3 .fixed-table-body {
-            height: auto!important;
-            overflow-y: hidden;
-        }
-        .li-3 .bootstrap-table .table:not(.table-condensed),.li-3 .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
-        .li-3 .table>tbody>tr>td{
-            padding: 0!important;
-        }
-        .li-3 .fixed-table-container thead th .both{
-            background-image: none!important;
-        }
-        .fixed-table-container {top: 15px;}
-        .table-hover>tbody>tr:hover {
-            background-color: inherit!important;
-        }
-        .fixed-table-toolbar .search {width: 100%;}
-        .form-control {
-            text-align: center;
-            font-size: 14px;
-            color: white;
-            border: 1px solid silver;
-            border-radius: 5px;
-            padding: 4px 7px;
-            background: rgba(8,23,44,0.35);
-        }
-        /*.li-3 .table:not(.table-condensed)>tbody>tr>td {*/
-            /*text-align: left!important;*/
-        /*}*/
-        .history-2 .fixed-table-toolbar {display: none;}
-        /**/
-        .table>thead>tr>th {border-top: none!important;}
-        .li-1 .fixed-table-container thead th .both {background-image: none!important;}
-        .li-1 .bootstrap-table .table:not(.table-condensed) {padding: 0!important;}
-        .li-1 .bootstrap-table .table {border-bottom: none!important;}
-        .li-1 .fixed-table-pagination { display:none!important;}
-    </style>
+<link rel="stylesheet" href="/static/css/operation_control.css">
+<style>
+    .fixed-table-toolbar .search {width:100%}
+    .fixed-table-pagination .page-list{display: none;}
+    .demo-label{display:inline-block;margin:5px;cursor:pointer;font-size: 12px;font-weight: normal;color: white;}
+    .demo-radio{display:none!important;}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    #start_1,#end_1,#sure-1,#start_2,#end_2,#sure-2,#start_3,#end_3,#sure-3 {
+        display:none;
+    }
+    #sure-1,#sure-2,#sure-3 {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    #sure-1:hover,#sure-2:hover,#sure-3:hover {
+        background: rgba(8,23,44,0.65);
+    }
+    /**/
+    .li-3 .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .li-3 .table-no-bordered,.li-3 .table>tbody>tr>td,.li-3 .fixed-table-container,
+    .li-3 .bootstrap-table .table>thead>tr>th,.li-3 .bootstrap-table .table,.li-3 .table>tbody>tr>td{
+        border: none;
+    }
+    .li-3 .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .li-3 .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .li-3 .bootstrap-table .table:not(.table-condensed),.li-3 .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .li-3 .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .li-3 .fixed-table-container thead th .both{
+        background-image: none!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    /*.li-3 .table:not(.table-condensed)>tbody>tr>td {*/
+        /*text-align: left!important;*/
+    /*}*/
+    .history-2 .fixed-table-toolbar {display: none;}
+    /**/
+    .table>thead>tr>th {border-top: none!important;}
+    .li-1 .fixed-table-container thead th .both {background-image: none!important;}
+    .li-1 .bootstrap-table .table:not(.table-condensed) {padding: 0!important;}
+    .li-1 .bootstrap-table .table {border-bottom: none!important;}
+    .li-1 .fixed-table-pagination { display:none!important;}
+</style>
 {% endblock %}
 {% block main %}
 <div id="container">
@@ -346,6 +346,39 @@
 
 <!--模态框-->
 <!--查看内容-->
+<style>
+    #lookDialogue .dialogueContent ._dialogue {
+        position: relative;
+        padding: 10px 10px 10px 30px;
+        background: #182a44;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+    #lookDialogue .dialogueContent ._dialogue .center_icon {
+        position: absolute;
+        top:10px;
+        left:3px;
+        width: 20px;
+        height:20px;
+    }
+    #container .dialogueContent ._dialogue a {
+        cursor: pointer;
+        display: inline-block;
+    }
+</style>
+<div class="modal fade" id="lookDialogue" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">对话内容</h4>
+            </div>
+            <div class="modal-body dialogueContent">
+
+            </div>
+        </div>
+    </div>
+</div>
 <!--提示弹框-->
 <div class="modal fade" id="successfail" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
