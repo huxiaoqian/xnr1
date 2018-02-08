@@ -1,383 +1,4 @@
-// 人数变化图
-    function peopleNum(){
-        var myChart = echarts.init(document.getElementById('people-num'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            title: {
-                text: '人数变化图',
-                // subtext: '纯属虚构'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['最高人数','最低人数']
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
-                    dataView: {readOnly: false},
-                    magicType: {type: ['line', 'bar']},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    // formatter: '{value} °C'
-                    formatter: '{value}'
-                }
-            },
-            grid:{
-                // height:'80%',
-                y:'15%'
-            },
-            series: [
-                {
-                    name:'最高人数',
-                    type:'line',
-                    data:[11, 11, 15, 13, 12, 13, 10],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name:'最低人数',
-                    type:'line',
-                    data:[1, -2, 2, 5, 3, 2, 0],
-                    markPoint: {
-                        data: [
-                            {name: '预警点', value: 2, xAxis: 2, yAxis: 2}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'},
-                            [{
-                                symbol: 'none',
-                                x: '90%',
-                                yAxis: 'max'
-                            }, {
-                                symbol: 'circle',
-                                label: {
-                                    normal: {
-                                        position: 'start',
-                                        formatter: '最大值'
-                                    }
-                                },
-                                type: 'max',
-                                name: '最高点'
-                            }]
-                        ]
-                    }
-                }
-            ]
-        };
-        myChart.setOption(option)
-    }
-    peopleNum();
 
-// 平均敏感度变化折线图
-    function sensitivity(){
-        var myChart = echarts.init(document.getElementById('sensitivity'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            title: {
-                text: '平均敏感度变化折线图',
-                // subtext: '纯属虚构'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['最高人数','最低人数']
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
-                    dataView: {readOnly: false},
-                    magicType: {type: ['line', 'bar']},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            grid:{
-                y:'15%'
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    // formatter: '{value} °C'
-                    formatter: '{value}'
-                }
-            },
-            series: [
-                {
-                    name:'最高人数',
-                    type:'line',
-                    data:[11, 11, 15, 13, 12, 13, 10],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name:'最低人数',
-                    type:'line',
-                    data:[1, -2, 2, 5, 3, 2, 0],
-                    markPoint: {
-                        data: [
-                            {name: '预警点', value: 2, xAxis: 2, yAxis: 2}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'},
-                            [{
-                                symbol: 'none',
-                                x: '90%',
-                                yAxis: 'max'
-                            }, {
-                                symbol: 'circle',
-                                label: {
-                                    normal: {
-                                        position: 'start',
-                                        formatter: '最大值'
-                                    }
-                                },
-                                type: 'max',
-                                name: '最高点'
-                            }]
-                        ]
-                    }
-                }
-            ]
-        };
-        myChart.setOption(option)
-    }
-    sensitivity()
-
-// 平均影响力变化折线图
-    function influence(){
-        var myChart = echarts.init(document.getElementById('influence'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            title: {
-                text: '平均影响力变化折线图',
-                // subtext: '纯属虚构'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['最高人数','最低人数']
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
-                    dataView: {readOnly: false},
-                    magicType: {type: ['line', 'bar']},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            grid:{
-                y:'15%'
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    // formatter: '{value} °C'
-                    formatter: '{value}'
-                }
-            },
-            series: [
-                {
-                    name:'最高人数',
-                    type:'line',
-                    data:[11, 11, 15, 13, 12, 13, 10],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name:'最低人数',
-                    type:'line',
-                    data:[1, -2, 2, 5, 3, 2, 0],
-                    markPoint: {
-                        data: [
-                            {name: '预警点', value: 2, xAxis: 2, yAxis: 2}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'},
-                            [{
-                                symbol: 'none',
-                                x: '90%',
-                                yAxis: 'max'
-                            }, {
-                                symbol: 'circle',
-                                label: {
-                                    normal: {
-                                        position: 'start',
-                                        formatter: '最大值'
-                                    }
-                                },
-                                type: 'max',
-                                name: '最高点'
-                            }]
-                        ]
-                    }
-                }
-            ]
-        };
-        myChart.setOption(option)
-    }
-    influence()
-
-// 聚集系数变化折线图
-    function convergence(){
-        var myChart = echarts.init(document.getElementById('convergence'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            title: {
-                text: '聚集系数变化折线图',
-                // subtext: '纯属虚构'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['最高人数','最低人数']
-            },
-            toolbox: {
-                show: false,
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
-                    dataView: {readOnly: false},
-                    magicType: {type: ['line', 'bar']},
-                    restore: {},
-                    saveAsImage: {}
-                }
-            },
-            grid:{
-                y:'15%'
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: ['周一','周二','周三','周四','周五','周六','周日']
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    // formatter: '{value} °C'
-                    formatter: '{value}'
-                }
-            },
-            series: [
-                {
-                    name:'最高人数',
-                    type:'line',
-                    data:[11, 11, 15, 13, 12, 13, 10],
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name:'最低人数',
-                    type:'line',
-                    data:[1, -2, 2, 5, 3, 2, 0],
-                    markPoint: {
-                        data: [
-                            {name: '预警点', value: 2, xAxis: 2, yAxis: 2}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'},
-                            [{
-                                symbol: 'none',
-                                x: '90%',
-                                yAxis: 'max'
-                            }, {
-                                symbol: 'circle',
-                                label: {
-                                    normal: {
-                                        position: 'start',
-                                        formatter: '最大值'
-                                    }
-                                },
-                                type: 'max',
-                                name: '最高点'
-                            }]
-                        ]
-                    }
-                }
-            ]
-        };
-        myChart.setOption(option)
-    }
-    convergence()
 
 // tab栏
 // 社区详情----
@@ -386,29 +7,29 @@
     var memberChange_data = [
             {
                 a:'1',
-                b:'1',
-                c:'1',
-                d:'1',
-                e:'1',
-                f:'1',
-                g:'1',
-                h:'1',
-                i:'1',
-                g:'1',
-                k:'1',
+                b:'西安直播',
+                c:'3423537',
+                d:'84950',
+                e:'3252',
+                f:'22',
+                g:'7837',
+                h:'637',
+                i:'7272',
+                g:'4537',
+                k:'5343',
             },
             {
                 a:'2',
-                b:'2',
-                c:'2',
-                d:'2',
-                e:'2',
-                f:'2',
-                g:'2',
-                h:'2',
-                i:'2',
-                g:'2',
-                k:'2',
+                b:'民运人士',
+                c:'23112451',
+                d:'23514',
+                e:'235',
+                f:'8',
+                g:'375',
+                h:'7275',
+                i:'424',
+                g:'7837',
+                k:'786',
             },
         ]
 
@@ -432,23 +53,23 @@
                 sortName:'bci',
                 sortOrder:"desc",
                 columns: [
+                    // {
+                    //     title: "编号",//标题
+                    //     field: "a",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.a;
+                    //         };
+                    //     }
+                    // },
                     {
-                        title: "编号",//标题
-                        field: "a",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
-                                return '未知';
-                            } else {
-                                return row.a;
-                            };
-                        }
-                    },
-                    {
-                        title: "社区名称",//标题
+                        title: "昵称",//标题
                         field: "b",//键名
                         sortable: false,//是否可排序
                         order: "desc",//默认排序方式
@@ -463,7 +84,7 @@
                         }
                     },
                     {
-                        title: "人数",//标题
+                        title: "ID",//标题
                         field: "c",//键名
                         sortable: true,//是否可排序
                         order: "desc",//默认排序方式
@@ -477,21 +98,21 @@
                             };
                         }
                     },
-                    {
-                        title: "紧密度",//标题
-                        field: "d",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
-                                return '未知';
-                            } else {
-                                return row.d;
-                            };
-                        }
-                    },
+                    // {
+                    //     title: "紧密度",//标题
+                    //     field: "d",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.d;
+                    //         };
+                    //     }
+                    // },
                     {
                         title: "平均聚集系数",//标题
                         field: "e",//键名
@@ -595,51 +216,21 @@
                             return '<span style="cursor:pointer;color:white;" onclick="jumpFrame(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
                         }
                     },
-                    {
-                        title: "操作",//标题
-                        field: "select",
-                        checkbox: true,
-                        align: "center",//水平
-                        valign: "middle"//垂直
-                    },
-                    /*
-                    {
-                        title: "登录状态",//标题
-                        field: "login_status",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.login_status == 'logout'){return '离线'}else{return '在线'}
-                        },
-                    },
-                    {
-                        title: '操作',//标题
-                        field: "",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            var ld;
-                            if (row.login_status=='logout'){ld = '登录'}else{ld = '在线中'}
-                            var str = '<a onclick="loginIN(this,\''+row.wxbot_id+'\',\''+row.wx_id+'\',\''+row.login_status+'\')" in_out="out" style="cursor: pointer;color:white;" title="'+ld+'"><i class="icon icon-key"></i></a>';
-                            str +='<a onclick="enterIn(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;display: inline-block;margin:0 10px;"  title="进入"><i class="icon icon-link"></i></a>';
-                            str +='<a onclick="deletePerson(\''+row.wxbot_id+'\')" style="cursor: pointer;color:white;margin-right:10px;"  title="删除"><i class="icon icon-trash"></i></a>';
-                            str +='<a onclick="logoutPerson(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;"  title="退出登录"><i class="icon icon-signout"></i></a>';
-                            str +='<a onclick="loadallGroups(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;margin-left:10px;"  title="设置群组"><i class="icon icon-cogs"></i></a>';
-                            return str;
-                        },
-                    },
-                     */
+                    // {
+                    //     title: "操作",//标题
+                    //     field: "select",
+                    //     checkbox: true,
+                    //     align: "center",//水平
+                    //     valign: "middle"//垂直
+                    // },
+
                 ],
         });
         $('#member-change-1 p').slideUp(30);
     }
 
     memberChange_1(memberChange_data)
-
+    // 社区成员列表
     function memberChange_2(data){
         $('#member-change-2').bootstrapTable('load', data);
         $('#member-change-2').bootstrapTable({
@@ -660,21 +251,21 @@
                 sortName:'bci',
                 sortOrder:"desc",
                 columns: [
-                    {
-                        title: "编号",//标题
-                        field: "a",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
-                                return '未知';
-                            } else {
-                                return row.a;
-                            };
-                        }
-                    },
+                    // {
+                    //     title: "编号",//标题
+                    //     field: "a",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.a;
+                    //         };
+                    //     }
+                    // },
                     {
                         title: "社区名称",//标题
                         field: "b",//键名
@@ -705,21 +296,21 @@
                             };
                         }
                     },
-                    {
-                        title: "紧密度",//标题
-                        field: "d",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
-                                return '未知';
-                            } else {
-                                return row.d;
-                            };
-                        }
-                    },
+                    // {
+                    //     title: "紧密度",//标题
+                    //     field: "d",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.d;
+                    //         };
+                    //     }
+                    // },
                     {
                         title: "平均聚集系数",//标题
                         field: "e",//键名
@@ -823,19 +414,19 @@
                             return '<span style="cursor:pointer;color:white;" onclick="jumpFrame(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
                         }
                     },
-                    {
-                        title: "操作",//标题
-                        field: "select",
-                        checkbox: true,
-                        align: "center",//水平
-                        valign: "middle"//垂直
-                    },
+                    // {
+                    //     title: "操作",//标题
+                    //     field: "select",
+                    //     checkbox: true,
+                    //     align: "center",//水平
+                    //     valign: "middle"//垂直
+                    // },
                 ],
         });
         $('#member-change-2 p').slideUp(30);
     }
     memberChange_2(memberChange_data)
-
+    // 核心成员列表
     function memberChange_3(data){
         $('#member-change-3').bootstrapTable('load', data);
         $('#member-change-3').bootstrapTable({
@@ -856,21 +447,21 @@
                 sortName:'bci',
                 sortOrder:"desc",
                 columns: [
-                    {
-                        title: "编号",//标题
-                        field: "a",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
-                                return '未知';
-                            } else {
-                                return row.a;
-                            };
-                        }
-                    },
+                    // {
+                    //     title: "编号",//标题
+                    //     field: "a",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.a;
+                    //         };
+                    //     }
+                    // },
                     {
                         title: "社区名称",//标题
                         field: "b",//键名
@@ -901,21 +492,21 @@
                             };
                         }
                     },
-                    {
-                        title: "紧密度",//标题
-                        field: "d",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
-                                return '未知';
-                            } else {
-                                return row.d;
-                            };
-                        }
-                    },
+                    // {
+                    //     title: "紧密度",//标题
+                    //     field: "d",//键名
+                    //     sortable: true,//是否可排序
+                    //     order: "desc",//默认排序方式
+                    //     align: "center",//水平
+                    //     valign: "middle",//垂直
+                    //     formatter: function (value, row, index) {
+                    //         if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
+                    //             return '未知';
+                    //         } else {
+                    //             return row.d;
+                    //         };
+                    //     }
+                    // },
                     {
                         title: "平均聚集系数",//标题
                         field: "e",//键名
@@ -1019,13 +610,13 @@
                             return '<span style="cursor:pointer;color:white;" onclick="jumpFrame(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
                         }
                     },
-                    {
-                        title: "操作",//标题
-                        field: "select",
-                        checkbox: true,
-                        align: "center",//水平
-                        valign: "middle"//垂直
-                    },
+                    // {
+                    //     title: "操作",//标题
+                    //     field: "select",
+                    //     checkbox: true,
+                    //     align: "center",//水平
+                    //     valign: "middle"//垂直
+                    // },
                 ],
         });
         $('#member-change-3 p').slideUp(30);
@@ -1635,5 +1226,359 @@
             }
         );
     }
-    social()
+    // social()  //echarts 2 的
+    function social_1(div){
+        var myChart = echarts.init(document.getElementById(div),'dark');
+        myChart.showLoading();
+        // $.get('./les-miserables.gexf', function (xml) {
+            myChart.hideLoading();
+            // ---------
 
+            // ---------
+            // var graph = echarts.dataTool.gexf.parse(xml);
+            var categories = [];
+            for (var i = 0; i < 9; i++) {
+                categories[i] = {
+                    name: '类目' + i
+                };
+            }
+            // graph.nodes.forEach(function (node) {
+            //     node.itemStyle = null;
+            //     node.symbolSize = 10;
+            //     node.value = node.symbolSize;
+            //     node.category = node.attributes.modularity_class;
+            //     // Use random x, y
+            //     node.x = node.y = null;
+            //     node.draggable = true;
+            // });
+            option = {
+                backgroundColor:'transparent',
+                title: {
+                    text: 'Les Miserables',
+                    subtext: 'Default layout',
+                    top: 'bottom',
+                    left: 'right'
+                },
+                tooltip: {},
+                legend: [{
+                    selectedMode: 'multiple',// 图例选择模式
+                    // data: categories.map(function (a) {
+                    //     return a.name;
+                    // })
+                    data:['Les Miserables']
+                }],
+                animation: false,
+                series : [
+                    {
+                        name: 'Les Miserables',
+                        type: 'graph',
+                        layout: 'force',
+
+                        data: [
+                            {
+                                name: '1',
+                                x: 10,
+                                y: 10,
+                                value: 10
+                            },
+                            {
+                                name: '2',
+                                x: 100,
+                                y: 100,
+                                value: 20,
+                                symbolSize: 20,
+                                itemStyle: {
+                                    color: 'red'
+                                },
+                            },
+                            {
+                                name: '3',
+                                x: 30,
+                                y: 30,
+                                value: 20,
+                                symbolSize: 20,
+                                itemStyle: {
+                                    color: 'red'
+                                }
+                            },
+                            {
+                                name: '4',
+                                x: 20,
+                                y: 300,
+                                value: 20,
+                                symbolSize: 20,
+                                itemStyle: {
+                                    color: 'red'
+                                }
+                            },
+                            {category:0, name: '乔布斯', value : 10, label: '乔布斯\n（主要）'},
+                            {category:1, name: '丽萨-乔布斯',value : 2},
+                            {category:1, name: '保罗-乔布斯',value : 3},
+                            {category:1, name: '克拉拉-乔布斯',value : 3},
+                            {category:1, name: '劳伦-鲍威尔',value : 7},
+                            {category:2, name: '史蒂夫-沃兹尼艾克',value : 5},
+                            {category:2, name: '奥巴马',value : 8},
+                            {category:2, name: '比尔-盖茨',value : 9},
+                            {category:2, name: '乔纳森-艾夫',value : 4},
+                            {category:2, name: '蒂姆-库克',value : 4},
+                            {category:2, name: '龙-韦恩',value : 1},
+                        ],
+                        links: [
+                            {
+                                source: '1',
+                                target: '2'
+                            },
+                            {
+                                source: '2',
+                                target: '3'
+                            },
+                            {
+                                source: '1',
+                                target: '4'
+                            },
+                            {source : '丽萨-乔布斯', target : '乔布斯', weight : 1, name: '女儿'},
+                            {source : '保罗-乔布斯', target : '乔布斯', weight : 2, name: '父亲'},
+                            {source : '克拉拉-乔布斯', target : '乔布斯', weight : 1, name: '母亲'},
+                            {source : '劳伦-鲍威尔', target : '乔布斯', weight : 2},
+                            {source : '史蒂夫-沃兹尼艾克', target : '乔布斯', weight : 3, name: '合伙人'},
+                            {source : '奥巴马', target : '乔布斯', weight : 1},
+                            {source : '比尔-盖茨', target : '乔布斯', weight : 6, name: '竞争对手'},
+                            {source : '乔纳森-艾夫', target : '乔布斯', weight : 1, name: '爱将'},
+                            {source : '蒂姆-库克', target : '乔布斯', weight : 1},
+                            {source : '龙-韦恩', target : '乔布斯', weight : 1},
+                            {source : '克拉拉-乔布斯', target : '保罗-乔布斯', weight : 1},
+                            {source : '奥巴马', target : '保罗-乔布斯', weight : 1},
+                            {source : '奥巴马', target : '克拉拉-乔布斯', weight : 1},
+                            {source : '奥巴马', target : '劳伦-鲍威尔', weight : 1},
+                            {source : '奥巴马', target : '史蒂夫-沃兹尼艾克', weight : 1},
+                            {source : '比尔-盖茨', target : '奥巴马', weight : 6},
+                            {source : '比尔-盖茨', target : '克拉拉-乔布斯', weight : 1},
+                            {source : '蒂姆-库克', target : '奥巴马', weight : 1}
+                        ],
+
+                        // data: graph.nodes,
+                        // links: graph.links,
+
+                        categories: categories,
+                        roam: true,
+                        label: {
+                            normal: {
+                                position: 'right'
+                            }
+                        },
+                        force: {
+                            repulsion: 100
+                        }
+                    }
+                ]
+            };
+
+            myChart.setOption(option);
+
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+        // }, 'xml');
+    }
+    social_1('social-content');
+    social_1('social-content-2');
+
+
+// 离去人员
+    function leavePerson_content(data){
+            $('#leave-person-content').bootstrapTable('load', data);
+            $('#leave-person-content').bootstrapTable({
+                    data:data,
+                    search: true,//是否搜索
+                    pagination: true,//是否分页
+                    pageSize:10,//单页记录数
+                    pageList: [15,20,25],//分页步进值
+                    sidePagination: "client",//服务端分页
+                    searchAlign: "left",
+                    searchOnEnterKey: true,//回车搜索
+                    showRefresh: false,//刷新按钮
+                    showColumns: false,//列选择按钮
+                    buttonsAlign: "right",//按钮对齐方式
+                    locale: "zh-CN",//中文支持
+                    detailView: false,
+                    showToggle:false,
+                    sortName:'bci',
+                    sortOrder:"desc",
+                    columns: [
+                        // {
+                        //     title: "编号",//标题
+                        //     field: "a",//键名
+                        //     sortable: true,//是否可排序
+                        //     order: "desc",//默认排序方式
+                        //     align: "center",//水平
+                        //     valign: "middle",//垂直
+                        //     formatter: function (value, row, index) {
+                        //         if (row.a == '' || row.a == 'null' || row.a == 'unknown'||!row.a) {
+                        //             return '未知';
+                        //         } else {
+                        //             return row.a;
+                        //         };
+                        //     }
+                        // },
+                        {
+                            title: "昵称",//标题
+                            field: "b",//键名
+                            sortable: false,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.b == '' || row.b == 'null' || row.b == 'unknown'||!row.b) {
+                                    return '未知';
+                                } else {
+                                    return row.b;
+                                };
+                            }
+                        },
+                        {
+                            title: "ID",//标题
+                            field: "c",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.c == '' || row.c == 'null' || row.c == 'unknown'||!row.c||row.c.length==0) {
+                                    return '未知';
+                                } else {
+                                    return row.c;
+                                };
+                            }
+                        },
+                        // {
+                        //     title: "紧密度",//标题
+                        //     field: "d",//键名
+                        //     sortable: true,//是否可排序
+                        //     order: "desc",//默认排序方式
+                        //     align: "center",//水平
+                        //     valign: "middle",//垂直
+                        //     formatter: function (value, row, index) {
+                        //         if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
+                        //             return '未知';
+                        //         } else {
+                        //             return row.d;
+                        //         };
+                        //     }
+                        // },
+                        {
+                            title: "平均聚集系数",//标题
+                            field: "e",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.e==''||row.e=='null'||row.e=='unknown'||!row.e){
+                                    return '未知';
+                                }else {
+                                    return row.e;
+                                }
+                            }
+                        },
+                        {
+                            title: "最大影响力",//标题
+                            field: "f",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.f==''||row.f=='null'||row.f=='unknown'||!row.f){
+                                    return '未知';
+                                }else {
+                                    return row.f;
+                                }
+                            }
+                        },
+
+                        {
+                            title: "平均影响力",//标题
+                            field: "g",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.g==''||row.g=='null'||row.g=='unknown'||!row.g){
+                                    return '未知';
+                                }else {
+                                    return row.g;
+                                }
+                            }
+                        },
+                        {
+                            title: "最大敏感度",//标题
+                            field: "h",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.h==''||row.h=='null'||row.h=='unknown'||!row.h){
+                                    return '未知';
+                                }else {
+                                    return row.h;
+                                }
+                            }
+                        },
+                        {
+                            title: "平均敏感度",//标题
+                            field: "i",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.i==''||row.i=='null'||row.i=='unknown'||!row.i){
+                                    return '未知';
+                                }else {
+                                    return row.i;
+                                }
+                            }
+                        },
+                        {
+                            title: "预警级别",//标题
+                            field: "g",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                if (row.g==''||row.g=='null'||row.g=='unknown'||!row.g){
+                                    return '未知';
+                                }else {
+                                    return row.g;
+                                }
+                            }
+                        },
+                        {
+                            title: "跟踪详情",//标题
+                            field: "k",//键名
+                            sortable: true,//是否可排序
+                            order: "desc",//默认排序方式
+                            align: "center",//水平
+                            valign: "middle",//垂直
+                            formatter: function (value, row, index) {
+                                // return '<span style="cursor:pointer;color:white;" onclick="jumpFrame_2(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
+                                return '<span style="cursor:pointer;color:white;" onclick="jumpFrame(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
+                            }
+                        },
+                        // {
+                        //     title: "操作",//标题
+                        //     field: "select",
+                        //     checkbox: true,
+                        //     align: "center",//水平
+                        //     valign: "middle"//垂直
+                        // },
+
+                    ],
+            });
+            $('#leave-person-content p').slideUp(30);
+        }
+
+    leavePerson_content(memberChange_data)

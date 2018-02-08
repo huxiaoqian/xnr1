@@ -1,5 +1,5 @@
 {% extends "publicNav.html" %}
-{% block title %}<title>预警监控 - 社区预警详情</title>{% endblock %}
+{% block title %}<title>预警监控 - 社区详情</title>{% endblock %}
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/community-detail.css">
 <style>
@@ -18,7 +18,8 @@
         color:#f98077;
     }
 
-    /* 人数变化 */
+    /* ----------------- */
+    /* 人数变化 ----折线图*/
     #people-num  ,#sensitivity ,#influence ,#convergence {
         float:left;
         width:49%;
@@ -31,6 +32,8 @@
     #sensitivity ,#convergence {
         margin-left:2%;
     }
+    /* --------------- */
+
 
     /* tab栏 */
     .type_page {
@@ -52,16 +55,16 @@
     }
     /* 表格样式 */
     .bootstrap-table .table>thead>tr>th{
-        width: 9%;
+        width: 7%;
     }
     .fixed-table-container tbody .selected td {
         background-color: #2a556f!important;
     }
     /* tab栏社区详情  边框*/
-    #member-change-1 ,#member-change-2, #member-change-3 {
+    #member-change-1 ,#member-change-2, #member-change-3, #leave-person-content {
         border-bottom:none;
     }
-    #member-change-1 thead th ,#member-change-2 thead th, #member-change-3 thead th{
+    #member-change-1 thead th ,#member-change-2 thead th, #member-change-3 thead th, #leave-person-content thead th{
         border-top:none;
     }
     /* 蓝色小标题 */
@@ -131,6 +134,12 @@
     #social-content {
         margin-top:20px;
         height: 500px;
+        border-bottom: 1px solid #ddd;
+    }
+    #social-content-2 {
+        margin-top:20px;
+        height: 500px;
+        /* border-bottom: 1px solid #ddd; */
     }
 </style>
 {% endblock %}
@@ -142,35 +151,6 @@
             <b style="font-size: 20px;color: #fff;">社区基本信息</b>
         </div>
     </div>
-    <!-- <div class="choosetime">
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time" value='0' checked>
-            <span class="demo-checkbox demo-radioInput"></span> 今天
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time" value='1'>
-            <span class="demo-checkbox demo-radioInput"></span> 昨天
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time" value='7'>
-            <span class="demo-checkbox demo-radioInput"></span> 7天
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time" value='30'>
-            <span class="demo-checkbox demo-radioInput"></span> 30天
-        </label>
-        <label class="demo-label">
-            <input class="demo-radio" type="radio" name="time" value='mize'>
-            <span class="demo-checkbox demo-radioInput"></span> 自定义
-        </label>
-        <input type="text" size="16" id="start" class="form_datetime" placeholder="开始时间"
-               style="height: 20px;font-size: 10px;color: white;text-align: center;
-                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-        <input type="text" size="16" id="end" class="form_datetime" placeholder="结束时间"
-               style="height: 20px;font-size: 10px;color: white;text-align: center;
-                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-        <span id="sure" class="sureTime">确定</span>
-    </div> -->
     <!-- 社区详情 -->
     <div class="community-detail clearfix">
         <!-- 基本信息 -->
@@ -179,22 +159,24 @@
             <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
             <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
         </p>
+
+        <!-- 折线图放在预警详情页 -->
         <!-- 人数变化图 -->
-        <div id="people-num">
+        <!-- <div id="people-num"> -->
             <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        </div>
+        <!-- </div> -->
         <!-- 平均敏感度变化折线图 -->
-        <div id="sensitivity">
+        <!-- <div id="sensitivity"> -->
             <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        </div>
+        <!-- </div> -->
         <!-- 平均影响力变化折线图 -->
-        <div id="influence">
+        <!-- <div id="influence"> -->
             <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        </div>
+        <!-- </div> -->
         <!-- 聚集系数变化折线图 -->
-        <div id="convergence">
+        <!-- <div id="convergence"> -->
             <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        </div>
+        <!-- </div> -->
     </div>
     <!-- tab栏 -->
     <div class="type_page">
@@ -207,6 +189,9 @@
             </li>
             <li role="presentation">
                 <a href="#social" role="tab" data-toggle="tab"><b class="icon icon-glass"></b>&nbsp;社交特征</a>
+            </li>
+            <li role="presentation">
+                <a href="#leave-person" role="tab" data-toggle="tab"><b class="icon icon-share-alt"></b>&nbsp;离去人员</a>
             </li>
         </ul>
         <div class="behavior">
@@ -258,33 +243,21 @@
                     <div id="social-content">
 
                     </div>
+                    <div id="social-content-2">
+
+                    </div>
+                </div>
+                <!-- 离去人员 -->
+                <div role="tabpanel" class="tab-pane" id="leave-person">
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 离去人员列表</p>
+                    <div id="leave-person-content">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- <div class="weiboContent">
-        <div id="group_emotion_loading" style="text-align:center;">正在拼命加载中...</div>
-        <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
-            <table id="input-table" class="In-table" style="width:100%;">
-                <tbody class="In-table" style='width:100%!important;'>
-                </tbody>
-            </table>
-        </div>
-        <div class='fanye' style="width:100%;text-align:center;margin-top: 20px;">
-            <div style="display:none;">
-                每页显示<input type="text" id="PageNo" size="1" value="1" style='text-align:center;border:1px solid #ccc;'/>组
-            </div>
-            <div id="div-button" style="display:inline-block;margin-left:5px;">
-                <input type="button" value="首页" id="F-page">
-                <input type="button" value="上一页" id="Pre-page">
-                <input type="button" value="下一页" id="Nex-page">
-                <input type="button" value="尾页" id="L-page">
-            </div>
-            <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
-            <span style="display:inline-block;">总共<span id="s1"></span>页</span>
-        </div>
-    </div> -->
 </div>
 
 <!--提示弹框-->
@@ -326,5 +299,10 @@
 
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/echarts-2/build/dist/echarts.js"></script>
+
+<!-- <script src="/static/echarts/LLecharts.min.js"></script>
+<script src="/static/echarts/LLdataTool.min.js"></script> -->
+
 <script src="/static/js/community_detail.js"></script>
+
 {% endblock %}
