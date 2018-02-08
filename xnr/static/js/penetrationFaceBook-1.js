@@ -1,4 +1,4 @@
-var end_time=Date.parse(new Date())/1000;
+var end_time=yesterday();
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
@@ -164,9 +164,8 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var end=Date.parse(new Date())/1000;
 var penetration_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=penetration';
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=penetration';
 public_ajax.call_request('get',penetration_7day_url,penetration_7day);
 function penetration_7day(data) {
     $('#near_7_day p').show();
@@ -238,7 +237,7 @@ function score(data) {
     $('.title .tit-2 .score').text(data);
 }
 var defaultUrl='/weibo_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=penetration';;
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=penetration';;
 public_ajax.call_request('get',defaultUrl,penetration);
 //=====
 function publicData(data) {

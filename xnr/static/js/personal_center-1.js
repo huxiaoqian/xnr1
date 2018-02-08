@@ -1,13 +1,9 @@
-function auto() {
-    var has_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
-    var notHao_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
-    public_ajax.call_request('GET',has_url,has_table);
-    public_ajax.call_request('GET',notHao_url,not_yet);
-}
-auto();
+var has_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
+var notHao_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
+public_ajax.call_request('GET',has_url,has_table);
+public_ajax.call_request('GET',notHao_url,not_yet);
 function has_table(has_data) {
     var person=eval(has_data);
-    $('.has_list #haslist p').show();
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
         data:person,
@@ -164,7 +160,6 @@ function has_table(has_data) {
 };
 function not_yet(no_data) {
     var undone_person=eval(no_data);
-    $('.undone_list #undonelist p').show();
     $('.undone_list #undonelist').bootstrapTable('load', undone_person);
     $('.undone_list #undonelist').bootstrapTable({
         data:undone_person,
@@ -301,7 +296,7 @@ function sureDelXnr() {
 //继续创建未完成的虚拟人
 function go_on(id,flag) {
     localStorage.setItem('go_mod_user',id);
-    window.open('/registered/virtualCreated/?continueUser='+flag);
+    window.open('/registered/virtualCreated/?continueUser='+flag+'&flag=1');
     // var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+id;
     // public_ajax.call_request('GET',go_url,success_fail);
 }
@@ -335,13 +330,10 @@ function success_fail(data) {
     if (data){
         word='删除成功。';
         setTimeout(function () {
-            var has_not_url='';
             if (uploadUser=='1'){
-                has_not_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
-                public_ajax.call_request('GET',has_not_url,has_table);
+                public_ajax.call_request('GET',has_url,has_table);
             }else {
-                has_not_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
-                public_ajax.call_request('GET',has_not_url,not_yet);
+                public_ajax.call_request('GET',notHao_url,not_yet);
             }
         },1000);
     }else {
