@@ -1,4 +1,4 @@
-var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=sensitive';
+var relatedUrl='/twitter_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=sensitive';
 public_ajax.call_request('get',relatedUrl,related);
 function related(data) {
     $.each(data,function (index,item) {
@@ -116,7 +116,7 @@ function related(data) {
 //     //idNAME=ty;
 //     $('.influence').hide();
 //     $('#influe p').show();
-//     var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
+//     var relatedUrl='/twitter_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
 //     public_ajax.call_request('get',relatedUrl,related);
 //     showHide(ty);
 // })
@@ -131,7 +131,7 @@ $('.findSure').on('click',function () {
         idNAME='searchResult';
         $('.influence').hide();
         $('#influe p').show();
-        var searchUrl='/facebook_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=sensitive&uids='+ids;
+        var searchUrl='/twitter_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=sensitive&uids='+ids;
         public_ajax.call_request('get',searchUrl,related);
         $('.searchResult').slideDown(30);
     }
@@ -216,7 +216,7 @@ function driectFocus(uid,_this) {
     }else {
         mid='unfollow_operate';
     }
-    foc_url='/facebook_xnr_operate/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+uid;
+    foc_url='/twitter_xnr_operate/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',foc_url,sucFai)
 }
 //提示

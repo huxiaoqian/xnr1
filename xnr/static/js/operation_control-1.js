@@ -567,7 +567,7 @@ function saw(data) {
     $("#details .details-3 #_timing").attr("placeholder",m);
     $("#details .details-4 #words").val(t1);
     $("#details .details-5 #remarks").val(t2);
-    if (row.__ST==1){
+    if (__ST==1){
         $('#details .__modify').css({display:'none'});
     }
     $('#details').modal('show');
@@ -592,18 +592,24 @@ function sureModify() {
     public_ajax.call_request('get',againSave_url,successfail);
 }
 //撤销
+var escTxt=0;
 function revoked(_id) {
+    escTxt=1;
     var delTask_url='/weibo_xnr_manage/wxnr_timing_tasks_revoked/?task_id='+_id;
     public_ajax.call_request('get',delTask_url,successfail);
 }
 //=========
 function successfail(data) {
     var t ='操作成功';
-    if (!data){t='操作失败'}else {
+    if (!data){
+        t='操作失败';
+        if(escTxt==1){t='消息已发送，无法撤回。';escTxt=0;}
+    }else {
         setTimeout(function () {
             public_ajax.call_request('get',timingTask_url,timingTask);
         },700);
     };
+
     $('#successfail p').text(t);
     $('#successfail').modal('show');
 }
