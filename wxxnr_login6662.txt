@@ -102,3 +102,25 @@ None
 {u'_type': u'record', u'_id': u'AWFuOzUe1COAk33WH1r7', u'created': True, u'_version': 1, u'_index': u'wx_group_message_2018-02-07'}
 remove ok
 {'PostFix': 'jpg', 'BaseResponse': {'Ret': 0, 'ErrMsg': u'\u8bf7\u6c42\u6210\u529f', 'RawMsg': 'Successfully downloaded'}}
+█[H[Jstart_bot:  WXXNR0002 6662 f7fe6f5c,8747093f,1e118ec3
+starting WXXNR0002 ...
+before login
+None
+False
+/home/ubuntu8/Lvlei/xnr1/xnr/static/images/WX/WXXNR0002_2aa7d21b881cf6cbb0c9b8951628f804_qrcode.png
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+trying to save qrcode picture
+save qrcode picture
+after login
+self.puid_path:  /home/ubuntu8/Lvlei/xnr1/xnr/wx/data/WXXNR0002_puid.pkl
+loginedwithcache：file not exist
+Accept new connection from 127.0.0.1:47457...
+Connection from 127.0.0.1:47457 closed.
+Accept new connection from 127.0.0.1:47470...
+Connection from 127.0.0.1:47470 closed.
+Accept new connection from 127.0.0.1:36342...
+
+Connection from 127.0.0.1:36342 closed.
