@@ -21,7 +21,8 @@ mod = Blueprint('intelligent_writing', __name__, url_prefix='/intelligent_writin
 '''
 
 # 创建任务
-#http://219.224.134.213:9090/intelligent_writing/create_writing_task/?task_source=facebook&xnr_user_no=FXNR0005&task_name=测试任务&event_keywords=十九大，习近平&opinion_keywords=十九大，习近平，常委&opinion_type=positive&submitter=admin@qq.com
+#http://219.224.134.213:9090/intelligent_writing/create_writing_task/?task_source=facebook&xnr_user_no=FXNR0005&task_name=测试任务
+#&event_keywords=十九大，习近平&opinion_keywords=十九大，习近平，常委&opinion_type=positive&submitter=admin@qq.com
 
 @mod.route('/create_writing_task/')
 def ajax_create_writing_task():

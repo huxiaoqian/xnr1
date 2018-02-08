@@ -1,4 +1,3 @@
-//-------------------颜色----------------------
 function createRandomItemStyle() {
     return {
         normal: {
@@ -33,7 +32,6 @@ function yesterday() {
     var s2 = (Date.parse(new Date(new Date(new Date(s1).toLocaleDateString()).getTime()+24*60*60*1000-1)))/1000;
     return s2;
 }
-
 //时间戳转时间
 function getLocalTime(nS) {
     return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
@@ -188,7 +186,8 @@ function robot(_this) {
     robotThis=_this;
     $(_this).parents('.center_rel').find('.commentDown').show();
     var txt= $(_this).parents('.center_rel').find('.center_2').text();
-    var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
+    // var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
+    var robot_url='/facebook_xnr_operate/robot_reply/?question='+Check(txt);
     public_ajax.call_request('get',robot_url,robotTxt)
     // var uid = $(_this).parents('.center_rel').find('.uid').text();
     // $('#robotBack .questionVal').val('');
