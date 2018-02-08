@@ -31,11 +31,16 @@ def timeWarning():
 def communityWarning():
 	return render_template('monitor/community_warning.html')
 
-
-# 社区预警 详情
+# 社区 详情
 @mod.route('/communityDetails/')
 def communityDetails():
 	return render_template('monitor/community_details.html')
+
+# 预警详情
+@mod.route('/communityWaringdetails/')
+def communityWaringdetails():
+	flag = request.args.get('flag','')
+	return render_template('monitor/communityWaring_details.html',flag=flag)
 
 @mod.route('/characterBehaviorTwitter/')
 def characterBehaviorTwitter():

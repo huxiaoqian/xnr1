@@ -4,29 +4,29 @@
     var track_community_data = [
         {
             a:'1',
-            b:'1',
-            c:'1',
-            d:'1',
-            e:'1',
-            f:'1',
-            g:'1',
-            h:'1',
-            i:'1',
-            g:'1',
-            k:'1',
+            b:'西安直播',
+            c:'33',
+            d:'86',
+            e:'24',
+            f:'7',
+            g:'4361',
+            h:'58',
+            i:'21',
+            g:'5',
+            k:'965',
         },
         {
             a:'2',
-            b:'2',
-            c:'2',
-            d:'2',
-            e:'2',
-            f:'2',
-            g:'2',
-            h:'2',
-            i:'2',
-            g:'2',
-            k:'2',
+            b:'民运人士',
+            c:'643',
+            d:'457',
+            e:'8865',
+            f:'342',
+            g:'25',
+            h:'886',
+            i:'21',
+            g:'34',
+            k:'967',
         },
     ]
 
@@ -50,6 +50,7 @@
                 sortName:'bci',
                 sortOrder:"desc",
                 columns: [
+                    /*
                     {
                         title: "编号",//标题
                         field: "a",//键名
@@ -65,10 +66,11 @@
                             };
                         }
                     },
+                     */
                     {
                         title: "社区名称",//标题
                         field: "b",//键名
-                        sortable: false,//是否可排序
+                        sortable: true,//是否可排序
                         order: "desc",//默认排序方式
                         align: "center",//水平
                         valign: "middle",//垂直
@@ -97,6 +99,7 @@
                             };
                         }
                     },
+                    /*
                     {
                         title: "紧密度",//标题
                         field: "d",//键名
@@ -112,6 +115,7 @@
                             };
                         }
                     },
+                     */
                     {
                         title: "平均聚集系数",//标题
                         field: "e",//键名
@@ -211,57 +215,47 @@
                         align: "center",//水平
                         valign: "middle",//垂直
                         formatter: function (value, row, index) {
-                            // return '<span style="cursor:pointer;color:white;" onclick="jumpFrame_2(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
-                            return '<span style="cursor:pointer;color:white;" onclick="jumpFrame(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
+                            return '<span style="cursor:pointer;color:white;margin-right:15px;" onclick="jumpFrame(\''+row.entity_name+'\',event)" title="社区详情"><i class="icon icon-file-alt"></i></span>'+
+                                '<span style="cursor:pointer;color:white;" onclick="jumpFrame_1(\''+row.entity_name+'\',1,event)" title="预警详情"><i class="icon icon-warning-sign"></i></span>';
                         }
                     },
-                    /*
-                    {
-                        title: "操作",//标题
-                        field: "select",
-                        checkbox: true,
-                        align: "center",//水平
-                        valign: "middle"//垂直
-                    },
-                    {
-                        title: "登录状态",//标题
-                        field: "login_status",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.login_status == 'logout'){return '离线'}else{return '在线'}
-                        },
-                    },
-                    {
-                        title: '操作',//标题
-                        field: "",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            var ld;
-                            if (row.login_status=='logout'){ld = '登录'}else{ld = '在线中'}
-                            var str = '<a onclick="loginIN(this,\''+row.wxbot_id+'\',\''+row.wx_id+'\',\''+row.login_status+'\')" in_out="out" style="cursor: pointer;color:white;" title="'+ld+'"><i class="icon icon-key"></i></a>';
-                            str +='<a onclick="enterIn(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;display: inline-block;margin:0 10px;"  title="进入"><i class="icon icon-link"></i></a>';
-                            str +='<a onclick="deletePerson(\''+row.wxbot_id+'\')" style="cursor: pointer;color:white;margin-right:10px;"  title="删除"><i class="icon icon-trash"></i></a>';
-                            str +='<a onclick="logoutPerson(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;"  title="退出登录"><i class="icon icon-signout"></i></a>';
-                            str +='<a onclick="loadallGroups(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;margin-left:10px;"  title="设置群组"><i class="icon icon-cogs"></i></a>';
-                            return str;
-                        },
-                    },
-                     */
                 ],
         });
         $('#track-community p').slideUp(30);
-    }
 
-    trackCommunity(track_community_data)
-    // 跳转详情页
-    function jumpFrame(){
+        // 点击行
+        $('#track-community').on('click-row.bs.table', function (row,field) {
+            console.log(row);
+            console.log(field.a);
+            $('.detailed-content').show();
+            // 核心人物列表
+            $('#person-list').show();
+            show_influ_users('person-list',person_list_data)
+            // 关键词
+            $('#keyword').show();
+            basic_1();
+            // 敏感度和影响力分布
+            $('#influence').show().siblings('#person-list');
+            influence_lef();
+            influence_rig();
+        });
+    }
+    trackCommunity(track_community_data);
+
+    // 跳转社区详情页
+    function jumpFrame(name,e){
+        // 阻止默认事件
+        e.stopPropagation();
+
         var html = '/monitor/communityDetails';
+        window.location.href = html;
+    }
+    // 跳转预警详情页
+    function jumpFrame_1(name, flag, e){
+        // 阻止默认事件
+        e.stopPropagation();
+
+        var html = '/monitor/communityWaringdetails?flag='+flag;
         window.location.href = html;
     }
 
@@ -285,14 +279,16 @@
     //     $('#downbox').stop().slideUp(400)
     // })
 
-    // 鼠标 每行浮动显示
-    $('#track-community tbody div.community-name-box').append(str);
-    $('#track-community tbody .community-name-box').parent('td').mouseover(function(){
-        $(this).find('#downbox').stop().slideDown('fast');
-    })
-    $('#track-community tbody .community-name-box').parent('td').mouseout(function(){
-        $(this).find('#downbox').stop().slideUp('fast');
-    })
+    /*
+        // 鼠标 每行浮动显示
+        $('#track-community tbody div.community-name-box').append(str);
+        $('#track-community tbody .community-name-box').parent('td').mouseover(function(){
+            $(this).find('#downbox').stop().slideDown('fast');
+        })
+        $('#track-community tbody .community-name-box').parent('td').mouseout(function(){
+            $(this).find('#downbox').stop().slideUp('fast');
+        })
+    */
 
     // 核心人物列表
     function show_influ_users(div_name,data){
@@ -349,6 +345,7 @@
                 var option = {
                     // backgroundColor:'rgba(9, 36, 49, 0.65)',
                     title: {
+                        show:false,
                         text: '微话题关键词云',
                         textStyle:{
                             color:'#fff'
@@ -500,6 +497,7 @@
             backgroundColor:'transparent',
             title: {
                 text: '影响力分布',
+                show:false,
             },
             tooltip: {
                 trigger: 'axis'
@@ -555,6 +553,7 @@
             backgroundColor:'transparent',
             title: {
                 text: '身份敏感度分布',
+                show:false,
             },
             tooltip: {
                 trigger: 'axis'
@@ -627,29 +626,29 @@
     var new_track_community_data = [
         {
             a:'1',
-            b:'1',
-            c:'1',
-            d:'1',
-            e:'1',
-            f:'1',
-            g:'1',
-            h:'1',
-            i:'1',
-            g:'1',
-            k:'1',
+            b:'西安直播',
+            c:'33',
+            d:'86',
+            e:'24',
+            f:'7',
+            g:'4361',
+            h:'58',
+            i:'21',
+            g:'5',
+            k:'965',
         },
         {
             a:'2',
-            b:'2',
-            c:'2',
-            d:'2',
-            e:'2',
-            f:'2',
-            g:'2',
-            h:'2',
-            i:'2',
-            g:'2',
-            k:'2',
+            b:'民运人士',
+            c:'643',
+            d:'457',
+            e:'8865',
+            f:'342',
+            g:'25',
+            h:'886',
+            i:'21',
+            g:'34',
+            k:'967',
         },
     ]
 
@@ -673,6 +672,7 @@
                 sortName:'bci',
                 sortOrder:"desc",
                 columns: [
+                    /*
                     {
                         title: "编号",//标题
                         field: "a",//键名
@@ -688,6 +688,7 @@
                             };
                         }
                     },
+                     */
                     {
                         title: "社区名称",//标题
                         field: "b",//键名
@@ -718,6 +719,7 @@
                             };
                         }
                     },
+                    /*
                     {
                         title: "紧密度",//标题
                         field: "d",//键名
@@ -733,6 +735,7 @@
                             };
                         }
                     },
+                     */
                     {
                         title: "平均聚集系数",//标题
                         field: "e",//键名
@@ -748,6 +751,22 @@
                             }
                         }
                     },
+                    {
+                        title: "预警原因",//标题
+                        field: "d",//键名
+                        sortable: true,//是否可排序
+                        order: "desc",//默认排序方式
+                        align: "center",//水平
+                        valign: "middle",//垂直
+                        formatter: function (value, row, index) {
+                            if (row.d == '' || row.d == 'null' || row.d == 'unknown'||!row.d) {
+                                return '未知';
+                            } else {
+                                return row.d;
+                            };
+                        }
+                    },
+
                     {
                         title: "最大影响力",//标题
                         field: "f",//键名
@@ -832,48 +851,10 @@
                         align: "center",//水平
                         valign: "middle",//垂直
                         formatter: function (value, row, index) {
-                            return '<span style="cursor:pointer;color:white;" onclick="jumpFrame_2(\''+row.entity_name+'\',\''+row.entity_type+'\',\''+row.id+'\',\''+row.illegal_type+'\')" title="查看详情"><i class="icon icon-file-alt"></i></span>';
+                            return '<span style="cursor:pointer;color:white;margin-right:15px;" onclick="jumpFrame(\''+row.entity_name+'\',event)" title="社区详情"><i class="icon icon-file-alt"></i></span>'+
+                                '<span style="cursor:pointer;color:white;" onclick="jumpFrame_1(\''+row.entity_name+'\',0,event)" title="预警详情"><i class="icon icon-warning-sign"></i></span>';
                         }
                     },
-                    /*
-                    {
-                        title: "操作",//标题
-                        field: "select",
-                        checkbox: true,
-                        align: "center",//水平
-                        valign: "middle"//垂直
-                    },
-
-                    {
-                        title: "登录状态",//标题
-                        field: "login_status",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            if (row.login_status == 'logout'){return '离线'}else{return '在线'}
-                        },
-                    },
-                    {
-                        title: '操作',//标题
-                        field: "",//键名
-                        sortable: true,//是否可排序
-                        order: "desc",//默认排序方式
-                        align: "center",//水平
-                        valign: "middle",//垂直
-                        formatter: function (value, row, index) {
-                            var ld;
-                            if (row.login_status=='logout'){ld = '登录'}else{ld = '在线中'}
-                            var str = '<a onclick="loginIN(this,\''+row.wxbot_id+'\',\''+row.wx_id+'\',\''+row.login_status+'\')" in_out="out" style="cursor: pointer;color:white;" title="'+ld+'"><i class="icon icon-key"></i></a>';
-                            str +='<a onclick="enterIn(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;display: inline-block;margin:0 10px;"  title="进入"><i class="icon icon-link"></i></a>';
-                            str +='<a onclick="deletePerson(\''+row.wxbot_id+'\')" style="cursor: pointer;color:white;margin-right:10px;"  title="删除"><i class="icon icon-trash"></i></a>';
-                            str +='<a onclick="logoutPerson(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;"  title="退出登录"><i class="icon icon-signout"></i></a>';
-                            str +='<a onclick="loadallGroups(\''+row.wxbot_id+'\',\''+row.login_status+'\')" style="cursor: pointer;color:white;margin-left:10px;"  title="设置群组"><i class="icon icon-cogs"></i></a>';
-                            return str;
-                        },
-                    },
-                     */
                 ],
         });
         $('#new-track-community p').slideUp(30);
