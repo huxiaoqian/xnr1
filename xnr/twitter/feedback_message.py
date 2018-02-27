@@ -12,6 +12,7 @@ class Message():
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
 		self.list = []
+		self.root_uid = self.api.me()
 
 	def get_message(self):
 		for each in self.api.direct_messages():
@@ -19,12 +20,15 @@ class Message():
 			sender_screen_name = each.sender._json['screen_name']
 			sender_id = each.sender._json['id']
 			timestamp = int(time.mktime(each.created_at.timetuple()))
+			mid = each.id
 
 			item = {
 				'nick_name':sender_screen_name,
 				'uid':sender_id,
 				'text':content,
-				'timestamp':timestamp
+				'timestamp':timestamp,
+				'root_uid':self.root_uid,
+				'mid':mid
 			}
 			self.list.append(item)
 

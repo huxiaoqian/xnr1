@@ -15,25 +15,32 @@ class At():
 
 	def get_mention(self):
 		for each in self.api.mentions_timeline():
-			user_screen_name = each.author.screen_name
-			user_name = each.author.name
-			user_id = each.author.id
-			text = each.text
-			user_mention_screen_name = each.entities['user_mentions'][0]['screen_name']
-			user_mention_name = each.entities['user_mentions'][0]['name']
-			user_mention_id = each.entities['user_mentions'][0]['id']
-			timestamp = int(time.mktime(each.created_at.timetuple()))
-			item = {
-				'user_name': user_screen_name,
-				'nick_name': user_name,
-				'uid': user_id,
-				'text': text,
-				'user_mention_screen_name': user_mention_screen_name,
-				'user_mention_name': user_mention_name,
-				'user_mention_id': user_mention_id,
-				'timestamp': timestamp
-			}
-			self.list.append(item)
+			try:
+				user_screen_name = each.author.screen_name
+				user_name = each.author.name
+				user_id = each.author.id
+				text = each.text
+				user_mention_screen_name = each.entities['user_mentions'][0]['screen_name']
+				user_mention_name = each.entities['user_mentions'][0]['name']
+				user_mention_id = each.entities['user_mentions'][0]['id']
+				timestamp = int(time.mktime(each.created_at.timetuple()))
+				mid = each.id
+
+				item = {
+					'user_name': user_screen_name,
+					'nick_name': user_name,
+					'uid': user_id,
+					'text': text,
+					'user_mention_screen_name': user_mention_screen_name,
+					'user_mention_name': user_mention_name,
+					'user_mention_id': user_mention_id,
+					'root_uid':user_mention_id,
+					'timestamp': timestamp,
+					'mid':mid
+				}
+				self.list.append(item)
+			except:
+				pass
 		return self.list
 
 	def save(self, indexName, typeName, list):
