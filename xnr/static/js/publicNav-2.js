@@ -155,7 +155,10 @@ function showInput(_this) {
     $(_this).parents('.center_rel').find('.commentDown').show();
 };
 function comMent(_this,type){
-    var txt = $(_this).prev().val();
+    var txt = Check($(_this).prev().val());
+    console.log(txt)
+    console.log($(_this))
+    console.log($(_this).prev())
     if (txt!=''){
         var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
         var comPost_url='/'+urlFirst_zpd+'/'+reply_comment+'/?tweet_type='+type+'&text='+txt+'&xnr_user_no='+
@@ -188,26 +191,26 @@ function robot(_this) {
     var txt= $(_this).parents('.center_rel').find('.center_2').text();
     // var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
     var robot_url='/facebook_xnr_operate/robot_reply/?question='+Check(txt);
-    public_ajax.call_request('get',robot_url,robotTxt)
-    // var uid = $(_this).parents('.center_rel').find('.uid').text();
-    // $('#robotBack .questionVal').val('');
-    // $('#robotBack .QC').hide();
-    // $('#robotBack').modal('show');
+    public_ajax.call_request('get',robot_url,robotTxt);
 }
-// function getRobot() {
-//     var s=$('.commentDown .questionVal').val();
-//     if (!s){
-//         $('#pormpt p').text('请输入问题。');
-//         $('#pormpt').modal('show');
-//     }else {
-//         var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
-//         public_ajax.call_request('get',robot_url,robotTxt)
-//     }
-// }
 function robotTxt(data) {
-    var txt=data;
-    if (!data){txt='机器人无答复'};
+    $(robotThis).parents('.center_rel').find('.robotQuestion').remove();
+    var txt=data['tuling'];
+    if (isEmptyObject(data)||!txt){txt='机器人无答复'};
     $(robotThis).parents('.center_rel').find('.commentDown').children('input').val(txt);
+    var robotType=$(robotThis).parents('.center_rel').find('.commentDown').children('span').attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
+    var str='<div class="robotQuestion">';
+    var robot1='<p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关问题</p>' +
+        '<p style="text-indent:30px;margin:5px 0;">'+data["own"][0]+'</p>';
+    var robot2='<div><p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关评论</p>';
+    var robot3='';
+    $.each(data['own'][1],function (index,item) {
+         robot3+='<div class="robotDown" class="r"><input type="text" class="robotIput" value="'+item+'">&nbsp;' +
+        '<span class="sureRobot" onclick="comMent(this,\''+robotType+'\')">回复</span></div>'
+    });
+    robot2+=robot3+'</div>';
+    str+=robot1+robot2+'</div>';
+    $(robotThis).parents('.center_rel').find('.commentDown').after(str);
 }
 //加入预警库
 function getInfo(_this) {
