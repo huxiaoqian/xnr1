@@ -38,7 +38,7 @@ def ajax_create_writing_task():
     task_detail['compute_status'] = 0  # 0-尚未计算 1- 正在计算 2- 计算完成
     task_detail['task_source'] = request.args.get('task_source','')  # 使用英文：weibo、facebook、twitter
 
-    mark = get_create_writing_task(task_detail)  # repeat_mark: True-表示重复，False-表示不重复
+    mark = get_create_writing_task(task_detail)  # exists-表示任务名称已经存在 True-成功，False-失败
 
     return json.dumps(mark)
 
@@ -62,12 +62,10 @@ def ajax_show_writing_task():
 def ajax_delete_writing_task():
     task_detail = dict()
     task_detail['task_id'] = request.args.get('task_id','')
-    #task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    #task_detail['task_name_pinyin'] = request.args.get('task_name_pinyin','')
 
     mark = get_delete_writing_task(task_detail)
 
-    return json.dumps(mark)
+    return json.dumps(mark) # True - 成功 False-失败
 
 
 # 事件摘要 - 主题河

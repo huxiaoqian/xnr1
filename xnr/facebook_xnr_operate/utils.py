@@ -30,9 +30,18 @@ from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HO
 sys.path.append(WRITING_PATH)
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
 from tuling_test import get_message_from_tuling
+from question_search import search_answer
 
 def get_robot_reply(question):
-    return get_message_from_tuling(question)
+    
+    tuling = get_message_from_tuling(question)
+    own = search_answer(question)
+
+    answer_dict = {}
+    answer_dict['tuling'] = tuling
+    answer_dict['own'] = own
+
+    return answer_dict
 
 def get_submit_tweet_fb(task_detail):
 

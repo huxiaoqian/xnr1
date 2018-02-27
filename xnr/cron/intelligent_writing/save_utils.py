@@ -30,12 +30,13 @@ def save2topic_es(task_source,task_id,search_results):
         es_intel.bulk(bulk_action,index=task_id,doc_type=task_source,timeout=600)
     
 
-def save_intelligent_opinion_results(task_id,sub_opinion_results,intel_type):
+def save_intelligent_opinion_results(task_id,sub_opinion_results,summary, intel_type):
 
     #try:
     item_exist = dict()
     item_exist['task_id'] = task_id
     item_exist['subopinion_tweets'] = json.dumps(sub_opinion_results)
+    item_exist['summary'] = summary
     # 保存子观点结果
     es_intel.index(index=intel_opinion_results_index_name,doc_type=intel_type,\
                 id=task_id,body=item_exist)
