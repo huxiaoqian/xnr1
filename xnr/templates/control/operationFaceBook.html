@@ -482,10 +482,10 @@
 
 {% block my_js %}
 <script>
-    var loadingType = 'weibo';
-    weiboORqq('weibo');
-    $('.nav_type').text('(微博)');
-    judgment('2');
+    var loadingType='faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
+    judgmentFaceBook('2');
     $('li.listItem').on('click',function () {
         var _eq=$(this).index(),_top;
         if (_eq==1){

@@ -1,4 +1,4 @@
-var end_time=Date.parse(new Date())/1000;
+var end_time=yesterday();
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
@@ -164,9 +164,8 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var end=Date.parse(new Date())/1000;
 var influe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=influence';
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=influence';
 public_ajax.call_request('get',influe_7day_url,influe_7day);
 function influe_7day(data) {
     $('#near_7_day p').show();
@@ -254,7 +253,7 @@ $('#container .quota .quota-opt .demo-label input').on('click',function () {
     }
 })
 var influe_url='/weibo_xnr_assessment/influence_total/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=influence';
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=influence';
 public_ajax.call_request('get',influe_url,influe);
 //总数量
 function publicData(data) {

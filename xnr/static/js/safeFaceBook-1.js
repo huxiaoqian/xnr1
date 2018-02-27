@@ -1,4 +1,4 @@
-var end_time=Date.parse(new Date())/1000;
+var end_time=yesterday();
 var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
@@ -116,7 +116,8 @@ $('.choosetime .demo-label input').on('click',function () {
         $('#start_1').hide();
         $('#end_1').hide();
         $('.sureTime').hide();
-        var startTime='',today='',startTime_2,midURL='safe_active',lastURL='';
+        var startTime='',today='',startTime_2,midURL='safe_active',
+            lastURL='';
         if (_val==0){
             startTime=todayTimetamp();
             startTime_2=0;
@@ -164,9 +165,8 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var end=Date.parse(new Date())/1000;
 var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
-    '&start_time='+getDaysBefore('7')+'&end_time='+end+'&assess_type=safe';
+    '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=safe';
 public_ajax.call_request('get',safe_7day_url,safe_7day);
 function safe_7day(data) {
     $('#near_7_day p').show();
@@ -241,6 +241,7 @@ var defaultUrl='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
 public_ajax.call_request('get',defaultUrl,safe);
 var t;
 $('#container .type_page #myTabs li').on('click',function () {
+    $('#postRelease p').show();
     var mid=$(this).attr('midurl');
     if (mid.indexOf('&')==-1){
         public_ajax.call_request('get',defaultUrl,safe);
@@ -272,9 +273,9 @@ $('#container .type_page #myTabs li').on('click',function () {
 //--活跃安全性
 function safe(data) {
     //total_num、day_num、growth_rate
-    $('#safeContent p').show();
+    $('#active-1 p').show();
     if (isEmptyObject(data)){
-        $('#safeContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#active-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],totData=[];
         for (var i in data){
@@ -342,9 +343,18 @@ function radar(data) {
     var radarData=[],radarVal=[];
     for (var k in data){
         if (k=='radar'){
-            for(var m in data[k]){
-                radarData.push({name:m, max:1});
-                radarVal.push(data[k][m]);
+            if (isEmptyObject(data[k])){
+                radarVal=[0,0,0,0,0];
+                var p;
+                if (t=='area'){p=$('#field input')}else {p=$('#userField input')};
+                for(var s=0;s<5;s++){
+                    radarData.push({name:$(p[s]).val().replace(/_/g,'\n'), max:1});
+                }
+            }else {
+                for(var m in data[k]){
+                    radarData.push({name:m.replace(/_/g,'\n'), max:1});
+                    radarVal.push(data[k][m]);
+                }
             }
         }else {
             dashBoard(data[k]);
@@ -403,6 +413,7 @@ function dashBoard(dashVal) {
 }
 //发表内容
 $('.pc-4 input').on('click',function () {
+    $('#postRelease p').show();
     var name=$(this).attr('name'),theSort='',the='';
     if (name=='th'){
         if (t=='area'){
@@ -453,12 +464,12 @@ function weiboData(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var name,location,txt,txt2,all='',img;
-                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
+                    if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name=row.uid;
                     }else {
                         name=row.nick_name;
                     };
-                    if (row.geo==''||row.geo=='null'||row.geo=='unknown'||!row.geo){
+                    if (row.geo==''||row.geo=='null'||row.geo=='unknown'){
                         location='未知';
                     }else {
                         location=row.geo.replace(/&/g,' ');
@@ -500,14 +511,14 @@ function weiboData(data) {
                         };
                     };
                     var str=
-                        '<div class="post_center-every safeft" style="text-align: left;">'+
+                        '<div class="post_center-every" style="text-align: left;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="'+img+'" class="center_icon">'+
                         '       <div class="center_rel">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
                         '           <span class="time" style="font-weight:700;color:#f6a38e;display: inline-block;margin-left:5px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
                         // '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left:5px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
-                        '           <i class="fid" style="display: none;">'+row.fid+'</i>'+
+                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
@@ -515,25 +526,19 @@ function weiboData(data) {
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
                         '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-1" title="分享" onclick="retweet(this,\'info_detect\')"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（'+row.retweeted+'）</span>'+
-                        '               <span class="cen3-2" title="回复" onclick="showInput(this)"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;回复（'+row.comment+'）</span>'+
-                        '               <span class="cen3-3" title="赞" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                        '               <span class="cen3-4" title="私信" onclick="emailThis(this)"><i class="icon icon-envelope"></i>&nbsp;&nbsp;私信</span>'+
-                        '               <span class="cen3-5" title="翻译" onclick="translateWord(this)"><i class="icon icon-exchange"></i>&nbsp;&nbsp;翻译</span>'+
-                        '               <span class="cen3-9" title="机器人回复" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
-                        '               <span class="cen3-4" title="加入语料库" onclick="joinlab(this)"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this,\'行为评估\')" title="转发"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-2" onclick="showInput(this)" title="评论"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
+                        '               <span class="cen3-3" onclick="thumbs(this)" title="赞"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '               <span class="cen3-9" onclick="robot(this)" title="机器人回复"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
+                        '               <span class="cen3-4" onclick="joinlab(this)" title="加入语料库"><i class="icon icon-upload-alt"></i>&nbsp;&nbsp;加入语料库</span>'+
                         '           </div>'+
                         '           <div class="forwardingDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="forwardingIput" placeholder="分享内容"/>'+
-                        '               <span class="sureFor" onclick="forwardingBtn()">分享</span>'+
+                        '               <input type="text" class="forwardingIput" placeholder="转发内容"/>'+
+                        '               <span class="sureFor" onclick="forwardingBtn()">转发</span>'+
                         '           </div>'+
                         '           <div class="commentDown" style="width: 100%;display: none;">'+
                         '               <input type="text" class="comtnt" placeholder="评论内容"/>'+
-                        '               <span class="sureCom" onclick="comMent(this,\'info_detect\')">评论</span>'+
-                        '           </div>'+
-                        '           <div class="emailDown" style="width: 100%;display: none;">'+
-                        '               <input type="text" class="infor" placeholder="私信内容"/>'+
-                        '               <span class="sureEmail" onclick="letter(this)">发送</span>'+
+                        '               <span class="sureCom" onclick="comMent(this,\'行为评估\')">评论</span>'+
                         '           </div>'+
                         '       </div>'+
                         '   </div>'+
@@ -543,7 +548,7 @@ function weiboData(data) {
             },
         ],
     });
-    $('#postRelease p').hide();
+    $('#postRelease p').slideUp(30);
     $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //操作返回结果
