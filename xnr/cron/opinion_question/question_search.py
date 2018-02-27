@@ -10,14 +10,14 @@ import json
 import heapq
 import math
 import Levenshtein
-from config import cut_by_textrank,TopkHeap,K1,B,K3
+from config import cut_by_textrank,TopkHeap,K1,B,K3, CORPUS_ANSWER_PATH
 
 def load_question_dict():#加载question语料
 
     question_dict = dict()
     lines = []
     count = 0
-    reader = csv.reader(file('./corpus/corpus_answer.csv', 'rb'))
+    reader = csv.reader(file(CORPUS_ANSWER_PATH, 'rb'))
     for line in reader:
 ##        if len(line) == 1:
 ##            lines.append(line)

@@ -13,10 +13,15 @@ from comment_module import comments_calculation_v2
 sys.path.append('./fix/')
 from fix_config import emotions_vk_v1
 
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/text_greneration/')
+from text_generation import text_generation_main
+
+
 # 引入子观点分析分类器
 
 sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/sub_opinion_analysis/')
 from opinion_produce import opinion_main
+
 
 sys.path.append('../../')
 from global_utils import R_WRITING as r_r
@@ -145,7 +150,7 @@ def find_flow_texts(task_source,task_id,event_keywords):
     if len(nest_query_list) == 1:
         SHOULD_PERCENT = 1
     else:
-        SHOULD_PERCENT = 2
+        SHOULD_PERCENT = 1
 
 
     # 匹配文本
@@ -357,7 +362,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         if len(nest_query_list) == 1:
             SHOULD_PERCENT = 1
         else:
-            SHOULD_PERCENT = 2
+            SHOULD_PERCENT = 1
 
         if intel_type == 'all':
             query_body = {
@@ -503,7 +508,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         if len(nest_query_list) == 1:
             SHOULD_PERCENT = 1
         else:
-            SHOULD_PERCENT = 2
+            SHOULD_PERCENT = 1
 
         if task_source == 'facebook':
             index_name_list = fb_get_flow_text_index_list(current_time,days=5)
@@ -736,6 +741,8 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
                     'size':MAX_SEARCH_SIZE
                 }
 
+            print 'index_name_list...',index_name_list
+            print 'query_body........',query_body
             tweets_results = es_xnr.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
 
             if tweets_results:
@@ -748,16 +755,31 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         opinion_name,word_result,text_list = opinion_main(tweets_list,k_cluster=5)
         sub_opinion_results = dict()
 
+        topic_keywords_list = []
+        summary_text_list = []
+
         for topic, text in text_list.iteritems():
             
             topic_name = opinion_name[topic]
             sub_opinion_results[topic_name] = text[:SUB_OPINION_WEIBO_LIMIT]
+
+            topic_keywords_list.extend(topic_name.split('&'))
+            summary_text_list.extend(text)
+
+        #try:
+        print 'summary_text_list..',len(summary_text_list)
+        print 'topic_keywords_list..',topic_keywords_list
+        summary = text_generation_main(summary_text_list,topic_keywords_list)
+        #except:
+        #    summary = ''
             
     else:
         sub_opinion_results = {}
+        summary = ''
 
     print '开始保存子观点计算结果......'
-    mark = save_intelligent_opinion_results(task_id,sub_opinion_results,intel_type)
+    print 'summary....',summary
+    mark = save_intelligent_opinion_results(task_id,sub_opinion_results,summary,intel_type)
 
     return mark
     

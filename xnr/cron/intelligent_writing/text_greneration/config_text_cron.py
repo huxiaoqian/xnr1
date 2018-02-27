@@ -8,7 +8,7 @@ import csv
 import time
 import heapq
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-abs_path = './xnr/cron/opinion_question/'
+abs_path = './text_greneration/'
 K1 = 1.5
 B = 0.75
 K3 = 500
@@ -16,7 +16,8 @@ K3 = 500
 ##对微博文本进行预处理
 
 def cut_filter(text):
-    pattern_list = [r'\（分享自 .*\）', r'http://\w*']
+    pattern_list = [r'\（分享自 .*\）',r'http://\w*',r'[a-zA-z]',r'\[.*?\]',r'回复',r'\@.*?\:',r'\@.*?\s',r'\@.*?\s',r'\【.*?\】',\
+                    r'\「.*?\」',r'\#.*?\#']
     for i in pattern_list:
         p = re.compile(i)
         text = p.sub('', text)
@@ -25,15 +26,10 @@ def cut_filter(text):
 def re_cut(w_text):#根据一些规则把无关内容过滤掉
     
     w_text = cut_filter(w_text)
-    w_text = re.sub(r'[a-zA-z]','',w_text)
-    a1 = re.compile(r'\[.*?\]' )
-    w_text = a1.sub('',w_text)
-    a1 = re.compile(r'回复' )
-    w_text = a1.sub('',w_text)
-    a1 = re.compile(r'\@.*?\:' )
-    w_text = a1.sub('',w_text)
-    a1 = re.compile(r'\@.*?\s' )
-    w_text = a1.sub('',w_text)
+    label_list = [r'\?',r'\？',r'\!',r'\！',r'\...',r'\。。。',r'\......',r'\。。。。。。',r'\；',r'\;',r'\：',r'\:']
+    for label in label_list:
+        p = re.compile(label)
+        w_text = p.sub('。', w_text)
     if w_text == '转发微博':
         w_text = ''
 
@@ -54,7 +50,7 @@ EXTRA_STOPWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'stopword.txt')
 EXTRA_EMOTIONWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'emotionlist.txt')
 EXTRA_ONE_WORD_WHITE_LIST_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'one_word_white_list.txt')
 EXTRA_BLACK_LIST_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'black.txt')
-CORPUS_ANSWER_PATH = os.path.abspath(os.path.join(abs_path, './corpus/corpus_answer.csv'))
+
 cx_dict = ['an','Ng','n','nr','ns','nt','nz','vn','@']#关键词词性词典
 
 def load_one_words():
@@ -90,7 +86,7 @@ des_dict = ['an','Ng','n','vn','v','Vg']
 
 def cut_des(text_str):
 
-    text = re_cut(text_str)
+    text = text_str#re_cut(text_str)
     tks = set()
     for token in SW.participle(text):
         if token[1] in des_dict and token[0] not in black_word and len(token[0]) > 3 and token[0] not in tks:
@@ -130,7 +126,6 @@ def cut_by_textrank(text):#利用textrank切词
 
     return word_list
 
-#以下是设置cluto的路径
-INPUT_FOLDER = "/home/ubuntu8/yuanshi/verified_user/cluto"
-VCLUTO = "/home/ubuntu8/yuanshi/verified_user/cluto-2.1.2/Linux-i686/vcluster"
+
+
 

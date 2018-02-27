@@ -31,17 +31,17 @@ def execute(username, password):
 
 	mention = Mention(username, password)
 	list = mention.get_mention()
-	mention.save('facebook_feedback_at_2017-11-13','text',list)
+	mention.save('facebook_feedback_at','text',list)
 
 	message = Message(username, password)
 	list = message.get_message()
-	message.save('facebook_feedback_private_2017-11-13','text',list)
+	message.save('facebook_feedback_private','text',list)
 
 	online = Online(username, password)
 
 	share = Share(username, password)
 	list = share.get_share()
-	share.save('facebook_feedback_retweet_2017-11-13','text',list)
+	share.save('facebook_feedback_retweet','text',list)
 	
 if __name__ == '__main__':
 	execute('8617078448226','xnr123456')
