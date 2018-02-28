@@ -153,6 +153,9 @@ MAX_VALUE = 9999
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
 
+SENTIMENT_POS = [0,1]
+SENTIMENT_NEG = [2,3,4,5,6,7]
+
 daily_ch2en = {u'旅游':'travel',u'美食':'food',u'汽车':'cars',u'游戏':'games',\
             u'星座':'constellation',u'音乐':'music',u'影视':'movie',\
             u'健身':'fitness',u'养生':'health',u'体育':'sports',\
