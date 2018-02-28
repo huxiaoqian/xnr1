@@ -12,7 +12,7 @@ from xnr.global_utils import es_xnr as es, es_flow_text
 from xnr.global_config import S_TYPE
 from xnr.time_utils import datetime2ts, ts2datetime
 from utils import get_create_writing_task, get_show_writing_task, get_delete_writing_task,\
-                get_topics_river, get_symbol_weibo, get_opinions_results
+                get_topics_river, get_symbol_weibo, get_opinions_results, get_model_text_results
 
 mod = Blueprint('intelligent_writing', __name__, url_prefix='/intelligent_writing')
 
@@ -116,3 +116,21 @@ def ajax_opinions_all():
 
     return json.dumps(results)
 
+# 发帖模板
+# 单极性：http://219.224.134.213:9090/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8&model_type=single&text_type=positive
+# 双极性：http://219.224.134.213:9090/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8&model_type=double&double_order=although_positive
+# 事实性陈述：http://219.224.134.213:9090/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8&model_type=news&text_type=positive
+
+@mod.route('/model_text/')
+def ajax_model_text():
+
+    task_detail = dict()
+    task_detail['task_id'] = request.args.get('task_id','')
+    task_detail['model_type'] = request.args.get('model_type','') # single-单极性，double-双极性，news-事实陈述
+    #task_detail['polar_type'] = request.args.get('polar_type','') # agree-赞成，object-反对
+    task_detail['text_type'] = request.args.get('text_type','') # positive-正向，negtive-负向
+    task_detail['double_order'] = request.args.get('double_order','') # although_positive-虽然正向，但是负向，although_negtive-虽然正向，但是负向，
+
+    results = get_model_text_results(task_detail)
+
+    return json.dumps(results)

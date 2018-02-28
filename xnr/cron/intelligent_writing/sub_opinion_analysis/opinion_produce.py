@@ -14,7 +14,7 @@ import sys
 
 from config_2 import *
 from word_cut import word_net
-from text_classify import text_net
+from text_classify_2 import text_net
 
 def opinion_main(weibo_data,k_cluster):
     '''
