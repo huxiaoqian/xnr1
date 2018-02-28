@@ -40,19 +40,19 @@ $('#container .type_page #myTabs a').on('click',function () {
         // recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?xnr_user_no='+xnrUser;
         //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=timestamp';
         $('#container .post_post .post-2 #post-2-content').width('100%');
-        $('.dingshi').css({'marginLeft':'20%'});
+        $('#container .post_post .post-2 .add_thing').css({'width':'100%'});
         $('#user_recommend').hide();
     }else if (arrow=='#hot'){
         arrowName='@用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
-        $('.dingshi').css({'marginLeft':'15px'});
+        $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
         $('#user_recommend').show();
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
         recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share';
     }else if (arrow=='#business'){
         arrowName='@敏感用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
-        $('.dingshi').css({'marginLeft':'15px'});
+        $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
         $('#user_recommend').show();
         public_ajax.call_request('get',busWeiboUrl,businessWeibo);
         recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=sensitive';
@@ -63,9 +63,13 @@ $('#container .type_page #myTabs a').on('click',function () {
     }else {
         arrowName='@用户推荐';
         operateType='intel_post';
+        $('#intell_type').show();
         var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
         // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
         public_ajax.call_request('get',intelligent_writing_url,intelligentList);
+    }
+    if (arrow!='#intelliGence'){
+        $('#intell_type').hide();
     }
     if (arrow!='#reportNote'){
         $('.post_post').show();
