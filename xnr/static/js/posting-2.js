@@ -229,7 +229,7 @@ function lookType(_id,endTime) {
     // '&task_source=weibo&pointInterval=3600&start_ts=1517461822&end_ts=1517893822'
     // var time_event_url='#http://219.224.134.213:9090/intelligent_writing/symbol_weibos/?task_source=weibo&task_id=' +
     //     'facebook_fxnr0005_ce_shi_ren_wu&pointInterval=3600&start_ts=1517461822&end_ts=1517893822';
-    var river_url='intelligent_writing/topics_river/?task_id='+task_id+'&task_source='+intelligentType+
+    var river_url='/intelligent_writing/topics_river/?task_id='+task_id+'&task_source='+intelligentType+
         '&pointInterval=3600&start_ts='+task_start+'&end_ts='+task_end;
     public_ajax.call_request('get',river_url,river);
     var time_event_url='/intelligent_writing/symbol_weibos/?task_source='+intelligentType+'&task_id='+task_id+
@@ -388,7 +388,7 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
     tableView=$(this).attr('table-view');
     var view_type=$(this).attr('view-type');
     var viewThis_url='/intelligent_writing/opinions_all/?task_id='+task_id+'&intel_type='+view_type;
-    // var viewThis_url='/intelligent_writing/opinions_all/?task_id=weibo_wxnr0004_ce_shi_ren_wu_3&intel_type='+view_type;
+    // var viewThis_url='/intelligent_writing/opinions_all/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_6___0_4&intel_type='+view_type;
     public_ajax.call_request('get',viewThis_url,viewData);
 });
 var viewButton={};
@@ -397,6 +397,8 @@ function viewData(data) {
         $(boxView).html('<center>暂无内容</center>');
         return false;
     }
+    if (data['summary']==''){$(boxView+' .summary span').text('暂无摘要内容');}
+    else{$(boxView+' .summary span').text(data['summary']);}
     var viewAllData=JSON.parse(data['subopinion_tweets']);
     viewButton=viewAllData;
     var butAry='',showDeafult=0,_act='';
