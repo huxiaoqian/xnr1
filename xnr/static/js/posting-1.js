@@ -53,9 +53,13 @@ $('#container .type_page #myTabs a').on('click',function () {
     }else {
         arrowName='@用户推荐';
         operateType='intel_post';
+        $('#intell_type').show();
         var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
         // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
         public_ajax.call_request('get',intelligent_writing_url,intelligentList);
+    }
+    if (arrow!='#intelliGence'){
+        $('#intell_type').hide();
     }
     if (arrow!='#reportNote'){
         $('.post_post').show();
