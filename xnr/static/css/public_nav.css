@@ -239,11 +239,12 @@ a,a:link,a:hover,a:visited,a:active {
     background-color: #176de2;
 }
 /**/
-#container .commentDown,#container .emailDown {
+#container .commentDown,#container .emailDown,#container .robotDown {
     width: 100%;
     padding: 5px;
     margin: 10px 0;
 }
+#container .robotQuestion input,
 #container .commentDown input,
 #container .emailDown input {
     width: 90%;
@@ -255,6 +256,7 @@ a,a:link,a:hover,a:visited,a:active {
     border-radius: 5px;
     text-align: center;
 }
+#container .robotQuestion span,
 #container .commentDown span,
 #container .emailDown span{
     color: white;
@@ -265,6 +267,7 @@ a,a:link,a:hover,a:visited,a:active {
     border-radius: 5px;
     cursor: pointer;
 }
+#container .robotQuestion span:hover,
 #container .commentDown span:hover,
 #container .emailDown span:hover{
     background: rgba(28, 28, 28, 0.96);
