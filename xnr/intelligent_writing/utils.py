@@ -8,7 +8,8 @@ import re
 
 from xnr.global_config import S_TYPE,S_DATE,S_DATE_FB
 from xnr.global_utils import es_xnr as es, es_intel, writing_task_index_name, writing_task_index_type,\
-                        topics_river_index_name, topics_river_index_type, intel_opinion_results_index_name
+                        topics_river_index_name, topics_river_index_type, intel_opinion_results_index_name,\
+                        intel_models_text_index_name, intel_models_text_index_type
 from xnr.parameter import MAX_SEARCH_SIZE
 from time_utils import ts2HourlyTime, ts2datetime, datetime2ts, full_datetime2ts
 
@@ -231,3 +232,59 @@ def get_opinions_results(task_id,intel_type):
         results = {}
 
     return results
+
+
+def get_model_text_results(task_detail):    
+
+    text = ''
+
+    try:
+        task_id = task_detail['task_id']
+        model_type = task_detail['model_type']
+        #polar_type = task_detail['polar_type']
+        text_type = task_detail['text_type']
+        double_order = task_detail['double_order']
+
+
+        results = es_intel.get(index=intel_models_text_index_name,doc_type=intel_models_text_index_type,id=task_id)['_source']
+
+        model_text_pos = results['model_text_pos']
+        model_text_neg = results['model_text_neg']
+        model_text_news = results['model_text_news']
+
+        if model_type == 'single':
+            # if polar_type == 'agree' and text_type == 'positive':
+            #     text = '我觉得有道理。' + model_text_pos
+
+            # elif polar_type == 'agree' and text_type == 'negtive':
+            #     text = '我觉得有道理。但是' + model_text_neg
+
+            # elif polar_type == 'agree' and text_type == 'positive':
+            #     text = '不太同意。但是' + model_text_pos
+
+            # else:
+            #     text = '不太同意。' + model_text_neg
+
+            if text_type == 'positive':
+            	text = model_text_pos
+            else:
+            	text = model_text_neg
+
+
+        elif model_type == 'double':
+
+            if double_order == 'although_positive':
+                text = '虽然'+ model_text_pos + '。但是，' + model_text_neg
+            else:
+                text = '虽然'+ model_text_neg + '。但是，' + model_text_pos
+
+        else:
+            if text_type == 'positive':
+                text = model_text_news + '。' + model_text_pos
+            else:
+                text = model_text_news + '。' + model_text_neg
+
+    except:
+        pass
+
+    return text

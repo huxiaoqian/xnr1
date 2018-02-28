@@ -7,7 +7,8 @@ import json
 
 sys.path.append('../../')
 from global_utils import es_xnr, es_intel, writing_task_index_name, writing_task_index_type, \
-                        intel_opinion_results_index_name
+                        intel_opinion_results_index_name, intel_models_text_index_name, \
+                        intel_models_text_index_type
 
 def save2topic_es(task_source,task_id,search_results):
 
@@ -41,10 +42,10 @@ def save_intelligent_opinion_results(task_id,sub_opinion_results,summary, intel_
     es_intel.index(index=intel_opinion_results_index_name,doc_type=intel_type,\
                 id=task_id,body=item_exist)
 
-    item_task = dict() 
-    item_task['compute_status'] = 2  ## 保存子观点结果，更新计算状态
-    es_xnr.update(index=writing_task_index_name,doc_type=writing_task_index_type,\
-            id=task_id, body={'doc':{'compute_status':2}})
+    # item_task = dict() 
+    # item_task['compute_status'] = 2  ## 保存子观点结果，更新计算状态
+    # es_xnr.update(index=writing_task_index_name,doc_type=writing_task_index_type,\
+    #         id=task_id, body={'doc':{'compute_status':2}})
 
     mark = True
 
@@ -52,4 +53,23 @@ def save_intelligent_opinion_results(task_id,sub_opinion_results,summary, intel_
     #     mark = False
 
     return mark
+
+def save2models_text(task_id,model_text_dict):
+
+    item_exist = dict()
+    item_exist['task_id'] = task_id
+    item_exist['model_text_pos'] = model_text_dict['model_text_pos']
+    item_exist['model_text_neg'] = model_text_dict['model_text_neg']
+    item_exist['model_text_news'] = model_text_dict['model_text_news']
+
+    # 保存智能发帖模板文本结果
+    print 'item_exist...',item_exist
+    
+    es_intel.index(index=intel_models_text_index_name,doc_type=intel_models_text_index_type,\
+                id=task_id,body=item_exist)
+
+    item_task = dict() 
+    item_task['compute_status'] = 2  ## 保存子观点结果，更新计算状态
+    es_xnr.update(index=writing_task_index_name,doc_type=writing_task_index_type,\
+            id=task_id, body={'doc':{'compute_status':2}})
 

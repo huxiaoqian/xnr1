@@ -143,6 +143,8 @@ topics_river_index_type = 'river'
 timeline_index_name = 'timeline_results'
 timeline_index_type = 'timeline'
 
+intel_models_text_index_name = 'models_text'
+intel_models_text_index_type = 'text'
 
 
 '''
