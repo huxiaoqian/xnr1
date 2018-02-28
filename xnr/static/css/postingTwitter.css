@@ -42,6 +42,8 @@ body {
     padding: 5px;
 }
 #container .post_post .post-2 .add_thing {
+    overflow: hidden;
+    width: 100%;
     padding:10px 0;
 }
 #container .post_post .post-2 .add_thing div {
@@ -470,29 +472,26 @@ span.disableCss{
 
 /* =========LL 12-18智能发帖 =============*/
 /* 输入框 */
-#container #content #intelliGence .point-view-1 {
-    width: 56%;
+#container #content #intelliGence .point-view {
+    width: 35%;
     background: transparent;
     border: 1px solid silver;
     border-radius: 5px;
     padding: 3px 6px;
+    text-align: center;
+}
+#container #content #intelliGence .intelliGenceSpan {
+    display: inline-block;
+    width:115px;
+    text-align: right;
 }
 #container #content #intelliGence .ed-2-1-bottom{
     margin:10px 0 20px 0;
 }
 /* 按钮 */
 #container #content #intelliGence .ed-2-1-bottom button {
-    /* 透明色 */
-    /* background-color: transparent; */
-    /* background-color: #003366; */
-    height:26px;
-    /* border-color: silver; */
-    color: white;
-}
-#container #content #intelliGence .ed-2-1-bottom button:hover {
-    /* background-color: rgba(3, 8, 16, 0.61); */
-    /* background-color: #666666; */
-    color: white;
+    float: right;
+    margin: 4px 30px 0 0;
 }
 #container .type_page #intelligenceTabs a {
     color: white;

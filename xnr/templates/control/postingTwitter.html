@@ -66,6 +66,9 @@
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
+    #z-0 .table-hover>tbody>tr:hover {
+        background-color:#2a556f!important;
+    }
     th.bs-checkbox {width: 1%!important;}
     .focus_main .bootstrap-table .table thead>tr>th {width: 5%!important;}
     .fixed-table-container tbody .selected td {
@@ -121,7 +124,7 @@
     #sure-1:hover {background: rgba(8,23,44,0.65);}
     #content-2 .fixed-table-toolbar .search {display: none}
     #content-2 .btn-primary.active {background-color:#78ad57;}
-
+    .telChoose { background:#31708f;}
 </style>
 {% endblock %}
 {% block main %}
@@ -154,6 +157,42 @@
             <div class="post-1" style="margin-top: 20px;">
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff">我要发推</span>
+                <div id="intell_type" style="padding: 10px 0 0 20px;display: none;">
+                    <div class="intel_1">
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="single">
+                            <span class="demo-checkbox demo-radioInput"></span> 单极性
+                        </label>
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="double">
+                            <span class="demo-checkbox demo-radioInput"></span> 双极性
+                        </label>
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="news">
+                            <span class="demo-checkbox demo-radioInput"></span> 事实陈述
+                        </label>
+                    </div>
+                    <div class="intel_2 intelDownType" style="display:none;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel2" value="positive">
+                            <span class="demo-checkbox demo-radioInput"></span> 正向观点
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel2" value="negtive">
+                            <span class="demo-checkbox demo-radioInput"></span> 负向观点
+                        </label>
+                    </div>
+                    <div class="intel_3 intelDownType" style="display:none;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel3" value="although_positive">
+                            <span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel3" value="although_negtive">
+                            <span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="post-2">
                 <div>
@@ -166,12 +205,13 @@
                 </div>
                 <img src='' alt='' id='imgimg' style="display: none;"/>
                 <div class="add_thing">
-                    <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
-                    <div style="margin:0 10px;" onclick="selectFile();"><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
-                    <form action='' method='' name='myform' style="display: none;">
-                        <input type='file' id='iptfileupload' onchange='show()' value=''/>
-                    </form>
-                    <div class="dingshi" style="margin-left:20%;">
+                    <!--<div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>-->
+                    <!--<div style="margin:0 10px;" onclick="selectFile();"><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>-->
+                    <!--<form action='' method='' name='myform' style="display: none;">-->
+                        <!--<input type='file' id='iptfileupload' onchange='show()' value=''/>-->
+                    <!--</form>-->
+                    <button type="button" class="btn btn-info btn-xs" id="sure_post" style="float:right;">发布</button>
+                    <div class="dingshi" style="float:right;margin: -2px 10px 0 0;">
                         <label class="demo-label timingss" style="margin: 5px 7px;">
                             <input class="demo-radio timing" type="checkbox" name="demo">
                             <span class="demo-checkbox demo-radioInput"></span> 定时
@@ -189,7 +229,7 @@
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info btn-xs" id="sure_post">发布</button>
+
                 </div>
             </div>
             <div id="user_recommend" style="display: none;">
@@ -603,13 +643,13 @@
                             <li role="presentation" class="radyType6 radyType">
                                 <a href="#z-6" table-view="view-5" role="tab" data-toggle="tab" view-type="" class="viewHave">观点语料库</a>
                             </li>
-                            <li role="presentation" class="radyType7 radyType">
-                                <a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>
-                            </li>
+                            <!--<li role="presentation" class="radyType7 radyType">-->
+                                <!--<a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>-->
+                            <!--</li>-->
                         </ul>
                         <div class="tab-content" id="content-2">
                             <div role="tabpanel" class="tab-pane active" id="z-0">
-                                <div class="eventList">
+                                <div class="eventList" style="margin-top: 10px;">
                                     <div id="eventList">
                                         <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                                     </div>
@@ -720,15 +760,6 @@
                                 <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
                                 <div class="view-5">
                                     <div id="view-5"></div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="weiboTable tab-pane" id="z-7">
-                                <div class="z-Top">
-                                    <div class="view-1-button" style="display: inline-block;"></div>
-                                </div>
-                                <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
-                                <div class="view-6">
-                                    <div id="view-6"></div>
                                 </div>
                             </div>
                         </div>
@@ -1103,7 +1134,7 @@
 
     var intelligentType='twitter';
 </script>
-<script src="/static/js/jquery.sinaEmotion.js"></script>
+<!--<script src="/static/js/jquery.sinaEmotion.js"></script>-->
 <script src="/static/js/chalk.js"></script>
 <script src="/static/js/posting-2.js"></script>
 <script src="/static/js/postTwitter-1.js"></script>
