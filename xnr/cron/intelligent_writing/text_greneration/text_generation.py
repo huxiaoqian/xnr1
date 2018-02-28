@@ -13,14 +13,14 @@ from config_text_cron import re_cut,cut_des,TopkHeap
 
 def get_s(text,weibo):#计算相似度，剔除重复文本
 
-        max_r = 0
+    max_r = 0
 
-        for i in range(0,len(text)):
-                r = Levenshtein.ratio(str(text[i]), str(weibo))
-                if max_r < r:
-                    max_r = r
+    for i in range(0,len(text)):
+        r = Levenshtein.ratio(str(text[i]), str(weibo))
+        if max_r < r:
+            max_r = r
 
-        return max_r
+    return max_r
 
 def rank_text_list(text_list,keywords):#根据关键词匹配的长度，对text文本排序
 
@@ -36,6 +36,9 @@ def rank_text_list(text_list,keywords):#根据关键词匹配的长度，对text
         
     for i in range(0,len(text_list)):
         text = text_list[i]
+        
+        if len(text) == 0:
+                    continue
         row = []
         word_sum = 0
         for key in keywords:
@@ -43,7 +46,7 @@ def rank_text_list(text_list,keywords):#根据关键词匹配的长度，对text
                 word_sum = word_sum + text.count(key)
                 row.append(key)
         if len(row) >= 1:
-                        result_list.Push(((len(row)*word_sum),text))
+                    result_list.Push(((len(row)*word_sum),text))
             #result_list.Push((float(word_sum)/float(len(row)),text))
 
     result = result_list.TopK()
@@ -84,10 +87,10 @@ def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
             if weight > max_weight and weight >= w_n:
                 r = get_s(summary_list,text)
                 if r >= 0.7:
-                        continue
+                    continue
                 else:
-                        max_index = i
-                        max_weight = weight
+                    max_index = i
+                    max_weight = weight
 
         if max_weight == 0:#没有可以拼接的文本
             break
@@ -114,14 +117,27 @@ def text_generation_main(text_list,keyword_list):#文本生成主函数
 
     sen_list = []
     for text in text_list:
-        text_re = re_cut(text)
+        if type(text).__name__ == "unicode":
+            new_text = text.encode('utf-8')
+        else:
+            new_text = text
+        text_re = re_cut(new_text)
         ts = text_re.split('。')
         sen_list.extend(ts)
 
-    rank_text = rank_text_list(sen_list,keyword_list)
+    new_keywords = []
+    for key in keyword_list:
+        if type(key).__name__ == "unicode":
+            new_keywords.append(key.encode('utf-8'))
+        else:
+            new_keywords.append(key)
+        
+    rank_text = rank_text_list(sen_list,new_keywords)
+    
     if len(rank_text) == 0:#加入错误判定
-            summary = ''
+        summary = ''
     else:
-            summary = combine_rank_text(rank_text)
+        summary = combine_rank_text(rank_text)
 
     return summary
+

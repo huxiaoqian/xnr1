@@ -5,7 +5,7 @@ import sys
 import json
 import time
 
-from save_utils import save_intelligent_opinion_results,save2topic_es
+from save_utils import save_intelligent_opinion_results,save2topic_es, save2models_text
 
 sys.path.append('./public/')
 from comment_module import comments_calculation_v2
@@ -16,6 +16,8 @@ from fix_config import emotions_vk_v1
 sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/text_greneration/')
 from text_generation import text_generation_main
 
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/summary_produce/')
+from process_summary import summary_main
 
 # 引入子观点分析分类器
 
@@ -40,7 +42,7 @@ from flow_text_mappings import get_mappings
 from timed_python_files.facebook_mappings import facebook_flow_text_mappings
 from timed_python_files.twitter_mappings import twitter_flow_text_mappings
 from time_utils import datetime2ts,ts2datetime,ts2datetime_full ,get_flow_text_index_list, fb_get_flow_text_index_list, tw_get_flow_text_index_list
-from parameter import MAX_SEARCH_SIZE, SUB_OPINION_WEIBO_LIMIT
+from parameter import MAX_SEARCH_SIZE, SUB_OPINION_WEIBO_LIMIT, SENTIMENT_POS, SENTIMENT_NEG
 sys.path.append('../trans/')
 from trans import trans, simplified2traditional, traditional2simplified
 
@@ -770,6 +772,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
         print 'summary_text_list..',len(summary_text_list)
         print 'topic_keywords_list..',topic_keywords_list
         summary = text_generation_main(summary_text_list,topic_keywords_list)
+        #summary = summary_main(summary_text_list)
         #except:
         #    summary = ''
             
@@ -783,6 +786,73 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
     return mark
     
+
+def get_models_text(task_id,task_source,opinion_keywords_list):
+
+    if task_source == 'weibo':
+        sort_item = 'retweeted'
+    else:
+        sort_item = 'share'
+
+    query_body_pos = {
+        'query':{
+            'terms':{'sentiment':SENTIMENT_POS}
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    query_body_neg = {
+        'query':{
+            'terms':{'sentiment':SENTIMENT_NEG}
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    query_body_news = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'wildcard':{'text':'*【*】*'}}
+                    ]
+            }
+        },
+        'sort':{sort_item:{'order':'desc'}},
+        'size':MAX_SEARCH_SIZE
+    }
+
+    results_pos = es_intel.search(index=task_id,doc_type=task_source,body=query_body_pos)['hits']['hits']
+    results_neg = es_intel.search(index=task_id,doc_type=task_source,body=query_body_neg)['hits']['hits']
+    results_news = es_intel.search(index=task_id,doc_type=task_source,body=query_body_news)['hits']['hits']
+
+    text_list_pos = []
+    text_list_neg = []
+    text_list_news = []
+
+    for result_pos in results_pos:
+        text_list_pos.append(result_pos['_source']['text'])
+
+    for result_neg in results_neg:
+        text_list_neg.append(result_neg['_source']['text'])
+    
+    for result_news in results_news:
+        text_list_news.append(result_news['_source']['text'])
+
+    model_text_dict = {}
+
+    model_text_pos = text_generation_main(text_list_pos,opinion_keywords_list)
+    model_text_neg = text_generation_main(text_list_neg,opinion_keywords_list)
+    model_text_news = text_generation_main(text_list_news,opinion_keywords_list)
+
+    model_text_dict['model_text_pos'] = model_text_pos
+    model_text_dict['model_text_neg'] = model_text_neg
+    model_text_dict['model_text_news'] = model_text_news
+
+    print 'model_text_dict..',model_text_dict
+    
+    save2models_text(task_id,model_text_dict)
+
 
 def compute_intelligent_recommend(task_detail):
 
@@ -832,5 +902,8 @@ def compute_intelligent_recommend(task_detail):
     print 'compute sensitive opinions over...'
 
     # 观点语料库
+
+    # 智能发帖模板文本生成 -- 正向、负向、事实陈述
+    get_models_text(task_id,task_source,opinion_keywords_list)
 
     return []

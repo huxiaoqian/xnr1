@@ -16,8 +16,7 @@ K3 = 500
 ##对微博文本进行预处理
 
 def cut_filter(text):
-    pattern_list = [r'\（分享自 .*\）',r'http://\w*',r'[a-zA-z]',r'\[.*?\]',r'回复',r'\@.*?\:',r'\@.*?\s',r'\@.*?\s',r'\【.*?\】',\
-                    r'\「.*?\」',r'\#.*?\#']
+    pattern_list = [r'\（分享自 .*\）',r'http://\w*',r'[a-zA-z]',r'\[.*?\]',r'回复',r'\@.*?\:',r'\@.*?\s',r'\【.*?\】']
     for i in pattern_list:
         p = re.compile(i)
         text = p.sub('', text)
@@ -26,13 +25,11 @@ def cut_filter(text):
 def re_cut(w_text):#根据一些规则把无关内容过滤掉
     
     w_text = cut_filter(w_text)
-    label_list = [r'\?',r'\？',r'\!',r'\！',r'\...',r'\。。。',r'\......',r'\。。。。。。',r'\；',r'\;',r'\：',r'\:']
+    label_list = ['?','？','!','！','...','；',';','：']
     for label in label_list:
-        p = re.compile(label)
-        w_text = p.sub('。', w_text)
+        w_text.replace(label, '。')
     if w_text == '转发微博':
         w_text = ''
-
     return w_text
 
 ##微博文本预处理结束
@@ -125,7 +122,3 @@ def cut_by_textrank(text):#利用textrank切词
             word_list.append(word)
 
     return word_list
-
-
-
-
