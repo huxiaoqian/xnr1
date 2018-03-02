@@ -37,7 +37,7 @@ $('#container .type_page #myTabs a').on('click',function () {
     var arrow=$(this).attr('href'),arrowName='';
     if (arrow == '#everyday'){
         //arrowName='@用户推荐';
-        // recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?xnr_user_no='+xnrUser;
+        //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?xnr_user_no='+xnrUser;
         //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=timestamp';
         $('#container .post_post .post-2 #post-2-content').width('100%');
         $('#container .post_post .post-2 .add_thing').css({'width':'100%'});
@@ -67,12 +67,18 @@ $('#container .type_page #myTabs a').on('click',function () {
         var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
         // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
         public_ajax.call_request('get',intelligent_writing_url,intelligentList);
+
+        $('#container .post_post .post-2 #post-2-content').width('100%');
+        $('#container .post_post .post-2 .add_thing').css({'width':'100%'});
+        $('#user_recommend').hide();
     }
     if (arrow!='#intelliGence'){
         $('#intell_type').hide();
     }
     if (arrow!='#reportNote'){
         $('.post_post').show();
+    }
+    if (arrow!='#reportNote'&&arrow!='#intelliGence'){
         $('#user_recommend .tit').text(arrowName);
         public_ajax.call_request('get',recommendUrl,recommendlist);
     }
