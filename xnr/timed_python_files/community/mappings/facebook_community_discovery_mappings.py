@@ -28,21 +28,21 @@ def facebook_community_target_user_mappings(date_name):
 					'uid':{                     # uid
                         'type':'string',
                         'index':'not_analyzed'
-                    },
-                    'sensitive':{
-                    	'type':'long'
-                    },
-                    'influence':{
-                    	'type':'long'
-                    },
-                    'keywords':{
-                    	'type':'string',
-                    	'index':'not_analyzed'
-                    },
-                    'community_id':{   #社区ID
-                    	'type':'string',
-                    	'index':'not_analyzed'
-                    },
+                         },
+                         'sensitive':{
+                         	'type':'long'
+                         },
+                         'influence':{
+                         	'type':'long'
+                         },
+                         'keywords':{
+                         	'type':'string',
+                         	'index':'not_analyzed'
+                         },
+                         'community_id':{   #社区ID
+                         	'type':'string',
+                         	'index':'not_analyzed'
+                         },
 					'timestamp':{
 						'type':'long'
 					}
@@ -104,6 +104,12 @@ def facebook_select_community_mappings(date_name):
                     	'type':'long'
                     },
                     'mean_sensitive':{  #社区平均敏感度
+                    	'type':'long'
+                    },
+                    'min_influence':{ #社区最小影响力
+                    	'type':'long'
+                    },
+                    'min_sensitive':{  #社区最小敏感度
                     	'type':'long'
                     }
 				}
@@ -167,6 +173,13 @@ def facebook_detail_community_mappings(date_name):
                     'mean_sensitive':{  #社区平均敏感度
                     	'type':'long'
                     },
+                    ##
+                    'min_influence':{ #社区最小影响力
+                    	'type':'long'
+                    },
+                    'min_sensitive':{  #社区最小敏感度
+                    	'type':'long'
+                    },
                     ##############detail############
                     'community_status':{  #社区状态：0 新社区，1 跟踪社区，-1 放弃跟踪社区
                     	'type':'long'
@@ -192,7 +205,26 @@ def facebook_detail_community_mappings(date_name):
                     'outer_user':{ #与核心人物互动频繁的外部人员信息
                     	'type':'string',
                     	'index':'no'
-                    }
+                    },
+                    'community_user_list':{ #社区成员列表信息,需标记核心成员
+                    	'type':'string',
+                    	'index':'no'
+                    },
+                    'community_user_change':{ #社区成员变化信息，形式参考核心人物
+                    	'type':'string',
+                    	'index':'no'
+                    },
+                    'warning_rank':{   #预警级别
+                    	'type':'long'
+                    },
+                    'total_score':{   #综合得分
+                    	'type':'long'
+                    },
+                    'socail_keyword':{  #社区初始关键词
+                    	'type':'string',
+                    	'index':'not_analyzed'
+                    },
+
 				}
 			}
 		}
