@@ -932,4 +932,3 @@ function judgmentTwitter(typeNum) {
     };
     $('.behind').html(afterEle);
 };
-

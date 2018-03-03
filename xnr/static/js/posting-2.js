@@ -267,6 +267,11 @@ function intelligentList(data) {
     $('#eventList p').slideUp(700);
 }
 $('#eventList').on('click-row.bs.table', function (e, row, element){
+    $('.point-view-1').val(row.task_name);
+    $('.point-view-2').val(row.event_keywords);
+    $('.point-view-3').val(row.opinion_keywords);
+    $('.intelliGence-2 .ed-2-1-bottom input[value="'+row.opinion_type+'"]').attr('checked','true');
+    //
     chooseThisIntelID=row.task_id;
     $('.telChoose').removeClass('telChoose');//去除之前选中的行的，选中样式
     $(element).addClass('telChoose');//添加当前选中的success样式用于区别
