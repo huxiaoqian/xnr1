@@ -8,7 +8,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.parameter import MAX_VALUE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 
-from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_user
+from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_user,addto_twitter_corpus
  
 
 mod = Blueprint('twitter_xnr_monitor', __name__, url_prefix='/twitter_xnr_monitor')
@@ -53,3 +53,17 @@ def ajax_lookup_active_user():
     return json.dumps(result)
 
 
+#加入语料库
+@mod.route('/addto_twitter_corpus/')
+def ajax_addto_twitter_corpus():
+    task_detail=dict()
+    task_detail['corpus_type']=request.args.get('corpus_type','')
+    task_detail['theme_daily_name']=request.args.get('theme_daily_name','').split(',')
+    task_detail['uid']=request.args.get('uid','')
+    task_detail['tid']=request.args.get('tid','')
+    task_detail['timestamp']=int(request.args.get('timestamp',''))
+    task_detail['create_type']=request.args.get('create_type','')
+    task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+    task_detail['create_time']=int(time.time())
+    results=addto_twitter_corpus(task_detail)
+    return json.dumps(results)
