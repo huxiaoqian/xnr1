@@ -551,6 +551,17 @@ twitter_timing_warning_index_type = 'text'
 twitter_keyword_count_index_name = 'twitter_keyword_count'
 twitter_keyword_count_index_type = 'text'
 
+## 上报管理
+twitter_report_management_index_name_pre = 'twitter_report_management_'
+twitter_report_management_index_type = 'report'
+
+# 语料库 -- 主题和日常
+twitter_xnr_corpus_index_name = 'twitter_corpus'
+twitter_xnr_corpus_index_type = 'text'
+
+#预警库
+twitter_warning_corpus_index_name = 'twitter_warning_corpus'
+twitter_warning_corpus_index_type = 'text'
 
 # use to save influence
 tw_bci_index_name_pre = 'tw_bci_'

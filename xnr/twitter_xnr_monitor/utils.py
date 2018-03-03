@@ -14,7 +14,8 @@ from xnr.global_utils import es_xnr,twitter_keyword_count_index_name,twitter_key
                              tw_xnr_index_name,tw_xnr_index_type,\
                              twitter_count_index_name_pre,twitter_count_index_type,\
                              tw_bci_index_name_pre,tw_bci_index_type,\
-                             twitter_user_index_name,twitter_user_index_type
+                             twitter_user_index_name,twitter_user_index_type,\
+                             twitter_xnr_corpus_index_name,twitter_xnr_corpus_index_type
 
 from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN,\
                           MAX_HOT_POST_SIZE
@@ -305,3 +306,33 @@ def lookup_active_user(classify_id,xnr_id,start_time,end_time):
     return results
 
 
+#加入语料库
+def addto_twitter_corpus(task_detail):
+    flow_text_index_name = twitter_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=twitter_flow_text_index_type,id=task_detail['tid'])['_source']
+        task_detail['text']=corpus_result['text']
+        
+        #查询三个指标字段
+        tid_result=lookup_tid_attend_index(task_detail['tid'],task_detail['timestamp'],task_detail['timestamp'])
+        if tid_result:
+            task_detail['comment']=tid_result['comment']
+            task_detail['share']=tid_result['share']
+            task_detail['favorite']=tid_result['favorite']
+        else:
+            task_detail['comment']=0
+            task_detail['share']=0
+            task_detail['favorite']=0 
+
+            #查询用户昵称
+        task_detail['nick_name']=get_user_nickname(item['_source']['uid'])
+
+    except:
+        mark=False
+
+    try:
+        es_xnr.index(index=twitter_xnr_corpus_index_name,doc_type=twitter_xnr_corpus_index_type,id=task_detail['tid'],body=task_detail)
+        mark=True
+    except:
+        mark=False
+    return mark

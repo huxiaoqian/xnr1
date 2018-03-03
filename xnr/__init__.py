@@ -43,12 +43,14 @@ from xnr.facebook_xnr_monitor.views import mod as facebookxnrmonitorModule
 from xnr.facebook_xnr_manage.views import mod as facebookxnrmanageModule
 from xnr.facebook_xnr_knowledge_base_management.views import mod as facebookxnrknowledgebasemanagementModule
 from xnr.facebook_xnr_report_manage.views import mod as facebookxnrreportmanageModule
+from xnr.facebook_xnr_community.views import mod as facebookxnrcommunityModule
 
 from xnr.twitter_xnr_create.views import mod as twitterxnrcreateModule
 from xnr.twitter_xnr_warning.views import mod as twitterxnrwarningModule
 from xnr.twitter_xnr_monitor.views import mod as twitterxnrmonitorModule
 from xnr.twitter_xnr_manage.views import mod as twitterxnrmanageModule
 from xnr.twitter_xnr_knowledge_base_management.views import mod as twitterxnrknowledgebasemanagementModule
+from xnr.twitter_xnr_report_manage.views import mod as twitterxnrreportmanageModule
 
 from xnr.facebook_xnr_operate.views import mod as facebookxnroperateModule
 from xnr.twitter_xnr_operate.views import mod as twitterxnroperateModule
@@ -109,13 +111,15 @@ def create_app():
     app.register_blueprint(facebookxnrmonitorModule)
     app.register_blueprint(facebookxnrmanageModule)
     app.register_blueprint(facebookxnrknowledgebasemanagementModule)
-    app.register_blueprint(facebookxnrreportmanageModule)    
+    app.register_blueprint(facebookxnrreportmanageModule)
+    app.register_blueprint(facebookxnrcommunityModule)    
 
     app.register_blueprint(twitterxnrcreateModule)
     app.register_blueprint(twitterxnrwarningModule)
     app.register_blueprint(twitterxnrmonitorModule)
     app.register_blueprint(twitterxnrmanageModule)
     app.register_blueprint(twitterxnrknowledgebasemanagementModule)
+    app.register_blueprint(twitterxnrreportmanageModule)
 
     app.register_blueprint(facebookxnroperateModule)
     app.register_blueprint(twitterxnroperateModule)
