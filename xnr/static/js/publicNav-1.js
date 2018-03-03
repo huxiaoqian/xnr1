@@ -501,7 +501,7 @@ function same_xnr(mid2) {
         mid1='twitter';xnrNo=localStorage.getItem('userTw');
     }
     var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform='+mid1+'&origin_xnr_user_no='+xnrNo+'&new_platform='+mid2;
-    public_ajax.call_request('GET',sameXnr_url,sameXnrPoint)
+    // public_ajax.call_request('GET',sameXnr_url,sameXnrPoint)
 }
 function sameXnrPoint(data) {
     for (var k in data[0]){
@@ -590,6 +590,11 @@ function judgment(typeNum){
             '<li class="main_li">'+
             '    <a class="li_a" href="/monitor/timeWarning/">' +
             '        <i class="icon icon-time"></i>&nbsp;时间预警' +
+            '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/monitor/communityWarning/">' +
+            '        <i class="icon icon-building"></i>&nbsp;社区预警' +
             '    </a>'+
             '</li>';
     }else if (typeNum==5){

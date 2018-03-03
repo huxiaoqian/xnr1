@@ -23,11 +23,13 @@ class Follower():
 				name = each.name
 				screen_name = each.screen_name
 				id = each.id
+				root_uid = self.api.me().id
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time
+					'update_time':self.update_time,
+					'root_uid':root_uid
 				}
 				self.list.append(item)
 		except Exception as e:
@@ -35,11 +37,13 @@ class Follower():
 				name = each.name
 				screen_name = each.screen_name
 				id = each.id
+				root_uid = self.api.me().id
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time
+					'update_time':self.update_time,
+					'root_uid':root_uid
 				}
 				self.list.append(item)
 		return self.list

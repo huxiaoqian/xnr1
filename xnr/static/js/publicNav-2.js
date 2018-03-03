@@ -1,4 +1,3 @@
-//-------------------颜色----------------------
 function createRandomItemStyle() {
     return {
         normal: {
@@ -24,6 +23,14 @@ function todayTimetamp() {
     start.setMilliseconds(0);
     var todayStartTime=Date.parse(start)/1000;
     return todayStartTime;
+}
+//昨天时间到23:59
+function yesterday() {
+    var day = new Date();
+    day.setTime(day.getTime()-24*60*60*1000);
+    var s1 = day.getFullYear()+ "-" + (day.getMonth()+1) + "-" + day.getDate();
+    var s2 = (Date.parse(new Date(new Date(new Date(s1).toLocaleDateString()).getTime()+24*60*60*1000-1)))/1000;
+    return s2;
 }
 //时间戳转时间
 function getLocalTime(nS) {
@@ -103,17 +110,20 @@ function letter(_this) {
         '&text='+txt;
     public_ajax.call_request('get',post_url_letter,operatSuccess)
 }
-var urlFirst_zpd='',mft_id,
+var urlFirst_zpd='',mft_id,ft,first_url,reportWaring,reportInfo,
     reply_retweet='retweet_operate',reply_comment='comment_operate';
 setTimeout(function () {
-    var ft=$('.nav_type').text();
+    ft=$('.nav_type').text();
     if(ft=='(微博)'){
-        urlFirst_zpd='weibo_xnr_operate';mft_id='mid';
-        reply_retweet='reply_retweet',reply_comment='reply_comment';
+        urlFirst_zpd='weibo_xnr_operate';mft_id='mid';reportWaring='weibo_xnr_warming_new';
+        reply_retweet='reply_retweet',reply_comment='reply_comment';reportInfo='weibo_info';
+        first_url='/weibo_xnr_monitor/new_addto_weibo_corpus/';
     }else if(ft=='(FaceBook)'){
-        urlFirst_zpd='facebook_xnr_operate';mft_id='fid';
+        urlFirst_zpd='facebook_xnr_operate';mft_id='fid';reportWaring='facebook_xnr_warning';
+        first_url='/facebook_xnr_monitor/addto_facebook_corpus/';reportInfo='fb_info';
     }else if(ft=='(twitter)'){
-        urlFirst_zpd='twitter_xnr_operate';mft_id='tid';
+        urlFirst_zpd='twitter_xnr_operate';mft_id='tid';reportWaring='twitter_xnr_warning';
+        first_url='/twitter_xnr_monitor/addto_facebook_corpus/';reportInfo='tw_info';
     }
 },1000)
 //retweet_operate   comment_operate   like_operate
@@ -145,7 +155,10 @@ function showInput(_this) {
     $(_this).parents('.center_rel').find('.commentDown').show();
 };
 function comMent(_this,type){
-    var txt = $(_this).prev().val();
+    var txt = Check($(_this).prev().val());
+    console.log(txt)
+    console.log($(_this))
+    console.log($(_this).prev())
     if (txt!=''){
         var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
         var comPost_url='/'+urlFirst_zpd+'/'+reply_comment+'/?tweet_type='+type+'&text='+txt+'&xnr_user_no='+
@@ -176,27 +189,28 @@ function robot(_this) {
     robotThis=_this;
     $(_this).parents('.center_rel').find('.commentDown').show();
     var txt= $(_this).parents('.center_rel').find('.center_2').text();
-    var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
-    public_ajax.call_request('get',robot_url,robotTxt)
-    // var uid = $(_this).parents('.center_rel').find('.uid').text();
-    // $('#robotBack .questionVal').val('');
-    // $('#robotBack .QC').hide();
-    // $('#robotBack').modal('show');
+    // var robot_url='/'+urlFirst_zpd+'/robot_reply/?question='+Check(txt);
+    var robot_url='/facebook_xnr_operate/robot_reply/?question='+Check(txt);
+    public_ajax.call_request('get',robot_url,robotTxt);
 }
-// function getRobot() {
-//     var s=$('.commentDown .questionVal').val();
-//     if (!s){
-//         $('#pormpt p').text('请输入问题。');
-//         $('#pormpt').modal('show');
-//     }else {
-//         var robot_url='/facebook_xnr_operate/robot_reply/?question='+s;
-//         public_ajax.call_request('get',robot_url,robotTxt)
-//     }
-// }
 function robotTxt(data) {
-    var txt=data;
-    if (!data){txt='机器人无答复'};
+    $(robotThis).parents('.center_rel').find('.robotQuestion').remove();
+    var txt=data['tuling'];
+    if (isEmptyObject(data)||!txt){txt='机器人无答复'};
     $(robotThis).parents('.center_rel').find('.commentDown').children('input').val(txt);
+    var robotType=$(robotThis).parents('.center_rel').find('.commentDown').children('span').attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
+    var str='<div class="robotQuestion">';
+    var robot1='<p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关问题</p>' +
+        '<p style="text-indent:30px;margin:5px 0;">'+data["own"][0]+'</p>';
+    var robot2='<div><p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关评论</p>';
+    var robot3='';
+    $.each(data['own'][1],function (index,item) {
+         robot3+='<div class="robotDown" class="r"><input type="text" class="robotIput" value="'+item+'">&nbsp;' +
+        '<span class="sureRobot" onclick="comMent(this,\''+robotType+'\')">回复</span></div>'
+    });
+    robot2+=robot3+'</div>';
+    str+=robot1+robot2+'</div>';
+    $(robotThis).parents('.center_rel').find('.commentDown').after(str);
 }
 //加入预警库
 function getInfo(_this) {
@@ -208,7 +222,7 @@ function getInfo(_this) {
 };
 function joinPolice(_this,type) {
     var info=getInfo(_this);
-    var police_url='/weibo_xnr_warming_new/addto_warning_corpus/?xnr_user_no='+ID_Num+'&uid='+info[0]+
+    var police_url='/'+reportWaring+'/addto_warning_corpus/?xnr_user_no='+ID_Num+'&uid='+info[0]+
         '&mid='+info[1]+'&timestamp='+info[2]+'&warning_source='+type;
     public_ajax.call_request('get',police_url,operatSuccess)
 };
@@ -228,9 +242,17 @@ function joinWord() {
     $("#wordcloud input:checkbox[name='theme"+tt+"']:checked").each(function (index,item) {
         theme_daily_name.push($(this).val());
     });
-    var corpus_url='/weibo_xnr_monitor/new_addto_weibo_corpus/?xnr_user_no='+ID_Num +
+    var first_url,mftID;
+    if(ft=='(微博)'){
+        first_url='/weibo_xnr_monitor/new_addto_weibo_corpus/';mftID='mid';
+    }else if(ft=='(FaceBook)'){
+        first_url='/facebook_xnr_monitor/addto_facebook_corpus/';mftID='fid';
+    }else if(ft=='(twitter)'){
+        first_url='/twitter_xnr_monitor/addto_facebook_corpus/';mftID='tid';
+    }
+    var corpus_url= first_url+'?xnr_user_no='+ID_Num +
         '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+
-        '&uid='+wordUid+'&mid='+wordMid+'&timestamp='+wordTime+'&create_type='+create_type;
+        '&uid='+wordUid+'&'+mft_id+'='+wordMid+'&timestamp='+wordTime+'&create_type='+create_type;
     public_ajax.call_request('get',corpus_url,operatSuccess);
 }
 //一键上报
@@ -244,7 +266,7 @@ function oneUP(_this,type) {
         var uidList=[],weibo_info=[];
         for (var i=0;i<len.length;i++){
             var uid=$(len[i]).find('.uid').text();uidList.push(uid);
-            var mid = $(len[i]).find('.mid').text();
+            var mid = $(len[i]).find('.'+mft_id).text();
             var timestamp = $(len[i]).find('.timestamp').text();
             weibo_info.push({'mid':mid,'timestamp':timestamp});
         }
@@ -270,11 +292,12 @@ function oneUP(_this,type) {
             'event_name':mainNAME,
             'uid':mainUID,
             'user_info':uidList,
-            'weibo_info':weibo_info,
+            // 'weibo_info':weibo_info,
         }
+        job[reportInfo]=weibo_info;
         $.ajax({
             type:'POST',
-            url: '/weibo_xnr_warming_new/report_warming_content/',
+            url: '/'+reportWaring+'/report_warming_content/',
             contentType:"application/json",
             data: JSON.stringify(job),
             dataType: "json",

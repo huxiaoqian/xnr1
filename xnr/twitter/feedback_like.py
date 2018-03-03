@@ -27,6 +27,7 @@ class Like():
 				root_user_screen_name = li.find_element_by_xpath('./div/div/div/div[2]/div[2]/div/div/div/div/div/div[1]/span[3]/b').text
 				root_user_id = li.find_element_by_xpath('./div/div/div/div[2]/div[2]/div/div/div').get_attribute('data-user-id')
 				root_content = li.find_element_by_xpath('./div/div/div/div[2]/div[2]/div/div/div/div/div/div[2]').text
+				mid = li.get_attribute('data-item-id')
 
 				item = {
 					'nick_name':user_name,
@@ -35,7 +36,8 @@ class Like():
 					'root_user_name':root_user_name,
 					'root_nick_name':root_user_screen_name,
 					'root_uid':root_user_id,
-					'root_text':root_content
+					'root_text':root_content,
+					'mid':mid
 				}
 				self.list.append(item)
 

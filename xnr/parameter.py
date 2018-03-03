@@ -141,6 +141,9 @@ PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
 
 POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
 
+#智能写作
+WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+
 #FB & TW 属性计算
 FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
 TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'
@@ -152,6 +155,9 @@ MAX_VALUE = 9999
 
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
+
+SENTIMENT_POS = [0,1]
+SENTIMENT_NEG = [2,3,4,5,6,7]
 
 daily_ch2en = {u'旅游':'travel',u'美食':'food',u'汽车':'cars',u'游戏':'games',\
             u'星座':'constellation',u'音乐':'music',u'影视':'movie',\
