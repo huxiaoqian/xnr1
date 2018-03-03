@@ -6,7 +6,7 @@ from global_utils import es_xnr as es,twitter_flow_text_index_name_pre,twitter_f
 								twitter_count_index_name_pre,twitter_count_index_type,\
 								twitter_user_index_name,twitter_user_index_type
 
-def twitter_flow_text_mappings(index_name):
+def twitter_flow_text_mappings(index_name,index_type='text'):
 
 	index_info = {
 		'settings':{
@@ -22,7 +22,7 @@ def twitter_flow_text_mappings(index_name):
 			}
 		},
 		'mappings':{
-			twitter_flow_text_index_type:{
+			index_type:{
 				'properties':{
 					'uid':{
 						'type':'string',

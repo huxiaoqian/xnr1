@@ -55,7 +55,7 @@ body {
     background: rgba(3, 8, 16, 0.61);
 }
 #container .everyUser {
-    padding: 5px 10px;
+    // padding: 5px 10px;
 }
 #container .everyEvent .event_center {
     position: relative;

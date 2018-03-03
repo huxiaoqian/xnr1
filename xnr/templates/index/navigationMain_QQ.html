@@ -59,18 +59,40 @@
             margin:0 15px;
             cursor: pointer;
         }
+        #signOut {
+            position: fixed;
+            z-index: 99999;
+            right: 20px;
+            top: 20px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        #signOut a {color: white;}
+        #signOut:hover {
+            background: #2a2b2c;
+        }
         @media screen and (min-width:1370px) and (max-width:1920px) {
-            .bg13 .warning {
-                top: 700px!important;
-                left: 890px!important;
-            }
+            /*.bg13 .warning {*/
+                /*top: 700px!important;*/
+                /*left: 890px!important;*/
+            /*}*/
+            /*.xnr {*/
+                /*left:40% !important;*/
+            /*}*/
             .xnr {
-                left:43% !important;
+                left:40% !important;
             }
         }
     </style>
 {% endblock %}
 {% block main %}
+<div id="signOut">
+    <span><i class="icon icon-signout"></i>&nbsp;<a href="/logout/">退出登录</a></span>
+</div>
 <div class="section section1">
 
     <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
@@ -87,7 +109,7 @@
                 <span>操作控制</span>
             </div>
         </div>
-        <div class="warning" style="top: 490px;right:44%;">
+        <div class="warning" style="top:47%;right:44%;">
             <i class="icon icon-eye-open"></i>
             <div class="cover" id="warning">
                 <em class="icon icon-plus-sign"></em>

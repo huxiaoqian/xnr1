@@ -62,8 +62,12 @@
         padding: 0!important;
     }
     .fixed-table-container {top: 15px;}
+    .focus_main .fixed-table-container,.eventList .fixed-table-container {top: 0;}
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
+    }
+    #z-0 .table-hover>tbody>tr:hover {
+        background-color:#2a556f!important;
     }
     th.bs-checkbox {width: 1%!important;}
     .focus_main .bootstrap-table .table thead>tr>th {width: 5%!important;}
@@ -118,8 +122,9 @@
         cursor: pointer;
     }
     #sure-1:hover {background: rgba(8,23,44,0.65);}
-
-
+    #content-2 .fixed-table-toolbar .search {display: none}
+    #content-2 .btn-primary.active {background-color:#78ad57;}
+    .telChoose { background:#31708f;}
 </style>
 {% endblock %}
 {% block main %}
@@ -152,6 +157,42 @@
             <div class="post-1" style="margin-top: 20px;">
                 <img src="/static/images/icon.png" alt="">
                 <span style="font-size: 18px;font-weight: 900;color: #fff">我要发帖</span>
+                <div id="intell_type" style="padding: 10px 0 0 20px;display: none;">
+                    <div class="intel_1">
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="single">
+                            <span class="demo-checkbox demo-radioInput"></span> 单极性
+                        </label>
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="double">
+                            <span class="demo-checkbox demo-radioInput"></span> 双极性
+                        </label>
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="news">
+                            <span class="demo-checkbox demo-radioInput"></span> 事实陈述
+                        </label>
+                    </div>
+                    <div class="intel_2 intelDownType" style="display:none;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel2" value="positive">
+                            <span class="demo-checkbox demo-radioInput"></span> 正向观点
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel2" value="negtive">
+                            <span class="demo-checkbox demo-radioInput"></span> 负向观点
+                        </label>
+                    </div>
+                    <div class="intel_3 intelDownType" style="display:none;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel3" value="although_positive">
+                            <span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="intel3" value="although_negtive">
+                            <span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点
+                        </label>
+                    </div>
+                </div>
             </div>
             <div class="post-2">
                 <div>
@@ -197,10 +238,10 @@
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
                         <div class="ttime">
-                            <input type="text" size="22" id="_timing1" class="form_datetime start" placeholder="开始时间"
+                            <input type="text" size="22" id="_timing1" class="form_datetime start disableCss" placeholder="开始时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing2" class="form_datetime end" placeholder="结束时间"
+                            <input type="text" size="22" id="_timing2" class="form_datetime end disableCss" placeholder="结束时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                             <input type="text" size="22" id="_timing3" class="remarks" placeholder="备注信息"
@@ -528,33 +569,30 @@
                 <div class="intelliGence-2" style="margin-left: 30px;overflow: hidden;">
                     <div class="ed-2-1">
                     	<div>
-                    		<span>事件名称：</span>&nbsp;
-	                       	<input type="text" class="point-view-1" placeholder="请输入搜索事件名称"/><i class="icon icon-asterisk" style="color:red;margin-left:5px;"></i>
-                            <span class="pull-right">
-                                <span>帖子极性：</span>
+                    		<span class="intelliGenceSpan">事件名称：</span>
+	                       	<input type="text" class="point-view point-view-1" placeholder="事件名称"/>
+                            <span class="intelliGenceSpan">事件关键词：</span>
+                            <input type="text" class="point-view point-view-2" placeholder="事件关键词(多个用逗号分隔)"/>
+                    	</div>
+                    	<div class="ed-2-1-bottom" style="margin-top: 8px;">
+                    		<span class="intelliGenceSpan">我的观点关键词：</span>
+	                        <input type="text" class="point-view point-view-3" placeholder="观点关键词(多个用逗号分隔)"/>
+                            <div style="display: inline-block;">
+                                <span class="intelliGenceSpan">我的帖子极性：</span>
                                 <label class="demo-label" title="全部">
-                                    <input class="demo-radio" type="radio" name="polar" value="全部" checked>
+                                    <input class="demo-radio" type="radio" name="polar" value="all" checked>
                                     <span class="demo-checkbox demo-radioInput"></span> 全部
                                 </label>
                                 <label class="demo-label" title="积极">
-                                    <input class="demo-radio" type="radio" name="polar" value="积极">
+                                    <input class="demo-radio" type="radio" name="polar" value="positive">
                                     <span class="demo-checkbox demo-radioInput"></span> 积极
                                 </label>
                                 <label class="demo-label" title="消极">
-                                    <input class="demo-radio" type="radio" name="polar" value="消极">
+                                    <input class="demo-radio" type="radio" name="polar" value="negtive">
                                     <span class="demo-checkbox demo-radioInput"></span> 消极
                                 </label>
-                            </span>
-                    	</div>
-                    	<div class="ed-2-1-bottom">
-                    		<span>观点关键词:</span>
-	                        <input type="text" class="point-view-1" placeholder="输入上述事件下的子观点关键词" style="width:83%;"/>
-                            <span class="pull-right">
-                                <button type="button" class="btn btn-primary btn-xs"
-                                data-toggle="modal" data-target="#sameRoad">观点分析</button>
-                                <!--<button type="button" class="btn btn-primary btn-xs"-->
-                                <!--data-toggle="modal" data-target="#sameRoad" style="margin:0 10px 0 20px;">文本推荐</button>-->
-                            </span>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-xs" id="create">观点分析</button>
                     	</div>
                     </div>
                     <div class="ed-2-2">
@@ -566,27 +604,27 @@
 				                <a href="#z-1" role="tab" data-toggle="tab">事件摘要</a>
 				            </li>
 				            <li role="presentation" class="radyType2 radyType">
-				                <a href="#z-2" role="tab" data-toggle="tab">代表性观点</a>
+				                <a href="#z-2" table-view="view-1" role="tab" data-toggle="tab" view-type="all" class="viewHave">代表者观点</a>
 				            </li>
 				            <li role="presentation" class="radyType3 radyType">
-				                <a href="#z-3" role="tab" data-toggle="tab">关注群体观点</a>
+				                <a href="#z-3" table-view="view-2" role="tab" data-toggle="tab" view-type="follow" class="viewHave">关注群体观点</a>
 				            </li>
 				            <li role="presentation" class="radyType4 radyType">
-				                <a href="#z-4" role="tab" data-toggle="tab">高影响力用户观点</a>
+				                <a href="#z-4" table-view="view-3" role="tab" data-toggle="tab" view-type="influence" class="viewHave">高影响力用户观点</a>
 				            </li>
 				            <li role="presentation" class="radyType5 radyType">
-				                <a href="#z-5" role="tab" data-toggle="tab">高敏感度用户观点</a>
+				                <a href="#z-5" table-view="view-4" role="tab" data-toggle="tab" view-type="sensitive" class="viewHave">高敏感度用户观点</a>
 				            </li>
 				            <li role="presentation" class="radyType6 radyType">
-				                <a href="#z-6" role="tab" data-toggle="tab">观点语料库</a>
+				                <a href="#z-6" table-view="view-5" role="tab" data-toggle="tab" view-type="" class="viewHave">观点语料库</a>
 				            </li>
-                            <li role="presentation" class="radyType7 radyType">
-                                <a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>
-                            </li>
+                            <!--<li role="presentation" class="radyType7 radyType">-->
+                                <!--<a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>-->
+                            <!--</li>-->
 				        </ul>
 						<div class="tab-content" id="content-2">
                             <div role="tabpanel" class="tab-pane active" id="z-0">
-                                <div class="eventList">
+                                <div class="eventList" style="margin-top: 10px;">
                                     <div id="eventList">
                                         <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                                     </div>
@@ -596,177 +634,136 @@
                                 <div style="margin:10px 0">
                                     <img src="/static/images/post-6.png" alt="">
                                     <span>事件主题河</span>
+                                    <div class="interval-1" style="display:inline-block;">
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval1" value="3600" checked>
+                                            <span class="demo-checkbox demo-radioInput"></span> 1小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval1" value="10800">
+                                            <span class="demo-checkbox demo-radioInput"></span> 3小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval1" value="21600">
+                                            <span class="demo-checkbox demo-radioInput"></span> 6小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval1" value="43200">
+                                            <span class="demo-checkbox demo-radioInput"></span> 12小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval1" value="86400">
+                                            <span class="demo-checkbox demo-radioInput"></span> 24小时
+                                        </label>
+                                    </div>
                                 </div>
 				                <div id="eventRiver-1">
+                                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
 				                </div>
                                 <div style="margin:10px 0">
                                     <img src="/static/images/post-6.png" alt="">
                                     <span>事件概览</span>
+                                    <div class="interval-2" style="display:inline-block;">
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval2" value="3600" checked>
+                                            <span class="demo-checkbox demo-radioInput"></span> 1小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval2" value="10800">
+                                            <span class="demo-checkbox demo-radioInput"></span> 3小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval2" value="21600">
+                                            <span class="demo-checkbox demo-radioInput"></span> 6小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval2" value="43200">
+                                            <span class="demo-checkbox demo-radioInput"></span> 12小时
+                                        </label>
+                                        <label class="demo-label">
+                                            <input class="demo-radio" type="radio" name="interval2" value="86400">
+                                            <span class="demo-checkbox demo-radioInput"></span> 24小时
+                                        </label>
+                                    </div>
                                 </div>
                                 <div id="eventSurvey">
                                     <div class="VivaTimeline">
-                                        <dl>
-                                            <dt>May 2016</dt>
-                                            <dd class="pos-left clearfix">
-                                                <div class="circ"></div>
-                                                <div class="time">Feb 03</div>
-                                                <div class="events">
-                                                    <div class="events-header">游客</div>
-                                                    <div class="events-body">
-                                                        <div class="row">
-                                                            <!-- 左浮图片 -->
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/dog01.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【说北京老虎伤人是游客作死？为啥网友如此冷血】近日，北京八达岭野生动物园内发生一起老虎伤人惨剧，事件致1死1伤。目前，野生动物园已被责令停业并配合联合调查组对事发原因进行调查，受伤的游客正在医院进行治疗。
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/dog02.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【新民网·最新报道】12月18日晚11时许，新民晚报新民网接网友爆料，上海浦东新区张杨路浦东南路口的华润时代广场大楼突发火情，现场火光冲天，浓烟滚滚。至凌晨0时30分许，新民晚报新民网记者在现场看到，经过消防全力扑救，现场火情已被完全扑灭，有关部门正在处理善后。
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/dog03.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【甘肃省市联合工作组彻查兰州危废污染】记者获悉，中铝集团已做出回应：中铝兰州分公司已加快排查、全力清理。中铝公司称看到报道后，立即责成兰州分公司如实查清问题，迅速整改、责任到人。此次报道中所涉及的存在废阴极炭块和耐火砖等的场景，公司要求兰州分公司加快排查清理，彻底干净地整改历史遗留问题。
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="events-footer">
-                                                        123
-                                                    </div>
-                                                </div>
-                                            </dd>
-                                            <dt>Feb 2016</dt>
-                                            <dd class="pos-right clearfix">
-                                                <div class="circ"></div>
-                                                <div class="time">Jan 21</div>
-                                                <div class="events">
-                                                    <div class="events-header">谣言</div>
-                                                    <div class="events-body">
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/cat01.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【大众话题打击“关怀式”谣言，从斩断利益链入手】就现有相关法律法规来看，虽然对这一现象的打击有一定的处罚幅度，但这与“巨额”处罚和代价还有不小的距离,仍需要通过一定的修法、完善制度解释等来实现。
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/cat02.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                本报记者 吴英模 秋冬季节是柿子、橘子等水果销售旺季，为了防止谣言反复出现扰乱消费者视听，近日，省食药监部门发布了水果谣言背后真相，内容涵盖了近几年比较“火”的水果谣言。谣言一： 柿子与酸奶同食中毒 “家里有孩子的注意了，现在是柿子上市的季节，虽然很好吃，但是千万不要和酸奶、海鲜、酒一起吃。刚发生一件真事儿，一个小女孩吃完柿子，又喝了酸奶，结果不到半个小时就中毒死了……”
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/cat03.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【新闻】 香港这所学校的校长火了 原因引人深思
-                                                                最近，香港发生了一件事。
-                                                                在香港专业进修学校的毕业典礼上，有学生对国歌不敬，校方果断将他们驱逐立场。校长陈卓禧随后表示，该校“必定高举爱国旗帜，没有任何妥协余地！”
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="events-footer">
-
-                                                    </div>
-                                                </div>
-                                            </dd>
-                                            <dd class="pos-left clearfix">
-                                                <div class="circ"></div>
-                                                <div class="time">Jan 07</div>
-                                                <div class="events">
-                                                    <div class="events-header">新闻</div>
-                                                    <div class="events-body">
-                                                        <div class="row">
-                                                            <!-- <div class="col-md-6 pull-left">
-                                                                <img class="events-object img-responsive img-rounded" src="img/rabbit01.jpeg" />
-                                                            </div> -->
-                                                            <div class="events-desc">
-                                                                【航拍 | 澳门口岸整体亮灯 具备通车条件
-                                                                18日晚上，伴随着璀璨绚目的灯光秀，港珠澳大桥澳门口岸工程举行了一场名为“连三地锦绣，铸湾区辉煌”的庆澳门回归18周年暨港珠澳大桥澳门口岸管理区项目点亮仪式。此次亮灯也标志着澳门口岸正式具备了通车通关条件，同时这也是目前港珠澳大桥建设中首个正式具备通车条件的重点工程。
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </dd>
-                                            <dt>Jan 2016</dt>
-                                            <dt>Dec 2015</dt>
-                                            <dt>Oct 2015</dt>
-                                            <dt>Sep 2015</dt>
-                                            <dt>Aug 2015</dt>
-                                        </dl>
+                                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                                     </div>
                                 </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-2">
-                                <div class="z-2Top">
-                                    <img src="/static/images/post-6.png" alt="">
-                                    <button type="button" class="btn btn-primary btn-xs">袁立&amp;黑幕&amp;合同&amp;欺骗</button>
-                                    <button type="button" class="btn btn-primary btn-xs" style="margin:0 5px;">章子怡&amp;袁立&amp;演戏</button>
-                                    <button type="button" class="btn btn-primary btn-xs">宋丹丹&amp;袁立&amp;投票</button>
-
+                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
+                                    观点摘要：<span></span>
                                 </div>
-                                <div id="z-2Content">
-                                    <span>代表微博：</span>
-                                    <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
+                                <div class="z-Top">
+                                    <div class="view-1-button" style="display: inline-block;"></div>
                                 </div>
-
+                                <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
+                                <div class="view-1">
+                                    <div id="view-1"></div>
+                                </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-3">
-                                <div class="z-3Top" style="margin: 10px 0;">
-                                    <img src="/static/images/post-6.png" width="18" height="18">
-                                    <span>关注类型</span>
-                                    <label class="demo-label" title="紧密跟随">
-                                        <input class="demo-radio" type="radio" name="focus_Type" value="紧密跟随" checked>
-                                        <span class="demo-checkbox demo-radioInput"></span> 紧密跟随
-                                    </label>
-                                    <label class="demo-label" title="渗透">
-                                        <input class="demo-radio" type="radio" name="focus_Type" value="渗透">
-                                        <span class="demo-checkbox demo-radioInput"></span> 渗透
-                                    </label>
+                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
+                                    观点摘要：<span></span>
                                 </div>
-                                <!-- 暂代位置 -->
-				                <center style="margin-top:20px;">渗透群体观点</center>
+                                <div class="z-Top">
+                                    <div class="view-1-button" style="display: inline-block;"></div>
+                                </div>
+				                <center style="margin-top:20px;">正在拼命加载中...</center>
+                                <div class="view-2">
+                                    <div id="view-2"></div>
+                                </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-4">
-				                <center style="margin-top:20px;">高影响力用户观点</center>
+                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
+                                    观点摘要：<span></span>
+                                </div>
+                                <div class="z-Top">
+                                    <div class="view-1-button" style="display: inline-block;"></div>
+                                </div>
+				                <center style="margin-top:20px;">正在拼命加载中...</center>
+                                <div class="view-3">
+                                    <div id="view-3"></div>
+                                </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-5">
-				                <center style="margin-top:20px;">高敏感度用户观点</center>
+                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
+                                    观点摘要：<span></span>
+                                </div>
+                                <div class="z-Top">
+                                    <div class="view-1-button" style="display: inline-block;"></div>
+                                </div>
+				                <center style="margin-top:20px;">正在拼命加载中...</center>
+                                <div class="view-4">
+                                    <div id="view-4"></div>
+                                </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
-				                <div class="z-7Top">
-                                    <img src="/static/images/post-6.png" alt="">
-                                    <span>语料主题</span>
-                                    <label class="demo-label" title="暴恐">
-                                        <input class="demo-radio" type="radio" name="themeCorpus" value="暴恐" checked>
-                                        <span class="demo-checkbox demo-radioInput"></span> 暴恐
-                                    </label>
-                                    <label class="demo-label" title="维权">
-                                        <input class="demo-radio" type="radio" name="themeCorpus" value="维权">
-                                        <span class="demo-checkbox demo-radioInput"></span> 维权
-                                    </label>
+                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
+                                    观点摘要：<span></span>
                                 </div>
-                                <div id="z-7Content">
-                                    <span>代表微博：</span>
-                                    <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
+                                <div class="z-Top">
+                                    <div class="view-1-button" style="display: inline-block;"></div>
+                                </div>
+                                <center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>
+                                <div class="view-5">
+                                    <div id="view-5"></div>
                                 </div>
 				            </div>
-                            <div role="tabpanel" class="weiboTable tab-pane" id="z-7">
-                                <center style="margin-top:20px;">文本推荐</center>
-                            </div>
+                            <!--<div role="tabpanel" class="weiboTable tab-pane" id="z-7">-->
+                                <!--<div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">-->
+                                    <!--观点摘要：<span></span>-->
+                                <!--</div>-->
+                                <!--<div class="z-Top">-->
+                                    <!--<div class="view-1-button" style="display: inline-block;"></div>-->
+                                <!--</div>-->
+                                <!--<center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>-->
+                                <!--<div class="view-6">-->
+                                    <!--<div id="view-6"></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
 						</div>
                     </div>
                 </div>
@@ -936,7 +933,24 @@
     </div>
 </div>
 
-
+<!--智能发帖删除-->
+<div class="modal fade" id="intelligentDEL" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body moreCon">
+                您确定要删除吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureIntelligentDEL()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--相关通道-->
 <style>
     #sameRoad .modActCC .tt {
@@ -1045,41 +1059,40 @@
                 strSrc = imgArr[imgArr.length - 1].toLowerCase() ;
                 if(strSrc.localeCompare('jpg') === 0 || strSrc.localeCompare('jpeg') === 0 || strSrc.localeCompare('gif') === 0 || strSrc.localeCompare('png') === 0){
                     obj.setAttribute("src", e.target.result) ;
-//                    $('#post-2-content')
-                    var editor = document.getElementById('post-2-content');
-                    var img = document.createElement('img');
-                    img.style.width = '30px';
-                    img.style.height = '30px';
-                    img.src = e.target.result;
-                    editor.appendChild(img);
-                    var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
-                    var rr=res.substring(0,res.length);
-                    $.ajax({
-                        type:'GET',
-                        url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
-                        async:true,
-                        //timeout:300,
-                        //data:{"name":"xm"},//传参数
-                        dataType:"json",
-                        success:uploadIMG,
-                        error:function (xhr,textStatus,errorThrown) {
-                            //请求失败执行的函数
-                            console.log("请求失败",textStatus,errorThrown)
-                        },
-                        global:false//是否触发全局请求,需要触发就是true,不需要false
-                    });
-                }else{
-                    //try{
-                    throw new Error('File type Error! please image file upload..') ;
-                    //}catch(e){
-                    // alert('name: ' + e.name + 'message: ' + e.message) ;
-                    //}
-                }
-
-                // alert(e.target.result);
+                var editor = document.getElementById('post-2-content');
+                var img = document.createElement('img');
+                img.style.width = '30px';
+                img.style.height = '30px';
+                img.src = e.target.result;
+                editor.appendChild(img);
+                var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
+                var rr=res.substring(0,res.length);
+                $.ajax({
+                    type:'GET',
+                    url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
+                    async:true,
+                    //timeout:300,
+                    //data:{"name":"xm"},//传参数
+                    dataType:"json",
+                    success:uploadIMG,
+                    error:function (xhr,textStatus,errorThrown) {
+                        //请求失败执行的函数
+                        console.log("请求失败",textStatus,errorThrown)
+                    },
+                    global:false//是否触发全局请求,需要触发就是true,不需要false
+                });
+            }else{
+                //try{
+                throw new Error('File type Error! please image file upload..') ;
+                //}catch(e){
+                // alert('name: ' + e.name + 'message: ' + e.message) ;
+                //}
             }
-            reader.readAsDataURL(file);
+
+            // alert(e.target.result);
         }
+        reader.readAsDataURL(file);
+    }
 
     }
     var imgRoad=[];
@@ -1169,6 +1182,22 @@
         }
     });
     //===================================以上====关于群可见后的操作=========================================
+    var tick_NY='no';
+    $('.timingss input').on('click',function() {
+        if (tick_NY=='no') {
+            tick_NY='yes';
+            $(".form_datetime").removeClass('disableCss');
+        } else {
+            tick_NY='no';
+            $(".form_datetime").addClass('disableCss');
+        }
+    })
+    $(".ttime").on('click',function() {
+        if (tick_NY=='no') {
+            $('#pormpt p').text('请先勾选左侧定时按钮。');
+            $('#pormpt').modal('show');
+        }
+    })
     $(".form_datetime").datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,
@@ -1181,11 +1210,13 @@
     $('.end').on('changeDate', function(ev){
         $('.start').datetimepicker('setEndDate',ev.date);
     });
+    var intelligentType='weibo';
 </script>
-<script src="/static/js/LL_jquery.eeyellow.Timeline.js"></script>
-<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
 <script src="/static/js/jquery.sinaEmotion.js"></script>
+<script src="/static/js/chalk.js"></script>
+<script src="/static/js/posting-2.js"></script>
 <script src="/static/js/posting-1.js"></script>
+<script src="/static/js/LL_jquery.eeyellow.Timeline.js"></script>
 <script>
     //表情
     $('.emotion').bind({
@@ -1196,12 +1227,5 @@
             }
         }
     });
-    $(document).ready(function () {
-        $('.VivaTimeline').vivaTimeline({
-            carousel: true,
-            carouselTime: 3000
-        });
-    });
-
 </script>
 {% endblock %}

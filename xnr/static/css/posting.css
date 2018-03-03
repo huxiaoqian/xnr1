@@ -30,7 +30,7 @@ body {
     position: relative;
 }
 #container .post_post .post-2 {
-    margin: 15px 0 15px 25px;
+    margin: 0 0 15px 25px;
     padding: 5px;
 }
 #container .post_post .post-2 #post-2-content {
@@ -452,105 +452,102 @@ span.disableCss{
 
 
 /* =========LL 12-18智能发帖 =============*/
-    /* 输入框 */
-    #container #content #intelliGence .point-view-1 {
-        width: 56%;
-        background: transparent;
-        border: 1px solid silver;
-        border-radius: 5px;
-        padding: 3px 6px;
-    }
-    #container #content #intelliGence .ed-2-1-bottom{
-        margin:10px 0 20px 0;
-    }
-    /* 按钮 */
-    #container #content #intelliGence .ed-2-1-bottom button {
-        /* 透明色 */
-        /* background-color: transparent; */
-        /* background-color: #003366; */
-        height:26px;
-        /* border-color: silver; */
-        color: white;
-    }
-    #container #content #intelliGence .ed-2-1-bottom button:hover {
-        /* background-color: rgba(3, 8, 16, 0.61); */
-        /* background-color: #666666; */
-        color: white;
-    }
-    #container .type_page #intelligenceTabs a {
-        color: white;
-    }
-    /* 事件河流图 */
-    #content #intelliGence #eventRiver-1 {
-        padding:0 4%;
-        width:100%;
-        height:400px;
-    }
-    /* #z-1 .z-1 {
-        margin:10px 0;
-    } */
-    #z-1 div img {
-        width:18px;
-        height:18px;
-        margin-right:5px;
-    }
+/* 输入框 */
+#container #content #intelliGence .point-view {
+    width: 35%;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 3px 6px;
+    text-align: center;
+}
+#container #content #intelliGence .intelliGenceSpan {
+    display: inline-block;
+    width:115px;
+    text-align: right;
+}
+#container #content #intelliGence .ed-2-1-bottom{
+    margin:10px 0 20px 0;
+}
+/* 按钮 */
+#container #content #intelliGence .ed-2-1-bottom button {
+    float: right;
+    margin: 4px 30px 0 0;
+}
+#container .type_page #intelligenceTabs a {
+    color: white;
+}
+/* 事件河流图 */
+#content #intelliGence #eventRiver-1 {
+    padding:0 4%;
+    width:100%;
+    height:400px;
+}
+/* #z-1 .z-1 {
+    margin:10px 0;
+} */
+#z-1 div img {
+    width:18px;
+    height:18px;
+    margin-right:5px;
+}
 
-    #z-2 img {
-        width:20px;
-        height: 20px;
-        margin-right:5px;
-    }
-    #z-2 .z-2Top {
-        margin:10px 0;
-    }
-    #z-2 .z-2Top button{
-        /* 透明色 */
-        /* background-color: transparent; */
-        /* background-color: #003366; */
-        height:26px;
-        /* border-color: silver; */
-        color: white;
-    }
-    #z-2 .z-2Top button:hover{
-        /* background-color: rgba(3, 8, 16, 0.61); */
-        /* background-color: #666666; */
-        color: white;
-    }
-    #z-2 p {
-        margin:10px 0;
-    }
+#z-2 img {
+    width:20px;
+    height: 20px;
+    margin-right:5px;
+}
+#z-2 .z-2Top {
+    margin:10px 0;
+}
+#z-2 .z-2Top button{
+    /* 透明色 */
+    /* background-color: transparent; */
+    /* background-color: #003366; */
+    height:26px;
+    /* border-color: silver; */
+    color: white;
+}
+#z-2 .z-2Top button:hover{
+    /* background-color: rgba(3, 8, 16, 0.61); */
+    /* background-color: #666666; */
+    color: white;
+}
+#z-2 p {
+    margin:10px 0;
+}
 
 
-    #z-7 .z-7Top {
-        margin:10px 0;
-    }
-    #z-7 img {
-        width:20px;
-        height: 20px;
-        margin-right:5px;
-    }
-    #z-7 p {
-        margin:10px 0;
-    }
+#z-7 .z-7Top {
+    margin:10px 0;
+}
+#z-7 img {
+    width:20px;
+    height: 20px;
+    margin-right:5px;
+}
+#z-7 p {
+    margin:10px 0;
+}
 
-    .fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination {
-        margin:20px 0;
-    }
-    /* 事件概览 */
-    #eventSurvey {
-        padding:0 4%;
-    }
-    .VivaTimeline dl dd .events {
-        color:#333;
-    }
-    /* bootstrap tab中echarts加载问题 */
-    .tab-content > .tab-pane,
-    .pill-content > .pill-pane {
-        display: block;     /* undo display:none          */
-        height: 0;          /* height:0 is also invisible */
-        overflow-y: hidden; /* no-overflow                */
-    }
-    .tab-content > .active,
-    .pill-content > .active {
-        height: auto;       /* let the content decide it  */
-    } /* bootstrap hack end
+.fixed-table-pagination .pagination-detail, .fixed-table-pagination div.pagination {
+    margin:20px 0;
+}
+/* 事件概览 */
+#eventSurvey {
+    padding:0 4%;
+}
+.VivaTimeline dl dd .events {
+    color:#333;
+}
+/* bootstrap tab中echarts加载问题 */
+.tab-content > .tab-pane,
+.pill-content > .pill-pane {
+    display: block;     /* undo display:none          */
+    height: 0;          /* height:0 is also invisible */
+    overflow-y: hidden; /* no-overflow                */
+}
+.tab-content > .active,
+.pill-content > .active {
+    height: auto;       /* let the content decide it  */
+} /* bootstrap hack end

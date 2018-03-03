@@ -67,6 +67,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 #     json.dump(result_json,dump_f)
 #     print '@'
 
+
 # 导入
 # with open("./retweet_tweet_timing.json","r") as load_f:
 #     #print 'load_f::',load_f
@@ -393,6 +394,32 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.delete(index='tw_xnr_fans_followers',doc_type='uids',id='FXNR0003')
 
 #es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
+
+# query_sensitive = {
+#                     'query':{
+#                         'match_all':{}
+#                     },
+#                     "aggs" : {
+#                         "uids" : {
+#                             "terms" : {
+#                               "field" : "uid",
+#                               "order": {
+#                                 "avg_sensitive" : "desc" 
+#                               }
+#                             },
+#                             "aggs": {
+#                                 "avg_sensitive": {
+#                                     "avg": {"field": "sensitive"} 
+#                                 }
+#                             }
+#                         }
+#                     },
+#                     'size':5
+#                 }
+
+# q = es.search(index='facebook_flow_text_2017-10-25',doc_type='text',body=query_sensitive)['aggregations']                
+
+# print 'q..',q
 
 query_body = {
 	'query':{

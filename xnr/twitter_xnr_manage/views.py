@@ -5,9 +5,13 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
-from xnr.global_utils import es_flow_text
-from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo_xnr,\
-                  xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
+from xnr.global_utils import es_xnr
+es_flow_text = es_xnr
+from xnr.time_utils import datetime2ts
+from utils import show_completed_twxnr,show_uncompleted_twxnr,delete_tw_xnr, get_xnr_detail
+
+'''
+from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				  show_history_posting,show_at_content,show_comment_content,show_like_content,\
 				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
@@ -16,7 +20,7 @@ from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohis
                   delete_history_count,create_history_count,lookup_xnr_assess_info,\
                   get_xnr_detail,\
                   create_xnr_flow_text,update_weibo_count,create_send_like,delete_weibo_count,delete_receive_like,delete_xnr_flow_text
-from xnr.time_utils import datetime2ts
+'''
 
 mod = Blueprint('twitter_xnr_manage', __name__, url_prefix='/twitter_xnr_manage')
 
@@ -26,16 +30,16 @@ mod = Blueprint('twitter_xnr_manage', __name__, url_prefix='/twitter_xnr_manage'
 
 #已有虚拟人
 #暂未完成测试
-#test:http://219.224.134.213:9209/weibo_xnr_manage/show_completed_weiboxnr/?account_no=admin@qq.com
-@mod.route('/show_completed_weiboxnr/')
+#test:http://219.224.134.213:9209/twitter_xnr_manage/show_completed_twxnr/?account_no=admin@qq.com
+@mod.route('/show_completed_twxnr/')
 def ajax_show_completed_weiboxnr():
 	now_time=int(time.time())
 	account_no=request.args.get('account_no','')
-	results=show_completed_weiboxnr(account_no,now_time)
+	results=show_completed_twxnr(account_no,now_time)
 	return json.dumps(results)
 
 #进入虚拟人中心，返回虚拟人信息
-#http://219.224.134.213:9209/weibo_xnr_manage/get_xnr_detail/?xnr_user_no=WXNR0003
+#http://219.224.134.213:9209/twitter_xnr_manage/get_xnr_detail/?xnr_user_no=FXNR0005
 @mod.route('/get_xnr_detail/')
 def ajax_get_xnr_detail():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -43,21 +47,21 @@ def ajax_get_xnr_detail():
 	return json.dumps(results)
 
 #未完成虚拟人
-#test:http://219.224.134.213:9209/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no=admin@qq.com
-@mod.route('/show_uncompleted_weiboxnr/')
+#test:http://219.224.134.213:9209/twitter_xnr_manage/show_uncompleted_twxnr/?account_no=admin@qq.com
+@mod.route('/show_uncompleted_twxnr/')
 def ajax_show_uncompleted_weiboxnr():
 	account_no=request.args.get('account_no','')
-	results=show_uncompleted_weiboxnr(account_no)
+	results=show_uncompleted_twxnr(account_no)
 	return json.dumps(results)
 
 #删除虚拟人
 #test:http://219.224.134.213:9209/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no=WXNR0001
-@mod.route('/delete_weibo_xnr/')
-def ajax_delete_weibo_xnr():
+@mod.route('/delete_tw_xnr/')
+def ajax_delete_tw_xnr():
 	xnr_user_no=request.args.get('xnr_user_no','')
-	results=delete_weibo_xnr(xnr_user_no)
+	results=delete_tw_xnr(xnr_user_no)
 	return json.dumps(results)
-
+"""
 #今日提醒
 #http://219.224.134.213:9209/weibo_xnr_manage/xnr_today_remind/?xnr_user_no=WXNR0004
 @mod.route('/xnr_today_remind/')
@@ -455,3 +459,4 @@ def ajax_create_send_like():
 def ajax_delete_receive_like():
 	results=delete_receive_like()
 	return json.dumps(results)
+"""

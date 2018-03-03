@@ -421,7 +421,14 @@
     var $id=localStorage.getItem('go_mod_user');
     var basicData;
     if (go_on){
-        var go_url = WFT_url+'/get_xnr_info/?xnr_user_no='+$id;
+        var go_url;
+        if (flag==1){
+            go_url ='/weibo_xnr_create/get_xnr_info/?xnr_user_no='+$id;
+        }else if (flag==4){
+            go_url ='/facebook_xnr_manage/get_xnr_detail/?xnr_user_no='+$id;
+        }else if (flag==5){
+            go_url ='/twitter_xnr_manage/get_xnr_detail/?xnr_user_no='+$id;
+        }
         public_ajax.call_request('GET',go_url,continueData);
     }else {
         basicData=JSON.parse(localStorage.getItem(firstStep));
@@ -440,11 +447,9 @@
         $('#place').val($two.location);
         $('#career').val($two.career);
         $('#description').val($two.description);
-
         for (var t of $two.active_time){
             $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
         }
-
         //var posyNum = ($two.day_post_average.toString().split('-')[0])||$two.day_post_average||$two.day_post_num||($two.day_post_num.toString().split('-')[0]);
         var posyNum = ($two.day_post_average)||($two.day_post_num);
         if (posyNum>5){

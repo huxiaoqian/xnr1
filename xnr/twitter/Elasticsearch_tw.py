@@ -32,7 +32,7 @@ class Es_twitter():
 
 				mappings_func = twitter_feedback_retweet_mappings
 				mappings_func(date_time)
-				es.index(index=indexName_date, doc_type=typeName, body=list_data)
+				es.index(index=indexName_date, doc_type=typeName, id=list_data['mid'], body=list_data)
 
 
 			elif indexName == 'twitter_feedback_at':
@@ -41,7 +41,7 @@ class Es_twitter():
 
 				mappings_func = twitter_feedback_at_mappings
 				mappings_func(date_time)
-				es.index(index=indexName_date, doc_type=typeName, body=list_data)
+				es.index(index=indexName_date, doc_type=typeName, id=list_data['mid'], body=list_data)
 
 
 			elif indexName == 'twitter_feedback_like':
@@ -50,7 +50,7 @@ class Es_twitter():
 
 				mappings_func = twitter_feedback_like_mappings
 				mappings_func(date_time)
-				es.index(index=indexName_date, doc_type=typeName, body=list_data)
+				es.index(index=indexName_date, doc_type=typeName, id=list_data['mid'], body=list_data)
 
 
 			elif indexName == 'twitter_feedback_private':
@@ -59,7 +59,7 @@ class Es_twitter():
 
 				mappings_func = twitter_feedback_private_mappings
 				mappings_func(date_time)
-				es.index(index=indexName_date, doc_type=typeName, body=list_data)
+				es.index(index=indexName_date, doc_type=typeName, id=list_data['mid'], body=list_data)
 
 
 
