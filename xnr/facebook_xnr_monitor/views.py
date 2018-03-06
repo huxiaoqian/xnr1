@@ -8,7 +8,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.parameter import MAX_VALUE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 
-from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_user
+from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_user,addto_facebook_corpus
  
 
 mod = Blueprint('facebook_xnr_monitor', __name__, url_prefix='/facebook_xnr_monitor')

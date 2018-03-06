@@ -1136,8 +1136,8 @@ def report_warming_content(task_detail):
         report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
     elif task_detail['report_type'] == u'时间':
         # print weibo_info
-        if weibo_info:
-            report_id=weibo_info[0]['fid']
+        if fb_info:
+            report_id=fb_info[0]['fid']
         else:
             report_id=str(task_detail['report_time'])
 
@@ -1171,7 +1171,7 @@ def report_warming_content(task_detail):
 def addto_warning_corpus(task_detail):
     flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
     try:
-        corpus_result = es_flow_text.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
+        corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
         corpus_result['xnr_user_no'] = task_detail['xnr_user_no']
         corpus_result['warning_source'] = task_detail['warning_source']
         corpus_result['create_time'] = task_detail['create_time']

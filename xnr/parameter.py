@@ -42,8 +42,11 @@ MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
 MAX_HOT_POST_SIZE = 200 #热门帖子未筛选前返回最大数量
 
 #社区发现
-MAX_TARGET_USER_NUM=100000 #种子用户最大数量
-MAX_CACULATE_USER_NUM=200000 #种子用户计算最大数量
+MAX_TARGET_USER_NUM = 100000 #种子用户最大数量
+MAX_CACULATE_USER_NUM = 200000 #种子用户计算最大数量
+MIN_TARGET_USER_NUM = 10000 #种子用户最小数量
+COMMUNITY_TERM = 7 #社区生成周期
+TARGET_KEYWORD_NUM = 50 #扩展关键词最大数量
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 20
