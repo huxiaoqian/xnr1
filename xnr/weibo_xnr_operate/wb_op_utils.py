@@ -188,6 +188,51 @@ def get_recommend_at_user(xnr_user_no):
     index_name = flow_text_index_name_pre + datetime
     nest_query_list = []
     daily_interests_list = daily_interests.split('&')
+    '''
+    ## daily_interests 字段为多个值
+    for interest in daily_interests_list:
+        nest_query_list.append({'wildcard':{'daily_interests':'*'+interest+'*'}})
+
+
+    es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+                        body={'query':{'bool':{'must':nest_query_list}},'size':DAILY_INTEREST_TOP_USER,\
+                        'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    '''
+    ## daily_interests 字段为单个值
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'terms':{'daily_interests':daily_interests_list}
+    #             }
+    #         }
+    #     },
+    #     'size':MAX_SEARCH_SIZE
+    # }
+    # #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    # es_results = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                     body=query_body)['hits']['hits']
+
+    #print 'es_results_len::',len(es_results)
+    #if not es_results:
+    # if S_TYPE != 'test':
+    #     query_body = {
+    #         'query':{
+    #             'filtered':{
+    #                 'filter':{
+    #                     'terms':{'daily_interests':daily_interests_list}
+    #                 }
+    #             }
+    #         },
+    #         'size':MAX_SEARCH_SIZE
+    #     }
+    #     #print '!!!!!!!!!!!!!!!!!!!!!!!!:::'
+    #     es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #                         body=query_body)['hits']['hits']
+    #     # es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    #     #                     body={'query':{'match_all':{}},'size':DAILY_INTEREST_TOP_USER,\
+    #     #                     'sort':{'user_fansnum':{'order':'desc'}}})['hits']['hits']
+    # else:
 
     es_results_daily = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
                         body={'query':{'match_all':{}},'size':1000,\
@@ -218,6 +263,18 @@ def get_recommend_at_user(xnr_user_no):
     return uid_nick_name_dict
 
 def get_daily_recommend_tweets(theme,sort_item):
+    # query_body = {
+    #     'query':{
+    #         'filtered':{
+    #             'filter':{
+    #                 'term':{'daily_interests':theme}
+    #             }
+    #         }
+    #     },
+    #     'sort':{sort_item:{'order':'desc'}},
+    #     'size':TOP_WEIBOS_LIMIT_DAILY
+    # }
+
 
     if S_TYPE == 'test':
         now_ts = datetime2ts(S_DATE)    

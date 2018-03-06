@@ -141,6 +141,16 @@ POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_mana
 #智能写作
 WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
 
+# 定制模块
+TRANS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
+FB_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook/'
+TW_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter/'
+
+# redis 发帖操作
+WEIBO_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_operate/'
+FACEBOOK_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook_xnr_operate/'
+TWITTER_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter_xnr_operate/'
+
 #FB & TW 属性计算
 FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
 TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'

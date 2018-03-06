@@ -23,16 +23,17 @@ from xnr.global_utils import r, tw_xnr_index_name, tw_xnr_index_type,\
                             tw_role_index_name, tw_role_index_type, \
                             tw_xnr_fans_followers_index_name, tw_xnr_fans_followers_index_type,\
                             tw_xnr_max_no
-from xnr.parameter import tw_domain_ch2en_dict,tw_domain_en2ch_dict
+from xnr.parameter import tw_domain_ch2en_dict,tw_domain_en2ch_dict, TRANS_PATH, TW_OP_PATH
 from xnr.parameter import ACTIVE_TIME_TOP,DAILY_INTEREST_TOP_USER,NICK_NAME_TOP,USER_LOCATION_TOP,\
                         DESCRIPTION_TOP,DAILY_INTEREST_TOP_USER,MONITOR_TOP_USER,MAX_SEARCH_SIZE
 from xnr.time_utils import get_twitter_flow_text_index_list as get_flow_text_index_list, datetime2ts
 from xnr.utils import user_no2tw_id
-trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
-sys.path.append(trans_path)
+# trans_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
+sys.path.append(TRANS_PATH)
 from trans import trans, simplified2traditional
 
-sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/twitter/'))
+#sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/twitter/'))
+sys.path.append(TW_OP_PATH)
 from userinfo import Userinfo
 from twitter_operate import Operation
 

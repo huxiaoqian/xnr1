@@ -10,7 +10,7 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   get_create_date_remind,show_date_remind,show_date_remind_condition,show_select_date_remind,change_date_remind,delete_date_remind,\
                   get_create_hidden_expression,show_hidden_expression,show_hidden_expression_condition,show_select_hidden_expression,change_hidden_expression,delete_hidden_expression,\
                   create_corpus,show_corpus,show_corpus_class,show_select_corpus,change_select_corpus,delete_corpus,\
-                  get_create_type_content,domain_create_task,get_show_domain_group_summary,\
+                  get_create_type_content,domain_create_task,domain_update_task,get_show_domain_group_summary,\
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
                   get_show_domain_role_info,get_delete_domain,get_export_example_model,\
                   get_generate_example_model,get_show_example_model
@@ -45,6 +45,25 @@ def ajax_export_example_model():
     results = get_export_example_model(domain_name,role_name)
 
     return json.dumps(results)
+
+# 更新计算
+@mod.route('/update_domain/')
+def ajax_update_domain():
+    #xnr_user_no = request.args.get('xnr_user_no','')
+    domain_name = request.args.get('domain_name','')
+    create_type = request.args.get('create_type','')  # 按关键词--by_keywords  按种子用户--by_seed_users  按所有用户--by_all_users 
+    keywords_string = request.args.get('keywords_string','')  # 按关键词方式，以中文逗号“，”分割。若是不是按关键词，则不传递此参数
+    seed_users = request.args.get('seed_users','')  # 按种子用户方式，不同uid之间以中文逗号“，”分隔
+    all_users = request.args.get('all_users','')  #按所有用户方式，传递所有uid
+    create_type_new = get_create_type_content(create_type,keywords_string,seed_users,all_users)
+    create_time = int(time.time())
+    submitter = request.args.get('submitter','admin@qq.com')
+    description = request.args.get('description','')
+    remark = request.args.get('remark','')
+
+    mark = domain_update_task(domain_name,create_type_new,create_time,submitter,description,remark)
+
+    return json.dumps(mark)  # True False
 
 ## 创建领域
 @mod.route('/create_domain/')

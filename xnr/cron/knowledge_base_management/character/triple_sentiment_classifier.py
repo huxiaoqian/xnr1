@@ -12,12 +12,16 @@ from flow_psy import flow_psychology_classfiy
 from global_utils_ch import abs_path
 #from test_data import input_data2 #测试输入
 
+sys.path.append('../../')
+from parameter import TRANS_PATH
+
 AB_PATH = os.path.join(abs_path, './data')
 
 cut_str = load_scws()
 
 # cc = opencc.OpenCC('s2t', opencc_path='/usr/bin/opencc')
-sys.path.append('../../trans/')
+#sys.path.append('../../trans/')
+sys.path.append(TRANS_PATH)
 from trans import trans, simplified2traditional, traditional2simplified
 
 
