@@ -3,6 +3,51 @@ $('.point-view-2').on('focus',function () {
     var a=$('.point-view-1').val();
     $(this).val(a);
 });
+var chooseThisIntel='no',chooseThisIntelID='';
+$('#intell_type .intel_1').on('click',function () {
+    if (chooseThisIntel!='yes'){
+        $('#pormpt p').text('请选择下方的一个事件再进行操作。');
+        $('#pormpt').modal('show');
+    }
+})
+$('#intell_type .intel_1 input').on('click',function () {
+    var _val1=$(this).val();
+    if (_val1=='double'){
+        $('#intell_type .intelDownType').hide();
+        $('#intell_type .intel_3').show();
+        var val3=$('#intell_type .intel_3 input[name="intel3"]:checked').val();
+        if (val3){
+            var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
+                '&model_type='+_val1+'&text_type='+val3;
+            public_ajax.call_request('get',intelPostUrl,intelPostWord);
+        }
+    }else {
+        $('#intell_type .intelDownType').hide();
+        $('#intell_type .intel_2').show();
+        var val12=$('#intell_type .intel_2 input[name="intel2"]:checked').val();
+        if (val12){
+            var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
+                '&model_type='+_val1+'&text_type='+val12;
+            public_ajax.call_request('get',intelPostUrl,intelPostWord);
+        }
+    }
+});
+$('#intell_type .intelDownType input').on('click',function () {
+    var argument1=$('#intell_type .intel_1 input[name="intel1"]:checked').val();
+    var argument2=$(this).val();
+    var intelPostUrl='/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8'+
+        '&model_type='+argument1+'&text_type='+argument2;
+    // var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
+    //     '&model_type='+argument1+'&text_type='+argument2;
+    public_ajax.call_request('get',intelPostUrl,intelPostWord);
+})
+function intelPostWord(data) {
+    if (data){
+        $('#post-2-content').text(data);
+    }else {
+        $('#post-2-content').text('未计算出任何发帖内容');
+    }
+}
 //创建任务
 $('#create').on('click',function () {
     var taskName=$('.point-view-1').val();
@@ -221,6 +266,18 @@ function intelligentList(data) {
     });
     $('#eventList p').slideUp(700);
 }
+$('#eventList').on('click-row.bs.table', function (e, row, element){
+    $('.point-view-1').val(row.task_name);
+    $('.point-view-2').val(row.event_keywords);
+    $('.point-view-3').val(row.opinion_keywords);
+    $('.intelliGence-2 .ed-2-1-bottom input[value="'+row.opinion_type+'"]').attr('checked','true');
+    //
+    chooseThisIntelID=row.task_id;
+    $('.telChoose').removeClass('telChoose');//去除之前选中的行的，选中样式
+    $(element).addClass('telChoose');//添加当前选中的success样式用于区别
+    chooseThisIntel='yes';
+    $('#intell_type .intel_1 .demo-label').removeClass('disableCss');
+});
 var task_id,task_start,task_end;
 function lookType(_id,endTime) {
     task_id=_id;task_end=endTime;

@@ -8,7 +8,7 @@ from flask import Blueprint,url_for,render_template,request,\
 
 from utils import show_report_content,output_excel_word
 
-mod=Blueprint('facebook_xnr_report_manage',__name__,url_prefix='/facebook_xnr_report_manage')
+mod=Blueprint('twitter_xnr_report_manage',__name__,url_prefix='/twitter_xnr_report_manage')
 
 
 #上报显示新方法

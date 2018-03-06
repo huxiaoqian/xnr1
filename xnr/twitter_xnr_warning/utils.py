@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 '''
-facebook_xnr warning function
+twitter_xnr warning function
 '''
 import os
 import json
@@ -16,7 +16,8 @@ from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_da
                              twitter_timing_warning_index_name_pre,twitter_timing_warning_index_type,\
                              twitter_count_index_name_pre,twitter_count_index_type,\
                              twitter_user_index_name,twitter_user_index_type,\
-                             twitter_event_warning_index_name_pre,twitter_event_warning_index_type
+                             twitter_event_warning_index_name_pre,twitter_event_warning_index_type,\
+                             twitter_report_management_index_name_pre,twitter_report_management_index_type
 
 
 from xnr.parameter import MAX_SEARCH_SIZE,MAX_VALUE,DAY,SPEECH_WARMING_NUM,MAX_WARMING_SIZE,\
@@ -975,3 +976,215 @@ def show_event_warming(xnr_user_no,start_time,end_time):
 
     return warming_list 
 
+
+
+#加入预警库
+def addto_warning_corpus(task_detail):
+    flow_text_index_name = twitter_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=twitter_flow_text_index_type,id=task_detail['tid'])['_source']
+        corpus_result['xnr_user_no'] = task_detail['xnr_user_no']
+        corpus_result['warning_source'] = task_detail['warning_source']
+        corpus_result['create_time'] = task_detail['create_time']
+        corpus_result['validity'] = 1
+        corpus_result['nick_name'] = get_user_nickname(task_detail['uid'])
+
+        tid_result=lookup_tid_attend_index(task_detail['tid'],task_detail['timestamp'])
+        if tid_result:
+            corpus_result['comment']=tid_result['comment']
+            corpus_result['share']=tid_result['share']
+            corpus_result['favorite']=tid_result['favorite']
+        else:
+            corpus_result['comment']=0
+            corpus_result['share']=0
+            corpus_result['favorite']=0  
+
+        #查询好友列表
+        lookup_type='fans_list'
+        friends_list=lookup_xnr_fans_followers(task_detail['xnr_user_no'],lookup_type)
+        set_mark = set_intersection(task_detail['uid'],friends_list)
+        if set_mark > 0:
+            corpus_result['content_type']='friends'
+        else:
+            corpus_result['content_type']='unfriends'
+
+        es_xnr.index(index=twitter_warning_corpus_index_name,doc_type=twitter_warning_corpus_index_type,id=task_detail['tid'],body=corpus_result)
+        mark=True
+    except:
+        mark=False
+
+    return mark
+
+
+
+#上报
+def report_warming_content(task_detail):
+    report_dict=dict()
+    report_dict['report_type']=task_detail['report_type']
+    report_dict['report_time']=task_detail['report_time']
+    report_dict['xnr_user_no']=task_detail['xnr_user_no']
+    report_dict['event_name']=task_detail['event_name']
+    report_dict['uid']=task_detail['uid']
+
+    report_dict['nick_name']=get_user_nickname(task_detail['uid'])
+
+    tw_list=[]
+    user_list=[]
+    # print 'type:',type(task_detail['weibo_info']),task_detail['weibo_info']
+    tw_info=task_detail['tw_info']
+    for item in tw_info:
+        lookup_mark=False
+        item['timestamp'] = int(item['timestamp'])
+        if task_detail['report_type']==u'人物':
+            twitter_user_warning_index_name = twitter_user_warning_index_name_pre + ts2datetime(item['timestamp'])
+            twitter_user_warming_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
+            try:
+                twitter_user_result=es_xnr.get(index=twitter_user_warning_index_name,doc_type=twitter_user_warning_index_type,id=twitter_user_warming_id)['_source']
+                user_warning_content=json.dumps(twitter_user_result['content'])
+                for content in user_warning_content:
+                    if content['tid'] == item['tid']:
+                        lookup_mark=True
+                        tw_list.append(content)
+                    else:
+                        pass
+            except:
+                print 'user_error!'
+
+        elif task_detail['report_type']==u'言论':
+            twitter_speech_warning_index_name = twitter_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
+            try:
+                twitter_speech_result=es_xnr.get(index=twitter_speech_warning_index_name,doc_type=twitter_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['tid'])['_source']
+                report_dict['uid']=twitter_speech_result['uid']
+                lookup_mark=True
+                tw_list.append(twitter_speech_result)
+            except:
+                # weibo_timing_warning_index_name = weibo_timing_warning_index_name_pre + ts2datetime(item['timestamp'])
+                print 'speech_error!'
+
+        elif task_detail['report_type']==u'事件':
+            twitter_event_warning_index_name = twitter_event_warning_index_name_pre + ts2datetime(item['timestamp'])
+            event_warning_id = task_detail['xnr_user_no']+'_'+task_detail['event_name']
+            try:
+                event_result=es_xnr.get(index=twitter_event_warning_index_name,doc_type=twitter_event_warning_index_type,id=event_warning_id)['_source']
+                event_content=json.dumps(event_result['main_twitter_info'])
+                for event in event_content:
+                    if event['tid'] == item['tid']:
+                        lookup_mark=True
+                        tw_list.append(event)
+                    else:
+                        pass
+            except:
+                print 'event_error!'
+
+        elif task_detail['report_type']==u'时间':
+            year = ts2yeartime(item['timestamp'])
+            twitter_timing_warning_index_name = twitter_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
+            try:
+                time_result=es_xnr.search(index=twitter_timing_warning_index_name,doc_type=twitter_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
+                time_content=[]
+                for timedata in time_result:
+                    for data in timedata['twitter_date_warming_content']:
+                        if data['tid'] == item['tid']:
+                            lookup_mark=True
+                            tw_list.append(data)
+                        else:
+                            pass
+            except:
+                print 'time_error!'               
+
+        if lookup_mark:
+            pass
+        else:
+            flow_text_index_name = twitter_flow_text_index_name_pre + ts2datetime(item['timestamp'])
+            try:
+                tw_result=es_xnr.get(index=flow_text_index_name,doc_type=twitter_flow_text_index_type,id=item['tid'])['_source']
+                tw_result['nick_name']=get_user_nickname(fb_result['uid'])
+                tid_result=lookup_tid_attend_index(item['tid'],item['timestamp'])
+                if tid_result:
+                    tw_result['comment']=tid_result['comment']
+                    tw_result['share']=tid_result['share']
+                    tw_result['favorite']=tid_result['favorite']
+                else:
+                    tw_result['comment']=0
+                    tw_result['share']=0
+                    tw_result['favorite']=0  
+                tw_list.append(tw_result)
+            except:
+                print 'flow_text error!'
+
+
+    user_info=task_detail['user_info']
+    if user_info:
+        for uid in user_info:
+            user=dict()
+            try:
+                user_result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)['_source']
+                user_dict['uid']=item['_id']
+                user_dict['username']=user_result['username']
+                if user_result.has_key('talking_about_count'):
+                    user_dict['talking_about_count']=user_result['talking_about_count']
+                else:
+                    user_dict['talking_about_count']=0
+                if user_result.has_key('likes'):
+                    user_dict['likes']=user_result['likes']
+                else:
+                    user_dict['likes']=0
+                if user_result.has_key('category'):
+                    user_dict['category']=user_result['category']
+                else:
+                    user_dict['category']=''
+                user_list.append(user)
+            except:
+                user_dict['uid']=item['_id']
+                user_dict['username']=''
+                user_dict['talking_about_count']=0
+                user_dict['likes']=0
+                user_dict['category']=''
+                user_list.append(user)
+                print 'user_list error!'
+    else:
+        pass
+
+    report_content=dict()
+    report_content['user_list']=user_list
+    report_content['tw_list']=tw_list
+
+    report_dict['report_content']=json.dumps(report_content)
+    
+    report_id=''
+    if task_detail['report_type'] == u'言论':
+        report_id=weibo_info[0]['tid']
+    elif task_detail['report_type'] == u'人物':
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
+    elif task_detail['report_type'] == u'事件':
+        report_id=task_detail['xnr_user_no']+'_'+task_detail['event_name']
+    elif task_detail['report_type'] == u'时间':
+        # print weibo_info
+        if tw_info:
+            report_id=tw_info[0]['tid']
+        else:
+            report_id=str(task_detail['report_time'])
+
+
+    if tw_list:
+        report_mark=True
+    else:
+        report_mark=False
+    #预警上报后不再显示问题
+
+    now_time=int(time.time())
+    twitter_report_management_index_name = twitter_report_management_index_name_pre + ts2datetime(now_time)
+    if es_xnr.indices.exists(index=twitter_report_management_index_name):
+        pass
+    else:
+        twitter_report_management_mappings() 
+
+    if report_id and report_mark:
+        try:
+            es_xnr.index(index=twitter_report_management_index_name,doc_type=twitter_report_management_index_type,id=report_id,body=report_dict)
+            mark=True
+        except:
+            mark=False
+    else:
+        mark=False
+    return mark
