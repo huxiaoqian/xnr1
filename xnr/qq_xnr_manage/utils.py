@@ -4,9 +4,10 @@ use to save function---about deal database
 '''
 import time
 import sys
+import json
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
-        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r
+        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r_qq_group_mark_set_pre,r, qq_xnr_max_no
 from xnr.global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,\
                         group_message_index_name_pre,group_message_index_type
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
@@ -64,20 +65,45 @@ def find_port(exist_port_list):
     return port
 
 
+def get_qq_xnr_no():
+    
+    if not r.exists(qq_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
+        user_no_max = 1
+        r.set(qq_xnr_max_no,user_no_max)
+    else:   #如果当前redis有记录，则取用
+        user_no_max = r.incr(qq_xnr_max_no)
+
+    return user_no_max
+
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
     qq_group_exist_list = []
     qq_group_new_list = []
     qq_number = xnr_info['qq_number']
-    qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
-    #qqbot_mc = xnr_info['qqbot_mc']
+    #qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
+    group_names = xnr_info['group_names'].encode('utf-8').split('，')
+    mark_names = xnr_info['mark_names'].encode('utf-8').split('，')
+    group_numbers = xnr_info['group_numbers'].encode('utf-8').split('，')
+    print 'group_numbers...',group_numbers
+    if not len(group_names)==len(mark_names)==len(group_numbers):
+        #return [False,'群名称数量和群号码数量不一致']
+        return [False,'not_equal']
+
+    if len(group_numbers) != 0:
+        return [False, 'null']
+
+    # redis 群名
+    r_qq_group_set = r_qq_group_set_pre + qq_number
+
+    mark_name_exist_list = []
+    
     nickname = xnr_info['nickname']
     access_id = xnr_info['access_id']
     remark = xnr_info['remark']
     submitter = xnr_info['submitter']
 
-    # redis 群名
-    r_qq_group_set = r_qq_group_set_pre + qq_number
+    
+    #r_qq_group_mark_set = r_qq_group_mark_set_pre + qq_number
 
     query_body_qq_exist = {
         'query':{
@@ -90,43 +116,46 @@ def create_qq_xnr(xnr_info):
 
     if search_result:
         #return ['当前qq已经被添加！',qq_group_exist_list]
-    
-        for group_qq_number in qq_groups:
-            query_body_qq_group_exist = {
-                'query':{
-                    'bool':{
-                        'must':[
-                            {'term':{'qq_number':qq_number}},
-                            {'term':{'qq_groups':group_qq_number}}
-                        ]
-                    }
-                }
-            }
+        group_info = json.loads(search_result[0]['_source']['group_info'])
+        group_info_keys = group_info.keys() # 群号
 
-            exits_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
-            body=query_body_qq_group_exist)['hits']['hits']
-            print 'exits_result::',exits_result
-            if exits_result:
-                qq_group_exist_list.append(group_qq_number)
+        for i in range(len(group_numbers)):
+
+            group_qq_number = group_numbers[i]
+            group_qq_name = group_names[i]
+            group_qq_mark = mark_names[i]
+
+            if group_qq_number in group_info_keys:
+                #qq_group_exist_list.append(group_qq_number)
+                #mark_name_list = group_info[group_qq_number]['mark_name']
+                group_name_list = group_info[group_qq_number]['group_name']
+
+                if not group_qq_name in group_name_list:
+                    group_info[group_qq_number]['group_name'].append(group_qq_name)
 
             else:
-                print '!!!!redis',r.sadd(r_qq_group_set,group_qq_number)
-                qq_group_new_list.append(group_qq_number)
+                if not r.sadd(r_qq_group_set,group_qq_mark):  # 群号唯一 改为 备注唯一
+                    mark_name_exist_list.append(group_qq_mark)
+                #r.sadd(r_qq_group_mark_set,group_qq_mark)   # ）
+                else:
+
+                    qq_group_new_list.append(group_qq_number)
+                    group_info[group_qq_number] = {'mark_name':group_qq_mark,'group_name':[group_qq_name]}
+
         qqbot_port = search_result[0]['_source']['qqbot_port']
         #if not qq_group_new_list:
         #    return ['当前群已经添加',qq_group_exist_list]
         result = True
         if qq_group_new_list:
-            # 把不在的群添加进去
-            qq_exist_results = es_xnr.search(index=qq_xnr_index_name,doc_type=\
-                qq_xnr_index_type,body={'query':{'term':{'qq_number':qq_number}}})['hits']['hits']
-            
-            qq_exist_result = qq_exist_results[0]['_source']
+            # 把不在的群添加进去           
+            qq_exist_result = search_result[0]['_source']
             xnr_user_no = qq_exist_result['xnr_user_no']
-            qq_groups = qq_exist_result['qq_groups']
-            qq_groups.extend(qq_group_new_list)
-            qq_exist_result['qq_groups'] = qq_groups
-            qq_exist_result['qq_group_num'] = len(qq_groups)
+            #qq_groups = qq_exist_result['qq_groups']
+            #qq_groups.extend(qq_group_new_list)
+            #qq_exist_result['qq_groups'] = qq_groups
+            qq_exist_result['group_info'] = json.dumps(group_info)
+
+            qq_exist_result['qq_group_num'] = len(group_info)
 
             es_xnr.update(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no,\
                 body={'doc':qq_exist_result})
@@ -140,36 +169,37 @@ def create_qq_xnr(xnr_info):
         qqbot_port = find_port(exist_port_list)
         #qq_groups_num = len(qq_groups)
         # qq_groups = getgroup_v2(qq_number)
-
-        es_results = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body={'query':{'match_all':{}},\
-                        'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-        if es_results:
-            user_no_max = es_results[0]['_source']['user_no']
-            user_no_current = user_no_max + 1 
-        else:
-            user_no_current = 1
-
-        #task_detail['user_no'] = user_no_current
+        user_no_current = get_qq_xnr_no()
         xnr_user_no = user_no2qq_id(user_no_current)  #五位数 QXNR0001
-        print 'xnr_user_no:', xnr_user_no
+        
+        # 群信息
+        group_info = {}
+        
+        for i in range(len(group_numbers)):
+            group_qq_number = group_numbers[i]
+            group_qq_name = group_names[i]
+            group_info[group_qq_number] = [group_qq_name,'']
+            r.sadd(r_qq_group_set,group_qq_number)  ## 存入redis,后面接收群消息时，用于过滤消息。
+
+
+        qq_group_num = len(group_info)
+        group_info = json.dumps(group_info)
+
+
         try:
-            # if es_xnr.get(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number):
-            #     return 0
             
             ## 存入es
             es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
-            body={'qq_number':qq_number,'nickname':nickname,'qq_groups':qq_groups,'qq_group_num':len(qq_groups),'create_ts':create_ts,\
+            body={'qq_number':qq_number,'nickname':nickname,'group_info':group_info,'qq_group_num':qq_group_num,'create_ts':create_ts,\
                     'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no,\
                     'access_id':access_id,'remark':remark,'submitter':submitter})
             
-            ## 存入redis
-            
-            for qq_group_number in qq_groups:
-                print '###redis',r.sadd(r_qq_group_set,qq_group_number)
             result = True
         except:
             result = False
+
     print 'before python recieveQQGroupMessage:', result
+
     if result == True:
         
         #qqbot_port = '8199'
@@ -221,6 +251,8 @@ def show_qq_xnr(MAX_VALUE):
         qqnum = item['_source']['qq_number']
         xnr_user_no = item['_source']['xnr_user_no']
         group_dict = getgroup_v2(xnr_user_no)
+        #group_dict = True
+        print 'hhhhh'
         print 'group_dict:::',group_dict
         if group_dict:
             login_status = True
@@ -278,15 +310,45 @@ def delete_qq_xnr(qq_number):
         result = 0
     return result
 
-def change_qq_xnr(xnr_info):
-    qq_number = xnr_info[0]
-    qq_groups = xnr_info[1]
+def change_qq_xnr(xnr_user_no,group_names_string,group_numbers_string):
+
+    get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+
+    group_info = json.loads(get_result['group_info'])
+
+    group_names = group_names_string.encode('utf-8').split('，')
+    group_numbers = group_numbers_string.encode('utf-8').split('，')
+
+    if len(group_numbers) != len(group_names) and len(group_numbers) != 0:
+        return 'not_equal'
+
+    group_numbers_origin = group_info.keys()
+
+    delete_list = list(set(group_numbers_origin).difference(set(group_numbers)))
+    #add_list = list(set(group_numbers).difference(set(group_numbers_origin)))
+
+    if delete_list:
+        for item in delete_list:
+            group_info.pop(item)
+
+    for i in range(len(group_numbers)):
+        group_qq_number = group_numbers[i]
+        group_qq_name = group_names[i]
+
+        if group_qq_number not in group_numbers_origin:  # 新添加的
+            group_info[group_qq_number] = [group_qq_name,'']
+            r.sadd(r_qq_group_set,group_qq_number)  ## 存入redis,后面接收群消息时，用于过滤消息。
+
+    qq_group_num = len(group_info)
+    group_info = json.dumps(group_info)
+
     try:
-        es_xnr.update(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number,  \
-            body={"doc":{'qq_groups':qq_groups,}})
-        result = 'Successfully changed'
+        es_xnr.update(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no,  \
+            body={"doc":{'group_info':group_info,'qq_group_num':qq_group_num}})
+        result = True #'Successfully changed'
     except:
-        result = 'Changing Failed'
+        result = False #'Changing Failed'
+
     return result
 
 def search_qq_xnr(qq_number):
