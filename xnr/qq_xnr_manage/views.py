@@ -67,7 +67,7 @@ def ajax_add_qq_xnr():
     xnr_info['remark'] = remark
 
     result = create_qq_xnr(xnr_info)
-    return json.dumps(result)   # 结果：[True, 重复添加的qq群号list]、[False, 重复添加的qq群号list]、[False, 'not_equal']、[False, 'null']（输入为空）
+    return json.dumps(result)   # 结果：[True, '']、[False, 'not_equal']、[False, 'null']（输入为空）、[False,'失败！以下备注名重复：' + ','.join(mark_name_exist_list)]
 
 @mod.route('/delete_qq_xnr/')
 def ajax_delete_qq_xnr():

@@ -187,8 +187,7 @@ def create_qq_xnr(xnr_info):
         group_info = json.dumps(group_info)
 
 
-        try:
-            
+        try:        
             ## 存入es
             es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
             body={'qq_number':qq_number,'nickname':nickname,'group_info':group_info,'qq_group_num':qq_group_num,'create_ts':create_ts,\

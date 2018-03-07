@@ -22,6 +22,8 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_show_trace_followers,get_image_path,get_reply_total,get_show_domain,\
                 get_show_retweet_timing_list_future
 
+from xnr.utils import add_operate2redis
+
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
 #from xnr import create_app
 
@@ -76,7 +78,13 @@ def ajax_submit_daily_tweet():
     task_detail['rank'] = request.args.get('rank','')
     task_detail['rankid'] = request.args.get('rankid','')
 
-    mark = get_submit_tweet(task_detail)
+    #mark = get_submit_tweet(task_detail)
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'publish'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
+
     return json.dumps(mark)
 
 # 提交定时发送任务
@@ -238,10 +246,17 @@ def ajax_reply_total():
     task_detail['text'] = request.args.get('text','').encode('utf-8')
     task_detail['r_mid'] = request.args.get('r_mid','')
     task_detail['mid'] = request.args.get('mid','')
-    task_detail['uid'] = request.args.get('uid','')
-    task_detail['retweet_option'] = request.args.get('retweet_option','')
+    task_detail['uid'] = request.args.get('uid','')  # 收到的评论人的uid
+    task_detail['retweet_option'] = request.args.get('retweet_option','')  # true-同时转发，false-不转发
 
-    mark = get_reply_total(task_detail)
+
+    #mark = get_reply_total(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'receive'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -269,7 +284,13 @@ def ajax_reply_comment():
     task_detail['text'] = request.args.get('text','').encode('utf-8')
     task_detail['r_mid'] = request.args.get('mid','')
 
-    mark = get_reply_comment(task_detail)
+    #mark = get_reply_comment(task_detail)
+    
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'comment'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -298,7 +319,13 @@ def ajax_reply_retweet():
     task_detail['text'] = request.args.get('text','').encode('utf-8')
     task_detail['r_mid'] = request.args.get('mid','')
 
-    mark = get_reply_retweet(task_detail)
+    #mark = get_reply_retweet(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'retweet'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -327,7 +354,13 @@ def ajax_reply_private():
     task_detail['text'] = request.args.get('text','').encode('utf-8')
     task_detail['uid'] = request.args.get('uid','')
 
-    mark = get_reply_private(task_detail)
+    #mark = get_reply_private(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'private'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -347,13 +380,13 @@ def ajax_show_at():
     results = get_show_at(task_detail)
     return json.dumps(results)
 
-@mod.route('/reply_at/')
-def ajax_reply_at():
-    text = request.args.get('text','')
-    mid = request.args.get('mid','')
-    mark = get_reply_at(text,mid)
+# @mod.route('/reply_at/')
+# def ajax_reply_at():
+#     text = request.args.get('text','')
+#     mid = request.args.get('mid','')
+#     mark = get_reply_at(text,mid)
 
-    return json.dumps(mark)
+#     return json.dumps(mark)
 
 # 关注及回粉
 
@@ -374,7 +407,9 @@ def ajax_show_follow():
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
+
     results = get_show_follow(task_detail)
+
     return json.dumps(results)
 
 @mod.route('/follow_operate/')
@@ -383,7 +418,14 @@ def ajax_reply_follow():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
     task_detail['trace_type'] = request.args.get('trace_type','')  # 跟随关注 -trace_follow，普通关注-ordinary_follow
-    mark = get_reply_follow(task_detail)
+    
+    #mark = get_reply_follow(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'follow'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -392,7 +434,13 @@ def ajax_unfollow_operate():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['uid'] = request.args.get('uid','')
-    mark = get_reply_unfollow(task_detail)
+    #mark = get_reply_unfollow(task_detail)
+
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'unfollow'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
@@ -403,7 +451,13 @@ def ajax_like_operate():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['mid'] = request.args.get('mid','')
 
-    mark = get_like_operate(task_detail)
+    #mark = get_like_operate(task_detail)
+    
+    queue_dict = {}
+    queue_dict['channel'] = 'weibo'
+    queue_dict['operate_type'] = 'like'
+    queue_dict['content'] = task_detail
+    mark = add_operate2redis(queue_dict)
 
     return json.dumps(mark)
 
