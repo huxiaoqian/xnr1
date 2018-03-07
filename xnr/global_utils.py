@@ -689,6 +689,7 @@ fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
 
+
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
@@ -701,3 +702,5 @@ operate_queue_name = 'operate'
 fb_xnr_max_no = 'fb_xnr_max_no'
 tw_xnr_max_no = 'tw_xnr_max_no'
 wx_xnr_max_no = 'wx_xnr_max_no'
+wb_xnr_max_no = 'wb_xnr_max_no'
+qq_xnr_max_no = 'qq_xnr_max_no'

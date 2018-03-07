@@ -23,7 +23,7 @@ def qq_xnr_mappings():
                         'type': 'string',
                         'index': 'not_analyzed'
                     },
-                    'qq_groups':{
+                    'group_info':{
                         'type': 'string',
                         'index': 'not_analyzed'
                     },
@@ -197,7 +197,7 @@ def qq_xnr_history_sensitive_mappings():
 if __name__ == '__main__':
 
     qq_xnr_mappings()
-    qq_xnr_history_count_mappings()
+    #qq_xnr_history_count_mappings()
     #qq_xnr_history_sensitive_mappings()
     #qq_xnr_history_be_at_mappings()
 
