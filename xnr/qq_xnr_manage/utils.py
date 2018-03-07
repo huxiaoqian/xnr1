@@ -77,7 +77,7 @@ def get_qq_xnr_no():
 
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
-    qq_group_exist_list = []
+    qq_group_exist_list = ''#[]
     qq_group_new_list = []
     qq_number = xnr_info['qq_number']
     #qq_groups = xnr_info['qq_groups'].encode('utf-8').split('，')
@@ -125,7 +125,7 @@ def create_qq_xnr(xnr_info):
             group_qq_name = group_names[i]
             group_qq_mark = mark_names[i]
 
-            if group_qq_number in group_info_keys:
+            if group_qq_number in group_info_keys:   # 若群号已添加，则可修改群名
                 #qq_group_exist_list.append(group_qq_number)
                 #mark_name_list = group_info[group_qq_number]['mark_name']
                 group_name_list = group_info[group_qq_number]['group_name']
@@ -133,34 +133,28 @@ def create_qq_xnr(xnr_info):
                 if not group_qq_name in group_name_list:
                     group_info[group_qq_number]['group_name'].append(group_qq_name)
 
-            else:
+            else:  # 若群号未添加，首先检查备注名是否重复，若重复，则返回，否则，正常流程。
                 if not r.sadd(r_qq_group_set,group_qq_mark):  # 群号唯一 改为 备注唯一
                     mark_name_exist_list.append(group_qq_mark)
-                #r.sadd(r_qq_group_mark_set,group_qq_mark)   # ）
                 else:
-
-                    qq_group_new_list.append(group_qq_number)
                     group_info[group_qq_number] = {'mark_name':group_qq_mark,'group_name':[group_qq_name]}
 
+        if mark_name_exist_list:
+            return [False,'失败！以下备注名重复：' + ','.join(mark_name_exist_list)]
+
         qqbot_port = search_result[0]['_source']['qqbot_port']
-        #if not qq_group_new_list:
-        #    return ['当前群已经添加',qq_group_exist_list]
+        
+        # 把不在的群添加进去           
+        qq_exist_result = search_result[0]['_source']
+        xnr_user_no = qq_exist_result['xnr_user_no']
+        qq_exist_result['group_info'] = json.dumps(group_info)
+
+        qq_exist_result['qq_group_num'] = len(group_info)
+
+        es_xnr.update(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no,\
+            body={'doc':qq_exist_result})
+
         result = True
-        if qq_group_new_list:
-            # 把不在的群添加进去           
-            qq_exist_result = search_result[0]['_source']
-            xnr_user_no = qq_exist_result['xnr_user_no']
-            #qq_groups = qq_exist_result['qq_groups']
-            #qq_groups.extend(qq_group_new_list)
-            #qq_exist_result['qq_groups'] = qq_groups
-            qq_exist_result['group_info'] = json.dumps(group_info)
-
-            qq_exist_result['qq_group_num'] = len(group_info)
-
-            es_xnr.update(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no,\
-                body={'doc':qq_exist_result})
-
-            result = True
     else:
 
         # active_time = xnr_info[3]
@@ -178,9 +172,16 @@ def create_qq_xnr(xnr_info):
         for i in range(len(group_numbers)):
             group_qq_number = group_numbers[i]
             group_qq_name = group_names[i]
-            group_info[group_qq_number] = [group_qq_name,'']
-            r.sadd(r_qq_group_set,group_qq_number)  ## 存入redis,后面接收群消息时，用于过滤消息。
+            group_qq_mark = mark_names[i]
 
+            if not r.sadd(r_qq_group_set,group_qq_mark):  # 群号唯一 改为 备注唯一. 存入redis,后面接收群消息时，用于过滤消息。
+                mark_name_exist_list.append(group_qq_mark)
+            else:
+                group_info[group_qq_number] = {'mark_name':group_qq_mark,'group_name':[group_qq_name]}
+
+
+        if mark_name_exist_list:
+            return [False,'失败！以下备注名重复：' + ','.join(mark_name_exist_list)]
 
         qq_group_num = len(group_info)
         group_info = json.dumps(group_info)
