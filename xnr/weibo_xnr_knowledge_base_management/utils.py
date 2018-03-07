@@ -235,6 +235,49 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
 
     return create_type_new
 
+
+
+def domain_update_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
+    
+    task_id = pinyin.get(domain_name,format='strip',delimiter='_')
+
+    try:
+        domain_task_dict = dict()
+
+        #domain_task_dict['xnr_user_no'] = xnr_user_no
+        domain_task_dict['domain_pinyin'] = pinyin.get(domain_name,format='strip',delimiter='_')
+        domain_task_dict['domain_name'] = domain_name
+        domain_task_dict['create_type'] = json.dumps(create_type)
+        domain_task_dict['create_time'] = create_time
+        domain_task_dict['submitter'] = submitter
+        domain_task_dict['description'] = description
+        domain_task_dict['remark'] = remark
+        domain_task_dict['compute_status'] = compute_status
+
+        r.lpush(weibo_target_domain_detect_queue_name,json.dumps(domain_task_dict))
+
+        item_exist = dict()
+        
+        #item_exist['xnr_user_no'] = domain_task_dict['xnr_user_no']
+        item_exist['domain_pinyin'] = domain_task_dict['domain_pinyin']
+        item_exist['domain_name'] = domain_task_dict['domain_name']
+        item_exist['create_type'] = domain_task_dict['create_type']
+        item_exist['create_time'] = domain_task_dict['create_time']
+        item_exist['submitter'] = domain_task_dict['submitter']
+        item_exist['description'] = domain_task_dict['description']
+        item_exist['remark'] = domain_task_dict['remark']
+        item_exist['group_size'] = ''
+        
+        item_exist['compute_status'] = 0  # 存入创建信息
+        es.index(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,id=item_exist['domain_pinyin'],body=item_exist)
+
+        mark = True
+    except:
+        mark =False
+
+    return mark
+
+
 def domain_create_task(domain_name,create_type,create_time,submitter,description,remark,compute_status=0):
     
     task_id = pinyin.get(domain_name,format='strip',delimiter='_')

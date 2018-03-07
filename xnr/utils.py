@@ -596,6 +596,7 @@ def add_operate2redis(item_dict):
     queue_dict['operate_type'] = item_dict['operate_type']  
     # publish-发帖、retweet-转发、comment-评论、like-点赞、follow-关注、unfollow-取消关注、at-提到、private-私信
     # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
+    # receive - 回复
 
     queue_dict['content'] = item_dict['content']
     try:

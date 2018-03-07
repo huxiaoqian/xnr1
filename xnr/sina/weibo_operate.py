@@ -49,6 +49,7 @@ class SinaOperateAPI:
             content = response.read()
             
             succ = json.loads(content)
+            #print 'content..',content
             if succ['code'] == '100000':
                 print 'publish success...', succ['msg']
                 return True, '成功'
@@ -197,7 +198,7 @@ class SinaOperateAPI:
         #w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
-        print 'aaaaaaaaaaaaaaaaaa'
+        #print 'aaaaaaaaaaaaaaaaaa'
         post_data = {
             "_t": "0",
             "act": "reply",
