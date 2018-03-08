@@ -351,7 +351,7 @@ weibo_account_management_index_type = 'account'
 
 
 ## qq发言统计 
-qq_xnr_history_count_index_name = 'qq_history_count'
+qq_xnr_history_count_index_name_pre = 'qq_history_count_'
 qq_xnr_history_count_index_type = 'count'  # - 活跃
 qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透

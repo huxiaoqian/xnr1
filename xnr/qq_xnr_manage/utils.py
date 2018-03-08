@@ -7,8 +7,8 @@ import sys
 import json
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
-        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r_qq_group_mark_set_pre,r, qq_xnr_max_no
-from xnr.global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,\
+        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r, qq_xnr_max_no
+from xnr.global_utils import qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,\
                         group_message_index_name_pre,group_message_index_type
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
@@ -75,8 +75,51 @@ def get_qq_xnr_no():
 
     return user_no_max
 
+def get_login_name(xnr_user_no):
+
+    try:
+        get_results = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+
+        qq_number = get_results['qq_number']
+        qqbot_port = get_results['qqbot_port']
+        access_id = get_results['access_id']
+
+        #qqbot_port = '8199'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
+        #qqbot_port = '8190'
+        qqbot_num = qq_number
+        qqbot_port = str(qqbot_port)
+        qqbot_mc = access_id #'sirtgdmgwiivbegf'
+        #qqbot_mc = 'worunhzbzyipdagc'
+        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
+        #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
+        command_str = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
+        print 'p_str1:', p_str1
+        p_str2 = 'pgrep -f ' + '"' + command_str + '"'
+        print 'p_str2::',p_str2
+        process_ids = subprocess.Popen(p_str2, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        process_id_list = process_ids.stdout.readlines()
+        
+        for process_id in process_id_list:
+            process_id = process_id.strip()
+            kill_str = 'kill -9 ' + process_id
+            print 'kill_str::',kill_str
+            p2 = subprocess.Popen(kill_str, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+        p2 = subprocess.Popen(p_str1, \
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+        return True
+
+    except:
+        return False
+
+
 def create_qq_xnr(xnr_info):
 # xnr_info = [qq_number,qq_groups,nickname,active_time,create_time]
+    print '============1'
     qq_group_exist_list = ''#[]
     qq_group_new_list = []
     qq_number = xnr_info['qq_number']
@@ -87,10 +130,10 @@ def create_qq_xnr(xnr_info):
     print 'group_numbers...',group_numbers
     if not len(group_names)==len(mark_names)==len(group_numbers):
         #return [False,'群名称数量和群号码数量不一致']
-        return [False,'not_equal']
+        return [False,'群名称数量、群备注数量和群号码数量不一致']
 
-    if len(group_numbers) != 0:
-        return [False, 'null']
+    if len(group_numbers) == 0:
+        return [False, '输入不能为空']
 
     # redis 群名
     r_qq_group_set = r_qq_group_set_pre + qq_number
@@ -113,7 +156,7 @@ def create_qq_xnr(xnr_info):
 
     search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
         body=query_body_qq_exist)['hits']['hits']
-
+    print '456'
     if search_result:
         #return ['当前qq已经被添加！',qq_group_exist_list]
         group_info = json.loads(search_result[0]['_source']['group_info'])
@@ -129,6 +172,7 @@ def create_qq_xnr(xnr_info):
                 #qq_group_exist_list.append(group_qq_number)
                 #mark_name_list = group_info[group_qq_number]['mark_name']
                 group_name_list = group_info[group_qq_number]['group_name']
+                r.sadd(r_qq_group_set,group_qq_mark)
 
                 if not group_qq_name in group_name_list:
                     group_info[group_qq_number]['group_name'].append(group_qq_name)
@@ -155,6 +199,7 @@ def create_qq_xnr(xnr_info):
             body={'doc':qq_exist_result})
 
         result = True
+
     else:
 
         # active_time = xnr_info[3]
@@ -186,51 +231,38 @@ def create_qq_xnr(xnr_info):
         qq_group_num = len(group_info)
         group_info = json.dumps(group_info)
 
-
-        try:        
+        #try:        
             ## 存入es
-            es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
-            body={'qq_number':qq_number,'nickname':nickname,'group_info':group_info,'qq_group_num':qq_group_num,'create_ts':create_ts,\
-                    'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no,\
-                    'access_id':access_id,'remark':remark,'submitter':submitter})
-            
-            result = True
-        except:
-            result = False
+        print es_xnr.index(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no, \
+        body={'qq_number':qq_number,'nickname':nickname,'group_info':group_info,'qq_group_num':qq_group_num,'create_ts':create_ts,\
+                'qqbot_port':qqbot_port,'user_no':user_no_current,'xnr_user_no':xnr_user_no,\
+                'access_id':access_id,'remark':remark,'submitter':submitter})
+        
+
+        #     result = True
+        # except:
+        #     result = False
 
     print 'before python recieveQQGroupMessage:', result
 
-    if result == True:
-        
-        #qqbot_port = '8199'
-        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+str(qqbot_port) + ' >> login'+str(qqbot_port)+'.txt'
-        #qqbot_port = '8190'
-        qqbot_num = qq_number
-        qqbot_port = str(qqbot_port)
-        qqbot_mc = access_id #'sirtgdmgwiivbegf'
-        #qqbot_mc = 'worunhzbzyipdagc'
-        p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc + ' >> login'+qqbot_port+'.txt'
-        #p_str1 = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
-        command_str = 'python '+ ABS_LOGIN_PATH + ' -i '+qqbot_port + ' -o ' + qqbot_num + ' -m ' + qqbot_mc
-        print 'p_str1:', p_str1
-        p_str2 = 'pgrep -f ' + '"' + command_str + '"'
-        print 'p_str2::',p_str2
-        process_ids = subprocess.Popen(p_str2, \
-                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        process_id_list = process_ids.stdout.readlines()
-        
-        for process_id in process_id_list:
-            process_id = process_id.strip()
-            kill_str = 'kill -9 ' + process_id
-            print 'kill_str::',kill_str
-            p2 = subprocess.Popen(kill_str, \
-                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-        p2 = subprocess.Popen(p_str1, \
-                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        
+
         #print 'output:', p2.stdout.readlines()
         
     return [result,qq_group_exist_list]
+
+def login_status(xnr_user_no):
+
+    group_dict = getgroup_v2(xnr_user_no)
+
+    if group_dict:
+        login_status = True
+    else:
+        login_status = False
+
+    return login_status
+
 
 def show_qq_xnr(MAX_VALUE):
     query_body = {
@@ -260,18 +292,16 @@ def show_qq_xnr(MAX_VALUE):
             login_status = False
         item_dict['login_status'] = login_status
         now_date = ts2datetime(time.time() - 24*3600)
-        histroy_id = item['_source']['xnr_user_no'] + '_' + now_date
+        #histroy_id = item['_source']['xnr_user_no'] + '_' + now_date
+        qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + now_date
         try:
             history_result = es_xnr.get(index=qq_xnr_history_count_index_name,\
-                doc_type=qq_xnr_history_count_index_type, id=histroy_id)['_source']
+                doc_type=qq_xnr_history_count_index_type, id=xnr_user_no)['_source']
             total_post_num = history_result['total_post_num']
             daily_post_num = history_result['daily_post_num']
         except:
             total_post_num = 0
             daily_post_num = 0
-        # item_dict['total_post_num'] = total_post_num
-        #item_dict['daily_post_num'] = daily_post_num
-
         
         group_message_index_name = group_message_index_name_pre + ts2datetime(time.time())
 
@@ -310,13 +340,60 @@ def delete_qq_xnr(qq_number):
         result = 0
     return result
 
-def change_qq_xnr(xnr_user_no,group_names_string,group_numbers_string):
+
+def delete_qq_group(xnr_user_no,group_numbers_string):
+
+    group_numbers = group_numbers_string.encode('utf-8').split('，')
+
+    if not group_numbers:
+
+        return [False,'请先选择要删除的群']
+
+
+    query_body_qq_exist = {
+        'query':{
+            'term':{'xnr_user_no':xnr_user_no}
+        }
+    }
+
+    search_result = es_xnr.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
+        body=query_body_qq_exist)['hits']['hits']
+
+    if search_result:
+        group_info = json.loads(search_result[0]['_source']['group_info'])
+        qq_number = search_result[0]['_source']['qq_number']
+        r_qq_group_set = r_qq_group_set_pre + qq_number
+
+        for item in group_numbers:
+            try:
+                group_qq_mark = group_info[item]['mark_name']
+                print 'group_qq_mark...',group_qq_mark
+                r.srem(r_qq_group_set,group_qq_mark)
+
+                group_info.pop(item)
+
+            except:
+                pass
+
+        qq_group_num = len(group_info)
+        group_info = json.dumps(group_info)
+
+        es_xnr.update(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=xnr_user_no,  \
+            body={"doc":{'group_info':group_info,'qq_group_num':qq_group_num}})
+
+        return [True,'']
+    else:
+        return [False,'当前qq尚未添加到系统']
+
+
+def change_qq_xnr(xnr_user_no,group_names_string,mark_names_string,group_numbers_string):
 
     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
 
     group_info = json.loads(get_result['group_info'])
 
     group_names = group_names_string.encode('utf-8').split('，')
+    mark_names = mark_names_string.encode('utf-8').split('，')
     group_numbers = group_numbers_string.encode('utf-8').split('，')
 
     if len(group_numbers) != len(group_names) and len(group_numbers) != 0:

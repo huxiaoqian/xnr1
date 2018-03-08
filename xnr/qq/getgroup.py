@@ -54,18 +54,21 @@ def getgroup_v2(qq_xnr):
                 #qq_group_number = str(int(item_line_list[2]))
                 qq_uin_number = str(int(item_line_list[7]))
                 print 'qq_uin_number..',qq_uin_number
-                qq_group_name = item_line_list[3]
+                qq_group_name = item_line_list[4]
+                qq_mark_name = item_line_list[5]
                 # group_dict[qq_group_number] = qq_group_name
                 group_dict[qq_uin_number] = qq_group_name
 
                 # 如果uin为空，则添加进去uin，如果不为空，则更新群名（因为群名可能修改）
-                for key,value_list in group_info.iteritems():
-                    if not value_list[1]:
-                        if value_list[0] == qq_group_name:
-                            group_info[key][1] = qq_uin_number
-                    else:
-                        if value_list[1] == qq_uin_number:
-                            group_info[key][0] = qq_group_name
+                for key,value_dict in group_info.iteritems():
+                    
+                    mark_name = value_dict['mark_name']
+
+                    if not qq_mark_name:
+                        if qq_mark_name == mark_name:
+                            if not qq_group_name in value_dict['group_name']:
+                                group_info[key]['group_name'].append(qq_group_name)
+
             except:
                 next
 
@@ -77,7 +80,7 @@ def getgroup_v2(qq_xnr):
     return group_dict
 
 # 定时更新uin对应的群名
-def update_uin():
+def update_group_name():
 
     query_body = {
         'query':{
@@ -95,7 +98,7 @@ def update_uin():
 
 if __name__ == '__main__':
     
-    update_uin() 
+    update_group_name() 
     #groups = getgroup()
     #qq_xnr = 'QXNR0001'
     #groups = getgroup_v2(qq_xnr)
