@@ -1,21 +1,25 @@
 //展示QQ群
-var time=Date.parse(new Date());
+var localTime=new Date();
+Y= localTime.getFullYear()+'-';
+M=(localTime.getMonth()+1<10?'0'+(localTime.getMonth()+1):localTime.getMonth()+1)+'-';
+D=(localTime.getDate()-1<10?'0'+(localTime.getDate()-2):localTime.getDate()-1);
+var time=Y+M+D;
 var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_user_no='+qqID;
 public_ajax.call_request('get',QQgroup_url,QQgroup);
 function QQgroup(data) {
     var str = '',poi=0;
     for (var d in data){
-        var ched='';
+        var ched='';var re=data[d]['group_name']
         if (poi==0){
             ched='checked';
-            var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+d+
-                '&date='+Number(time)/1000;
+            var QQ_news_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_name='+re.join('，')+
+                '&date='+time;
             public_ajax.call_request('get',QQ_news_url,personEarly);
-        }
+        };//备注名(群名，群qq)
         str +=
-            '<label class="demo-label" onclick="diff_group_news(this)">'+
-            '    <input class="demo-radio" type="radio" name="demo-radio" value="'+d+'" title="'+data[d]+'" '+ched+'>'+
-            '    <span class="demo-radioInput"></span> '+data[d]+
+            '<label class="demo-label" onclick="diff_group_news(this)" title="'+data[d]["mark_name"]+'">'+
+            '    <input class="demo-radio" type="radio" name="demo-radio" value="'+re.join('，')+'" '+ched+'>'+
+            '    <span class="demo-radioInput"></span> '+data[d]["mark_name"]+'（'+re[re.length-1]+'，'+d+'）'+
             '</label>';
         poi++;
     }
@@ -23,13 +27,13 @@ function QQgroup(data) {
 
     var str1='',str2='',b=0;
     for(var a in data){
-        var n=data[a];
-        if (n==''){n=a};
+        var we1=data[a]['group_name'];
+        var we2=data[a]['mark_name'];
         if (b<=5){
             str1+=
-                '<label class="demo-label" title="'+n+'">'+
-                '   <input class="demo-radio" type="checkbox" name="group" value="'+a+'">'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+n+
+                '<label class="demo-label" title="'+we2+'">'+
+                '   <input class="demo-radio" type="checkbox" name="group" value="'+we1.join('，')+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[a]["mark_name"]+'（'+we1[we1.length-1]+'，'+a+'）'+
                 '</label>';
         }else {
             if (b==6){
@@ -38,9 +42,9 @@ function QQgroup(data) {
                     'padding: 2px 6px;margin:10px 0;border-radius: 7px;">更多</a>'
             };
             str2+=
-                '<label class="demo-label" title="'+n+'">'+
-                '   <input class="demo-radio" type="checkbox" name="group" value="'+a+'">'+
-                '   <span class="demo-checkbox demo-radioInput"></span> '+n+
+                '<label class="demo-label" title="'+we2+'">'+
+                '   <input class="demo-radio" type="checkbox" name="group" value="'+we1.join('，')+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[a]["mark_name"]+'（'+we1[we1.length-1]+'，'+a+'）'+
                 '</label>';
         }
         b++;
@@ -106,11 +110,16 @@ function personEarly(personEarly_QQ) {
         ],
     });
     $('.historyNews .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
+    $('.loadImg').slideUp(300);
+    $('.historyNews').show();
 };
 //选择群
 function diff_group_news(_this) {
+    $('.historyNews').hide();
+    $('.loadImg').slideDown(300);
     var qq_id=$(_this).find('input').val();
-    var chooseGroup_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+'&group_qq_number='+qq_id+'&date='+Number(time)/1000;
+    var chooseGroup_url='/qq_xnr_operate/search_by_xnr_number/?xnr_number='+qqNumber+
+        '&group_qq_name='+qq_id+'&date='+time;
     public_ajax.call_request('get',chooseGroup_url,personEarly);
 }
 
@@ -123,7 +132,7 @@ $('#container .post_post .post-2 .titTime .timeSure').on('click',function () {
         $('#pormpt p').text('请检查时间，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&group_qq_number='+$_qqNumber+
+        var search_news_url='/qq_xnr_operate/search_by_period/?xnr_number='+qqNumber+'&group_qq_name='+$_qqNumber+
             '&startdate='+start+'&enddate='+end;
         public_ajax.call_request('get',search_news_url,personEarly);
     }
@@ -133,17 +142,17 @@ $('#sure_post').on('click',function () {
     var value=$('#post-2-content').val();
     var group=[];
     $(".user_example_list input:checkbox:checked").each(function(index,item) {
-        group.push($(this).val());
+        group.push($(item).parent().attr('title'));
     });
     //模态框中的群组
     $("#moreThing input:checkbox:checked").each(function(index,item) {
-        group.push($(this).val());
+        group.push($(item).parent().attr('title'));
     });
     if (value==''||group.length==0){
         $('#pormpt p').text('请检查消息内容，不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+value+'&group='+group.join(',')+
+        var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+Check(value)+'&group='+group.join('，')+
             '&xnr_number='+qqNumber;
         public_ajax.call_request('get',post_news_url,postYES);
     }
