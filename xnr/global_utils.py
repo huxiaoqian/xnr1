@@ -115,7 +115,7 @@ ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.
 
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
-wx_xnr_qrcode_path = 'xnr/static/images/WX'
+wx_xnr_qrcode_path = 'xnr/static/WX'
 WX_LOGIN_PATH = 'xnr/wx/run_bot.py' #使用命令行开启run_bot()的subprocess的程序地址
 sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
