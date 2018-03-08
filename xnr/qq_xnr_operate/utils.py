@@ -3,6 +3,7 @@
 use to save function---about deal database
 '''
 import sys
+import json
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
                              group_message_index_name_pre, group_message_index_type
 from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
@@ -25,7 +26,20 @@ def get_my_group(xnr_user_no,groups):
                 continue
     return my_group_list
 
-def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
+def get_my_group_v2(xnr_user_no):
+
+    try:
+        es_get_results = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+        group_info = json.loads(es_get_results['group_info'])
+
+    except:
+        group_info = {}
+        
+    return group_info
+
+def search_by_xnr_number(xnr_qq_number, current_date,group_qq_name):
+
+    group_qq_name_list = group_qq_name.encode('utf-8').split('，')
     # 用于显示操作页面初始的所有群历史信息
     query_body = {
         "query": {
@@ -34,7 +48,7 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
                     "bool":{
                         "must":[
                             {"term":{"xnr_qq_number":xnr_qq_number}},
-                            {'term':{'qq_group_number':group_qq_number}}
+                            {'terms':{'qq_group_nickname':group_qq_name_list}}
 
                         ]
                     }
@@ -56,13 +70,13 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
         #     continue
         try:
             result = es_xnr.search(index=index_name, doc_type=group_message_index_type,body=query_body)
-            print 'result::',result
+            
             if results != {}:
                 results['hits']['hits'].extend(result['hits']['hits'])
-                print 'results:::',results
+                
             else:
                 results=result #.copy()
-                print 'results::::::',results
+                
         except:
             pass
     # results_new = []
@@ -79,7 +93,10 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_number):
 
     return results
 
-def search_by_period(xnr_qq_number,startdate,enddate,group_qq_number):
+def search_by_period(xnr_qq_number,startdate,enddate,group_qq_name):
+
+    group_qq_name_list = group_qq_name.encode('utf-8').split('，')
+
     results = {}
     query_body = {
         "query": {
@@ -88,7 +105,7 @@ def search_by_period(xnr_qq_number,startdate,enddate,group_qq_number):
                     "bool":{
                         "must":[
                             {"term":{"xnr_qq_number":xnr_qq_number}},
-                            {'term':{'qq_group_number':group_qq_number}}
+                            {'terms':{'qq_group_nickname':group_qq_name_list}}
 
                         ]
                     }
