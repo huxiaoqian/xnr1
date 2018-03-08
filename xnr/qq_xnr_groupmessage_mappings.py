@@ -18,6 +18,10 @@ def group_message_mappings(qq_number, date):
         'mappings':{
             group_message_index_type:{
                 'properties':{
+                    'qq_uin_number':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
                     'qq_group_number':{
                         'type':'string',
                         'index':'not_analyzed'
