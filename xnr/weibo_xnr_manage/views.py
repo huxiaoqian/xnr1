@@ -14,7 +14,7 @@ from utils import show_completed_weiboxnr,show_uncompleted_weiboxnr,delete_weibo
 from utils import get_weibohistory_retweet,get_weibohistory_comment,get_weibohistory_like,\
                   show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser,\
                   delete_history_count,create_history_count,lookup_xnr_assess_info,\
-                  get_xnr_detail,\
+                  get_xnr_detail,new_show_history_posting,\
                   create_xnr_flow_text,update_weibo_count,create_send_like,delete_weibo_count,delete_receive_like,delete_xnr_flow_text
 from xnr.time_utils import datetime2ts
 
@@ -188,6 +188,19 @@ def ajax_show_history_posting():
 	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_history_posting(require_detail)
 	return json.dumps(results)
+
+#备注：部署后添加
+@mod.route('/new_show_history_posting/')
+def ajax_new_show_history_posting():
+	require_detail=dict()
+	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
+	# message_type:1 原创，2评论，3转发
+	require_detail['message_type']=request.args.get('message_type','').split(',')   
+	require_detail['start_time']=int(request.args.get('start_time',''))
+	require_detail['end_time']=int(request.args.get('end_time',''))
+	results=new_show_history_posting(require_detail)
+	return json.dumps(results)
+
 
 #step 4.3.2:show at content
 #http://219.224.134.213:9209/weibo_xnr_manage/show_at_content/?xnr_user_no=WXNR0004&content_type=weibo,at&start_time=1501948800&end_time=1504627200
