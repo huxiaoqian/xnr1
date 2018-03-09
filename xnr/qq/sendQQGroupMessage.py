@@ -233,9 +233,11 @@ def get_qqxnr_port(qq_xnr, group):
         line_count += 1
         if line_count == 5:
             item_line_list = line.split('|')
-            qq_group_number = str(int(item_line_list[2]))
+            # qq_group_number = str(int(item_line_list[2]))
+            #qq_uin_number = str(int(item_line_list[7]))
             #print 'item_line_list:', qq_group_number, len(qq_group_number)
-    qq_xnr_info['qq_group_number'] = qq_group_number
+    # qq_xnr_info['qq_group_number'] = qq_group_number
+    # qq_xnr_info['qq_uin_number'] = qq_uin_number
     qq_xnr_info['qq_group_nickname'] = group
 
     print 'qq_xnr_info::',qq_xnr_info
@@ -263,6 +265,16 @@ def sendfromweb_v2(qq_xnr, group, content):
        line_list += line
     
     if '成功' in line_list:
+        # qq_item = {
+        #            'xnr_qq_number': qq_xnr_info['xnr_qq_number'],
+        #            'xnr_nickname': qq_xnr_info['xnr_nickname'],
+        #            'timestamp': int(round(time.time())),
+        #            'speaker_qq_number': qq_xnr_info['speaker_qq_number'],
+        #            'text': content,
+        #            'speaker_nickname': qq_xnr_info['speaker_nickname'],
+        #            'qq_group_number': qq_xnr_info['qq_group_number'],
+        #            'qq_group_nickname': qq_xnr_info['qq_group_nickname']
+        #            }
         qq_item = {
                    'xnr_qq_number': qq_xnr_info['xnr_qq_number'],
                    'xnr_nickname': qq_xnr_info['xnr_nickname'],
@@ -270,7 +282,6 @@ def sendfromweb_v2(qq_xnr, group, content):
                    'speaker_qq_number': qq_xnr_info['speaker_qq_number'],
                    'text': content,
                    'speaker_nickname': qq_xnr_info['speaker_nickname'],
-                   'qq_group_number': qq_xnr_info['qq_group_number'],
                    'qq_group_nickname': qq_xnr_info['qq_group_nickname']
                    }
         qq_json = json.dumps(qq_item)

@@ -4,6 +4,7 @@ import os
 import json
 import random
 import time
+import uuid
 import hashlib
 import datetime
 import socket
@@ -102,6 +103,8 @@ class MyBot(Bot):
         self.save_bot_info()
         #创建时默认设置监听所有的群组
         self.set_default_groups()
+        #设置群组中好友成员的备注名
+        self.setGroupMembersRN()
 
     def my_qr_callback(self, **kwargs):
         print 'trying to save qrcode picture'
@@ -202,6 +205,50 @@ class MyBot(Bot):
             print e
         return 0
 
+    def setRN(self, all_friends, rn_pre='id_'):
+        #保证all_friends中member所在的所有群组都更新了群组成员的详细信息
+        sleeptime = 2
+        index = 0
+        print u'最多', len(all_friends), u'名好友需要设置备注名'
+        while index < len(all_friends):
+            for member in all_friends[index:]:
+                rn = rn_pre + str(uuid.uuid1())
+                try:
+                    remark_name = member.remark_name
+                    if remark_name[:3] == 'id_' and len(remark_name) == 39: #再进一步判断一下，确保无误
+                        #该member是已经更改过备注的成员，不再需要变更
+                        pass
+                    else:
+                        print member.set_remark_name(rn)
+                        time.sleep(5)
+                    index += 1
+                except ResponseError as e:
+                    if e.err_code == 1205:  #通常因为操作频率过高
+                        time.sleep(sleeptime)
+                        sleeptime = sleeptime*1.1
+                    else:
+                        print e.err_code, e.err_msg
+                    break
+            print index, u'名好友备注已完成设置'
+
+    def setGroupMembersRN(self):
+        all_friends = []
+        for group in self.groups():
+            print group
+            group.update_group(members_details=True)
+            for member in group.members:
+                if member.is_friend:
+                    if not member.user_name == self.self.user_name:  #排除机器人自己
+                        all_friends.append(member)
+        self.setRN(list(set(all_friends)))
+
+    def load_member_id(self, member):
+        if member.is_friend and member.remark_name:
+            member_id = member.remark_name
+        else:
+            member_id = member.puid
+        return member_id
+
     def save_sent_msg(self, m, to_puid, to_name):
         data = {
             'msg_type': m.type,
@@ -243,7 +290,8 @@ class MyBot(Bot):
                     'group_id': group_puid, 
                     'group_name': msg.sender.name,
                     'timestamp': msg.raw['CreateTime'],
-                    'speaker_id': msg.member.puid,
+                    # 'speaker_id': msg.member.puid,
+                    'speaker_id': self.load_member_id(msg.member),
                     'speaker_name': msg.member.name,
                     'msg_type': msg_type
                 }

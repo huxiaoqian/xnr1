@@ -6,25 +6,28 @@ import os
 import sys
 from elasticsearch.helpers import scan
 sys.path.append('../')
-from global_config import S_TYPE,QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT
-from global_utils import qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,es_xnr as es,\
+from global_config import S_TYPE,QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT, QQ_S_DATE_ASSESSMENT
+from global_utils import qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,es_xnr as es,\
                 group_message_index_name_pre,group_message_index_type,qq_xnr_index_name,\
                 qq_xnr_index_type,qq_xnr_history_be_at_index_type,qq_xnr_history_sensitive_index_type,\
                 weibo_xnr_index_name,weibo_xnr_index_type,es_xnr
-
+from qq_xnr_manage_mappings import qq_xnr_history_count_mappings
 from time_utils import ts2datetime,datetime2ts,get_groupmessage_index_list
 from parameter import DAY,MAX_VALUE,MAX_SEARCH_SIZE
 
 # 安全性
 def qq_history_count(xnr_user_no,qq_number,current_time):
 
+    if S_TYPE == 'test':
+        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
+
     current_date = ts2datetime(current_time)
-    #timestamp = datetime2ts(current_date)
     last_date = ts2datetime(current_time-DAY)
-    #print 'current_date:::',current_date
 
     group_message_index_name = group_message_index_name_pre + current_date
+    qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + last_date
 
+    # 得到当天发帖数量
     query_body = {
         'query':{
             'bool':{
@@ -44,26 +47,24 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
         print 'es index rank error'
         today_count = 0
 
-    _id_last = xnr_user_no +'_'+ last_date
-    print '_id_last::',_id_last
 
+    # 得到历史发言总数
     try:
         get_result = es.get(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
-                            id=_id_last)['_source']
+                            id=xnr_user_no)['_source']
+
         total_count_history = get_result['total_post_num']
+
     except:
         total_count_history = 0
 
     total_count_totay = total_count_history + today_count
 
-    _id_today = xnr_user_no + '_' + current_date
-
     item_dict = dict()
-    #item_dict['date_time'] = current_date
-    #item_dict['xnr_user_no'] = xnr_user_no
     item_dict['total_post_num'] = total_count_totay
     item_dict['daily_post_num'] = today_count
 
+    # xnr所在群当天发言最多的人
     query_body_total_day = {
         'query':{
             'filtered':{
@@ -94,60 +95,22 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
     
     item_dict['mark'] = safe
 
-    # es.index(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
-    #             id=_id_today,body=item_dict)
-
     return item_dict
 
-# 活跃性  统计 指标
-# def main_qq_count():
-#     query_body = {
-#         'query':{
-#             'match_all':{}
-#         },
-#         'size':MAX_VALUE
-#     }
-#     results = es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,body=query_body)['hits']['hits']
-
-#     for item in results:
-#         item = item['_source']
-#         xnr_user_no = item['xnr_user_no']
-#         qq_number = item['qq_number']
-#         current_time = time.time() - DAY
-        # qq_history_count(xnr_user_no,qq_number,current_time)
 
 # 影响力 指标 统计
-def get_influence_at_num(xnr_user_no):
+def get_influence_at_num(xnr_user_no, qq_number, current_time):
     
     item_dict = {}
-    # item_dict['daily_be_at_num'] = {}
-    # item_dict['daily_be_at_num'] = {}
+    
+    if S_TYPE == 'test':
+        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
 
-    get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
-    qq_number = get_result['qq_number']
-    nickname = get_result['nickname']
-        
-    # if S_TYPE == 'test':
-    #     current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
-    # else:
-    #     current_time = int(time.time())
-    current_timestamp = int(time.time()-DAY)
-    current_date = ts2datetime(current_timestamp)
-    current_time = datetime2ts(current_date)
-
-    group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
-
-    # for i in range(WEEK-1,-1,-1):
-    #     current_time_new = current_time - i*DAY
-    #     current_date = ts2datetime(current_time_new)
-        
-    #     #start_ts = current_time_new - i*DAY  # DAY=3600*24
-    #     end_ts = current_time_new + DAY 
+    current_date = ts2datetime(current_time)
 
     group_message_index_name = group_message_index_name_pre + current_date
-    #group_message_index_list = get_groupmessage_index_list(QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT,current_date)
-    
-    #虚拟人被@数量
+        
+    #虚拟人当天被@数量
     query_body_xnr = {
         'query':{
             'bool':{
@@ -172,36 +135,22 @@ def get_influence_at_num(xnr_user_no):
     except:
         at_num_xnr = 0
         
-    # 截止目前所有被@总数
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'xnr_qq_number':qq_number}},
-                    {'wildcard':{'text':'*'+'@ME'+'*'}}
-                ]
-            }
-        }
-    }
 
+    # 得到历史总数
+    current_time_last = current_time - DAY
+    current_date_last = ts2datetime(current_time_last)
+    qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + current_date_last
 
-    results_total = es_xnr.count(index=group_message_index_list,doc_type=group_message_index_type,\
-                body=query_body_total)
-
-    if results_total['_shards']['successful'] != 0:
-        at_num_total = results_total['count']
-    else:
-        print 'es index rank error'
-        at_num_total = 0
+    try:
+        result_last = es_xnr.get(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_be_at_index_type,id=xnr_user_no)['_source']
+        total_be_at_num_last = result_last['total_be_at_num']
+    except:
+        total_be_at_num_last = 0
 
     item_dict['daily_be_at_num'] = at_num_xnr
-    item_dict['total_be_at_num'] = at_num_total
-    #item_dict['timestamp'] = current_time
-    #item_dict['date_time'] = current_date
-    #item_dict['xnr_user_no'] = xnr_user_no
-    #item_dict['qq_number'] = qq_number
+    item_dict['total_be_at_num'] = at_num_xnr + total_be_at_num_last
 
-    
+    # 被@总数
     query_body_total_day = {
         'query':{
             'bool':{
@@ -239,28 +188,27 @@ def get_influence_at_num(xnr_user_no):
 
 
 # 渗透力 指标 统计
-def get_penetration_num(xnr_user_no):
+def get_penetration_num(xnr_user_no,qq_number,current_time):
     
     follow_group_sensitive = {}
     follow_group_sensitive['sensitive_info'] = {}
-
+    
     get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
-    qq_number = get_result['qq_number']
-    nickname = get_result['nickname']
     
-    group_list = get_result['qq_groups']
-        
-    current_timestamp = int(time.time()-DAY)
-    current_date = ts2datetime(current_timestamp)
-    current_time = datetime2ts(current_date)
+    #group_list = get_result['qq_groups']
+    group_list = []
+    group_info = json.loads(get_result['group_info'])
 
-    # #for i in range(WEEK):
-    # current_time_new = current_time - i*DAY
-    # current_date = ts2datetime(current_time_new)
-    
-    # start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-    # end_ts = current_time_new - i*DAY 
-    
+    for key, value_dict in group_info.iteritems():
+        group_name = value_dict['group_name']
+        group_list.extend(group_name)
+
+        
+    if S_TYPE == 'test':
+        current_time = datetime2ts(QQ_S_DATE_ASSESSMENT)
+
+    current_date = ts2datetime(current_time)
+
     group_message_index_name = group_message_index_name_pre + current_date
 
 
@@ -268,7 +216,7 @@ def get_penetration_num(xnr_user_no):
         'query':{
             'filtered':{
                 'filter':{
-                    'terms':{'qq_group_number':group_list}
+                    'terms':{'qq_group_nickname':group_list}
                 }
             }
         },
@@ -287,7 +235,7 @@ def get_penetration_num(xnr_user_no):
         
         if sensitive_value == None:
             sensitive_value = 0.0
-        follow_group_sensitive['sensitive_info'] = sensitive_value
+        follow_group_sensitive['sensitive_info'] = round(sensitive_value,2)
     except:
         follow_group_sensitive['sensitive_info'] = 0
 
@@ -296,7 +244,7 @@ def get_penetration_num(xnr_user_no):
         'query':{
             'filtered':{
                 'filter':{
-                    'terms':{'qq_group_number':group_list}
+                    'terms':{'qq_group_nickname':group_list}
                 }
             }
         },
@@ -318,27 +266,27 @@ def get_penetration_num(xnr_user_no):
     return follow_group_sensitive
 
 
-def cron_compute_mark_qq():
+def cron_compute_mark_qq(current_time):
 
-    current_time = int(time.time()-DAY)
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
-    xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
+    xnr_results = es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
-        xnr_results = [{'_source':{'xnr_user_no':'QXNR0001','qq_number':'1965056593'}}]
+        xnr_results = [{'_source':{'xnr_user_no':'QXNR0007','qq_number':'1039598173'}}]
 
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
         qq_number = result['_source']['qq_number']
         #xnr_user_no = 'WXNR0004'
-        influence_dict = get_influence_at_num(xnr_user_no)
-        penetration_dict = get_penetration_num(xnr_user_no)
-        safe_dict = qq_history_count(xnr_user_no,qq_number,current_time_new)
+        influence_dict = get_influence_at_num(xnr_user_no, qq_number, current_time)
+        penetration_dict = get_penetration_num(xnr_user_no, qq_number, current_time)
+        safe_dict = qq_history_count(xnr_user_no,qq_number,current_time)
 
-        _id = xnr_user_no + '_' + current_date
+        #_id = xnr_user_no + '_' + current_date
+        _id = xnr_user_no
 
         xnr_user_detail = {}
         xnr_user_detail['influence'] = influence_dict['mark']
@@ -359,11 +307,15 @@ def cron_compute_mark_qq():
         xnr_user_detail['xnr_user_no'] = xnr_user_no
         xnr_user_detail['qq_number'] = qq_number
 
-        try:
+        qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + current_date
 
+        try:
+            #print 'xnr_user_detail...',xnr_user_detail
+            print 'qq_xnr_history_count_index_name...',qq_xnr_history_count_index_name
+            qq_xnr_history_count_mappings(qq_xnr_history_count_index_name)
             es.index(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
                 id=_id,body=xnr_user_detail)
-            
+        
             mark = True
 
         except:
@@ -397,13 +349,12 @@ def cron_compute_mark_qq():
 
 if __name__ == '__main__':
 
-    # xnr_user_no = 'QXNR0001'
-    # qq_number = '1965056593'
-    # current_time = time.time()
-    # qq_history_count(xnr_user_no,qq_number,current_time)
+
 
     #main_qq_count()
-    cron_compute_mark_qq()
+    # 每天凌晨统计前一天
+    current_time = int(time.time()-DAY)
+    cron_compute_mark_qq(current_time)
     #bulk_add()
 
 
