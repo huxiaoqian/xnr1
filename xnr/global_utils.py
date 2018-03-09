@@ -54,6 +54,7 @@ xnr_map_index_type='user'
 
 ## qq上报管理
 qq_report_management_index_name = 'qq_report_management'
+qq_report_management_index_name_pre = 'qq_report_management_'
 qq_report_management_index_type = 'report'
 
 #use to save xnr group message
@@ -77,6 +78,12 @@ flow_text_index_type = 'text'
 
 weibo_bci_index_name_pre = 'bci_'
 weibo_bci_index_type = 'bci'
+
+weibo_bci_history_index_name = 'bci_history'
+weibo_bci_history_index_type = 'bci'
+
+weibo_sensitive_history_index_name = 'sensitive_history'
+weibo_sensitive_history_index_type = 'sensitive'
 
 #use to identify the user portrait
 es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
