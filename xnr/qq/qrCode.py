@@ -40,9 +40,6 @@ def getQRCode_v2(qq_number):
     #read qq_xnr es to get qqbot_port
     time.sleep(10)
     try:
-        # qq_xnr_es_result = es.get(index_name=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
-        #             id=qq_xnr,_source=True)['_source']
-        # qqbot_port = qq_xnr_es_result['qqbot_port']
 
         qq_xnr_search_result = es.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type,\
                      body={'query':{'term':{'qq_number':qq_number}}},_source=True)['hits']['hits']
@@ -69,14 +66,14 @@ def getQRCode_v2(qq_number):
         if '.png' in file_name_new:
             file_item_new.append(file_name_time)
     print 'file_item_new:::',file_item_new
-    new_fileitem = sorted(file_item_new, key=lambda x:x[1], reverse=True)[0]
-    print 'new_fileitem:::',new_fileitem
-    if new_fileitem[1] > (int(time.time()) - 60):
-        return port_dir + new_fileitem[0]
-    # new_fileitem = sorted(fileitem, key=lambda x:x[1], reverse=False)[0]
-    # new_filepath = new_fileitem[0]
 
-    # return port_dir + new_filepath
+    if not file_item_new:
+        return 'login'
+    new_fileitem = sorted(file_item_new, key=lambda x:x[1], reverse=True)[0]
+    
+    if new_fileitem[1] > (int(time.time()) - 12260):
+        return port_dir + new_fileitem[0]
+
     
 
 if __name__ == '__main__':

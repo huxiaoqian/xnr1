@@ -222,7 +222,7 @@ function driectFocus(uid,_this) {
 //提示
 function sucFai(data) {
     var m='';
-    if (data[0]){
+    if (data[0]||data){
         m='操作成功';
     }else {
         m='操作失败';
