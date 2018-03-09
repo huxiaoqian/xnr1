@@ -52,7 +52,7 @@ from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judg
 
 def get_show_domain():
     domain_name_dict = {}
-    query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
+    query_body = {'query':{'term':{'compute_status':3}},'size':MAX_SEARCH_SIZE}
     es_results = es.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,body=query_body)['hits']['hits']
     if es_results:
         for result in es_results:
@@ -226,22 +226,20 @@ def get_daily_recommend_tweets(theme,sort_item):
 
     datetime = ts2datetime(now_ts)
 
-    #index_name = flow_text_index_name_pre + datetime
     index_name = daily_interest_index_name_pre +'_'+ datetime
 
-    #es_results = es_flow_text.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
-    #print 'index_name:::',index_name
-    #print 'daily_interest_index_type::',daily_interest_index_type
     theme_en = daily_ch2en[theme]
-    es_results = es.get(index=index_name,doc_type=daily_interest_index_type,id=theme_en)['_source']
-    content = json.loads(es_results['content'])
-    # if not es_results:
-    #     es_results_recommend = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
-    #                             body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT_DAILY,\
-    #                             'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+    query_body = {
+        'query':{
+            'term':{'label':theme_en}
+        },
+        'sort':{sort_item:{'order':'desc'}}
+    }
+    es_results = es.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['_source']
+    
     results_all = []
-    for result in content:
-        #result = result['_source']
+    for result in es_results:
+        result = result['_source']
         uid = result['uid']
         nick_name,photo_url = uid2nick_name_photo(uid)
         result['nick_name'] = nick_name

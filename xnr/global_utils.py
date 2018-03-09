@@ -256,6 +256,8 @@ weibo_community_target_user_index_type = 'user'
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
+new_xnr_flow_text_index_name_pre = 'new_xnr_flow_text_'
+new_xnr_flow_text_index_type = 'text'
 # 日常发帖
 daily_interest_index_name_pre = 'daily_inerest_flow_text_'
 daily_interest_index_type = 'text'

@@ -27,20 +27,24 @@ mod = Blueprint('qq_xnr_operate', __name__, url_prefix='/qq_xnr_operate')
 @mod.route('/search_by_period/')
 def ajax_search_by_period():
     xnr_qq_number = request.args.get('xnr_number','')     #查询时需要给定虚拟人身份
-    group_qq_number = request.args.get('group_qq_number','')
+    # group_qq_number = request.args.get('group_qq_number','')
+    group_qq_name = request.args.get('group_qq_name','')  # 如果该群名有多个曾用群名（即：group_name的list中元素不止一个），以中文逗号'，'分隔。
+                                                            # 或者是想要同时查询多个群的群名也是该url，需要把每个群的所有曾用群名都传进来
     startdate = request.args.get('startdate','')
     enddate = request.args.get('enddate','')
-    results = search_by_period(xnr_qq_number,startdate,enddate,group_qq_number)
+    results = search_by_period(xnr_qq_number,startdate,enddate,group_qq_name)
     return json.dumps(results)
 
 @mod.route('/search_by_xnr_number/')
 def ajax_search_by_xnr_number():
     xnr_qq_number = request.args.get('xnr_number','')
-    group_qq_number = request.args.get('group_qq_number','')
+    #group_qq_number = request.args.get('group_qq_number','')
+    group_qq_name = request.args.get('group_qq_name','')   # 如果该群名有多个曾用群名（即：group_name的list中元素不止一个），以中文逗号'，'分隔。
+                                                            # 或者是想要同时查询多个群的群名也是该url，需要把每个群的所有曾用群名都传进来
     ts = request.args.get('date','')
     ts = float(ts)
     date = ts2datetime(ts)
-    results = search_by_xnr_number(xnr_qq_number, date,group_qq_number)
+    results = search_by_xnr_number(xnr_qq_number, date,group_qq_name)
     return json.dumps(results)
 
 @mod.route('/send_qq_group_message/')
