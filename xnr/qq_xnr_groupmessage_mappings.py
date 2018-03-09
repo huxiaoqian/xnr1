@@ -34,7 +34,7 @@ def group_message_mappings(qq_number, date):
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'speaker_qq_nickname':{
+                    'speaker_nickname':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -46,7 +46,7 @@ def group_message_mappings(qq_number, date):
                         'type':'string',
                         'index': 'not_analyzed'
                     },
-                    'xnr_qq_nickname':{
+                    'xnr_nickname':{
                         'type':'string',
                         'index':'not_analyzed'
                     },
@@ -77,6 +77,6 @@ def group_message_mappings(qq_number, date):
 
 if __name__ == '__main__':
     qq_number = 123456
-    # date = '2017-06-24'
-    date = QQ_S_DATE
+    date = '2018-03-07'
+    # date = QQ_S_DATE
     group_message_mappings(qq_number, date)

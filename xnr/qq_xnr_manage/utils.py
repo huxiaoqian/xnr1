@@ -221,6 +221,7 @@ def show_qq_xnr(MAX_VALUE):
         qqnum = item['_source']['qq_number']
         xnr_user_no = item['_source']['xnr_user_no']
         group_dict = getgroup_v2(xnr_user_no)
+        #group_dict = True
         print 'group_dict:::',group_dict
         if group_dict:
             login_status = True
