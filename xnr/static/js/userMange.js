@@ -1,7 +1,6 @@
 var userList_Url='/system_manage/show_all_users_account/';
 public_ajax.call_request('get',userList_Url,userList);
 function userList(data) {
-    console.log(data)
     $('#userlist').bootstrapTable('load', data);
     $('#userlist').bootstrapTable({
         data:data,

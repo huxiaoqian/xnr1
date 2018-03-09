@@ -122,7 +122,7 @@ ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.
 
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
-wx_xnr_qrcode_path = 'xnr/static/images/WX'
+wx_xnr_qrcode_path = 'xnr/static/WX'
 WX_LOGIN_PATH = 'xnr/wx/run_bot.py' #使用命令行开启run_bot()的subprocess的程序地址
 sensitive_words_path = 'xnr/wx/sensitive_words.txt'
 
@@ -358,7 +358,7 @@ weibo_account_management_index_type = 'account'
 
 
 ## qq发言统计 
-qq_xnr_history_count_index_name = 'qq_history_count'
+qq_xnr_history_count_index_name_pre = 'qq_history_count_'
 qq_xnr_history_count_index_type = 'count'  # - 活跃
 qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
@@ -696,6 +696,7 @@ fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
 
+
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
@@ -708,3 +709,5 @@ operate_queue_name = 'operate'
 fb_xnr_max_no = 'fb_xnr_max_no'
 tw_xnr_max_no = 'tw_xnr_max_no'
 wx_xnr_max_no = 'wx_xnr_max_no'
+wb_xnr_max_no = 'wb_xnr_max_no'
+qq_xnr_max_no = 'qq_xnr_max_no'

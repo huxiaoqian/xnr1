@@ -12,18 +12,21 @@ from utils import get_influence_at_num,get_penetration_qq,get_safe_qq,get_influe
 mod = Blueprint('qq_xnr_assessment', __name__, url_prefix='/qq_xnr_assessment')
 
 
+
 # 影响力评估
+# http://219.224.134.213:9090/qq_xnr_assessment/influence_qq/?xnr_user_no=QXNR0007&start_time=1519837261&end_time=1520437426
 @mod.route('/influence_qq/')
 def ajax_influence_mark():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
 
-	results = get_influence_at_num(xnr_user_no,start_time,end_time)
+	results = get_influence_at_num(xnr_user_no,int(start_time),int(end_time))
 
 	return json.dumps(results)
 
 # 影响力评估 -- 今日
+# http://219.224.134.213:9090/qq_xnr_assessment/influence_qq_today/?xnr_user_no=QXNR0007
 @mod.route('/influence_qq_today/')
 def ajax_influence_mark_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
@@ -34,17 +37,19 @@ def ajax_influence_mark_today():
 
 
 # 渗透力评估
+# http://219.224.134.213:9090/qq_xnr_assessment/penetration_qq/?xnr_user_no=QXNR0007&start_time=1519837261&end_time=1520437426
 @mod.route('/penetration_qq/') 
 def ajax_penetration_qq():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
 	
-	results = get_penetration_qq(xnr_user_no,start_time,end_time)
+	results = get_penetration_qq(xnr_user_no,int(start_time),int(end_time))
 
 	return json.dumps(results)
 
 # 渗透力评估 -- 今日
+# http://219.224.134.213:9090/qq_xnr_assessment/penetration_qq_today/?xnr_user_no=QXNR0007
 @mod.route('/penetration_qq_today/') 
 def ajax_penetration_qq_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
@@ -55,17 +60,21 @@ def ajax_penetration_qq_today():
 
 
 # 安全性评估
+# http://219.224.134.213:9090/qq_xnr_assessment/safe_qq/?xnr_user_no=QXNR0007&start_time=1519837261&end_time=1520437426
+
 @mod.route('/safe_qq/')
 def ajax_safe_qq():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
 	
-	results = get_safe_qq(xnr_user_no,start_time,end_time)
+	results = get_safe_qq(xnr_user_no,int(start_time),int(end_time))
 
 	return json.dumps(results)
 
 # 安全性评估 -- 今日
+# http://219.224.134.213:9090/qq_xnr_assessment/safe_qq_today/?xnr_user_no=QXNR0007
+
 @mod.route('/safe_qq_today/')
 def ajax_safe_qq_today():
 	xnr_user_no = request.args.get('xnr_user_no','')
