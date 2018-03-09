@@ -3,6 +3,7 @@
 use to save function---about deal database
 '''
 import sys
+import json
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
                              group_message_index_name_pre, group_message_index_type
 from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
@@ -24,6 +25,17 @@ def get_my_group(xnr_user_no,groups):
             except:
                 continue
     return my_group_list
+
+def get_my_group_v2(xnr_user_no):
+
+    try:
+        es_get_results = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=xnr_user_no)['_source']
+        group_info = json.loads(es_get_results['group_info'])
+
+    except:
+        group_info = {}
+        
+    return group_info
 
 def search_by_xnr_number(xnr_qq_number, current_date,group_qq_name):
 

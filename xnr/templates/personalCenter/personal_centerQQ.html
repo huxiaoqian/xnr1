@@ -5,8 +5,9 @@
 <style>
     /**/
     .xnrShowHide{display: none;}
-    .bootstrap-table .table>thead>tr>th {width:7%;}
+    .bootstrap-table .table>thead>tr>th {width:0%;}
     .table>thead>tr>th {border-top: none;}
+    .fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner {padding: 13px;}
 </style>
 {% endblock %}
 {% block main %}
@@ -62,7 +63,15 @@
                 </div>
                 <div class="opt opt-2">
                     <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群：</span>
-                    <input type="text" class="QQgroup" placeholder="请输入QQ群号码（多个用逗号分隔）"/>
+                    <input type="text" class="QQgroup" placeholder="请输入QQ群号码（多个用逗号分隔，请与下方的群名称对应）"/>
+                </div>
+                <div class="opt opt-5">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群名称：</span>
+                    <input type="text" class="QQgroupName" placeholder="请输入QQ群名称（多个用逗号分隔，请与上方的群号码对应）"/>
+                </div>
+                <div class="opt opt-6">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群备注：</span>
+                    <input type="text" class="QQgroupbeizhu" placeholder="请输入QQ群备注（多个用逗号分隔，请与上方的群对应）"/>
                 </div>
                 <div class="opt opt-3">
                     <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ昵称：</span>
@@ -72,6 +81,10 @@
                     <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ授权码：</span>
                     <input type="text" class="QQpower" placeholder="请输入授权码"/>
                 </div>
+                <div class="opt opt-7">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ虚拟人备注：</span>
+                    <input type="text" class="QQxnrBEIZHU" placeholder="请输入备注内容"/>
+                </div>
             </div>
             <div class="optSure"><span class="optClear">重填</span><span class="optSureadd">确定</span></div>
         </div>
@@ -79,7 +92,79 @@
 </div>
 
 <!--模态框-->
-
+<!--修改群-->
+<div class="modal fade" id="delThisGroupInfor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">确定要删除该群吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal" onclick="Iamdel()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    #modGroup .addG .opt {margin-top: 10px;}
+    #modGroup .addG .opt span {
+        display: inline-block;
+        width: 18%;
+    }
+    #modGroup .addG .opt input {
+        width: 77%;
+        display: inline-block;
+        padding: 3px 7px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+        cursor: pointer;
+    }
+</style>
+<div class="modal fade" id="modGroup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改群组</h4>
+            </div>
+            <div class="modal-body">
+                <div style="color: #fff;">
+                    <div>
+                        <span>现有群：</span>
+                        <div class="nowGroup" style="display: inline-block;"></div>
+                    </div>
+                    <div class="addG" style="overflow: hidden;">
+                        <span>添加群：</span>
+                        <div class="opt opt-1">
+                            <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群：</span>
+                            <input type="text" class="QQgroup" placeholder="请输入QQ群号码（多个用逗号分隔，请与下方的群名称对应）"/>
+                        </div>
+                        <div class="opt opt-2">
+                            <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群名称：</span>
+                            <input type="text" class="QQgroupName" placeholder="请输入QQ群名称（多个用逗号分隔，请与上方的群号码对应）"/>
+                        </div>
+                        <div class="opt opt-3">
+                            <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;QQ群备注：</span>
+                            <input type="text" class="QQgroupbeizhu" placeholder="请输入QQ群备注（多个用逗号分隔，请与上方的群对应）"/>
+                        </div>
+                        <button type="button" class="btn btn-info" onclick="sureModGroup()" style="margin-top: 10px;float: right;">确定</button>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn" data-dismiss="modal">取消</button>-->
+                <!--<button type="button" class="btn" data-dismiss="modal" onclick="sureModGroup()">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
 <!--成功失败-->
 <div class="modal fade" id="succee_fail" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
