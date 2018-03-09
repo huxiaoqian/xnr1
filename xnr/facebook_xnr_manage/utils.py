@@ -603,14 +603,9 @@ def show_history_count(xnr_user_no,date_range):
             end_time=now_time
         if start_time < system_start_time:
             start_time=system_start_time
-        #print 'condition_time:',start_time,end_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
-        
-    #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
-    #print 'xnr_date_info',xnr_date_info
+
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
-
-
     return Cumulative_statistics_dict,xnr_date_info
 
 def delete_history_count(task_id):
