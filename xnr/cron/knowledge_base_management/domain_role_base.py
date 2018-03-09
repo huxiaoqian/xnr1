@@ -233,8 +233,8 @@ def get_flow_text_datetime_list(date_range_end_ts):
 def detect_by_keywords(keywords,datetime_list):
 
     keyword_list = []
+    print 'keywords...',keywords
     model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
-    keywords = keywords.split('，').encode('utf-8')
     
     for word in keywords:
         simi_list = model.most_similar(word,topn=20)
@@ -835,9 +835,9 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
         day_hour_counts_all.append(day_hour_counts)
 
     day_hour_counts_all_np = np.array(day_hour_counts_all)
-    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0).astype(np.int)  ## 对二维数组按列求和
+    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0).astype(np.int)  ## 对二维数组按列求均值
 
-    day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
+    #day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
  
     role_feature_analysis_results['top_keywords'] = keywords_dict_all_users_sort
     role_feature_analysis_results['political_side'] = political_side_count_sort

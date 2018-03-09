@@ -5,6 +5,8 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
         abort, flash, session, redirect
 from xnr.global_utils import es_flow_text
+from xnr.global_config import S_TYPE
+from xnr.time_utils import datetime2ts
 from utils import get_influ_fans_num,get_influ_retweeted_num,\
 				get_influ_commented_num,get_influ_like_num,get_influ_at_num,get_influ_private_num,\
 				compute_influence_num,get_pene_follow_group_sensitive,get_pene_fans_group_sensitive,\
@@ -35,6 +37,11 @@ def ajax_influence_total_trend():
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
 
+	if S_TYPE == 'test':
+		start_time = datetime2ts('2017-10-01')
+		end_time = datetime2ts('2017-10-07')
+
+
 	results = get_influence_total_trend(xnr_user_no,start_time,end_time)
 
 	return json.dumps(results)
@@ -48,61 +55,6 @@ def ajax_influence_total_trend_today():
 	results = get_influence_total_trend_today(xnr_user_no)
 
 	return json.dumps(results)
-
-# # 粉丝数
-# @mod.route('/influ_fans_num/')
-# def ajax_influ_fans_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_fans_num(xnr_user_no)
-# 	return json.dumps(results)
-# '''
-# # 粉丝群的粉丝数
-# @mod.route('/influ_fans_fans_num/')
-# def ajax_influ_fans_fans_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_fans_fans_num(xnr_user_no)
-
-# 	return json.dumps(results)
-# '''
-# # 被转发
-# @mod.route('/influ_retweeted_num/')
-# def ajax_influ_retweeted_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_retweeted_num(xnr_user_no)
-
-# 	return json.dumps(results)
-
-# # 被评论
-# @mod.route('/influ_commented_num/')
-# def ajax_influ_commented_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_commented_num(xnr_user_no)
-
-# 	return json.dumps(results)
-
-# # 被点赞
-# @mod.route('/influ_like_num/')
-# def ajax_influ_like_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_like_num(xnr_user_no)
-
-# 	return json.dumps(results)
-
-# # 被@
-# @mod.route('/influ_at_num/')
-# def ajax_influ_at_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_at_num(xnr_user_no)
-
-# 	return json.dumps(results)
-
-# # 被私信
-# @mod.route('/influ_private_num/')
-# def ajax_influ_private_num():
-# 	xnr_user_no = request.args.get('xnr_user_no','')
-# 	results = get_influ_private_num(xnr_user_no)
-
-# 	return json.dumps(results)
 
 
 '''
@@ -123,6 +75,10 @@ def ajax_penetration_total():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
+
+	if S_TYPE == 'test':
+		start_time = datetime2ts('2017-10-01')
+		end_time = datetime2ts('2017-10-07')
 
 	results = penetration_total(xnr_user_no,start_time,end_time)
 
@@ -195,6 +151,10 @@ def ajax_safe_active():
 	xnr_user_no = request.args.get('xnr_user_no','')
 	start_time = request.args.get('start_time','')
 	end_time = request.args.get('end_time','')
+
+	if S_TYPE == 'test':
+		start_time = datetime2ts('2017-10-01')
+		end_time = datetime2ts('2017-10-07')
 
 	results = get_safe_active(xnr_user_no,start_time,end_time)
 

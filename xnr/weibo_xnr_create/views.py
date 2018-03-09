@@ -221,19 +221,3 @@ def ajax_modify_base_info():
     mark = get_modify_base_info(task_detail)    
 
     return json.dumps(mark)
-
-
-@mod.route('/show_register_info/')
-def ajax_show_register_info():
-    
-    return json.dumps(results)
-
-@mod.route('/save_register_info/')
-def ajax_save_register_info():
-
-    return json.dumps(results)
-
-@mod.route('/bind_info/')
-def ajax_bind_indo():
-
-    return json.dumps(results)

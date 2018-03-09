@@ -450,6 +450,7 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
 });
 var viewButton={};
 function viewData(data) {
+    console.log(data)
     if (isEmptyObject(data)||isEmptyObject(JSON.parse(data['subopinion_tweets']))){
         $(boxView).html('<center>暂无内容</center>');
         return false;
