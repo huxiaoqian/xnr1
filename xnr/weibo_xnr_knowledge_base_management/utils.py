@@ -227,11 +227,23 @@ def get_create_type_content(create_type,keywords_string,seed_users,all_users):
     create_type_new['by_all_users'] = []
 
     if create_type == 'by_keywords':
-        create_type_new['by_keywords'] = keywords_string.encode('utf-8').split('，')
+
+        if '，' in keywords_string:
+            create_type_new['by_keywords'] = keywords_string.encode('utf-8').split('，')
+        else:
+            create_type_new['by_keywords'] = keywords_string.encode('utf-8').split(',')
+
     elif create_type == 'by_seed_users':
-        create_type_new['by_seed_users'] = seed_users.encode('utf-8').split('，')
+        if '，' in seed_users:
+            create_type_new['by_seed_users'] = seed_users.encode('utf-8').split('，')
+        else:
+            create_type_new['by_seed_users'] = seed_users.encode('utf-8').split(',')
+
     else:
-        create_type_new['all_users'] = all_users.encode('utf-8').split('，')
+        if '，' in all_users:
+            create_type_new['all_users'] = all_users.encode('utf-8').split('，')
+        else:
+            create_type_new['all_users'] = all_users.encode('utf-8').split(',')
 
     return create_type_new
 
