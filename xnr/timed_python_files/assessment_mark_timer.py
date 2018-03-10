@@ -24,7 +24,8 @@ from global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_fee
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_index_name,weibo_xnr_index_type,xnr_flow_text_index_name_pre,\
                         xnr_flow_text_index_type,\
-                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
+                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
+                        weibo_feedback_fans_index_name,weibo_feedback_fans_index_type
                         
 from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -425,6 +426,28 @@ def uid2nick_name_photo(uid):
         
     return nick_name,photo_url
 
+
+#查询虚拟人粉丝数
+def get_today_xnr_fans(xnr_user_no):
+    xnr_uid = xnr_user_no2uid(xnr_user_no)
+    query_body = {
+       'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'root_uid':xnr_uid}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+    try:
+        search_result = es_xnr.search(index = weibo_feedback_fans_index_name,doc_type = weibo_feedback_fans_index_type,body = query_body)['hits']['hits']
+        fans_num = len(search_result)
+    except:
+        fans_num = 0
+    return fans_num
+
+
 #统计信息表
 def create_xnr_history_info_count(xnr_user_no,current_date):
     #create_date=ts2datetime(create_time)
@@ -450,57 +473,61 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     xnr_user_detail=dict()
     #时间
     xnr_user_detail['date_time']=current_date
-    # try:
-    xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
-    #今日总粉丝数
-    for item in xnr_result['hits']['hits']:
-        xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
-    # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
-    for item in xnr_result['aggregations']['all_task_source']['buckets']:
-        if item['key'] == 'daily_post':
-            xnr_user_detail['daily_post_num']=item['doc_count']
-        elif item['key'] == 'business_post':
-            xnr_user_detail['business_post_num']=item['doc_count']
-        elif item['key'] == 'hot_post':
-            xnr_user_detail['hot_follower_num']=item['doc_count']
-        elif item['key'] =='trace_follow_tweet':
-            xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
-    #总发帖量
-    if xnr_user_detail.has_key('daily_post_num'):
-        pass
-    else:
+    try:
+        xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+        #今日总粉丝数
+        xnr_user_detail['user_fansnum'] = get_today_xnr_fans(xnr_user_no)
+        # for item in xnr_result['hits']['hits']:
+            # xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+        # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
+        for item in xnr_result['aggregations']['all_task_source']['buckets']:
+            if item['key'] == 'daily_post':
+                xnr_user_detail['daily_post_num']=item['doc_count']
+            elif item['key'] == 'business_post':
+                xnr_user_detail['business_post_num']=item['doc_count']
+            elif item['key'] == 'hot_post':
+                xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
+        #总发帖量
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
+        
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
+        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
+    except:
+        print 'except1!'
+        xnr_user_detail['user_fansnum']=0
         xnr_user_detail['daily_post_num']=0
-    
-    if xnr_user_detail.has_key('business_post_num'):
-        pass
-    else:
         xnr_user_detail['business_post_num']=0
-
-    if xnr_user_detail.has_key('hot_follower_num'):
-        pass
-    else:
         xnr_user_detail['hot_follower_num']=0
-
-    if xnr_user_detail.has_key('trace_follow_tweet_num'):
-        pass
-    else:
+        xnr_user_detail['total_post_sum']=0
         xnr_user_detail['trace_follow_tweet_num']=0
-
-    xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
-    # except:
-    #     print 'except1!'
-    #     xnr_user_detail['user_fansnum']=0
-    #     xnr_user_detail['daily_post_num']=0
-    #     xnr_user_detail['business_post_num']=0
-    #     xnr_user_detail['hot_follower_num']=0
-    #     xnr_user_detail['total_post_sum']=0
-    #     xnr_user_detail['trace_follow_tweet_num']=0
 
     if xnr_user_detail['user_fansnum'] == 0:
         yesterday_date=ts2datetime(datetime2ts(current_date)-DAY)
         count_id=xnr_user_no+'_'+yesterday_date
-        xnr_count_result=es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-        xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        try:
+            xnr_count_result=es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        except:
+            xnr_user_detail['user_fansnum']=0
     else:
         pass
 
