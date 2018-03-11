@@ -9,7 +9,7 @@ if(flagType == 1){//微博
     weiboORqq('QQ');
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
+    reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 3){
     weiboORqq('WX');
