@@ -771,6 +771,71 @@ def show_history_posting(require_detail):
         post_result=[]
     return post_result
 
+
+def new_show_history_posting(require_detail):
+    if S_TYPE == 'test':
+        date_range_end_ts=XNR_CENTER_DATE_TIME
+        test_time_gap=require_detail['end_time']-require_detail['start_time']
+        test_datetime_gap=int(test_time_gap/DAY)
+        date_range_start_ts=datetime2ts(ts2datetime(date_range_end_ts-DAY*test_datetime_gap))
+    else:
+        date_range_start_ts=require_detail['start_time']
+        date_range_end_ts=require_detail['end_time']
+    #print date_range_start_ts,date_range_end_ts
+
+
+    xnr_user_no=require_detail['xnr_user_no']   
+    task_source=require_detail['task_source']
+    try:
+        es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        uid=es_result['uid']
+    except:
+        uid=''
+
+
+    temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+    weibo_xnr_flow_text_listname=[]
+    for index_name in temp_weibo_xnr_flow_text_listname:
+        #print 'index_name:',index_name
+        if es_xnr.indices.exists(index=index_name):
+            weibo_xnr_flow_text_listname.append(index_name)
+
+        else:
+            #print 'not_',index_name
+            pass
+    #print weibo_xnr_flow_text_listname
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'uid':uid}},
+                            {'terms':{'task_source':task_source}}
+                        ]
+                    }                   
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'desc'}},
+        'size':HOT_WEIBO_NUM
+    }
+
+    try:
+        #print weibo_xnr_flow_text_listname
+        if weibo_xnr_flow_text_listname:
+            result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            post_result=[]
+            for item in result:
+                post_result.append(item['_source'])
+        else:
+            post_result=[]
+    except:
+        post_result=[]
+    return post_result
+
+
+
 #step 4.3.2:show at content
 def show_at_content(require_detail):
     xnr_user_no=require_detail['xnr_user_no']

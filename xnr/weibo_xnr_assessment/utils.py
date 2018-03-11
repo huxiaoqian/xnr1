@@ -20,8 +20,7 @@ from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                         user_domain_index_name,user_domain_index_type,\
-                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
-                        xnr_flow_text_index_name_pre,xnr_flow_text_index_type
+                        new_xnr_flow_text_index_name_pre,xnr_flow_text_index_type
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -34,6 +33,8 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID
 
 
 def get_influence_total_trend(xnr_user_no,start_time,end_time):
+
+    
 
     total_dict = {}
     total_dict['total_trend'] = {}
@@ -53,6 +54,7 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
         },
         'size':MAX_SEARCH_SIZE
     }
+
 
     search_results = es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
@@ -1307,12 +1309,9 @@ def get_safe_active_today(xnr_user_no):
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
     safe_active_dict = {} 
-    xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
+    xnr_flow_text_index_name = new_xnr_flow_text_index_name_pre + current_date
     try:
         search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
-
-
-        
 
         if search_result['_shards']['successful'] != 0:
             result = search_result['count']
@@ -1448,21 +1447,7 @@ def get_tweets_distribute(xnr_user_no):
 
 def get_safe_tweets(xnr_user_no,topic,sort_item):
 
-    # if S_TYPE == 'test':
 
-    #     current_time = datetime2ts(S_DATE)
-    #     index_name_list = get_flow_text_index_list(current_time)
-    #     query_body = {
-    #         'query':{
-    #             'match_all':{}
-    #         },
-    #         'size':TOP_WEIBOS_LIMIT,
-    #         'sort':{sort_item:{'order':'desc'}}
-    #     }
-
-    #     es_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    
-    # else:
     if S_TYPE == 'test':
         current_time = 1507362127  # 10月7日
 

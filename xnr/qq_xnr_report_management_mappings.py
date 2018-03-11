@@ -1,9 +1,9 @@
 #-*-coding:utf-8-*-
 import os
 import json
-
+from time_utils import ts2datetime
 from global_utils import es_xnr as es
-from global_utils import qq_report_management_index_name,qq_report_management_index_type
+from global_utils import qq_report_management_index_name_pre,qq_report_management_index_name,qq_report_management_index_type
 
 # 上报管理
 def qq_report_management_mappings():
@@ -33,12 +33,18 @@ def qq_report_management_mappings():
 					'qq_number':{ #QQ号
 						'type':'string',
 						'index':'not_analyzed'
-					}
+					},
+					'qq_nickname':{ 
+						'type':'string',
+						'index':'not_analyzed'
+					},
 				}
 			}
 		}
 	}
 
+	# now_time=int(time.time())
+	# qq_report_management_index_name = qq_report_management_index_name_pre + ts2datetime(now_time)
 	if not es.indices.exists(index=qq_report_management_index_name):
 		es.indices.create(index=qq_report_management_index_name,body=index_info,ignore=400)
 
