@@ -146,13 +146,106 @@ def daily_inerests_flow_text_mappings(index_name):
         'mappings':{
             'text':{
                 'properties':{
-                    'timestamp':{
+                    'uid':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'text':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'picture_url':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'vedio_url':{
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'user_fansnum':{
                         'type':'long'
                     },
-                    'content':{
-                        'type':'string',
-                        'index':'no'
-                    }
+                    'user_followersum':{
+                        'type':'long'
+                    },
+                    'weibos_sum':{
+                        'type':'long'
+                    },
+                    'mid':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'ip':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'directed_uid':{
+                        'type':'long',
+                        },
+                    'directed_uname':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'timestamp':{
+                        'type': 'long'
+                        },
+                    'sentiment': {
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'geo':{
+                        'type': 'string',
+                        'analyzer': 'my_analyzer'
+                        },
+                    'keywords_dict':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'keywords_string':{
+                        'type': 'string',
+                        'analyzer': 'my_analyzer'
+                        },
+                    'sensitive_words_dict':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'sensitive_words_string':{
+                        'type': 'string',
+                        'analyzer': 'my_analyzer'
+                        },
+                    'message_type':{
+                        'type': 'long'
+                        },
+                    'root_uid':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'root_mid':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                     # uncut weibo text
+                    'origin_text':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'origin_keywords_dict':{
+                        'type': 'string',
+                        'index': 'not_analyzed'
+                        },
+                    'origin_keywords_string':{
+                        'type': 'string',
+                        'analyzer': 'my_analyzer'
+                        },
+                    'comment':{
+                        'type':'long'
+                        },
+                    'sensitive':{
+                        'type':'long'
+                        },
+                    'retweeted':{
+                        'type':'long'
+                        }
                 }
             }
         }

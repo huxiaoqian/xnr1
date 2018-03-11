@@ -131,7 +131,7 @@ class SinaOperateAPI:
         :param r_mid:mid=4131527589733848
         :return:
         """
-        w_url = 'http://weibo.com/aj/v6/mblog/forward?ajwvr=6&domain=%s&__rnd=%d' % (self.uid, int(time.time() * 1000))
+        w_url = 'https://weibo.com/aj/v6/mblog/forward?ajwvr=6&domain=%s&__rnd=%d' % (self.uid, int(time.time() * 1000))
         print w_url
         print '!!!!'
         post_data = {
@@ -164,7 +164,7 @@ class SinaOperateAPI:
         :param r_mid:
         :return:
         """
-        w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
@@ -196,7 +196,7 @@ class SinaOperateAPI:
         :return:
         """
         #w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
-        w_url = 'http://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/v6/comment/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
         #print 'aaaaaaaaaaaaaaaaaa'
         post_data = {
@@ -225,7 +225,7 @@ class SinaOperateAPI:
         :param r_mid:
         :return:
         """
-        w_url = 'http://weibo.com/aj/message/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/message/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
@@ -247,7 +247,7 @@ class SinaOperateAPI:
         :param r_mid:
         :return:
         """
-        w_url = 'http://weibo.com/aj/v6/like/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/v6/like/add?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
@@ -267,7 +267,7 @@ class SinaOperateAPI:
         :param r_uid:
         :return:
         """
-        w_url = 'http://weibo.com/aj/f/followed?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/f/followed?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
@@ -292,7 +292,7 @@ class SinaOperateAPI:
         :param r_uid:
         :return:
         """
-        w_url = 'http://weibo.com/aj/f/unfollow?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/f/unfollow?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
@@ -312,7 +312,7 @@ class SinaOperateAPI:
         :param members:
         :return:
         """
-        w_url = 'http://weibo.com/aj/groupchat/create?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
+        w_url = 'https://weibo.com/aj/groupchat/create?ajwvr=6&__rnd=%d' % int(time.time() * 1000)
         print w_url
 
         post_data = {
