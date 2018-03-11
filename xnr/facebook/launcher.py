@@ -12,8 +12,8 @@ class Launcher():
 		self.username = username
 		self.password = password
 		#模拟窗口
-		self.display = Display(visible=0,size=(1024,768))
-		self.display.start()
+		# self.display = Display(visible=0,size=(1024,768))
+		# self.display.start()
 		self.driver = webdriver.Firefox()
 		#self.driver = webdriver.Chrome()
 		self.req = requests.Session()
@@ -30,7 +30,17 @@ class Launcher():
 		except Exception as e:
 			pass
 		time.sleep(2)
-		self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+		time.sleep(2)
+		
+		try:
+			self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		except:
+			pass
 
 		# 将cookie保存在req中
 		cookies = self.driver.get_cookies()
@@ -44,30 +54,14 @@ class Launcher():
 	def get_like_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -93,30 +87,14 @@ class Launcher():
 	def get_share_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -143,30 +121,14 @@ class Launcher():
 	def get_mention_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -192,30 +154,14 @@ class Launcher():
 	def get_comment_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -246,30 +192,14 @@ class Launcher():
 	def target_post(self, uid, fid):
 		self.driver.get('https://www.facebook.com/'+uid)		
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 
 
 

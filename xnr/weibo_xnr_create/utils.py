@@ -207,7 +207,7 @@ def get_nick_name_unique(nick_name):
 
 def get_show_domain():
     domain_name_dict = {}
-    query_body = {'query':{'match_all':{}},'size':MAX_SEARCH_SIZE}
+    query_body = {'query':{'term':{'compute_status':3}},'size':MAX_SEARCH_SIZE}
     es_results = es.search(index=weibo_domain_index_name,doc_type=weibo_domain_index_type,body=query_body)['hits']['hits']
     if es_results:
         for result in es_results:
