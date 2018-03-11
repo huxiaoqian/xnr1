@@ -54,6 +54,7 @@ xnr_map_index_type='user'
 
 ## qq上报管理
 qq_report_management_index_name = 'qq_report_management'
+qq_report_management_index_name_pre = 'qq_report_management_'
 qq_report_management_index_type = 'report'
 
 #use to save xnr group message
@@ -77,6 +78,12 @@ flow_text_index_type = 'text'
 
 weibo_bci_index_name_pre = 'bci_'
 weibo_bci_index_type = 'bci'
+
+weibo_bci_history_index_name = 'bci_history'
+weibo_bci_history_index_type = 'bci'
+
+weibo_sensitive_history_index_name = 'sensitive_history'
+weibo_sensitive_history_index_type = 'sensitive'
 
 #use to identify the user portrait
 es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
@@ -256,6 +263,8 @@ weibo_community_target_user_index_type = 'user'
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
+new_xnr_flow_text_index_name_pre = 'new_xnr_flow_text_'
+new_xnr_flow_text_index_type = 'text'
 # 日常发帖
 daily_interest_index_name_pre = 'daily_inerest_flow_text_'
 daily_interest_index_type = 'text'
@@ -351,7 +360,7 @@ weibo_account_management_index_type = 'account'
 
 
 ## qq发言统计 
-qq_xnr_history_count_index_name = 'qq_history_count'
+qq_xnr_history_count_index_name_pre = 'qq_history_count_'
 qq_xnr_history_count_index_type = 'count'  # - 活跃
 qq_xnr_history_be_at_index_type = 'be_at'   # - 影响力
 qq_xnr_history_sensitive_index_type = 'sensitive'   # - 渗透
@@ -689,6 +698,7 @@ fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
 
+
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
@@ -701,3 +711,5 @@ operate_queue_name = 'operate'
 fb_xnr_max_no = 'fb_xnr_max_no'
 tw_xnr_max_no = 'tw_xnr_max_no'
 wx_xnr_max_no = 'wx_xnr_max_no'
+wb_xnr_max_no = 'wb_xnr_max_no'
+qq_xnr_max_no = 'qq_xnr_max_no'

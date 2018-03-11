@@ -39,13 +39,15 @@ def onQQMessage(bot, contact, member, content):
     INFO('bot.conf %s', bot.conf)
 
     if contact.ctype == 'group':
-        INFO('群的 QQ.. %s', contact.qq)
-        INFO('群的昵称.. %s', contact.nick)
-        INFO('成员的 QQ.. %s', member.qq)
-        INFO('成员的昵称.. %s', member.nick)
-        INFO('最后发言时间.. %s', member.last_speak_time)
-        INFO('消息.. %s', content)
+        INFO('群的 QQ.. %s', contact.qq)  # #NULL
+        INFO('群的昵称.. %s', contact.nick) # 嘿哼哈
+        INFO('成员的 QQ.. %s', member.qq)   # #NULL
+        INFO('成员的昵称.. %s', member.nick) # /石沫沫
+        INFO('最后发言时间.. %s', member.last_speak_time) # -1
+        INFO('消息.. %s', content) # test内容
 
+        last_speak_time = int(time.time())
+        print 'last_speak_time..',last_speak_time
         if content == '':
             INFO('您发了一张图片或假消息... %s', content)
         else:
@@ -54,43 +56,56 @@ def onQQMessage(bot, contact, member, content):
                 sen_flag = 1    #该条信息是敏感信息
             else:
                 sen_flag = 0
+            # qq_item = {
+            #     'xnr_qq_number': bot.session.qq,
+            #     'xnr_nickname': bot.session.nick,
+            #     'timestamp': member.last_speak_time,
+            #     'speaker_qq_number': member.qq,
+            #     'text': content,
+            #     'sensitive_flag':sen_flag,
+            #     'sensitive_value': sen_value,
+            #     'sensitive_words_string': sen_words['sensitive_words_string'],
+            #     'speaker_nickname': member.nick,
+            #     'qq_group_number': contact.qq,
+            #     'qq_group_nickname': contact.nick
+            # }
             qq_item = {
                 'xnr_qq_number': bot.session.qq,
                 'xnr_nickname': bot.session.nick,
-                'timestamp': member.last_speak_time,
-                'speaker_qq_number': member.qq,
+                'timestamp': last_speak_time,
+                'speaker_qq_number': '',
                 'text': content,
                 'sensitive_flag':sen_flag,
                 'sensitive_value': sen_value,
                 'sensitive_words_string': sen_words['sensitive_words_string'],
                 'speaker_nickname': member.nick,
-                'qq_group_number': contact.qq,
+                'qq_group_number': '',
                 'qq_group_nickname': contact.nick
             }
             qq_json = json.dumps(qq_item)
             print 'qq_json:',qq_json
             # 判断该qq群是否在redis的群set中
-            qq_number  = qq_item['xnr_qq_number']
-            qq_group_number = qq_item['qq_group_number']
+            #qq_number  = qq_item['xnr_qq_number']
+            #qq_group_number = qq_item['qq_group_number']
 
-            r_qq_group_set = r_qq_group_set_pre + qq_number
-            qq_group_set = r.smembers(r_qq_group_set)
+            # r_qq_group_set = r_qq_group_set_pre + qq_number
+            # qq_group_set = r.smembers(r_qq_group_set)
             #test
             #qq_group_set = set(['531811289'])
-            print 'qq_group_set:', qq_group_set
-            print 'qq_group_number:', qq_group_number
-            if qq_group_number in qq_group_set:
+           
+            #if qq_group_number in qq_group_set:
             
-                conMD5 = string_md5(content)
-                
-                nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
-                index_name = group_message_index_name_pre+ str(nowDate)
-                index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
-                if not es.indices.exists(index=index_name):
-                    print 'get mapping'
-                    print group_message_mappings(bot.session.qq,nowDate)
-
-                es.index(index=index_name, doc_type=group_message_index_type, id=index_id, body=qq_item)
+            conMD5 = string_md5(content)
+            
+            nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
+            index_name = group_message_index_name_pre+ str(nowDate)
+            #index_id = bot.conf.qq + '_' + contact.qq + '_' + str(member.last_speak_time) + '_' + conMD5
+            # 让系统随机分配 _id
+            if not es.indices.exists(index=index_name):
+                print 'get mapping'
+                print group_message_mappings(bot.session.qq,nowDate)
+            print 'qq_item.....',qq_item
+            print es.index(index=index_name, doc_type=group_message_index_type,body=qq_item)
                 
 
 def string_md5(str):
