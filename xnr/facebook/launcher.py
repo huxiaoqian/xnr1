@@ -30,7 +30,10 @@ class Launcher():
 		except Exception as e:
 			pass
 		time.sleep(2)
-		self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		try:
+			self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		except:
+			pass
 
 		# 将cookie保存在req中
 		cookies = self.driver.get_cookies()

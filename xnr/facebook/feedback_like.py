@@ -53,7 +53,8 @@ class Like():
 if __name__ == '__main__':
 	like = Like('8618348831412','Z1290605918')
 	list = like.get_like()
-	like.save('facebook_feedback_like','text',list)
+	print list
+	# like.save('facebook_feedback_like','text',list)
 
 	
 
