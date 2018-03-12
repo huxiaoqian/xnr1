@@ -7,6 +7,7 @@ if(flagType == 1){//微博
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
+    $('.qqHide').hide();
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论&start_ts='+start_ts+'&end_ts='+end_ts;
@@ -16,16 +17,18 @@ if(flagType == 1){//微博
     reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if (flagType == 4){
+    beginUrl='facebook_xnr_report_manage';
     weiboORqq('faceBook');
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论,事件,时间&start_time='+start_ts+'&end_time='+end_ts;
+    reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if (flagType == 5){
+    beginUrl='twitter_xnr_report_manage';
     weiboORqq('twitter');
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/twitter_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论,事件,时间&start_time='+start_ts+'&end_time='+end_ts;
+    reportDefaul_url='/twitter_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 };
 var currentData={},wordCurrentData={},currentDataPrival={};
@@ -60,16 +63,19 @@ function reportDefaul(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var artical=row.report_content.weibo_list,str='';
-                    if (artical.length==0){
+                    var artical=(row.report_content.weibo_list||JSON.parse(row.report_content)),str='';
+                    console.log(artical)
+                    if (artical.length==0||artical==''){
                         str='<div style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</div>';
                     }else {
                         $.each(artical,function (index,item) {
                             var text,time,name,img,row,text2,all;
-                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
-                                name=item.uid||'未命名';
+                            console.log(item.qq_group_nickname)
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||
+                                item.qq_group_nickname==''||item.qq_group_nickname=='null'||item.qq_group_nickname=='unknown'){
+                                name=item.uid||item.qq_group_number||'未命名';
                             }else {
-                                name=item.nick_name;
+                                name=item.nick_name||item.qq_group_nickname;
                             };
                             if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                                 img='/static/images/unknown.png';
@@ -124,27 +130,22 @@ function reportDefaul(data) {
                                 '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
                                 '   <img src="'+img+'" alt="" class="center_icon">'+
                                 '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
-                                '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                                // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                                '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
                                 '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
                                 '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
                                 '   <p class="allall1" style="display:none;">'+text+'</p>'+
                                 '   <p class="allall2" style="display:none;">'+text2+'</p>'+
                                 '   <span class="center_2">'+text2+'</span>'+
-                                // '   <div class="center_3">'+
-                                // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                                // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                                // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                                // '    </div>'+
                                 '</div>'
                         });
                     }
                     var nameuid,time,report_type,xnr;
-                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
-                        nameuid = row.uid;
+                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'||
+                        row.qq_nickname==''||row.qq_nickname=='null'||row.qq_nickname=='unknown'){
+                        nameuid = row.uid||row.qq_number||'未知';
                     }else {
-                        nameuid = row.event_name;
+                        nameuid = row.event_name||row.qq_nickname||'未知';
                     };
                     if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
                         time = '未知';
@@ -291,7 +292,6 @@ function WXreportDefaul(data) {
     $('.person').show();
 }
 //=========
-
 var $this_point;
 function chooseNo(_this) {
     $this_point=_this;
@@ -332,7 +332,6 @@ function deltPointData(_this) {
     if (h==0){$('.filesList').hide()}
 }
 //切换类型
-
 $('.type2 .demo-label').on('click',function () {
     $('.person p').show();
     var types=[];
@@ -355,8 +354,18 @@ $('.type2 .demo-label').on('click',function () {
     }
     $('.personContent p').show();
     $('.person').hide();
-    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+types.join(',')+
-        '&start_time='+time1+'&end_time='+time2;
+    var newReport_url;
+    if (flagType==1||flagType==4||flagType==5){
+        newReport_url='/'+beginUrl+'/show_reportcontent_new/?report_type='+types.join(',')+
+            '&start_time='+time1+'&end_time='+time2;
+    }else if(flagType==2){
+        newReport_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+            '&report_type='+types.join(',')+'&start_ts='+time1+'&end_ts='+time2;
+    }else if(flagType==3){
+        newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+        public_ajax.call_request('get',newReport_url,WXreportDefaul);
+        return false;
+    }
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
 //时间选择
@@ -376,9 +385,20 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
-        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        var weiboUrl;
+        if (flagType==1||flagType==4||flagType==5){
+            weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
+                '&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        }else if(flagType==2){
+            weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+                '&report_type='+valCH.join(',')+'&start_ts='+getDaysBefore(_val)+'&end_ts='+time2;
+        }else if(flagType==3){
+            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            public_ajax.call_request('get',newReport_url,WXreportDefaul);
+            return false;
+        }
         public_ajax.call_request('get',weiboUrl,reportDefaul);
-    }//show_reportcontent_new
+    }
 });
 $('#sure').on('click',function () {
     $('.personContent p').show();
@@ -393,8 +413,19 @@ $('#sure').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+
-            '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        var weiboUrl;
+        if (flagType==1||flagType==4||flagType==5){
+            weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
+                '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        }else if(flagType==2){
+            weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+                '&report_type='+valCH.join(',')+'&start_ts='+(Date.parse(new Date(s))/1000)+
+                '&end_ts='+(Date.parse(new Date(d))/1000);
+        }else if(flagType==3){
+            weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            public_ajax.call_request('get',weiboUrl,WXreportDefaul);
+            return false;
+        }
         public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
 });

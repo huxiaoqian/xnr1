@@ -66,7 +66,7 @@ $('#create').on('click',function () {
 });
 function reshIntelligent(data) {
     var f='操作失败。';
-    if (data== 'True'){
+    if (data=='true'){
         f='操作成功。';
     }else if (data== 'exists'){
         f='请更换一个事件名称。';
@@ -202,7 +202,7 @@ function intelligentList(data) {
                 formatter: function (value, row, index) {
                     var status;
                     if (row.compute_status==''||row.compute_status=='null'||
-                        row.compute_status=='unknown'||!row.compute_status){
+                        row.compute_status=='unknown'){
                         status='未知';
                     }else {
                         var t=row.compute_status;

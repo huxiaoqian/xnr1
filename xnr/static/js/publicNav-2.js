@@ -125,7 +125,7 @@ setTimeout(function () {
         urlFirst_zpd='twitter_xnr_operate';mft_id='tid';reportWaring='twitter_xnr_warning';
         first_url='/twitter_xnr_monitor/addto_facebook_corpus/';reportInfo='tw_info';
     }
-},1000)
+},1000);
 //retweet_operate   comment_operate   like_operate
 //转发 分享  转推
 var for_type,for_this;
