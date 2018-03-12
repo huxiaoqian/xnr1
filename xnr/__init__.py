@@ -66,8 +66,13 @@ from flask_security import SQLAlchemyUserDatastore
 from flask_admin.contrib import sqla
 from xnr.jinja import gender, tsfmt, Int2string, gender_text, user_email, user_location, user_birth, user_vertify, weibo_source
 
-from flask_mail import Mail
 
+from flask_mail import Mail
+from werkzeug.local import LocalProxy
+
+#_security = LocalProxy(lambda: current_app.extensions['security'])
+
+#_datastore = LocalProxy(lambda: _security.datastore)
 
 def create_app():
     app = Flask(__name__)
@@ -146,6 +151,8 @@ def create_app():
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
     app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+    #app.config['SECURITY_CONFIRMABLE']=True
+    app.config['SECURITY_RETYPABLE']=True
 
     '''
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://%s:@%s/%s?charset=utf8' % (MYSQL_USER, MYSQL_HOST, MYSQL_DB)
