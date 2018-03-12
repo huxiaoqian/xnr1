@@ -36,11 +36,11 @@ function senNews(data) {
                     }else {
                         name=row.qq_group_nickname;
                     };
-                    if (row.qq_group_number==''||row.qq_group_number=='null'||row.qq_group_number=='unknown'){
-                        groupNum='QQ群号码未知';
-                    }else {
-                        groupNum=row.qq_group_number;
-                    };
+                    // if (row.qq_group_number==''||row.qq_group_number=='null'||row.qq_group_number=='unknown'){
+                    //     groupNum='QQ群号码未知';
+                    // }else {
+                    //     groupNum=row.qq_group_number;
+                    // };
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
@@ -61,8 +61,8 @@ function senNews(data) {
                         '           <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
                         '           <img src="/static/images/post-6.png" class="center_icon">'+
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+groupNum+'</b><span>）</span>' +
-                        '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</b>  '+
+                        '               <b class="name">'+name+'</b>'+// <span>（</span><b class="QQnum">'+groupNum+'</b><span>）</span>' +
+                        '               <b class="time" style="display: inline-block;margin-left:30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</b>  '+
                         '               <span class="joinWord" onclick="joinWord(this)" tp="言论">上报</span>'+
                         '           </a>'+
                         '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b><span>'+txt+'</span></div>'+
@@ -166,7 +166,7 @@ function senUser(data) {
                                 '<div class="center_rel">'+
                                 '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
                                 '   <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                                '       <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+(k||'QQ群号码未知')+'</b><span>）</span>' +
+                                '       <b class="name">'+row.qq_groups[k]+'</b>'+// <span>（</span><b class="QQnum">'+(k||'QQ群号码未知')+'</b><span>）</span>' +
                                 '   </a>'+
                                 '</div>';
                         }
