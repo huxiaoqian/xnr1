@@ -235,7 +235,7 @@ def get_daily_recommend_tweets(theme,sort_item):
         },
         'sort':{sort_item:{'order':'desc'}}
     }
-    es_results = es.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['_source']
+    es_results = es.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
     
     results_all = []
     for result in es_results:
