@@ -619,8 +619,12 @@ def get_influ_fans_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    fans_total_num_last = get_result['fans_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        fans_total_num_last = get_result['fans_total_num']
+    except:
+        fans_total_num_last = 0
+
     if not fans_total_num_last:
         fans_total_num_last = 1
 
@@ -704,8 +708,11 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    retweet_total_num_last = get_result['retweet_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        retweet_total_num_last = get_result['retweet_total_num']
+    except:
+        retweet_total_num_last = 0
 
     if not retweet_total_num_last:
         retweet_total_num_last = 1
@@ -795,8 +802,11 @@ def get_influ_commented_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    comment_total_num_last = get_result['comment_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        comment_total_num_last = get_result['comment_total_num']
+    except:
+        comment_total_num_last = 0
 
     if not comment_total_num_last:
         comment_total_num_last = 1
@@ -815,18 +825,7 @@ def get_influ_like_num(xnr_user_no,current_time):
 
     uid = xnr_user_no2uid(xnr_user_no)
 
-    #if xnr_user_no:
-        # if S_TYPE == 'test':
-        #     es_results = es.search(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
-        #                         body={'query':{'match_all':{}},'sort':{'timestamp':{'order':'desc'}}})['hits']['hits']
-        #     current_time = es_results[0]['_source']['timestamp']
-        # else:
-        #     current_time = time.time()
-        
-    # if S_TYPE == 'test':
-    #     current_time = datetime2ts('2017-10-07')
-    # else:
-    #     current_time = int(time.time())
+
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
@@ -883,8 +882,11 @@ def get_influ_like_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    like_total_num_last = get_result['like_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        like_total_num_last = get_result['like_total_num']
+    except:
+        like_total_num_last = 0
 
     if not like_total_num_last:
         like_total_num_last = 1
@@ -970,8 +972,11 @@ def get_influ_at_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    at_total_num_last = get_result['at_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        at_total_num_last = get_result['at_total_num']
+    except:
+        at_total_num_last = 0
 
     if not at_total_num_last:
         at_total_num_last = 1
@@ -1062,8 +1067,11 @@ def get_influ_private_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    private_total_num_last = get_result['private_total_num']
+    try:
+        get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+        private_total_num_last = get_result['private_total_num']
+    except:
+        private_total_num_last = 0
 
     if not private_total_num_last:
         private_total_num_last = 1
