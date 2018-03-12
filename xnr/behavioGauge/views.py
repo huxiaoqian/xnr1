@@ -10,6 +10,10 @@ from flask import Blueprint, url_for, render_template, request,\
 
 mod = Blueprint('behavioGauge', __name__, url_prefix='/behavioGauge')
 
+@mod.route('/evCompare/')
+def evCompare():
+    return render_template('behavioGauge/evCompare.html')
+
 @mod.route('/influeAssess/')
 def influeAssess():
     return render_template('behavioGauge/influe_assess.html')
