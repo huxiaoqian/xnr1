@@ -7,10 +7,12 @@ import json
 import time
 import sys
 reload(sys)
+import sqlite
+import sqlite3
 sys.path.append('../../')
-from timed_python_files.system_log_create import get_user_account_list
+# from timed_python_files.system_log_create import get_user_account_list
 from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH,MAX_SEARCH_SIZE,MAX_WARMING_SIZE,USER_XNR_NUM,\
-                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
+                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE,EVENT_OFFLINE_COUNT
 from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING,S_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime
 from global_utils import R_CLUSTER_FLOW2 as r_cluster
@@ -24,6 +26,17 @@ from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fa
                          weibo_date_remind_index_name,weibo_date_remind_index_type,\
                          weibo_event_warning_index_name_pre,weibo_event_warning_index_type,\
                          es_user_profile,profile_index_name,profile_index_type
+
+#连接数据库,获取账户列表
+def get_user_account_list():     
+    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    # cx = sqlite3.connect("/home/xnr_0110/xnr1/xnr/flask-admin.db")
+    cu=cx.cursor()
+    cu.execute("select email from user") 
+    user_info = cu.fetchall()
+    cx.close()
+    return user_info
+
 
 #查询用户昵称
 def get_user_nickname(uid):
