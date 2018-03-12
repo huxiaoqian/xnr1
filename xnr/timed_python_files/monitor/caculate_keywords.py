@@ -7,7 +7,7 @@ import json
 import time
 import sys
 reload(sys)
-sys.path.append('../')
+sys.path.append('../../')
 from global_config import S_TYPE
 from time_utils import ts2datetime,datetime2ts
 from global_utils import es_xnr,weibo_keyword_count_index_name,weibo_keyword_count_index_type,\
