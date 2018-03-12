@@ -18,7 +18,8 @@ class SinaLauncher():
     def __init__(self, username, password):
         self.password = password
         self.username = username
-    
+        print 'username..',username
+        print 'password..',password
     def get_prelogin_args(self):
         """
         该函数用于模拟预登录过程,并获取服务器返回的 nonce , servertime , pub_key 等信息
@@ -29,7 +30,11 @@ class SinaLauncher():
         try:
             request = urllib2.Request(url)
             response = urllib2.urlopen(request)
+            print 'response..',response
             raw_data = response.read().decode('utf-8')
+            print 'raw_data...',raw_data
+            print 'json_pattern.search(raw_data)..',json_pattern.search(raw_data)
+            
             json_data = json_pattern.search(raw_data).group(1)
             data = json.loads(json_data)
             # print data
