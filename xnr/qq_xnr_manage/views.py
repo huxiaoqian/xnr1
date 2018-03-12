@@ -31,13 +31,13 @@ def ajax_get_qr_code():
         print 'path..',path
         if path != None:
             if path == 'login':
-                return 'login'
+                return json.dumps(path)
             new_path = '/'.join(path.split('/')[-2:])
             print 'new_path::',new_path
             return json.dumps(new_path)
         
         else:
-            return 'try later'
+            return json.dumps('try later')
     else:
         return False
 

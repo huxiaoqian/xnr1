@@ -1,9 +1,8 @@
 //敏感消息
 var senNews_url='/qq_xnr_monitor/search_by_xnr_number/?xnr_number='+userQQnum+'&date='+(Number(Date.parse(new Date()))/1000);
-console.log(senNews_url)
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
-    var news=data.hits.hits;
+    var news=data;
     $('#content-1-word').bootstrapTable('load', news);
     $('#content-1-word').bootstrapTable({
         data:news,
@@ -31,17 +30,22 @@ function senNews(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,txt;
-                    if (row._source.qq_group_nickname==''||row._source.qq_group_nickname=='null'||row._source.qq_group_nickname=='unknown'){
-                        name=row._source.qq_group_number;
+                    var name,txt,groupNum;
+                    if (row.qq_group_nickname==''||row.qq_group_nickname=='null'||row.qq_group_nickname=='unknown'){
+                        name=row.qq_group_number;
                     }else {
-                        name=row._source.qq_group_nickname;
+                        name=row.qq_group_nickname;
                     };
-                    if (row._source.text==''||row._source.text=='null'||row._source.text=='unknown'){
+                    // if (row.qq_group_number==''||row.qq_group_number=='null'||row.qq_group_number=='unknown'){
+                    //     groupNum='QQ群号码未知';
+                    // }else {
+                    //     groupNum=row.qq_group_number;
+                    // };
+                    if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
                     }else {
-                        var keyword=row._source.sensitive_words_string.split('&');
-                        var s=row._source.text;
+                        var keyword=row.sensitive_words_string.split('&');
+                        var s=row.text;
                         for (var f=0;f<keyword.length;f++){
                             s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
                         }
@@ -51,11 +55,15 @@ function senNews(data) {
                         '<div class="everySpeak">'+
                         '   <div class="speak_center">'+
                         '       <div class="center_rel" style="text-align: left;">'+
+                        '           <a class="speakerName" style="display: none;">'+row.speaker_nickname+'</a>'+
+                        '           <a class="qqNumber" style="display: none;">'+row.speaker_qq_number+'</a>'+
+                        '           <a class="_id" style="display: none;">'+row._id+'</a>'+
+                        '           <a class="timestamp" style="display: none;">'+row.timestamp+'</a>'+
                         '           <img src="/static/images/post-6.png" class="center_icon">'+
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
-                        '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
-                        '               <span class="joinWord" onclick="joinWord(this)" tp="content">上报</span>'+
+                        '               <b class="name">'+name+'</b>'+// <span>（</span><b class="QQnum">'+groupNum+'</b><span>）</span>' +
+                        '               <b class="time" style="display: inline-block;margin-left:30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row.timestamp)+'</b>  '+
+                        '               <span class="joinWord" onclick="joinWord(this)" tp="言论">上报</span>'+
                         '           </a>'+
                         '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b><span>'+txt+'</span></div>'+
                         '       </div>'+
@@ -72,7 +80,6 @@ function senNews(data) {
 var senUserurl='/qq_xnr_monitor/show_sensitive_users/?xnr_number='+userQQnum;
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
-    console.log(data)
     $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
         data:data,
@@ -92,14 +99,14 @@ function senUser(data) {
         sortName:'bci',
         sortOrder:"desc",
         columns: [
-            {
-                title: "QQ号码",//标题
-                field: "qq_number",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
+            // {
+            //     title: "QQ号码",//标题
+            //     field: "qq_number",//键名
+            //     sortable: true,//是否可排序
+            //     order: "desc",//默认排序方式
+            //     align: "center",//水平
+            //     valign: "middle",//垂直
+            // },
             {
                 title: "昵称",//标题
                 field: "qq_nick",//键名
@@ -159,7 +166,7 @@ function senUser(data) {
                                 '<div class="center_rel">'+
                                 '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
                                 '   <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                                '       <b class="name">'+row.qq_groups[k]+'</b> <span>（</span><b class="QQnum">'+k+'</b><span>）</span>' +
+                                '       <b class="name">'+row.qq_groups[k]+'</b>'+// <span>（</span><b class="QQnum">'+(k||'QQ群号码未知')+'</b><span>）</span>' +
                                 '   </a>'+
                                 '</div>';
                         }
@@ -167,33 +174,21 @@ function senUser(data) {
                     return str;
                 }
             },
+            {
+                title: "操作",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    qqgroup['index_'+index]=row.qq_groups;
+                    rowList['row_'+index]=row;
+                    return '<span title="上报此用户" onclick="joinWord(\''+index+'\',\'人物\')" style="display: inline-block;margin-right: 20px;cursor: pointer;"><i class="icon icon-upload"></i></span>' +
+                        '<span title="查看消息" onclick="lookNews(\''+index+'\')" style="cursor: pointer;"><i class="icon icon-file"></i></span>';
+                }
+            },
         ],
-        onClickRow: function (row, $element) {
-            $('#QQgroup_weibo .QW-1').text(row.qq_number);
-            var txt=row.text,str='';
-            if (txt.length!=0||txt){
-                $.each(txt,function (index,item) {
-                    var keyword=item[2].split('&');
-                    var s=item[0];
-                    for (var f=0;f<keyword.length;f++){
-                        s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
-                    }
-
-                    str+=
-                        '<div class="center_rel" style="margin-bottom: 10px;">'+
-                        '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
-                        '   <a class="center_1 qq-2" href="###" style="font-weight: 700;color: white;">'+s+'</a>'+
-                        '   <b class="qq-1" style="display: none;">'+item[1]+'</b>'+
-                        '   <span class="joinWord" onclick="joinWord(this)" tp="user">上报</span>'+
-                        '</div>';
-                })
-            }else {
-                str='<p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">暂无任何敏感内容</p>';
-            }
-
-            $('#QQgroup_weibo .QW-2').html(str);
-            $('#QQgroup_weibo').modal('show');
-        }
     });
     $('.hot-2 .search .form-control').attr('placeholder','请输入关键词或人物昵称或人物qq号码（回车搜索）');
 }
@@ -211,30 +206,74 @@ $('#container .titTime .timeSure').on('click',function () {
         public_ajax.call_request('get',senUserurl,senUser);
     }
 });
+//消息
+var rowList={};
+function lookNews(index) {
+    var row=rowList['row_'+index];
+    $('#QQgroup_weibo .QW-1').text(row.qq_number);
+    var txt=row.text,str='';
+    if (txt.length!=0||txt){
+        $.each(txt,function (index,item) {
+            var keyword=item[2].split('&');
+            var s=item[0];
+            for (var f=0;f<keyword.length;f++){
+                s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+            }
+
+            str+=
+                '<div class="center_rel" style="margin-bottom: 10px;">'+
+                '   <img src="/static/images/post-6.png" class="center_icon" style="width: 20px;height: 20px;">'+
+                '   <a class="center_1 qq-2" href="###" style="font-weight: 700;color: white;">'+s+'</a>'+
+                '   <b class="qq-1" style="display: none;">'+item[1]+'</b>'+
+                // '   <span class="joinWord" onclick="joinWord(this)" tp="user">上报</span>'+
+                '</div>';
+        })
+    }else {
+        str='<p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">暂无任何敏感内容</p>';
+    }
+    $('#QQgroup_weibo .QW-2').html(str);
+    $('#QQgroup_weibo').modal('show');
+}
 //上报
-function joinWord(_this) {
-    var qq_1=($(_this).parents('.center_1').find('.QQnum').text())||($(_this).prev().text());
-    var qq_2=($(_this).parents('.center_1').next('.center_2').find('span').text())||($(_this).parents('.center_rel').find('qq-2').text());
-    var reportType=$(_this).attr('tp');
-    var upload_mange_url='/qq_xnr_monitor/report_warming_content/?report_type='+reportType+'&xnr_user_no='+ID_Num+
-        '&qq_number='+qq_1+'&report_content='+qq_2;
-    var uploadData={'report_type':reportType, "xnr_user_no": ID_Num,"qq_number": qq_1, "report_content": qq_2};
+var qqgroup={};
+function joinWord(_this,tpN) {
+    var qq_3='';
+    var reportType=$(_this).attr('tp')||tpN;
+    var userList=[],contentList=[];
+    if (reportType=='言论'){
+        qq_1=$(_this).parents('.center_rel').find('.speakerName').text();
+        qq_2=$(_this).parents('.center_rel').find('.qqNumber').text();
+        qq_3=$(_this).parents('.center_rel').find('._id').text();
+        var qq_4=$(_this).parents('.center_rel').find('.timestamp').text();
+        contentList.push({'_id':qq_3,'timestamp':qq_4});
+    }else {
+        var row=rowList['row_'+_this];
+        qq_1=row.qq_nick;
+        qq_2=row.qq_number;
+        var qq_4=row.qq_groups;
+        var qq_5=row.count;
+        var qq_6=row.last_speak_ts;
+        userList=[{'qq_nick':qq_1,'qq_groups':qq_4,'count':qq_5,'last_speak_ts':qq_6}]
+    };
+    var uploadData={
+        'report_type':reportType,
+        "xnr_user_no": ID_Num,
+        "qq_nickname": qq_1,
+        "qq_number": qq_2,
+        "report_id": qq_3,
+        "user_info":userList,
+        "content_info":contentList,
+    };
     uploadData=JSON.stringify(uploadData);
     $.ajax({
-        type:'get',
-        url:'/qq_xnr_monitor/report_warming_content/',
-        async:true,
-        dataType:"json",
-        data:uploadData,
+        type:'POST',
+        url:'/qq_xnr_monitor/report_warming_content_new/',
+        contentType:"application/json",
+        data: uploadData,
+        dataType: "json",
         success:postYES,
         error:function (xhr,textStatus,errorThrown) {
-            //请求失败执行的函数
-            console.log("请求失败",textStatus,errorThrown);
             var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。';
-            if (ISclear=='clear'){
-                errorHtml='登录过期，请清除缓存，重新登录。'
-                ISclear='againSet';
-            }
             $('#errorInfor p').text(errorHtml);
             $('#errorInfor').modal('show');
         },
@@ -243,8 +282,8 @@ function joinWord(_this) {
 //确定加入
 //操作返回结果
 function postYES(data) {
-    var f='';
-    if (data){f='操作成功'}else {f='操作失败'};
+    var f='操作失败';
+    if (data){f='操作成功'};
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
 }

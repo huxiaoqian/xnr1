@@ -1,93 +1,36 @@
-var reportDefaul_url;
+var reportDefaul_url,beginUrl;
 var time2=Date.parse(new Date())/1000;
-if(flagType == 3){
-    //===============时间搜索添加11---21 ===============
-    var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="0">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 今天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="1">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 昨天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="7" checked>'
-            +'<span class="demo-checkbox demo-radioInput"></span> 7天'
-        +'</label>'
-        +'<label class="demo-label">'
-           +'<input class="demo-radio" type="radio" name="time1" value="30">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 30天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="mize">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 自定义'
-        +'</label>'
-        +'<input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"'
-               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
-                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
-        +'<input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"'
-               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
-                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
-        +'<span id="sure" class="sureTime">确定</span>'
-    +'</div>';
-    $('#container .title').after(choosetimeStr)
-
-    // 时间选项
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView:2, //控制时分秒
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left"
-    });
-    $('.choosetime .demo-label input').on('click',function () {
-        var _val=$(this).val();
-        if (_val=='mize'){
-            $('#start_1').show();
-            $('#end_1').show();
-            $('.sureTime').show();
-        }else {
-            $('#start_1').hide();
-            $('#end_1').hide();
-            $('.sureTime').hide();
-            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
-            public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
-        }
-    });
-    // 确定时间搜索
-    $('.sureTime').on('click',function () {
-        var s=$('#start_1').val();
-        var d=$('#end_1').val();
-        if (s==''||d==''){
-            $('#pormpt p').text('请检查时间，不能为空。');
-            $('#pormpt').modal('show');
-        }else {
-            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
-        }
-    });
-    weiboORqq('WX');
-    reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
-    public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
-}else if(flagType == 1){//微博
+if(flagType == 1){//微博
+    beginUrl='weibo_xnr_report_manage';
     weiboORqq('weibo');
     reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+time2;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
+    $('.qqHide').hide();
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/qq_xnr_report_manage/show_reportcontent_new/?qq_xnr_no='+ID_Num+'&report_type=content&start_ts='+start_ts+'&end_ts='+end_ts;
+    reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+}else if(flagType == 3){
+    weiboORqq('WX');
+    reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+    public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if (flagType == 4){
+    beginUrl='facebook_xnr_report_manage';
     weiboORqq('faceBook');
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
-    reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论,事件,时间&start_time='+start_ts+'&end_time='+end_ts;
+    reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
-}
-// var reportDefaul_url='/weibo_xnr_report_manage/show_report_content/';
-// public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+}else if (flagType == 5){
+    beginUrl='twitter_xnr_report_manage';
+    weiboORqq('twitter');
+    var start_ts=getDaysBefore(7);
+    var end_ts= todayTimetamp();
+    reportDefaul_url='/twitter_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
+    public_ajax.call_request('get',reportDefaul_url,reportDefaul);
+};
 var currentData={},wordCurrentData={},currentDataPrival={};
 function reportDefaul(data) {
     $.each(data,function (index,item) {
@@ -120,91 +63,141 @@ function reportDefaul(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var artical=row.report_content.weibo_list,str='';
-                    if (artical.length==0){
+                    var artical=(row.report_content.weibo_list||JSON.parse(row.report_content)),str='';
+                    if (artical.length==0||artical==''){
                         str='<div style="text-align:center;margin: 10px 0;background:#06162d;padding: 10px 0;">暂无内容</div>';
                     }else {
                         $.each(artical,function (index,item) {
                             var text,time,name,img,row,text2,all;
-                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
-                                name=item.uid||'未命名';
+                            if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||
+                                item.qq_group_nickname==''||item.qq_group_nickname=='null'||item.qq_group_nickname=='unknown'){
+                                name=item.uid||item.qq_group_number||'未命名';
                             }else {
-                                name=item.nick_name;
+                                name=item.nick_name||item.qq_group_nickname;
                             };
                             if (item.photo_url==''||item.photo_url=='null'||item.photo_url=='unknown'||!item.photo_url){
                                 img='/static/images/unknown.png';
                             }else {
                                 img=item.photo_url;
                             };
-                            if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
+                            if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text||item.text.length==0){
                                 text='暂无内容';
                             }else {
-                                if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
-                                    var s=item.text;
-                                    var keywords=item.sensitive_words_string.split('&');
-                                    for (var f=0;f<keywords.length;f++){
-                                        s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
-                                    }
-                                    text=s;
+                                if(!(item.text instanceof Object)){
+                                    if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
+                                        var s=item.text;
+                                        var keywords=item.sensitive_words_string.split('&');
+                                        for (var f=0;f<keywords.length;f++){
+                                            s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
+                                        }
+                                        text=s;
 
-                                    var rrr=item.text;
-                                    if (rrr.length>=160){
-                                        rrr=rrr.substring(0,160)+'...';
-                                        all='inline-block';
+                                        var rrr=item.text;
+                                        if (rrr.length>=160){
+                                            rrr=rrr.substring(0,160)+'...';
+                                            all='inline-block';
+                                        }else {
+                                            rrr=item.text;
+                                            all='none';
+                                        }
+                                        for (var f of keywords){
+                                            rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                        }
+                                        text2=rrr;
                                     }else {
-                                        rrr=item.text;
-                                        all='none';
+                                        text=item.text;
+                                        if (text.length>=160){
+                                            text2=text.substring(0,160)+'...';
+                                            all='inline-block';
+                                        }else {
+                                            text2=text;
+                                            all='none';
+                                        }
+                                    };
+                                    if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'){
+                                        time='未知';
+                                    }else {
+                                        time=getLocalTime(item.timestamp);
+                                    };
+                                    var sye_1='',sye_2='';
+                                    if (Number(item.sensitive) < 50){
+                                        sye_1='border-color: transparent transparent #131313';
+                                        sye_2='color: yellow';
                                     }
-                                    for (var f of keywords){
-                                        rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
-                                    }
-                                    text2=rrr;
+                                    str+=
+                                        '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                                        '   <img src="'+img+'" alt="" class="center_icon">'+
+                                        '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
+                                        // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                        // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                        '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>'+
+                                        '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                                        '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                                        '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                                        '   <span class="center_2">'+text2+'</span>'+
+                                        '</div>';
                                 }else {
-                                    text=item.text;
-                                    if (txt.length>=160){
-                                        text2=txt.substring(0,160)+'...';
-                                        all='inline-block';
-                                    }else {
-                                        text2=txt;
-                                        all='none';
+                                    if(!name){
+                                        name=Object.values(item.qq_groups)[0];
                                     }
-                                };
+                                    var relTxt=item.text.text;
+                                    var text,time,text2;
+                                    $.each(relTxt,function (index,item) {
+                                        if (item[2]){
+                                            var s=item[0];
+                                            var keywords=item[2];
+                                            s=s.toString().replace(new RegExp(keywords,'g'),'<b style="color:#ef3e3e;">'+keywords+'</b>');
+                                            text=s;
+
+                                            var rrr=item[0];
+                                            if (rrr.length>=160){
+                                                rrr=rrr.substring(0,160)+'...';
+                                                all='inline-block';
+                                            }else {
+                                                rrr=item[0];
+                                                all='none';
+                                            }
+                                            rrr=rrr.toString().replace(new RegExp(keywords,'g'),'<b style="color:#ef3e3e;">'+keywords+'</b>');
+                                            text2=rrr;
+                                        }else {
+                                            text=item[0];
+                                            if (text.length>=160){
+                                                text2=text.substring(0,160)+'...';
+                                                all='inline-block';
+                                            }else {
+                                                text2=text;
+                                                all='none';
+                                            }
+                                        };
+                                        if (item[1]==''||item[1]=='null'||item[1]=='unknown'){
+                                            time='未知';
+                                        }else {
+                                            time=getLocalTime(item[1]);
+                                        };
+                                        str+=
+                                            '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
+                                            '   <img src="'+img+'" alt="" class="center_icon">'+
+                                            '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
+                                            // '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
+                                            // '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
+                                            '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>'+
+                                            '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                                            '   <p class="allall1" style="display:none;">'+text+'</p>'+
+                                            '   <p class="allall2" style="display:none;">'+text2+'</p>'+
+                                            '   <span class="center_2">'+text2+'</span>'+
+                                            '</div>';
+                                    })
+                                }
                             };
-                            if (item.timestamp==''||item.timestamp=='null'||item.timestamp=='unknown'||!item.timestamp){
-                                time='未知';
-                            }else {
-                                time=getLocalTime(item.timestamp);
-                            };
-                            var sye_1='',sye_2='';
-                            if (Number(item.sensitive) < 50){
-                                sye_1='border-color: transparent transparent #131313';
-                                sye_2='color: yellow';
-                            }
-                            str+=
-                                '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                                '   <img src="'+img+'" alt="" class="center_icon">'+
-                                '   <a class="center_1" style="color:#f98077;">'+name+'</a>'+
-                                '   <a class="mid" style="display: none;">'+item.mid+'</a>'+
-                                // '   <a class="uid" style="display: none;">'+item.uid+'</a>'+
-                                '   <a class="timestamp" style="display: none;">'+item.timestamp+'</a>'+
-                                '   <span class="cen3-1" style="color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>'+
-                                '   <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
-                                '   <p class="allall1" style="display:none;">'+text+'</p>'+
-                                '   <p class="allall2" style="display:none;">'+text2+'</p>'+
-                                '   <span class="center_2">'+text2+'</span>'+
-                                // '   <div class="center_3">'+
-                                // '       <span class="cen3-2"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（<b class="forwarding">'+item.retweeted+'</b>）</span>'+
-                                // '       <span class="cen3-3"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（<b class="comment">'+item.comment+'</b>）</span>'+
-                                // '       <span class="cen3-4"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
-                                // '    </div>'+
-                                '</div>'
+
                         });
                     }
                     var nameuid,time,report_type,xnr;
-                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'){
-                        nameuid = row.uid;
+                    if (row.event_name==''||row.event_name=='null'||row.event_name=='unknown'||
+                        row.qq_nickname==''||row.qq_nickname=='null'||row.qq_nickname=='unknown'){
+                        nameuid = row.uid||row.qq_number||'未知';
                     }else {
-                        nameuid = row.event_name;
+                        nameuid = row.event_name||row.qq_nickname||'未知';
                     };
                     if (row.report_time==''||row.report_time=='null'||row.report_time=='unknown'){
                         time = '未知';
@@ -351,7 +344,6 @@ function WXreportDefaul(data) {
     $('.person').show();
 }
 //=========
-
 var $this_point;
 function chooseNo(_this) {
     $this_point=_this;
@@ -392,7 +384,6 @@ function deltPointData(_this) {
     if (h==0){$('.filesList').hide()}
 }
 //切换类型
-
 $('.type2 .demo-label').on('click',function () {
     $('.person p').show();
     var types=[];
@@ -415,8 +406,18 @@ $('.type2 .demo-label').on('click',function () {
     }
     $('.personContent p').show();
     $('.person').hide();
-    var newReport_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+types.join(',')+
-        '&start_time='+time1+'&end_time='+time2;
+    var newReport_url;
+    if (flagType==1||flagType==4||flagType==5){
+        newReport_url='/'+beginUrl+'/show_reportcontent_new/?report_type='+types.join(',')+
+            '&start_time='+time1+'&end_time='+time2;
+    }else if(flagType==2){
+        newReport_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+            '&report_type='+types.join(',')+'&start_ts='+time1+'&end_ts='+time2;
+    }else if(flagType==3){
+        newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+        public_ajax.call_request('get',newReport_url,WXreportDefaul);
+        return false;
+    }
     public_ajax.call_request('get',newReport_url,reportDefaul);
 });
 //时间选择
@@ -436,9 +437,20 @@ $('.choosetime .demo-label input').on('click',function () {
         $(this).parents('.choosetime').find('#start').hide();
         $(this).parents('.choosetime').find('#end').hide();
         $(this).parents('.choosetime').find('#sure').hide();
-        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        var weiboUrl;
+        if (flagType==1||flagType==4||flagType==5){
+            weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
+                '&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        }else if(flagType==2){
+            weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+                '&report_type='+valCH.join(',')+'&start_ts='+getDaysBefore(_val)+'&end_ts='+time2;
+        }else if(flagType==3){
+            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            public_ajax.call_request('get',newReport_url,WXreportDefaul);
+            return false;
+        }
         public_ajax.call_request('get',weiboUrl,reportDefaul);
-    }//show_reportcontent_new
+    }
 });
 $('#sure').on('click',function () {
     $('.personContent p').show();
@@ -453,8 +465,19 @@ $('#sure').on('click',function () {
         $('#pormpt p').text('时间不能为空。');
         $('#pormpt').modal('show');
     }else {
-        var weiboUrl='/weibo_xnr_report_manage/show_reportcontent_new/?report_type='+valCH.join(',')+
-            '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        var weiboUrl;
+        if (flagType==1||flagType==4||flagType==5){
+            weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
+                '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        }else if(flagType==2){
+            weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
+                '&report_type='+valCH.join(',')+'&start_ts='+(Date.parse(new Date(s))/1000)+
+                '&end_ts='+(Date.parse(new Date(d))/1000);
+        }else if(flagType==3){
+            weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            public_ajax.call_request('get',weiboUrl,WXreportDefaul);
+            return false;
+        }
         public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
 });
