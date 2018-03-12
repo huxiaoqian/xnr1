@@ -124,14 +124,14 @@ def detect_by_keywords(keywords,datetime_list):
 
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
-    en_keywords_list = trans(keywords_list, target_language='en')
+    # en_keywords_list = trans(keywords_list, target_language='en')
     for i in range(len(keywords_list)):
         keyword = keywords_list[i]
         traditional_keyword = simplified2traditional(keyword)
         
-        if len(en_keywords_list) == len(keywords_list): #确保翻译没出错
-            en_keyword = en_keywords_list[i]
-            nest_query_list.append({'wildcard':{query_item:'*'+en_keyword+'*'}})
+        # if len(en_keywords_list) == len(keywords_list): #确保翻译没出错
+        #     en_keyword = en_keywords_list[i]
+        #     nest_query_list.append({'wildcard':{query_item:'*'+en_keyword+'*'}})
         
         nest_query_list.append({'wildcard':{query_item:'*'+keyword+'*'}})
         nest_query_list.append({'wildcard':{query_item:'*'+traditional_keyword+'*'}})
@@ -270,7 +270,7 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
     expand_userid_list = origin_relationer_uidlist
     uid_num = len(expand_userid_list)
 
-    while uid_num >= MIN_TARGET_USER_NUM:
+    while uid_num <= MIN_TARGET_USER_NUM:
         temp_uidlist = detect_by_seed_users(expand_userid_list)
         expand_userid_list.extend(temp_uidlist)
         uid_num = len(expand_userid_list)
@@ -312,6 +312,7 @@ def create_xnr_targetuser(xnr_user_no):
 
     #step3.3：基于关键词和种子用户扩展用户
     expand_userid_list = get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list)
+    print 'user_num::',len(expand_userid_list)
 
 
     return expand_userid_list 

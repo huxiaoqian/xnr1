@@ -99,6 +99,6 @@ if __name__ == '__main__':
         traditional_sentence = simplified2traditional(t)
         print(traditional_sentence)
 
-    voice_path = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice/2018-01-03/a.mp3'
-    print os.path.isfile(voice_path)
-    print voice2text(voice_path)
+    # voice_path = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice/2018-01-03/a.mp3'
+    # print os.path.isfile(voice_path)
+    # print voice2text(voice_path)

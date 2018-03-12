@@ -37,5 +37,5 @@ def translate(q, target_language):
 
 if __name__ == '__main__':
     q = "‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏طالبة جامعية ‏‏من مواليد [١٩٩١م] طموحي الحصول على الدكتوراه في تخصصي من هواياتي: كتابه الخط العربي وعشقي مايسمى [بالتصوير"
-    result = translate(q)
+    result = translate(q,'zh-cn')
     print result

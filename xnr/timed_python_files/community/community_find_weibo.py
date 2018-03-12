@@ -81,6 +81,7 @@ def get_users(xnr_user_no,nodes=None):
         max_count = max([int(n) for n in uid_retweet.values()])
         G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
     for i in comment_result:
+    	print 'comment_i:',i
         if not i['found']:
             continue
         uid_comment = json.loads(i['_source']['uid_comment'])
@@ -139,7 +140,8 @@ def find_from_uid_list(xnr_user_no,nodes=None,path=PATH,file_name=FILE_NAME,com_
         coms_list = coms.values()
     else:
         #传边
-        coms_list = find_community(degree_dict,G,str(int(time.time())))
+        file_path = './weibo_data/' + ts2datetime(int(time.time())) + '_' + str(int(time.time()))
+        coms_list = find_community(degree_dict,G,file_path)
     print 'find community time:',time.time()-start
     print 'post process...'
     coms_list = post_process(allG,coms_list)
@@ -284,7 +286,7 @@ def ExtendQ(G,coms_list):
 
 
 #组织社区生成
-def create_facebook_community():
+def create_weibo_community():
     # xnr_user_no_list = get_compelete_wbxnr()
     xnr_user_no_list = ['WXNR0004']
     for xnr_user_no in xnr_user_no_list:
@@ -300,7 +302,9 @@ def create_facebook_community():
         print 'allG nodes:',allG.number_of_nodes()        
         print 'G nodes:',G.number_of_nodes()
 
-        f = open('save_com_json.json','w')
+        file_path = './weibo_data/' + xnr_user_no + '_' + ts2datetime(int(time.time())) + '_' +'save_com.json'
+        print 'file_path:',file_path
+        f = open(file_path,'w')
         for k,v in enumerate(coms_list):
             #计算评价指标
             f.write(json.dumps(group_evaluate(xnr_user_no,v,all_influence,all_sensitive,G))+'\n')
@@ -310,5 +314,5 @@ def create_facebook_community():
 
 if __name__ == '__main__':
 
-    create_facebook_community()
+    create_weibo_community()
 
