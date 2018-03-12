@@ -1311,7 +1311,11 @@ def get_related_recommendation(task_detail):
     ## 监测词关注
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
-    monitor_en_keywords_list = trans(monitor_keywords_list, target_language='en')
+    try:
+        monitor_en_keywords_list = trans(monitor_keywords_list, target_language='en')
+    except Exception,e:
+        print e
+        monitor_en_keywords_list = []
     for i in range(len(monitor_keywords_list)):
         monitor_keyword = monitor_keywords_list[i]
         monitor_traditional_keyword = simplified2traditional(monitor_keyword)
@@ -1339,6 +1343,7 @@ def get_related_recommendation(task_detail):
         if sort_item == 'influence':
             # sort_item = 'user_fansnum'
             sort_item = 'share'
+        #sort_itme为share或sensitive，这两个字段在flow_text中都有，可以直接进行下面的聚合操作
         query_body_rec = {
             'query':{
                 'bool':{
@@ -1373,11 +1378,17 @@ def get_related_recommendation(task_detail):
             uid_list = [] 
         else:
             uid_list = []
-            friends_list_results = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':recommend_set_list})['_source']
-            for result in friends_list_results:
-                friends_list = friends_list + result['friend_list']
-            friends_set_list = list(set(friends_list))
-            sort_item_new = 'fansnum'
+
+            if recommend_set_list:
+                friends_list_results = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':recommend_set_list})['_source']
+                for result in friends_list_results:
+                    friends_list = friends_list + result['friend_list']
+                friends_set_list = list(set(friends_list))
+            else:
+                friends_set_list = []
+            
+            # sort_item_new = 'fansnum'
+            sort_item_new = 'share'
             query_body_rec = {
                 'query':{
                     'bool':{
@@ -1404,6 +1415,8 @@ def get_related_recommendation(task_detail):
                 
                 avg_sort_uid_dict[uid] = {}
                 avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
+
+    print 'avg_sort_uid_dict', avg_sort_uid_dict
 
     results_all = []
     for uid in uid_list:
@@ -1439,15 +1452,17 @@ def get_related_recommendation(task_detail):
                 if sort_item == 'friend':
                     if S_TYPE == 'test':
                         # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
-                        item['_source']['fansnum'] = 0
+                        item['_source']['share'] = 0
                     else:
-                        item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                        # item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                        item['_source']['share'] = avg_sort_uid_dict[uid]['sort_item_value']
                 elif sort_item == 'sensitive':
                     item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
                     # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
-                    item['_source']['fansnum'] = 0
+                    # item['_source']['fansnum'] = 0
                 else:
                     item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                    item['_source']['share'] = avg_sort_uid_dict[uid]['sort_item_value']
 
 
 

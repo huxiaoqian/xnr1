@@ -389,6 +389,10 @@ fb_xnr_index_type='user'
 fb_xnr_fans_followers_index_name='fb_xnr_fans_followers'
 fb_xnr_fans_followers_index_type='uids'
 
+#use to save weibo xnr count info
+facebook_xnr_count_info_index_name='facebook_xnr_count'
+facebook_xnr_count_info_index_type='text'
+
 #use to save feedback info
 facebook_feedback_comment_index_name_pre = 'facebook_feedback_comment_'
 facebook_feedback_comment_index_name = 'facebook_feedback_comment'
