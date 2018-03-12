@@ -167,6 +167,18 @@ def logout():
 
     return redirect("/login") #redirect(request.args.get('next', None))
 
+# logout
+# @app.route('/creat_account')
+# def creat_account():
+#     logout_user()
+#     #flash(u'You have been signed out')
+#     #flash(u'登出成功')
+
+#     return redirect("/login") #redirect(request.args.get('next', None))
+
+@app.route('/creat_account', methods=['GET'])
+def register():
+    return render_template('security/register_user.html')
 
 # get ip
 # @app.route('/get_ip/')

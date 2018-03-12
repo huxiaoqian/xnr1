@@ -17,7 +17,7 @@ from weibo_publish_func import newest_time_func
 def execute(uname, upasswd):
 
     xnr = SinaLauncher(uname, upasswd)
-    xnr.login()
+    print xnr.login()
     print 'uname::',uname
     uid = xnr.uid
     current_ts = int(time.time())
@@ -77,4 +77,4 @@ if __name__ == '__main__':
     #execute('weiboxnr01@126.com','xnr123456')
     #execute('weiboxnr02@126.com','xnr123456')
     #execute('weiboxnr03@126.com','xnr123456')
-    execute('weiboxnr04@126.com','xnr123456')
+    execute('weiboxnr04@126.com','xnr1234567')
