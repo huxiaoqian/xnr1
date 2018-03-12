@@ -38,8 +38,9 @@ def ajax_create_writing_task():
     task_detail['compute_status'] = 0  # 0-尚未计算 1- 正在计算 2- 计算完成
     task_detail['task_source'] = request.args.get('task_source','')  # 使用英文：weibo、facebook、twitter
 
+    print 'task_detail..',task_detail
     mark = get_create_writing_task(task_detail)  # exists-表示任务名称已经存在 True-成功，False-失败
-
+    print 'mark...',mark
     return json.dumps(mark)
 
 # 展示任务
