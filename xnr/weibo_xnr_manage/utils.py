@@ -22,7 +22,8 @@ from xnr.global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
-                             weibo_feedback_fans_index_name,weibo_feedback_fans_index_type
+                             weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
+                             new_xnr_flow_text_index_name_pre,new_xnr_flow_text_index_type
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
 from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_list,get_xnr_flow_text_index_listname,\
@@ -785,7 +786,7 @@ def new_show_history_posting(require_detail):
 
 
     xnr_user_no=require_detail['xnr_user_no']   
-    task_source=require_detail['task_source']
+    message_type=require_detail['message_type']
     try:
         es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
         uid=es_result['uid']
@@ -793,7 +794,7 @@ def new_show_history_posting(require_detail):
         uid=''
 
 
-    temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+    temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(new_xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
     weibo_xnr_flow_text_listname=[]
     for index_name in temp_weibo_xnr_flow_text_listname:
         #print 'index_name:',index_name
@@ -811,7 +812,7 @@ def new_show_history_posting(require_detail):
                     'bool':{
                         'must':[
                             {'term':{'uid':uid}},
-                            {'terms':{'task_source':task_source}}
+                            {'terms':{'message_type':message_type}}
                         ]
                     }                   
                 }
@@ -824,7 +825,7 @@ def new_show_history_posting(require_detail):
     try:
         #print weibo_xnr_flow_text_listname
         if weibo_xnr_flow_text_listname:
-            result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
             post_result=[]
             for item in result:
                 post_result.append(item['_source'])
