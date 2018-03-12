@@ -156,9 +156,6 @@ function showInput(_this) {
 };
 function comMent(_this,type){
     var txt = Check($(_this).prev().val());
-    console.log(txt)
-    console.log($(_this))
-    console.log($(_this).prev())
     if (txt!=''){
         var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
         var comPost_url='/'+urlFirst_zpd+'/'+reply_comment+'/?tweet_type='+type+'&text='+txt+'&xnr_user_no='+
