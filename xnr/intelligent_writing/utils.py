@@ -5,11 +5,14 @@ import json
 import sys
 import random
 import re
+import pinyin
 
 from xnr.global_config import S_TYPE,S_DATE,S_DATE_FB
 from xnr.global_utils import es_xnr as es, es_intel, writing_task_index_name, writing_task_index_type,\
                         topics_river_index_name, topics_river_index_type, intel_opinion_results_index_name,\
-                        intel_models_text_index_name, intel_models_text_index_type
+                        intel_models_text_index_name, intel_models_text_index_type, opinion_corpus_index_name,\
+                        opinion_corpus_index_type, opinion_corpus_results_index_name, opinion_corpus_results_index_type
+
 from xnr.parameter import MAX_SEARCH_SIZE
 from time_utils import ts2HourlyTime, ts2datetime, datetime2ts, full_datetime2ts
 
@@ -288,3 +291,81 @@ def get_model_text_results(task_detail):
         pass
 
     return text
+
+
+def get_add_opinion_corpus(task_detail):
+
+    mark = False
+
+    corpus_name = task_detail['corpus_name']
+    corpus_pinyin = pinyin.get(corpus_name,format='strip',delimiter='_')
+
+    item_dict = {}
+    item_dict['corpus_name'] = corpus_name
+    item_dict['corpus_pinyin'] = corpus_pinyin
+    item_dict['submitter'] = task_detail['submitter']
+
+    try:
+        es.get(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,id=corpus_pinyin)
+
+        return 'exists'
+
+    except:
+
+        try:
+            es.index(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=item_dict,id=corpus_pinyin)
+            mark = True
+
+        except:
+            pass
+
+    return mark
+
+
+def get_delete_opinion_corpus(task_detail):
+
+    mark = False
+
+    corpus_name = task_detail['corpus_name']
+    corpus_pinyin = pinyin.get(corpus_name,format='strip',delimiter='_')
+
+    try:
+        es.delete(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,id=corpus_pinyin)
+        mark = True
+
+    except:
+        pass
+
+    return mark
+
+
+def get_show_opinion_corpus_name():
+
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+
+    results = es.search(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=query_body)['hits']['hits']
+
+    item_dict = {}
+
+    for result in results:
+        result = result['_source']
+        corpus_pinyin = result['corpus_pinyin']
+        corpus_name = result['corpus_name']
+        item_dict[corpus_name] = corpus_pinyin
+
+    return item_dict
+
+def get_show_opinion_corpus_content(task_detail):
+
+    task_id = task_detail['task_id']
+    corpus_name = task_detail['corpus_name']
+    get_result = es.get(index=opinion_corpus_results_index_name,doc_type=opinion_corpus_results_index_type)['result']
+
+    opinion_results = get_result['corpus_results']
+
+    return opinion_results[corpus_name]

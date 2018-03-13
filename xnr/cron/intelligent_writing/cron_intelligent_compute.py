@@ -5,7 +5,7 @@ import sys
 import json
 import time
 
-from save_utils import save_intelligent_opinion_results,save2topic_es, save2models_text
+from save_utils import save_intelligent_opinion_results,save2topic_es, save2models_text,save2opinion_corpus
 
 sys.path.append('./public/')
 from comment_module import comments_calculation_v2
@@ -19,24 +19,24 @@ from text_generation import text_generation_main
 sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/summary_produce/')
 from process_summary import summary_main
 
-# 引入子观点分析分类器
-
 sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/sub_opinion_analysis/')
 from opinion_produce import opinion_main
 
+sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/opinion_question/')
+from opinion_search import opinion_relevance
 
 sys.path.append('../../')
 from global_utils import R_WRITING as r_r
-from global_config import S_TYPE, S_DATE, S_DATE_FB, S_DATE_TW
+from global_config import S_TYPE, S_DATE, S_DATE_FB, S_DATE_TW, S_DATE_BCI
 from global_utils import es_xnr, es_flow_text,es_intel, es_user_portrait, writing_task_queue_name,\
-					fb_bci_index_name_pre, fb_bci_index_type, tw_bci_index_name_pre, \
-					tw_bci_index_type, weibo_bci_index_name_pre, weibo_bci_index_type,\
-					weibo_xnr_fans_followers_index_name, weibo_xnr_fans_followers_index_type,\
-					fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type, \
-					tw_xnr_fans_followers_index_name, tw_xnr_fans_followers_index_name,\
+                    fb_bci_index_name_pre, fb_bci_index_type, tw_bci_index_name_pre, \
+                    tw_bci_index_type, weibo_bci_index_name_pre, weibo_bci_index_type,\
+                    weibo_xnr_fans_followers_index_name, weibo_xnr_fans_followers_index_type,\
+                    fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type, \
+                    tw_xnr_fans_followers_index_name, tw_xnr_fans_followers_index_name,\
                     writing_task_index_name, writing_task_index_type, topics_river_index_name,\
                     topics_river_index_type, intel_type_all, intel_type_follow, intel_type_influence,\
-                    intel_type_sensitive
+                    intel_type_sensitive, opinion_corpus_index_name, opinion_corpus_index_type
 
 from flow_text_mappings import get_mappings
 from timed_python_files.facebook_mappings import facebook_flow_text_mappings
@@ -160,9 +160,9 @@ def find_flow_texts(task_source,task_id,event_keywords):
         sort_item = 'retweeted'
 
         if S_TYPE == 'test':
-        	current_time = datetime2ts(S_DATE)
+            current_time = datetime2ts(S_DATE)
         else:
-        	current_time = int(time.time())
+            current_time = int(time.time())
 
         index_name_list = get_flow_text_index_list(current_time,days=5)
         es_name = es_flow_text
@@ -170,9 +170,9 @@ def find_flow_texts(task_source,task_id,event_keywords):
     elif task_source == 'facebook':
         sort_item = 'share'
         if S_TYPE == 'test':
-        	current_time = datetime2ts(S_DATE_FB)
+            current_time = datetime2ts(S_DATE_FB)
         else:
-        	current_time = int(time.time())
+            current_time = int(time.time())
 
         index_name_list = fb_get_flow_text_index_list(current_time,days=5)
         es_name = es_xnr
@@ -180,9 +180,9 @@ def find_flow_texts(task_source,task_id,event_keywords):
     else:
         sort_item = 'share'
         if S_TYPE == 'test':
-        	current_time = datetime2ts(S_DATE_TW)
+            current_time = datetime2ts(S_DATE_TW)
         else:
-        	current_time = int(time.time())
+            current_time = int(time.time())
         index_name_list = tw_get_flow_text_index_list(current_time,days=5)
         es_name = es_xnr
 
@@ -350,10 +350,11 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
     tweets_list = []
     if task_source == 'weibo':
 
-    	if S_TYPE == 'test':
-        	current_time = datetime2ts(S_DATE)
+        if S_TYPE == 'test':
+            current_time = datetime2ts(S_DATE)
+                
         else:
-        	current_time = int(time.time())
+            current_time = int(time.time())
 
         index_name_list = get_flow_text_index_list(current_time,days=5)
         sort_item = 'retweeted'
@@ -380,18 +381,18 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
         elif intel_type == 'follow':
 
-        	try:
-        		follow_results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-        			id=xnr_user_no)['_source']
+            try:
+                follow_results = es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                    id=xnr_user_no)['_source']
 
-        		if follow_results:
-        			for follow_result in follow_results:
-        				uid_list = follow_result['_source']['followers']
-        	except:
-        		uid_list = []
+                if follow_results:
+                    for follow_result in follow_results:
+                        uid_list = follow_result['_source']['followers']
+            except:
+                uid_list = []
                 
             
-        	query_body = {
+            query_body = {
                 'query':{
                     'bool':{
                         'should':nest_query_list,
@@ -404,25 +405,28 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
             }
 
         elif intel_type == 'influence':
-        	date = ts2datetime(current_time)
-        	
-        	weibo_bci_index_name = weibo_bci_index_name_pre + date[:4] + date[5:7] + date[8:10]
+            date = ts2datetime(current_time)
 
-        	query_body_bci = {
-        		'query':{
-        			'match_all':{}
-        		},
-        		'sort':{'influence':{'order':'desc'}},
-        		'size':500
-        	}
+            if S_TYPE == 'test':
+                date = S_DATE_BCI
+            
+            weibo_bci_index_name = weibo_bci_index_name_pre + date[:4] + date[5:7] + date[8:10]
 
-        	weino_bci_results = es_xnr.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body_bci)['hits']['hits']
-        	if weino_bci_results:
-        		for bci_result in weino_bci_results:
-        			uid = bci_result['_source']['uid']
-        			uid_list.append(uid)
+            query_body_bci = {
+                'query':{
+                    'match_all':{}
+                },
+                'sort':{'user_index':{'order':'desc'}},
+                'size':500
+            }
 
-        	query_body = {
+            weino_bci_results = es_user_portrait.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body_bci)['hits']['hits']
+            if weino_bci_results:
+                for bci_result in weino_bci_results:
+                    uid = bci_result['_source']['user']
+                    uid_list.append(uid)
+
+            query_body = {
                 'query':{
                     'bool':{
                         'should':nest_query_list,
@@ -436,35 +440,35 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
         else:
 
-        	query_sensitive = {
-        		'query':{
-        			'match_all':{}
-        		},
-        		"aggs" : {
-			        "uids" : {
-			            "terms" : {
-			              "field" : "uid",
-			              "order": {
-			                "avg_sensitive" : "desc" 
-			              }
-			            },
-			            "aggs": {
-			                "avg_sensitive": {
-			                    "avg": {"field": "sensitive"} 
-			                }
-			            }
-			        }
-			    },
-			    'size':500
-        	}
+            query_sensitive = {
+                'query':{
+                    'match_all':{}
+                },
+                "aggs" : {
+                    "uids" : {
+                        "terms" : {
+                          "field" : "uid",
+                          "order": {
+                            "avg_sensitive" : "desc" 
+                          }
+                        },
+                        "aggs": {
+                            "avg_sensitive": {
+                                "avg": {"field": "sensitive"} 
+                            }
+                        }
+                    }
+                },
+                'size':500
+            }
 
-        	es_sensitive_result = es_flow_text.search(index=index_name_list,doc_type='text',\
-                    body=query_body)['aggregations']['uids']['buckets']
-        	for item in es_sensitive_result:
-        		uid = item['key']
-        		uid_list.append(uid)
+            es_sensitive_result = es_flow_text.search(index=index_name_list,doc_type='text',\
+                    body=query_sensitive)['aggregations']['uids']['buckets']
+            for item in es_sensitive_result:
+                uid = item['key']
+                uid_list.append(uid)
             
-        	query_body = {
+            query_body = {
                 'query':{
                     'bool':{
                         'should':nest_query_list,
@@ -489,9 +493,9 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
     else:
         if S_TYPE == 'test':
-        	current_time = datetime2ts(S_DATE_FB)
+            current_time = datetime2ts(S_DATE_FB)
         else:
-        	current_time = int(time.time())
+            current_time = int(time.time())
         uid_list = []
         sort_item = 'share'
         opinion_keywords_list = [word.encode('utf-8') for word in opinion_keywords_list]
@@ -529,17 +533,17 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
             elif intel_type == 'follow':
 
-            	try:
-            		follow_results = es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
-            			id=xnr_user_no)['_source']
+                try:
+                    follow_results = es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
 
-            		if follow_results:
-            			for follow_result in follow_results:
-            				uid_list = follow_result['_source']['fans_list']
-            	except:
-            		uid_list = []
+                    if follow_results:
+                        for follow_result in follow_results:
+                            uid_list = follow_result['_source']['fans_list']
+                except:
+                    uid_list = []
 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             'should':nest_query_list,
@@ -552,23 +556,23 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
                 }
 
             elif intel_type == 'influence':
-            	fb_bci_index_name = fb_bci_index_name_pre + ts2datetime(current_time)
-            	query_body_bci = {
-            		'query':{
-            			'match_all':{}
-            		},
-            		'sort':{'influence':{'order':'desc'}},
-            		'size':500
-            	}
+                fb_bci_index_name = fb_bci_index_name_pre + ts2datetime(current_time)
+                query_body_bci = {
+                    'query':{
+                        'match_all':{}
+                    },
+                    'sort':{'influence':{'order':'desc'}},
+                    'size':500
+                }
 
-            	fb_bci_results = es_xnr.search(index=fb_bci_index_name,doc_type=fb_bci_index_type,body=query_body_bci)['hits']['hits']
-            	#print 'fb_bci_results...',len(fb_bci_results)
+                fb_bci_results = es_xnr.search(index=fb_bci_index_name,doc_type=fb_bci_index_type,body=query_body_bci)['hits']['hits']
+                #print 'fb_bci_results...',len(fb_bci_results)
                 if fb_bci_results:
-            		for bci_result in fb_bci_results:
-            			uid = bci_result['_source']['uid']
-            			uid_list.append(uid)
+                    for bci_result in fb_bci_results:
+                        uid = bci_result['_source']['uid']
+                        uid_list.append(uid)
 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             'should':nest_query_list,
@@ -582,36 +586,36 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
             else:
 
-            	query_sensitive = {
-            		'query':{
-            			'match_all':{}
-            		},
-            		"aggs" : {
-				        "uids" : {
-				            "terms" : {
-				              "field" : "uid",
-				              "order": {
-				                "avg_sensitive" : "desc" 
-				              }
-				            },
-				            "aggs": {
-				                "avg_sensitive": {
-				                    "avg": {"field": "sensitive"} 
-				                }
-				            }
-				        }
-				    },
-				    'size':500
-            	}
+                query_sensitive = {
+                    'query':{
+                        'match_all':{}
+                    },
+                    "aggs" : {
+                        "uids" : {
+                            "terms" : {
+                              "field" : "uid",
+                              "order": {
+                                "avg_sensitive" : "desc" 
+                              }
+                            },
+                            "aggs": {
+                                "avg_sensitive": {
+                                    "avg": {"field": "sensitive"} 
+                                }
+                            }
+                        }
+                    },
+                    'size':500
+                }
 
-            	es_sensitive_result = es_xnr.search(index=index_name_list,doc_type='text',\
+                es_sensitive_result = es_xnr.search(index=index_name_list,doc_type='text',\
                         body=query_sensitive)['aggregations']['uids']['buckets']
                 #print 'es_sensitive_result...',len(es_sensitive_result)
-            	for item in es_sensitive_result:
-            		uid = item['key']
-            		uid_list.append(uid)
+                for item in es_sensitive_result:
+                    uid = item['key']
+                    uid_list.append(uid)
                 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             
@@ -651,17 +655,17 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
             elif intel_type == 'follow':
 
-            	try:
-            		follow_results = es_xnr.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
-            			id=xnr_user_no)['_source']
+                try:
+                    follow_results = es_xnr.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
 
-            		if follow_results:
-            			for follow_result in follow_results:
-            				uid_list = follow_result['_source']['followers_list']
-            	except:
-            		uid_list = []
+                    if follow_results:
+                        for follow_result in follow_results:
+                            uid_list = follow_result['_source']['followers_list']
+                except:
+                    uid_list = []
 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             'should':nest_query_list,
@@ -674,22 +678,22 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
                 }
 
             elif intel_type == 'influence':
-            	tw_bci_index_name = tw_bci_index_name_pre + ts2datetime(current_time)
-            	query_body_bci = {
-            		'query':{
-            			'match_all':{}
-            		},
-            		'sort':{'influence':{'order':'desc'}},
-            		'size':500
-            	}
+                tw_bci_index_name = tw_bci_index_name_pre + ts2datetime(current_time)
+                query_body_bci = {
+                    'query':{
+                        'match_all':{}
+                    },
+                    'sort':{'influence':{'order':'desc'}},
+                    'size':500
+                }
 
-            	tw_bci_results = es_xnr.search(index=tw_bci_index_name,doc_type=tw_bci_index_type,body=query_body_bci)['hits']['hits']
-            	if tw_bci_results:
-            		for bci_result in tw_bci_results:
-            			uid = bci_result['_source']['uid']
-            			uid_list.append(uid)
+                tw_bci_results = es_xnr.search(index=tw_bci_index_name,doc_type=tw_bci_index_type,body=query_body_bci)['hits']['hits']
+                if tw_bci_results:
+                    for bci_result in tw_bci_results:
+                        uid = bci_result['_source']['uid']
+                        uid_list.append(uid)
 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             'should':nest_query_list,
@@ -703,35 +707,35 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
 
             else:
 
-            	query_sensitive = {
-            		'query':{
-            			'match_all':{}
-            		},
-            		"aggs" : {
-				        "uids" : {
-				            "terms" : {
-				              "field" : "uid",
-				              "order": {
-				                "avg_sensitive" : "desc" 
-				              }
-				            },
-				            "aggs": {
-				                "avg_sensitive": {
-				                    "avg": {"field": "sensitive"} 
-				                }
-				            }
-				        }
-				    },
-				    'size':500
-            	}
+                query_sensitive = {
+                    'query':{
+                        'match_all':{}
+                    },
+                    "aggs" : {
+                        "uids" : {
+                            "terms" : {
+                              "field" : "uid",
+                              "order": {
+                                "avg_sensitive" : "desc" 
+                              }
+                            },
+                            "aggs": {
+                                "avg_sensitive": {
+                                    "avg": {"field": "sensitive"} 
+                                }
+                            }
+                        }
+                    },
+                    'size':500
+                }
 
-            	es_sensitive_result = es_xnr.search(index=index_name_list,doc_type='text',\
+                es_sensitive_result = es_xnr.search(index=index_name_list,doc_type='text',\
                         body=query_sensitive)['aggregations']['uids']['buckets']
-            	for item in es_sensitive_result:
-            		uid = item['key']
-            		uid_list.append(uid)
+                for item in es_sensitive_result:
+                    uid = item['key']
+                    uid_list.append(uid)
                 
-            	query_body = {
+                query_body = {
                     'query':{
                         'bool':{
                             'should':nest_query_list,
@@ -853,6 +857,31 @@ def get_models_text(task_id,task_source,opinion_keywords_list):
     
     save2models_text(task_id,model_text_dict)
 
+def opinion_relevance_main(task_source,task_id,xnr_user_no,opinion_keywords_list):
+
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+
+    results = es_xnr.search(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=query_body)['hits']['hits']
+
+    opinion_results = {}
+
+    for result in results:
+
+        corpus_pinyin = result['_source']['corpus_pinyin']
+        corpus_name = result['_source']['corpus_name']
+
+        item_result = opinion_relevance(opinion_keywords_list,corpus_pinyin)
+        #opinion_results[corpus_pinyin] = [corpus_name,item_result[0]]
+        opinion_results[corpus_name] = item_result[0]
+
+    save2opinion_corpus(task_id,opinion_results)
+    print 'opinion_results....',opinion_results
+    #return opinion_results
 
 def compute_intelligent_recommend(task_detail):
 
@@ -902,6 +931,8 @@ def compute_intelligent_recommend(task_detail):
     print 'compute sensitive opinions over...'
 
     # 观点语料库
+    opinion_relevance_main(task_source,task_id,xnr_user_no,opinion_keywords_list)
+    print 'compute opinion corpus over...'
 
     # 智能发帖模板文本生成 -- 正向、负向、事实陈述
     get_models_text(task_id,task_source,opinion_keywords_list)
