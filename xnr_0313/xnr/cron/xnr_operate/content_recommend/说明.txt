@@ -1,0 +1,3 @@
+微博自动推荐：从一堆微博中推荐出重要句子，输入的微博最好是一个事件下的微博
+
+from process_summary import summary_main
