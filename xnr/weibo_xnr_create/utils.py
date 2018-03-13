@@ -15,7 +15,8 @@ import random
 from xnr.global_config import S_TYPE,S_DATE
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,weibo_domain_index_name,weibo_domain_index_type,\
                                 weibo_role_index_name,weibo_role_index_type,weibo_xnr_index_name,weibo_xnr_index_type,\
-                                weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
+                                weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
+                                wb_xnr_max_no
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type
 from xnr.parameter import topic_en2ch_dict,domain_ch2en_dict,domain_en2ch_dict,\
@@ -539,16 +540,27 @@ def get_save_step_one(task_detail):
 
     return mark
 
+def get_wb_xnr_no():
+    
+    if not r.exists(wb_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
+        user_no_max = 1
+        r.set(wb_xnr_max_no,user_no_max)
+    else:   #如果当前redis有记录，则取用
+        user_no_max = r.incr(wb_xnr_max_no)
+
+    return user_no_max
+
 def get_save_step_two(task_detail):
 
     #task_id = task_detail['task_id']
-    es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
-                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    if es_results:
-        user_no_max = es_results[0]['_source']['user_no']
-        user_no_current = user_no_max + 1 
-    else:
-        user_no_current = 1
+    # es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
+    #                 'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+    # if es_results:
+    #     user_no_max = es_results[0]['_source']['user_no']
+    #     user_no_current = user_no_max + 1 
+    # else:
+    #     user_no_current = 1
+    user_no_current = get_wb_xnr_no()
 
     task_detail['user_no'] = user_no_current
     task_id = user_no2_id(user_no_current)  #五位数 WXNR0001

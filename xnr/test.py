@@ -440,3 +440,5 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 #es.delete(index='qq_xnr',doc_type='user',id='QXNR0005')
 #es.indices.put_mapping(index='qq_xnr', doc_type='user', body={"properties": {"group_info" : {"type": "string", "index":"not_analyzed"}}})
 # print es.update(index='weibo_xnr',doc_type='user',id='WXNR0004',body={'doc':{'password':'xnr1234567'}})
+
+es.update(index='tw_xnr',doc_type='user',id='TXNR0001',body={'doc':{'create_status':2}})
