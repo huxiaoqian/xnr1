@@ -126,28 +126,28 @@
         </div>
         <div class="control" style="top: 370px;left: 160px;">
             <i class="icon icon-cogs"></i>
-            <div class="cover" id="control">
+            <div class="cover notAllow" id="control">
                 <em class="icon icon-plus-sign"></em>
                 <span>操作控制</span>
             </div>
         </div>
         <div class="info" style="top: 490px;left: 450px;">
             <i class="icon icon-eye-open"></i>
-            <div class="cover" id="info">
+            <div class="cover notAllow" id="info">
                 <em class="icon icon-plus-sign"></em>
                 <span>信息监测</span>
             </div>
         </div>
         <div class="monitor" style="top: 490px;left: 750px;">
             <i class="icon icon-warning-sign"></i>
-            <div class="cover" id="monitor">
+            <div class="cover notAllow" id="monitor">
                 <em class="icon icon-plus-sign"></em>
                 <span>预警监控</span>
             </div>
         </div>
         <div class="reported" style="top:100px;right:260px;">
             <i class="icon icon-sitemap"></i>
-            <div class="cover" id="reported">
+            <div class="cover notAllow" id="reported">
                 <em class="icon icon-plus-sign"></em>
                 <span>行为评估</span>
             </div>
@@ -548,8 +548,14 @@
     });
 
     //登录类型
-    var admin='admin@qq.com';
+    var admin='{{g.user}}';
     //虚拟人列表
+    function isEmptyObject(e) {
+        var t;
+        for (t in e)
+            return !1;
+        return !0
+    }
     var oneTrue=1,sameID='';
     $.ajax({
         type: 'GET',
@@ -557,30 +563,35 @@
         async: true,
         dataType: "json",
         success: function (data) {
-            var str='';
-            var sameid=localStorage.getItem('sameXnr');
-            for (var k in data){
-                var isChecked=''
-                if (data[k]==''||data[k]=='unknown'){
-                    data[k]='无昵称';
+            if(isEmptyObject(data)){
+                $('#xnrName').text('请先定制虚拟人').attr('请先定制虚拟人');
+                $('. notAllow').addClass('disableCss');
+            }else {
+                var str='';
+                var sameid=localStorage.getItem('sameXnr');
+                for (var k in data){
+                    var isChecked=''
+                    if (data[k]==''||data[k]=='unknown'){
+                        data[k]='无昵称';
+                    };
+                    if (sameid==k){
+                        isChecked='checked';
+                        sameID=sameid;
+                        downXnr(k,data[k]);
+                    }else if (oneTrue==1){
+                        isChecked='checked';
+                        sameID=sameid;
+                        downXnr(k,data[k]);
+                    }
+                    str+=
+                        '<label class="demo-label" title="'+data[k]+'">'+
+                        '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
+                        '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                        '</label>';
+                    oneTrue++;
                 }
-                if (sameid==k){
-                    isChecked='checked';
-                    sameID=sameid;
-                    downXnr(k,data[k]);
-                }else if (oneTrue==1){
-                    isChecked='checked';
-                    sameID=sameid
-                    downXnr(k,data[k]);
-                }
-                str+=
-                    '<label class="demo-label" title="'+data[k]+'">'+
-                    '   <input class="demo-radio" type="radio" name="ID" valueID='+k+' valueName='+data[k]+' '+isChecked+'>'+
-                    '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
-                    '</label>';
-                oneTrue++;
+                $('#choosePerson .identity').html(str);
             }
-            $('#choosePerson .identity').html(str);
         }
     });
     function downXnr(k1,k2) {

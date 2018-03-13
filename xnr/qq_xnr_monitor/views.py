@@ -10,7 +10,7 @@ from xnr.parameter import MAX_VALUE,DAY
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 
 from utils import search_by_xnr_number,search_by_period,aggr_sen_users,rank_sen_users
-from utils import report_warming_content
+from utils import report_warming_content,report_warming_content_new
 
 mod = Blueprint('qq_xnr_monitor', __name__, url_prefix='/qq_xnr_monitor')
 
@@ -94,7 +94,7 @@ def ajax_report_warming_content_new():
     if request.method == 'POST':
         # print 'post method !!'
         data = json.loads(request.data)
-        print 'data:',data
+        # print 'data:',data
         task_detail['report_type']=data['report_type'] #预警类型    #言论/人物
         task_detail['report_time']=int(time.time())
         task_detail['xnr_user_no']=data['xnr_user_no']

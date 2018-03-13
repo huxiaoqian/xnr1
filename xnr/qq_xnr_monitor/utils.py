@@ -245,6 +245,41 @@ def report_warming_content(report_type, report_time, xnr_user_no,\
     return mark
 
 
+def get_user_text(qq_nick,qq_groups,last_speak_ts):
+    print 'qq_nick:',qq_nick
+    query_body = {
+        "query": {
+            "filtered":{
+                "filter":{
+                    "bool":{
+                        "must":[
+                            {"term":{"speaker_nickname":qq_nick}},
+                            {"term":{"sensitive_flag":1}},
+                            {"term":{"qq_group_nickname":qq_groups}}
+                        ]
+                    }
+                }
+            }
+            },
+            "size": MAX_VALUE,
+            "sort":{"timestamp":{"order":"desc"}}
+        }
+    index_name = group_message_index_name_pre + ts2datetime(last_speak_ts)
+    result = es_xnr.search(index=index_name, doc_type=group_message_index_type, body=query_body)['hits']['hits']
+    results = {}
+
+    for item in result:
+        source = item['_source']
+        text_item = [source['text'], source['timestamp'], source['sensitive_words_string']]
+        #print 'text_item:', text_item
+        try:
+            results['text'].append(text_item)
+        except:
+            results['text'] = [text_item]
+    #print 'final results:', results
+    return results
+
+
 def report_warming_content_new(task_detail):
     report_dict = dict()
     report_dict['report_type'] = task_detail['report_type']
@@ -257,6 +292,8 @@ def report_warming_content_new(task_detail):
     if task_detail['report_type'] == '人物':
     	user_info = []
         for item in task_detail['user_info']:
+            qq_groups = item['qq_groups'].values()
+            item['text'] = get_user_text(item['qq_nick'],qq_groups,item['last_speak_ts'])
             user_info.append(item)
         report_id = task_detail['xnr_user_no'] + '_' + task_detail['qq_nickname']
         report_dict['report_content'] = json.dumps(user_info)
