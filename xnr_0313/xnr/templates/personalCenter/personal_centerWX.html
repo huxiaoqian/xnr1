@@ -1,0 +1,187 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>个人中心</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/personal_center.css">
+<style>
+    .demo-label{display:inline-block;margin:15px 0 0 10px;width:110px;cursor: pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /**/
+    .bootstrap-table .table>thead>tr>th {width:7%;}
+    .table>thead>tr>th {border-top: none;}
+
+    #haslistQQ thead th,#haslistQQ tbody td {
+        word-break:break-word;
+        padding:8px;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <img src="/static/images/peo_center.png" class="peo_icon"/>
+            <b style="font-size: 16px;">我的虚拟人管理</b>
+        </div>
+        <div style="margin-left:40px;">
+            <span style="color: white;">类型：</span>
+            <!--<select id="weibo_QQ">-->
+                <!--<option value="weibo">微博虚拟人</option>-->
+                <!--<option value="qq">QQ群虚拟人</option>-->
+            <!--</select>-->
+            <div id="weibo_QQ">
+                <!--<label class="demo-label">-->
+                    <!--<input class="demo-radio" type="radio" name="demo-radio" weiboqq="W" checked>-->
+                    <!--<span class="demo-radioInput"></span>微博虚拟人-->
+                <!--</label>-->
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="demo-radio" weiboqq="Q" checked>
+                    <span class="demo-checkbox demo-radioInput"></span>微信虚拟人
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="has_person_QQ" style="padding: 10px 30px;">
+        <div style="margin: 20px 0;">
+            <img src="/static/images/icon.png">
+            <b style="color:white;">已有微信虚拟人</b>
+        </div>
+        <div class="has_list_QQ">
+            <span class="hasAddQQ">
+                <b class="icon icon-plus"></b>&nbsp;添加
+            </span>
+            <div class="haslistbagQQ">
+                <div id="haslistQQ">
+                    <p style="width: 100%;text-align: center;font-size: 18px;color: white;">正在拼命加载中...</p>
+                </div>
+            </div>
+        </div>
+        <!-- 添加虚拟人 -->
+        <div class="addQQperson" style="display: none;">
+            <div style="margin: 20px 0;">
+                <img src="/static/images/icon.png">
+                <b style="color:white;">添加微信虚拟人</b>
+            </div>
+            <div class="QQoptions" style="text-align: center;">
+                <div class="opt opt-1">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;微信ID：</span>
+                    <!-- <input type="text" class="QQnumber" placeholder="请输入微信ID"/> -->
+                    <input type="text" class="wx_id" placeholder="请输入微信ID（必填）"/>
+                </div>
+                <div class="opt opt-2">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;备注：</span>
+                    <input type="text" class="wxRemark" placeholder="请输入微信备注（选填）"/>
+                </div>
+                <div class="opt opt-3">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;邮箱：</span>
+                    <input type="text" class="email" placeholder="请输入您的邮箱（必填）"/>
+                </div>
+                <div class="opt opt-4">
+                    <span><i class="icon icon-hand-right"></i>&nbsp;&nbsp;邮箱授权码：</span>
+                    <input type="text" class="wxPower" placeholder="请输入邮箱授权码（必填）"/>
+                </div>
+            </div>
+            <div class="optSure"><span class="optClear">重填</span><span class="optSureadd">确定</span></div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+
+<!--成功失败-->
+<div class="modal fade" id="succee_fail" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <p id="words" style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn" data-dismiss="modal">取消</button>-->
+                <!--<button type="button" class="btn" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<!--登录二维码-->
+<div class="modal fade" id="QR_code" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">微信登录</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 二维码 -->
+                <div id="QQ_picture">
+                    <img src="" class="imagewx" style="display:block;width: 200px;height: 200px;margin: 20px auto;">
+                </div>
+                <!-- 提示信息 -->
+                <div id="L-points"></div>
+            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn" data-dismiss="modal">取消</button>-->
+            <!--<button type="button" class="btn" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<!-- 设置群组模态框 -->
+<div class="modal fade" id="setgroups" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">设置监听的群组</h4>
+            </div>
+            <div class="modal-body">
+                <div id="loadallGroups" style="text-align: left;font-size: 18px;color: #fff;font-weight: 900;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="checkbox" name="L-demo-checkbox" checked>
+                        <span class="demo-checkbox demo-radioInput"></span>测试群
+                    </label>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button id="L-sure" type="button" class="btn" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除虚拟人模态框 -->
+<div class="modal fade" id="L-delete" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="L-title" class="modal-title">确认删除吗？</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button id="L-del-sure" type="button" class="btn" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+
+<script>
+    var loadingType = 'WX';
+    weiboORqq('WX');
+    $('.nav_type').text('(微信)');
+    judgment('1');
+</script>
+<script src="/static/js/personal_centerWX-1.js"></script>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>知识库管理 - 角色知识库</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/character_library.css">
+<style>
+    #container .title #buildModal {
+        display: inline-block;
+        color: white;
+        font-weight: 700;
+        position: relative;
+        top:-5px;
+        left: 40px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+    }
+    #container .title #buildModal:hover {
+        background:rgba(3, 8, 16, 0.61);
+    }
+    .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;
+        width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-github account_icon"></span>
+            <b>角色知识库</b>
+            <a id="buildModal">生成实例模板</a>
+        </div>
+        <div class="tit-2" style="padding-left: 50px;margin: 15px 0;">
+            <span style="color: white;font-size: 16px;font-weight: 700;">选择领域：</span>
+            <div class="field-1">
+
+            </div>
+        </div>
+        <div class="tit-3" style="padding-left: 50px;display: none;">
+            <span style="color: white;font-size: 16px;font-weight: 700;">选择身份：</span>
+            <div class="field-2" style="color: white;margin-top: 10px;">
+
+            </div>
+        </div>
+    </div>
+    <div class="options">
+        <!--<div class="options-1">-->
+            <!--<div class="opt-1-1">-->
+                <!--<img src="/static/images/icon.png" alt="">-->
+                <!--<span style="font-size: 18px;font-weight: 900;color: #fff;">所属领域：</span>-->
+                <!--<b class="realm" style="font-size: 18px;font-weight: 900;color: #fff;">阿姆斯特朗</b>-->
+            <!--</div>-->
+            <!--<div id="opt-1-2"></div>-->
+        <!--</div>-->
+        <div class="options-2">
+            <div class="op-2-down">
+                <div class="opt-2-1">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">性格特征</span>
+                </div>
+                <div id="opt-2-2"></div>
+            </div>
+            <div class="op-2-down">
+                <div class="opt-2-3">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">政治倾向</span>
+                </div>
+                <div id="opt-2-4"></div>
+            </div>
+        </div>
+        <div class="options-3">
+            <div class="opt-3-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">地理位置</span>
+            </div>
+            <div id="opt-3-2"></div>
+        </div>
+        <div class="options-4">
+            <div class="op-4-down">
+                <div class="opt-4-1">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">活跃时间</span>
+                </div>
+                <div id="opt-4-2"></div>
+            </div>
+            <div class="op-4-down">
+                <div class="opt-4-3">
+                    <img src="/static/images/icon.png" alt="">
+                    <span style="font-size: 18px;font-weight: 900;color: #fff;">日发帖量</span>
+                </div>
+                <div id="opt-4-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+
+<!--群体详情-->
+<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体详情列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="grouplist">
+                    <div id="grouplist"></div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
+    if (flag==1){
+        judgment('8');
+        urlTotal='/weibo_xnr_knowledge_base_management';
+        defalutDomain='维权群体';defalutRole='其他';
+    }else if (flag==4){
+        judgmentFaceBook('8');
+        urlTotal='/fb_xnr_knowledge_base_management';
+        defalutDomain='脸书测试1';defalutRole='民间组织'
+    }else if (flag==5){
+        judgmentTwitter('8');
+        urlTotal='/tw_xnr_knowledge_base_management';
+        defalutDomain='推特测试1';defalutRole='商业人士';
+    }
+</script>
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/character_library-1.js"></script>
+{% endblock %}
