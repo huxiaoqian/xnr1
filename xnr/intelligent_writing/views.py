@@ -12,7 +12,9 @@ from xnr.global_utils import es_xnr as es, es_flow_text
 from xnr.global_config import S_TYPE
 from xnr.time_utils import datetime2ts, ts2datetime
 from utils import get_create_writing_task, get_show_writing_task, get_delete_writing_task,\
-                get_topics_river, get_symbol_weibo, get_opinions_results, get_model_text_results
+                get_topics_river, get_symbol_weibo, get_opinions_results, get_model_text_results,\
+                get_add_opinion_corpus, get_delete_opinion_corpus, get_show_opinion_corpus_name,\
+                get_show_opinion_corpus_content
 
 mod = Blueprint('intelligent_writing', __name__, url_prefix='/intelligent_writing')
 
@@ -135,3 +137,57 @@ def ajax_model_text():
     results = get_model_text_results(task_detail)
 
     return json.dumps(results)
+
+
+# 添加观点语料库
+# http://219.224.134.213:9090/intelligent_writing/add_opinion_corpus/?corpus_name=暴恐&submitter=admin@qq.com
+
+@mod.route('/add_opinion_corpus/')
+def ajax_add_opinion_corpus():
+    
+    task_detail = dict()
+    task_detail['corpus_name'] = request.args.get('corpus_name','')
+    task_detail['submitter'] = request.args.get('submitter','admin@qq.com')
+
+    results = get_add_opinion_corpus(task_detail)
+
+    return json.dumps(results)   # True False exists
+
+# 展示观点语料库标题
+# http://219.224.134.213:9090/intelligent_writing/show_opinion_corpus_name/
+@mod.route('/show_opinion_corpus_name/')
+def ajax_show_opinion_corpus_name():
+    
+    task_detail = dict()
+    #task_detail['submitter'] = request.args.get('submitter','admin@qq.com')
+    results = get_show_opinion_corpus_name()
+
+    return json.dumps(results)   # True False
+
+# 展示观点语料库内容
+# http://219.224.134.213:9090/intelligent_writing/show_opinion_corpus_content/?corpus_name=暴恐&task_id=
+
+@mod.route('/show_opinion_corpus_content/')
+def ajax_show_opinion_corpus_content():
+    
+    task_detail = dict()
+    task_detail['task_id'] = request.args.get('task_id','')
+    task_detail['corpus_name'] = request.args.get('corpus_name','')
+
+    results = get_show_opinion_corpus_content(task_detail)
+
+    return json.dumps(results)   # True False
+
+# 删除观点语料库
+# http://219.224.134.213:9090/intelligent_writing/delete_opinion_corpus/?corpus_name=暴恐&submitter=admin@qq.com
+
+@mod.route('/delete_opinion_corpus/')
+def ajax_delete_opinion_corpus():
+    
+    task_detail = dict()
+    task_detail['corpus_name'] = request.args.get('corpus_name','')
+    task_detail['submitter'] = request.args.get('submitter','admin@qq.com')
+
+    results = get_delete_opinion_corpus(task_detail)
+
+    return json.dumps(results)   # True False
