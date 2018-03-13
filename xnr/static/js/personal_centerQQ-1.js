@@ -184,7 +184,7 @@ function has_table_QQ(has_data_QQ) {
                     if (row.login_status){ld = '在线中'}else{ld = '登录'}
                     return '<a style="cursor: pointer;color:white;" onclick="nowGroup(\''+qq_groups.join('，')+'\',\''+row.xnr_user_no+'\',\''+row.qq_number+'\')" title="编辑"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
                         '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this,\''+row.qq_number+'\',\''+qq_groups.join('，')+'\',\''+row.nickname+'\',\''+row.xnr_user_no+'\')" title="'+ld+'"><i class="icon icon-key"></i></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color:white;display: inline-block;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\',\''+row.login_status+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color:white;display: inline-block;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\',\''+row.login_status+'\',this)" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row.xnr_user_no+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -243,7 +243,7 @@ function sureModGroup() {
 var $this_QQ,$this_QQ_id;
 function loginIN(_this,id,qgp,qname,qpower) {
     $this_QQ=_this;
-    $this_QQ_id=id;
+    $this_QQ_id=id;xnrThis=qpower;
     var login_1_url='/qq_xnr_manage/click_login/?xnr_user_no='+qpower;
     public_ajax.call_request('get',login_1_url,login_1);
 }
@@ -259,9 +259,6 @@ function login_1(data) {
                 if (data){
                     $('#succee_fail #words').text('您的QQ号码已经自动登录。');
                     $('#succee_fail').modal('show');
-                    setTimeout(function () {
-                        public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
-                    },1500);
                 }else {
                     var login_url='/qq_xnr_manage/get_qr_code/?qq_number='+$this_QQ_id;
                     public_ajax.call_request('get',login_url,login_QR_code);
@@ -269,21 +266,23 @@ function login_1(data) {
             },
             //cache:false,//不会从浏览器缓存中加载请求信息
         });
-
     }else {
         $('#succee_fail #words').text('您的QQ号码出现问题，请稍后再登陆。');
         $('#succee_fail').modal('show');
     }
 }
 function login_QR_code(data) {
-    console.log(data)
     if (data){
         if (data=='login'){
             $('#succee_fail #words').text('该QQ已经自动登录。');
             $('#succee_fail').modal('show');
+            setTimeout(function () {
+                public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
+            },1500);
         }else if(data=='try later'){
             $('#succee_fail #words').text('系统繁忙，稍后再试。');
             $('#succee_fail').modal('show');
+            return false;
         }else {
             var kl=data.toString();
             if (kl.substring(kl.length-3)!='png'){
@@ -340,8 +339,9 @@ function success_fail(data) {
 }
 
 //进入虚拟人的具体操作
-function enterIn(QQ_id,QQ_num,status) {
-    if (status=='true'){
+function enterIn(QQ_id,QQ_num,status,_this) {
+    var d=$(_this).parent().prev().text();
+    if (d=='在线'){
         window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
     }else {
         $('#succee_fail #words').text('请先登录在进行其他操作。');

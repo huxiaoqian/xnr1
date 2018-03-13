@@ -13,7 +13,7 @@ mod=Blueprint('qq_xnr_report_manage',__name__,url_prefix='/qq_xnr_report_manage'
 
 @mod.route('/show_report_content/')
 def ajax_show_report_content():
-    report_type = request.args.get('report_type', '')
+    report_type = request.args.get('report_type', '').split(',')
     start_ts = request.args.get('start_ts', '')
     end_ts = request.args.get('end_ts', '')
     qq_xnr_no = request.args.get('qq_xnr_no', '')

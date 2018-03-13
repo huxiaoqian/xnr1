@@ -125,7 +125,7 @@ setTimeout(function () {
         urlFirst_zpd='twitter_xnr_operate';mft_id='tid';reportWaring='twitter_xnr_warning';
         first_url='/twitter_xnr_monitor/addto_facebook_corpus/';reportInfo='tw_info';
     }
-},1000)
+},1000);
 //retweet_operate   comment_operate   like_operate
 //转发 分享  转推
 var for_type,for_this;
@@ -156,9 +156,6 @@ function showInput(_this) {
 };
 function comMent(_this,type){
     var txt = Check($(_this).prev().val());
-    console.log(txt)
-    console.log($(_this))
-    console.log($(_this).prev())
     if (txt!=''){
         var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
         var comPost_url='/'+urlFirst_zpd+'/'+reply_comment+'/?tweet_type='+type+'&text='+txt+'&xnr_user_no='+
