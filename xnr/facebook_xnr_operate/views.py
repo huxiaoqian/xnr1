@@ -511,7 +511,7 @@ def ajax_show_at():
 
 # 好友列表
 # http://219.224.134.213:6659/weibo_xnr_operate/show_friends/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
-@mod.route('/show_friends')
+@mod.route('/show_friends/')
 def ajax_show_friends():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
