@@ -8,7 +8,7 @@ import sys
 reload(sys)
 sys.path.append('../')
 from global_utils import es_xnr as es
-from global_utils import R_WEIBO_XNR_FANS_FOLLOWERS as r_fans_followers
+from global_utils import R_FACEBOOK_XNR_FANS_FOLLOWERS as r_fans_followers
 from global_utils import facebook_feedback_comment_index_name,facebook_feedback_comment_index_type,\
                         facebook_feedback_retweet_index_name,facebook_feedback_retweet_index_type,\
                         facebook_feedback_at_index_name,facebook_feedback_at_index_type,\
@@ -27,49 +27,32 @@ from global_utils import facebook_feedback_comment_index_name,facebook_feedback_
                         fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,\
                         fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
                         facebook_xnr_count_info_index_name,facebook_xnr_count_info_index_type
-
-
-
-
-
-
-
-
-
-
-from global_utils import es_flow_text,es_user_portrait,es_user_profile,\
-                        weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
-                        weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
-                        weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
-                        weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
-                        weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
-                        flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
-                        flow_text_index_name_pre,\
-                        weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
-                        weibo_report_management_index_name,weibo_report_management_index_type,\
-                        portrait_index_name,portrait_index_type,\
-                        weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
-                        weibo_xnr_index_name,weibo_xnr_index_type,xnr_flow_text_index_name_pre,\
-                        xnr_flow_text_index_type,\
-                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
-                        
-from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
-                r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
-
-#from utils import xnr_user_no2uid,uid2nick_name_photo
-from global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
-from time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list,\
+from global_utils import r_fb_fans_uid_list_datetime_pre as r_fans_uid_list_datetime_pre,\
+                        r_fb_fans_count_datetime_xnr_pre as r_fans_count_datetime_xnr_pre,\
+                        r_fb_fans_search_xnr_pre as r_fans_search_xnr_pre,\
+                        r_fb_followers_uid_list_datetime_pre as r_followers_uid_list_datetime_pre,\
+                        r_fb_followers_count_datetime_xnr_pre as r_followers_count_datetime_xnr_pre,\
+                        r_fb_followers_search_xnr_pre as r_followers_search_xnr_pre
+from global_config import S_TYPE,S_DATE_FB as S_DATE,S_UID_FB as S_UID,S_DATE_BCI_FB as S_DATE_BCI
+from time_utils import ts2datetime,datetime2ts,fb_get_flow_text_index_list as get_flow_text_index_list,\
+                        get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
                         get_timeset_indexset_list
-from parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
-                        TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
+from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT,\
+                    FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID
+
+
+
+
+
+
+from parameter import WEEK,DAY,MAX_SEARCH_SIZE,FOLLOWERS_TODAY,\
+                        TOP_ASSESSMENT_NUM,ACTIVE_UID
 
 
 # 影响力粉丝数
 def compute_influence_num(xnr_user_no,current_time_old):
 
     uid = xnr_user_no2uid(xnr_user_no)
-
-
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE_BCI)
         uid = S_UID
@@ -77,18 +60,19 @@ def compute_influence_num(xnr_user_no,current_time_old):
         current_time = current_time_old
 
     datetime = ts2datetime(current_time)
-    new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
-    index_name = weibo_bci_index_name_pre + new_datetime
+    # new_datetime = datetime[0:4]+datetime[5:7]+datetime[8:10]
+    index_name = facebook_bci_index_name_pre + datetime
+
     try:
         
-        bci_xnr = es_user_portrait.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']['user_index']
-
-        bci_max = es_user_portrait.search(index=index_name,doc_type=weibo_bci_index_type,body=\
-            {'query':{'match_all':{}},'sort':{'user_index':{'order':'desc'}}})['hits']['hits'][0]['_source']['user_index']
+        bci_xnr = es.get(index=index_name,doc_type=facebook_bci_index_type,id=uid)['_source']['influence']
+        bci_max = es.search(index=index_name,doc_type=facebook_bci_index_type,body=\
+            {'query':{'match_all':{}},'sort':{'influence':{'order':'desc'}}})['hits']['hits'][0]['_source']['influence']
 
         influence = float(bci_xnr)/bci_max*100
         influence = round(influence,2)  # 保留两位小数
-    except:
+    except Exception,e:
+        print e
         influence = 0
 
     return influence
@@ -96,10 +80,10 @@ def compute_influence_num(xnr_user_no,current_time_old):
 # 渗透力分数
 def compute_penetration_num(xnr_user_no,current_time_old):
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE) - DAY
-    else:
-        current_time = current_time_old
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE) - DAY
+    # else:
+    current_time = current_time_old
     
     current_date = ts2datetime(current_time)
     timestamp = datetime2ts(current_date)
@@ -113,7 +97,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
         'size':TOP_ASSESSMENT_NUM
     }
 
-    top_sensitive_users = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,\
+    top_sensitive_users = es.search(index=portrait_index_name,doc_type=portrait_index_type,\
                             body=query_body)['hits']['hits']
     top_sensitive_uid_list = []
     for user in top_sensitive_users:
@@ -143,7 +127,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     else:
         index_name = flow_text_index_name_pre + current_date
 
-    es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    es_sensitive_result = es.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_count)['aggregations']
     sensitive_value_top_avg = es_sensitive_result['avg_sensitive']['value']
 
@@ -166,14 +150,16 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg
     pene_mark = round(pene_mark,2)
 
+    print 'pene_mark'
+    print pene_mark
     return pene_mark
 
 # 安全性分数
 def compute_safe_num(xnr_user_no,current_time_old):
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE) - DAY
-    else:
-        current_time = current_time_old
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE) - DAY
+    # else:
+    current_time = current_time_old
 
     current_date = ts2datetime(current_time)
 
@@ -187,12 +173,19 @@ def compute_safe_num(xnr_user_no,current_time_old):
         'sort':{'activeness':{'order':'desc'}},
         'size':TOP_ASSESSMENT_NUM
     }
-    top_active_users = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,\
+    top_active_users = es.search(index=portrait_index_name,doc_type=portrait_index_type,\
                 body=query_body)['hits']['hits']
+    
+    # print 'top_active_users'
+    # print top_active_users
+
     top_active_uid_list = []
     for user in top_active_users:
         user = user['_source']
         top_active_uid_list.append(user['uid'])
+
+    print 'top_active_uid_list'
+    print top_active_uid_list
 
     query_body_count = {
         'query':{
@@ -203,7 +196,9 @@ def compute_safe_num(xnr_user_no,current_time_old):
             }
         }
     }
-    es_count_results = es_flow_text.count(index=index_name,doc_type=flow_text_index_type,body=query_body_count)
+    print 'index_name'
+    print index_name
+    es_count_results = es.count(index=index_name,doc_type=flow_text_index_type,body=query_body_count)
 
     if es_count_results['_shards']['successful'] != 0:
        tweets_count = es_count_results['count']
@@ -212,10 +207,15 @@ def compute_safe_num(xnr_user_no,current_time_old):
         print 'es index rank error'
         tweets_top_avg = 0
 
+    print 'tweets_top_avg'
+    print tweets_top_avg
+
     # 当前虚拟人发博数量
     uid = xnr_user_no2uid(xnr_user_no)
-    if S_TYPE == 'test':
-        uid = ACTIVE_UID
+    # if S_TYPE == 'test':
+    #     uid = ACTIVE_UID
+    print 'uid'
+    print uid
     xnr_query_body_count = {
         'query':{
             'filtered':{
@@ -225,7 +225,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
             }
         }
     }
-    es_xnr_count_results = es_flow_text.count(index=index_name,doc_type=flow_text_index_type,body=xnr_query_body_count)
+    es_xnr_count_results = es.count(index=index_name,doc_type=flow_text_index_type,body=xnr_query_body_count)
 
     if es_xnr_count_results['_shards']['successful'] != 0:
        xnr_tweets_count = es_xnr_count_results['count']
@@ -237,6 +237,9 @@ def compute_safe_num(xnr_user_no,current_time_old):
         active_mark = float(xnr_tweets_count)/tweets_top_avg
     except:
         active_mark = 0
+
+    print 'active_mark'
+    print active_mark
 
     ## 计算分数
     topic_distribute_dict = get_tweets_distribute(xnr_user_no)
@@ -257,9 +260,12 @@ def get_tweets_distribute(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
-        followers_list = es_results['followers_list']
+        followers_list = []
+        if es_results.has_key('followers_list'):
+            followers_list = es_results['followers_list']
+
 
     if S_TYPE == 'test':
         uid=PORTRAI_UID
@@ -267,7 +273,7 @@ def get_tweets_distribute(xnr_user_no):
 
     # 关注者topic分布
 
-    results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+    results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
         body={'ids':followers_list})['docs']
 
     topic_list_followers = []
@@ -280,16 +286,20 @@ def get_tweets_distribute(xnr_user_no):
 
     topic_list_followers_count = Counter(topic_list_followers)
 
+    print 'topic_list_followers_count'
+    print topic_list_followers_count
+
     # 虚拟人topic分布
     try:
-        xnr_results = es_user_portrait.get(index=portrait_index_name,doc_type=portrait_index_type,\
+        xnr_results = es.get(index=portrait_index_name,doc_type=portrait_index_type,\
             id=uid)['_source']
         topic_string = xnr_results['topic_string'].split('&')
         topic_xnr_count = Counter(topic_string)
-
-
     except:
         topic_xnr_count = {}
+
+    print 'topic_xnr_count'
+    print topic_xnr_count
 
     if topic_xnr_count:
         for topic, value in topic_list_followers_count.iteritems():
@@ -301,7 +311,6 @@ def get_tweets_distribute(xnr_user_no):
             
     # 整理仪表盘数据
     mark = 0
-    
     if topic_xnr_count:
         n_topic = len(topic_list_followers_count.keys())
         for topic,value in topic_xnr_count.iteritems():
@@ -312,7 +321,8 @@ def get_tweets_distribute(xnr_user_no):
             except:
                 continue
     topic_distribute_dict['mark'] = mark
-
+    print 'topic_distribute_dict'
+    print topic_distribute_dict
     return topic_distribute_dict
 
 def get_follow_group_distribute(xnr_user_no):
@@ -325,7 +335,7 @@ def get_follow_group_distribute(xnr_user_no):
         followers_list_today = FOLLOWERS_TODAY
     else:
         # 获取所有关注者
-        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
         followers_list = es_results['followers_list']
 
@@ -338,7 +348,7 @@ def get_follow_group_distribute(xnr_user_no):
 
     # 所有关注者领域分布
 
-    results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+    results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
         body={'ids':followers_list})['docs']
     
     domain_list_followers = []
@@ -353,7 +363,7 @@ def get_follow_group_distribute(xnr_user_no):
 
     
     try:
-        today_results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+        today_results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
             body={'ids':followers_list_today})['docs']
 
         domain_list_followers_today = []
@@ -395,11 +405,10 @@ def get_follow_group_distribute(xnr_user_no):
 
 def xnr_user_no2uid(xnr_user_no):
     try:
-        result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        result = es.get(index=facebook_xnr_index_name,doc_type=facebook_xnr_index_type,id=xnr_user_no)['_source']
         uid = result['uid']
     except:
         uid = ''
-
     return uid
 
 def uid2nick_name_photo(uid):
@@ -417,7 +426,7 @@ def uid2nick_name_photo(uid):
 #统计信息表
 def create_xnr_history_info_count(xnr_user_no,current_date):
     #create_date=ts2datetime(create_time)
-    weibo_xnr_flow_text_name=xnr_flow_text_index_name_pre+current_date
+    facebook_xnr_flow_text_name=xnr_flow_text_index_name_pre+current_date
 
     query_body={
         'query':{
@@ -439,21 +448,34 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     xnr_user_detail=dict()
     #时间
     xnr_user_detail['date_time']=current_date
-    # try:
-    xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
-    #今日总粉丝数
-    for item in xnr_result['hits']['hits']:
-        xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
-    # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
-    for item in xnr_result['aggregations']['all_task_source']['buckets']:
-        if item['key'] == 'daily_post':
-            xnr_user_detail['daily_post_num']=item['doc_count']
-        elif item['key'] == 'business_post':
-            xnr_user_detail['business_post_num']=item['doc_count']
-        elif item['key'] == 'hot_post':
-            xnr_user_detail['hot_follower_num']=item['doc_count']
-        elif item['key'] =='trace_follow_tweet':
-            xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
+    
+    try:
+        xnr_result=es.search(index=facebook_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+    except Exception,e:
+        xnr_result = []
+        print e
+
+
+
+    if xnr_result:
+        #今日总粉丝数
+        for item in xnr_result['hits']['hits']:
+            xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+        # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
+        for item in xnr_result['aggregations']['all_task_source']['buckets']:
+            if item['key'] == 'daily_post':
+                xnr_user_detail['daily_post_num']=item['doc_count']
+            elif item['key'] == 'business_post':
+                xnr_user_detail['business_post_num']=item['doc_count']
+            elif item['key'] == 'hot_post':
+                xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
+
+    if xnr_user_detail.has_key('user_fansnum'):
+        pass
+    else:
+        xnr_user_detail['user_fansnum']=0
     #总发帖量
     if xnr_user_detail.has_key('daily_post_num'):
         pass
@@ -481,13 +503,15 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     if xnr_user_detail['user_fansnum'] == 0:
         yesterday_date=ts2datetime(datetime2ts(current_date)-DAY)
         count_id=xnr_user_no+'_'+yesterday_date
-        xnr_count_result=es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-        xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        try:
+            xnr_count_result=es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+        except Exception,e:
+            print e
+            xnr_user_detail['user_fansnum']=0
     else:
         pass
-
     xnr_user_detail['xnr_user_no']=xnr_user_no
-
     return xnr_user_detail
 
 ## 影响力评估各指标
@@ -556,8 +580,13 @@ def get_influ_fans_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    fans_total_num_last = get_result['fans_total_num']
+    try:
+        get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
+        fans_total_num_last = get_result['fans_total_num']
+    except Exception,e:
+        print e
+        fans_total_num_last = 0
+
     if not fans_total_num_last:
         fans_total_num_last = 1
 
@@ -598,23 +627,29 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
         }
     }
 
-
-    es_day_count_result = es.count(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
+    try:
+        es_day_count_result = es.count(index=facebook_feedback_retweet_index_name,doc_type=facebook_feedback_retweet_index_type,\
                     body=query_body_day,request_timeout=999999)
+        if es_day_count_result['_shards']['successful'] != 0:
+            es_day_count = es_day_count_result['count']
+        else:
+            return 'es_day_count_found_error'
+    except Exception,e:
+        print e
+        es_day_count = 0
 
-    if es_day_count_result['_shards']['successful'] != 0:
-        es_day_count = es_day_count_result['count']
-    else:
-        return 'es_day_count_found_error'
 
+    try:
+        es_total_count_result = es.count(index=facebook_feedback_retweet_index_name,doc_type=facebook_feedback_retweet_index_type,\
+                        body=query_body_total,request_timeout=999999)
 
-    es_total_count_result = es.count(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
-                    body=query_body_total,request_timeout=999999)
-
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
+        if es_total_count_result['_shards']['successful'] != 0:
+            es_total_count = es_total_count_result['count']
+        else:
+            return 'es_total_count_found_error'
+    except Exception,e:
+        print e
+        es_total_count = 0
 
     retweet_dict['day_num'] = es_day_count
     retweet_dict['total_num'] = es_total_count
@@ -622,9 +657,13 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
-    retweet_total_num_last = get_result['retweet_total_num']
-
+    try:
+        get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
+        retweet_total_num_last = get_result['retweet_total_num']
+    except Exception,e:
+        print e
+        retweet_total_num_last = 0
+        
     if not retweet_total_num_last:
         retweet_total_num_last = 1
 
@@ -668,7 +707,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
         }
     }
 
-    es_day_count_result = es.count(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    es_day_count_result = es.count(index=facebook_feedback_comment_index_name,doc_type=facebook_feedback_comment_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
@@ -677,7 +716,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
         return 'es_day_count_found_error'
 
 
-    es_total_count_result = es.count(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
+    es_total_count_result = es.count(index=facebook_feedback_comment_index_name,doc_type=facebook_feedback_comment_index_type,\
                     body=query_body_total,request_timeout=999999)
 
     if es_total_count_result['_shards']['successful'] != 0:
@@ -691,7 +730,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+    get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
     comment_total_num_last = get_result['comment_total_num']
 
     if not comment_total_num_last:
@@ -734,7 +773,7 @@ def get_influ_like_num(xnr_user_no,current_time):
         }
     }
 
-    es_day_count_result = es.count(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
+    es_day_count_result = es.count(index=facebook_feedback_like_index_name,doc_type=facebook_feedback_like_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
@@ -742,7 +781,7 @@ def get_influ_like_num(xnr_user_no,current_time):
     else:
         return 'es_day_count_found_error'
 
-    es_total_count_result = es.count(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
+    es_total_count_result = es.count(index=facebook_feedback_like_index_name,doc_type=facebook_feedback_like_index_type,\
                     body=query_body_total,request_timeout=999999)
 
     if es_total_count_result['_shards']['successful'] != 0:
@@ -756,7 +795,7 @@ def get_influ_like_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+    get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
     like_total_num_last = get_result['like_total_num']
 
     if not like_total_num_last:
@@ -796,7 +835,7 @@ def get_influ_at_num(xnr_user_no,current_time):
         }
     }
 
-    es_day_count_result = es.count(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+    es_day_count_result = es.count(index=facebook_feedback_at_index_name,doc_type=facebook_feedback_at_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
@@ -804,7 +843,7 @@ def get_influ_at_num(xnr_user_no,current_time):
     else:
         return 'es_day_count_found_error'
 
-    es_total_count_result = es.count(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
+    es_total_count_result = es.count(index=facebook_feedback_at_index_name,doc_type=facebook_feedback_at_index_type,\
                     body=query_body_total,request_timeout=999999)
 
     if es_total_count_result['_shards']['successful'] != 0:
@@ -818,7 +857,7 @@ def get_influ_at_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+    get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
     at_total_num_last = get_result['at_total_num']
 
     if not at_total_num_last:
@@ -863,7 +902,7 @@ def get_influ_private_num(xnr_user_no,current_time):
         }
     }
 
-    es_day_count_result = es.count(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+    es_day_count_result = es.count(index=facebook_feedback_private_index_name,doc_type=facebook_feedback_private_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
@@ -872,7 +911,7 @@ def get_influ_private_num(xnr_user_no,current_time):
         return 'es_day_count_found_error'
 
 
-    es_total_count_result = es.count(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
+    es_total_count_result = es.count(index=facebook_feedback_private_index_name,doc_type=facebook_feedback_private_index_type,\
                     body=query_body_total,request_timeout=999999)
 
     if es_total_count_result['_shards']['successful'] != 0:
@@ -886,7 +925,7 @@ def get_influ_private_num(xnr_user_no,current_time):
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
 
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=_id_last_day)['_source']
+    get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
     private_total_num_last = get_result['private_total_num']
 
     if not private_total_num_last:
@@ -934,7 +973,7 @@ def penetration_total(xnr_user_no,current_time):
 def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
 
     #if xnr_user_no:
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
     followers_list = es_results['followers_list']
 
@@ -969,7 +1008,7 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
             }
         }
     }
-    es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    es_sensitive_result = es.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
     sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
 
@@ -982,7 +1021,7 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
 def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
 
     #if xnr_user_no:
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
     fans_list = es_results['fans_list']
 
@@ -1014,7 +1053,7 @@ def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
             }
         }
     }
-    es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    es_sensitive_result = es.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
     sensitive_value = es_sensitive_result['avg_sensitive']['value']
 
@@ -1056,7 +1095,7 @@ def get_pene_infor_sensitive(xnr_user_no,current_time_old):
             }
         }
     }
-    es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
+    es_sensitive_result = es.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
     sensitive_value = es_sensitive_result['avg_sensitive']['value']
 
@@ -1071,27 +1110,26 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if sort_item == 'be_at':
-        index_name_sort = weibo_feedback_at_index_name
-        index_type_sort = weibo_feedback_at_index_type
+        index_name_sort = facebook_feedback_at_index_name
+        index_type_sort = facebook_feedback_at_index_type
     elif sort_item == 'be_retweet':
-        index_name_sort = weibo_feedback_retweet_index_name
-        index_type_sort = weibo_feedback_retweet_index_type
+        index_name_sort = facebook_feedback_retweet_index_name
+        index_type_sort = facebook_feedback_retweet_index_type
     elif sort_item == 'be_comment':
-        index_name_sort = weibo_feedback_comment_index_name
-        index_type_sort = weibo_feedback_comment_index_type
+        index_name_sort = facebook_feedback_comment_index_name
+        index_type_sort = facebook_feedback_comment_index_type
 
     if S_TYPE == 'test':
-        current_time = current_time_old
-        current_time_test = datetime2ts(S_DATE_BCI)
+        current_time = datetime2ts(S_DATE_BCI)
     else:
         current_time = current_time_old
-        current_time_test = current_time
-    #current_time = int(time.time())
+
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
-    
-    current_date_test = ts2datetime(current_time_test)
-    current_time_new_test = datetime2ts(current_date_test)
+
+
+    #到底用哪个时间？？？？
+    index_name_sort = index_name_sort + '_' + ts2datetime(current_time_new)
 
     feedback_sensitive_dict = {}
 
@@ -1100,7 +1138,7 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    # {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
                 ]
             }
         },
@@ -1112,15 +1150,23 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
             }
         }
     }
+    try:
+        es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
+        print 'index_name_sort'
+        print index_name_sort
+        print 'es_sensitive_result', es_sensitive_result
 
-    es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
-
-    sensitive_value = es_sensitive_result['avg_sensitive']['value']
-
-    if sensitive_value == None:
+        sensitive_value = es_sensitive_result['avg_sensitive']['value']
+        if sensitive_value == None:
+            sensitive_value = 0.0
+    except Exception,e:
+        print e
         sensitive_value = 0.0
-    feedback_sensitive_dict['sensitive_info'] = sensitive_value
 
+
+    feedback_sensitive_dict['sensitive_info'] = sensitive_value
+    print 'feedback_sensitive_dict'
+    print feedback_sensitive_dict
     return feedback_sensitive_dict
 
 def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
@@ -1156,7 +1202,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
             
         }
 
-        es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+        es_sensitive_result = es.search(index=facebook_report_management_index_name,doc_type=facebook_report_management_index_type,\
             body=query_body)['hits']['hits']
 
         if es_sensitive_result:    
@@ -1164,9 +1210,9 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
                 for result in es_sensitive_result:
                     result = result['_source']
                     report_content = json.loads(result['report_content'])
-                    weibo_list = report_content['weibo_list']
-                    for weibo in weibo_list:
-                        mid_event_list.append(weibo['mid'])
+                    facebook_list = report_content['facebook_list']
+                    for facebook in facebook_list:
+                        mid_event_list.append(facebook['mid'])
             elif report_type == u'人物':
                 for result in es_sensitive_result:
                     result = result['_source']
@@ -1178,9 +1224,9 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
                 for result in es_sensitive_result:
                     result = result['_source']
                     report_content = json.loads(result['report_content'])
-                    weibo_list = report_content['weibo_list']
-                    for weibo in weibo_list:
-                        mid_tweet_list.append(weibo['mid'])
+                    facebook_list = report_content['facebook_list']
+                    for facebook in facebook_list:
+                        mid_tweet_list.append(facebook['mid'])
 
     ## 事件平均敏感度
     
@@ -1206,7 +1252,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
     index_name_list = get_flow_text_index_list(current_time)
 
-    es_result_event = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+    es_result_event = es.search(index=index_name_list,doc_type=flow_text_index_type,\
         body=query_body_event)['aggregations']
     event_sensitive_avg = es_result_event['avg_sensitive']['value']
 
@@ -1232,7 +1278,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
         }
     }
 
-    es_result_user = es_user_portrait.search(index=portrait_index_name,doc_type=portrait_index_type,\
+    es_result_user = es.search(index=portrait_index_name,doc_type=portrait_index_type,\
         body=query_body_user)['aggregations']
     user_sensitive_avg = es_result_user['avg_sensitive']['value']
 
@@ -1261,7 +1307,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
         current_time = datetime2ts(S_DATE)
     index_name_list = get_flow_text_index_list(current_time)
 
-    es_result_tweet = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+    es_result_tweet = es.search(index=index_name_list,doc_type=flow_text_index_type,\
         body=query_body_tweet)['aggregations']
     tweet_sensitive_avg = es_result_tweet['avg_sensitive']['value']
     if tweet_sensitive_avg == None:
@@ -1284,17 +1330,15 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 # main 函数
 def cron_compute_mark(current_time):
 
-    xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
+    xnr_results = es.search(index=facebook_xnr_index_name,doc_type=facebook_xnr_index_type,\
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
-        xnr_results = [{'_source':{'xnr_user_no':'WXNR0004'}}]
+        xnr_results = [{'_source':{'xnr_user_no':'FXNR0005'}}]
     start_time = int(time.time())
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
-        #xnr_user_no = 'WXNR0004'
-
-        # current_time = int(time.time()-DAY)
+        #xnr_user_no = 'FXNR0005'
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
@@ -1356,17 +1400,22 @@ def cron_compute_mark(current_time):
         ## 安全性（同发帖量）
         end_time = int(time.time())
         print 'total time: ',end_time - start_time
-        try:
 
-            es.index(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
-                id=_id,body=xnr_user_detail)
+
+
+        print 'xnr_user_detail', xnr_user_detail
+
+        # try:
+
+        #     es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+        #         id=_id,body=xnr_user_detail)
             
-            mark = True
+        #     mark = True
 
-        except:
-            mark = False
+        # except:
+        #     mark = False
 
-        return mark
+        # return mark
 
 
 
@@ -1374,7 +1423,11 @@ def cron_compute_mark(current_time):
 if __name__ == '__main__':
 
 
-    current_time=int(time.time()-DAY)
+    if S_TYPE == 'test':
+        current_time = datetime2ts(S_DATE)
+    else:
+        current_time = int(time.time()-DAY)
+
     # current_time_now = int(time.time())
     # for i in range(11,-1,-1):
 
