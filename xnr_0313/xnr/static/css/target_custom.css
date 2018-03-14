@@ -1,0 +1,73 @@
+/*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.5);
+    position: relative;
+    top: 80px;
+}
+#container .title .tit-1 .icon {
+    width: 40px;
+    height: 40px;
+}
+#container .title .tit-1 b,#container .title .tit-2 b {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#container .title .tit-2 b {
+    margin-left: 0;
+}
+#container .title .tit-2 {
+    padding: 10px 30px;
+}
+#container .title .tit-2 .buildNew {
+    color:#f4c203;
+    /*color:#03a9f4;*/
+    cursor: pointer;
+    font-weight: 900;
+}
+#container .buildOption {
+    padding: 5px 30px;
+}
+#container .buildOption .opt {
+    padding: 15px 10px 10px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+#container .buildOption .opt-4 .aims,
+#container .buildOption .opt-6 .keywords {
+    padding: 6px 11px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: transparent;
+    color: white;
+    width: 100%;
+    text-align: center;
+}
+#container .next {
+    padding: 10px 30px;
+    text-align: center;
+}
+#container .next .nextButton {
+    padding: 5px 10px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background:rgba(117, 97, 97, 0.32);
+    cursor: pointer;
+}
+#container .next .nextButton:hover {
+    background: black;
+}

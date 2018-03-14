@@ -1,0 +1,365 @@
+/*清除默认样式*/
+html,body,div,img,h1,h2,h3,h4,h5,h6,input,button,span,p,b,strong,em,li,ul,ol,dl,dt,dd,
+th,tr,td,textarea,select,table,form {
+    margin: 0;
+    padding: 0;
+    font-family: '微软雅黑';
+}
+ul,li,ol {
+    list-style: none;
+}
+img {
+    border:none;
+}
+input,select,textarea,button {
+    outline: none;
+    border: none;
+}
+a,a:link,a:hover,a:visited,a:active {
+    text-decoration: none;
+}
+/*内容样式*/
+#nav {
+    position: fixed;
+    z-index: 99999999;
+    width: 100%;
+    /*height: 70px;*/
+    text-align: center;
+    background-color: white;
+    /*padding: 10px 30px;*/
+    box-shadow: 0 2px 5px rgba(41,46,51,0.15);
+}
+#nav .nav_top {
+    /*width: 50%;*/
+    padding: 20px 0 10px 60px;
+    /*text-align: center;*/
+    color: black;
+    display: inline-block;
+    background: url("/static/images/ID.png") no-repeat left center;
+    background-size:50px 50px;
+    position: relative;
+}
+#nav .nav_top h3 {
+    margin-left: 6px;
+    font-size: 27px;
+    margin-top: -5px;
+}
+/*10-12 LL向下展开的盒子*/
+#nav .nav_top {
+    cursor: pointer;
+}
+#nav .nav_top #LL {
+    width:100%;
+    display: none;
+    position:absolute;
+    left: 0;
+    background-color: #fff;
+    margin-top: 10px !important;
+    padding-bottom: 10px;
+}
+#nav .nav_top #LL li {
+    text-align:justify;
+    padding: 10px 5px;
+    padding-left:60px;
+}
+#nav .nav_top #LL li:hover {
+    background-color: #2a556f;
+    color:#fff;
+}
+#nav .nav_top #LL li i {
+    margin-right: 10px;
+}
+/**/
+.forwardingDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+.forwardingDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+.forwardingDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.forwardingDown span:hover {
+    background: #333333;
+}
+/*<style> navigationMain.html页面内样式*/
+.demo-label{display:inline-block;cursor:pointer;font-weight: normal;margin: 5px 10px;}
+.demo-radio{display:none!important;}
+.demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+.modal-header {
+    background: #09344e!important;
+    color: white!important;
+}
+.modal-body,.modal-footer {
+    background: #041b29!important;
+    color: white!important;
+}
+.modal-body,.modal-footer span {
+    background: #041b29!important;
+    color: white!important;
+}
+
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.modal-header .close {
+    color:white!important;
+    opacity: 1!important;
+}
+.modal-footer .btn {
+    background-color: transparent;
+    border-color: silver;
+    color: white;
+}
+.modal-footer .btn:hover {
+    background-color: rgba(3, 8, 16, 0.61);
+    color: white;
+}
+.weiboQQ {
+    position: absolute;
+    width: 554px;
+    height: 176px;
+    left: 50%;
+    top: 22%;
+    margin: 0 0 0 -277px;
+    text-align: center;
+}
+.weiboQQ img {
+    margin:0 30px;
+    cursor: pointer;
+}
+@media screen and (min-width:1370px) and (max-width:1920px) {
+    .bg13 .monitor {
+        top: 700px!important;
+        left: 1100px!important;
+    }
+    .bg13 .info {
+        top: 700px!important;
+        left:700px!important;
+    }
+}
+/*</style>*/
+/*---------*/
+
+#nav .nav_bottom {
+    display: inline-block;
+}
+#nav .nav_bottom .list {
+    display: inline-block;
+    position: relative;
+    top: 10px;
+    left: 20px;
+}
+#nav .nav_bottom .loadingUser {
+    display: inline-block;
+    left: 30px;
+    top: 1px;
+}
+#nav .coordinate {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 20px;
+    color:#1296db;
+}
+#nav .nav_bottom .loadingUser .xnrShowHide a,
+#nav .nav_bottom .loadingUser a#login_user {
+    color:#333;
+}
+#nav .nav_bottom .loadingUser button #login_user:hover{
+    color:#fa7d3c;
+}
+#nav .nav_bottom .list .main_li {
+    float: left;
+    margin-left: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
+#nav .nav_bottom .list .main_li:hover {
+    color: #fa7d3c;
+}
+#nav .nav_bottom .list .main_li i {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    color: black;
+}
+#nav .nav_bottom .list .main_li .li_a {
+    display: inline-block;
+    font-size: 14px;
+    color: #333;
+}
+#nav .nav_bottom .list .main_li:hover a,
+#nav .nav_bottom .list .main_li:hover i {
+    color: #fa7d3c;
+}
+#nav .username {
+    position: absolute;
+    right: 100px;
+    top: 110px;
+}
+#nav .username b {
+    display: inline-block;
+    font-size: 14px;
+    color: #003366;
+    margin-right: 5px;
+}
+#nav .username #navWQ #weibo_QQ_nav {
+    padding: 2px 3px;
+    border: 1px solid #424547;
+    border-radius: 5px;
+}
+#nav .username .sign_out {
+    display: inline-block;
+    padding: 2px 10px;
+    color: white;
+    background-color: #1ab5e2;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #838383;
+    cursor: pointer;
+}
+#nav .username .sign_out:hover {
+    background-color: #176de2;
+}
+/**/
+#container .commentDown,#container .emailDown,#container .robotDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .robotQuestion input,
+#container .commentDown input,
+#container .emailDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .robotQuestion span,
+#container .commentDown span,
+#container .emailDown span{
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .robotQuestion span:hover,
+#container .commentDown span:hover,
+#container .emailDown span:hover{
+    background: rgba(28, 28, 28, 0.96);
+}
+/*模态框*/
+.modal-open .modal {
+    overflow-x: hidden;
+    /*overflow-y: hidden;*/
+}
+.modal.in .modal-dialog {
+    margin: 100px auto 0;
+}
+body.modal-open {
+    /*overflow-y: auto !important;*/
+    padding-right: 0 !important;
+}
+.modal {
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9999999999999999999999999;
+}
+.modal-header {
+    background: #09344e!important;
+    color: white!important;
+}
+.modal-body,.modal-footer {
+    background: #041b29!important;
+    color: white!important;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.modal-header .close {
+    color:white!important;
+    opacity: 1!important;
+}
+.modal-footer .btn {
+    background-color: transparent;
+    border-color: silver;
+    color: white;
+}
+.modal-footer .btn:hover {
+    background-color: rgba(3, 8, 16, 0.61);
+    color: white;
+}
+
+/*表格中的样式*/
+.fixed-table-toolbar .search {width: 80%;}
+.form-control {
+    text-align: center;
+    font-size: 14px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding: 4px 7px;
+    background: rgba(8,23,44,0.35);
+}
+.fixed-table-container thead th .sortable {
+    padding-right: 12px;
+}
+.table:not(.table-condensed)>tbody>tr>td,
+.fixed-table-container thead th .both,
+.fixed-table-pagination .pagination-info{
+    color: white;
+}
+.table-hover>tbody>tr:hover {
+    background-color: #2a556f!important;
+}
+.fixed-table-container thead th .th-inner {
+    overflow: auto;
+    text-overflow: inherit;
+    white-space: normal;
+}
+.bootstrap-table .table>thead>tr>th {
+    width:10%;
+}
+.pagination>li>a {
+    background:rgba(8,23,44,0.35);
+    color: white;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover,
+.pagination>li>a:focus, .pagination>li>a:hover,.fixed-table-pagination li.disabled a {
+    background:#31708f;
+    border-color: silver;
+}
+.fixed-table-pagination li.disabled a {
+    color: white;
+}
+.pagination>li>a:focus, .pagination>li>a:hover {
+    color: white;
+}
+.disableCss{
+    pointer-events:none;
+    color:#afafaf!important;
+    cursor:not-allowed!important;
+}
