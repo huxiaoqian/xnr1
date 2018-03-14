@@ -6,7 +6,8 @@ import sys
 
 sys.path.append('../../')
 from parameter import MIN_COMMUNITY_NUM,MAX_COMMUNITY_NUM,COMMUNITY_DENSITY_CLUSTER,\
-                      MIN_MEAN_COMMUNITY_SENSITIVE,MIN_MEAN_COMMUNITY_INFLUENCE
+                      MIN_MEAN_COMMUNITY_SENSITIVE,MIN_MEAN_COMMUNITY_INFLUENCE,\
+                      MAX_SELECT_COMMUNITY_NUM
 from global_utils import es_xnr
 
 
@@ -26,12 +27,8 @@ def get_xnr_community(xnr_user_no,date_time):
     return community_list
 
 
-#根据指标筛选推荐社区
-def get_select_community(xnr_user_no,date_time):
-    #获取生成社区列表
-    create_communitylist = get_xnr_community(xnr_user_no,date_time)
-
-    #根据社区指标对生成社区进行筛选
+#根据社区指标对生成社区进行筛选：
+def get_first_select_result(create_communitylist):
     first_select_community = []
     for community in create_communitylist:
         community = json.loads(community)
@@ -68,18 +65,47 @@ def get_select_community(xnr_user_no,date_time):
         else:
             pass
 
+    return first_select_community
+
+
+#跟踪社区在跟踪周期内的指标阈值范围信息，若没有跟踪社区则适当提高指标阈值
+# def get_xnr_trace_community_detail(xnr_user_no):
+
+
+#基于跟踪社区指标或指定阈值进行二次筛选
+# def get_second_select_result(first_select_community,trace_community_detail):
+
+
+#根据指标筛选推荐社区
+def get_select_community(xnr_user_no,date_time):
+    #获取生成社区列表
+    create_communitylist = get_xnr_community(xnr_user_no,date_time)
+
+    #根据社区指标对生成社区进行筛选
+    first_select_community = get_first_select_result(create_communitylist)
+
     #第一次筛选后的社区人数
     first_community_num = len(first_select_community)
     print 'first_select_community::',first_community_num,first_select_community
 
-    #计算xnr当前跟踪社区指标平均值信息
-    # trace_community_detail = get_xnr_trace_community_detail(xnr_user_no)
-    return True
+    second_select_community = []
+    if first_community_num > MAX_SELECT_COMMUNITY_NUM:
+        #计算xnr当前跟踪社区指标平均值信息
+        trace_community_detail = get_xnr_trace_community_detail(xnr_user_no)
+
+        #基于跟踪社区指标信息进行二次筛选
+        second_select_community = get_second_select_result(first_select_community,trace_community_detail)
+    else:
+        second_select_community = first_select_community
 
 
-#新旧社区对比
+    return second_select_community
+
+
+#新旧社区的比较与信息更新
+
 
 if __name__ == '__main__':
     xnr_user_no = 'WXNR0004'
-    date_time = '2018-03-11'
+    date_time = '2018-03-13'
     get_select_community(xnr_user_no,date_time)
