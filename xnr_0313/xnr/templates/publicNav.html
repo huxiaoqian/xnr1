@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- head标签开始 -->
+    {% block head_meta %}
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    {% block title %}<title></title>{% endblock %}
+    {% endblock %}
+    <!-- head标签结束 -->
+
+    <!-- css标签 -->
+    {% block css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/public_nav.css">
+    <style>
+        #choosePerson .demo-label{width: auto!important;}
+        ._translate {margin: 10px 0;}
+        .datetimepicker td,.datetimepicker th {color:#333!important;}
+        #wordcloud .demo-label {
+            width:90px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 5px 10px;
+        }
+    </style>
+    {% endblock %}
+    <!-- css结束 -->
+
+    <!-- 自己的css -->
+    {% block my_css %}
+    {% endblock %}
+</head>
+<body>
+<!-- 导航开始 -->
+
+{% block header %}
+<div id="nav">
+    <div class="nav_top">
+        <h4 style="color:#373737;">虚拟人指挥管理系统</h4>
+        <div id="LL">
+            <ul>
+                <li id="personal"><i class="icon icon-github-alt"></i>我的虚拟人</li>
+                <li id="control"><i class="icon icon-cogs"></i>操作控制</li>
+                <li id="info"><i class="icon icon-eye-open"></i>信息监测</li>
+                <li id="monitor"><i class="icon icon-warning-sign"></i>预警监控</li>
+                <li id="knowledge"><i class="icon icon-user-md"></i>虚拟人定制</li>
+                <li id="reported"><i class="icon icon-sitemap"></i>行为评估</li>
+                <li id="reportedmange"><i class="icon icon-share"></i>上报管理</li>
+                <li id="knowledgebase"><i class="icon icon-key"></i>知识库管理</li>
+                <li id="system"><i class="icon icon-inbox"></i>系统管理</li>
+            </ul>
+        </div>
+
+    </div>
+    <div class="nav_bottom">
+        <ul class="list">
+            <li class="main_li" id="backHome">
+                <a class="list_one li_a">
+                    <i class="icon icon-home"></i>&nbsp;首页
+                </a>
+            </li>
+            <div class="behind" style="float: left;"></div>
+        </ul>
+        <div class="btn-group loadingUser">
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" title="登录用户"
+                    aria-expanded="false" style="background:transparent;color: black;">
+                <span class="icon icon-user"></span> <a id="login_user"></a>&nbsp;&nbsp;<span class="down3page"></span>
+            </button>
+            <span class="xnrShowHide"><b style="color:#333;">虚拟人：</b> <a class="nav_name"></a> <a class="nav_type"></a></span>
+            <ul class="dropdown-menu">
+                <!-- <li><a href="#"><i class="icon-pencil"></i> 编辑</a></li>
+                <li><a href="#"><i class="icon-trash"></i> 删除</a></li> -->
+                <li class="current"><a href="#"><i class="icon-map-marker"></i> <span>微博虚拟人</span></a></li>
+                <li class="change"><a href="#"><i class="icon-random"></i> <span>切换虚拟人</span></a></li>
+                <li class="divider"></li>
+                <li class="old"><a href="#"><i class="icon-exchange"></i> <span>QQ群虚拟人</span></a></li>
+                <li class="old_2"><a href="#"><i class="icon-exchange"></i> <span>微信虚拟人</span></a></li>
+                <li class="old_3"><a href="#"><i class="icon-exchange"></i> <span>FaceBook虚拟人</span></a></li>
+                <li class="old_4"><a href="#"><i class="icon-exchange"></i> <span>Twitter虚拟人</span></a></li>
+                <li><a id="logout" href="/logout/"><i class="i"></i> 登出 </a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="coordinate">
+        <!--<i class="icon icon-screenshot"></i>-->
+        <img src="/static/images/navpos.png" alt="">
+        <b class="coorName"></b>
+    </div>
+</div>
+<div class="modal fade" id="errorInfor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">错误提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--语料选择-->
+<div class="modal fade" id="wordcloud" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">语料选择</h4>
+            </div>
+            <div class="modal-body">
+                <div class="xnr_choose" style="margin: 10px;">
+                    <span style="position: relative;top:-3px;">虚拟人选择：</span>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="xnr" value='my_xnrs' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 私有
+                    </label>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="xnr" value='all_xnrs'>
+                        <span class="demo-checkbox demo-radioInput"></span> 共享
+                    </label>
+                </div>
+                <div class="word-1" style="margin: 10px;">
+                    <span style="position: relative;top:-3px;">语料分类：</span>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="theday" value='日常语料' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 日常语料
+                    </label>
+                    <label class="demo-label" style="margin-bottom:0;">
+                        <input class="demo-radio" type="radio" name="theday" value='主题语料'>
+                        <span class="demo-checkbox demo-radioInput"></span> 主题语料
+                    </label>
+                </div>
+                <div id="cloud-1">
+                    <label class="demo-label" title="旅游">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='旅游' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 旅游
+                    </label>
+                    <label class="demo-label" title="美食">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='美食'>
+                        <span class="demo-checkbox demo-radioInput"></span> 美食
+                    </label>
+                    <label class="demo-label" title="汽车">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='汽车'>
+                        <span class="demo-checkbox demo-radioInput"></span> 汽车
+                    </label>
+                    <label class="demo-label" title="游戏">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='游戏'>
+                        <span class="demo-checkbox demo-radioInput"></span> 游戏
+                    </label>
+                    <label class="demo-label" title="星座">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='星座'>
+                        <span class="demo-checkbox demo-radioInput"></span> 星座
+                    </label>
+                    <label class="demo-label" title="摄影">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='摄影'>
+                        <span class="demo-checkbox demo-radioInput"></span> 摄影
+                    </label>
+                    <label class="demo-label" title="音乐">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='音乐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 音乐
+                    </label>
+                    <label class="demo-label" title="电影">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='电影'>
+                        <span class="demo-checkbox demo-radioInput"></span> 电影
+                    </label>
+                    <label class="demo-label" title="运动">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='运动'>
+                        <span class="demo-checkbox demo-radioInput"></span> 运动
+                    </label>
+                    <label class="demo-label" title="搞笑">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='搞笑'>
+                        <span class="demo-checkbox demo-radioInput"></span> 搞笑
+                    </label>
+                    <label class="demo-label" title="数码">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='数码'>
+                        <span class="demo-checkbox demo-radioInput"></span> 数码
+                    </label>
+                    <label class="demo-label" title="军事">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='军事'>
+                        <span class="demo-checkbox demo-radioInput"></span> 军事
+                    </label>
+                    <label class="demo-label" title="历史">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='历史'>
+                        <span class="demo-checkbox demo-radioInput"></span> 历史
+                    </label>
+                    <label class="demo-label" title="萌宠">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='萌宠'>
+                        <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                    </label>
+                    <label class="demo-label" title="动漫">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='动漫'>
+                        <span class="demo-checkbox demo-radioInput"></span> 动漫
+                    </label>
+                    <label class="demo-label" title="情感">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='情感'>
+                        <span class="demo-checkbox demo-radioInput"></span> 情感
+                    </label>
+                    <label class="demo-label" title="时尚">
+                        <input class="demo-radio" type="checkbox" name="theme11" value='时尚'>
+                        <span class="demo-checkbox demo-radioInput"></span> 时尚
+                    </label>
+                </div>
+                <div id="cloud-2" style="display: none;">
+                    <label class="demo-label" title="民生类_法律">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_法律' checked>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_法律
+                    </label>
+                    <label class="demo-label" title="文体类_娱乐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_娱乐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 文体类_娱乐
+                    </label>
+                    <label class="demo-label" title="科技类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='科技类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 科技类
+                    </label>
+                    <label class="demo-label" title="经济类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='经济类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 经济类
+                    </label>
+                    <label class="demo-label" title="教育类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='教育类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 教育类
+                    </label>
+                    <label class="demo-label" title="民生类_环保">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_环保'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_环保
+                    </label>
+                    <label class="demo-label" title="民生类_健康">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_健康'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_健康
+                    </label>
+                    <label class="demo-label" title="军事类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='军事类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 军事类
+                    </label>
+                    <label class="demo-label" title="政治类_外交">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_外交'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_外交
+                    </label>
+                    <label class="demo-label" title="文体类_体育">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='文体类_体育'>
+                        <span class="demo-checkbox demo-radioInput"></span> 文体类_体育
+                    </label>
+                    <label class="demo-label" title="民生类_交通">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_交通'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_交通
+                    </label>
+                    <label class="demo-label" title="其他类">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='其他类'>
+                        <span class="demo-checkbox demo-radioInput"></span> 其他类
+                    </label>
+                    <label class="demo-label" title="政治类_反腐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_反腐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_反腐
+                    </label>
+                    <label class="demo-label" title="民生类_就业">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_就业'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_就业
+                    </label>
+                    <label class="demo-label" title="政治类_暴恐">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_暴恐'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_暴恐
+                    </label>
+                    <label class="demo-label" title="民生类_住房">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_住房'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_住房
+                    </label>
+                    <label class="demo-label" title="政治类_地区和平">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_地区和平'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_地区和平
+                    </label>
+                    <label class="demo-label" title="政治类_宗教">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='政治类_宗教'>
+                        <span class="demo-checkbox demo-radioInput"></span> 政治类_宗教
+                    </label>
+                    <label class="demo-label" title="民生类_社会保障">
+                        <input class="demo-radio" type="checkbox" name="theme22" value='民生类_社会保障'>
+                        <span class="demo-checkbox demo-radioInput"></span> 民生类_社会保障
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="joinWord()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--机器人-->
+<!-- <style>
+    #robotBack .question {
+        padding: 10px 0;
+    }
+    #robotBack .questionVal {
+        width: 60%;
+        border-radius: 5px;
+        text-align: center;
+        padding: 3px 7px;
+        background: transparent;
+        color: white;
+        border:1px solid #fff;
+    }
+</style>
+<div class="modal fade" id="robotBack" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">机器人回复</h4>
+            </div>
+            <div class="modal-body">
+                <div class="question">
+                    <span>问题：</span>
+                    <input type="text" class="questionVal" placeholder="请输入问题内容"/>
+                    <button class="sureQuestion btn btn-primary btn-sm" onclick="getRobot()">确定</button>
+                </div>
+                <p class="QC" style="display: none;">内容：<b class="showRob"></b></p>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!-- 10-12 LL===微博  -->
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的虚拟人身份</span>
+                        <div class="identity" style="padding: 10px 25px;">
+
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择虚拟人的显示模式</span>
+                        <div class="showType" style="padding: 10px 25px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                <span class="demo-checkbox demo-radioInput"></span> 隐身
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<!-- 导航结束 -->
+
+<!-- 主要内容 -->
+{% block main %}
+
+{% endblock %}
+
+
+<!-- JS文件 -->
+{% block js %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/bootstrap-table.min.js"></script>
+<script src="/static/js/bootstrap-table-zh-CN.min.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/static/js/moment.min.js"></script>
+<script src="/static/echarts/echarts.min.js"></script>
+<script>
+    //登录用户名
+//    var admin='admin@qq.com';
+    var admin='{{g.user}}';
+    $('#login_user').text(admin);
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                //cache:false,//不会从浏览器缓存中加载请求信息
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
+    //清除所有存储
+    var ISclear;
+    setTimeout(function () {
+        localStorage.clear();
+        ISclear='clear';
+    },21600000);
+    //
+    $('#wordcloud .word-1 .demo-label .demo-radio').on('click',function () {
+        var _val=$(this).val();
+        if (_val=='日常语料'){
+            $('#cloud-1').show();
+            $('#cloud-2').hide();
+        }else {
+            $('#cloud-1').hide();
+            $('#cloud-2').show();
+        }
+    })
+    //
+    var flagType='{{flag}}',loadingType;
+    if (flagType){
+        if (flagType=='1'){
+            $('.down3page').text('(微博)');
+            loadingType='weibo';
+        }else if (flagType=='2'){
+            $('.down3page').text('(QQ群)');
+            loadingType='QQ';
+        }else if (flagType=='3'){
+            $('.down3page').text('(微信)');
+            loadingType='WX';
+        }else if (flagType=='4'){
+            $('.down3page').text('(FaceBook)');
+            loadingType='faceBook';
+        }else if (flagType=='5'){
+            $('.down3page').text('(twitter)');
+            loadingType='twitter';
+        }
+    }
+</script>
+<script src="/static/js/publicNav-1.js"></script>
+<script src="/static/js/publicNav-2.js"></script>
+{% endblock %}
+
+
+{% block write_js %}
+<script>
+
+</script>
+{% endblock %}
+
+<!-- 自己的JS -->
+{% block my_js %}
+
+{% endblock %}
+
+</body>
+</html>

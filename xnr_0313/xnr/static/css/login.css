@@ -1,0 +1,153 @@
+html, body, div, img, h1, h2, h3, h4, h5, h6, input, button, span, p, b, strong, em, li, ul, ol, dl, dt,
+dd, th,textarea, select, table, form {
+    margin: 0;
+    padding: 0;
+    font-family: '微软雅黑';
+}
+input,button {
+    outline: none;
+    border: none;
+}
+img {
+    border: none;
+}
+/*-------主要内容-------*/
+body {
+    /*background: url('../static/images/login.jpg') no-repeat;*/
+    /*background-size: 100% 100%;*/
+    position: relative;
+    background: rgb(48, 48, 61);
+    padding-bottom: 20px;
+    /*background:linear-gradient(-180deg, rgba(55,60,65,0.00) 38%, #00DEFF 100%);*/
+}
+#fonts {
+    height: 100px;
+    background:url("/static/images/font.png") center center no-repeat;
+}
+#box_body {
+    min-width: 1136px;
+    max-width: 1360px;
+    padding: 100px 0;
+    position: relative;
+    z-index: 10;
+    margin: 0 auto;
+}
+.flashes {color: white;}
+#linear {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 500px;
+    background:linear-gradient(-180deg, rgba(55,60,65,0.00) 18%, #00DEFF 100%);
+}
+#img_list_1,#img_list_2 {
+    position: absolute;
+}
+#img_list_1 {
+    top: 170px;
+    left:5px;
+}
+#img_list_1 img  {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    transition: all linear 0.2s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+#box img.img-7,#box img.img-8 {
+    position: absolute;
+    bottom: -23px;
+    right: -211px;
+    -webkit-animation:change 11s linear infinite both;
+    -o-animation:change 11s linear infinite  both;
+    animation:change 11s linear infinite  both;
+}
+#box img.img-8 {
+    bottom: -35px;
+    right: -255px;
+}
+@keyframes change {
+    from{
+        -webkit-transform:  rotate(0deg);
+        -moz-transform:  rotate(0deg);
+        -ms-transform:  rotate(0deg);
+        -o-transform:  rotate(0deg);
+        transform:  rotate(0deg);
+    }
+    to{
+        -webkit-transform:  rotate(360deg);
+        -moz-transform:  rotate(360deg);
+        -ms-transform:  rotate(360deg);
+        -o-transform:  rotate(360deg);
+        transform:  rotate(360deg);
+    }
+}
+@-webkit-keyframes change {
+    from{
+        -webkit-transform:  rotate(0deg);
+        -moz-transform:  rotate(0deg);
+        -ms-transform:  rotate(0deg);
+        -o-transform:  rotate(0deg);
+        transform:  rotate(0deg);
+    }
+    to{
+        -webkit-transform:  rotate(360deg);
+        -moz-transform:  rotate(360deg);
+        -ms-transform:  rotate(360deg);
+        -o-transform:  rotate(360deg);
+        transform:  rotate(360deg);
+    }
+}
+#img_list_2 {
+    top:0px;
+    left:700px;
+}
+#img_list_2 img {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: all linear 0.2s;
+}
+#box_body #box {
+    position: relative;
+    z-index: 200;
+    margin:50px auto 0;
+    width:400px;
+    padding:20px;
+    border-radius: 10px;
+    background-color: rgba(21, 21, 21, 0.56);
+}
+#email,#password {
+    width: 200px;
+    height: 25px;
+    padding: 5px 5px 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid white;
+    transition: all linear .7s;
+    color: white;
+}
+#submit {
+    text-align: center;
+    background: transparent;
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    /*text-shadow: rgb(173, 60, 37) 1px 1px 1px;*/
+    width: 288px;
+    height: 32px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all linear .5s;
+}
+#submit:hover {
+    background: #fff;
+    color: black;
+}
