@@ -1015,7 +1015,8 @@ from xnr.global_utils import facebook_feedback_comment_index_name, facebook_feed
                             facebook_feedback_retweet_index_name, facebook_feedback_retweet_index_type,\
                             facebook_feedback_private_index_name, facebook_feedback_private_index_type,\
                             facebook_feedback_at_index_name, facebook_feedback_at_index_type,\
-                            facebook_feedback_fans_index_name, facebook_feedback_fans_index_type
+                            facebook_feedback_fans_index_name, facebook_feedback_fans_index_type,\
+                            facebook_feedback_friends_index_name, facebook_feedback_friends_index_type
 from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list
 from xnr.utils import judge_fb_follow_type, judge_fb_sensing_sensor
 from xnr.parameter import TOP_ACTIVE_SOCIAL
@@ -1172,7 +1173,7 @@ def get_show_at(task_detail):
         print e
     return results_all
 
-def get_show_fans(task_detail):
+def get_show_friends(task_detail):
     xnr_user_no = task_detail['xnr_user_no']
     sort_item = task_detail['sort_item']
     start_ts = int(task_detail['start_ts'])
@@ -1194,7 +1195,7 @@ def get_show_fans(task_detail):
     }
     results_all = []
     try:
-        es_results = es.search(index=facebook_feedback_fans_index_name,doc_type=facebook_feedback_fans_index_type,\
+        es_results = es.search(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,\
                             body=query_body)['hits']['hits']
         if es_results:
             for item in es_results:
