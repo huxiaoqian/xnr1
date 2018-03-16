@@ -1,0 +1,185 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/inforChecking.css">
+<style>
+    .content-1-word .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    #container .content-1-word .fixed-table-body {text-align: center;}
+    .content-1-word .table-no-bordered,.content-1-word .fixed-table-container,
+    .content-1-word .bootstrap-table .table>thead>tr>th,.content-1-word .bootstrap-table .table,.content-1-word .table>tbody>tr>td{
+        border: none;
+    }
+    .content-1-word .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .content-1-word .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .content-1-word .bootstrap-table .table:not(.table-condensed),.content-1-word .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .content-1-word .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .content-1-word .fixed-table-container {top: 15px;}
+    .content-1-word .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .hot-2 .table>tbody>tr>td{border-left: 1px solid #ddd;}
+    .hot-2 .fixed-table-container tbody td:first-child {border-left:none;}
+    .content-1-word .fixed-table-container thead th .both {background-image: none!important;}
+    /*----------------------*/
+    #container .title .titTime input {width: 380px;}
+    #container .content-1-word .everySpeak,
+    #container .content-2 .everySpeak {
+        width: 950px;
+        margin-bottom: 15px;
+        position: relative;
+        padding: 20px 10px 20px 30px;
+        background: rgba(8,23,44,0.35);
+    }
+    #container .content-1-word .everySpeak .center_icon,
+    #container .content-2 .everySpeak .center_icon {
+        position: absolute;
+        top:19px;
+        left:3px;
+        width: 20px;
+        height:20px;
+    }
+    .joinWord {
+        position: relative;
+        top: -2px;
+        display: inline-block;
+        padding: 2px 6px;
+        margin-left: 30px;
+        font-size: 12px;
+        color: white;
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .joinWord:hover {
+        background: rgba(0, 0, 0, 0.71);
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-rss note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">预警监控</b>
+        </div>
+        <div class="titTime">
+            <span>时间范围：从</span>
+            <input size="16" type="text" value="" readonly class="form_datetime start" placeholder="请选择时间">
+            <span>到</span>
+            <input size="16" type="text" readonly class="form_datetime end" placeholder="请选择时间">
+            <span class="timeSure">确定</span>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content-1" style="margin-top: 20px;">
+            <img src="/static/images/icon.png" alt="">
+            <span style="font-size: 16px;font-weight: 900;color: #fff">敏感消息</span>
+            <div class="content-1-word">
+                <div id="content-1-word"></div>
+            </div>
+        </div>
+        <div class="content-2" style="margin-top: 40px;">
+            <div class="hot-1" style="margin: 20px 0;">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff">敏感用户</span>
+            </div>
+            <div class="hot-2">
+                <div id="hot-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="errorInfor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">错误提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--敏感内容-->
+<div class="modal fade" id="QQgroup_weibo" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><b class="QW-1" style="color: #ff6c0d"></b>所在群的敏感言论</h4>
+            </div>
+            <div class="modal-body QW-2">
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType = 'QQ';
+    weiboORqq('QQ');
+    $('.nav_type').text('(QQ群)');
+    $('.coorName').text('预警监控');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd",
+        minView:2, //控制时分秒
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('.start').on('changeDate', function(ev){
+        $('.end').datetimepicker('setStartDate',ev.date);
+    });
+    $('.end').on('changeDate', function(ev){
+        $('.start').datetimepicker('setEndDate',ev.date);
+    });
+</script>
+<script src="/static/js/inforCheckingQQ-1.js"></script>
+{% endblock %}
