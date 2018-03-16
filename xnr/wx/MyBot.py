@@ -233,13 +233,15 @@ class MyBot(Bot):
 
     def setGroupMembersRN(self):
         all_friends = []
+        listening_group_puid_list = self.groups_list
         for group in self.groups():
-            print group
-            group.update_group(members_details=True)
-            for member in group.members:
-                if member.is_friend:
-                    if not member.user_name == self.self.user_name:  #排除机器人自己
-                        all_friends.append(member)
+            if group.puid in listening_group_puid_list:
+                print group
+                group.update_group(members_details=True)
+                for member in group.members:
+                    if member.is_friend:
+                        if not member.user_name == self.self.user_name:  #排除机器人自己
+                            all_friends.append(member)
         self.setRN(list(set(all_friends)))
 
     def load_member_id(self, member):
