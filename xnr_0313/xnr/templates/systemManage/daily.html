@@ -1,0 +1,139 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>系统管理 - 日志管理</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/daily.css">
+<style>
+    #addLogModal .logContent .logCC {
+        margin-bottom: 15px;
+    }
+    #addLogModal .logContent .logCC span {
+        display: inline-block;
+        width: 70px;
+        margin: 0 10px;
+        text-align: right;
+    }
+    #addLogModal .logContent .logCC input {
+        display: inline-block;
+        width: 400px;
+        text-align: center;
+        padding: 3px 6px;
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .fixed-table-toolbar .search {
+        width: 100%;
+    }
+    .bootstrap-table .table>thead>tr>th {
+        width: 12%;
+    }
+    .fixed-table-container thead th:first-child,
+    .fixed-table-container thead th:last-child{
+        width: 5%!important;
+    }
+    .fixed-table-pagination .page-list {
+        display: none;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-calendar account_icon"></span>
+            <b>日志管理</b>
+        </div>
+    </div>
+    <div class="loglist">
+        <!--<span class="addLog" data-toggle="modal" data-target="#addLogModal">添加用户</span>-->
+        <div id="loglist"></div>
+    </div>
+</div>
+<!--模态框-->
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delAgain" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureDelLog()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加日志内容-->
+<div class="modal fade" id="addLogModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加日志内容</h4>
+            </div>
+            <div class="modal-body">
+                <!--
+                user_id,user_name,login_time,login_ip,operate_time,operate_content;
+                -->
+                <div class="logContent">
+                    <div class="logCC">
+                        <span>用户ID：</span><input type="text" class="user_id" placeholder="请输入用户ID"/>
+                    </div>
+                    <div class="logCC">
+                        <span>用户名：</span><input type="text" class="user_name" placeholder="请输入用户名"/>
+                    </div>
+                    <div class="logCC">
+                        <span>登陆时间：</span><input type="text" class="login_time form_datetime" placeholder="请选择登陆时间"/>
+                    </div>
+                    <div class="logCC">
+                        <span>登陆IP：</span><input type="text" class="login_ip" placeholder="请输入登陆IP"/>
+                    </div>
+                    <div class="logCC">
+                        <span>操作时间：</span><input type="text" class="operate_time form_datetime" placeholder="请选择操作时间"/>
+                    </div>
+                    <div class="logCC">
+                        <span>操作内容：</span><input type="text" class="operate_content" placeholder="请输入操作内容"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="AddLogSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('9');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+</script>
+<script src="/static/js/daily.js"></script>
+{% endblock %}

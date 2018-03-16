@@ -1,0 +1,211 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>个人中心</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/personal_center.css">
+<style>
+    #nav .nav_bottom .xnrShowHide{display: none!important;}
+    .undonelistbag .fixed-table-toolbar .search {width: 100%;}
+    .bootstrap-table .table>thead>tr>th {width: 9%}
+    .table>thead>tr>th {border-top: none!important;}
+    .undonelistbag .bootstrap-table .table>thead>tr>th {width: 7%}
+    .demo-label{display:inline-block;margin:15px 0 0 10px;width:150px;cursor: pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-right: 5px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-pagination .page-list {display: none;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <img src="/static/images/peo_center.png" class="peo_icon"/>
+            <b style="font-size: 16px;">我的虚拟人管理</b>
+        </div>
+        <div style="margin-left:40px;">
+            <span style="color: white;">类型：</span>
+            <!--<select id="weibo_QQ">-->
+            <!--<option value="weibo">微博虚拟人</option>-->
+            <!--<option value="qq">QQ群虚拟人</option>-->
+            <!--</select>-->
+            <div id="weibo_QQ">
+                <label class="demo-label">
+                    <input class="demo-radio" type="radio" name="demo-radio" weiboqq="W" checked>
+                    <span class="demo-radioInput"></span> FaceBook虚拟人
+                </label>
+                <!--<label class="demo-label">-->
+                <!--<input class="demo-radio" type="radio" name="demo-radio" weiboqq="Q">-->
+                <!--<span class="demo-radioInput"></span>QQ群虚拟人-->
+                <!--</label>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="has_person" style="padding: 10px 0;">
+        <div style="margin: 20px 0;">
+            <img src="/static/images/icon.png">
+            <b style="color:white;">已有FaceBook虚拟人</b>
+        </div>
+        <div class="has_list">
+            <span class="hasAdd" data-toggle="modal" data-target="#myModal-has">
+                <b class="icon icon-plus"></b>&nbsp;添加
+            </span>
+            <!--<button type="button" class="btn btn-primary"  style="color:white;">-->
+            <!---->
+            <!--</button>-->
+            <div class="haslistbag">
+                <div id="haslist">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="undone_person" style="padding: 10px 0;">
+        <div style="margin: 20px 0;">
+            <img src="/static/images/icon.png">
+            <b style="color:white;">未完成FaceBook虚拟人</b>
+        </div>
+        <div class="undone_list">
+            <!--<span class="undoneAdd" data-toggle="modal" data-target="#myModal-undone">-->
+            <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+            <!--</span>-->
+            <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone" style="color:white;">-->
+            <!--<b class="icon icon-plus"></b>&nbsp;添加-->
+            <!--</button>-->
+            <div class="undonelistbag">
+                <div id="undonelist">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson_3" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <span>请先选择虚拟人的显示模式</span>
+                <div class="showType" style="padding: 10px 25px;">
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="choose_3" value='隐身'>
+                        <span class="demo-checkbox demo-radioInput"></span> 隐身
+                    </label>
+                    <label class="demo-label">
+                        <input class="demo-radio" type="radio" name="choose_3" value='昵称可见'>
+                        <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认进入</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="myModal-has" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                    创建新的虚拟人？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn first_created" data-dismiss="modal">首次创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--提醒-->
+<div class="modal fade" id="alarm" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">提醒</h4>
+            </div>
+            <div class="modal-body" style="font-size: 16px;color: #fff;font-weight: 900;">
+                <div class="ala-1" style="margin: 10px 0;">
+                    <span>发帖提醒：</span>
+                    <p style="padding-left: 50px;"></p>
+                </div>
+                <div class="ala-2">
+                    <span>日历提醒：</span>
+                    <div style="padding-left: 50px;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除提示-->
+<div class="modal fade" id="delPrompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                    您确定要删除这个虚拟人吗？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal">取消</button>
+                <button type="button" class="btn" data-dismiss="modal" onclick="sureDelXnr()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--成功失败-->
+<div class="modal fade" id="succee_fail" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">操作提示</h4>
+            </div>
+            <div class="modal-body">
+                <p id="words" style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+
+<script>
+    var loadingType = 'faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
+    judgmentFaceBook('1');
+    $('.first_created').on('click',function () {
+        window.open('/registered/targetCustom/?flag=4');
+    });
+</script>
+<script src="/static/js/personal_centerFaceBook-1.js"></script>
+{% endblock %}

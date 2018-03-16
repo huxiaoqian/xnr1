@@ -1,0 +1,308 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 社区详情</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/community-detail.css">
+<style>
+
+    /* 基本信息 */
+    .essential-information {
+        font-size:18px;
+        font-weight:700;
+        text-align:center;
+        padding:10px 0 20px 0;
+    }
+    .essential-information .det-span {
+        margin:10px 30px;
+    }
+    .essential-information .det {
+        color:#f98077;
+    }
+
+    /* ----------------- */
+    /* 人数变化 ----折线图*/
+    #people-num  ,#sensitivity ,#influence ,#convergence {
+        float:left;
+        width:49%;
+        height:300px;
+        /* border: 1px solid #01b4ff; */
+    }
+    #people-num  ,#sensitivity {
+        margin-bottom:20px;
+    }
+    #sensitivity ,#convergence {
+        margin-left:2%;
+    }
+    /* --------------- */
+
+
+    /* tab栏 */
+    .type_page {
+        width: 96%;
+        margin: 20px auto 30px;
+    }
+    #container .type_page #myTabs a{
+        color:#fff;
+    }
+    .nav>li>a:focus, .nav>li>a:hover {
+        background-color: rgba(5, 23, 55, 0.45);
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+        background-color: rgba(7,26,55,0.2);
+    }
+    /* 搜索框 */
+    .fixed-table-toolbar .search{
+        width: 100%;
+    }
+    /* 表格样式 */
+    .bootstrap-table .table>thead>tr>th{
+        width: 7%;
+    }
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    /* tab栏社区详情  边框*/
+    #member-change-1 ,#member-change-2, #member-change-3, #leave-person-content {
+        border-bottom:none;
+    }
+    #member-change-1 thead th ,#member-change-2 thead th, #member-change-3 thead th, #leave-person-content thead th{
+        border-top:none;
+    }
+    /* 蓝色小标题 */
+    .details-title {
+        margin:20px auto 10px;
+    }
+
+    /* tab栏 基本特征 */
+    #basic {
+        /* margin:20px 0 30px 0; */
+    }
+    #basic-1, #basic-2 {
+        width:49%;
+        float:left;
+        height:300px;
+        /* border: 1px solid #01b4ff; */
+        margin:20px 0;
+    }
+    #basic-2 {
+        margin-left:2%;
+    }
+
+    /* 解决echarts图表在tab中的宽度问题 */
+    .tab-content > .tab-pane,
+    .pill-content > .pill-pane {
+        display: block;     /* undo display:none          */
+        height: 0;          /* height:0 is also invisible */
+        overflow-y: hidden; /* no-overflow                */
+    }
+    .tab-content > .active,
+    .pill-content > .active {
+        height: auto; /* let the content decide it */
+    }
+    /* 典型帖子 */
+    #basic-3 {
+        float:left;
+        margin:20px 0 30px 0;
+        width:100%;
+        /* height:400px; */
+        /* border: 1px solid #01b4ff; */
+    }
+    #basic-3 .details-title{
+        margin-top:0;
+    }
+
+    /*------典型帖子------*/
+    #basic-3-content thead {
+        display:none !important;
+    }
+    #basic-3-content tbody td {
+        border-top:none;
+    }
+    #basic-3-content {
+        border:none;
+    }
+    #basic-3 .fixed-table-container{
+        border:none;
+    }
+    .fixed-table-pagination .page-list{
+        display:none !important;;
+    }
+    #basic-3 .table-hover>tbody>tr:hover{
+        background:transparent !important;
+    }
+
+    /* 社交特征 */
+    #social-content {
+        margin-top:20px;
+        height: 500px;
+        border-bottom: 1px solid #ddd;
+    }
+    #social-content-2 {
+        margin-top:20px;
+        height: 500px;
+        /* border-bottom: 1px solid #ddd; */
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-calendar note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">社区基本信息</b>
+        </div>
+    </div>
+    <!-- 社区详情 -->
+    <div class="community-detail clearfix">
+        <!-- 基本信息 -->
+        <p class="essential-information">
+            <span class="det-span"><span>社区名称：</span><span class="det det1">七七</span></span>
+            <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
+            <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
+        </p>
+
+        <!-- 折线图放在预警详情页 -->
+        <!-- 人数变化图 -->
+        <!-- <div id="people-num"> -->
+            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
+        <!-- </div> -->
+        <!-- 平均敏感度变化折线图 -->
+        <!-- <div id="sensitivity"> -->
+            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
+        <!-- </div> -->
+        <!-- 平均影响力变化折线图 -->
+        <!-- <div id="influence"> -->
+            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
+        <!-- </div> -->
+        <!-- 聚集系数变化折线图 -->
+        <!-- <div id="convergence"> -->
+            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
+        <!-- </div> -->
+    </div>
+    <!-- tab栏 -->
+    <div class="type_page">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#community-details" role="tab" data-toggle="tab"><b class="icon icon-lightbulb"></b>&nbsp;社区详情</a>
+            </li>
+            <li role="penetration">
+                <a href="#basic" role="tab" data-toggle="tab"><b class="icon icon-tint"></b>&nbsp;基本特征</a>
+            </li>
+            <li role="presentation">
+                <a href="#social" role="tab" data-toggle="tab"><b class="icon icon-glass"></b>&nbsp;社交特征</a>
+            </li>
+            <li role="presentation">
+                <a href="#leave-person" role="tab" data-toggle="tab"><b class="icon icon-share-alt"></b>&nbsp;离去人员</a>
+            </li>
+        </ul>
+        <div class="behavior">
+            <div class="tab-content" id="content">
+                <!-- 社区详情 -->
+                <div role="tabpanel" class="tab-pane active" id="community-details">
+                    <!-- 成员变换信息 -->
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 成员变换信息</p>
+                    <div id="member-change-1">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+
+                    <!-- 社区成员列表 -->
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员列表</p>
+                    <div id="member-change-2">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+
+                    <!-- 核心成员变化信息 -->
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 核心成员变化信息</p>
+                    <div id="member-change-3">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+                </div>
+                <!-- 基本特征 -->
+                <div role="tabpanel" class="tab-pane clearfix " id="basic">
+                    <div id="basic-1"></div>
+                    <div id="basic-2"></div>
+
+                    <div id="basic-3">
+                        <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 典型帖子</p>
+                        <div>排序方式：
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="sort" value='0' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 按敏感度
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="sort" value='1'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按热度
+                            </label>
+                        </div>
+                        <div id="basic-3-content">
+                            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- 社交特征 -->
+                <div role="tabpanel" class="tab-pane" id="social">
+                    <div id="social-content">
+
+                    </div>
+                    <div id="social-content-2">
+
+                    </div>
+                </div>
+                <!-- 离去人员 -->
+                <div role="tabpanel" class="tab-pane" id="leave-person">
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 离去人员列表</p>
+                    <div id="leave-person-content">
+                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!--提示弹框-->
+<!-- <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div> -->
+<!--模态框-->
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('4');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
+    });
+</script>
+
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
+
+<!-- <script src="/static/echarts/LLecharts.min.js"></script>
+<script src="/static/echarts/LLdataTool.min.js"></script> -->
+
+<script src="/static/js/community_detail.js"></script>
+
+{% endblock %}

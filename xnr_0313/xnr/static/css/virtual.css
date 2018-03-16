@@ -1,0 +1,72 @@
+/*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.8);
+    position: relative;
+    top: 80px;
+}
+#container .title {
+    width: 100%;
+    position: relative;
+}
+#container .title .tit-1 b {
+    display: inline-block;
+    position: relative;
+    top: -3px;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#container .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #fff;
+}
+#container .virtualtable_2 {
+    position: relative;
+}
+#container .virtualtable_2 .addaccount,
+#modifyAccount .modAct .modActCC .addXnr {
+    position: absolute;
+    top:10px;
+    right: 0;
+    padding:6px 8px;
+    background: transparent;
+    border: 1px solid silver;
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+}
+#modifyAccount .modAct .modActCC .newXnrList {
+    width: 85%;
+}
+#modifyAccount .modAct .modActCC .addXnr {
+    padding:3px 10px;
+    position: static;
+    display: inline-block;
+}
+#container .virtualtable_2 .addaccount:hover,
+#modifyAccount .modAct .modActCC .addXnr:hover {
+    background: rgba(49, 49, 49, 0.78);
+}
+#modifyAndAddRoad .modActCC .list {
+    margin:10px 0;
+}
+#modifyAndAddRoad .modActCC .tt i {color:coral;}
+#modifyAndAddRoad .modActCC .demo-label {
+    width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

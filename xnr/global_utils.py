@@ -154,6 +154,12 @@ intel_models_text_index_name = 'models_text'
 intel_models_text_index_type = 'text'
 
 
+opinion_corpus_index_name = 'opinion_corpus'
+opinion_corpus_index_type = 'text'
+
+opinion_corpus_results_index_name = 'opinion_corpus_results'
+opinion_corpus_results_index_type = 'text'
+
 '''
 以下为微博相关定义
 
