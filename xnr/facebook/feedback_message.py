@@ -15,6 +15,12 @@ class Message():
 
 	def get_list(self):
 		self.driver.get('https://www.facebook.com/messages/t/')
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		sx_list = []
 		for each in self.driver.find_elements_by_xpath('//ul[@aria-label="对话列表"]/li'):
 			author_name = each.find_element_by_xpath('./div/a/div[2]/div[1]/span').text
@@ -28,6 +34,12 @@ class Message():
 		for sx in sx_list:
 			self.driver.get(sx['message_url'])
 			time.sleep(1)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
+
 			for message in self.driver.find_elements_by_xpath('//div[@class="_41ud"]'):
 				try:
 					mes = message.find_element_by_xpath('./div/div/div/span').text
