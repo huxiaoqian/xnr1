@@ -117,8 +117,8 @@ update_userinfo_queue_name = 'update_userinfo'
 
 #use to identify the qq login png save file
 #QRCODE_PATH = '/root/.qqbot-tmp/'
-QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
-ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
+QRCODE_PATH = '/home/xnr1/xnr_0313/xnr/static/images/QQ/'
+ABS_LOGIN_PATH = '/home/xnr1/xnr_0313/xnr/qq/receiveQQGroupMessage.py'
 
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
