@@ -28,9 +28,6 @@ optparser = OptionParser()
 optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number', default=9001, type='int')
 (options, args) = optparser.parse_args()
 
-
-
-
 # Create app
 app = create_app()
 
@@ -38,6 +35,7 @@ app = create_app()
 app.config['SECURITY_PASSWORD_SALT'] = 'salty'
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 # upload weibo images
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
