@@ -1,5 +1,6 @@
 #-*-coding:utf-8-*-
 import os
+import time
 import json
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
