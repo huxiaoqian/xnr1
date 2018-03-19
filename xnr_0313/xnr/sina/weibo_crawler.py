@@ -12,7 +12,7 @@ from sina.weibo_feedback_retweet import FeedbackRetweet
 from tools.Launcher import SinaLauncher
 
 from weibo_publish_func import newest_time_func
-
+from global_utils import es_xnr as es,weibo_xnr_index_name,weibo_xnr_index_type
 
 def execute(uname, upasswd):
 
@@ -72,9 +72,37 @@ def execute(uname, upasswd):
     # except:
         #print 'Except Abort'
 
+def xnr_feedback():
+    
+    query_body = {
+	'query':{
+	    'term':{'create_status':2}
+	},
+	'size':10000
+    }
+
+    search_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+
+    if search_result:
+	for result in search_result:
+	    result = result['_source']
+	    weibo_mail_account = result['weibo_mail_account']
+   	    weibo_phone_account = result['weibo_phone_account']
+            password = result['password']
+    
+            if weibo_mail_account:
+                account_name = weibo_mail_account
+            elif weibo_phone_account:
+                account_name = weibo_phone_account
+            
+	    if account_name:
+		#print 'account_name..',account_name,password
+		execute(account_name,password)
+
 if __name__ == '__main__':
 
     #execute('weiboxnr01@126.com','xnr123456')
     #execute('weiboxnr02@126.com','xnr123456')
     #execute('weiboxnr03@126.com','xnr123456')
-    execute('weiboxnr04@126.com','xnr1234567')
+    #execute('weiboxnr04@126.com','xnr1234567')
+    xnr_feedback()
