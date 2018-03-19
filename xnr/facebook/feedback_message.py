@@ -48,7 +48,8 @@ class Message():
 if __name__ == '__main__':
 	message = Message('8618348831412','Z1290605918')
 	list = message.get_message()
-	message.save('facebook_feedback_private','text',list)
+	print list
+	# message.save('facebook_feedback_private','text',list)
 
 
 
