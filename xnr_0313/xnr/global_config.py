@@ -6,7 +6,7 @@ import os
 import time
 
 # xnr system start date
-SYSTEM_START_DATE = '2017-10-01'
+SYSTEM_START_DATE = '2018-01-01'#'2017-10-01'
 
 #use to mark type:  run or test
 S_TYPE = 'run'   #test/run
