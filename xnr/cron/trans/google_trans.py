@@ -15,4 +15,4 @@ def translate(q, target_language):
 
 if __name__ == '__main__':
     q = ['안녕하세요.', 'Hello world']
-    print translate(q,'zh-cn')
+    print translate(q, 'zh-cn')

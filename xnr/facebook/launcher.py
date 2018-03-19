@@ -209,4 +209,3 @@ if __name__ == '__main__':
 	launcher.login()
 	#launcher.target_page("100011257748826")
 	launcher.target_post('100022568024116')
-
