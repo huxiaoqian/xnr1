@@ -741,8 +741,10 @@
                                 </div>
 				            </div>
 				            <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
-                                <div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">
-                                    观点摘要：<span></span>
+                                <div class="addCorpus" style="margin:20px 0;text-align: center;">
+                                    <input type="text" placeholder="请输入你想添加的观点语料库" class="corpusVal"
+                                    style="width:90%;background: transparent;border: 1px solid #eee;border-radius:5px;text-align:center;padding: 5px 10px;">
+                                    <button type="button" class="btn btn-primary sureAddCorpus">确定</button>
                                 </div>
                                 <div class="z-Top">
                                     <div class="view-1-button" style="display: inline-block;"></div>
@@ -752,27 +754,11 @@
                                     <div id="view-5"></div>
                                 </div>
 				            </div>
-                            <!--<div role="tabpanel" class="weiboTable tab-pane" id="z-7">-->
-                                <!--<div class="summary" style="font-weight:600;font-size: 14px;margin: 10px 0;color: #03a9f4;">-->
-                                    <!--观点摘要：<span></span>-->
-                                <!--</div>-->
-                                <!--<div class="z-Top">-->
-                                    <!--<div class="view-1-button" style="display: inline-block;"></div>-->
-                                <!--</div>-->
-                                <!--<center style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</center>-->
-                                <!--<div class="view-6">-->
-                                    <!--<div id="view-6"></div>-->
-                                <!--</div>-->
-                            <!--</div>-->
 						</div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!--<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-undone">-->
-        <!--<b class="icon icon-plus"></b>&nbsp;添加-->
-        <!--</button>-->
     </div>
 </div>
 <!--模态框-->
@@ -792,7 +778,24 @@
         </div>
     </div>
 </div>
-
+<!--提示弹框-->
+<div class="modal fade" id="delCorpus" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除此观点语料库吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="IamdelThisCorpus()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--多余的东西-->
 <div class="modal fade" id="moreThing" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

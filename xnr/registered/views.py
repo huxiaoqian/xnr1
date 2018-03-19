@@ -14,8 +14,10 @@ def targetCustom():
 
 @mod.route('/virtualCreated/')
 def virtualCreated():
+    continueUser = request.args.get('continueUser','')
     flag = request.args.get('flag','')
-    return render_template('registered/virtual_created.html',flag=flag)
+    taskID = request.args.get('taskID','')
+    return render_template('registered/virtual_created.html',continueUser=continueUser,flag=flag,taskID=taskID)
     
 @mod.route('/socialAccounts/')
 def socialAccounts():

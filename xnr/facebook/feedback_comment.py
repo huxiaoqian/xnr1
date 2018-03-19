@@ -60,4 +60,5 @@ class Comment():
 if __name__ == '__main__':
 	comment = Comment('8618348831412','Z1290605918')
 	list = comment.get_comment()
-	comment.save('facebook_feedback_comment','text',list)
+	print list
+	# comment.save('facebook_feedback_comment','text',list)
