@@ -856,15 +856,17 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
 #output: task_information_dict (from redis queue---gruop_detect_task)
 def get_detect_information():
     task_information_dict = {}
-    try:
-        task_information_string = r.rpop(weibo_target_domain_detect_queue_name)
-    except:
-        task_information_string = ''
+    #try:
+    task_information_string = r.rpop(weibo_target_domain_detect_queue_name)
+    #except:
+    #    task_information_string = ''
     #test
     #r_group.rpush(group_detect_queue_name, task_information_string)
     if task_information_string:
+	print 'task..',task_information_string
         task_information_dict = json.loads(task_information_string)
     else:
+	print 'task..{}'
         task_information_dict = {}
 
     return task_information_dict
