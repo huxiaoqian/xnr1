@@ -295,6 +295,7 @@ class MyBot(Bot):
                     'speaker_name': msg.member.name,
                     'msg_type': msg_type
                 }
+
                 nowDate = datetime.datetime.now().strftime('%Y-%m-%d')
                 index_name = wx_group_message_index_name_pre + str(nowDate)
             if msg_type == 'Text':

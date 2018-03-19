@@ -87,10 +87,6 @@ def executeES(indexName, typeName, listData):
             data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
             data['sensitive_user'] = get_sensitive_user(data['uid'])
 
-        # else:
-        #     print 'group index else'
-        #     _id = data["mid"]
-
 
             if indexName == 'weibo_feedback_follow':
                 # 修改 _id、保存至fans_followers_es表

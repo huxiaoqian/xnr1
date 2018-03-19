@@ -447,7 +447,7 @@ def ajax_robot_reply():
 ##########################韩梦成负责以下内容###########################
 #####################################################################
 from utils import get_show_comment, get_show_retweet, get_show_private, \
-					get_show_at,get_show_fans,get_direct_search,get_related_recommendation
+					get_show_at,get_show_friends,get_direct_search,get_related_recommendation
 # 评论及回复
 # http://219.224.134.213:6659/facebook_xnr_operate/show_comment/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
 @mod.route('/show_comment/')
@@ -509,16 +509,16 @@ def ajax_show_at():
     results = get_show_at(task_detail)
     return json.dumps(results)
 
-# 关注及回粉
-# http://219.224.134.213:6659/weibo_xnr_operate/show_fans/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
-@mod.route('/show_fans/')
-def ajax_show_fans():
+# 好友列表
+# http://219.224.134.213:6659/weibo_xnr_operate/show_friends/?xnr_user_no=FXNR0001&sort_item=timestamp&start_ts=1508256000&end_ts=1508860800  #2017-10-18 2017-10-25
+@mod.route('/show_friends/')
+def ajax_show_friends():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
     task_detail['start_ts'] = request.args.get('start_ts','')
     task_detail['end_ts'] = request.args.get('end_ts','')
-    results = get_show_fans(task_detail)
+    results = get_show_friends(task_detail)
     return json.dumps(results)
 
 

@@ -12,8 +12,8 @@ class Launcher():
 		self.username = username
 		self.password = password
 		#模拟窗口
-		# self.display = Display(visible=0,size=(1024,768))
-		# self.display.start()
+		self.display = Display(visible=0,size=(1024,768))
+		self.display.start()
 		self.driver = webdriver.Firefox()
 		#self.driver = webdriver.Chrome()
 		self.req = requests.Session()
@@ -23,22 +23,27 @@ class Launcher():
 		self.driver.find_element_by_xpath('//input[@id="email"]').send_keys(self.username)
 		self.driver.find_element_by_xpath('//input[@id="pass"]').send_keys(self.password)
 		self.driver.find_element_by_xpath('//input[@data-testid="royal_login_button"]').click()
-		# 点掉进入主页之后的提醒
+		# 退出通知弹窗进入页面
 		time.sleep(1)
-		try:
-			self.driver.find_element_by_xpath('//a[@action="cancel"]').click()
-		except Exception as e:
-			pass
-		time.sleep(2)
-
 		try:
 			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 		except:
 			pass
-		time.sleep(2)
-		
+		# 点掉进入主页之后的提醒
+		try:
+			self.driver.find_element_by_xpath('//a[@action="cancel"]').click()
+		except Exception as e:
+			pass
+		time.sleep(1)
+		# 点进首页
 		try:
 			self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		except:
+			pass
+		# 退出通知弹窗进入页面
+		time.sleep(1)
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 		except:
 			pass
 
@@ -54,6 +59,12 @@ class Launcher():
 	def get_like_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		#加载更多
 		length=100
 		for i in range(0,50):
@@ -86,6 +97,12 @@ class Launcher():
 
 	def get_share_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		time.sleep(3)
 		#加载更多
 		length=100
@@ -120,6 +137,12 @@ class Launcher():
 
 	def get_mention_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		time.sleep(3)
 		#加载更多
 		length=100
@@ -154,6 +177,12 @@ class Launcher():
 	def get_comment_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		#加载更多
 		length=100
 		for i in range(0,50):
@@ -187,11 +216,24 @@ class Launcher():
 
 	def target_page(self, uid):
 		self.driver.get('https://www.facebook.com/'+uid)
+		time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		return self.driver
 
 	def target_post(self, uid, fid):
 		self.driver.get('https://www.facebook.com/'+uid)		
 		time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		#加载更多
 		length=100
 		for i in range(0,50):
