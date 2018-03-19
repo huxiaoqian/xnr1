@@ -393,7 +393,7 @@
 {% block my_js %}
 <script id="load_user">
     judgment('6');
-    var flag='{{flag}}',WFT_url,firstStep,secondStep;
+    var flag='{{flag}}',go_on='{{continueUser}}',taskID='{{taskID}}',WFT_url,firstStep,secondStep;
     if (flag==1){
         WFT_url='/weibo_xnr_create';
         firstStep='WBfirstStep';
@@ -406,8 +406,7 @@
         WFT_url='/twitter_xnr_create';
         firstStep='TWfirstStep';
         secondStep='TWsecondStep';
-    }
-    var go_on='{{continueUser}}';
+    };
     if (go_on=='1'){
         $('#name').removeAttr('readonly');
         $('#age').removeAttr('readonly');
