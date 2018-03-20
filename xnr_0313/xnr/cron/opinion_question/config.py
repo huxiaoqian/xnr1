@@ -9,7 +9,7 @@ import time
 import heapq
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 #abs_path = './xnr/cron/opinion_question/'
-abs_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+abs_path = '/home/xnr1/xnr_0313/xnr/cron/opinion_question'
 K1 = 1.5
 B = 0.75
 K3 = 500

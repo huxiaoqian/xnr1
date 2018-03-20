@@ -17,6 +17,13 @@ class Like():
 	def get_like(self):
 		for url in self.like_list:
 			self.driver.get(url)
+			time.sleep(1)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
+
 			try:
 				root_name = self.driver.find_element_by_xpath('//span[@class="fwb"]').text
 			except:
@@ -34,7 +41,12 @@ class Like():
 			except:
 				timestamp = int(self.driver.find_element_by_xpath('//abbr[@class="_5ptz timestamp livetimestamp"]').get_attribute('data-utime'))
 			self.driver.get(self.driver.find_element_by_xpath('//a[@class="_2x4v"]').get_attribute('href'))
-			time.sleep(10)
+			time.sleep(5)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
 			for each in self.driver.find_elements_by_xpath('//li[@class="_5i_q"]'):
 				author_name = each.find_element_by_xpath('./div/div/div/div[1]/div[2]/div/a').text
 				author_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div/div[1]/div[2]/div/a').get_attribute('data-hovercard')))
@@ -53,7 +65,8 @@ class Like():
 if __name__ == '__main__':
 	like = Like('8618348831412','Z1290605918')
 	list = like.get_like()
-	like.save('facebook_feedback_like','text',list)
+	print list
+	# like.save('facebook_feedback_like','text',list)
 
 	
 

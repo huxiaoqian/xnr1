@@ -552,7 +552,7 @@ def get_wb_xnr_no():
 
 def get_save_step_two(task_detail):
 
-    #task_id = task_detail['task_id']
+    task_id = task_detail['task_id']
     # es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
     #                 'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
     # if es_results:
@@ -560,14 +560,17 @@ def get_save_step_two(task_detail):
     #     user_no_current = user_no_max + 1 
     # else:
     #     user_no_current = 1
-    user_no_current = get_wb_xnr_no()
+    # 如果是首次创建时，点到了第二步中，下一步，则 task_id 尚未分配，则首先分配 task_id
+    # 如果是从未完成虚拟人中，点到了第二步中，下一步，则task_id已分配，则沿用原来的task_id
+    if not task_id:
+	
+        user_no_current = get_wb_xnr_no()
 
-    task_detail['user_no'] = user_no_current
-    task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
-    #try:    
-    #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
+        task_detail['user_no'] = user_no_current
+        task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
+
+
     item_exist = dict()
-    # print 'task_detail::',task_detail
     item_exist['submitter'] = task_detail['submitter']
     item_exist['user_no'] = task_detail['user_no']
     item_exist['domain_name'] = task_detail['domain_name']
@@ -577,13 +580,7 @@ def get_save_step_two(task_detail):
     item_exist['business_goal'] = '&'.join(task_detail['business_goal'].encode('utf-8').split('，'))
     item_exist['daily_interests'] = '&'.join(task_detail['daily_interests'].encode('utf-8').split('，'))
     item_exist['monitor_keywords'] = ','.join(task_detail['monitor_keywords'].encode('utf-8').split('，'))
-    #item_exist['sex'] = task_detail['sex']
 
-    # item_exist['nick_name'] = task_detail['nick_name']
-    # item_exist['age'] = task_detail['age']
-    # item_exist['location'] = task_detail['location']
-    # item_exist['career'] = task_detail['career']
-    # item_exist['description'] = task_detail['description']
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
     item_exist['day_post_average'] = json.dumps(task_detail['day_post_average'].split('-'))
     item_exist['create_status'] = 1 # 第二步完成
@@ -600,7 +597,7 @@ def get_save_step_two(task_detail):
 
 
 def get_save_step_three_1(task_detail):
-    #task_id = task_detail['task_id']
+    task_id = task_detail['task_id']
     #try:
     #print 'task_detail:::',task_detail
     # print 'nick_name:::',task_detail['nick_name']
@@ -620,18 +617,19 @@ def get_save_step_three_1(task_detail):
         return '账户名或密码输入错误，请检查后输入！！'
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
     #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
+    #query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
     # print 'query_body:::',query_body
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    #es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
+    #task_id = es_result[0]['_source']['xnr_user_no']
     item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
+    
     item_exist['uid'] = uid
     item_exist['nick_name'] = task_detail['nick_name']
     item_exist['weibo_mail_account'] = task_detail['weibo_mail_account']
     item_exist['weibo_phone_account'] = task_detail['weibo_phone_account']
     item_exist['password'] = task_detail['password']
     item_exist['create_status'] = 2 # 创建完成
-
+    print 'item_exists...',item_exist
     # 更新 weibo_xnr表
     print es.update(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body={'doc':item_exist})        
 
