@@ -16,8 +16,14 @@ class Mention():
 
 	def get_mention(self):
 		for url in self.mention_list:
-			print(url)
 			self.driver.get(url)
+			time.sleep(1)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
+
 			for each in self.driver.find_elements_by_xpath('//div[@id="contentArea"]'):
 				try:
 					author_name = each.find_element_by_xpath('./div/div/div[3]/div/div/div/div[2]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/h5/span/span/span/a').text

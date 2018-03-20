@@ -35,10 +35,10 @@ $('#intell_type .intel_1 input').on('click',function () {
 $('#intell_type .intelDownType input').on('click',function () {
     var argument1=$('#intell_type .intel_1 input[name="intel1"]:checked').val();
     var argument2=$(this).val();
-    var intelPostUrl='/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8'+
-        '&model_type='+argument1+'&text_type='+argument2;
-    // var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
+    // var intelPostUrl='/intelligent_writing/model_text/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_8'+
     //     '&model_type='+argument1+'&text_type='+argument2;
+    var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
+        '&model_type='+argument1+'&text_type='+argument2;
     public_ajax.call_request('get',intelPostUrl,intelPostWord);
 })
 function intelPostWord(data) {
@@ -77,7 +77,7 @@ function reshIntelligent(data) {
 //任务列表
 var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
 // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
-public_ajax.call_request('get',intelligent_writing_url,intelligentList);
+// public_ajax.call_request('get',intelligent_writing_url,intelligentList);
 function intelligentList(data) {
     $('#eventList').bootstrapTable('load', data);
     $('#eventList').bootstrapTable({
@@ -201,8 +201,7 @@ function intelligentList(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var status;
-                    if (row.compute_status==''||row.compute_status=='null'||
-                        row.compute_status=='unknown'){
+                    if (row.compute_status=='null'||row.compute_status=='unknown'){
                         status='未知';
                     }else {
                         var t=row.compute_status;
@@ -443,46 +442,130 @@ var boxView='',tableView;
 $('#intelligenceTabs a.viewHave').on('click',function () {
     boxView=$(this).attr('href');
     tableView=$(this).attr('table-view');
-    var view_type=$(this).attr('view-type');
-    var viewThis_url='/intelligent_writing/opinions_all/?task_id='+task_id+'&intel_type='+view_type;
+    var viewThis_url;
+    if (tableView=='view-5'){
+        viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
+        // public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        // return false;
+    }else {
+        var view_type=$(this).attr('view-type');
+        viewThis_url='/intelligent_writing/opinions_all/?task_id='+task_id+'&intel_type='+view_type;
+    }
     // var viewThis_url='/intelligent_writing/opinions_all/?task_id=twitter_txnr0001_ce_shi_ren_wu___0_2_2_6___0_4&intel_type='+view_type;
     public_ajax.call_request('get',viewThis_url,viewData);
 });
 var viewButton={};
 function viewData(data) {
-    console.log(data)
-    if (isEmptyObject(data)||isEmptyObject(JSON.parse(data['subopinion_tweets']))){
+    if ('subopinion_tweets' in data){
+        if (isEmptyObject(JSON.parse(data['subopinion_tweets']))){
+            $(boxView).html('<center>暂无内容</center>');
+        }
+        return false;
+    }else if (isEmptyObject(data)){
         $(boxView).html('<center>暂无内容</center>');
         return false;
     }
-    if (data['summary']==''){$(boxView+' .summary span').text('暂无摘要内容');}
-    else{$(boxView+' .summary span').text(data['summary']);}
-    var viewAllData=JSON.parse(data['subopinion_tweets']);
-    viewButton=viewAllData;
+    var viewAllData;
+    if ('subopinion_tweets' in data){
+        viewAllData=JSON.parse(data['subopinion_tweets']);
+    }else {
+        viewAllData=data;
+    }
+    if ('subopinion_tweets' in data){
+        if (data['summary']==''){$(boxView+' .summary span').text('暂无摘要内容');}
+        else{$(boxView+' .summary span').text(data['summary']);}
+        viewButton=viewAllData;
+    }
     var butAry='',showDeafult=0,_act='';
     for(var t in viewAllData){
         var _act='';
         if (showDeafult==0){
-            thisButton_Content(viewButton[t]);
+            if ('subopinion_tweets' in data){thisButton_Content(viewButton[t])}
+            else {
+                var klb_url='/intelligent_writing/show_opinion_corpus_content/?corpus_name='+t+'&task_id='+task_id;
+                public_ajax.call_request('get',klb_url,thisButton_Content);
+            };
             _act='active';
         };
-        butAry+='<button type="button" class="btn btn-primary btn-xs '+_act+'" ' +
-            'onclick="z_Content(this)" style="margin: 5px;">'+t+'</button>';
+        if ('subopinion_tweets' in data){
+            butAry+='<button type="button" class="btn btn-primary btn-xs '+_act+'" ' +
+                'onclick="z_Content(this)" style="margin: 5px;">'+t+'</button>';
+        }else {
+            butAry+='<button type="button" class="btn btn-primary btn-xs '+_act+'" ' +
+                'onclick="z_Content(this)" style="margin: 5px;"><span>'+t+'</span>&nbsp;&nbsp;<i class="icon icon-remove" onclick="delThisCorpus(\''+t+'\',this,event);return false;" style="cursor: pointer;"></i></button>';
+        }
         showDeafult++;
     }
     $(boxView+' .view-1-button').html(butAry);
 }
+//
+$('.sureAddCorpus').on('click',function () {
+    var _val=$('.corpusVal').val();
+    if (_val){
+        var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
+        public_ajax.call_request('get',kus_url,addpostYES);
+    }else {
+        $('#pormpt p').text('请输入观点语料库名称，不能为空。');
+        $('#pormpt').modal('show');
+    }
+});
+function addpostYES(data) {
+    var f='操作失败';
+    if (data[0]||data){
+        f='操作成功';
+        setTimeout(function () {
+            var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
+            public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        },700);
+    };
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
+}
+var IamdelThisCorpus_id,ThisCorpus_this;
+function delThisCorpus(n,_this,e) {
+    e.stopPropagation();
+    IamdelThisCorpus_id=n,ThisCorpus_this=_this;
+    $('#delCorpus').modal('show');
+}
+function IamdelThisCorpus() {
+    var del_url='/intelligent_writing/delete_opinion_corpus/?corpus_name='+IamdelThisCorpus_id+'&submitter='+admin;
+    public_ajax.call_request('get',del_url,delpostYES);
+}
+function delpostYES(data) {
+    var f='操作失败';
+    if (data[0]||data){
+        f='操作成功';
+        $(ThisCorpus_this).parent().remove();
+        setTimeout(function () {
+            var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
+            public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        },700);
+    };
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
+}
 // 公用
 function z_Content(_this) {
-    var ThisData=$(_this).text();
+    var ThisData;
+    if ($(_this).find('span').text()){
+        ThisData=$(_this).find('span').text();
+    }else {
+        ThisData=$(_this).text();
+    }
     $(_this).siblings('button').removeClass('active');
     $(_this).addClass('active');
-    if (isEmptyObject(viewButton[ThisData])){
-        $(boxView+' .'+tableView).html('<center>暂无内容</center>');
-        return false;
+    if (ThisData in viewButton){
+        if (isEmptyObject(viewButton[ThisData])){
+            $(boxView+' .'+tableView).html('<center>暂无内容</center>');
+            return false;
+        }else {
+            thisButton_Content(viewButton[ThisData]);
+        }
     }else {
-        thisButton_Content(viewButton[ThisData]);
+        var klb_url='/intelligent_writing/show_opinion_corpus_content/?corpus_name='+ThisData+'&task_id='+task_id;
+        public_ajax.call_request('get',klb_url,thisButton_Content);
     }
+
 }
 function thisButton_Content(data) {
     $(boxView+' .'+tableView).hide();

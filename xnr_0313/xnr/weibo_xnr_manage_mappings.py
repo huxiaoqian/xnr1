@@ -166,5 +166,5 @@ def weibo_xnr_fans_followers_mappings():
 
 if __name__=='__main__':
   
-    #weibo_xnr_mappings()
+    weibo_xnr_mappings()
     weibo_xnr_fans_followers_mappings()

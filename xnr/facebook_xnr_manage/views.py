@@ -65,6 +65,18 @@ def ajax_delete_fb_xnr():
 	return json.dumps(results)
 
 
+#按指标查询评估信息
+#assess_type=influence,safe,penetration
+#http://219.224.134.213:9209/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=FXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
+@mod.route('/lookup_xnr_assess_info/')
+def ajax_lookup_xnr_assess_info():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	assess_type=request.args.get('assess_type','')
+	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
+	return json.dumps(results)
+
 
 '''
 #2018-3-8 11:17:25
@@ -85,17 +97,6 @@ def ajax_show_history_count():
 	return json.dumps(results)
 
 
-#按指标查询评估信息
-#assess_type=influence,safe,penetration
-#http://219.224.134.213:9209/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=FXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
-@mod.route('/lookup_xnr_assess_info/')
-def ajax_lookup_xnr_assess_info():
-	xnr_user_no=request.args.get('xnr_user_no','')
-	start_time=int(request.args.get('start_time',''))
-	end_time=int(request.args.get('end_time',''))
-	assess_type=request.args.get('assess_type','')
-	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
-	return json.dumps(results)
 
 
 '''

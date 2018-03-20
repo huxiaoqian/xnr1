@@ -19,6 +19,12 @@ class Comment():
 			print(url)
 			self.driver.get(url)
 			time.sleep(1)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
+
 			try:
 				root_content = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]').text
 			except:
@@ -54,4 +60,5 @@ class Comment():
 if __name__ == '__main__':
 	comment = Comment('8618348831412','Z1290605918')
 	list = comment.get_comment()
-	comment.save('facebook_feedback_comment','text',list)
+	print list
+	# comment.save('facebook_feedback_comment','text',list)

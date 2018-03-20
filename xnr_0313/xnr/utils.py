@@ -283,7 +283,10 @@ def judge_trace_follow(xnr_user_no,uid):
         get_result = es_xnr.get(index=weibo_xnr_fans_followers_index_name,\
             doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         
-        trace_follow_list = get_result['trace_follow_list']
+	try: 
+            trace_follow_list = get_result['trace_follow_list']
+	except:
+	    trace_follow_list = []
     
         if uid in trace_follow_list:
             return True
