@@ -37,10 +37,10 @@ def update_date_remind():
         action = {"index": {"_id": cdr['_id']}}
         bulk_action.extend([action, cdr['_source']])
         if index % 1000 == 0:        
-            es.bulk(bulk_action, index=weibo_date_remind_index_name_test, doc_type = weibo_date_remind_index_type)
+            es.bulk(bulk_action, index=weibo_date_remind_index_name, doc_type = weibo_date_remind_index_type)
             bulk_action = []  
     if bulk_action:
-        es.bulk(bulk_action, index=weibo_date_remind_index_name_test, doc_type = weibo_date_remind_index_type)
+        es.bulk(bulk_action, index=weibo_date_remind_index_name, doc_type = weibo_date_remind_index_type)
     print 'finish insert'
 
 def show_hidden_expression():
@@ -66,10 +66,10 @@ def update_hidden_expression():
         action = {"index": {"_id": cdr['_id']}}
         bulk_action.extend([action, cdr['_source']])
         if index % 1000 == 0:        
-            es.bulk(bulk_action, index=weibo_hidden_expression_index_name_test, doc_type = weibo_hidden_expression_index_type)
+            es.bulk(bulk_action, index=weibo_hidden_expression_index_name, doc_type = weibo_hidden_expression_index_type)
             bulk_action = []  
     if bulk_action:
-        es.bulk(bulk_action, index=weibo_hidden_expression_index_name_test, doc_type = weibo_hidden_expression_index_type)
+        es.bulk(bulk_action, index=weibo_hidden_expression_index_name, doc_type = weibo_hidden_expression_index_type)
     print 'finish insert'
 
 
