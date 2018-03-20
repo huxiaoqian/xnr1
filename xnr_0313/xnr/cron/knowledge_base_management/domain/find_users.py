@@ -73,6 +73,7 @@ def get_user(uidlist):#返回用户的背景信息
     for item in search_result:
         #print 'item:', item
         uid = item['_id']
+	print 'item......',item
         if not item['found']:
             user_list[str(uid)] = 'other'
         else:
