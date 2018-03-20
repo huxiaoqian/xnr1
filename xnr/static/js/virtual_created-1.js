@@ -176,7 +176,8 @@ function values() {
     }
     var saveSecond_url;
     if (active_time||day_post_average){
-        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+
+        if(!taskID){taskID=''};
+        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+taskID+
             '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
             '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
             '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests;

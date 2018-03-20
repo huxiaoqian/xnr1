@@ -8,7 +8,7 @@ import time
 import sys
 reload(sys)
 sys.path.append('../')
-import sqlite
+#import sqlite
 import sqlite3
 from parameter import USER_XNR_NUM,DAY,MAX_VALUE
 from time_utils import ts2datetime,datetime2ts
@@ -27,14 +27,14 @@ from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
                          weibo_log_management_index_name,weibo_log_management_index_type,\
                          qq_xnr_index_name,qq_xnr_index_type,\
-                         qq_xnr_history_count_index_name,qq_xnr_history_count_index_type,\
+                         qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,\
                          qq_report_management_index_name,qq_report_management_index_type
 
 
 #连接数据库,获取账户列表
 def get_user_account_list():     
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
-    # cx = sqlite3.connect("/home/xnr_0110/xnr1/xnr/flask-admin.db")
+   # cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db")
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
@@ -462,6 +462,7 @@ def count_qqxnr_daily_post(date_time,xnr_user_no_list):
         },
         'size':MAX_VALUE
     }
+    qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + date_time
     try:
         user_result=es_xnr.search(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,body=query_body)['hits']['hits']
         number=0

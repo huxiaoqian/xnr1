@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import opencc
+#import opencc
 import os
 import sys
 import time
@@ -15,7 +15,7 @@ from global_utils_ch import abs_path
 sys.path.append('../../')
 from parameter import TRANS_PATH
 
-AB_PATH = os.path.join(abs_path, './data')
+AB_PATH = os.path.join(abs_path, 'data')
 
 cut_str = load_scws()
 

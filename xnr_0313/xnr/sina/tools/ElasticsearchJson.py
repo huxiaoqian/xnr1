@@ -87,10 +87,6 @@ def executeES(indexName, typeName, listData):
             data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
             data['sensitive_user'] = get_sensitive_user(data['uid'])
 
-        # else:
-        #     print 'group index else'
-        #     _id = data["mid"]
-
 
             if indexName == 'weibo_feedback_follow':
                 # 修改 _id、保存至fans_followers_es表
@@ -126,7 +122,10 @@ def executeES(indexName, typeName, listData):
 
                     # trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
                     # data['trace_follow_mark'] = trace_follow_mark
-                print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
+		try:
+		    es.get(index=indexName,doc_type=typeName,id=_id)
+		except:
+                    print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
             
             elif indexName == 'weibo_feedback_comment':
                 indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
