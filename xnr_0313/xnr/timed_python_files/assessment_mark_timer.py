@@ -93,6 +93,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     for user in top_sensitive_users:
         user = user['_source']
         top_sensitive_uid_list.append(user['uid'])
+    #print 'top_sensitive_uid_list...',top_sensitive_uid_list
 
 
     # 计算top敏感用户的微博敏感度均值
@@ -124,7 +125,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     if S_TYPE == 'test':
         if not sensitive_value_top_avg:
             sensitive_value_top_avg = 1
-    print 'es_sensitive_result::',es_sensitive_result
+    #print 'es_sensitive_result::',es_sensitive_result
     # 计算xnr反馈群体的敏感度
     
 
@@ -138,10 +139,14 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at',current_time)['sensitive_info']
     feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet',current_time)['sensitive_info']
     feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)['sensitive_info']
+
+    print 'sensitive_value_top_avg:',sensitive_value_top_avg    
+    if not sensitive_value_top_avg:
+        sensitive_value_top_avg = 1    
     
     pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg
     pene_mark = round(pene_mark,2)
-
+    print 'pene_mark....',pene_mark
     return pene_mark
 
 
@@ -320,8 +325,11 @@ def get_follow_group_distribute(xnr_user_no):
         current_date = ts2datetime(current_time)
         r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
         followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
-        followers_list_today = json.loads(followers_results)
-
+        #print 'followers_results:',followers_results,type(followers_results)
+        if followers_results:      
+            followers_list_today = json.loads(followers_results)
+        else:
+            followers_list_today = []
     # 所有关注者领域分布
 
     results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
@@ -378,8 +386,8 @@ def get_follow_group_distribute(xnr_user_no):
 
     # 整理仪表盘数据
     mark = 0
-    print 'domain_list_followers_today_count::',domain_list_followers_today_count
-    print 'domain_distribute_dict::',domain_distribute_dict
+    #print 'domain_list_followers_today_count::',domain_list_followers_today_count
+    #print 'domain_distribute_dict::',domain_distribute_dict
     if domain_list_followers_today_count:
         n_domain = len(domain_list_followers_count.keys())
         for domain,value in domain_list_followers_today_count.iteritems():
@@ -608,7 +616,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
         fans_total_num_last = 1
 
     fans_dict['day_num'] = datetime_count
-    fans_dict['total_num'] = fans_total_num_last + datetime_count
+    fans_dict['total_num'] = int(fans_total_num_last) + int(datetime_count)
 
     fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
 
@@ -1067,7 +1075,10 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
     }
     es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
-    sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
+    if not es_sensitive_result['avg_sensitive']['value']:
+	sensitive_value = 0.0
+    else:
+        sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
 
     if sensitive_value == None:
         sensitive_value = 0.0
@@ -1261,8 +1272,11 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
             
         }
         weibo_report_management_index_name = weibo_report_management_index_name_pre + current_date
-        es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+	try:
+            es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
             body=query_body)['hits']['hits']
+	except:
+	    es_sensitive_result = []
 
         if es_sensitive_result:    
             if report_type == u'事件':
@@ -1311,9 +1325,12 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
     index_name_list = get_flow_text_index_list(current_time)
 
-    es_result_event = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
-        body=query_body_event)['aggregations']
-    event_sensitive_avg = es_result_event['avg_sensitive']['value']
+    try:
+        es_result_event = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+            body=query_body_event)['aggregations']
+        event_sensitive_avg = es_result_event['avg_sensitive']['value']
+    except:
+	event_sensitive_avg = None
 
     if event_sensitive_avg == None:
         event_sensitive_avg = 0.0
@@ -1365,12 +1382,15 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     index_name_list = get_flow_text_index_list(current_time)
-
-    es_result_tweet = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
-        body=query_body_tweet)['aggregations']
-    tweet_sensitive_avg = es_result_tweet['avg_sensitive']['value']
-    if tweet_sensitive_avg == None:
-        tweet_sensitive_avg = 0.0
+    
+    try:
+        es_result_tweet = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
+            body=query_body_tweet)['aggregations']
+        tweet_sensitive_avg = es_result_tweet['avg_sensitive']['value']
+        if tweet_sensitive_avg == None:
+            tweet_sensitive_avg = 0.0
+    except:
+	tweet_sensitive_avg = 0.0
 
     if S_TYPE == 'test':
         event_sensitive_avg = round(random.random(),2)
@@ -1388,9 +1408,24 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
 # main 函数
 def cron_compute_mark(current_time):
+    query_body={
+                '_source':['xnr_user_no'],
+		'query':{
+			'filtered':{
+				'filter':{
+					'bool':{
+						'must':[
+							{'term':{'create_status':2}}
+						]
+					}					
+				}
+			}
 
+		},
+		'size':MAX_SEARCH_SIZE
+    }
     xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
-                body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
+                body=query_body)['hits']['hits']
     
     if S_TYPE == 'test':
         xnr_results = [{'_source':{'xnr_user_no':'WXNR0004'}}]
@@ -1512,11 +1547,13 @@ if __name__ == '__main__':
 
 
     current_time=int(time.time()-DAY)
-    # current_time_now = int(time.time())
-    # for i in range(11,-1,-1):
-
-    #     current_time = current_time_now - i*24*3600
-    #     print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
-
     cron_compute_mark(current_time)
+    '''
+    current_time_now = int(time.time())
+    for i in range(2,-1,-1):
 
+        current_time = current_time_now - i*24*3600
+        print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
+
+        cron_compute_mark(current_time)
+     '''

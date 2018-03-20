@@ -274,10 +274,10 @@ def mappings_social_sensing_text(index_name):
 
 
 if __name__ == "__main__":
-    #manage_sensing_task()
-    #mappings_sensing_task("social_sensing")
-    index_name = 'social_sensing_text_' + ts2datetime(time.time())
-
+    manage_sensing_task()
+    mappings_sensing_task("social_sensing")
+    #index_name = 'social_sensing_text_' + ts2datetime(time.time())
+    index_name = 'social_sensing_text'
     mappings_social_sensing_text(index_name)
 
 
