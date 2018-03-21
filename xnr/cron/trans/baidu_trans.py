@@ -36,7 +36,6 @@ def translate(q, target_language):
         return res
 
 if __name__ == '__main__':
-<<<<<<< HEAD
     q = "‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏‏안녕하세요"
     result = translate(q, 'zh-cn')
     print result
