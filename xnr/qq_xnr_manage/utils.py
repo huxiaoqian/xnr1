@@ -239,7 +239,7 @@ def create_qq_xnr(xnr_info):
                 'access_id':access_id,'remark':remark,'submitter':submitter})
         
 
-        #     result = True
+        result = True
         # except:
         #     result = False
 
@@ -331,6 +331,18 @@ def show_qq_xnr(MAX_VALUE):
     return results
 
 def delete_qq_xnr(qq_number):
+
+    get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=qq_number)['_source']
+    qq = get_result['qq_number']
+    r_qq_group_set = r_qq_group_set_pre + qq
+
+    while True:
+        a = r.spop(r_qq_group_set)
+        if a:
+            continue
+        else:
+            break
+
     try:
         es_xnr.delete(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number)
         result = 1

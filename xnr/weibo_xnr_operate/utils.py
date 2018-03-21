@@ -33,11 +33,11 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             index_sensing,type_sensing,weibo_xnr_retweet_timing_list_index_name,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_xnr_retweet_timing_list_index_type,weibo_private_white_uid_index_name,\
                             weibo_private_white_uid_index_type,daily_interest_index_name_pre,\
-                            daily_interest_index_type
+                            daily_interest_index_type, be_retweet_index_name_pre, be_retweet_index_type, es_retweet
 
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,\
-                            get_timeset_indexset_list
+                            get_timeset_indexset_list, get_db_num
 from xnr.weibo_publish_func import publish_tweet_func,retweet_tweet_func,comment_tweet_func,private_tweet_func,\
                                 like_tweet_func,follow_tweet_func,unfollow_tweet_func,create_group_func,\
                                 reply_tweet_func #,at_tweet_func
@@ -235,8 +235,12 @@ def get_daily_recommend_tweets(theme,sort_item):
         },
         'sort':{sort_item:{'order':'desc'}}
     }
-    es_results = es.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
     
+    try:
+        es_results = es.search(index=index_name,doc_type=daily_interest_index_type,body=query_body)['hits']['hits']
+    except:
+        return []
+        
     results_all = []
     for result in es_results:
         result = result['_source']
@@ -1284,6 +1288,25 @@ def get_direct_search(task_detail):
     return return_results_all
 
 
+def get_friends_list(recommend_set_list):
+
+    now_ts = time.time()
+    now_date_ts = datetime2ts(ts2datetime(now_ts))
+    #get redis db number
+    db_number = get_db_num(now_date_ts)
+    search_result = es_retweet.mget(index=be_retweet_index_name_pre+str(db_number), doc_type=be_retweet_index_type, body={"ids": recommend_set_list})["docs"]
+    friend_list = []
+    for item in search_result:
+        uid = item['_id']
+        if not item['found']:
+            continue
+        else:
+            data = item['_source']['uid_be_retweet']
+            data = eval(data)
+            friend_list.extend(data.keys())
+
+    return friend_list[:500]
+
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     
@@ -1356,9 +1379,13 @@ def get_related_recommendation(task_detail):
             #sort_item = 'sensitive'
         else:
             uid_list = []
-            friends_list_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['_source']
+            '''
+            friends_list_results = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':recommend_set_list})['docs']
             for result in friends_list_results:
                 friends_list = friends_list + result['friend_list']
+            '''
+            friends_list = get_friends_list(recommend_set_list)
+
             friends_set_list = list(set(friends_list))
 
             #uid_list = friends_set_list
@@ -1391,7 +1418,11 @@ def get_related_recommendation(task_detail):
                 uid_list.append(uid)
                 
                 avg_sort_uid_dict[uid] = {}
-                avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
+                
+                if not item['avg_sort']['value']:
+                    avg_sort_uid_dict[uid]['sort_item_value'] = 0
+                else:
+                    avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
                 
     results_all = []
 
