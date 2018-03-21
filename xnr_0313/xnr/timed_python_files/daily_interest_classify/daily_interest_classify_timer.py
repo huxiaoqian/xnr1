@@ -79,7 +79,8 @@ def read_flow_text(flow_text_index_name,current_date):
 
 	for content_label,content_weibo in content_dict.iteritems():
 		#_id = content_label
-		index_name = daily_interest_index_name_pre +'_'+ current_date
+		current_date_new = ts2datetime(datetime2ts(current_date)+24*3600)
+		index_name = daily_interest_index_name_pre +'_'+ current_date_new
 		daily_inerests_flow_text_mappings(index_name)
 		#item_dict = {}
 		#item_dict['timestamp'] = datetime2ts(current_date)
