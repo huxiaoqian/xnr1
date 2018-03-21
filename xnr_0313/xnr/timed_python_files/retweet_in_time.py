@@ -249,7 +249,7 @@ if __name__ == '__main__':
     publish_operate_timing()
 
     # 定时跟踪转发
-    #read_tracing_followers_tweet()
-    #retweet_operate_timing()
+    read_tracing_followers_tweet()
+    retweet_operate_timing()
 
 

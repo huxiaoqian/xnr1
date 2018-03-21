@@ -128,6 +128,8 @@ def create_qq_xnr(xnr_info):
     mark_names = xnr_info['mark_names'].encode('utf-8').split('，')
     group_numbers = xnr_info['group_numbers'].encode('utf-8').split('，')
     print 'group_numbers...',group_numbers
+    print 'mark_names......',mark_names
+    print 'group_names.....',group_names
     if not len(group_names)==len(mark_names)==len(group_numbers):
         #return [False,'群名称数量和群号码数量不一致']
         return [False,'群名称数量、群备注数量和群号码数量不一致']
@@ -218,6 +220,9 @@ def create_qq_xnr(xnr_info):
             group_qq_number = group_numbers[i]
             group_qq_name = group_names[i]
             group_qq_mark = mark_names[i]
+	    print '1..',group_qq_number
+	    print '2..',group_qq_name
+	    print '3..',group_qq_mark
 
             if not r.sadd(r_qq_group_set,group_qq_mark):  # 群号唯一 改为 备注唯一. 存入redis,后面接收群消息时，用于过滤消息。
                 mark_name_exist_list.append(group_qq_mark)
@@ -239,7 +244,7 @@ def create_qq_xnr(xnr_info):
                 'access_id':access_id,'remark':remark,'submitter':submitter})
         
 
-        #     result = True
+        result = True
         # except:
         #     result = False
 
@@ -331,6 +336,18 @@ def show_qq_xnr(MAX_VALUE):
     return results
 
 def delete_qq_xnr(qq_number):
+    
+    get_result = es_xnr.get(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=qq_number)['_source']
+    qq = get_result['qq_number']
+    r_qq_group_set = r_qq_group_set_pre + qq
+    
+    while True:
+        a = r.spop(r_qq_group_set)
+	if a:
+            continue
+        else:
+            break
+
     try:
         es_xnr.delete(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, id=qq_number)
         result = 1
