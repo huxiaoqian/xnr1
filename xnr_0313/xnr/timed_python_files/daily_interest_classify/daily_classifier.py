@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import opencc
+#import opencc
 import os
 import time
 import csv

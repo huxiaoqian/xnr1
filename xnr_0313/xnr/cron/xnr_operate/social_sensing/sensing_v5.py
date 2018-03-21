@@ -177,6 +177,8 @@ def query_mid_list(ts, social_sensors, time_segment, message_type=1):
         filter_list = []
         filter_mid_dict = dict()
         for iter_index in index_list:
+	    print 'index..',iter_index
+	    print 'mid_list..',list(origin_mid_list)
             exist_es = es_text.mget(index=iter_index, doc_type="text", body={"ids":list(origin_mid_list)})["docs"]
             for item in exist_es:
                 if item["found"]:
@@ -442,7 +444,7 @@ def filter_mid(mid_list):
             es_results = es_xnr.mget(index="social_sensing_text", doc_type="text", body={"ids":tmp}, _source=False)["docs"]
             #print 'es_results:::',es_results
             for item in es_results:
-                #print 'item::',item
+                print 'item::',item
                 if not item["found"]:
                     result.append(item["_id"])
 
@@ -464,7 +466,7 @@ def social_sensing(task_detail):
     #ts = int(task_detail[2])
     ts = float(task_detail[2])
 
-    xnr_user_no = task_detail[3]
+    #xnr_user_no = task_detail[3]
 
     print ts2date(ts)
     index_list = []
@@ -693,12 +695,13 @@ def social_sensing(task_detail):
         iter_dict["compute_status"] = 0  # 尚未计算
         iter_dict["topic_field"] = mid_value[mid]
         iter_dict["detect_ts"] = ts
-        iter_dict["xnr_user_no"] = xnr_user_no
+        #iter_dict["xnr_user_no"] = xnr_user_no
 
         iter_dict.update(all_text_dict[mid])
         count += 1
         print 'iter_dict:::',iter_dict
-        _id = xnr_user_no + '_' + mid
+        #_id = xnr_user_no + '_' + mid
+	_id = mid
         bulk_action.extend([{"index":{"_id": _id}}, iter_dict])
         if count % 500 == 0:
             es_xnr.bulk(bulk_action, index="social_sensing_text", doc_type="text", timeout=600)

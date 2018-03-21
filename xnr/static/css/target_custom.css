@@ -71,3 +71,8 @@ body {
 #container .next .nextButton:hover {
     background: black;
 }
+.disableCss{
+    pointer-events:none;
+    color:#afafaf!important;
+    cursor:default!important;
+}

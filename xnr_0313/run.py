@@ -3,7 +3,7 @@ import base64
 import os
 import json
 import time
-import sqlite
+#import sqlite
 import sqlite3
 import flask_security
 from flask_login import current_user
@@ -109,7 +109,7 @@ def homepage():
     timestamp = int(time.time())
     user_name = ''
     _id = current_user.get_id()
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db")
     #cx = sqlite3.connect("sqlite:///flask-admin.db")
     cu=cx.cursor()
     users = cu.execute("select id,email from user") 
