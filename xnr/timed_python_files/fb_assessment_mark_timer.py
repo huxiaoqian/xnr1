@@ -29,7 +29,7 @@ from global_utils import facebook_feedback_comment_index_name,facebook_feedback_
                         facebook_xnr_count_info_index_name,facebook_xnr_count_info_index_type,\
                         facebook_feedback_retweet_index_name_pre, facebook_feedback_comment_index_name_pre,\
                         facebook_feedback_like_index_name_pre, facebook_feedback_at_index_name_pre,\
-                        facebook_feedback_private_index_name_pre
+                        facebook_feedback_private_index_name_pre,facebook_report_management_index_name_pre
 from global_utils import r_fb_fans_uid_list_datetime_pre as r_fans_uid_list_datetime_pre,\
                         r_fb_fans_count_datetime_xnr_pre as r_fans_count_datetime_xnr_pre,\
                         r_fb_fans_search_xnr_pre as r_fans_search_xnr_pre,\
@@ -1228,6 +1228,13 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
+    print 'current_date'
+    print current_date
+    print 'current_time_new'
+    print current_time_new
+
+    index_name = facebook_report_management_index_name_pre + current_date
+
     mid_event_list = []
     mid_tweet_list = []
     uid_list = []
@@ -1247,8 +1254,11 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
             
         }
         try:
-        es_sensitive_result = es.search(index=facebook_report_management_index_name,doc_type=facebook_report_management_index_type,\
-            body=query_body)['hits']['hits']
+            es_sensitive_result = es.search(index=index_name,doc_type=facebook_report_management_index_type,\
+                body=query_body)['hits']['hits']
+        except Exception,e:
+            print e
+            es_sensitive_result = []
 
         if es_sensitive_result:    
             if report_type == u'事件':
@@ -1450,17 +1460,15 @@ def cron_compute_mark(current_time):
 
         print 'xnr_user_detail', xnr_user_detail
 
-        # try:
+        try:
 
-        #     es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
-        #         id=_id,body=xnr_user_detail)
-            
-        #     mark = True
-
-        # except:
-        #     mark = False
-
-        # return mark
+            es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+                id=_id,body=xnr_user_detail)
+            mark = True
+        except Exception,e:
+            print e
+            mark = False
+        return mark
 
 
 

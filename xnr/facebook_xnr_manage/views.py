@@ -8,9 +8,8 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_xnr
 es_flow_text = es_xnr
 from xnr.time_utils import datetime2ts
-from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get_xnr_detail
-					 #show_history_count,
-					# lookup_xnr_assess_info
+from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get_xnr_detail,\
+					 show_history_count, lookup_xnr_assess_info
 
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
@@ -78,8 +77,6 @@ def ajax_lookup_xnr_assess_info():
 	return json.dumps(results)
 
 
-'''
-#2018-3-8 11:17:25
 
 #按时间条件显示历史统计结果
 #http://219.224.134.213:9209/facebook_xnr_manage/show_history_count/?xnr_user_no=FXNR0004&type=today&start_time=0&end_time=1505044800
@@ -96,10 +93,6 @@ def ajax_show_history_count():
 	results=show_history_count(xnr_user_no,date_range)
 	return json.dumps(results)
 
-
-
-
-'''
 
 
 
