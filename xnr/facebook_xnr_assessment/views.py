@@ -4,9 +4,20 @@ import time
 import json
 from flask import Blueprint, url_for, render_template, request,\
         abort, flash, session, redirect
-
+from utils import get_influence_total_trend
 
 mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
+
+# 影响力各指标
+@mod.route('/influence_total/')
+def ajax_influence_total_trend():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    start_time = request.args.get('start_time','')
+    end_time = request.args.get('end_time','')
+
+    results = get_influence_total_trend(xnr_user_no,start_time,end_time)
+
+    return json.dumps(results)
 
 """
 #2018-3-8 11:19:09
@@ -35,16 +46,7 @@ def ajax_influ_mark_compute():
 
     return json.dumps(results)
 
-# 影响力各指标
-@mod.route('/influence_total/')
-def ajax_influence_total_trend():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    start_time = request.args.get('start_time','')
-    end_time = request.args.get('end_time','')
 
-    results = get_influence_total_trend(xnr_user_no,start_time,end_time)
-
-    return json.dumps(results)
 
 
 # 影响力各指标 -- 今日
