@@ -373,7 +373,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
         }
     }
 
-    
+    weibo_feedback_comment_index_name = weibo_feedback_comment_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                     body=query_body_day,request_timeout=999999)
 
@@ -448,7 +448,7 @@ def get_influ_like_num(xnr_user_no,current_time):
             }
         }
     }
-    
+    weibo_feedback_like_index_name = weibo_feedback_like_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
                     body=query_body_day,request_timeout=999999)
 
@@ -522,7 +522,7 @@ def get_influ_at_num(xnr_user_no,current_time):
         }
     }
 
-
+    weibo_feedback_at_index_name = weibo_feedback_at_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                     body=query_body_day,request_timeout=999999)
 
@@ -601,7 +601,7 @@ def get_influ_private_num(xnr_user_no,current_time):
         }
     }
 
-
+    weibo_feedback_private_index_name = weibo_feedback_private_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                     body=query_body_day,request_timeout=999999)
 
@@ -1020,8 +1020,12 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
         }
         weibo_report_management_index_name = weibo_report_management_index_name_pre + current_date
         
-        es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+        try:
+            es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
             body=query_body)['hits']['hits']
+        except:
+            es_sensitive_result = []
+
 
         if es_sensitive_result:    
             if report_type == u'事件':
