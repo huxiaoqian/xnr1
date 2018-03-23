@@ -546,7 +546,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            # {'term':{'xnr_user_no':xnr_user_no}},
+                            {'term':{'xnr_user_no':xnr_user_no}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -566,8 +566,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         xnr_count_result=es_xnr.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,body=query_body)['hits']['hits']
         xnr_date_info=[]
         for item in xnr_count_result:
-            if item['_source']['xnr_user_no'] == xnr_user_no:
-                xnr_date_info.append(item['_source'])
+            xnr_date_info.append(item['_source'])
 
     except Exception, e:
         print e
@@ -1457,13 +1456,13 @@ def delete_fb_xnr(xnr_user_no):
 ###############################
 def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
     query_body={
-        'fields':['date_time',assess_type, 'xnr_user_no'],
+        'fields':['date_time',assess_type],
         'query':{
             'filtered':{
                 'filter':{
                     'bool':{
                         'must':[
-                            # {'term':{'xnr_user_no':xnr_user_no}},
+                            {'term':{'xnr_user_no':xnr_user_no}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -1482,9 +1481,7 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
         xnr_assess_result=es_xnr.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,body=query_body)['hits']['hits']
         assess_result=[]
         for item in xnr_assess_result:
-            if item['fields']['xnr_user_no'][0] == xnr_user_no:
-                item['fields'].pop('xnr_user_no')
-                assess_result.append(item['fields'])
+            assess_result.append(item['fields'])
     except:
         assess_result=[]
     return assess_result
