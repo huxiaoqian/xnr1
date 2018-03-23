@@ -5,6 +5,11 @@
     <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
     <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
     <style>
+        .disableCss{
+            /*pointer-events:none;*/
+            color:#afafaf!important;
+            cursor:not-allowed!important;
+        }
         .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
         .demo-radio{display:none!important;}
         .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
@@ -140,9 +145,9 @@
     <div class="weiboQQ">
         <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
         <img src="/static/images/clickQQ.png" title="正在使用QQ登录中" class="qq">
-        <img src="/static/images/WXload.png" title="微信登录" class="wx">
-        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook">
-        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx disableCss">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook disableCss">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter disableCss">
     </div>
 
     <p class="p11" style="font-size: 16px;text-align: center;">
@@ -424,45 +429,45 @@
     },function () {
         $(this).attr('src','/static/images/WXload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weixin';
-        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $.fn.fullpage.setAutoScrolling(false);
-        $('#loadingJump').modal('show');
-        setTimeout(function () {
-            window.location.href='/index/navigationWX/';
-            $('#loadingJump').modal('hide');
-            $.fn.fullpage.setAutoScrolling(true);
-        },1000);
+//        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+//        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+//        $.fn.fullpage.setAutoScrolling(false);
+//        $('#loadingJump').modal('show');
+//        setTimeout(function () {
+//            window.location.href='/index/navigationWX/';
+//            $('#loadingJump').modal('hide');
+//            $.fn.fullpage.setAutoScrolling(true);
+//        },1000);
     });
     $('.facebook').hover(function () {
         $(this).attr('src','/static/images/facebookclick.png');
     },function () {
         $(this).attr('src','/static/images/facebookload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=facebook';
-        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $.fn.fullpage.setAutoScrolling(false);
-        $('#loadingJump').modal('show');
-        setTimeout(function () {
-            window.location.href='/index/navigationFaceBook/';
-            $('#loadingJump').modal('hide');
-            $.fn.fullpage.setAutoScrolling(true);
-        },1000);
+//        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=facebook';
+//        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+//        $.fn.fullpage.setAutoScrolling(false);
+//        $('#loadingJump').modal('show');
+//        setTimeout(function () {
+//            window.location.href='/index/navigationFaceBook/';
+//            $('#loadingJump').modal('hide');
+//            $.fn.fullpage.setAutoScrolling(true);
+//        },1000);
     });
     $('.twitter').hover(function () {
         $(this).attr('src','/static/images/twitterclick.png');
     },function () {
         $(this).attr('src','/static/images/twitterload.png');
     }).on('click',function () {
-        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=twitter';
-        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
-        $.fn.fullpage.setAutoScrolling(false);
-        $('#loadingJump').modal('show');
-        setTimeout(function () {
-            window.location.href = '/index/navigationTwitter/';
-            $('#loadingJump').modal('hide');
-            $.fn.fullpage.setAutoScrolling(true);
-        },1000);
+//        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+//        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+//        $.fn.fullpage.setAutoScrolling(false);
+//        $('#loadingJump').modal('show');
+//        setTimeout(function () {
+//            window.location.href = '/index/navigationTwitter/';
+//            $('#loadingJump').modal('hide');
+//            $.fn.fullpage.setAutoScrolling(true);
+//        },1000);
     });
     //页面跳转
     $('#control').on('click',function () {
