@@ -67,7 +67,7 @@ class Launcher():
 
 		#加载更多
 		length=100
-		for i in range(0,50):
+		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
 			time.sleep(2)
@@ -106,7 +106,7 @@ class Launcher():
 		time.sleep(3)
 		#加载更多
 		length=100
-		for i in range(0,50):
+		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
 			time.sleep(2)
@@ -146,7 +146,7 @@ class Launcher():
 		time.sleep(3)
 		#加载更多
 		length=100
-		for i in range(0,50):
+		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
 			time.sleep(2)
@@ -185,7 +185,7 @@ class Launcher():
 
 		#加载更多
 		length=100
-		for i in range(0,50):
+		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
 			time.sleep(2)
