@@ -627,10 +627,10 @@ function focus(data) {
 //============================
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
-        f='操作失败，'+data[1];
+        f='操作失败';
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
@@ -738,7 +738,7 @@ function focusUserSure() {
 }
 function focusYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
         if (focusYN==1){
             var tm=$('.choosetime input:radio[name="time1"]:checked').val();
@@ -762,7 +762,7 @@ function focusYES(data) {
         }
 
     }else {
-        f='操作失败，'+data[1];
+        f='操作失败';
     }
     $('#focusSure p').text(f);
     $('#focusSure').modal('show');
