@@ -331,9 +331,9 @@ function success_fail(data) {
     var flag=eval(data),word;
     if (flag==1){
         word='删除成功。';
-        setTimeout(function () {
+	    setTimeout(function () {
             public_ajax.call_request('GET',url_QQ,has_table_QQ);
-        },800)
+        },800);
     }else {
         word='删除失败。';
     }
