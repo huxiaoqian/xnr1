@@ -8,14 +8,14 @@ import re
 
 from xnr.global_config import S_DATE_FB,S_TYPE,S_DATE_BCI_FB,SYSTEM_START_DATE
 from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
-					fb_xnr_timing_list_index_name, fb_xnr_timing_list_index_type,\
-					fb_xnr_retweet_timing_list_index_name, fb_xnr_retweet_timing_list_index_type,\
-					facebook_flow_text_index_name_pre, facebook_flow_text_index_type,\
-					facebook_user_index_name, facebook_user_index_type, fb_social_sensing_index_name_pre, \
-					fb_social_sensing_index_type, fb_hot_keyword_task_index_name, fb_hot_keyword_task_index_type,\
-					fb_hot_subopinion_results_index_name, fb_hot_subopinion_results_index_type, \
-					es_fb_user_portrait, fb_portrait_index_name, fb_portrait_index_type, \
-					fb_bci_index_name_pre, fb_bci_index_type, fb_xnr_fans_followers_index_name, \
+                    fb_xnr_timing_list_index_name, fb_xnr_timing_list_index_type,\
+                    fb_xnr_retweet_timing_list_index_name, fb_xnr_retweet_timing_list_index_type,\
+                    facebook_flow_text_index_name_pre, facebook_flow_text_index_type,\
+                    facebook_user_index_name, facebook_user_index_type, fb_social_sensing_index_name_pre, \
+                    fb_social_sensing_index_type, fb_hot_keyword_task_index_name, fb_hot_keyword_task_index_type,\
+                    fb_hot_subopinion_results_index_name, fb_hot_subopinion_results_index_type, \
+                    es_fb_user_portrait, fb_portrait_index_name, fb_portrait_index_type, \
+                    fb_bci_index_name_pre, fb_bci_index_type, fb_xnr_fans_followers_index_name, \
                     fb_xnr_fans_followers_index_type
 
 
@@ -46,30 +46,30 @@ def get_robot_reply(question):
 
 def get_submit_tweet_fb(task_detail):
 
-	text = task_detail['text']
-	tweet_type = task_detail['tweet_type']
-	xnr_user_no = task_detail['xnr_user_no']
+    text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_publish(account_name, password, text, tweet_type, xnr_user_no)
+    if account_name:
+        mark = fb_publish(account_name, password, text, tweet_type, xnr_user_no)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 def fb_save_to_tweet_timing_list(task_detail):
 
@@ -96,7 +96,7 @@ def fb_save_to_tweet_timing_list(task_detail):
         mark = False
 
     return mark
-	
+    
 
 def get_recommend_at_user(xnr_user_no):
     #_id  = user_no2_id(user_no)
@@ -498,173 +498,173 @@ def get_tweets_from_bci(monitor_keywords_list,sort_item_new):
 
 def get_comment_operate_fb(task_detail):
 
-	text = task_detail['text']
-	tweet_type = task_detail['tweet_type']
-	xnr_user_no = task_detail['xnr_user_no']
-	_id = task_detail['r_fid']
-	#_id = ??????
-	uid = task_detail['r_uid']
+    text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
+    _id = task_detail['r_fid']
+    #_id = ??????
+    uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
+    if account_name:
+        mark = fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 def get_retweet_operate_fb(task_detail):
 
-	text = task_detail['text']
-	tweet_type = task_detail['tweet_type']
-	xnr_user_no = task_detail['xnr_user_no']
-	_id = task_detail['r_fid']
-	#_id = ??????
-	uid = task_detail['r_uid']
+    text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
+    _id = task_detail['r_fid']
+    #_id = ??????
+    uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
+    if account_name:
+        mark = fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 
 def get_at_operate_fb(task_detail):
-	
-	text = task_detail['text']
-	tweet_type = task_detail['tweet_type']
-	xnr_user_no = task_detail['xnr_user_no']
-	user_name = task_detail['nick_name']
+    
+    text = task_detail['text']
+    tweet_type = task_detail['tweet_type']
+    xnr_user_no = task_detail['xnr_user_no']
+    user_name = task_detail['nick_name']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_mention(account_name,password, user_name, text, xnr_user_no, tweet_type)
+    if account_name:
+        mark = fb_mention(account_name,password, user_name, text, xnr_user_no, tweet_type)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 def get_like_operate_fb(task_detail):
 
-	xnr_user_no = task_detail['xnr_user_no']
-	_id = task_detail['r_fid']
-	#_id = ??????
-	uid = task_detail['r_uid']
+    xnr_user_no = task_detail['xnr_user_no']
+    _id = task_detail['r_fid']
+    #_id = ??????
+    uid = task_detail['r_uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_like(account_name,password, _id, uid)
+    if account_name:
+        mark = fb_like(account_name,password, _id, uid)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 def get_follow_operate_fb(task_detail):
 
-	trace_type = task_detail['trace_type']
-	xnr_user_no = task_detail['xnr_user_no']
-	uid = task_detail['uid']
+    trace_type = task_detail['trace_type']
+    xnr_user_no = task_detail['xnr_user_no']
+    uid = task_detail['uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_follow(account_name, password, uid, xnr_user_no, trace_type)
+    if account_name:
+        mark = fb_follow(account_name, password, uid, xnr_user_no, trace_type)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 def get_unfollow_operate_fb(task_detail):
 
-	xnr_user_no = task_detail['xnr_user_no']
-	uid = task_detail['uid']
+    xnr_user_no = task_detail['xnr_user_no']
+    uid = task_detail['uid']
 
-	es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    es_xnr_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
 
-	fb_mail_account = es_xnr_result['fb_mail_account']
-	fb_phone_account = es_xnr_result['fb_phone_account']
-	password = es_xnr_result['password']
+    fb_mail_account = es_xnr_result['fb_mail_account']
+    fb_phone_account = es_xnr_result['fb_phone_account']
+    password = es_xnr_result['password']
 
-	if fb_phone_account:
-		account_name = fb_phone_account
-	elif fb_mail_account:
-		account_name = fb_mail_account
-	else:
-		account_name = False
+    if fb_phone_account:
+        account_name = fb_phone_account
+    elif fb_mail_account:
+        account_name = fb_mail_account
+    else:
+        account_name = False
 
-	if account_name:
-		mark = fb_unfollow(account_name, password, uid, xnr_user_no)
+    if account_name:
+        mark = fb_unfollow(account_name, password, uid, xnr_user_no)
 
-	else:
-		mark = False
+    else:
+        mark = False
 
-	return mark
+    return mark
 
 
 def get_private_operate_fb(task_detail):
@@ -1017,10 +1017,13 @@ from xnr.global_utils import facebook_feedback_comment_index_name, facebook_feed
                             facebook_feedback_private_index_name, facebook_feedback_private_index_type,\
                             facebook_feedback_at_index_name, facebook_feedback_at_index_type,\
                             facebook_feedback_fans_index_name, facebook_feedback_fans_index_type,\
-                            facebook_feedback_friends_index_name, facebook_feedback_friends_index_type
+                            facebook_feedback_friends_index_name, facebook_feedback_friends_index_type,\
+                            fb_be_retweet_index_name_pre, fb_be_retweet_index_type,\
+                            facebook_feedback_like_index_name, facebook_feedback_like_index_type
+from xnr.global_config import R_BEGIN_TIME
 from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list
 from xnr.utils import judge_fb_follow_type, judge_fb_sensing_sensor
-from xnr.parameter import TOP_ACTIVE_SOCIAL
+from xnr.parameter import TOP_ACTIVE_SOCIAL,DAY
 trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
 from trans import trans, simplified2traditional
@@ -1205,6 +1208,43 @@ def get_show_friends(task_detail):
         print e
     return results_all
 
+def get_show_like(task_detail):
+    xnr_user_no = task_detail['xnr_user_no']
+    sort_item = task_detail['sort_item']
+    start_ts = int(task_detail['start_ts'])
+    end_ts = int(task_detail['end_ts'])
+    es_result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+    uid = es_result['uid']
+    query_body = {
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'root_uid':uid}},
+                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                ]
+            }
+        },
+        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'size':MAX_SEARCH_SIZE
+    }
+        
+    if start_ts < datetime2ts(SYSTEM_START_DATE):
+        start_ts = datetime2ts(SYSTEM_START_DATE)
+
+    index_name_pre = facebook_feedback_like_index_name + '_'
+
+    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    results_all = []
+    try:
+        es_results = es.search(index=index_name,doc_type=facebook_feedback_like_index_type,\
+                            body=query_body)['hits']['hits']
+        if es_results:
+            for item in es_results:
+                results_all.append(item['_source'])
+    except Exception,e:
+        print e
+    return results_all
+
 # 主动社交-直接搜索
 def get_direct_search(task_detail):
     return_results_all = []
@@ -1299,6 +1339,18 @@ def get_direct_search(task_detail):
             return_results_all.append(item_else)
     return return_results_all
 
+begin_ts = datetime2ts(R_BEGIN_TIME)
+
+#use to get db_number which is needed to es
+def get_db_num(timestamp):
+    date = ts2datetime(timestamp)
+    date_ts = datetime2ts(date)
+    db_number = 2 - (((date_ts - begin_ts) / (DAY * 7))) % 2
+    #run_type
+    if S_TYPE == 'test':
+        db_number = 1
+    return db_number
+
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     avg_sort_uid_dict = {}
@@ -1329,12 +1381,28 @@ def get_related_recommendation(task_detail):
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_traditional_keyword+'*'}})
 
-    recommend_list_r = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    #弃用，改用转发网络
+    # recommend_list_r = es.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    # recommend_list = []
+    # if recommend_list_r.has_key('followers_list'):
+    #     recommend_list = recommend_list_r['followers_list']
+    # recommend_set_list = list(set(recommend_list))
+    #转发网络
+    now_ts = time.time()
+    now_date_ts = datetime2ts(ts2datetime(now_ts))
+    #get redis db number
+    db_number = get_db_num(now_date_ts)
+    fb_be_retweet_index_name = fb_be_retweet_index_name_pre +str(db_number)
+    try:
+        recommend_list_r = es.get(index=fb_be_retweet_index_name,doc_type=fb_be_retweet_index_type,id=xnr_user_no)['_source']
+        recommend_list = []
+        if recommend_list_r.has_key('uid_be_retweet'):
+            recommend_list = recommend_list_r['uid_be_retweet']
+        recommend_set_list = list(set(recommend_list))
+    except Exception,e:
+        print e
+        recommend_set_list = []
 
-    recommend_list = []
-    if recommend_list_r.has_key('followers_list'):
-        recommend_list = recommend_list_r['followers_list']
-    recommend_set_list = list(set(recommend_list))
 
 
     if S_TYPE == 'test':
@@ -1388,18 +1456,7 @@ def get_related_recommendation(task_detail):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+        '''#弃用，改用转发网络
         if recommend_set_list:
             friends_list_results = es.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':recommend_set_list})['docs']
             for result in friends_list_results:
@@ -1412,9 +1469,32 @@ def get_related_recommendation(task_detail):
             friends_set_list = list(set(friends_list))
         else:
             friends_set_list = []
+        '''
+
+        #转发网络
+        if recommend_set_list:
+            friends_list_results = es.mget(index=fb_be_retweet_index_name,doc_type=fb_be_retweet_index_type,body={'ids':recommend_set_list})['docs']
+            for result in friends_list_results:
+                friends_list = []
+                try:
+                    friends_list = friends_list + result['_source']['uid_be_retweet']
+                except:
+                    pass
+            friends_set_list = list(set(friends_list))
+        else:
+            friends_set_list = []
         
         print 'friends_set_list'
         print friends_set_list
+
+
+
+
+
+
+
+
+
 
         # sort_item_new = 'fansnum'
         sort_item_new = 'share'
@@ -1496,14 +1576,14 @@ def get_related_recommendation(task_detail):
 
                 if sort_item == 'friend':
                     if S_TYPE == 'test':
-                        # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
+                        # item['_source']['fansnum'] = item['_source']['fansnum']   #暂无
                         item['_source']['share'] = 0
                     else:
                         # item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
                         item['_source']['share'] = avg_sort_uid_dict[uid]['sort_item_value']
                 elif sort_item == 'sensitive':
                     item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
-                    # item['_source']['fansnum'] = item['_source']['fansnum']	#暂无
+                    # item['_source']['fansnum'] = item['_source']['fansnum']   #暂无
                     # item['_source']['fansnum'] = 0
                 else:
                     item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
