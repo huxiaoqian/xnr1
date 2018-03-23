@@ -1,5 +1,5 @@
 var end_time=yesterday();
-var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
     var data=[dataTable[0]];
@@ -129,11 +129,11 @@ $('.choosetime .demo-label input').on('click',function () {
             lastURL='&start_time='+startTime+'&end_time='+end_time+'&assess_type=safe';
         }
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
+        var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
             '&start_time='+startTime_2+'&end_time='+end_time;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var safe_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+startTime+'&end_time='+end_time+'&assess_type=safe';
         public_ajax.call_request('get',safe_7day_url,safe_7day);
         //曲线图 2
@@ -151,11 +151,11 @@ $('.sureTime').on('click',function () {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
+        var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var safe_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end+'&assess_type=safe';
         public_ajax.call_request('get',safe_7day_url,safe_7day);
         //曲线图 2
@@ -165,7 +165,7 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var safe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+var safe_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=safe';
 public_ajax.call_request('get',safe_7day_url,safe_7day);
 function safe_7day(data) {
