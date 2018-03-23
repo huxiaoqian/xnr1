@@ -15,6 +15,12 @@ class Share():
 		self.share_list = self.launcher.get_share_list()
 	def get_share(self):
 		self.driver.get(self.share_list[0])
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		for ea in self.driver.find_elements_by_xpath('//div[@id="repost_view_permalink"]/div/div[1]/div'):
 			for each in ea.find_elements_by_xpath('./div'):
 				author_name = each.find_element_by_xpath('./div/div[2]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/h5/span/span/span/a').text
@@ -34,5 +40,7 @@ class Share():
 
 if __name__ == '__main__':
 	share = Share('8618348831412','Z1290605918')
+	# share = Share('13041233988','han8528520258')
 	list = share.get_share()
-	share.save('facebook_feedback_retweet','text',list)
+	print list
+	# share.save('facebook_feedback_retweet','text',list)

@@ -80,6 +80,7 @@ def ajax_add_qq_xnr():
     xnr_info['submitter'] = submitter
     xnr_info['remark'] = remark
     print 'before utils!!!!!'
+    print 'xnr_info..',xnr_info
     result = create_qq_xnr(xnr_info)
     return json.dumps(result)   # 结果：[True, '']、[False, '群名称数量、群备注数量和群号码数量不一致']、[False, '输入不能为空']、[False,'失败！以下备注名重复：' + ','.join(mark_name_exist_list)]
 

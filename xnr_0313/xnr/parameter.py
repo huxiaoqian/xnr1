@@ -99,11 +99,13 @@ SUB_OPINION_WEIBO_LIMIT = 3
 # top心理特征
 TOP_PSY_FEATURE = 4
 
+abs_path = '/home/xnr1/xnr_0313/xnr/cron/model_file'
+
 ## 读取hashtag
-UID_TXT_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_warming'
+UID_TXT_PATH = '/home/xnr1/xnr_0313/xnr/weibo_xnr_warming'
 
 ## 生成实例模板
-EXAMPLE_MODEL_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/example_model/'
+EXAMPLE_MODEL_PATH = '/home/xnr1/xnr_0313/xnr/example_model/'
 
 # 主动社交，朋友圈推荐，weibo_user库中 friend_list字段
 FRIEND_LIST = ['3077463611','3925294372','1666458704','1663088660','3605949192','3700715461','5664244064','5764699905','2567277481']
@@ -129,41 +131,45 @@ ACTIVE_UID = '2919766227'
 #MAX_PRIVATE = 100
 #MAX_AT = 1000
 
-WORD2VEC_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/word2vec/news_12g_baidubaike_20g_novel_90g_embedding_64.bin'
+WORD2VEC_PATH = '/home/xnr1/xnr_0313/xnr/cron/word2vec/news_12g_baidubaike_20g_novel_90g_embedding_64.bin'
 
-WHITE_UID_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/'
+WHITE_UID_PATH = '/home/xnr1/xnr_0313/xnr/'
 
 WHITE_UID_FILE_NAME = 'white_uid.txt'
 
-IMAGE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/weibo_images/'
+IMAGE_PATH = '/home/xnr1/xnr_0313/xnr/weibo_images/'
 
-DOMAIN_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
+DOMAIN_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/model_file/domain'
+		#'/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/domain'
 
-CH_ABS_PATH = '/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
+CH_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/model_file/character'
+		#'/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/character'
 
-TOPIC_ABS_PATH = "/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
+TOPIC_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/model_file/topic'
+		#"/home/ubuntu8/huxiaoqian/user_portrait_151220/user_portrait/user_portrait/cron/model_file/topic"
 
-PSY_ABS_PATH = "/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
+PSY_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/model_file/psy'
+		#"/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/model_file/psy"
 
-POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_management/political'
+POLICY_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/knowledge_base_management/political'
 
 #智能写作
-WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+WRITING_PATH = '/home/xnr1/xnr_0313/xnr/cron/opinion_question'
 
 # 定制模块
-TRANS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
-FB_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook/'
-TW_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter/'
+TRANS_PATH = '/home/xnr1/xnr_0313/xnr/cron/trans/'
+FB_OP_PATH = '/home/xnr1/xnr_0313/xnr/facebook/'
+TW_OP_PATH = '/home/xnr1/xnr_0313/xnr/twitter/'
 
 # redis 发帖操作
-WEIBO_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_operate/'
-FACEBOOK_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook_xnr_operate/'
-TWITTER_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter_xnr_operate/'
+WEIBO_XNR_OPERATE_PATH = '/home/xnr1/xnr_0313/xnr/weibo_xnr_operate/'
+FACEBOOK_XNR_OPERATE_PATH = '/home/xnr1/xnr_0313/xnr/facebook_xnr_operate/'
+TWITTER_XNR_OPERATE_PATH = '/home/xnr1/xnr_0313/xnr/twitter_xnr_operate/'
 
 #FB & TW 属性计算
-FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
-TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'
-FB_TW_TOPIC_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/topic'
+FB_DOMAIN_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
+TW_DOMAIN_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'
+FB_TW_TOPIC_ABS_PATH = '/home/xnr1/xnr_0313/xnr/cron/topic_domain_facebook_twitter_v1/topic'
 
 MID_VALUE = 500      #查询活跃用户数量
 

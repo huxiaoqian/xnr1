@@ -13,33 +13,40 @@ class Friend():
 		self.driver = self.launcher.login()
 		time.sleep(2)
 		self.driver.find_element_by_xpath('//a[@title="个人主页"]').click()
-		time.sleep(3)
+		time.sleep(4)
 		self.driver.find_element_by_xpath('//ul[@data-referrer="timeline_light_nav_top"]/li[3]/a').click()
-		time.sleep(1)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
+		# self.driver.execute_script("""
+		# 	(function () {
+		# 	var y = 0;
+		# 	var step = 100;
+		# 	window.scroll(0, 0);
+		# 	function f() {
+		# 	if (y < document.body.scrollHeight) {
+		# 	y += step;
+		# 	window.scroll(0, y);
+		# 	setTimeout(f, 150);
+		# 	} else {
+		# 	window.scroll(0, 0);
+		# 	document.title += "scroll-done";
+		# 	}
+		# 	}
+		# 	setTimeout(f, 1500);
+		# 	})();
+		# 	""")
+		# time.sleep(3)
+		# while True:
+		# 	if "scroll-done" in self.driver.title:
+		# 		break
+		# 	else:
+		# 		time.sleep(3)
 		self.data_gt = self.driver.find_element_by_xpath('//div[@id="contentArea"]/div[1]').get_attribute('data-gt')
 		self.root_uid = json.loads(self.data_gt)['profile_owner']
 		self.es = Es_fb()

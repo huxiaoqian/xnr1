@@ -7,7 +7,7 @@ from elasticsearch import Elasticsearch
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, ES_INTELLIGENT_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
-                          ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,\
+                          ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,USER_PROFILE_ES_HOST,\
                           REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
                           REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
                           REDIS_WX_HOST, REDIS_WX_PORT, \
@@ -86,7 +86,7 @@ weibo_sensitive_history_index_name = 'sensitive_history'
 weibo_sensitive_history_index_type = 'sensitive'
 
 #use to identify the user portrait
-es_user_profile = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout = 600)
+es_user_profile = Elasticsearch(USER_PROFILE_ES_HOST, timeout = 600)
 es_user_portrait = Elasticsearch(ES_USER_PORTRAIT_HOST, timeout=600)
 portrait_index_name = 'user_portrait_1222'
 portrait_index_type = 'user'
@@ -117,8 +117,8 @@ update_userinfo_queue_name = 'update_userinfo'
 
 #use to identify the qq login png save file
 #QRCODE_PATH = '/root/.qqbot-tmp/'
-QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
-ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
+QRCODE_PATH = '/home/xnr1/xnr_0313/xnr/static/images/QQ/'
+ABS_LOGIN_PATH = '/home/xnr1/xnr_0313/xnr/qq/receiveQQGroupMessage.py'
 
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'

@@ -147,6 +147,7 @@ def ajax_save_step_two():
     #task_detail['career'] = request.args.get('career','') # 职业
     #task_detail['description'] = request.args.get('description','') # 个人简介
     '''
+    print 'save step two!!!!!!!!!!!!!!!!!'
     task_detail['active_time'] = request.args.get('active_time','') 
     # 活跃时间，数字，以中文逗号分隔“，”，如：9,19 表示：9:00-10:00，19:00-20:00活跃
     task_detail['day_post_average'] = request.args.get('day_post_average','') 
@@ -176,8 +177,10 @@ def ajax_save_step_three_1():
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     #print 'nick_name::',task_detail['nick_name']
     #step2 info
-    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
+    print 'task_detail...绑定。。。',task_detail
 
+    new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
+    print 'new task detail...',new_task_detail
     #new_task_detail = dict(task_detail, **results)
     if new_task_detail == 'nick_name error':
         print 'name error!!'

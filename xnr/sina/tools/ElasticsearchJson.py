@@ -126,7 +126,10 @@ def executeES(indexName, typeName, listData):
 
                     # trace_follow_mark = judge_trace_follow(xnr_user_no,data['uid'])
                     # data['trace_follow_mark'] = trace_follow_mark
-                print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
+                try:
+                    es.get(index=indexName,doc_type=typeName,id=_id)
+                except:
+                    print 'save to es!!!!',es.index(index=indexName, doc_type=typeName, id=_id, body=data)
             
             elif indexName == 'weibo_feedback_comment':
                 indexName_date =indexName + '_' + ts2datetime(data['timestamp'])
