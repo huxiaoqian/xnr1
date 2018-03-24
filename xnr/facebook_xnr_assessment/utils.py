@@ -7,9 +7,7 @@ import random
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import R_WEIBO_XNR_FANS_FOLLOWERS as r_fans_followers ,\
                             facebook_xnr_count_info_index_name,facebook_xnr_count_info_index_type
-
-
-
+from xnr.global_config import S_DATE_FB
 
 
 
@@ -54,7 +52,7 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
         'query':{
             'bool':{
                 'must':[
-                    # {'term':{'xnr_user_no':xnr_user_no}},
+                    {'term':{'xnr_user_no':xnr_user_no}},
                     {'range':{
                         'timestamp':{'gte':start_time,'lt':end_time}
                     }}
@@ -99,33 +97,32 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
 
 
     for result in search_results:
-        if result['_source']['xnr_user_no'] == xnr_user_no: 
-            result = result['_source']
-            timestamp = result['timestamp']
+        result = result['_source']
+        timestamp = result['timestamp']
 
-            fans_dict['total_num'][timestamp] = result['fans_total_num']
-            fans_dict['day_num'][timestamp] = result['fans_day_num']
-            fans_dict['growth_rate'][timestamp] = result['fans_growth_rate']
+        fans_dict['total_num'][timestamp] = result['fans_total_num']
+        fans_dict['day_num'][timestamp] = result['fans_day_num']
+        fans_dict['growth_rate'][timestamp] = result['fans_growth_rate']
 
-            retweet_dict['total_num'][timestamp] = result['retweet_total_num']
-            retweet_dict['day_num'][timestamp] = result['retweet_day_num']
-            retweet_dict['growth_rate'][timestamp] = result['retweet_growth_rate']
+        retweet_dict['total_num'][timestamp] = result['retweet_total_num']
+        retweet_dict['day_num'][timestamp] = result['retweet_day_num']
+        retweet_dict['growth_rate'][timestamp] = result['retweet_growth_rate']
 
-            comment_dict['total_num'][timestamp] = result['comment_total_num']
-            comment_dict['day_num'][timestamp] = result['comment_day_num']
-            comment_dict['growth_rate'][timestamp] = result['comment_growth_rate']
+        comment_dict['total_num'][timestamp] = result['comment_total_num']
+        comment_dict['day_num'][timestamp] = result['comment_day_num']
+        comment_dict['growth_rate'][timestamp] = result['comment_growth_rate']
 
-            like_dict['total_num'][timestamp] = result['like_total_num']
-            like_dict['day_num'][timestamp] = result['like_day_num']
-            like_dict['growth_rate'][timestamp] = result['like_growth_rate']
+        like_dict['total_num'][timestamp] = result['like_total_num']
+        like_dict['day_num'][timestamp] = result['like_day_num']
+        like_dict['growth_rate'][timestamp] = result['like_growth_rate']
 
-            private_dict['total_num'][timestamp] = result['private_total_num']
-            private_dict['day_num'][timestamp] = result['private_day_num']
-            private_dict['growth_rate'][timestamp] = result['private_growth_rate']
-            
-            at_dict['total_num'][timestamp] = result['at_total_num']
-            at_dict['day_num'][timestamp] = result['at_day_num']
-            at_dict['growth_rate'][timestamp] = result['at_growth_rate']
+        private_dict['total_num'][timestamp] = result['private_total_num']
+        private_dict['day_num'][timestamp] = result['private_day_num']
+        private_dict['growth_rate'][timestamp] = result['private_growth_rate']
+        
+        at_dict['total_num'][timestamp] = result['at_total_num']
+        at_dict['day_num'][timestamp] = result['at_day_num']
+        at_dict['growth_rate'][timestamp] = result['at_growth_rate']
 
 
     total_dict['total_trend']['fans'] = fans_dict['total_num']
@@ -720,18 +717,20 @@ def get_influ_private_num(xnr_user_no,current_time):
 def compute_influence_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-07')
+        current_time = datetime2ts(S_DATE_FB)
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+    try:
+        get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
             id=_id)['_source']
-
-    influence = get_result['influence']
-
+        influence = get_result['influence']
+    except Exception,e:
+        print e
+        influence = 0
     return influence
 
 '''
@@ -742,18 +741,21 @@ def compute_influence_num(xnr_user_no):
 def compute_penetration_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-07')
+        current_time = datetime2ts(S_DATE_FB)
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
-            id=_id)['_source']
+    try:
+        get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+                id=_id)['_source']
 
-    pene_mark = get_result['penetration']
-
+        pene_mark = get_result['penetration']
+    except Exception,e:
+        print e
+        pene_mark = 0
     return pene_mark
 
 
@@ -780,7 +782,7 @@ def penetration_total(xnr_user_no,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
 
-    search_results = es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+    search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
 
     follow_group = {}
@@ -1243,14 +1245,14 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 def compute_safe_num(xnr_user_no):
     
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-07')
+        current_time = datetime2ts(S_DATE_FB)
     else:
         current_time = int(time.time()-DAY)
     
     current_date = ts2datetime(current_time)
 
     _id = xnr_user_no + '_' + current_date
-    get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+    get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
             id=_id)['_source']
 
     safe_mark = get_result['safe']
@@ -1276,7 +1278,7 @@ def get_safe_active(xnr_user_no,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
 
-    search_results = es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+    search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
 
     for result in search_results:

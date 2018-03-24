@@ -41,14 +41,14 @@ from time_utils import ts2datetime,datetime2ts,fb_get_flow_text_index_list as ge
                         get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
                         get_timeset_indexset_list
 from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT,\
-                    FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID
+                    FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID,\
+                    FB_FANS_TODAY as FANS_TODAY
 from time_utils import get_timeset_indexset_list
 
 
 
 
-from parameter import WEEK,DAY,MAX_SEARCH_SIZE,FOLLOWERS_TODAY,\
-                        TOP_ASSESSMENT_NUM,ACTIVE_UID
+from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,ACTIVE_UID
 
 
 # 影响力粉丝数
@@ -245,8 +245,9 @@ def compute_safe_num(xnr_user_no,current_time_old):
 
     ## 计算分数
     topic_distribute_dict = get_tweets_distribute(xnr_user_no)
-    domain_distribute_dict = get_follow_group_distribute(xnr_user_no)
-
+#     domain_distribute_dict = get_follow_group_distribute(xnr_user_no)
+    domain_distribute_dict = get_fans_group_distribute(xnr_user_no)
+    
     topic_mark = topic_distribute_dict['mark']
     domain_mark = domain_distribute_dict['mark']
 
@@ -264,32 +265,35 @@ def get_tweets_distribute(xnr_user_no):
     if xnr_user_no:
         es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
-        followers_list = []
-        if es_results.has_key('followers_list'):
-            followers_list = es_results['followers_list']
+        fans_list = []
+        if es_results.has_key('fans_list'):
+            fans_list = es_results['fans_list']
 
 
     if S_TYPE == 'test':
         uid=PORTRAI_UID
-        followers_list=PORTRAIT_UID_LIST
+        fans_list=PORTRAIT_UID_LIST
 
-    # 关注者topic分布
+    print 'fans_list'
+    print fans_list
+
+    # friends topic分布 虽然用的名称是fans，但实际上是friends
 
     results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
-        body={'ids':followers_list})['docs']
+        body={'ids':fans_list})['docs']
 
-    topic_list_followers = []
+    topic_list_fans = []
 
     for result in results:
         if result['found'] == True:
             result = result['_source']
             topic_string_first = result['topic_string'].split('&')
-            topic_list_followers.extend(topic_string_first)
+            topic_list_fans.extend(topic_string_first)
 
-    topic_list_followers_count = Counter(topic_list_followers)
+    topic_list_fans_count = Counter(topic_list_fans)
 
-    print 'topic_list_followers_count'
-    print topic_list_followers_count
+    print 'topic_list_fans_count'
+    print topic_list_fans_count
 
     # 虚拟人topic分布
     try:
@@ -304,7 +308,7 @@ def get_tweets_distribute(xnr_user_no):
     print topic_xnr_count
 
     if topic_xnr_count:
-        for topic, value in topic_list_followers_count.iteritems():
+        for topic, value in topic_list_fans_count.iteritems():
             try:
                 topic_value = float(topic_xnr_count[topic])/value
             except:
@@ -314,10 +318,10 @@ def get_tweets_distribute(xnr_user_no):
     # 整理仪表盘数据
     mark = 0
     if topic_xnr_count:
-        n_topic = len(topic_list_followers_count.keys())
+        n_topic = len(topic_list_fans_count.keys())
         for topic,value in topic_xnr_count.iteritems():
             try:
-                mark += float(value)/(topic_list_followers_count[topic]*n_topic)
+                mark += float(value)/(topic_list_fans_count[topic]*n_topic)
                 print topic 
                 print mark
             except:
@@ -409,6 +413,116 @@ def get_follow_group_distribute(xnr_user_no):
 
     return domain_distribute_dict
 
+
+
+
+
+
+
+
+
+
+
+
+def get_fans_group_distribute(xnr_user_no):
+    
+    domain_distribute_dict = {}
+    domain_distribute_dict['radar'] = {}
+
+    if S_TYPE == 'test':
+        fans_list=PORTRAIT_UID_LIST
+        fans_list_today = FANS_TODAY
+    else:
+        # 获取所有关注者
+        es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
+                                id=xnr_user_no)["_source"]
+        fans_list = es_results['fans_list']
+
+        # 获取今日关注者
+        current_time = int(time.time()-DAY)
+        current_date = ts2datetime(current_time)
+        r_uid_list_datetime_index_name = r_fans_uid_list_datetime_pre + current_date
+        fans_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
+        fans_list_today = json.loads(fans_results)
+
+    # 所有关注者领域分布
+
+    results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+        body={'ids':fans_list})['docs']
+    
+    domain_list_fans = []
+
+    for result in results:
+        if result['found'] == True:
+            result = result['_source']
+            domain_name = result['domain']
+            domain_list_fans.append(domain_name)
+
+    domain_list_fans_count = Counter(domain_list_fans)
+
+    
+    try:
+        today_results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+            body={'ids':fans_list_today})['docs']
+
+        print 'today_results'
+        print today_results
+
+        domain_list_fans_today = []
+
+        for result in today_results:
+            if result['found'] == True:
+                result = result['_source']
+                domain_name = result['domain']
+                domain_list_fans_today.append(domain_name)
+
+        domain_list_fans_today_count = Counter(domain_list_fans_today)
+
+    except Exception,e:
+        print e
+        domain_list_fans_today_count = {}
+
+
+    if domain_list_fans_today_count:
+        for domain, value in domain_list_fans_today_count.iteritems():
+            try:
+                domain_value = float(domain_list_fans_today_count[domain])/value
+            except:
+                continue
+            domain_distribute_dict['radar'][domain] = domain_value
+
+    # 整理仪表盘数据
+    mark = 0
+    print 'domain_list_fans_today_count::',domain_list_fans_today_count
+    print 'domain_distribute_dict::',domain_distribute_dict
+    if domain_list_fans_today_count:
+        n_domain = len(domain_list_fans_count.keys())
+        for domain,value in domain_list_fans_today_count.iteritems():
+            try:
+                mark += float(value)/(domain_list_fans_count[domain]*n_domain)
+            except:
+                continue
+    domain_distribute_dict['mark'] = mark
+
+    return domain_distribute_dict
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def xnr_user_no2uid(xnr_user_no):
     try:
         result = es.get(index=facebook_xnr_index_name,doc_type=facebook_xnr_index_type,id=xnr_user_no)['_source']
@@ -466,7 +580,7 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     if xnr_result:
         #今日总粉丝数
         for item in xnr_result['hits']['hits']:
-            xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+            xnr_user_detail['user_friendsnum']=item['_source']['user_friendsnum']
         # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
         for item in xnr_result['aggregations']['all_task_source']['buckets']:
             if item['key'] == 'daily_post':
@@ -478,10 +592,10 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
             elif item['key'] =='trace_follow_tweet':
                 xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
 
-    if xnr_user_detail.has_key('user_fansnum'):
+    if xnr_user_detail.has_key('user_friendsnum'):
         pass
     else:
-        xnr_user_detail['user_fansnum']=0
+        xnr_user_detail['user_friendsnum']=0
     #总发帖量
     if xnr_user_detail.has_key('daily_post_num'):
         pass
@@ -506,15 +620,15 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
 
 
-    if xnr_user_detail['user_fansnum'] == 0:
+    if xnr_user_detail['user_friendsnum'] == 0:
         yesterday_date=ts2datetime(datetime2ts(current_date)-DAY)
         count_id=xnr_user_no+'_'+yesterday_date
         try:
             xnr_count_result=es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=count_id)['_source']
-            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+            xnr_user_detail['user_friendsnum']=xnr_count_result['user_friendsnum']
         except Exception,e:
             print e
-            xnr_user_detail['user_fansnum']=0
+            xnr_user_detail['user_friendsnum']=0
     else:
         pass
     xnr_user_detail['xnr_user_no']=xnr_user_no
@@ -592,7 +706,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
 
     try:
         get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=_id_last_day)['_source']
-        fans_total_num_last = get_result['fans_total_num']
+        fans_total_num_last = get_result['friends_total_num']
     except Exception,e:
         print e
         fans_total_num_last = 0
@@ -986,7 +1100,7 @@ def penetration_total(xnr_user_no,current_time):
     total_dict = {}
 
 
-    follow_group = get_pene_follow_group_sensitive(xnr_user_no,current_time)
+    # follow_group = get_pene_follow_group_sensitive(xnr_user_no,current_time)
     fans_group = get_pene_fans_group_sensitive(xnr_user_no,current_time)
     self_info = get_pene_infor_sensitive(xnr_user_no,current_time)
     
@@ -1005,7 +1119,7 @@ def penetration_total(xnr_user_no,current_time):
         warning_report['user'] + warning_report['tweet'])/3,2)
 
 
-    total_dict['follow_group'] = follow_group['sensitive_info']
+    # total_dict['follow_group'] = follow_group['sensitive_info']
     total_dict['fans_group'] = fans_group['sensitive_info']
     total_dict['self_info'] = self_info['sensitive_info']
     total_dict['warning_report_total'] = warning_report_total
@@ -1420,21 +1534,21 @@ def cron_compute_mark(current_time):
         print 'start influence.......'
         influ_total_dict = get_influence_total_trend(xnr_user_no,current_time)
 
-        xnr_user_detail['fans_total_num'] = influ_total_dict['total_trend']['fans']
+        xnr_user_detail['friends_total_num'] = influ_total_dict['total_trend']['fans']
         xnr_user_detail['retweet_total_num'] = influ_total_dict['total_trend']['retweet']
         xnr_user_detail['comment_total_num'] = influ_total_dict['total_trend']['comment']
         xnr_user_detail['like_total_num'] = influ_total_dict['total_trend']['like']
         xnr_user_detail['at_total_num'] = influ_total_dict['total_trend']['at']
         xnr_user_detail['private_total_num'] = influ_total_dict['total_trend']['private']
 
-        xnr_user_detail['fans_day_num'] = influ_total_dict['day_num']['fans']
+        xnr_user_detail['friends_day_num'] = influ_total_dict['day_num']['fans']
         xnr_user_detail['retweet_day_num'] = influ_total_dict['day_num']['retweet']
         xnr_user_detail['comment_day_num'] = influ_total_dict['day_num']['comment']
         xnr_user_detail['like_day_num'] = influ_total_dict['day_num']['like']
         xnr_user_detail['at_day_num'] = influ_total_dict['day_num']['at']
         xnr_user_detail['private_day_num'] = influ_total_dict['day_num']['private']
 
-        xnr_user_detail['fans_growth_rate'] = influ_total_dict['growth_rate']['fans']
+        xnr_user_detail['friends_growth_rate'] = influ_total_dict['growth_rate']['fans']
         xnr_user_detail['retweet_growth_rate'] = influ_total_dict['growth_rate']['retweet']
         xnr_user_detail['comment_growth_rate'] = influ_total_dict['growth_rate']['comment']
         xnr_user_detail['like_growth_rate'] = influ_total_dict['growth_rate']['like']
@@ -1446,8 +1560,8 @@ def cron_compute_mark(current_time):
         print 'start penetration......'
         pene_total_dict = penetration_total(xnr_user_no,current_time)
 
-        xnr_user_detail['follow_group_sensitive_info'] = pene_total_dict['follow_group']
-        xnr_user_detail['fans_group_sensitive_info'] = pene_total_dict['fans_group']
+        # xnr_user_detail['follow_group_sensitive_info'] = pene_total_dict['follow_group']
+        xnr_user_detail['friends_group_sensitive_info'] = pene_total_dict['fans_group']
         xnr_user_detail['self_info_sensitive_info'] = pene_total_dict['self_info']
         xnr_user_detail['warning_report_total_sensitive_info'] = pene_total_dict['warning_report_total']
         xnr_user_detail['feedback_total_sensitive_info'] = pene_total_dict['feedback_total']
