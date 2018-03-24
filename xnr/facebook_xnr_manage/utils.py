@@ -515,14 +515,14 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
     if xnr_user_detail['user_fansnum'] == 0:
         count_id=xnr_user_no+'_'+yesterday_date
         try:
-            xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_count_result=es_xnr.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=count_id)['_source']
             xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
         except:
             xnr_user_detail['user_fansnum']=0
     else:
         pass
     try:
-        xnr_assess_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
+        xnr_assess_result=es_xnr.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
         print 'xnr_assessment_id:::',xnr_assessment_id
         xnr_user_detail['influence']=xnr_assess_result['influence']
         xnr_user_detail['penetration']=xnr_assess_result['penetration']
