@@ -1,5 +1,5 @@
 var end_time=yesterday();
-var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+var historyTotal_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
     var data=[dataTable[0]];
@@ -128,11 +128,11 @@ $('.choosetime .demo-label input').on('click',function () {
             lastURL='&start_time='+startTime+'&end_time='+end_time+'&assess_type=influence';
         }
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
+        var historyTotal_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
             '&start_time='+startTime_2+'&end_time='+end_time;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var influe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var influe_7day_url='/twitter_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+startTime+'&end_time='+end_time+'&assess_type=influence';
         public_ajax.call_request('get',influe_7day_url,influe_7day);
         //曲线图 2
@@ -150,11 +150,11 @@ $('.sureTime').on('click',function () {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
+        var historyTotal_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var influe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var influe_7day_url='/twitter_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end+'&assess_type=influence';
         public_ajax.call_request('get',influe_7day_url,influe_7day);
         //曲线图 2
@@ -164,16 +164,21 @@ $('.sureTime').on('click',function () {
     }
 });
 //==============
-var influe_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+var influe_7day_url='/twitter_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=influence';
 public_ajax.call_request('get',influe_7day_url,influe_7day);
 function influe_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
-    $.each(data,function (index,item) {
-        nearTime.push(item['date_time'][0]);
-        nearData.push(item['influence'][0]);
-    })
+    if (data.length==0){
+        nearTime.push($_time);
+        nearData.push(0);
+    }else {
+        $.each(data,function (index,item) {
+            nearTime.push(item['date_time'][0]);
+            nearData.push(item['influence'][0]);
+        })
+    }
     var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
     var option = {
         backgroundColor:'transparent',
