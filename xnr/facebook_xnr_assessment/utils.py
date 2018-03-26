@@ -65,10 +65,14 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
     search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
 
-    fans_dict = {}
-    fans_dict['total_num'] = {}
-    fans_dict['day_num'] = {}
-    fans_dict['growth_rate'] = {}
+    # fans_dict = {}
+    # fans_dict['total_num'] = {}
+    # fans_dict['day_num'] = {}
+    # fans_dict['growth_rate'] = {}
+    friends_dict = {}
+    friends_dict['total_num'] = {}
+    friends_dict['day_num'] = {}
+    friends_dict['growth_rate'] = {}
 
     retweet_dict = {}
     retweet_dict['total_num'] = {}
@@ -100,9 +104,12 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
         result = result['_source']
         timestamp = result['timestamp']
 
-        fans_dict['total_num'][timestamp] = result['fans_total_num']
-        fans_dict['day_num'][timestamp] = result['fans_day_num']
-        fans_dict['growth_rate'][timestamp] = result['fans_growth_rate']
+        # fans_dict['total_num'][timestamp] = result['fans_total_num']
+        # fans_dict['day_num'][timestamp] = result['fans_day_num']
+        # fans_dict['growth_rate'][timestamp] = result['fans_growth_rate']
+        friends_dict['total_num'][timestamp] = result['friends_total_num']
+        friends_dict['day_num'][timestamp] = result['friends_day_num']
+        friends_dict['growth_rate'][timestamp] = result['friends_growth_rate']
 
         retweet_dict['total_num'][timestamp] = result['retweet_total_num']
         retweet_dict['day_num'][timestamp] = result['retweet_day_num']
@@ -125,21 +132,24 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
         at_dict['growth_rate'][timestamp] = result['at_growth_rate']
 
 
-    total_dict['total_trend']['fans'] = fans_dict['total_num']
+    # total_dict['total_trend']['fans'] = fans_dict['total_num']
+    total_dict['total_trend']['fans'] = friends_dict['total_num']
     total_dict['total_trend']['retweet'] = retweet_dict['total_num']
     total_dict['total_trend']['comment'] = comment_dict['total_num']
     total_dict['total_trend']['like'] = like_dict['total_num']
     total_dict['total_trend']['at'] = at_dict['total_num']
     total_dict['total_trend']['private'] = private_dict['total_num']
 
-    total_dict['day_num']['fans'] = fans_dict['day_num']
+    # total_dict['day_num']['fans'] = fans_dict['day_num']
+    total_dict['day_num']['fans'] = friends_dict['day_num']
     total_dict['day_num']['retweet'] = retweet_dict['day_num']
     total_dict['day_num']['comment'] = comment_dict['day_num']
     total_dict['day_num']['like'] = like_dict['day_num']
     total_dict['day_num']['at'] = at_dict['day_num']
     total_dict['day_num']['private'] = private_dict['day_num']
 
-    total_dict['growth_rate']['fans'] = fans_dict['growth_rate']
+    # total_dict['growth_rate']['fans'] = fans_dict['growth_rate']
+    total_dict['growth_rate']['fans'] = friends_dict['growth_rate']
     total_dict['growth_rate']['retweet'] = retweet_dict['growth_rate']
     total_dict['growth_rate']['comment'] = comment_dict['growth_rate']
     total_dict['growth_rate']['like'] = like_dict['growth_rate']
@@ -785,8 +795,9 @@ def penetration_total(xnr_user_no,start_time,end_time):
     search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
 
-    follow_group = {}
-    fans_group = {}
+    # follow_group = {}
+    # fans_group = {}
+    friends_group = {}
     self_info = {}
     warning_report_total = {}
     feedback_total = {}
@@ -795,14 +806,16 @@ def penetration_total(xnr_user_no,start_time,end_time):
     for result in search_results:
         result = result['_source']
         timestamp = result['timestamp']
-        follow_group[timestamp] = result['follow_group_sensitive_info']
-        fans_group[timestamp] = result['fans_group_sensitive_info']
+        # follow_group[timestamp] = result['follow_group_sensitive_info']
+        # fans_group[timestamp] = result['fans_group_sensitive_info']
+        friends_group[timestamp] = result['friends_group_sensitive_info']
         self_info[timestamp] = result['self_info_sensitive_info']
         warning_report_total[timestamp] = result['warning_report_total_sensitive_info']
         feedback_total[timestamp] = result['feedback_total_sensitive_info']
 
-    total_dict['follow_group'] = follow_group
-    total_dict['fans_group'] = fans_group
+    # total_dict['follow_group'] = follow_group
+    # total_dict['fans_group'] = fans_group
+    total_dict['friends_group'] = friends_group
     total_dict['self_info'] = self_info
     total_dict['warning_report_total'] = warning_report_total
     total_dict['feedback_total'] = feedback_total
