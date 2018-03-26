@@ -16,10 +16,10 @@ $('.choosetime .demo-label input').on('click',function () {
         var his_timing_task_url;
         if (mid=='show_history_count'){
             if (_val==0){
-                his_timing_task_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+                his_timing_task_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
             }else {
                 _start=getDaysBefore(_val);
-                his_timing_task_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+_start+'&end_time='+end_time;
+                his_timing_task_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+_start+'&end_time='+end_time;
             }
         }else if (mid=='new_show_history_posting'){
             var conTP=[];
@@ -28,11 +28,11 @@ $('.choosetime .demo-label input').on('click',function () {
             });
             var mid_2=$(".li-3 .news li.active").attr('midurl').split('&');
             if (_val==0){
-                his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+                his_timing_task_url='/twitter_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
                     '&start_time='+todayTimetamp()+'&end_time='+end_time;
             }else {
                 _start=getDaysBefore(_val);
-                his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+                his_timing_task_url='/twitter_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
                     '&start_time='+_start+'&end_time='+end_time;
             }
         }else {
@@ -42,7 +42,7 @@ $('.choosetime .demo-label input').on('click',function () {
             }else {
                 startTime=getDaysBefore(_val);
             }
-            his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
+            his_timing_task_url='/twitter_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+startTime+'&end_time='+end_time;
         }
         public_ajax.call_request('get',his_timing_task_url, window[task]);
     }
@@ -57,7 +57,7 @@ $('.sureTime').on('click',function () {
     }else {
         var mid=$(this).parents('.choosetime').attr('midurl');
         var task=$(this).parents('.choosetime').attr('task');
-        var his_timing_task_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
+        var his_timing_task_url='/twitter_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
             '&end_time='+(Date.parse(new Date(d))/1000);
         if (mid=='show_history_count'){his_timing_task_url+='&type='};
         if (mid=='new_show_history_posting'){
@@ -66,7 +66,7 @@ $('.sureTime').on('click',function () {
                 conTP.push($(this).val());
             });
             var mid_2=$(".li-3 .news li.active").attr('midurl').split('&');
-            his_timing_task_url='/weibo_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
+            his_timing_task_url='/twitter_xnr_manage/'+mid_2[0]+'/?xnr_user_no='+ID_Num+'&'+mid_2[2]+'='+conTP.join(',')+
                 '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
         }
         public_ajax.call_request('get',his_timing_task_url,window[task]);
@@ -85,7 +85,7 @@ $(".customizeTime").keydown(function(e) {
     }
 });
 //历史统计
-var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+var historyTotal_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(data) {
     historyTotalTable(data[0]);
@@ -409,7 +409,7 @@ function historyTotalTable(dataTable) {
     $('#history-2 p').slideUp(700);
 };
 //定时发送任务列表
-var timingTask_url='/weibo_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+end_time;
+var timingTask_url='/twitter_xnr_manage/show_timing_tasks/?xnr_user_no='+ID_Num+'&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',timingTask_url,timingTask);
 var TYPE={
     'origin':'原创','retweet':'转发','comment':'评论'
@@ -546,7 +546,7 @@ function timingTask(data) {
 var __ST;
 function lookRevise(_id,ST) {
     __ST=ST;
-    var saw_url='/weibo_xnr_manage/wxnr_timing_tasks_lookup/?task_id='+_id;
+    var saw_url='/twitter_xnr_manage/wxnr_timing_tasks_lookup/?task_id='+_id;
     public_ajax.call_request('get',saw_url,saw);
 }
 function saw(data) {
@@ -587,7 +587,7 @@ function sureModify() {
         post_time=$("#details .details-3 #_timing").attr('placeholder');
         mi=Date.parse(new Date(post_time))/1000;
     }
-    var againSave_url='/weibo_xnr_manage/wxnr_timing_tasks_change/?task_id='+id+'&task_source='+task_source+
+    var againSave_url='/twitter_xnr_manage/wxnr_timing_tasks_change/?task_id='+id+'&task_source='+task_source+
         '&operate_type='+operate_type+'&create_time='+creat_time+'&post_time='+mi+'&text='+text+'&remark='+remark;
     public_ajax.call_request('get',againSave_url,successfail);
 }
@@ -595,7 +595,7 @@ function sureModify() {
 var escTxt=0;
 function revoked(_id) {
     escTxt=1;
-    var delTask_url='/weibo_xnr_manage/wxnr_timing_tasks_revoked/?task_id='+_id;
+    var delTask_url='/twitter_xnr_manage/wxnr_timing_tasks_revoked/?task_id='+_id;
     public_ajax.call_request('get',delTask_url,successfail);
 }
 //=========
@@ -630,7 +630,7 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
     if ($params.length==0){$params.push(middle[1])}
     if (tm){
         if (tm!='mize'){
-            liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
+            liNews_url='/twitter_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
@@ -640,12 +640,12 @@ $('#container .rightWindow .news #myTabs li').on('click',function () {
                 $('#successfail').modal('show');
                 return false;
             }else {
-                liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
+                liNews_url='/twitter_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
                     '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
             }
         }
     }else {
-        liNews_url='/weibo_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
+        liNews_url='/twitter_xnr_manage/'+middle[0]+'/?xnr_user_no='+ID_Num+'&'+middle[2]+'='+$params.join(',')+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
     public_ajax.call_request('get',liNews_url,historyNews);
@@ -663,7 +663,7 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
     var tm=$('input:radio[name="time3"]:checked').val();
     if (tm){
         if (tm!='mize'){
-            againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
+            againHistoryNews_url='/twitter_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
                 '&start_time='+getDaysBefore(tm)+'&end_time='+end_time;
         }else {
             var s=$(this).parents('.news').prev().find('#start_3').val();
@@ -673,19 +673,19 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
                 $('#successfail').modal('show');
                 return false;
             }else {
-                againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
+                againHistoryNews_url='/twitter_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
                     '&start_time='+(Date.parse(new Date(s))/1000)+ '&end_time='+(Date.parse(new Date(d))/1000);
             }
         }
     }else {
-        againHistoryNews_url='/weibo_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
+        againHistoryNews_url='/twitter_xnr_manage/'+typeDown+'/?xnr_user_no='+ID_Num+'&'+MID+'='+content_type+
             '&start_time='+todayTimetamp()+'&end_time='+end_time;
     }
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
-var historyNews_url='/weibo_xnr_manage/new_show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
+var historyNews_url='/twitter_xnr_manage/new_show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
-// var historyNews_url='/weibo_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
+// var historyNews_url='/twitter_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
 //     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
@@ -817,7 +817,7 @@ function allWord(_this) {
 //查看对话
 function dialogue(_this) {
     var mid = $(_this).parents('.post_perfect').find('.mid').text();
-    var dialogue_url='/weibo_xnr_manage/show_comment_dialog/?mid='+mid;
+    var dialogue_url='/twitter_xnr_manage/show_comment_dialog/?mid='+mid;
     public_ajax.call_request('get',dialogue_url,dialogue_show)
 };
 function dialogue_show(data) {
@@ -847,10 +847,10 @@ function postYES(data) {
 // =====关注列表====
 $('.focusSEN .demo-label input').on('click',function () {
     var orderType=$(this).val();
-    var ClickFocusOn_url='/weibo_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type='+orderType;
+    var ClickFocusOn_url='/twitter_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type='+orderType;
     public_ajax.call_request('get',ClickFocusOn_url,focusOn);
 })
-var focusOn_url='/weibo_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type=influence';
+var focusOn_url='/twitter_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type=influence';
 public_ajax.call_request('get',focusOn_url,focusOn);
 function focusOn(data) {
     $('#focus p').show();
@@ -993,10 +993,10 @@ function focusOn(data) {
 //=====粉丝列表====
 $('.fansSEN .demo-label input').on('click',function () {
     var orderType=$(this).val();
-    var clikcFans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type='+orderType;
+    var clikcFans_url='/twitter_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type='+orderType;
     public_ajax.call_request('get',clikcFans_url,fans);
 })
-var fans_url='/weibo_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
+var fans_url='/twitter_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
 public_ajax.call_request('get',fans_url,fans);
 function fans(data) {
     $('#fans p').show();
@@ -1147,7 +1147,7 @@ function fans(data) {
 //======查看详情===关注与否====
 
 // function lookDetails(_id) {
-//     var details_url='/weibo_xnr_manage/lookup_detail_weibouser/?uid='+_id;
+//     var details_url='/twitter_xnr_manage/lookup_detail_weibouser/?uid='+_id;
 //     public_ajax.call_request('get',details_url,detailsOK);
 // }
 // function detailsOK(data) {
@@ -1155,7 +1155,7 @@ function fans(data) {
 // }
 
 function focus_ornot(_id,mid) {
-    var focusNOT_url='/weibo_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+_id;
+    var focusNOT_url='/twitter_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+_id;
     public_ajax.call_request('get',focusNOT_url,succeedFail);
 }
 //=========

@@ -565,7 +565,7 @@
         success: function (data) {
             if(isEmptyObject(data)){
                 $('#xnrName').text('请先定制虚拟人').attr('请先定制虚拟人');
-                $('. notAllow').addClass('disableCss');
+                $('.notAllow').addClass('disableCss');
             }else {
                 var str='';
                 var sameid=localStorage.getItem('sameXnr');
