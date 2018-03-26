@@ -1,4 +1,5 @@
 //虚拟人列表
+var thisID=localStorage.getItem('user');
 var xnrList_url="/weibo_xnr_create/show_weibo_xnr/?submitter="+admin;
 public_ajax.call_request('get',xnrList_url,xnrList);
 function xnrList(data) {
@@ -10,11 +11,12 @@ function xnrList(data) {
         }
         str+=
             '<label class="demo-label" title="'+data[k]+'">'+
-            '   <input class="demo-radio" type="checkbox" name="com1" onclick="joinID(\''+k+'\')" value='+k+'>'+
+            '   <input class="demo-radio" type="checkbox" name="com1" value='+k+'>'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+'（'+k+'）'+
             '</label>';
     }
     $('.compareContent .com-1-choose').html(str);
+    $('.compareContent .com-1-choose input[value='+thisID+']').attr('checked','true');
 };
 //========
 var end_time=yesterday();
@@ -42,8 +44,8 @@ $('.sureTime').on('click',function () {
     var s=$('#start_1').val();
     var d=$('#end_1').val();
     if (s==''||d==''){
-        $('#successfail p').text('时间不能为空。');
-        $('#successfail').modal('show');
+        $('#errorInfor p').text('时间不能为空。');
+        $('#errorInfor').modal('show');
     }else {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
@@ -51,6 +53,27 @@ $('.sureTime').on('click',function () {
         // public_ajax.call_request('get',compareData_url,compareData);
     }
 });
+
+//===============================================
+function jugeXnr() {
+    var xnr_id=[];
+    $(".compareContent .com-1-choose input:checkbox:checked").each(function (index,item) {
+        xnr_id.push($(this).val());
+    });
+    return xnr_id;
+}
+$('.sureCompare').on('click',function () {
+    var len=jugeXnr().length;
+    if(!(len<6&&len>1)){
+        $('#errorInfor p').text('请检查您选择的虚拟人（请保证最少2个，最多5个）');
+        $('#errorInfor').modal('show');
+        return false;
+    }else {
+        var xnrList=jugeXnr();
+        $('.compare .vs').html(xnrList.join('&nbsp;&nbsp;&nbsp;'));
+    };
+});
+//=============对比内容========
 function compareData() {
     var myChart = echarts.init(document.getElementById('compare'),'chalk');
     var option = {
@@ -112,15 +135,163 @@ function compareData() {
     myChart.setOption(option);
 };
 compareData();
-//=====
-var xnr_id=[];
-function joinID(_id) {
-    xnr_id.push(_id);
-    if(xnr_id.length>3){
+// 影响力评估
+tableAry('table-1',[{a:2,b:3}],true,false,false);
+// 渗透力评估
+tableAry('table-2',[{a:2,b:3}],false,true,false);
+// 安全性
+tableAry('table-3',[{a:2,b:3}],false,false,true);
+//表格
+function tableAry(_id,data,FT1,FT2,FT3) {
+    $('#'+_id).bootstrapTable('load', data);
+    $('#'+_id).bootstrapTable({
+        data:data,
+        search: false,//是否搜索
+        pagination: true,//是否分页
+        pageSize: 5,//单页记录数
+        pageList: [15,20,25],//分页步进值
+        sidePagination: "client",//服务端分页
+        searchAlign: "left",
+        searchOnEnterKey: false,//回车搜索
+        showRefresh: false,//刷新按钮
+        showColumns: false,//列选择按钮
+        buttonsAlign: "right",//按钮对齐方式
+        locale: "zh-CN",//中文支持
+        detailView: false,
+        showToggle:false,
+        sortName:'bci',
+        sortOrder:"desc",
+        columns: [
+            {
+                title: "虚拟人",//标题
+                field: "xnr_user_no",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
+                        return '未知';
+                    }else {
+                        return row.xnr_user_no;
+                    };
+                }
+            },
+            //-----影响力
+            {
+                title: "被评论量",//标题
+                field: "a",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT1,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                        return 0;
+                    }else {
+                        return row.a;
+                    };
+                }
+            },
+            {
+                title: "被点赞",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT1,//控制显示隐藏
+                formatter: function (value, row, index) {
 
-    }
-    console.log(xnr_id)
-}
-$('.sureCompare').on('click',function () {
-    $('.compare .vs').html(xnr_id.join('&nbsp;&nbsp;&nbsp;&nbsp;'));
-});
+                }
+            },
+            {
+                title: "被私信",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT1,//控制显示隐藏
+                formatter: function (value, row, index) {
+
+                }
+            },
+            {
+                title: "被@数",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT1,//控制显示隐藏
+            },
+            {
+                title: "被转发",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT1,//控制显示隐藏
+            },
+            //-----渗透力
+            {
+                title: "关注群体敏感度",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT2,//控制显示隐藏
+            },
+            {
+                title: "粉丝群体敏感度",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT2,//控制显示隐藏
+            },
+            {
+                title: "发布信息敏感度",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT2,//控制显示隐藏
+            },
+            {
+                title: "社交反馈敏感度",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT2,//控制显示隐藏
+            },
+            {
+                title: "预警上报敏感度",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT2,//控制显示隐藏
+            },
+            //------安全性
+            {
+                title: "发帖量",//标题
+                field: "",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+            },
+        ],
+    });
+};
