@@ -58,11 +58,44 @@ def publish_by_source(text):
     except:
         driver.find_element_by_xpath("//*[@id=\"pl_publish_publishMobile\"]/section/section[1]/div/div[3]/div/a[3]").click()
 
+def publish_by_source_with_picture(text, file_path):
+    #url = random.choice(source_list)
+    url = source_list[2]
+    driver.get(url)
+    try:
+        texta = driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[2]/textarea")
+    except:
+        texta = driver.find_element_by_xpath("/html/body/section[1]/section/section[1]/div/div[2]/textarea")
+    texta.send_keys(text)
+    time.sleep(1)
+    driver.find_element_by_xpath('//a[@title="图片"]').click()
+    time.sleep(1)
+    driver.find_element_by_xpath('//input[@id="activity_img"]').send_keys(file_path)
+    time.sleep(1)
+    try:
+        driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[3]/div[2]/a").click()
+    except:
+        driver.find_element_by_xpath("//*[@id=\"pl_publish_publishMobile\"]/section/section[1]/div/div[3]/div/a[3]").click()
+
+
+def weibo_publish(username,password,text):
+    login_m_weibo_cn(username, password)
+    publish_by_source(text)
+    driver.quit()
+
+def weibo_publish_with_picture(username,password,text,file_path):
+    login_m_weibo_cn(username, password)
+    publish_by_source_with_picture(text, file_path)
+    driver.quit()
+
 if __name__ == '__main__':
     #定义变量
     username = 'weiboxnr04@126.com' #输入你的用户名
     password = 'xnr1234567' #输入你的密码
-    #操作函数
-    login_m_weibo_cn(username, password)
-    publish_by_source(u'hhhhh')
-    driver.quit()
+    text = 'oook'
+    file_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/sina/640.jpg'
+
+    if file_path:
+        weibo_publish_with_picture(username,password,text,file_path)
+    else:
+        weibo_publish(username,password,text)
