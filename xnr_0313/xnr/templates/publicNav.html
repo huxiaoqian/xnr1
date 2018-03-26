@@ -30,7 +30,7 @@
             text-overflow: ellipsis;
             margin: 5px 10px;
         }
-	span[onclick*="robot"] {display: none!important;}
+        span[onclick*="robot"] {display: none!important;}
     </style>
     {% endblock %}
     <!-- css结束 -->
@@ -454,7 +454,12 @@
             $('#cloud-1').hide();
             $('#cloud-2').show();
         }
-    })
+    });
+    //
+//    var rs=$('.center_rel span');
+//    for (var t=0;t<rs.length;t++){
+//        console.log($(rs[t]).text())
+//    }
     //
     var flagType='{{flag}}',loadingType;
     if (flagType){
