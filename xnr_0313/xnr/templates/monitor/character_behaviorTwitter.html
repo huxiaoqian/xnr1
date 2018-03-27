@@ -1,0 +1,152 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 人物行为预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/character_behaviorTwitter.css">
+<style>
+    .demo-label{display:inline-block}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /**/
+    #weiboContent .demo-label{display: none;}
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container thead th .th-inner {padding-top:1px;}
+    /*.fixed-table-container {top: 15px;}*/
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .fixed-table-container thead th .both {
+        background-image: none!important;
+    }
+    /**/
+    #start,#end,#sure {
+        display:none;
+    }
+    #sure {
+        padding:1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background:transparent;
+        cursor: pointer;
+    }
+    #sure:hover {
+        background: rgba(8,23,44,0.65);
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-user-md note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">人物行为预警</b>
+        </div>
+    </div>
+    <div class="choosetime">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='0' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='7'>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start" class="form_datetime" placeholder="开始时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end" class="form_datetime" placeholder="结束时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sure" class="sureTime">确定</span>
+    </div>
+    <div class="weiboContent">
+        <div id="weiboContent">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+    </div>
+</div>
+
+<!--模态框-->
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!---->
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType='twitter';
+    weiboORqq('twitter');
+    $('.nav_type').text('(twitter)');
+    judgmentTwitter('4');
+
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
+    });
+
+</script>
+<script src="/static/js/character_behaviorTwitter-1.js"></script>
+{% endblock %}

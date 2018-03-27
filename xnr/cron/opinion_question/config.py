@@ -8,7 +8,8 @@ import csv
 import time
 import heapq
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-abs_path = './'
+#abs_path = './xnr/cron/opinion_question/'
+abs_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
 K1 = 1.5
 B = 0.75
 K3 = 500
@@ -54,7 +55,7 @@ EXTRA_STOPWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'stopword.txt')
 EXTRA_EMOTIONWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'emotionlist.txt')
 EXTRA_ONE_WORD_WHITE_LIST_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'one_word_white_list.txt')
 EXTRA_BLACK_LIST_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'black.txt')
-
+CORPUS_ANSWER_PATH = os.path.abspath(os.path.join(abs_path, './corpus/corpus_answer.csv'))
 cx_dict = ['an','Ng','n','nr','ns','nt','nz','vn','@']#关键词词性词典
 
 def load_one_words():

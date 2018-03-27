@@ -2,6 +2,7 @@
 import os
 import json
 import time
+import gensim
 from flask import Blueprint, url_for, render_template, request, abort, flash, session, redirect
 
 
@@ -27,7 +28,7 @@ sys.path.append('../../')
 
 from parameter import MAX_DETECT_COUNT,MAX_FLOW_TEXT_DAYS,TOP_KEYWORDS_NUM,MAX_SEARCH_SIZE,SORT_FIELD,\
                         TOP_WEIBOS_LIMIT,topic_en2ch_dict,WEEK_TIME,DAY,DAY_HOURS,HOUR,SENTIMENT_DICT_NEW,\
-                        WHITE_UID_PATH, WHITE_UID_FILE_NAME
+                        WHITE_UID_PATH, WHITE_UID_FILE_NAME, WORD2VEC_PATH
 
 from global_utils import r,weibo_target_domain_detect_queue_name,weibo_target_domain_analysis_queue_name,\
                         es_flow_text,flow_text_index_name_pre,flow_text_index_type,\
@@ -230,14 +231,22 @@ def get_flow_text_datetime_list(date_range_end_ts):
 # input：关键词，任务创建时间
 # output：近期微博包含上述关键词的微博用户群体的画像数据
 def detect_by_keywords(keywords,datetime_list):
-    keyword_list = keywords
+
+    keyword_list = []
+    print 'keywords...',keywords
+    model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
+    
+    for word in keywords:
+        simi_list = model.most_similar(word,topn=20)
+        for simi_word in simi_list:
+            keyword_list.append(simi_word[0])
 
     group_uid_list = set()
 
     if datetime_list == []:
         return []
     #keyword_query_list = []
-    query_item = 'keywords_string'
+    query_item = 'text'
     flow_text_index_name_list = []
     for datetime in datetime_list:
         flow_text_index_name = flow_text_index_name_pre + datetime
@@ -261,40 +270,39 @@ def detect_by_keywords(keywords,datetime_list):
             white_uid_list.append(line)
 
     white_uid_list = list(set(white_uid_list))
-    print 'white_uid_list:::',white_uid_list
+    #print 'white_uid_list:::',white_uid_list
     if len(nest_query_list) == 1:
         SHOULD_PERCENT = 1  # 绝对数量。 保证至少匹配一个词
     else:
-        SHOULD_PERCENT = '75%'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
+        SHOULD_PERCENT = '3'  # 相对数量。 2个词时，保证匹配2个词，3个词时，保证匹配2个词
     
-    # query_body = {
-    #     'query':{
-    #         'bool':{
-    #             'should':nest_query_list,
-    #             "minimum_should_match": SHOULD_PERCENT,
-    #             'must_not':{'terms':{'uid':white_uid_list}}
-    #         }
-    #     },
-    #     'size':count,
-    #     'sort':[{'user_fansnum':{'order':'desc'}}]
-    # }
     query_body = {
         'query':{
             'bool':{
                 'should':nest_query_list,
+                'minimum_should_match': SHOULD_PERCENT,
                 'must_not':{'terms':{'uid':white_uid_list}}
             }
         },
-        'size':count,
-        'sort':[{'user_fansnum':{'order':'desc'}}]
+        'aggs':{
+            'all_uids':{
+                'terms':{
+                    'field':'uid',
+                    'order':{'_count':'desc'},
+                    'size':count
+                }
+            }
+        }
     }
     es_results = es_flow_text.search(index=flow_text_index_name_list,doc_type=flow_text_index_type,\
-                body=query_body)['hits']['hits']
+                body=query_body,request_timeout=999999)['aggregations']['all_uids']['buckets']
+
     #'must_not':{'terms':{'uid':white_uid_list}},
 
     for i in range(len(es_results)):
-
-        uid = es_results[i]['_source']['uid']
+        #print 'es_results..',es_results
+        #print 'es_results[i]..',es_results[i]
+        uid = es_results[i]['key']
         group_uid_list.add(uid)
     group_uid_list = list(group_uid_list)
     return group_uid_list
@@ -531,8 +539,7 @@ def group_description_analysis(detect_results,datetime_list):
     #print 'type：：：：：：：',type(uid_weibo_keywords_dict)
     ## 群体政治倾向
     political_side_count_sort = political_classify_sort(uids_list,uid_weibo_keywords_dict)
-    print 'political_side_count_sort::::',political_side_count_sort
-
+    
     # political_side_count_sort格式： [(label1,num1),(label2,num2),...] 按num降序
 
     ## 群体常用关键词
@@ -542,22 +549,9 @@ def group_description_analysis(detect_results,datetime_list):
     
     r_domain = dict()
 
-    #if S_TYPE == 'test':
     domain,r_domain = domain_classfiy(uids_list,uid_weibo_keywords_dict)
-    # else:
-    #     mget_domain_results = es_xnr.mget(index=portrait_index_name,doc_type=portrait_index_name,\
-    #                     body={'ids':uids_list})['docs']
-        
-        
-    #     if mget_domain_results:
-    #         for domain_result in mget_domain_results:
-    #             domain_result = domain_result['_source']
-    #             uid = domain_result['uid']
-    #             role_name = domain_result['domain']
-    #             r_domain[uid] = role_name
 
     role_list = r_domain.values()
-    #print 'r_domain::::::',r_domain
     role_set = set(role_list)
     role_count_dict = dict()
 
@@ -814,15 +808,7 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
     geo_cityTopic_results_merge = dict()
 
     for datetime,province_city_dict in geo_cityTopic_results.iteritems():
-        '''
-        for province in province_set:
-            
-            try:
-                geo_cityTopic_results_merge = dict(Counter(geo_cityTopic_results_merge[province])+Counter(province_city_dict[province]))
-                
-            except:
-                geo_cityTopic_results_merge[province] = province_city_dict[province]
-        '''
+
         ## 利用for循环
         for province, city_dict in province_city_dict.iteritems():
             if province in geo_cityTopic_results_merge.keys():
@@ -849,9 +835,9 @@ def role_feature_analysis(role_label, uids_list,datetime_list,create_time):
         day_hour_counts_all.append(day_hour_counts)
 
     day_hour_counts_all_np = np.array(day_hour_counts_all)
-    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0).astype(np.int)  ## 对二维数组按列求和
+    day_hour_counts_aver = np.mean(day_hour_counts_all_np,axis=0).astype(np.int)  ## 对二维数组按列求均值
 
-    day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
+    #day_hour_counts_aver_time = np.argsort(-day_hour_counts_aver)   ### np.argsort(-x)  按从大到小的数据的索引排列
  
     role_feature_analysis_results['top_keywords'] = keywords_dict_all_users_sort
     role_feature_analysis_results['political_side'] = political_side_count_sort

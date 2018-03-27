@@ -1,0 +1,51 @@
+{% extends 'admin/master.html' %}
+{% import 'admin/lib.html' as lib with context %}
+{% from 'admin/lib.html' import extra with context %} {# backward compatible #}
+
+{% block head %}
+  {{ super() }}
+  {{ lib.form_css() }}
+{% endblock %}
+
+{% block body %}
+  {% block navlinks %}
+  <ul class="nav nav-tabs">
+    <li>
+        <a href="{{ return_url }}"><span id="list_title_e">{{ _gettext('List') }}</span></a>
+    </li>
+    {%- if admin_view.can_create -%}
+    <li>
+        <a href="{{ get_url('.create_view', url=return_url) }}"><span id="create_title">{{ _gettext('Create') }}</span></a>
+    </li>
+    {%- endif -%}
+    <li class="active">
+        <a href="javascript:void(0)"><span id="edit_title_e">{{ _gettext('Edit') }}</span></a>
+    </li>
+    {%- if admin_view.can_view_details -%}
+    <li>
+        <a href="{{ get_url('.details_view', id=request.args.get('id'), url=return_url) }}">{{ _gettext('Details') }}</a>
+    </li>
+    {%- endif -%}
+  </ul>
+
+  {% endblock %}
+
+  {% block edit_form %}
+    {{ lib.render_form(form, return_url, extra(), form_opts) }}
+  {% endblock %}
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  {{ lib.form_js() }}
+<script>
+      //console.log('dvdsfv');
+      $('#list_title_e').empty();
+      $('#list_title_e').append('管理列表');
+      $('#create_title').empty();
+      $('#create_title').append('新建');
+      $('#edit_title_e').empty();
+      $('#edit_title_e').append('编辑');
+</script>
+{% endblock %}
+

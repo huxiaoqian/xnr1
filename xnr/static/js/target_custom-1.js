@@ -18,21 +18,29 @@ if (flag==1){
 var field_url=WFT_url+'/show_domain/';
 public_ajax.call_request('get',field_url,field);
 function field(data) {
-    var str='';
-    for (var k in data){
-        str+=
-            '<label class="demo-label" title="'+data[k]+'">'+
-            '   <input class="demo-radio" type="radio" name="demo1" id="'+k+'" value="'+data[k]+'">'+
-            '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
-            '</label>';
+    if(isEmptyObject(data)||(data)){
+        $('.nextButton').addClass('disableCss');
+        $('#pormpt p').text('抱歉，您没有可以推荐的领域，请先去创建领域。');
+        $('#pormpt').modal('show');
+        return false;
+    }else {
+        var str='';
+        for (var k in data){
+            str+=
+                '<label class="demo-label" title="'+data[k]+'">'+
+                '   <input class="demo-radio" type="radio" name="demo1" id="'+k+'" value="'+data[k]+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
+                '</label>';
+        }
+        $('#container .tit-2 .field').html(str);
+        $('input[name=demo1]').on('click',function () {
+            domainName=$(this).parent().attr('title');
+            var nameLEN=$(this).attr('name').toString();
+            var creat_url=WFT_url+'/domain2role/?domain_name='+domainName;
+            public_ajax.call_request('get',creat_url,creat_1)
+        });
     }
-    $('#container .tit-2 .field').html(str);
-    $('input[name=demo1]').on('click',function () {
-        domainName=$(this).parent().attr('title');
-        var nameLEN=$(this).attr('name').toString();
-        var creat_url=WFT_url+'/domain2role/?domain_name='+domainName;
-        public_ajax.call_request('get',creat_url,creat_1)
-    });
+
 }
 var $one=JSON.parse(localStorage.getItem(firstStep));
 if ($one){

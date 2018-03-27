@@ -42,11 +42,11 @@ function recommendTwo(data) {
         $('.other-2 .customize').hide();
         $('.other-2 .postNUM').show().val('0-'+parseInt(Number(posyNum)));
     }else if (posyNum==0){
-        $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
+        $(".other-2 input[name='Posting'][type='radio'][value='0-0']").attr("checked",true);
     }else if (posyNum>0&&posyNum<3){
-        $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
+        $(".other-2 input[name='Posting'][type='radio'][value='1-2']").attr("checked",true);
     }else if (posyNum>=3&&posyNum<=5){
-        $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
+        $(".other-2 input[name='Posting'][type='radio'][value='3-5']").attr("checked",true);
     }
 }
 
@@ -176,7 +176,8 @@ function values() {
     }
     var saveSecond_url;
     if (active_time||day_post_average){
-        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+
+        if(!taskID){taskID=''};
+        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+taskID+
             '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
             '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
             '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests;

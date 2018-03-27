@@ -8,7 +8,8 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_xnr
 es_flow_text = es_xnr
 from xnr.time_utils import datetime2ts
-from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get_xnr_detail
+from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get_xnr_detail,\
+					 show_history_count, lookup_xnr_assess_info
 
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
@@ -61,6 +62,55 @@ def ajax_delete_fb_xnr():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=delete_fb_xnr(xnr_user_no)
 	return json.dumps(results)
+
+
+#按指标查询评估信息
+#assess_type=influence,safe,penetration
+#http://219.224.134.213:9209/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=FXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
+@mod.route('/lookup_xnr_assess_info/')
+def ajax_lookup_xnr_assess_info():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	assess_type=request.args.get('assess_type','')
+	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
+	return json.dumps(results)
+
+
+
+#按时间条件显示历史统计结果
+#http://219.224.134.213:9209/facebook_xnr_manage/show_history_count/?xnr_user_no=FXNR0004&type=today&start_time=0&end_time=1505044800
+#http://219.224.134.213:9209/facebook_xnr_manage/show_history_count/?xnr_user_no=FXNR0004&type=''&start_time=1504526400&end_time=1505044800
+#http://219.224.134.213:9209/facebook_xnr_manage/show_history_count/?xnr_user_no=FXNR0004&type=&start_time=1506182400&end_time=1506433221
+@mod.route('/show_history_count/')
+def ajax_show_history_count():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	date_range=dict()
+	#今日统计type=today,start_time=0,end_time=当前时间；其他时间条件则type=''，start_time=起始时间，end_time=终止时间
+	date_range['type']=request.args.get('type','')
+	date_range['start_time']=int(request.args.get('start_time',''))
+	date_range['end_time']=int(request.args.get('end_time',''))
+	results=show_history_count(xnr_user_no,date_range)
+	return json.dumps(results)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 #今日提醒
 #http://219.224.134.213:9209/weibo_xnr_manage/xnr_today_remind/?xnr_user_no=WXNR0004

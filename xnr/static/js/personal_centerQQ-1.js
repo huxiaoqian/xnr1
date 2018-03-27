@@ -1,5 +1,5 @@
 function has_table_QQ(has_data_QQ) {
-    let sourcePER=eval(has_data_QQ);
+    var sourcePER=eval(has_data_QQ);
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -174,10 +174,17 @@ function has_table_QQ(has_data_QQ) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
+                    var group_info=JSON.parse(row.group_info);
+                    var qq_groups=[];
+                    for (var t in group_info){
+                        var len=group_info[t]['group_name'];
+                        qq_groups.push(len[len.length-1]+'('+t+')');
+                    }
                     var ld;
                     if (row.login_status){ld = '在线中'}else{ld = '登录'}
-                    return '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this,\''+row.qq_number+'\',\''+row.qq_groups.join('，')+'\',\''+row.nickname+'\',\''+row.access_id+'\')" title="'+ld+'"><i class="icon icon-key"></i></a>'+
-                        '<a style="cursor: pointer;color:white;display: inline-block;margin:0 10px;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\',\''+row.login_status+'\')" title="进入"><i class="icon icon-link"></i></a>'+
+                    return '<a style="cursor: pointer;color:white;" onclick="nowGroup(\''+qq_groups.join('，')+'\',\''+row.xnr_user_no+'\',\''+row.qq_number+'\')" title="编辑"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
+                        '<a in_out="out" style="cursor: pointer;color:white;" onclick="loginIN(this,\''+row.qq_number+'\',\''+qq_groups.join('，')+'\',\''+row.nickname+'\',\''+row.xnr_user_no+'\')" title="'+ld+'"><i class="icon icon-key"></i></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color:white;display: inline-block;" onclick="enterIn(\''+row.xnr_user_no+'\',\''+row.qq_number+'\',\''+row.login_status+'\',this)" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="deletePerson(\''+row.xnr_user_no+'\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -187,48 +194,106 @@ function has_table_QQ(has_data_QQ) {
 }
 var url_QQ = '/qq_xnr_manage/show_qq_xnr/';
 public_ajax.call_request('GET',url_QQ,has_table_QQ);
-
+//编辑群
+var xnrThis,qqNumThis;
+function nowGroup(groupName,id,qqNum) {
+    xnrThis=id,qqNumThis=qqNum;
+    var groupList=groupName.split('，');
+    var str='';
+    $.each(groupList,function (index,item) {
+        str+='<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+item+
+            '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>'
+    });
+    $('#modGroup .nowGroup').html(str);
+    $('#modGroup').modal('show');
+}
+var hideThis;
+function delThisGroup(_this) {
+    hideThis=_this;
+    $('#delThisGroupInfor').modal('show');
+}
+function Iamdel() {
+    var num=$(hideThis).prev().text().toString().split(/[()]/)[1];
+    var del_url='/qq_xnr_manage/delete_group/?xnr_user_no='+xnrThis+'&group_numbers='+num;
+    public_ajax.call_request('get',del_url,delGroupBack);
+}
+function delGroupBack(data) {
+    var f='删除失败。';
+    if(data[0]){
+        f='删除成功。';$(hideThis).parent().remove();
+        setTimeout(function () {
+            public_ajax.call_request('GET',url_QQ,has_table_QQ);
+        },1500);
+    }else {
+        f+=data[1]+'。';
+    }
+    $('#succee_fail #words').text(f);
+    $('#succee_fail').modal('show');
+}
+var TTqgp,TTqgpName,TTqgpBEIZHU;
+function sureModGroup() {
+    TTqgp=$('#modGroup .QQgroup').val().toString().replace(/,/g,'，');
+    TTqgpName=$('#modGroup .QQgroupName').val().toString().replace(/,/g,'，');
+    TTqgpBEIZHU=$('#modGroup .QQgroupbeizhu').val().toString().replace(/,/g,'，');
+    var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qqNumThis+'&group_numbers='+TTqgp+'&group_names='
+        +TTqgpName+'&mark_names='+TTqgpBEIZHU;
+    public_ajax.call_request('get',qqAdd_url,addOR);
+}
 //登陆一个QQ虚拟人
 var $this_QQ,$this_QQ_id;
 function loginIN(_this,id,qgp,qname,qpower) {
     $this_QQ=_this;
-    $this_QQ_id=id;
-    var login_1_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+id+'&qq_groups='+qgp+
-        '&qq_nickname='+qname+'&access_id='+qpower;
+    $this_QQ_id=id;xnrThis=qpower;
+    var login_1_url='/qq_xnr_manage/click_login/?xnr_user_no='+qpower;
     public_ajax.call_request('get',login_1_url,login_1);
 }
 function login_1(data) {
     if (data){
-        var login_url='/qq_xnr_manage/get_qr_code/?qq_number='+$this_QQ_id;
-        public_ajax.call_request('get',login_url,login_QR_code);
+        var login_2_url='/qq_xnr_manage/login_status/?xnr_user_no='+xnrThis;
+        $.ajax({
+            type:'GET',
+            url:login_2_url,
+            async:true,
+            dataType:"json",
+            success:function (data) {
+                if (data){
+                    $('#succee_fail #words').text('您的QQ号码已经自动登录。');
+                    $('#succee_fail').modal('show');
+                }else {
+                    var login_url='/qq_xnr_manage/get_qr_code/?qq_number='+$this_QQ_id;
+                    public_ajax.call_request('get',login_url,login_QR_code);
+                }
+            },
+            //cache:false,//不会从浏览器缓存中加载请求信息
+        });
     }else {
         $('#succee_fail #words').text('您的QQ号码出现问题，请稍后再登陆。');
         $('#succee_fail').modal('show');
     }
 }
 function login_QR_code(data) {
-    console.log(data)
     if (data){
-        var kl=data.toString();
-        if (kl.substring(kl.length-3)!='png'){
-            $('#succee_fail #words').text('您的QQ号码已经在线。');
+        if (data=='login'){
+            $('#succee_fail #words').text('该QQ已经自动登录。');
             $('#succee_fail').modal('show');
+            setTimeout(function () {
+                public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
+            },1500);
+        }else if(data=='try later'){
+            $('#succee_fail #words').text('系统繁忙，稍后再试。');
+            $('#succee_fail').modal('show');
+            return false;
         }else {
-            if(data=='try later'){
-                $('#succee_fail #words').text('系统繁忙，稍后再试。');
+            var kl=data.toString();
+            if (kl.substring(kl.length-3)!='png'){
+                $('#succee_fail #words').text('您的QQ号码已经在线。');
                 $('#succee_fail').modal('show');
             }else {
                 var _src='/static/images/QQ/'+data;
                 $('#QR_code #QQ_picture .imageqq').attr('src',_src);
                 $('#QR_code').modal('show');
-                // LL_11-3 模态框关闭之后重新画表
-                $('#QR_code').one('hidden.bs.modal', function (e) {
-                    // console.log('---二维码框关闭了、、画表中---');
-                    // 重新画表
-                    public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
-                })
             }
-        }
+        };
         if (document.getElementsByClassName('imageqq')[0].complete){
             var inout=$($this_QQ).attr('in_out');
             if (inout=='out'){
@@ -244,7 +309,14 @@ function login_QR_code(data) {
         $('#succee_fail').modal('show');
     }
 }
-
+$('#QR_code').one('hidden.bs.modal', function (e) {
+    $('#modGroup .QQgroup').val('');
+    $('#modGroup .QQgroupName').val('');
+    $('#modGroup .QQgroupbeizhu').val('');
+    setTimeout(function () {
+        public_ajax.call_request('GET','/qq_xnr_manage/show_qq_xnr/',has_table_QQ);
+    },1500);
+})
 //删除一个虚拟人
 var thisDelNum='';
 function deletePerson(num) {
@@ -259,6 +331,9 @@ function success_fail(data) {
     var flag=eval(data),word;
     if (flag==1){
         word='删除成功。';
+        setTimeout(function () {
+            public_ajax.call_request('GET',url_QQ,has_table_QQ);
+        },800);
     }else {
         word='删除失败。';
     }
@@ -267,8 +342,9 @@ function success_fail(data) {
 }
 
 //进入虚拟人的具体操作
-function enterIn(QQ_id,QQ_num,status) {
-    if (status=='true'){
+function enterIn(QQ_id,QQ_num,status,_this) {
+    var d=$(_this).parent().prev().text();
+    if (d=='在线'){
         window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
     }else {
         $('#succee_fail #words').text('请先登录在进行其他操作。');
@@ -285,7 +361,6 @@ $('.hasAddQQ').on('click',function () {
             // 滚动到底部
             $('html, body, #containe').animate({scrollTop: $(document).height()},'slow');
         });
-
     }else {
         $('.addQQperson').slideUp(20);
         k=1;
@@ -301,21 +376,38 @@ $('.optClear').on('click',function () {
 $('.optSureadd').on('click',function () {
     var qnum=$('.QQoptions .QQnumber').val();
     var qgp=$('.QQoptions .QQgroup').val().toString().replace(/,/g,'，');
+    var qgpName=$('.QQoptions .QQgroupName').val().toString().replace(/,/g,'，');
+    var qgpBEIZHU=$('.QQoptions .QQgroupbeizhu').val().toString().replace(/,/g,'，');
     var qname=$('.QQoptions .QQname').val();
     var qpower=$('.QQoptions .QQpower').val();
+    var qremark=$('.QQoptions .QQxnrBEIZHU').val();
     if (!(qnum||qgp||qname||qpower)){
         $('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
         $('#succee_fail').modal('show');
     }else {
-        var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&qq_groups='+qgp+
-            '&qq_nickname='+qname+'&access_id='+qpower;
+        var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&group_numbers='+qgp+'&group_names='+qgpName+
+            '&mark_names='+qgpBEIZHU+'&qq_nickname='+qname+'&remark='+qremark+'&access_id='+qpower+'&submitter='+admin;
         public_ajax.call_request('get',qqAdd_url,addOR);
     }
 });
 function addOR(data) {
     var Iadd='添加失败。';
-    if (data){
+    if (data[0]){
         Iadd='添加成功。';
+        if (data[1].length!=0){Iadd+='<br/>重复添加的QQ群：'+data[1].join('，')}
+        var a=TTqgp.split('，'),b=TTqgpName.split('，');
+        $('#modGroup .QQgroup').val('');
+        $('#modGroup .QQgroupName').val('');
+        $('#modGroup .QQgroupbeizhu').val('');
+        $.each(a,function (index,item) {
+            $('#modGroup .nowGroup').append('<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+b[index]+'('+item+')'+
+                '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>');
+        });
+        setTimeout(function () {
+            public_ajax.call_request('GET',url_QQ,has_table_QQ);
+        },1500);
+    }else {
+        Iadd+=data[1];
     }
     $('#succee_fail #words').text(Iadd);
     $('#succee_fail').modal('show');
