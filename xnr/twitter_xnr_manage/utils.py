@@ -15,7 +15,8 @@ from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
                              twitter_feedback_retweet_index_name,twitter_feedback_retweet_index_name_pre,twitter_feedback_retweet_index_type,\
                              twitter_feedback_at_index_name,twitter_feedback_at_index_name_pre,twitter_feedback_at_index_type,\
                              twitter_feedback_comment_index_name,twitter_feedback_comment_index_name_pre,twitter_feedback_comment_index_type,\
-                             twitter_feedback_like_index_name,twitter_feedback_like_index_name_pre,twitter_feedback_like_index_type
+                             twitter_feedback_like_index_name,twitter_feedback_like_index_name_pre,twitter_feedback_like_index_type,\
+                             twitter_xnr_count_info_index_name, twitter_xnr_count_info_index_type
 es_user_profile = es_xnr                            
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
@@ -517,14 +518,14 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
     if xnr_user_detail['user_fansnum'] == 0:
         count_id=xnr_user_no+'_'+yesterday_date
         try:
-            xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_count_result=es_xnr.get(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,id=count_id)['_source']
             xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
         except:
             xnr_user_detail['user_fansnum']=0
     else:
         pass
     try:
-        xnr_assess_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
+        xnr_assess_result=es_xnr.get(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
         print 'xnr_assessment_id:::',xnr_assessment_id
         xnr_user_detail['influence']=xnr_assess_result['influence']
         xnr_user_detail['penetration']=xnr_assess_result['penetration']
@@ -563,9 +564,9 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         'sort':{'timestamp':{'order':'asc'}} ,
         'size':MAX_SEARCH_SIZE
     }
-    print 'weibo_xnr_count_info_index_name::',weibo_xnr_count_info_index_name
+    print 'twitter_xnr_count_info_index_name::',twitter_xnr_count_info_index_name
     try:
-        xnr_count_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+        xnr_count_result=es_xnr.search(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,body=query_body)['hits']['hits']
         xnr_date_info=[]
         for item in xnr_count_result:
             xnr_date_info.append(item['_source'])
@@ -578,7 +579,7 @@ def show_history_count(xnr_user_no,date_range):
     if S_TYPE == 'test':
         test_time_gap=date_range['end_time']-date_range['start_time']
         test_datetime_gap=int(test_time_gap/DAY)
-        #print 'test_datetime_gap',test_datetime_gap
+        # print 'test_datetime_gap',test_datetime_gap
         date_range['end_time']=XNR_CENTER_DATE_TIME
         if date_range['type'] == 'today':
             date_range['start_time']=datetime2ts(ts2datetime(date_range['end_time']))
@@ -586,7 +587,7 @@ def show_history_count(xnr_user_no,date_range):
             date_range['start_time']=datetime2ts(ts2datetime(date_range['end_time']-DAY*test_datetime_gap))
     else:
         pass
-    #print 'date_range',date_range
+    # print 'date_range',date_range
 
     if date_range['type']=='today':
         start_time=datetime2ts(ts2datetime(date_range['end_time']))
@@ -603,15 +604,11 @@ def show_history_count(xnr_user_no,date_range):
             end_time=now_time
         if start_time < system_start_time:
             start_time=system_start_time
-        #print 'condition_time:',start_time,end_time
         xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
-        
-    #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
-    #print 'xnr_date_info',xnr_date_info
+
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
-
-
     return Cumulative_statistics_dict,xnr_date_info
+
 
 def delete_history_count(task_id):
     try:
@@ -1483,7 +1480,7 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
         'size':MAX_SEARCH_SIZE
     }
     try:
-        xnr_assess_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+        xnr_assess_result=es_xnr.search(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,body=query_body)['hits']['hits']
         assess_result=[]
         for item in xnr_assess_result:
             assess_result.append(item['fields'])
