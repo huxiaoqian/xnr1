@@ -7,7 +7,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from utils import get_influence_total_trend, compute_influence_num, penetration_total,\
                     compute_penetration_num,compute_safe_num, get_safe_active
 
-mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
+mod = Blueprint('twitter_xnr_assessment', __name__, url_prefix='/twitter_xnr_assessment')
 
 '''
 影响力评估

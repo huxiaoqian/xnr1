@@ -45,7 +45,7 @@ def fb_xnr_flow_text_mappings(index_name):
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'user_fansnum':{
+                        'user_friendsnum':{
                             'type':'long'
                         },
                         'user_followersum':{

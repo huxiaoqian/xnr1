@@ -369,7 +369,8 @@ def xnr_cumulative_statistics(xnr_date_info):
     Cumulative_statistics_dict['date_time']='累计统计'
     if xnr_date_info: 
         #print xnr_date_info[0]
-        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
+        # Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
+        Cumulative_statistics_dict['user_friendsnum']=xnr_date_info[-1]['user_friendsnum']
         total_post_sum=0
         daily_post_num=0
         business_post_num=0
@@ -456,7 +457,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
         print 'xnr_result:::',xnr_result
         #今日总粉丝数
         if not xnr_result['hits']['hits']:
-            xnr_user_detail['user_fansnum']=0
+            xnr_user_detail['user_friendsnum']=0
             xnr_user_detail['daily_post_num']=0
             xnr_user_detail['business_post_num']=0
             xnr_user_detail['hot_follower_num']=0
@@ -465,7 +466,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
         else:
 
             for item in xnr_result['hits']['hits']:
-                xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+                xnr_user_detail['user_friendsnum']=item['_source']['user_friendsnum']
             # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
             for item in xnr_result['aggregations']['all_task_source']['buckets']:
                 if item['key'] == 'daily_post':
@@ -500,7 +501,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
             xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
 
     except:
-        xnr_user_detail['user_fansnum']=0
+        xnr_user_detail['user_friendsnum']=0
         xnr_user_detail['daily_post_num']=0
         xnr_user_detail['business_post_num']=0
         xnr_user_detail['hot_follower_num']=0
@@ -512,17 +513,17 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
     yesterday_date=ts2datetime(datetime2ts(date_time)-DAY)
     xnr_assessment_id=xnr_user_no+'_'+yesterday_date
     print 'xnr_user_detail:::',xnr_user_detail
-    if xnr_user_detail['user_fansnum'] == 0:
+    if xnr_user_detail['user_friendsnum'] == 0:
         count_id=xnr_user_no+'_'+yesterday_date
         try:
-            xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+            xnr_count_result=es_xnr.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=count_id)['_source']
+            xnr_user_detail['user_friendsnum']=xnr_count_result['user_friendsnum']
         except:
-            xnr_user_detail['user_fansnum']=0
+            xnr_user_detail['user_friendsnum']=0
     else:
         pass
     try:
-        xnr_assess_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
+        xnr_assess_result=es_xnr.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,id=xnr_assessment_id)['_source']
         print 'xnr_assessment_id:::',xnr_assessment_id
         xnr_user_detail['influence']=xnr_assess_result['influence']
         xnr_user_detail['penetration']=xnr_assess_result['penetration']
@@ -540,7 +541,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
 
 def show_condition_history_count(xnr_user_no,start_time,end_time):
     query_body={
-        #'fields':['date_time','user_fansnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
+        #'fields':['date_time','user_friendsnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
         'query':{
             'filtered':{
                 'filter':{
