@@ -1,71 +1,73 @@
 var reportDefaul_url;
 var time2=Date.parse(new Date())/1000;
 if(flagType == 3){
-    //===============时间搜索添加11---21 ===============
-    var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="0">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 今天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="1">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 昨天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="7" checked>'
-            +'<span class="demo-checkbox demo-radioInput"></span> 7天'
-        +'</label>'
-        +'<label class="demo-label">'
-           +'<input class="demo-radio" type="radio" name="time1" value="30">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 30天'
-        +'</label>'
-        +'<label class="demo-label">'
-            +'<input class="demo-radio" type="radio" name="time1" value="mize">'
-            +'<span class="demo-checkbox demo-radioInput"></span> 自定义'
-        +'</label>'
-        +'<input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"'
-               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
-                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
-        +'<input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"'
-               +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
-                        +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
-        +'<span id="sure" class="sureTime">确定</span>'
-    +'</div>';
-    $('#container .title').after(choosetimeStr)
+    /*
+        //===============时间搜索添加11---21 ===============
+        var choosetimeStr = '<div class="choosetime" style="margin: 10px 0;">'
+            +'<label class="demo-label">'
+                +'<input class="demo-radio" type="radio" name="time1" value="0">'
+                +'<span class="demo-checkbox demo-radioInput"></span> 今天'
+            +'</label>'
+            +'<label class="demo-label">'
+                +'<input class="demo-radio" type="radio" name="time1" value="1">'
+                +'<span class="demo-checkbox demo-radioInput"></span> 昨天'
+            +'</label>'
+            +'<label class="demo-label">'
+                +'<input class="demo-radio" type="radio" name="time1" value="7" checked>'
+                +'<span class="demo-checkbox demo-radioInput"></span> 7天'
+            +'</label>'
+            +'<label class="demo-label">'
+               +'<input class="demo-radio" type="radio" name="time1" value="30">'
+                +'<span class="demo-checkbox demo-radioInput"></span> 30天'
+            +'</label>'
+            +'<label class="demo-label">'
+                +'<input class="demo-radio" type="radio" name="time1" value="mize">'
+                +'<span class="demo-checkbox demo-radioInput"></span> 自定义'
+            +'</label>'
+            +'<input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"'
+                   +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
+                            +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
+            +'<input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"'
+                   +'style="display:none;height: 20px;font-size: 10px;color: white;text-align: center;'
+                            +'padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">'
+            +'<span id="sure" class="sureTime">确定</span>'
+        +'</div>';
+        $('#container .title').after(choosetimeStr)
 
-    // 时间选项
-    $(".form_datetime").datetimepicker({
-        format: "yyyy-mm-dd",
-        minView:2, //控制时分秒
-        autoclose: true,
-        todayBtn: true,
-        pickerPosition: "bottom-left"
-    });
-    $('.choosetime .demo-label input').on('click',function () {
-        var _val=$(this).val();
-        if (_val=='mize'){
-            $('#start_1').show();
-            $('#end_1').show();
-            $('.sureTime').show();
-        }else {
-            $('#start_1').hide();
-            $('#end_1').hide();
-            $('.sureTime').hide();
-            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
-            public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
-        }
-    });
-    // 确定时间搜索
-    $('.sureTime').on('click',function () {
-        var s=$('#start_1').val();
-        var d=$('#end_1').val();
-        if (s==''||d==''){
-            $('#pormpt p').text('请检查时间，不能为空。');
-            $('#pormpt').modal('show');
-        }else {
-            reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
-        }
-    });
+        // 时间选项
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView:2, //控制时分秒
+            autoclose: true,
+            todayBtn: true,
+            pickerPosition: "bottom-left"
+        });
+        $('.choosetime .demo-label input').on('click',function () {
+            var _val=$(this).val();
+            if (_val=='mize'){
+                $('#start_1').show();
+                $('#end_1').show();
+                $('.sureTime').show();
+            }else {
+                $('#start_1').hide();
+                $('#end_1').hide();
+                $('.sureTime').hide();
+                reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
+                public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
+            }
+        });
+        // 确定时间搜索
+        $('.sureTime').on('click',function () {
+            var s=$('#start_1').val();
+            var d=$('#end_1').val();
+            if (s==''||d==''){
+                $('#pormpt p').text('请检查时间，不能为空。');
+                $('#pormpt').modal('show');
+            }else {
+                reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&startdate='+s+'&enddate='+d;
+            }
+        });
+     */
     weiboORqq('WX');
     reportDefaul_url = '/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);

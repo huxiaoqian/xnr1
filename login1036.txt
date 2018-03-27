@@ -1,0 +1,72 @@
+qqbot_port, qqbot_num. qqbot_mailauth: 1036
+qqbot_mailauth: ofjesxegiesjgbdf
+qqbot_num: 1290605918
+未找到配置文件“/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/v2.3.conf”，将使用默认配置
+已创建一个默认配置文件“/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/v2.3.conf”
+[2018-03-01 15:13:26] [INFO] QQBot-v2.3.5
+[2018-03-01 15:13:26] [INFO] Python 2.7.3
+[2018-03-01 15:13:26] [INFO] 工作目录：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036
+[2018-03-01 15:13:26] [INFO] 配置文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/v2.3.conf
+[2018-03-01 15:13:26] [INFO] 用户名：无
+[2018-03-01 15:13:26] [INFO] 登录方式：自动（qq=1290605918）
+[2018-03-01 15:13:26] [INFO] 命令行服务器端口号：1036
+[2018-03-01 15:13:26] [INFO] 二维码服务器 ip ：无
+[2018-03-01 15:13:26] [INFO] 二维码服务器端口号：无
+[2018-03-01 15:13:26] [INFO] 用于接收二维码的邮箱账号：1290605918@qq.com
+[2018-03-01 15:13:26] [INFO] 邮箱服务授权码：******
+[2018-03-01 15:13:26] [INFO] 以文本模式显示二维码：否
+[2018-03-01 15:13:26] [INFO] 调试模式：关闭
+[2018-03-01 15:13:26] [INFO] 掉线后自动重启：是
+[2018-03-01 15:13:26] [INFO] 后台模式（daemon 模式）：是
+[2018-03-01 15:13:26] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2018-03-01 15:13:26] [INFO] 插件目录1：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/plugins
+[2018-03-01 15:13:26] [INFO] 启动时需要加载的插件：[]
+[2018-03-01 15:13:26] [INFO] 开始自动登录...
+[2018-03-01 15:13:26] [WARNING] 自动登录失败，原因：[Errno 2] No such file or directory: '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/v2.3-py2-1290605918.pickle'
+[2018-03-01 15:13:26] [INFO] 开始手动登录...
+[2018-03-01 15:13:26] [INFO] 已获取二维码
+[2018-03-01 15:13:28] [INFO] 已将二维码发送至邮箱1290605918@qq.com
+[2018-03-01 15:13:29] [INFO] 等待二维码扫描及授权...
+[2018-03-01 15:14:03] [INFO] 已获授权
+[2018-03-01 15:14:03] [INFO] 已获取ptwebqq
+[2018-03-01 15:14:03] [INFO] 已获取vfwebqq
+[2018-03-01 15:14:03] [INFO] 已获取uin和psessionid
+[2018-03-01 15:14:03] [INFO] 登录成功。登录账号：鬼儿\/(1290605918)
+[2018-03-01 15:14:03] [INFO] 登录信息已保存至：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/v2.3-py2-1290605918.pickle
+[2018-03-01 15:14:03] [INFO] 联系人数据库文件：/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/1036/2018-03-01-15-14-03-1290605918-contact.db
+[2018-03-01 15:14:03] [INFO] 成功：加载插件 receiveQQGroupMessage（回调函数['onQQMessage']、定时任务[]）
+[2018-03-01 15:14:03] [INFO] 已在 127.0.0.1 的 1036 端口开启 QQBot-Term 服务器
+[2018-03-01 15:14:03] [INFO] 请在其他终端使用 qq 命令来控制 QQBot ，示例： qq send buddy jack hello
+[2018-03-01 15:14:07] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:14:08] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:14:09] [ERROR] 获取 群列表 失败
+[2018-03-01 15:14:09] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:14:10] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:14:10] [ERROR] 获取 群列表 失败
+[2018-03-01 15:14:20] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:14:21] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:14:21] [ERROR] 获取 群列表 失败
+[2018-03-01 15:41:23] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:41:24] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:41:24] [ERROR] 获取 群列表 失败
+[2018-03-01 15:50:41] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:50:42] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:50:42] [ERROR] 获取 群列表 失败
+[2018-03-01 15:50:42] [INFO] 来自 群“uin1902028608”[成员“uin3971814447”] 的消息: "123123"
+[2018-03-01 15:50:42] [INFO] 正在获取 群列表 ...
+[2018-03-01 15:50:43] [ERROR] 第3次请求“http://qun.qq.com/cgi-bin/qun_mgr/get_group_list”时出现 请求被拒绝错误, html='{"ec":1,"em":"no&nbsp;login"}'
+[2018-03-01 15:50:43] [ERROR] 获取 群列表 失败
+[2018-03-01 15:50:43] [INFO] test groups None
+[2018-03-01 15:50:43] [INFO] bot.conf <qqbot.qconf.QConf object at 0x257b410>
+[2018-03-01 15:50:43] [INFO] 群的 QQ.. #NULL
+[2018-03-01 15:50:43] [INFO] 群的昵称.. #NULL
+[2018-03-01 15:50:43] [INFO] 成员的 QQ.. #NULL
+[2018-03-01 15:50:43] [INFO] 成员的昵称.. #NULL
+[2018-03-01 15:50:43] [INFO] 最后发言时间.. -1
+[2018-03-01 15:50:43] [INFO] 消息.. 123123
+qq_json: {"speaker_qq_number": "#NULL", "sensitive_flag": 0, "sensitive_words_string": "", "text": "123123", "qq_group_nickname": "#NULL", "sensitive_value": 0, "xnr_qq_number": "1290605918", "xnr_nickname": "\u9b3c\u513f\\/", "speaker_nickname": "#NULL", "timestamp": -1, "qq_group_number": "#NULL"}
+qq_group_set: set([])
+qq_group_number: #NULL
+[2018-03-03 15:14:05] [ERROR] 第3次请求“https://d1.web2.qq.com/channel/poll2”时出现 请求被拒绝错误, html='{"retcode":100000,"r...omain login error"}\n'
+[2018-03-03 15:14:05] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-03-03 15:14:08] [ERROR] 登录 cookie 很可能已过期
