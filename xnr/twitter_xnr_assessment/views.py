@@ -9,6 +9,7 @@ from utils import get_influence_total_trend, compute_influence_num, penetration_
 
 mod = Blueprint('twitter_xnr_assessment', __name__, url_prefix='/twitter_xnr_assessment')
 
+
 '''
 影响力评估
 '''
