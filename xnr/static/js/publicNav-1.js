@@ -614,6 +614,11 @@ function judgment(typeNum){
             '    <a class="li_a" href="/behavioGauge/safe/">' +
             '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
             '    </a>'+
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/evCompare/">' +
+            '        <i class="icon icon-paste"></i>&nbsp;对比评估' +
+            '    </a>'+
             '</li>';
     }else if (typeNum==6){
         $('.coorName').text('虚拟人定制');
@@ -744,7 +749,12 @@ function judgmentFaceBook(typeNum) {
             '    <a class="li_a" href="/behavioGauge/safeFaceBook/">' +
             '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
             '    </a>'+
-            '</li>';
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/evCompare/">' +
+            '        <i class="icon icon-paste"></i>&nbsp;对比评估' +
+            '    </a>'+
+            '</li>';;
     }else if (typeNum==6){
         $('.coorName').text('虚拟人定制');
         $('.xnrShowHide').hide();
@@ -874,7 +884,12 @@ function judgmentTwitter(typeNum) {
             '    <a class="li_a" href="/behavioGauge/safeTwitter/">' +
             '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
             '    </a>'+
-            '</li>';
+            '</li>'+
+            '<li class="main_li">'+
+            '    <a class="li_a" href="/behavioGauge/evCompare/">' +
+            '        <i class="icon icon-paste"></i>&nbsp;对比评估' +
+            '    </a>'+
+            '</li>';;
     }else if (typeNum==6){
         $('.coorName').text('虚拟人定制');
         $('.xnrShowHide').hide();
@@ -932,4 +947,3 @@ function judgmentTwitter(typeNum) {
     };
     $('.behind').html(afterEle);
 };
-

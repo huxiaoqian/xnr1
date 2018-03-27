@@ -16,8 +16,15 @@ class Comment():
 
 	def get_comment(self):
 		for url in self.comment_list:
+			print(url)
 			self.driver.get(url)
 			time.sleep(1)
+			# 退出通知弹窗进入页面
+			try:
+				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+			except:
+				pass
+
 			try:
 				root_content = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]').text
 			except:
@@ -40,7 +47,10 @@ class Comment():
 					content = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[2]/span/span/span/span').text
 				except:
 					content = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[2]/span/span/span/span').text					
-				ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[4]/a/abbr').get_attribute('data-utime'))
+				try:
+					ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[4]/a/abbr').get_attribute('data-utime'))
+				except:
+					ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[5]/a/abbr').get_attribute('data-utime'))					
 				self.list.append({'nick_name':author_name,'uid':author_id,'photo_url':pic_url,'text':content,'timestamp':ti})
 		return self.list
 
@@ -50,4 +60,5 @@ class Comment():
 if __name__ == '__main__':
 	comment = Comment('8618348831412','Z1290605918')
 	list = comment.get_comment()
-	comment.save('facebook_feedback_comment','text',list)
+	print list
+	# comment.save('facebook_feedback_comment','text',list)

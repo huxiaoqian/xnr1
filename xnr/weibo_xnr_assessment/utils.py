@@ -6,22 +6,21 @@ from collections import Counter
 import random
 from xnr.global_utils import es_xnr as es
 from xnr.global_utils import R_WEIBO_XNR_FANS_FOLLOWERS as r_fans_followers 
-from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_feedback_comment_index_name,weibo_feedback_comment_index_type,\
-                        weibo_feedback_retweet_index_name,weibo_feedback_retweet_index_type,\
-                        weibo_feedback_private_index_name,weibo_feedback_private_index_type,\
-                        weibo_feedback_at_index_name,weibo_feedback_at_index_type,\
-                        weibo_feedback_like_index_name,weibo_feedback_like_index_type,\
+from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_feedback_comment_index_name_pre,weibo_feedback_comment_index_type,\
+                        weibo_feedback_retweet_index_name_pre,weibo_feedback_retweet_index_type,\
+                        weibo_feedback_private_index_name_pre,weibo_feedback_private_index_type,\
+                        weibo_feedback_at_index_name_pre,weibo_feedback_at_index_type,\
+                        weibo_feedback_like_index_name_pre,weibo_feedback_like_index_type,\
                         weibo_feedback_fans_index_name,weibo_feedback_fans_index_type,\
-                        weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
+                        weibo_feedback_follow_index_name_pre,weibo_feedback_follow_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                         flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
-                        flow_text_index_name_pre,weibo_report_management_index_name,weibo_report_management_index_type,\
+                        flow_text_index_name_pre,weibo_report_management_index_name_pre,weibo_report_management_index_type,\
                         portrait_index_name,portrait_index_type,xnr_flow_text_index_type,\
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                         user_domain_index_name,user_domain_index_type,\
-                        weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
-                        xnr_flow_text_index_name_pre,xnr_flow_text_index_type
+                        new_xnr_flow_text_index_name_pre,xnr_flow_text_index_type
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -34,6 +33,8 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID
 
 
 def get_influence_total_trend(xnr_user_no,start_time,end_time):
+
+    
 
     total_dict = {}
     total_dict['total_trend'] = {}
@@ -53,6 +54,7 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
         },
         'size':MAX_SEARCH_SIZE
     }
+
 
     search_results = es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
@@ -289,24 +291,13 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         }
     }
 
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':0,'lt':(current_time_new+DAY)}}}
-                ]
-            }
-        }
-    }
-
+    weibo_feedback_retweet_index_name = weibo_feedback_retweet_index_name_pre + current_date
 
     es_day_count_result = es.count(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
                     body=query_body_day,request_timeout=999999)
@@ -314,23 +305,12 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     if es_day_count_result['_shards']['successful'] != 0:
         es_day_count = es_day_count_result['count']
     else:
-        return 'es_day_count_found_error'
-
-
-    es_total_count_result = es.count(index=weibo_feedback_retweet_index_name,doc_type=weibo_feedback_retweet_index_type,\
-                    body=query_body_total,request_timeout=999999)
-
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
+        #return 'es_day_count_found_error'
+        es_day_count = 0
 
     retweet_dict['day_num'] = {}
     retweet_dict['total_num'] = {}
     retweet_dict['growth_rate'] = {}
-
-    retweet_dict['day_num'][current_time_new] = es_day_count
-    retweet_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -340,6 +320,9 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
 
     if not retweet_total_num_last:
         retweet_total_num_last = 1
+
+    retweet_dict['day_num'][current_time_new] = es_day_count
+    retweet_dict['total_num'][current_time_new] = retweet_total_num_last + es_day_count
 
     retweet_dict['growth_rate'][current_time_new] = round(float(es_day_count)/retweet_total_num_last,2)
 
@@ -385,47 +368,27 @@ def get_influ_commented_num(xnr_user_no,current_time):
                 'must':[
                     {'term':{'root_uid':uid}},
                     {'term':{'comment_type':'receive'}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
                 ]
             }
         }
     }
 
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'root_uid':uid}},
-                    {'term':{'comment_type':'receive'}},
-                    {'range':{'timestamp':{'lt':(current_time_new+DAY)}}}
-                ]
-            }
-        }
-    }
-
+    weibo_feedback_comment_index_name = weibo_feedback_comment_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
         es_day_count = es_day_count_result['count']
     else:
-        return 'es_day_count_found_error'
+        #return 'es_day_count_found_error'
+        es_day_count = 0
 
-
-    es_total_count_result = es.count(index=weibo_feedback_comment_index_name,doc_type=weibo_feedback_comment_index_type,\
-                    body=query_body_total,request_timeout=999999)
-
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
 
     comment_dict['day_num'] = {}
     comment_dict['total_num'] = {}
     comment_dict['growth_rate'] = {}
 
-    comment_dict['day_num'][current_time_new] = es_day_count
-    comment_dict['total_num'][current_time_new] = es_total_count
+
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -436,6 +399,8 @@ def get_influ_commented_num(xnr_user_no,current_time):
     if not comment_total_num_last:
         comment_total_num_last = 1
 
+    comment_dict['day_num'][current_time_new] = es_day_count
+    comment_dict['total_num'][current_time_new] = comment_total_num_last + es_day_count
     comment_dict['growth_rate'][current_time_new] = round(float(es_day_count)/comment_total_num_last,2)
 
     return comment_dict
@@ -478,47 +443,25 @@ def get_influ_like_num(xnr_user_no,current_time):
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         }
     }
-    
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'lt':(current_time_new+DAY)}}}
-                ]
-            }
-        }
-    }
-
+    weibo_feedback_like_index_name = weibo_feedback_like_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
         es_day_count = es_day_count_result['count']
     else:
-        return 'es_day_count_found_error'
+        #return 'es_day_count_found_error'
+        es_day_count = 0
 
-    es_total_count_result = es.count(index=weibo_feedback_like_index_name,doc_type=weibo_feedback_like_index_type,\
-                    body=query_body_total,request_timeout=999999)
-
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
 
     like_dict['day_num'] = {}
     like_dict['total_num'] = {}
     like_dict['growth_rate'] = {}
-
-
-    like_dict['day_num'][current_time_new] = es_day_count
-    like_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -528,6 +471,9 @@ def get_influ_like_num(xnr_user_no,current_time):
 
     if not like_total_num_last:
         like_total_num_last = 1
+
+    like_dict['day_num'][current_time_new] = es_day_count
+    like_dict['total_num'][current_time_new] = like_total_num_last + es_day_count
 
     like_dict['growth_rate'][current_time_new] = round(float(es_day_count)/like_total_num_last,2)
 
@@ -570,46 +516,28 @@ def get_influ_at_num(xnr_user_no,current_time):
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         }
     }
 
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'lt':(current_time_new+DAY)}}}
-                ]
-            }
-        }
-    }
-
+    weibo_feedback_at_index_name = weibo_feedback_at_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
         es_day_count = es_day_count_result['count']
     else:
-        return 'es_day_count_found_error'
+        #return 'es_day_count_found_error'
+        es_day_count = 0
 
-    es_total_count_result = es.count(index=weibo_feedback_at_index_name,doc_type=weibo_feedback_at_index_type,\
-                    body=query_body_total,request_timeout=999999)
 
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
 
     at_dict['day_num'] = {}
     at_dict['total_num'] = {}
     at_dict['growth_rate'] = {}
 
-    at_dict['day_num'][current_time_new] = es_day_count
-    at_dict['total_num'][current_time_new] = es_total_count
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -619,6 +547,9 @@ def get_influ_at_num(xnr_user_no,current_time):
 
     if not at_total_num_last:
         at_total_num_last = 1
+
+    at_dict['day_num'][current_time_new] = es_day_count
+    at_dict['total_num'][current_time_new] = at_total_num_last + es_day_count
 
     at_dict['growth_rate'][current_time_new] = round(float(es_day_count)/at_total_num_last,2)
 
@@ -664,48 +595,28 @@ def get_influ_private_num(xnr_user_no,current_time):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'term':{'private_type':'receive'}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    {'term':{'private_type':'receive'}}
                 ]
             }
         }
     }
 
-    query_body_total = {
-        'query':{
-            'bool':{
-                'must':[
-                    {'term':{'root_uid':uid}},
-                    {'term':{'private_type':'receive'}},
-                    {'range':{'timestamp':{'lt':(current_time_new+DAY)}}}
-                ]
-            }
-        }
-    }
-
+    weibo_feedback_private_index_name = weibo_feedback_private_index_name_pre + current_date
     es_day_count_result = es.count(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
                     body=query_body_day,request_timeout=999999)
 
     if es_day_count_result['_shards']['successful'] != 0:
         es_day_count = es_day_count_result['count']
     else:
-        return 'es_day_count_found_error'
+        #return 'es_day_count_found_error'
+        es_day_count = 0
 
 
-    es_total_count_result = es.count(index=weibo_feedback_private_index_name,doc_type=weibo_feedback_private_index_type,\
-                    body=query_body_total,request_timeout=999999)
-
-    if es_total_count_result['_shards']['successful'] != 0:
-        es_total_count = es_total_count_result['count']
-    else:
-        return 'es_total_count_found_error'
 
     private_dict['day_num'] = {}
     private_dict['total_num'] = {}
     private_dict['growth_rate'] = {}
-    
-    private_dict['day_num'][current_time_new] = es_day_count
-    private_dict['total_num'][current_time_new] = es_total_count
+
 
     last_day = ts2datetime(current_time_new - DAY)
     _id_last_day = xnr_user_no + '_' + last_day
@@ -715,6 +626,9 @@ def get_influ_private_num(xnr_user_no,current_time):
 
     if not private_total_num_last:
         private_total_num_last = 1
+
+    private_dict['day_num'][current_time_new] = es_day_count
+    private_dict['total_num'][current_time_new] = private_total_num_last + es_day_count
 
     private_dict['growth_rate'][current_time_new] = round(float(es_day_count)/private_total_num_last,2)
 
@@ -862,7 +776,10 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
     #if xnr_user_no:
     es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    followers_list = es_results['followers_list']
+    try:
+        followers_list = es_results['followers_list']
+    except:
+        followers_list = []
 
     
     if S_TYPE == 'test':
@@ -918,7 +835,10 @@ def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
     #if xnr_user_no:
     es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    fans_list = es_results['fans_list']
+    try:
+        fans_list = es_results['fans_list']
+    except:
+        fans_list = []
 
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE_BCI)
@@ -1013,45 +933,33 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
     
     uid = xnr_user_no2uid(xnr_user_no)
 
-    if sort_item == 'be_at':
-        index_name_sort = weibo_feedback_at_index_name
-        index_type_sort = weibo_feedback_at_index_type
-    elif sort_item == 'be_retweet':
-        index_name_sort = weibo_feedback_retweet_index_name
-        index_type_sort = weibo_feedback_retweet_index_type
-    elif sort_item == 'be_comment':
-        index_name_sort = weibo_feedback_comment_index_name
-        index_type_sort = weibo_feedback_comment_index_type
-
     if S_TYPE == 'test':
-        current_time = current_time_old
-        current_time_test = datetime2ts(S_DATE_BCI)
+        current_time = datetime2ts(S_DATE) #current_time_old
     else:
         current_time = current_time_old
-        current_time_test = current_time
-    #current_time = int(time.time())
+
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
     
-    current_date_test = ts2datetime(current_time_test)
-    current_time_new_test = datetime2ts(current_date_test)
+
+    if sort_item == 'be_at':
+        index_name_sort = weibo_feedback_at_index_name_pre + current_date
+        index_type_sort = weibo_feedback_at_index_type
+    elif sort_item == 'be_retweet':
+        index_name_sort = weibo_feedback_retweet_index_name_pre + current_date
+        index_type_sort = weibo_feedback_retweet_index_type
+    elif sort_item == 'be_comment':
+        index_name_sort = weibo_feedback_comment_index_name_pre + current_date
+        index_type_sort = weibo_feedback_comment_index_type
+
 
     feedback_sensitive_dict = {}
-    # feedback_sensitive_dict['sensitive_info'] = {}
-    # for i in range(WEEK): # WEEK=7
-    #     start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-    #     end_ts = current_time_new - i*DAY 
-    # if S_TYPE == 'test':
-    #     start_ts_test = current_time_new_test - (i+1)*DAY
-    # else:
-    #     start_ts_test = start_ts
 
     query_body = {
         'query':{
             'bool':{
                 'must':[
-                    {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                    {'term':{'root_uid':uid}}
                 ]
             }
         },
@@ -1084,13 +992,6 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     report_type_list = [u'人物',u'事件',u'言论']
     
 
-    # if S_TYPE == 'test':
-    #     es_time_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
-    #                     body={'query':{'match_all':{}},'sort':{'report_time':{'order':'desc'}}})['hits']['hits']
-
-    #     current_time = es_time_result[0]['_source']['report_time']
-    # else:
-    #     current_time = int(time.time())
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     else:
@@ -1099,9 +1000,6 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
-    # for i in range(WEEK): # WEEK=7
-    #     start_ts = current_time_new - (i+1)*DAY  # DAY=3600*24
-    #     end_ts = current_time_new - i*DAY
 
     mid_event_list = []
     mid_tweet_list = []
@@ -1113,17 +1011,21 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
                 'bool':{
                     'must':[
                         {'term':{'xnr_user_no':xnr_user_no}},
-                        {'term':{'report_type':report_type}},
-                        {'range':{'report_time':{'gte':current_time_new,'lt':(current_time_new+DAY)}}}
+                        {'term':{'report_type':report_type}}
                     ]
                 }
             },
             'size':MAX_SEARCH_SIZE
             
         }
-
-        es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+        weibo_report_management_index_name = weibo_report_management_index_name_pre + current_date
+        
+        try:
+            es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
             body=query_body)['hits']['hits']
+        except:
+            es_sensitive_result = []
+
 
         if es_sensitive_result:    
             if report_type == u'事件':
@@ -1307,12 +1209,9 @@ def get_safe_active_today(xnr_user_no):
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
     safe_active_dict = {} 
-    xnr_flow_text_index_name = xnr_flow_text_index_name_pre + current_date
+    xnr_flow_text_index_name = new_xnr_flow_text_index_name_pre + current_date
     try:
         search_result = es.count(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,body=query_body)
-
-
-        
 
         if search_result['_shards']['successful'] != 0:
             result = search_result['count']
@@ -1448,21 +1347,7 @@ def get_tweets_distribute(xnr_user_no):
 
 def get_safe_tweets(xnr_user_no,topic,sort_item):
 
-    # if S_TYPE == 'test':
 
-    #     current_time = datetime2ts(S_DATE)
-    #     index_name_list = get_flow_text_index_list(current_time)
-    #     query_body = {
-    #         'query':{
-    #             'match_all':{}
-    #         },
-    #         'size':TOP_WEIBOS_LIMIT,
-    #         'sort':{sort_item:{'order':'desc'}}
-    #     }
-
-    #     es_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    
-    # else:
     if S_TYPE == 'test':
         current_time = 1507362127  # 10月7日
 

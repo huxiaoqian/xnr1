@@ -28,7 +28,6 @@ optparser = OptionParser()
 optparser.add_option('-p', '--port', dest='port', help='Server Http Port Number', default=9001, type='int')
 (options, args) = optparser.parse_args()
 
-
 # Create app
 app = create_app()
 
@@ -36,6 +35,7 @@ app = create_app()
 app.config['SECURITY_PASSWORD_SALT'] = 'salty'
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 # upload weibo images
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 APP_ROOT = os.path.dirname(os.path.abspath(__file__)) 
@@ -167,6 +167,18 @@ def logout():
 
     return redirect("/login") #redirect(request.args.get('next', None))
 
+# logout
+# @app.route('/creat_account')
+# def creat_account():
+#     logout_user()
+#     #flash(u'You have been signed out')
+#     #flash(u'登出成功')
+
+#     return redirect("/login") #redirect(request.args.get('next', None))
+
+@app.route('/creat_account', methods=['GET'])
+def register():
+    return render_template('security/register_user.html')
 
 # get ip
 # @app.route('/get_ip/')

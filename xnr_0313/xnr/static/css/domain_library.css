@@ -1,0 +1,94 @@
+/*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.8);
+    position: relative;
+    top: 80px;
+}
+#container .title {
+    width: 100%;
+    position: relative;
+}
+#container .title .tit-1 b {
+    display: inline-block;
+    position: relative;
+    top: -3px;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#container .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #fff;
+}
+#container .building {
+    width: 90%;
+    margin: 20px auto;
+}
+#container .building .b-1-2 .b-opt {
+    margin-top: 10px;
+}
+#container .building .build-1 .b-1-2 {
+    margin-top: 15px;
+    padding:10px 20px;
+    border: 1px solid silver;
+}
+#container .building .build-1 .b-1-2 span {
+    font-size: 14px;
+    color: white;
+    font-weight: 700;
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+    margin-right: 30px;
+}
+#container .building .build-1 input {
+    background: transparent;
+    border: 1px solid silver;
+    border-radius:5px;
+    text-align: center;
+    color: white;
+    transition: all linear 0.3s;
+    width: 500px;
+    margin: 10px 0;
+    padding: 4px 8px;
+}
+#container .building .build-1 input:focus {
+    background: rgba(255, 255, 255, 0.88);
+    color: black;
+}
+#container .building .b-1-2 .b-opt .addBuild {
+    width: 500px;
+    padding: 4px 8px;
+    /*margin: 0 auto;*/
+    border: 1px solid silver;
+    color: white;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+    transition: all linear 0.3s;
+}
+#container .building .b-1-2 .b-opt .addBuild p {
+    width: 220px;
+    display: inline-block;
+    text-align: center;
+}
+#container .building .b-1-2 .b-opt .addBuild:hover {
+    background: rgba(255, 255, 255, 0.88);
+    color: black;
+}
+#container .group {
+    width: 90%;
+    margin: 20px auto;
+}

@@ -42,8 +42,17 @@ MAX_SEARCH_SIZE = 999 ## 从数据库中最大检索返回数量
 MAX_HOT_POST_SIZE = 200 #热门帖子未筛选前返回最大数量
 
 #社区发现
-MAX_TARGET_USER_NUM=100000 #种子用户最大数量
-MAX_CACULATE_USER_NUM=200000 #种子用户计算最大数量
+MAX_TARGET_USER_NUM = 100000 #种子用户最大数量
+MAX_CACULATE_USER_NUM = 200000 #种子用户计算最大数量
+MIN_TARGET_USER_NUM = 10000 #种子用户最小数量
+COMMUNITY_TERM = 7 #社区生成周期
+TARGET_KEYWORD_NUM = 50 #扩展关键词最大数量
+MIN_COMMUNITY_NUM = 10 #社区最小用户数
+MAX_COMMUNITY_NUM = 800 #社区最大用户数
+COMMUNITY_DENSITY_CLUSTER = 0.5 #社区紧密度阈值
+MIN_MEAN_COMMUNITY_SENSITIVE = 0.00001 #社区敏感度阈值
+MIN_MEAN_COMMUNITY_INFLUENCE = 0.0975  #社区影响力阈值
+
 
 SORT_FIELD = 'timestamp'
 TOP_WEIBOS_LIMIT = 20
@@ -114,6 +123,12 @@ TOP_ASSESSMENT_NUM = 500
 ## 2016-11-19 用户
 ACTIVE_UID = '2919766227'
 
+
+## 行为评估 facebook
+FB_PORTRAIT_UID_LIST = ['100023849442394', '100003271864059', '443835769306299', '121625551334730', '59393860784', '359574464219603']
+FB_PORTRAI_UID = '100018797745111'
+
+
 ## 影响力评估参数设置
 #MAX_FANS = 100
 #MAX_LIKE = 50000
@@ -141,6 +156,16 @@ POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_mana
 #智能写作
 WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
 
+# 定制模块
+TRANS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
+FB_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook/'
+TW_OP_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter/'
+
+# redis 发帖操作
+WEIBO_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/weibo_xnr_operate/'
+FACEBOOK_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/facebook_xnr_operate/'
+TWITTER_XNR_OPERATE_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/twitter_xnr_operate/'
+
 #FB & TW 属性计算
 FB_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_facebook'
 TW_DOMAIN_ABS_PATH = '/home/ubuntu8/hanmc/666/xnr1/xnr/cron/topic_domain_facebook_twitter_v1/domain_twitter'
@@ -152,6 +177,9 @@ MAX_VALUE = 9999
 
 SENTIMENT_DICT_NEW = {'0':u'中性', '1':u'积极', '2':u'生气', '3':'焦虑', \
          '4':u'悲伤', '5':u'厌恶', '6':u'消极其他', '7':u'消极'}
+
+SENTIMENT_POS = [0,1]
+SENTIMENT_NEG = [2,3,4,5,6,7]
 
 daily_ch2en = {u'旅游':'travel',u'美食':'food',u'汽车':'cars',u'游戏':'games',\
             u'星座':'constellation',u'音乐':'music',u'影视':'movie',\

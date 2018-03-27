@@ -15,7 +15,7 @@ $('.choosetime .demo-label input').on('click',function () {
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
         var _val=$(this).val();
         var start=getDaysBefore(_val);
-        var allData_url='/weibo_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+start+'&end_ts='+end_time;
+        var allData_url='/facebook_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+start+'&end_ts='+end_time;
         public_ajax.call_request('get',allData_url,com);
     }else {
         $('#sureChoose').show();
@@ -35,7 +35,7 @@ $('.sureTime').on('click',function () {
         $('.'+idbox).hide();
         $('.'+idbox).prev().show();
         var npp=$('.desc_index input:radio[name="desc"]:checked').val();
-        var his_task_url='/weibo_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
+        var his_task_url='/facebook_xnr_operate/'+$m+'/?xnr_user_no='+ID_Num+'&sort_item='+npp+'&start_ts='+(Date.parse(new Date(s))/1000)+
             '&end_ts='+(Date.parse(new Date(d))/1000);
         public_ajax.call_request('get',his_task_url,com);
     }
@@ -65,7 +65,7 @@ $('#container .type_page #myTabs a').on('click',function () {
         end=end_time;
     }
     if (start&&end){
-        var comURL='/weibo_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
+        var comURL='/facebook_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
             '&start_ts='+start+'&end_ts='+end;
         public_ajax.call_request('get',comURL,com);
     }else {
@@ -88,12 +88,12 @@ $('#container .desc_index .demo-label input').on('click',function () {
         s=(Date.parse(new Date(a))/1000);
         d=(Date.parse(new Date(b))/1000);
     }
-    var comURL='/weibo_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1+
+    var comURL='/facebook_xnr_operate/'+tp2+'/?xnr_user_no='+xnrUser+'&sort_item='+tp1+
         '&start_ts='+s+'&end_ts='+d;
     public_ajax.call_request('get',comURL,com);
 })
 //评论回复----转发回复
-var comURL='/weibo_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp'+
+var comURL='/facebook_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp'+
     '&start_ts='+todayTimetamp()+'&end_ts='+end_time;
 public_ajax.call_request('get',comURL,com);
 function com(data) {
@@ -184,7 +184,7 @@ function com(data) {
                             '        <div class="com com-1">'+
                             '            <b class="com-1-name">来自 '+user+'</b>&nbsp;&nbsp;&nbsp;'+
                             '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;&nbsp;'+
-                            '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                            '            <i class="mid" style="display: none;">'+row.fid+'</i>'+
                             '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                             '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
                             '            <div class="com-level">'+
@@ -328,7 +328,7 @@ function letter(data) {
                         '            <span class="com-2-name" style="display: none;">'+name+'</span>'+
                         '            <b class="let-1-name">来自 '+user+'&nbsp;'+name+'</b>&nbsp;&nbsp;&nbsp;'+
                         '            <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;'+time+'</span>&nbsp;'+
-                        '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '            <i class="mid" style="display: none;">'+row.fid+'</i>'+
                         '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
                         '            <div class="let-level">'+
@@ -436,7 +436,7 @@ function reply(data) {
                         '<div class="replyAll infoAll" style="text-align:left;">'+
                         '    <div class="replyEvery center_rel">'+
                         '        <img src="'+img+'" alt="" class="rep-head">'+
-                        '        <span style="display: none;" class="mid">'+row.mid+'</span>'+
+                        '        <span style="display: none;" class="mid">'+row.fid+'</span>'+
                         '        <span style="display: none;" class="r_mid">'+row.root_mid+'</span>'+
                         '        <span style="display: none;" class="uid">'+row.uid+'</span>'+
                         '        <div class="rep rep-1">'+
@@ -468,7 +468,7 @@ function reply(data) {
                         // '            <img src="/static/images/post-2.png" class="clone-2-2">'+
                         '            <label class="demo-label">'+
                         '                <input class="demo-radio clone-2-3" type="checkbox" name="desc4">'+
-                        '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
+                        '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的facebook'+
                         '            </label>'+
                         '            <a href="###" class="clone-2-4" midurl="reply_at" onclick="comMent_feed(this)">发送</a>'+
                         '        </div>'+
@@ -627,10 +627,10 @@ function focus(data) {
 //============================
 function postYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
     }else {
-        f='操作失败，'+data[1];
+        f='操作失败';
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
@@ -646,7 +646,7 @@ function forwarding_feed(_this) {
         var r_mid = $(_this).parents('.infoAll').find('.r_mid').text();
         var uid = $(_this).parents('.infoAll').find('.uid').text();
         var retweet_option=$($(_this).prev().find('input')[0]).is(':checked');
-        var comurl='/weibo_xnr_operate/reply_retweet/?text='+val+'&mid='+mid+'&r_mid='+r_mid+
+        var comurl='/facebook_xnr_operate/reply_retweet/?text='+val+'&mid='+mid+'&r_mid='+r_mid+
             '&xnr_user_no='+ID_Num+'&uid='+uid+'&retweet_option='+retweet_option;
         public_ajax.call_request('get',comurl,postYES);
     }else {
@@ -672,7 +672,7 @@ function comMent_feed(_this){
         var uid = $(_this).parents('.infoAll').find('.uid').text();
         var repTP=$(_this).attr('midurl');
         var retweet_option=$($(_this).prev().find('input')[0]).is(':checked');
-        var comurl='/weibo_xnr_operate/'+repTP+'/?text='+txt+'&mid='+mid+'&r_mid='+r_mid+
+        var comurl='/facebook_xnr_operate/'+repTP+'/?text='+txt+'&mid='+mid+'&r_mid='+r_mid+
             '&xnr_user_no='+ID_Num+'&uid='+uid+'&retweet_option='+retweet_option;
         public_ajax.call_request('get',comurl,postYES);
     }else {
@@ -717,12 +717,12 @@ function addfocus(_this) {
     // }
 }
 function delFocus() {
-    var f1_url='/weibo_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+ff_uid;
+    var f1_url='/facebook_xnr_operate/unfollow_operate/?xnr_user_no='+xnrUser+'&uid='+ff_uid;
     public_ajax.call_request('get',f1_url,focusYES)
 }
 var focusYN=0;
 function focusUserSure() {
-    var f2_url='/weibo_xnr_operate/';
+    var f2_url='/facebook_xnr_operate/';
     var trace_type=$('#focus_modal input:radio[name="fcs"]:checked').val();
     if (trace_type=='follow_operate'){
         f2_url+='follow_operate/?trace_type='+trace_type+'&uid='+ff_uid;
@@ -738,7 +738,7 @@ function focusUserSure() {
 }
 function focusYES(data) {
     var f='';
-    if (data[0]){
+    if (data[0]||data){
         f='操作成功';
         if (focusYN==1){
             var tm=$('.choosetime input:radio[name="time1"]:checked').val();
@@ -753,7 +753,7 @@ function focusYES(data) {
                 d=(Date.parse(new Date(b))/1000);
             }
             var si=$('input:radio[name="desc"]:checked').val();
-            var ssr='/weibo_xnr_operate/show_fans/?xnr_user_no='+ID_Num+'&sort_item='+si+
+            var ssr='/facebook_xnr_operate/show_fans/?xnr_user_no='+ID_Num+'&sort_item='+si+
                 '&start_ts='+s+'&end_ts='+d;
             setTimeout(function () {
                 public_ajax.call_request('get',ssr,focus);
@@ -762,7 +762,7 @@ function focusYES(data) {
         }
 
     }else {
-        f='操作失败，'+data[1];
+        f='操作失败';
     }
     $('#focusSure p').text(f);
     $('#focusSure').modal('show');

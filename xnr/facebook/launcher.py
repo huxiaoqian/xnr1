@@ -23,14 +23,29 @@ class Launcher():
 		self.driver.find_element_by_xpath('//input[@id="email"]').send_keys(self.username)
 		self.driver.find_element_by_xpath('//input[@id="pass"]').send_keys(self.password)
 		self.driver.find_element_by_xpath('//input[@data-testid="royal_login_button"]').click()
-		# 点掉进入主页之后的提醒
+		# 退出通知弹窗进入页面
 		time.sleep(1)
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+		# 点掉进入主页之后的提醒
 		try:
 			self.driver.find_element_by_xpath('//a[@action="cancel"]').click()
 		except Exception as e:
 			pass
-		time.sleep(2)
-		self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		time.sleep(1)
+		# 点进首页
+		try:
+			self.driver.find_element_by_xpath('//div[@data-click="home_icon"]/a').click()
+		except:
+			pass
+		# 退出通知弹窗进入页面
+		time.sleep(1)
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
 
 		# 将cookie保存在req中
 		cookies = self.driver.get_cookies()
@@ -44,30 +59,20 @@ class Launcher():
 	def get_like_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
+		#加载更多
+		length=100
+		for i in range(0,20):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -92,31 +97,21 @@ class Launcher():
 
 	def get_share_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,20):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -142,31 +137,21 @@ class Launcher():
 
 	def get_mention_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		#加载更多
+		length=100
+		for i in range(0,20):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -192,30 +177,20 @@ class Launcher():
 	def get_comment_list(self):
 		self.driver.get('https://www.facebook.com/notifications')
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
+		#加载更多
+		length=100
+		for i in range(0,20):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
 		share_list = []
@@ -241,35 +216,32 @@ class Launcher():
 
 	def target_page(self, uid):
 		self.driver.get('https://www.facebook.com/'+uid)
+		time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
 		return self.driver
 
 	def target_post(self, uid, fid):
 		self.driver.get('https://www.facebook.com/'+uid)		
 		time.sleep(3)
-		self.driver.execute_script("""
-			(function () {
-			var y = 0;
-			var step = 100;
-			window.scroll(0, 0);
-			function f() {
-			if (y < document.body.scrollHeight) {
-			y += step;
-			window.scroll(0, y);
-			setTimeout(f, 150);
-			} else {
-			window.scroll(0, 0);
-			document.title += "scroll-done";
-			}
-			}
-			setTimeout(f, 1500);
-			})();
-			""")
-		time.sleep(3)
-		while True:
-			if "scroll-done" in self.driver.title:
-				break
-			else:
-				time.sleep(3)
+		# 退出通知弹窗进入页面
+		try:
+			self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+		except:
+			pass
+
+		#加载更多
+		length=100
+		for i in range(0,50):
+			js="var q=document.documentElement.scrollTop="+str(length) 
+			self.driver.execute_script(js) 
+			time.sleep(2)
+			length+=length
+
 
 
 

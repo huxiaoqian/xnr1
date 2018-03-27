@@ -219,7 +219,7 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type='ord
             #if follow_type == 'follow':
             body_info = {}
             body_info['followers_list'] = [uid]
-            body_info['xnr_use_no'] = xnr_user_no
+            body_info['xnr_user_no'] = xnr_user_no
 
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
@@ -248,7 +248,7 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type='ord
         except:
             body_info = {}
             body_info['fans_list'] = [uid]
-            body_info['xnr_use_no'] = xnr_user_no
+            body_info['xnr_user_no'] = xnr_user_no
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
 
@@ -283,7 +283,10 @@ def judge_trace_follow(xnr_user_no,uid):
         get_result = es_xnr.get(index=weibo_xnr_fans_followers_index_name,\
             doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         
-        trace_follow_list = get_result['trace_follow_list']
+        try:
+            trace_follow_list = get_result['trace_follow_list']
+        except:
+            trace_follow_list = []
     
         if uid in trace_follow_list:
             return True
@@ -596,6 +599,7 @@ def add_operate2redis(item_dict):
     queue_dict['operate_type'] = item_dict['operate_type']  
     # publish-发帖、retweet-转发、comment-评论、like-点赞、follow-关注、unfollow-取消关注、at-提到、private-私信
     # add-发送添加好友请求、confirm-确认好友请求、delete-删除好友请求
+    # receive - 回复
 
     queue_dict['content'] = item_dict['content']
     try:

@@ -1,0 +1,118 @@
+/*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.8);
+    position: relative;
+    top: 80px;
+}
+#container .title {
+    width: 100%;
+    position: relative;
+}
+#container .title .tit-1 b,#container .title .tit-2 b {
+    display: inline-block;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#container .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #fff;
+}
+
+/*基本信息*/
+#container .info_sure {
+    margin: 30px 0 20px;
+    position: relative;
+}
+#container .info_sure .info_left {
+    width: 300px;
+    /*float:left;*/
+    margin-bottom: 50px;
+}
+#container .info_sure .info_list {
+    padding: 30px 15px;
+    border: 1px solid silver;
+}
+#container .info_sure .info_left .list-2 p,
+#container .info_sure .info_left .list-4 p {
+    margin: 10px 0 10px 36px;
+    color: white;
+}
+#container .info_sure .info_left .list-2 p span,
+#container .info_sure .info_left .list-4 p span{
+    width: 150px;
+    position: relative;
+    top: 5px;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#container .info_sure .info_right {
+    position: absolute;
+    top: 35px;
+    right: 200px;
+}
+#container .info_sure .info_right .bind_info {
+    width: 300px;
+    padding: 20px 30px;
+    background: #06162d;
+    border-radius: 10px;
+}
+#container .info_sure .info_right .bind_info input {
+    width: 100%;
+    padding: 3px 7px;
+    margin: 10px 0;
+    background: transparent;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+    transition: all linear 0.3s;
+}
+#container .info_sure .info_right .bind_info input:focus {
+    background: white;
+    color: black;
+}
+#container .info_sure .info_right .bind_info #go_bind {
+    display: inline-block;
+    width: 100%;
+    padding: 3px 10px;
+    margin-top: 10px;
+    background: transparent;
+    color: #fff;
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all linear 0.4s;
+    font-weight: 700;
+}
+#container .info_sure .info_right .bind_info #go_bind:hover {
+    background: white;
+    color: black;
+}
+#success_fail .user .personlist input {
+    position: relative;
+    top: 3px;
+    margin-right:5px;
+}
+#success_fail .user .personlist div{
+    display: inline-block;
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -1,4 +1,4 @@
-var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=influence';
+var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item=sensitive';
 public_ajax.call_request('get',relatedUrl,related);
 function related(data) {
     $.each(data,function (index,item) {
@@ -49,7 +49,7 @@ function related(data) {
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
-                visible:false
+                // visible:false
             },
             {
                 title: "粉丝数",//标题
@@ -70,7 +70,7 @@ function related(data) {
 
             },
             {
-                title: "微博数",//标题
+                title: "帖子数",//标题
                 field: "statusnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -116,7 +116,7 @@ $('#container .suggestion #myTabs li').on('click',function () {
     //idNAME=ty;
     $('.influence').hide();
     $('#influe p').show();
-    var relatedUrl='/weibo_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
+    var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
     public_ajax.call_request('get',relatedUrl,related);
     showHide(ty);
 })
@@ -131,7 +131,7 @@ $('.findSure').on('click',function () {
         idNAME='searchResult';
         $('.influence').hide();
         $('#influe p').show();
-        var searchUrl='/weibo_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=influence&uids='+ids;
+        var searchUrl='/facebook_xnr_operate/direct_search/?xnr_user_no='+ID_Num+'&sort_item=sensitive&uids='+ids;
         public_ajax.call_request('get',searchUrl,related);
         $('.searchResult').slideDown(30);
     }
@@ -216,13 +216,13 @@ function driectFocus(uid,_this) {
     }else {
         mid='unfollow_operate';
     }
-    foc_url='/weibo_xnr_operate/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+uid;
+    foc_url='/facebook_xnr_operate/'+mid+'/?xnr_user_no='+ID_Num+'&uid='+uid;
     public_ajax.call_request('get',foc_url,sucFai)
 }
 //提示
 function sucFai(data) {
     var m='';
-    if (data[0]){
+    if (data[0]||data){
         m='操作成功';
     }else {
         m='操作失败';

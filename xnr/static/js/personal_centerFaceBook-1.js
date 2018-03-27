@@ -1,13 +1,9 @@
-function auto() {
-    var has_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
-    var notHao_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
-    public_ajax.call_request('GET',has_url,has_table);
-    public_ajax.call_request('GET',notHao_url,not_yet);
-}
-auto();
+var has_url = '/facebook_xnr_manage/show_completed_fbxnr/?account_no='+admin;
+var notHao_url = '/facebook_xnr_manage/show_uncompleted_fbxnr/?account_no='+admin;
+public_ajax.call_request('GET',has_url,has_table);
+public_ajax.call_request('GET',notHao_url,not_yet);
 function has_table(has_data) {
     var person=eval(has_data);
-    $('.has_list #haslist p').show();
     $('.has_list #haslist').bootstrapTable('load', person);
     $('.has_list #haslist').bootstrapTable({
         data:person,
@@ -164,7 +160,6 @@ function has_table(has_data) {
 };
 function not_yet(no_data) {
     var undone_person=eval(no_data);
-    $('.undone_list #undonelist p').show();
     $('.undone_list #undonelist').bootstrapTable('load', undone_person);
     $('.undone_list #undonelist').bootstrapTable({
         data:undone_person,
@@ -264,7 +259,7 @@ function not_yet(no_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\',\'2\')" title="继续"><i class="icon icon-fire"></i></a>'+
+                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\',\'2\',\''+row.xnr_user_no+'\')" title="继续"><i class="icon icon-fire"></i></a>'+
                         '<a style="cursor: pointer;color: white;display:inline-block;margin-left:50px;" onclick="deluser(\''+row.xnr_user_no+'\',\'2\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },
@@ -295,13 +290,13 @@ function deluser(id,flag) {
     $('#delPrompt').modal('show');
 }
 function sureDelXnr() {
-    var del_url = '/weibo_xnr_manage/delete_weibo_xnr/?xnr_user_no='+delID;
+    var del_url = '/facebook_xnr_manage/delete_fb_xnr/?xnr_user_no='+delID;
     public_ajax.call_request('GET',del_url,success_fail);
 }
 //继续创建未完成的虚拟人
-function go_on(id,flag) {
+function go_on(id,flag,taskID) {
     localStorage.setItem('go_mod_user',id);
-    window.open('/registered/virtualCreated/?continueUser='+flag);
+    window.open('/registered/virtualCreated/?continueUser='+flag+'&flag=4&taskID='+taskID);
     // var go_url = '/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no='+id;
     // public_ajax.call_request('GET',go_url,success_fail);
 }
@@ -322,7 +317,7 @@ $('#choosePerson_3 .sure_in').on('click',function () {
         }
         localStorage.setItem('user',comingID);
         localStorage.setItem('userName',id_or_name);
-        window.open('/control/operationControl/');
+        window.open('/control/operationFaceBook/');
     }else {
         $('#succee_fail #words').text('请选择登录方式');
         $('#succee_fail').modal('show');
@@ -335,13 +330,10 @@ function success_fail(data) {
     if (data){
         word='删除成功。';
         setTimeout(function () {
-            var has_not_url='';
             if (uploadUser=='1'){
-                has_not_url = '/weibo_xnr_manage/show_completed_weiboxnr/?account_no='+admin;
-                public_ajax.call_request('GET',has_not_url,has_table);
+                public_ajax.call_request('GET',has_url,has_table);
             }else {
-                has_not_url = '/weibo_xnr_manage/show_uncompleted_weiboxnr/?account_no='+admin;
-                public_ajax.call_request('GET',has_not_url,not_yet);
+                public_ajax.call_request('GET',notHao_url,not_yet);
             }
         },1000);
     }else {
