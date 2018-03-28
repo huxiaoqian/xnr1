@@ -439,7 +439,7 @@ function postYES22(data) {
 }
 //=====================相关通道========================
 //相关通道
-var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
+/*var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
 public_ajax.call_request('get',roadInforurl,roadInfor);
 function roadInfor(data) {
     var data=data[0];
@@ -470,7 +470,7 @@ function nameAndGroup(opt1,opt2,opt3,opt4,opt5) {
     }
 
     $(opt5).html(str);
-}
+}*/
 //=====================相关通道=======完=================
 //群可见的情况
 var rankidList=[];

@@ -1546,14 +1546,14 @@ def cron_compute_mark(current_time):
 if __name__ == '__main__':
 
 
-    current_time=int(time.time()-DAY)
-    cron_compute_mark(current_time)
-    '''
-    current_time_now = int(time.time())
-    for i in range(2,-1,-1):
+    #current_time=int(time.time()-DAY)
+    #cron_compute_mark(current_time)
+    
+    current_time_now = int(time.time()-DAY)
+    for i in range(3,-1,-1):
 
         current_time = current_time_now - i*24*3600
         print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
 
         cron_compute_mark(current_time)
-     '''
+     

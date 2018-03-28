@@ -170,11 +170,16 @@ public_ajax.call_request('get',penetration_7day_url,penetration_7day);
 function penetration_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
-    $.each(data,function (index,item) {
-        nearTime.push(item['date_time'][0]);
-        var hu=item['penetration']||item['influence']
-        nearData.push(hu[0]);
-    })
+    if (data.length==0){
+        nearTime.push($_time);
+        nearData.push(0);
+    }else {
+    	$.each(data,function (index,item) {
+            nearTime.push(item['date_time'][0]);
+            var hu=item['penetration']||item['influence']
+            nearData.push(hu[0]);
+   	 })
+    };
     var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
     var option = {
         backgroundColor:'transparent',
