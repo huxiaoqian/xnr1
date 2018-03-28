@@ -8,7 +8,8 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.global_utils import es_xnr
 es_flow_text = es_xnr
 from xnr.time_utils import datetime2ts
-from utils import show_completed_twxnr,show_uncompleted_twxnr,delete_tw_xnr, get_xnr_detail
+from utils import show_completed_twxnr,show_uncompleted_twxnr,delete_tw_xnr, get_xnr_detail, \
+					show_history_count, lookup_xnr_assess_info
 
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
@@ -61,32 +62,11 @@ def ajax_delete_tw_xnr():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=delete_tw_xnr(xnr_user_no)
 	return json.dumps(results)
-"""
-#今日提醒
-#http://219.224.134.213:9209/weibo_xnr_manage/xnr_today_remind/?xnr_user_no=WXNR0004
-@mod.route('/xnr_today_remind/')
-def ajax_xnr_today_remind():
-	now_time=int(time.time())
-	xnr_user_no=request.args.get('xnr_user_no','')
-	results=xnr_today_remind(xnr_user_no,now_time)
-	return json.dumps(results)
-
-#历史统计
-'''
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_history_count/?xnr_user_no=WXNR0004&startdate=2017-09-01&enddate=2017-09-05
-@mod.route('/wxnr_history_count/')
-def ajax_wxnr_history_count():
-	startdate=request.args.get('startdate','')
-	enddate=request.args.get('enddate','')
-	xnr_user_no=request.args.get('xnr_user_no','')
-	results=wxnr_history_count(xnr_user_no,startdate,enddate)
-	return json.dumps(results)
-'''
 
 #按时间条件显示历史统计结果
-#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=today&start_time=0&end_time=1505044800
-#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=''&start_time=1504526400&end_time=1505044800
-#http://219.224.134.213:9209/weibo_xnr_manage/show_history_count/?xnr_user_no=WXNR0004&type=&start_time=1506182400&end_time=1506433221
+#http://219.224.134.213:9209/twitter_xnr_manage/show_history_count/?xnr_user_no=TXNR0003&type=today&start_time=0&end_time=1505044800
+#http://219.224.134.213:9209/twitter_xnr_manage/show_history_count/?xnr_user_no=TXNR0003&type=''&start_time=1504526400&end_time=1505044800
+#http://219.224.134.213:9209/twitter_xnr_manage/show_history_count/?xnr_user_no=TXNR0003&type=&start_time=1506182400&end_time=1506433221
 @mod.route('/show_history_count/')
 def ajax_show_history_count():
 	xnr_user_no=request.args.get('xnr_user_no','')
@@ -97,6 +77,50 @@ def ajax_show_history_count():
 	date_range['end_time']=int(request.args.get('end_time',''))
 	results=show_history_count(xnr_user_no,date_range)
 	return json.dumps(results)
+
+
+
+#按指标查询评估信息
+#assess_type=influence,safe,penetration
+#http://219.224.134.213:9209/twitter_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=TXNR0003&start_time=1506096000&end_time=1506441600&assess_type=influence
+@mod.route('/lookup_xnr_assess_info/')
+def ajax_lookup_xnr_assess_info():
+	xnr_user_no=request.args.get('xnr_user_no','')
+	start_time=int(request.args.get('start_time',''))
+	end_time=int(request.args.get('end_time',''))
+	assess_type=request.args.get('assess_type','')
+	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
+	return json.dumps(results)
+
+
+
+
+
+#历史统计
+'''
+#http://219.224.134.213:9209/twitter_xnr_manage/wxnr_history_count/?xnr_user_no=WXNR0004&startdate=2017-09-01&enddate=2017-09-05
+@mod.route('/wxnr_history_count/')
+def ajax_wxnr_history_count():
+	startdate=request.args.get('startdate','')
+	enddate=request.args.get('enddate','')
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=wxnr_history_count(xnr_user_no,startdate,enddate)
+	return json.dumps(results)
+'''
+
+
+"""
+#今日提醒
+#http://219.224.134.213:9209/weibo_xnr_manage/xnr_today_remind/?xnr_user_no=WXNR0004
+@mod.route('/xnr_today_remind/')
+def ajax_xnr_today_remind():
+	now_time=int(time.time())
+	xnr_user_no=request.args.get('xnr_user_no','')
+	results=xnr_today_remind(xnr_user_no,now_time)
+	return json.dumps(results)
+
+
+
 
 #http://219.224.134.213:9209/weibo_xnr_manage/delete_history_count/?task_id=WXNR0004_2017-09-27
 @mod.route('/delete_history_count/')
@@ -333,19 +357,6 @@ def ajax_wxnr_list_fans():
 	user_id=request.args.get('user_id','')
 	order_type=request.args.get('order_type','')
 	results=wxnr_list_fans(user_id,order_type)
-	return json.dumps(results)
-
-
-#按指标查询评估信息
-#assess_type=influence,safe,penetration
-#http://219.224.134.213:9209/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no=WXNR0004&start_time=1506096000&end_time=1506441600&assess_type=influence
-@mod.route('/lookup_xnr_assess_info/')
-def ajax_lookup_xnr_assess_info():
-	xnr_user_no=request.args.get('xnr_user_no','')
-	start_time=int(request.args.get('start_time',''))
-	end_time=int(request.args.get('end_time',''))
-	assess_type=request.args.get('assess_type','')
-	results=lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type)
 	return json.dumps(results)
 
 

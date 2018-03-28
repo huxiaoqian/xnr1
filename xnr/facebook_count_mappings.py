@@ -23,7 +23,7 @@ def facebook_xnr_count_info_mappings():
                 'at_total_num': {
                   'type': 'long'
                 },
-                'user_fansnum': {
+                'user_friendsnum': {
                   'type': 'long'
                 },
                 'xnr_user_no': {
@@ -48,7 +48,7 @@ def facebook_xnr_count_info_mappings():
                 'retweet_total_num': {
                   'type': 'long'
                 },
-                'fans_group_sensitive_info': {
+                'friends_group_sensitive_info': {
                   'type': 'long'
                 },
                 'feedback_total_sensitive_info': {
@@ -69,16 +69,16 @@ def facebook_xnr_count_info_mappings():
                 'private_day_num': {
                   'type': 'long'
                 },
-                'fans_growth_rate': {
+                'friends_growth_rate': {
                   'type': 'long'
                 },
-                'fans_total_num': {
+                'friends_total_num': {
                   'type': 'long'
                 },
-                'fans_num': {
+                'friends_num': {
                   'type': 'long'
                 },
-                'fans_day_num': {
+                'friends_day_num': {
                   'type': 'long'
                 },
                 'date_time': {
