@@ -5,7 +5,8 @@ import json
 from flask import Blueprint, url_for, render_template, request,\
         abort, flash, session, redirect
 from utils import get_influence_total_trend, compute_influence_num, penetration_total,\
-                    compute_penetration_num,compute_safe_num, get_safe_active
+                    compute_penetration_num,compute_safe_num, get_safe_active,\
+                    get_influence_total_trend_today, penetration_total_today, get_safe_active_today
 
 mod = Blueprint('twitter_xnr_assessment', __name__, url_prefix='/twitter_xnr_assessment')
 
@@ -81,6 +82,32 @@ def ajax_safe_active():
     return json.dumps(results)
 
 
+# 影响力各指标 -- 今日
+@mod.route('/influence_total_today/')
+def ajax_influence_total_trend_today():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_influence_total_trend_today(xnr_user_no)
+
+    return json.dumps(results)
+
+# 渗透力各指标 -- 今日
+@mod.route('/penetration_total_today/')
+def ajax_penetration_total_today():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = penetration_total_today(xnr_user_no)
+
+    return json.dumps(results)
+
+# 活跃安全性 -- 今日
+@mod.route('/safe_active_today/')
+def ajax_safe_active_today():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_safe_active_today(xnr_user_no)
+
+    return json.dumps(results)
 
 """
 #2018-3-8 11:19:09
@@ -98,14 +125,7 @@ from utils import get_influ_fans_num,get_influ_retweeted_num,\
 mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
 
 
-# 影响力各指标 -- 今日
-@mod.route('/influence_total_today/')
-def ajax_influence_total_trend_today():
-    xnr_user_no = request.args.get('xnr_user_no','')
 
-    results = get_influence_total_trend_today(xnr_user_no)
-
-    return json.dumps(results)
 
 
 
@@ -179,14 +199,7 @@ def ajax_influence_total_trend_today():
 
 
 
-# 渗透力各指标 -- 今日
-@mod.route('/penetration_total_today/')
-def ajax_penetration_total_today():
-    xnr_user_no = request.args.get('xnr_user_no','')
 
-    results = penetration_total_today(xnr_user_no)
-
-    return json.dumps(results)
 
 # 关注群体敏感度
 @mod.route('/pene_follow_group_sensitive/')
@@ -234,14 +247,7 @@ def ajax_pene_warning_report_sensitive():
 
 
 
-# 活跃安全性 -- 今日
-@mod.route('/safe_active_today/')
-def ajax_safe_active_today():
-    xnr_user_no = request.args.get('xnr_user_no','')
 
-    results = get_safe_active_today(xnr_user_no)
-
-    return json.dumps(results)
 
 # 发帖内容分布
 @mod.route('/tweets_distribute/')
