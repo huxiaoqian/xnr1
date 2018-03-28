@@ -876,8 +876,12 @@ def opinion_relevance_main(task_source,task_id,xnr_user_no,opinion_keywords_list
         corpus_name = result['_source']['corpus_name']
 
         item_result = opinion_relevance(opinion_keywords_list,corpus_pinyin)
+        #print 'item_result..',item_result
         #opinion_results[corpus_pinyin] = [corpus_name,item_result[0]]
-        opinion_results[corpus_name] = item_result[0]
+        if item_result:
+            opinion_results[corpus_name] = item_result
+        else:
+            opinion_results[corpus_name] = ''
 
     save2opinion_corpus(task_id,opinion_results)
     print 'opinion_results....',opinion_results
