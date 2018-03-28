@@ -1351,6 +1351,14 @@ def get_db_num(timestamp):
         db_number = 1
     return db_number
 
+def xnr_user_no2uid(xnr_user_no):
+    try:
+        result = es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+        uid = result['uid']
+    except:
+        uid = ''
+    return uid
+
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     avg_sort_uid_dict = {}
@@ -1394,7 +1402,8 @@ def get_related_recommendation(task_detail):
     db_number = get_db_num(now_date_ts)
     fb_be_retweet_index_name = fb_be_retweet_index_name_pre +str(db_number)
     try:
-        recommend_list_r = es.get(index=fb_be_retweet_index_name,doc_type=fb_be_retweet_index_type,id=xnr_user_no)['_source']
+        uid = xnr_user_no2uid(xnr_user_no)
+        recommend_list_r = es.get(index=fb_be_retweet_index_name,doc_type=fb_be_retweet_index_type,id=uid)['_source']
         recommend_list = []
         if recommend_list_r.has_key('uid_be_retweet'):
             recommend_list = recommend_list_r['uid_be_retweet']
@@ -1402,8 +1411,6 @@ def get_related_recommendation(task_detail):
     except Exception,e:
         print e
         recommend_set_list = []
-
-
 
     if S_TYPE == 'test':
         current_date = S_DATE_FB
