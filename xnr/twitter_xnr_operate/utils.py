@@ -6,7 +6,7 @@ import sys
 import random
 import re
 
-from xnr.global_config import S_DATE_TW,S_TYPE,S_DATE_BCI_TW,SYSTEM_START_DATE
+from xnr.global_config import S_DATE_TW,S_TYPE,S_DATE_BCI_TW,SYSTEM_START_DATE, R_BEGIN_TIME
 from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
                     tw_xnr_timing_list_index_name, tw_xnr_timing_list_index_type,\
                     tw_xnr_retweet_timing_list_index_name, tw_xnr_retweet_timing_list_index_type,\
@@ -16,13 +16,13 @@ from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
                     tw_hot_subopinion_results_index_name, tw_hot_subopinion_results_index_type, \
                     es_tw_user_portrait, tw_portrait_index_name, tw_portrait_index_type, \
                     tw_bci_index_name_pre, tw_bci_index_type,tw_xnr_fans_followers_index_name,\
-                    tw_xnr_fans_followers_index_type
+                    tw_xnr_fans_followers_index_type, tw_be_retweet_index_name_pre, tw_be_retweet_index_type
 
 
 from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention, tw_message
 from xnr.utils import tw_uid2nick_name_photo
 from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HOT_AT_RECOMMEND_USER_TOP,\
-                    BCI_USER_NUMBER, USER_POETRAIT_NUMBER
+                    BCI_USER_NUMBER, USER_POETRAIT_NUMBER, DAY
 from time_utils import datetime2ts, ts2datetime
 
 def get_submit_tweet_tw(task_detail):
@@ -214,37 +214,37 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
     topic_field_en = topic_ch2en_dict[topic_field]
 
     if sort_item != 'compute_status':
-	    query_body = {
-	        'query':{
-	            'bool':{
-	                'must':[
-	                    {
-	                        'filtered':{
-	                            'filter':{
-	                                'term':{'topic_field':topic_field_en}
-	                            }
-	                        }
-	                    }
-	                ]
-	            }
-	            
-	        },
-	        'sort':{sort_item:{'order':'desc'}},
-	        'size':TOP_WEIBOS_LIMIT
-	    }
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {
+                            'filtered':{
+                                'filter':{
+                                    'term':{'topic_field':topic_field_en}
+                                }
+                            }
+                        }
+                    ]
+                }
+                
+            },
+            'sort':{sort_item:{'order':'desc'}},
+            'size':TOP_WEIBOS_LIMIT
+        }
 
-	    current_time = time.time()
+        current_time = time.time()
 
-	    if S_TYPE == 'test':
-	        current_time = datetime2ts(S_DATE_TW)
-	    tw_social_sensing_index_name = tw_social_sensing_index_name_pre + ts2datetime(current_time)
+        if S_TYPE == 'test':
+            current_time = datetime2ts(S_DATE_TW)
+        tw_social_sensing_index_name = tw_social_sensing_index_name_pre + ts2datetime(current_time)
 
-	    es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,body=query_body)['hits']['hits']
+        es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,body=query_body)['hits']['hits']
 
-	    if not es_results:    
-	        es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,\
-	                                body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
-	                                'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
+        if not es_results:    
+            es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,\
+                                    body={'query':{'match_all':{}},'size':TOP_WEIBOS_LIMIT,\
+                                    'sort':{sort_item:{'order':'desc'}}})['hits']['hits']
     results_all = []
     for result in es_results:
         result = result['_source']
@@ -1254,6 +1254,26 @@ def get_direct_search(task_detail):
             return_results_all.append(item_else)
     return return_results_all
 
+begin_ts = datetime2ts(R_BEGIN_TIME)
+
+#use to get db_number which is needed to es
+def get_db_num(timestamp):
+    date = ts2datetime(timestamp)
+    date_ts = datetime2ts(date)
+    db_number = 2 - (((date_ts - begin_ts) / (DAY * 7))) % 2
+    #run_type
+    if S_TYPE == 'test':
+        db_number = 1
+    return db_number
+
+def xnr_user_no2uid(xnr_user_no):
+    try:
+        result = es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+        uid = result['uid']
+    except:
+        uid = ''
+    return uid
+
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     avg_sort_uid_dict = {}
@@ -1280,12 +1300,30 @@ def get_related_recommendation(task_detail):
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_traditional_keyword+'*'}})
 
-    recommend_list_r = es.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+    # recommend_list_r = es.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
 
-    recommend_list = []
-    if recommend_list_r.has_key('followers_list'):
-        recommend_list = recommend_list_r['followers_list']
-    recommend_set_list = list(set(recommend_list))
+    #弃用，改用转发网络
+    # recommend_list = []
+    # if recommend_list_r.has_key('followers_list'):
+    #     recommend_list = recommend_list_r['followers_list']
+    # recommend_set_list = list(set(recommend_list))
+    #转发网络
+    now_ts = time.time()
+    now_date_ts = datetime2ts(ts2datetime(now_ts))
+    #get redis db number
+    db_number = get_db_num(now_date_ts)
+    tw_be_retweet_index_name = tw_be_retweet_index_name_pre +str(db_number)
+    try:
+        recommend_list_r = es.get(index=tw_be_retweet_index_name,doc_type=tw_be_retweet_index_type,id=xnr_user_no2uid(xnr_user_no))['_source']
+        recommend_list = []
+        if recommend_list_r.has_key('uid_be_retweet'):
+            recommend_list = recommend_list_r['uid_be_retweet']
+        recommend_set_list = list(set(recommend_list))
+    except Exception,e:
+        print e
+        recommend_set_list = []
+
+
     if S_TYPE == 'test':
         current_date = S_DATE_TW
     else:
@@ -1330,37 +1368,60 @@ def get_related_recommendation(task_detail):
             uid_list = [] 
         else:
             uid_list = []
-            friends_list_results = es.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':recommend_set_list})['_source']
+
+            #弃用，改用转发网络
+            # friends_list_results = es.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':recommend_set_list})['_source']
+            # for result in friends_list_results:
+            #     friends_list = friends_list + result['friend_list']
+            # friends_set_list = list(set(friends_list))
+
+
+        #转发网络
+        if recommend_set_list:
+            friends_list_results = es.mget(index=tw_be_retweet_index_name,doc_type=tw_be_retweet_index_type,body={'ids':recommend_set_list})['docs']
             for result in friends_list_results:
-                friends_list = friends_list + result['friend_list']
+                friends_list = []
+                try:
+                    friends_list = friends_list + result['_source']['uid_be_retweet']
+                except Exception,e:
+                    print e
             friends_set_list = list(set(friends_list))
-            sort_item_new = 'fansnum'
-            query_body_rec = {
-                'query':{
-                    'bool':{
-                        'must':[
-                            {'terms':{'uid':friends_set_list}},
-                            {'bool':{
-                                'should':nest_query_list
-                            }}
-                        ]
-                    }
-                },
-                'aggs':{
-                    'uid_list':{
-                        'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL,'order':{'avg_sort':'desc'} },
-                        'aggs':{'avg_sort':{'avg':{'field':sort_item_new}}}
-                    }
+        else:
+            friends_set_list = []
+        
+        print 'friends_set_list'
+        print friends_set_list
+
+
+
+        # sort_item_new = 'fansnum'
+        sort_item_new = 'share'
+        query_body_rec = {
+            'query':{
+                'bool':{
+                    'must':[
+                        {'terms':{'uid':friends_set_list}},
+                        {'bool':{
+                            'should':nest_query_list
+                        }}
+                    ]
+                }
+            },
+            'aggs':{
+                'uid_list':{
+                    'terms':{'field':'uid','size':TOP_ACTIVE_SOCIAL,'order':{'avg_sort':'desc'} },
+                    'aggs':{'avg_sort':{'avg':{'field':sort_item_new}}}
                 }
             }
-            es_friend_result = es.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
+        }
+        es_friend_result = es.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
+        
+        for item in es_friend_result:
+            uid = item['key']
+            uid_list.append(uid)
             
-            for item in es_friend_result:
-                uid = item['key']
-                uid_list.append(uid)
-                
-                avg_sort_uid_dict[uid] = {}
-                avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
+            avg_sort_uid_dict[uid] = {}
+            avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
 
     results_all = []
     for uid in uid_list:
@@ -1396,15 +1457,17 @@ def get_related_recommendation(task_detail):
                 if sort_item == 'friend':
                     if S_TYPE == 'test':
                         # item['_source']['fansnum'] = item['_source']['fansnum']   #暂无
-                        item['_source']['fansnum'] = 0
+                        item['_source']['share'] = 0
                     else:
-                        item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                        # item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                        item['_source']['share'] = avg_sort_uid_dict[uid]['sort_item_value']
                 elif sort_item == 'sensitive':
                     item['_source']['sensitive'] = avg_sort_uid_dict[uid]['sort_item_value']
                     # item['_source']['fansnum'] = item['_source']['fansnum']   #暂无
-                    item['_source']['fansnum'] = 0
+                    # item['_source']['fansnum'] = 0
                 else:
                     item['_source']['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
+                    item['_source']['share'] = avg_sort_uid_dict[uid]['sort_item_value']
 
 
 
