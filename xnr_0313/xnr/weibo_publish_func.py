@@ -6,6 +6,7 @@ import sys
 import urllib
 import urllib2
 
+from sina.weibo_publish import weibo_publish_main
 from sina.weibo_operate import SinaOperateAPI
 from sina.tools.Launcher import SinaLauncher
 from global_utils import es_xnr as es
@@ -131,6 +132,9 @@ def newest_time_func(uid):
 ## 发布微博
 def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no):
     
+    mark = weibo_publish_main(account_name,password,text,p_url)
+
+    '''
     xnr = SinaLauncher(account_name,password)
     xnr.login()
     user = SinaOperateAPI(xnr.uid)
@@ -141,9 +145,10 @@ def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,x
     
     user.pic_ids = ' '.join(new_p_url)
     user.rankid = rankid
-    #print 'user.pic_ids::',user.pic_ids
+    
     mark = user.publish()
-    print 'mark...',mark
+    '''
+    
     # 保存微博
     if mark:
         try:

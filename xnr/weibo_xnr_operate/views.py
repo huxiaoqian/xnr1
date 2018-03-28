@@ -77,7 +77,7 @@ def ajax_submit_daily_tweet():
     task_detail['p_url']  = json.loads(json.dumps(request.args.get('p_url','').encode('utf-8')))  
     task_detail['rank'] = request.args.get('rank','')
     task_detail['rankid'] = request.args.get('rankid','')
-
+    print 'p_utl////',task_detail['p_url']
     #mark = get_submit_tweet(task_detail)
     queue_dict = {}
     queue_dict['channel'] = 'weibo'

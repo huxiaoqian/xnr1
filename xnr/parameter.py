@@ -162,6 +162,7 @@ POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_mana
 
 #智能写作
 WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+CORPUS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/opinion_question/corpus/'
 
 # 定制模块
 TRANS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'

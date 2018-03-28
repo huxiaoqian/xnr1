@@ -80,7 +80,7 @@ def save2opinion_corpus(task_id,opinion_results):
 
     item_exist = dict()
     item_exist['task_id'] = task_id
-    item_exist['corpus_results'] = opinion_results
+    item_exist['corpus_results'] = json.dumps(opinion_results)
 
     es_intel.index(index=opinion_corpus_results_index_name,doc_type=opinion_corpus_results_index_type,\
                 id=task_id,body=item_exist)
