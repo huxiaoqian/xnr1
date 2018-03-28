@@ -8,13 +8,14 @@ import re
 import pinyin
 
 from xnr.global_config import S_TYPE,S_DATE,S_DATE_FB
-from xnr.global_utils import es_xnr as es, es_intel, writing_task_index_name, writing_task_index_type,\
+from xnr.global_utils import es_xnr as es, es_intel, R_ADMIN as r_sensitive, writing_task_index_name, writing_task_index_type,\
                         topics_river_index_name, topics_river_index_type, intel_opinion_results_index_name,\
                         intel_models_text_index_name, intel_models_text_index_type, opinion_corpus_index_name,\
                         opinion_corpus_index_type, opinion_corpus_results_index_name, opinion_corpus_results_index_type
 
-from xnr.parameter import MAX_SEARCH_SIZE
+from xnr.parameter import MAX_SEARCH_SIZE, sensitive_score_dict
 from time_utils import ts2HourlyTime, ts2datetime, datetime2ts, full_datetime2ts
+from DFA_filter import createWordTree, searchWord
 
 MinInterval = 15*60 #15min
 Day = 24*3600
@@ -369,3 +370,30 @@ def get_show_opinion_corpus_content(task_detail):
     opinion_results = get_result['corpus_results']
 
     return opinion_results[corpus_name]
+
+
+def get_one_click_evaluation(task_detail):
+
+    results = []
+    text = task_detail['text'].encode('utf-8')
+
+    node = createWordTree();
+    print 'text...',text
+    sensitive_words_dict = searchWord(text, node)
+    print 'sensitive_words_dict..',sensitive_words_dict
+    if sensitive_words_dict:
+        score = 0
+        sensitive_words_list = []
+
+        for k,v in sensitive_words_dict.iteritems():
+            tmp_stage = r_sensitive.hget("sensitive_words", k)
+            if tmp_stage:
+                score += v*sensitive_score_dict[str(tmp_stage)]
+            sensitive_words_list.append(k.decode('utf-8'))
+        results.append(score)
+        results.append(sensitive_words_list)
+
+    else:
+        results = [0,[]]
+
+    return results
