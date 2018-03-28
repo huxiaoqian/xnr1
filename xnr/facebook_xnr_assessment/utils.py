@@ -57,7 +57,6 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID
 
 
 def get_influence_total_trend(xnr_user_no,start_time,end_time):
-
     total_dict = {}
     total_dict['total_trend'] = {}
     total_dict['day_num'] = {}
@@ -79,7 +78,8 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
 
     search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
-
+    if not search_results:
+        return {}
     # fans_dict = {}
     # fans_dict['total_num'] = {}
     # fans_dict['day_num'] = {}
@@ -713,7 +713,7 @@ def get_influ_private_num(xnr_user_no,current_time):
 def compute_influence_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_FB)
+        current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     
@@ -737,7 +737,7 @@ def compute_influence_num(xnr_user_no):
 def compute_penetration_num(xnr_user_no):
 
     if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_FB)
+        current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     
@@ -780,7 +780,9 @@ def penetration_total(xnr_user_no,start_time,end_time):
 
     search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
-
+    if not search_results:
+    	return {}
+    	
     # follow_group = {}
     # fans_group = {}
     friends_group = {}
@@ -1230,7 +1232,7 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 def compute_safe_num(xnr_user_no):
     
     if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_FB)
+        current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     
@@ -1308,13 +1310,9 @@ def get_tweets_distribute(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
         followers_list = es_results['followers_list']
-
-    # if S_TYPE == 'test':
-    #     uid=PORTRAI_UID
-    #     followers_list=PORTRAIT_UID_LIST
 
     # 关注者topic分布
 
@@ -1331,13 +1329,6 @@ def get_tweets_distribute(xnr_user_no):
 
     topic_list_followers_count = Counter(topic_list_followers)
 
-    #topic_distribute_dict['topic_follower'] = topic_list_followers_count
-    # 虚拟人topic分布
-    #try:
-        # xnr_results = es_user_portrait.get(index=portrait_index_name,doc_type=portrait_index_type,\
-        #     id=uid)['_source']
-        # topic_string = xnr_results['topic_string'].split('&')
-        # topic_xnr_count = Counter(topic_string)
     print 'topic_list_followers_count:::',topic_list_followers_count
 
     if S_TYPE == 'test':
