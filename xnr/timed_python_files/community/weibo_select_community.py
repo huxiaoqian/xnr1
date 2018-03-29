@@ -629,7 +629,7 @@ def get_community_keyword(uid_list,date_time):
     keyword_dict = sorted(word_dict_new.items(),key = lambda d:d[1],reverse = True)
     print 'keyword_dict',keyword_dict,keyword_dict[0],type(keyword_dict[0])
     keyword_name = keyword_dict[0][0] + '_' + keyword_dict[1][0]
-    return json.loads(keyword_dict),keyword_name
+    return json.dumps(keyword_dict),keyword_name
 
 
 #补充社区特征
