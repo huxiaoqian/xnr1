@@ -16,7 +16,7 @@ from global_utils import es_flow_text,retweet_index_name_pre,retweet_index_type,
                          weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
 
 
-from global_config import S_TYPE,R_BEGIN_TIME,S_DATE
+from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
@@ -290,7 +290,7 @@ def ExtendQ(G,coms_list):
 def create_weibo_community():
     
     if S_TYPE == 'test':
-        today_time = datetime2ts(S_DATE)
+        today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
         xnr_user_no_list = ['WXNR0004']
     else:
         today_time = time.time()
