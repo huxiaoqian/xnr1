@@ -464,7 +464,8 @@ function Change(){
         setTimeout(function () {
             window.open('/index/navigationQQ/');
         },1000)
-    }else if(txt=='微信虚拟人'){
+    }
+    /*else if(txt=='微信虚拟人'){
         same_xnr('weixin');
         setTimeout(function () {
             window.open('/index/navigationWX/');
@@ -479,7 +480,7 @@ function Change(){
         setTimeout(function () {
             window.open('/index/navigationTwitter/');
         },1000);
-    }
+    }*/
     $('#errorInfor h4').text('跳转提示');
     $('#errorInfor p').text('准备跳转中...请稍后...');
     $('#errorInfor').modal('show');
@@ -592,10 +593,10 @@ function judgment(typeNum){
             '        <i class="icon icon-time"></i>&nbsp;时间预警' +
             '    </a>'+
             '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/monitor/communityWarning/">' +
-            '        <i class="icon icon-building"></i>&nbsp;社区预警' +
-            '    </a>'+
+            // '<li class="main_li">'+
+            // '    <a class="li_a" href="/monitor/communityWarning/">' +
+            // '        <i class="icon icon-building"></i>&nbsp;社区预警' +
+            // '    </a>'+
             '</li>';
     }else if (typeNum==5){
         $('.coorName').text('行为评估');
@@ -614,12 +615,12 @@ function judgment(typeNum){
             '    <a class="li_a" href="/behavioGauge/safe/">' +
             '        <i class="icon icon-glass"></i>&nbsp;安全性评估' +
             '    </a>'+
-            '</li>'+
-            '<li class="main_li">'+
-            '    <a class="li_a" href="/behavioGauge/evCompare/">' +
-            '        <i class="icon icon-paste"></i>&nbsp;对比评估' +
-            '    </a>'+
             '</li>';
+            //'<li class="main_li">'+
+            //'    <a class="li_a" href="/behavioGauge/evCompare/">' +
+            //'        <i class="icon icon-paste"></i>&nbsp;对比评估' +
+            //'    </a>'+
+            //'</li>';
     }else if (typeNum==6){
         $('.coorName').text('虚拟人定制');
         $('.xnrShowHide').hide();

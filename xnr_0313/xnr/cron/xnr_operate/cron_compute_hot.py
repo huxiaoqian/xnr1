@@ -12,7 +12,7 @@ from save_utils import save_content_recommendation_results,save_subopnion_result
 
 # 引入子观点分析分类器
 import sys
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/xnr_operate/sub_opinion_analysis/')
+sys.path.append('/home/xnr1/xnr_0313/xnr/cron/xnr_operate/sub_opinion_analysis/')
 from opinion_produce import opinion_main
 
 import sys
@@ -27,7 +27,7 @@ from global_utils import weibo_hot_keyword_task_index_name,weibo_hot_keyword_tas
                         weibo_recommend_subopinion_keywords_task_queue_name,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type
 from global_config import S_TYPE,S_DATE
-from time_utils import get_flow_text_index_list,datetime2ts
+from time_utils import get_flow_text_index_list,datetime2ts, datehour2ts, ts2datehour
 from parameter import MAX_SEARCH_SIZE,SUB_OPINION_WEIBO_LIMIT
 
 #use to add task to redis queue when the task  detect process fail

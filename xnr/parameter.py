@@ -127,8 +127,15 @@ ACTIVE_UID = '2919766227'
 
 
 ## 行为评估 facebook
-FB_PORTRAIT_UID_LIST = ['100023849442394', '100003271864059', '443835769306299', '121625551334730', '59393860784', '359574464219603']
+FB_PORTRAIT_UID_LIST = ['100023849442394', '100003271864059', '443835769306299', '59393860784', '359574464219603']
 FB_PORTRAI_UID = '100018797745111'
+FB_FANS_TODAY = ['121625551334730']
+
+
+## 行为评估 twitter
+TW_PORTRAIT_UID_LIST = ['245354027', '878974735694139392', '578602288', '2353626132', '1406445751']
+TW_PORTRAI_UID = '747226658457927680'
+TW_FANS_TODAY = ['845341840618536960']
 
 
 ## 影响力评估参数设置
@@ -157,6 +164,7 @@ POLICY_ABS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/knowledge_base_mana
 
 #智能写作
 WRITING_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+CORPUS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/opinion_question/corpus/'
 
 # 定制模块
 TRANS_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'

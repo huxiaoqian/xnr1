@@ -17,7 +17,7 @@ import sys, getopt
 
 reload(sys)
 sys.path.append('../')
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/')
+sys.path.append('/home/xnr1/xnr_0313/xnr/')
 #sys.path.append('../cron/qq_group_message/')
 
 # es = Elasticsearch("http://219.224.134.213:9205/")
