@@ -10,6 +10,8 @@ import json
 import heapq
 import math
 from opinion_question_config import cut_des,K1,B,K3
+sys.path.append('../../../')
+from parameter import CORPUS_PATH
 
 class TopkHeap(object):
     def __init__(self, k):
@@ -30,7 +32,7 @@ class TopkHeap(object):
 def load_text_list(file_name):#从文件读取text文本
 
     text_list = []
-    reader = csv.reader(file('../cron/intelligent_writing/opinion_question/corpus/text_%s.csv' % file_name, 'rb'))
+    reader = csv.reader(file(CORPUS_PATH+'text_%s.csv' % file_name, 'rb'))
     count = 0
     for line in reader:
         if count == 0:
@@ -180,7 +182,7 @@ def opinion_relevance(keywords,file_name):#观点检索主函数
 
     if len(keywords) == 0:
         return ''
-    
+     
     text_list,keyword_count,avr_n,word_set = get_related_text(keywords,file_name)#通过keywords获取相关的文本
 
     rank_text = rank_text_list_by_word(text_list,keywords,word_set)
