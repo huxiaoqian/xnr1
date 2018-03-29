@@ -219,7 +219,7 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type='ord
             #if follow_type == 'follow':
             body_info = {}
             body_info['followers_list'] = [uid]
-            body_info['xnr_use_no'] = xnr_user_no
+            body_info['xnr_user_no'] = xnr_user_no
 
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
@@ -248,7 +248,7 @@ def save_to_fans_follow_ES(xnr_user_no,uid,save_type,follow_type,trace_type='ord
         except:
             body_info = {}
             body_info['fans_list'] = [uid]
-            body_info['xnr_use_no'] = xnr_user_no
+            body_info['xnr_user_no'] = xnr_user_no
             es_xnr.index(index=weibo_xnr_fans_followers_index_name, doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no, body=body_info)
 

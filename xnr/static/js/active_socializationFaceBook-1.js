@@ -103,23 +103,23 @@ function related(data) {
     $('#influe p').slideUp(700);
     $('.influence').show();
 }
-// $('#influence').bootstrapTable('hideColumn', 'sensitive');
-// function showHide(_tp$) {
-//     if (_tp$=='sensitive'){
-//         $('#influence').bootstrapTable('showColumn', 'sensitive');
-//     }else {
-//         $('#influence').bootstrapTable('hideColumn', 'sensitive');
-//     }
-// }
-// $('#container .suggestion #myTabs li').on('click',function () {
-//     var ty=$(this).attr('tp');
-//     //idNAME=ty;
-//     $('.influence').hide();
-//     $('#influe p').show();
-//     var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
-//     public_ajax.call_request('get',relatedUrl,related);
-//     showHide(ty);
-// })
+$('#influence').bootstrapTable('hideColumn', 'sensitive');
+function showHide(_tp$) {
+    if (_tp$=='sensitive'){
+        $('#influence').bootstrapTable('showColumn', 'sensitive');
+    }else {
+        $('#influence').bootstrapTable('hideColumn', 'sensitive');
+    }
+}
+$('#container .suggestion #myTabs li').on('click',function () {
+    var ty=$(this).attr('tp');
+    //idNAME=ty;
+    $('.influence').hide();
+    $('#influe p').show();
+    var relatedUrl='/facebook_xnr_operate/related_recommendation/?xnr_user_no='+ID_Num+'&sort_item='+ty;
+    public_ajax.call_request('get',relatedUrl,related);
+    showHide(ty);
+})
 //直接搜索
 $('.findSure').on('click',function () {
     var ids=$('.active-1-find').val();

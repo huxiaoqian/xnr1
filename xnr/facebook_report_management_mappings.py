@@ -3,7 +3,7 @@ import os
 import json
 import time
 from global_utils import es_xnr as es
-from global_utils import facebook_report_management_index_name_pre,facebook_report_management_index_type
+from global_utils import facebook_report_management_index_name_pre,facebook_report_management_index_type,facebook_report_management_index_name
 from time_utils import ts2datetime
 
 # 上报管理
