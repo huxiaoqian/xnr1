@@ -754,7 +754,7 @@ def get_old_community(xnr_user_no,date_time):
             }
         }
     }
-    weibo_community_index_name = weibo_community_index_name_pre + ts2datetime(date_time - 7*DAY)
+    weibo_community_index_name = weibo_community_index_name_pre + ts2datetime(date_time - 8*DAY)
     community_list = []
 
     if es_xnr.indices.exists(weibo_community_index_name):

@@ -7,6 +7,8 @@ import networkx as nx
 import json,os,time,community
 import numpy as np
 import math
+from community_find_weibo import group_evaluate
+from weibo_select_community import get_community_coreuser_socail
 sys.path.append('../../')
 
 from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace_community_index_type,\
@@ -16,7 +18,9 @@ from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace
                          es_retweet,retweet_index_name_pre,retweet_index_type,\
                          be_retweet_index_name_pre,be_retweet_index_type,\
                          es_comment,comment_index_name_pre,comment_index_type,\
-                         be_comment_index_name_pre,be_comment_index_type
+                         be_comment_index_name_pre,be_comment_index_type,\
+                         weibo_bci_history_index_name,weibo_bci_history_index_type,\
+                         weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
@@ -27,7 +31,7 @@ from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
 def get_community_index(date_time):
     date_range_end_ts = date_time
     index_name_list = []
-    for i in range(0,6):
+    for i in range(0,7):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
         index_name = weibo_community_index_name_pre + date_range_start_datetime
@@ -83,33 +87,33 @@ def get_evaluate_max(index_name,index_type,field):
     return max_evaluate
 
 #计算社区指标
-def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
-    result = {}
-    result['xnr_user_no'] = xnr_user_no
-    result['nodes'] = nodes
-    result['num'] = len(nodes)
+# def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
+#     result = {}
+#     result['xnr_user_no'] = xnr_user_no
+#     result['nodes'] = nodes
+#     result['num'] = len(nodes)
 
-    sub_g = G.subgraph(nodes)
+#     sub_g = G.subgraph(nodes)
 
-    result['density'] = nx.density(sub_g)
-    result['cluster'] = nx.average_clustering(sub_g)
-    result['transitivity'] = nx.transitivity(sub_g)
+#     result['density'] = nx.density(sub_g)
+#     result['cluster'] = nx.average_clustering(sub_g)
+#     result['transitivity'] = nx.transitivity(sub_g)
 
-	# for i in es_flow_text.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
-		# print i#['fields']['sensitive_week_ave']
+# 	# for i in es_flow_text.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
+# 		# print i#['fields']['sensitive_week_ave']
 	
-    influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in es_flow_text.mget(index=weibo_bci_history_index_name, doc_type=weibo_bci_history_index_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
-    sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in es_flow_text.mget(index=weibo_sensitive_history_index_name, doc_type=weibo_sensitive_history_index_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
+#     influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in es_flow_text.mget(index=weibo_bci_history_index_name, doc_type=weibo_bci_history_index_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
+#     sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in es_flow_text.mget(index=weibo_sensitive_history_index_name, doc_type=weibo_sensitive_history_index_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
 
 
-    result['max_influence'] = max(influence_result)/float(all_influence)
-    result['mean_influence'] = (sum(influence_result)/len(influence_result))/float(all_influence)
+#     result['max_influence'] = max(influence_result)/float(all_influence)
+#     result['mean_influence'] = (sum(influence_result)/len(influence_result))/float(all_influence)
 
-    result['max_sensitive'] = max(sensitive_result)/float(all_sensitive)
-    result['mean_sensitive'] = (sum(sensitive_result)/len(sensitive_result))/float(all_sensitive)
+#     result['max_sensitive'] = max(sensitive_result)/float(all_sensitive)
+#     result['mean_sensitive'] = (sum(sensitive_result)/len(sensitive_result))/float(all_sensitive)
 
 
-    return result
+#     return result
 
 
 #更新社区的预警等级
@@ -238,7 +242,7 @@ def get_person_warning(community_id,new_nodes):
         es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
             doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
         for item in es_community:
-            old_nodes = json.loads(item['_source']['nodes'])
+            old_nodes = item['_source']['nodes']
     except:
         old_nodes = []
 
@@ -250,7 +254,7 @@ def get_person_warning(community_id,new_nodes):
 
 
 #获取旧社区指标
-def get_index_olddiff(community_id,index_type,index_value):
+def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
     query_body = {
         'query':{
             'filtered':{
@@ -266,13 +270,13 @@ def get_index_olddiff(community_id,index_type,index_value):
         'size':1,
         'sort':{'trace_time':{'order':'desc'}}
     }   
-    try:
-        es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
-            doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
-        for item in es_community:
-            old_index = json.loads(item['_source'][index_type])
-    except:
-        old_index = 0 
+    # try:
+    es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
+        doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
+    for item in es_community:
+        old_index = item['_source'][index_type]
+    # except:
+        # old_index = 0 
     index_diff = index_value - old_index
     return old_index,index_diff
 
@@ -311,10 +315,10 @@ def get_warning_content(nodes,content_type,trace_datetime):
 def get_sensitive_warning(community,trace_datetime):
     #step 1:计算敏感度变化值
     max_sensitive_type = 'max_sensitive'
-    old_max_sensitive,max_sensitive_diff = get_index_olddiff(community['community_id'],max_sensitive_type,community['max_sensitive'])
+    old_max_sensitive,max_sensitive_diff = get_index_olddiff(community['community_id'],max_sensitive_type,community['max_sensitive'],community['xnr_user_no'])
 
     mean_sensitive_type = 'mean_sensitive'
-    old_mean_sensitive,mean_sensitive_diff = get_index_olddiff(community['community_id'],mean_sensitive_type,community['mean_sensitive'])
+    old_mean_sensitive,mean_sensitive_diff = get_index_olddiff(community['community_id'],mean_sensitive_type,community['mean_sensitive'],community['xnr_user_no'])
 
     if mean_sensitive_diff > 0:
         mean_sensitive_desp = u'社区平均敏感度上升了' + str(mean_sensitive_diff) + u'，由'+ str(old_mean_sensitive) + u'上升至' + str(community['mean_sensitive']) +u'；'
@@ -332,17 +336,17 @@ def get_sensitive_warning(community,trace_datetime):
     content_type = 'sensitive'
     warning_content = get_warning_content(community['nodes'],content_type,trace_datetime)
 
-    return warning_descp,json.loads(warning_content)
+    return warning_descp,json.dumps(warning_content)
 
 
 #影响力预警
-def get_influence_warning(community,trace_datetime)：
+def get_influence_warning(community,trace_datetime):
     #step 1:计算影响力变化值
     max_influence_type = 'max_influence'
-    old_max_influence,max_influence_diff = get_index_olddiff(community['community_id'],max_influence_type,community['max_influence'])
+    old_max_influence,max_influence_diff = get_index_olddiff(community['community_id'],max_influence_type,community['max_influence'],community['xnr_user_no'])
 
     mean_influence_type = 'mean_influence'
-    old_mean_influence,mean_influence_diff = get_index_olddiff(community['community_id'],mean_influence_type,community['mean_influence'])
+    old_mean_influence,mean_influence_diff = get_index_olddiff(community['community_id'],mean_influence_type,community['mean_influence'],community['xnr_user_no'])
 
     if mean_influence_diff > 0:
         mean_influence_desp = u'社区平均敏感度上升了' + str(mean_influence_diff) + u'，由'+ str(old_mean_influence) + u'上升至' + str(community['mean_influence']) +u'；'
@@ -360,13 +364,22 @@ def get_influence_warning(community,trace_datetime)：
     content_type = 'retweeted'
     warning_content = get_warning_content(community['nodes'],content_type,trace_datetime)
 
-    return warning_descp,json.loads(warning_content)
+    return warning_descp,json.dumps(warning_content)
 
 
 #社区聚集预警
 def get_density_warning(community,trace_datetime):
-    core_uidlist,outer_uidlist,core_user_socail,core_outer_socail=get_community_coreuser_socail(community['nodes'],trace_datetime)
-    return core_user_socail
+    #计算聚集系数变化值
+    density_type = 'density'
+    old_density,density_diff = get_index_olddiff(community['community_id'],density_type,community['density'],community['xnr_user_no'])
+    if density_diff > 0:
+        density_desp = u'社区聚集系数上升了' + str(density_diff) + u',由' + str(old_density) + u'上升至' + str(community['density']) + u'。'
+    else:
+        density_desp = u'社区聚集系数下降了' + str(abs(density_diff)) + u',由' + str(old_density) + u'下降至' + str(community['density']) + u'。'
+
+
+    core_uidlist,outer_uidlist,core_user_socail,core_outer_socail = get_community_coreuser_socail(community['nodes'],trace_datetime)
+    return density_desp,json.dumps(core_user_socail)
     
 #预警处理
 def get_warning_reslut(community,trace_datetime):   
@@ -443,7 +456,7 @@ def get_warning_reslut(community,trace_datetime):
         warning_result['density_warning_descrp'] = ''
         warning_result['density_warning_content'] = ''
 
-    warning_result['warning_type'] = json.loads(warning_type_list)
+    warning_result['warning_type'] = warning_type_list
     return warning_result
 
     
@@ -467,7 +480,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
         community_detail['num'] = community['num']
         community_detail['nodes'] = community['nodes']
 
-        trace_index_result = group_evaluate(community['xnr_user_no'],json.loads(community['nodes']),all_influence,all_sensitive)
+        trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
         community_detail['density'] = trace_index_result['density']
         community_detail['cluster'] = trace_index_result['cluster']
         community_detail['max_influence'] = trace_index_result['max_influence']
