@@ -395,12 +395,12 @@ fb_xnr_index_type='user'
 fb_xnr_fans_followers_index_name='fb_xnr_fans_followers'
 fb_xnr_fans_followers_index_type='uids'
 
-#use to save weibo xnr count info
+#use to save facebook xnr count info
 facebook_xnr_count_info_index_name='facebook_xnr_count'
 facebook_xnr_count_info_index_type='text'
 
 # 行为评估分值
-facebook_xnr_assessment_index_name= 'weibo_xnr_assessment'
+facebook_xnr_assessment_index_name= 'facebook_xnr_assessment'
 facebook_xnr_assessment_index_type = 'score'
 
 #use to save feedback info
@@ -534,6 +534,14 @@ tw_xnr_index_type='user'
 tw_xnr_fans_followers_index_name='tw_xnr_fans_followers'
 tw_xnr_fans_followers_index_type='uids'
 
+
+# 行为评估分值
+twitter_xnr_assessment_index_name= 'twitter_xnr_assessment'
+twitter_xnr_assessment_index_type = 'score'
+
+#use to save twitter xnr count info
+twitter_xnr_count_info_index_name='twitter_xnr_count'
+twitter_xnr_count_info_index_type='text'
 
 #use to save feedback info
 twitter_feedback_comment_index_name_pre = 'twitter_feedback_comment_'
@@ -690,6 +698,21 @@ r_fb_fans_search_xnr_pre = 'fb_fans_search_'    # fb_fans_search_6337917209
 r_fb_followers_uid_list_datetime_pre = 'fb_followers_uid_list_'  # fb_followers_uid_list_2017-08-30
 r_fb_followers_count_datetime_xnr_pre = 'fb_followers_count_'    # fb_followers_count_2017-08-30_6337917209
 r_fb_followers_search_xnr_pre = 'fb_followers_search_'    # fb_followers_search_6337917209
+
+
+
+
+## use to save follower every day    twitter
+R_TWITTER_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+r_tw_fans_uid_list_datetime_pre = 'tw_fans_uid_list_'  # fb_fans_uid_list_2017-08-30
+r_tw_fans_count_datetime_xnr_pre = 'tw_fans_count_'    # fb_fans_count_2017-08-30_6337917209
+r_tw_fans_search_xnr_pre = 'tw_fans_search_'    # fb_fans_search_6337917209
+
+r_tw_followers_uid_list_datetime_pre = 'tw_followers_uid_list_'  # fb_followers_uid_list_2017-08-30
+r_tw_followers_count_datetime_xnr_pre = 'tw_followers_count_'    # fb_followers_count_2017-08-30_6337917209
+r_tw_followers_search_xnr_pre = 'tw_followers_search_'    # fb_followers_search_6337917209
+
+
 
 # use to save action assessment every day
 # R_WEIBO_XNR_ASSESSMENT = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)

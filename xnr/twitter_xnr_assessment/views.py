@@ -8,7 +8,8 @@ from utils import get_influence_total_trend, compute_influence_num, penetration_
                     compute_penetration_num,compute_safe_num, get_safe_active,\
                     get_influence_total_trend_today, penetration_total_today, get_safe_active_today
 
-mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
+mod = Blueprint('twitter_xnr_assessment', __name__, url_prefix='/twitter_xnr_assessment')
+
 
 '''
 影响力评估
@@ -80,13 +81,15 @@ def ajax_safe_active():
 
     return json.dumps(results)
 
+
 # 影响力各指标 -- 今日
 @mod.route('/influence_total_today/')
 def ajax_influence_total_trend_today():
     xnr_user_no = request.args.get('xnr_user_no','')
-    results = get_influence_total_trend_today(xnr_user_no)
-    return json.dumps(results)
 
+    results = get_influence_total_trend_today(xnr_user_no)
+
+    return json.dumps(results)
 
 # 渗透力各指标 -- 今日
 @mod.route('/penetration_total_today/')
@@ -105,25 +108,6 @@ def ajax_safe_active_today():
     results = get_safe_active_today(xnr_user_no)
 
     return json.dumps(results)
-'''
-# 发帖内容分布
-@mod.route('/tweets_distribute/')
-def ajax_tweets_distribute():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    results = get_tweets_distribute(xnr_user_no)
-    return json.dumps(results)
-
-# 发帖内容 --话题
-@mod.route('/safe_tweets_topic/')
-def ajax_safe_tweets_topic():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    topic = request.args.get('topic',u'民生类_法律')
-    sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
-    # print 'topic::::',topic
-    results = get_safe_tweets(xnr_user_no,topic,sort_item)
-    
-    return json.dumps(results)
-'''
 
 """
 #2018-3-8 11:19:09
@@ -264,6 +248,25 @@ def ajax_pene_warning_report_sensitive():
 
 
 
+
+# 发帖内容分布
+@mod.route('/tweets_distribute/')
+def ajax_tweets_distribute():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = get_tweets_distribute(xnr_user_no)
+    # print 'results:::',results
+    return json.dumps(results)
+
+# 发帖内容 --话题
+@mod.route('/safe_tweets_topic/')
+def ajax_safe_tweets_topic():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    topic = request.args.get('topic',u'民生类_法律')
+    sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
+    # print 'topic::::',topic
+    results = get_safe_tweets(xnr_user_no,topic,sort_item)
+    
+    return json.dumps(results)
 
 # 关注人群分布
 @mod.route('/follow_group_distribute/')

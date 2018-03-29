@@ -211,10 +211,10 @@ def get_influ_fans_num(xnr_user_no,current_time):
     # fans_num_day = {}  # 每天增量统计
     # fans_num_total = {} # 截止到当天总量统计
 
-    # if S_TYPE == 'test':
-    #     current_time = datetime2ts(S_DATE)
-    # else:
-    #     current_time = int(time.time())
+    if S_TYPE == 'test':
+        current_time = datetime2ts('2017-10-07')
+    else:
+        current_time = int(time.time())
     # if S_TYPE == 'test':
     #     current_time = datetime2ts('2017-10-7')
     # else:
@@ -1558,4 +1558,181 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     return results_all
 
 
+def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
 
+    results_all = {}
+    results_all['trend'] = {}
+    results_all['table'] = {}
+
+
+    xnr_user_no_list = xnr_user_no_list.split(',')
+
+    day_num = (end_time - start_time)/(24*3600)
+
+    timestamp_list = []
+
+    for i in range(day_num):
+        timestamp_list.append(start_time + i*24*3600)
+
+
+    for xnr_user_no in xnr_user_no_list:
+
+        results_all['trend'][xnr_user_no] = {}
+        results_all['table'][xnr_user_no] = {}
+        
+        for timestamp in timestamp_list:
+            date = ts2datetime(timestamp)
+            _id = xnr_user_no + '_' + date
+            print '_id...',_id
+            try:
+                get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
+                    id=_id)['_source']
+            except:
+                get_result = {}
+
+            print 'get_result...',get_result
+            if get_result:
+
+                if dim == 'influence':
+
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['influence']
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = get_result['comment_total_num']
+                    results_all['table'][xnr_user_no][timestamp]['like_total_num'] = get_result['like_total_num']
+                    results_all['table'][xnr_user_no][timestamp]['private_total_num'] = get_result['private_total_num']
+                    results_all['table'][xnr_user_no][timestamp]['at_total_num'] = get_result['at_total_num']
+                    results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = get_result['retweet_total_num']
+
+                elif dim == 'penetration':
+
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['penetration']
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = get_result['follow_group_sensitive_info']
+                    results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = get_result['fans_group_sensitive_info']
+                    results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = get_result['self_info_sensitive_info']
+                    results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = get_result['feedback_total_sensitive_info']
+                    results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = get_result['warning_report_total_sensitive_info']
+
+                else:
+
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['safe']
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = get_result['total_post_sum']
+            else:
+
+                if dim == 'influence':
+
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['like_total_num'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['private_total_num'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['at_total_num'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = 0
+
+                elif dim == 'penetration':
+
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = 0
+                    results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = 0
+
+                else:
+
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    results_all['table'][xnr_user_no][timestamp] = {}
+                    results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = 0
+            
+    return results_all
+
+
+def get_compare_assessment_today(xnr_user_no_list, dim):
+
+    results_all = {}
+    results_all['trend'] = {}
+    results_all['table'] = {}
+
+    timestamp = int(time.time())
+
+    xnr_user_no_list = xnr_user_no_list.split(',')
+
+    for xnr_user_no in xnr_user_no_list:
+
+        results_all['trend'][xnr_user_no] = {}
+        results_all['table'][xnr_user_no] = {}
+
+
+        if dim == 'influence':
+
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_influence_num(xnr_user_no)
+        
+                results_all['table'][xnr_user_no][timestamp] = {}
+
+                result = get_influence_total_trend_today(xnr_user_no)
+
+                results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = list(result['total_trend']['comment'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['like_total_num'] = list(result['total_trend']['like'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['private_total_num'] = list(result['total_trend']['private'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['at_total_num'] = list(result['total_trend']['at'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = list(result['total_trend']['retweet'].values())[0]
+            
+            except:
+                results_all['trend'][xnr_user_no][timestamp] = 0
+        
+                results_all['table'][xnr_user_no][timestamp] = {}
+
+                results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = 0
+                results_all['table'][xnr_user_no][timestamp]['like_total_num'] = 0
+                results_all['table'][xnr_user_no][timestamp]['private_total_num'] = 0
+                results_all['table'][xnr_user_no][timestamp]['at_total_num'] = 0
+                results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = 0
+
+
+        elif dim == 'penetration':
+
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_penetration_num(xnr_user_no)
+                results_all['table'][xnr_user_no][timestamp] = {}
+
+                result = penetration_total_today(xnr_user_no)
+
+                results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = list(result['follow_group'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = list(result['fans_group'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = list(result['self_info'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = list(result['feedback_total'].values())[0]
+                results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = list(result['warning_report_total'].values())[0]
+
+            except:
+
+                results_all['trend'][xnr_user_no][timestamp] = 0
+                results_all['table'][xnr_user_no][timestamp] = {}
+
+                results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = 0
+                results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = 0
+                results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = 0
+                results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = 0
+                results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = 0
+
+        else:
+
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_safe_num(xnr_user_no)
+                results_all['table'][xnr_user_no][timestamp] = {}
+                result = get_safe_active_today(xnr_user_no)
+
+                results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = list(result.values())[0]
+
+            except:
+
+                results_all['trend'][xnr_user_no][timestamp] = 0
+                results_all['table'][xnr_user_no][timestamp] = {}
+
+                results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = 0
+
+
+
+    return results_all
