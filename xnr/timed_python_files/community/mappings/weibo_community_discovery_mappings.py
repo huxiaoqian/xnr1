@@ -3,22 +3,22 @@ import os
 import json
 import time
 import sys
-sys.path.append('../../')
+sys.path.append('../../../')
 from parameter import DAY
 from time_utils import ts2datetime
-from global_config import S_TYPE,FACEBOOK_COMMUNITY_DATE
+from global_config import S_TYPE,S_DATE
 from global_utils import es_xnr as es
-from global_utils import facebook_detail_community_index_name_pre,facebook_detail_community_index_type
+from global_utils import weibo_community_index_name_pre,weibo_community_index_type
 
 
-def facebook_detail_community_mappings(date_name):
+def weibo_community_mappings(date_name):
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
 			'number_of_shards':5
 		},
 		'mappings':{
-			facebook_detail_community_index_type:{
+			weibo_community_index_type:{
 				'properties':{
 					'xnr_user_no':{                     # xnr_user_no
                         'type':'string',
@@ -84,7 +84,7 @@ def facebook_detail_community_mappings(date_name):
                     'core_user_change':{ #核心人物变化信息dict形式{'add_user':[{},{}……],'delete_user':[{},{}……]}
                     	'type':'string',
                     	'index':'no'
-                    }
+                    },
                     'core_user_socail':{ #核心成员内部网络交换信息
                     	'type':'string',
                     	'index':'no'
@@ -92,7 +92,7 @@ def facebook_detail_community_mappings(date_name):
                     'core_outer_socail':{  #核心成员外部交换信息
                          'type':'string',
                          'index':'no'
-                    }
+                    },
                     'outer_user':{ #与核心人物互动频繁的外部人员信息
                     	'type':'string',
                     	'index':'no'
@@ -115,6 +115,10 @@ def facebook_detail_community_mappings(date_name):
                     	'type':'string',
                     	'index':'not_analyzed'
                     },
+                    'warning_type':{ #预警类型：人物突增预警；影响力剧增预警；敏感度剧增预警；社区聚集预警
+                          'type':'string',
+                          'index':'not_analyzed'
+                    }
 
 				}
 			}
@@ -122,18 +126,16 @@ def facebook_detail_community_mappings(date_name):
 	}
 
 
-	facebook_detail_community_index_name=facebook_detail_community_index_name_pre + date_name
-	if not es.indices.exists(index=facebook_detail_community_index_name):
-		es.indices.create(index=facebook_detail_community_index_name,body=index_info,ignore=400)
+	weibo_community_index_name = weibo_community_index_name_pre + date_name
+	if not es.indices.exists(index=weibo_community_index_name):
+		es.indices.create(index=weibo_community_index_name,body=index_info,ignore=400)
 
 
 if __name__ == '__main__':
-	if S_TYPE == 'test':
-		date_name = FACEBOOK_COMMUNITY_DATE
-	else:
-		now_time = int(time.time())
-		date_name = ts2datetime(now_time)
+     if S_TYPE == 'test':
+          date_name = S_DATE
+     else:
+          now_time = int(time.time())
+          date_name = ts2datetime(now_time)
 
-	facebook_select_community_mappings(date_name)
-
-	facebook_detail_community_mappings(date_name)
+     weibo_community_mappings(date_name)

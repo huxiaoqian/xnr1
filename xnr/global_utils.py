@@ -268,7 +268,7 @@ weibo_community_target_user_index_type = 'user'
 
 #use to save trace info
 weibo_trace_community_index_name_pre = 'weibo_trace_community_'
-weibo_trace_community_index_type = 'community'
+weibo_trace_community_index_type = 'trace_warning'
  
 #use to save community info
 weibo_community_index_name_pre = 'weibo_community_'
