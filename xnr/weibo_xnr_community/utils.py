@@ -29,6 +29,7 @@ def show_new_community(xnr_user_no,now_time):
 	return True
 
 
+
 #社区预警
 def get_community_warning(xnr_user_no,community_id):
 	return True
