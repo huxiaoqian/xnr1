@@ -1,5 +1,5 @@
 var end_time=yesterday();
-var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
     var data=[dataTable[0]];
@@ -128,15 +128,15 @@ $('.choosetime .demo-label input').on('click',function () {
             lastURL='&start_time='+startTime+'&end_time='+end_time+'&assess_type=penetration';
         }
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
+        var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type='+today+
             '&start_time='+startTime_2+'&end_time='+end_time;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var penetration_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var penetration_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+startTime+'&end_time='+end_time+'&assess_type=penetration';
         public_ajax.call_request('get',penetration_7day_url,penetration_7day);
         //曲线图 2
-        var penetration_url='/weibo_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
+        var penetration_url='/facebook_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
         public_ajax.call_request('get',penetration_url,penetration);
     }
 });
@@ -150,30 +150,35 @@ $('.sureTime').on('click',function () {
         var start =(Date.parse(new Date(s))/1000);
         var end = (Date.parse(new Date(d))/1000);
         //表格
-        var historyTotal_url='/weibo_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
+        var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end;
         public_ajax.call_request('get',historyTotal_url,historyTotal);
         //曲线图 1
-        var penetration_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+        var penetration_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end+'&assess_type=penetration';
         public_ajax.call_request('get',penetration_7day_url,penetration_7day);
         //曲线图 2
-        var penetration_url='/weibo_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num+
+        var penetration_url='/facebook_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end+'&assess_type=penetration';
         public_ajax.call_request('get',penetration_url,penetration);
     }
 });
 //==============
-var penetration_7day_url='/weibo_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
+var penetration_7day_url='/facebook_xnr_manage/lookup_xnr_assess_info/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=penetration';
 public_ajax.call_request('get',penetration_7day_url,penetration_7day);
 function penetration_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     if (data.length==0){
-        nearTime.push($_time);
-        nearData.push(0);
+        // nearTime.push($_time);
+        // nearData.push(0);
+        $('#near_7_day h2').remove();
+        $('#near_7_day p').slideUp(700);
+        $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
+        return false;
     }else {
+        $('#near_7_day').height('400px');
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
             var hu=item['penetration']||item['influence'];
@@ -236,12 +241,12 @@ function penetration_7day(data) {
     myChart.setOption(option);
     $('#near_7_day p').slideUp(700);
 };
-var scoreUrl='/weibo_xnr_assessment/penetration_mark/?xnr_user_no='+ID_Num;
+var scoreUrl='/facebook_xnr_assessment/penetration_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
     $('.title .tit-2 .score').text(data);
 }
-var defaultUrl='/weibo_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num+
+var defaultUrl='/facebook_xnr_assessment/penetration_total/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=penetration';;
 public_ajax.call_request('get',defaultUrl,penetration);
 //=====
