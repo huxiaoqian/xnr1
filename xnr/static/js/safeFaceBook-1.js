@@ -137,7 +137,7 @@ $('.choosetime .demo-label input').on('click',function () {
             '&start_time='+startTime+'&end_time='+end_time+'&assess_type=safe';
         public_ajax.call_request('get',safe_7day_url,safe_7day);
         //曲线图 2
-        var safe_url='/weibo_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
+        var safe_url='/facebook_xnr_assessment/'+midURL+'/?xnr_user_no='+ID_Num+lastURL;
         public_ajax.call_request('get',safe_url,safe);
     }
 });
@@ -159,7 +159,7 @@ $('.sureTime').on('click',function () {
             '&start_time='+start+'&end_time='+end+'&assess_type=safe';
         public_ajax.call_request('get',safe_7day_url,safe_7day);
         //曲线图 2
-        var safe_url='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
+        var safe_url='/facebook_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
             '&start_time='+start+'&end_time='+end+'&assess_type=safe';
         public_ajax.call_request('get',safe_url,safe);
     }
@@ -172,9 +172,14 @@ function safe_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     if (data.length==0){
-        nearTime.push($_time);
-        nearData.push(0);
+        // nearTime.push($_time);
+        // nearData.push(0);
+        $('#near_7_day h2').remove();
+        $('#near_7_day p').slideUp(700);
+        $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
+        return false;
     }else {
+        $('#near_7_day').height('400px');
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
             nearData.push(item['safe'][0]);
@@ -236,12 +241,12 @@ function safe_7day(data) {
     myChart.setOption(option);
     $('#near_7_day p').slideUp(700);
 };
-var scoreUrl='/weibo_xnr_assessment/safe_mark/?xnr_user_no='+ID_Num;
+var scoreUrl='/facebook_xnr_assessment/safe_mark/?xnr_user_no='+ID_Num;
 public_ajax.call_request('get',scoreUrl,score);
 function score(data) {
     $('.title .tit-2 .score').text(data);
 }
-var defaultUrl='/weibo_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
+var defaultUrl='/facebook_xnr_assessment/safe_active/?xnr_user_no='+ID_Num+
     '&start_time='+getDaysBefore('7')+'&end_time='+end_time+'&assess_type=safe';
 public_ajax.call_request('get',defaultUrl,safe);
 var t;
@@ -252,7 +257,7 @@ $('#container .type_page #myTabs li').on('click',function () {
         public_ajax.call_request('get',defaultUrl,safe);
     }else {
         var midTwo=mid.split('&');
-        var readyChart_url='/weibo_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num;
+        var readyChart_url='/facebook_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num;
         public_ajax.call_request('get',readyChart_url,radar);
         var topic;
         if (midTwo[1]=='safe_tweets_topic'){
@@ -260,7 +265,7 @@ $('#container .type_page #myTabs li').on('click',function () {
         }else {
             topic=$('#userField input:radio[name="domain"]:checked').val();
         }
-        var readyDoc_url='/weibo_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
+        var readyDoc_url='/facebook_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
             '&sort_item=timestamp';
         public_ajax.call_request('get',readyDoc_url,weiboData);
         t=$(this).attr('linktype');
@@ -434,9 +439,9 @@ $('.pc-4 input').on('click',function () {
     }
     var the_url='';
     if (t=='area'){
-        the_url='/weibo_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+theSort;
     }else {
-        the_url='/weibo_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+theSort;
     }
     public_ajax.call_request('get',the_url,weiboData)
 });
