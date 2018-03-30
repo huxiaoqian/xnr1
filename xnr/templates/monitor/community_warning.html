@@ -73,14 +73,6 @@
         width: 100%;
         display:block;
     }
-    /* 影响力和敏感度排名 */
-    #influence #influence-lef,#influence #influence-rig{
-        height: 300px;
-        float: left;
-        width: 50%;
-        display:block;
-    }
-
     /* 核心人物列表 关键词 --标题*/
     .detailed-content-title{
         font-size:18px;
@@ -103,66 +95,34 @@
         <div id="track-community">
             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
         </div>
-        <div class="detailed-content">
-            <!-- <p class="detailed-content-title" style="font-size: 16px;color:#01b4ff;margin-bottom:18px;"><i class="icon icon-bookmark"></i><span> 核心人物列表</span></p> -->
-            <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span>核心人物列表</span></h3>
-            <!-- 核心人物列表 -->
-            <div id="person-list"></div>
-
-            <!-- 关键词 -->
-            <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span>微话题关键词云</span></h3>
-            <div id="keyword"></div>
-            <!-- 敏感度和影响力分布 -->
-            <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span>敏感度和影响力分布</span></h3>
-            <div id="influence" class="clearfix">
-                <div id="influence-lef"></div>
-                <div id="influence-rig"></div>
-            </div>
-        </div>
         <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i> 新发现社区列表</p>
         <div id="new-track-community">
             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
         </div>
     </div>
-
-    <!-- <div class="weiboContent">
-        <div id="group_emotion_loading" style="text-align:center;">正在拼命加载中...</div>
-        <div id="influeweibo" style="overflow-x: auto; overflow-y: auto;height:auto;">
-            <table id="input-table" class="In-table" style="width:100%;">
-                <tbody class="In-table" style='width:100%!important;'>
-                </tbody>
-            </table>
-        </div>
-        <div class='fanye' style="width:100%;text-align:center;margin-top: 20px;">
-            <div style="display:none;">
-                每页显示<input type="text" id="PageNo" size="1" value="1" style='text-align:center;border:1px solid #ccc;'/>组
-            </div>
-            <div id="div-button" style="display:inline-block;margin-left:5px;">
-                <input type="button" value="首页" id="F-page">
-                <input type="button" value="上一页" id="Pre-page">
-                <input type="button" value="下一页" id="Nex-page">
-                <input type="button" value="尾页" id="L-page">
-            </div>
-            <span style="display:inline-block;">&nbsp;当前第<span id="s2"></span>页</span>
-            <span style="display:inline-block;">总共<span id="s1"></span>页</span>
-        </div>
-    </div> -->
 </div>
 
 <!--提示弹框-->
-<!-- <div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">温馨提示</h4>
+                <h4 class="modal-title"></h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+                <div class="detailed-content">
+                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 核心人物列表</span></h3>
+                    <!-- 核心人物列表 -->
+                    <div id="person-list"></div>
+                    <!-- 关键词 -->
+                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 微话题关键词云</span></h3>
+                    <div id="keyword"></div>
+                </div>
             </div>
         </div>
     </div>
-</div> -->
+</div>
 <!--模态框-->
 {% endblock %}
 
@@ -185,7 +145,7 @@
         $('#start').datetimepicker('setEndDate',ev.date);
     });
 </script>
-<script src="/static/js/dark.js"></script>
-<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
+<script src="/static/js/chalk.js"></script>
+<script src="/static/echarts/wordcloud.min.js"></script>
 <script src="/static/js/community_warning.js"></script>
 {% endblock %}

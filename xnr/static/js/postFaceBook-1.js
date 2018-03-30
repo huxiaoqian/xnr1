@@ -468,7 +468,7 @@ $('#sure_post').on('click',function () {
     };
     var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+Check(txt);
-    if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
+    // if (imgRoad.length!=0&&imgRoad.length==1){post_url_1+='&p_url='+Check(imgRoad[0]);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
             var a=Date.parse(new Date($('.start').val()))/1000;
