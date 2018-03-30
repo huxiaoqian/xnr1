@@ -53,7 +53,6 @@ $('.sureTime').on('click',function () {
         // public_ajax.call_request('get',compareData_url,compareData);
     }
 });
-
 //===============================================
 function jugeXnr() {
     var xnr_id=[];
@@ -62,6 +61,7 @@ function jugeXnr() {
     });
     return xnr_id;
 }
+var dim;
 $('.sureCompare').on('click',function () {
     var len=jugeXnr().length;
     if(!(len<6&&len>1)){
@@ -69,12 +69,74 @@ $('.sureCompare').on('click',function () {
         $('#errorInfor').modal('show');
         return false;
     }else {
-        var xnrList=jugeXnr();
-        $('.compare .vs').html(xnrList.join('&nbsp;&nbsp;&nbsp;'));
+        dim=$('.com-2-choose input:checked').val();
+        $('.load').show();
+        var TIME=$('.choosetime input:checked').val();
+        chooseTime(TIME);
     };
 });
+//-===时间选择=========
+function chooseTime(TIME) {
+    var xnrList=jugeXnr();
+    $('.compare .vs').html(xnrList.join('&nbsp;&nbsp;&nbsp;'));
+    var mid='',last='';
+    if (TIME!='mize'){
+        if (TIME==0){mid='_today'}else {
+            last='&start_time='+getDaysBefore(TIME)+'&end_time='+end_time;
+        }
+    }else {
+        var s=$('#start_1').val();
+        var d=$('#end_1').val();
+        if (s==''||d==''){
+            $('#successfail p').text('时间不能为空。');
+            $('#successfail').modal('show');
+            return false;
+        }else {
+            last='&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        }
+    };
+    if(dim=='influence'){
+        $('.table-1').show();$('.table-2').hide();$('.table-3').hide();_id='table-1';
+    }else if (dim=='penetration'){
+        $('.table-1').hide();$('.table-2').show();$('.table-3').hide();_id='table-2';
+    }else if (dim=='safe'){
+        $('.table-1').hide();$('.table-2').hide();$('.table-3').show();_id='table-3';
+    }
+    var compareData_url='/weibo_xnr_assessment/compare_assessment'+mid+'/?xnr_user_no_list='+xnrList.join(',')+
+        '&dim='+dim+last;
+    public_ajax.call_request('get',compareData_url,compareData);
+}
+$('.choosetime .demo-label input').on('click',function () {
+    $('.chartContent').hide();
+    $('.load').show();
+    var _val=$(this).val();
+    if (_val=='mize'){
+        $('#start_1').show();
+        $('#end_1').show();
+        $('.sureTime').show();
+    }else {
+        $('#start_1').hide();
+        $('#end_1').hide();
+        $('.sureTime').hide();
+        chooseTime(_val);
+    }
+});
 //=============对比内容========
-function compareData() {
+function compareData(data) {
+    var trendData=data['trend'];
+    var legendData=Object.keys(trendData);
+    var time=[],sriesData=[];
+    Object.keys(trendData[legendData[0]]).forEach(function(t,s){time.push(getLocalTime(t))});
+    $.each(legendData,function (index,item) {
+        sriesData.push(
+            {
+                name:item,
+                type:'line',
+                smooth: true,areaStyle: {},
+                data:Object.values(trendData[item]),
+            }
+        )
+    })
     var myChart = echarts.init(document.getElementById('compare'),'chalk');
     var option = {
         backgroundColor:'transparent',
@@ -86,7 +148,7 @@ function compareData() {
             trigger: 'axis'
         },
         legend: {
-            data:['WXNR0044-影响力分值','WXNR0004-影响力分值','WXNR0044-渗透力分值','WXNR0004-渗透力分值']
+            data:legendData
         },
         toolbox: {
             show: true,
@@ -100,7 +162,7 @@ function compareData() {
         xAxis:  {
             type: 'category',
             boundaryGap: false,
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            data: time
         },
         yAxis: {
             type: 'value',
@@ -108,41 +170,27 @@ function compareData() {
                 formatter: '{value} '
             }
         },
-        series : [
-            {
-                name:'WXNR0044-影响力分值',
-                type:'line',
-                smooth: true,areaStyle: {},
-                data:[11,8,5,7,11,6,17],
-            },
-            {
-                name:'WXNR0004-影响力分值',
-                type:'line',smooth: true,areaStyle: {},
-                data:[9,4,17,8,7,21,15],
-            },
-            {
-                name:'WXNR0044-渗透力分值',
-                type:'line',smooth: true,areaStyle: {},
-                data:[12,8,15,7,11,6,14,17],
-            },
-            {
-                name:'WXNR0004-渗透力分值',
-                type:'line',smooth: true,areaStyle: {},
-                data:[22,6,11,9,11,16,11],
-            },
-        ]
+        series : sriesData
     };
     myChart.setOption(option);
+    if(dim=='influence'){
+        FT1=true,FT2=false,FT3=false;
+    }else if (dim=='penetration'){
+        FT1=false,FT2=true,FT3=false;
+    }else if (dim=='safe'){
+        FT1=false,FT2=false,FT3=true;
+    }
+    tableAry(data['trend']);
 };
-compareData();
 // 影响力评估
-tableAry('table-1',[{a:2,b:3}],true,false,false);
+// tableAry('table-1',[{a:2,b:3}],true,false,false);
 // 渗透力评估
-tableAry('table-2',[{a:2,b:3}],false,true,false);
+// tableAry('table-2',[{a:2,b:3}],false,true,false);
 // 安全性
-tableAry('table-3',[{a:2,b:3}],false,false,true);
+// tableAry('table-3',[{a:2,b:3}],false,false,true);
 //表格
-function tableAry(_id,data,FT1,FT2,FT3) {
+var _id='',FT1,FT2,FT3;
+function tableAry(data) {
     $('#'+_id).bootstrapTable('load', data);
     $('#'+_id).bootstrapTable({
         data:data,
@@ -180,118 +228,264 @@ function tableAry(_id,data,FT1,FT2,FT3) {
             //-----影响力
             {
                 title: "被评论量",//标题
-                field: "a",//键名
+                field: "comment_total_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT1,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.a==''||row.a=='null'||row.a=='unknown'){
+                    if (row.comment_total_num=='null'||row.comment_total_num=='unknown'){
                         return 0;
                     }else {
-                        return row.a;
+                        return row.comment_total_num;
                     };
                 }
             },
             {
                 title: "被点赞",//标题
-                field: "",//键名
+                field: "like_total_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT1,//控制显示隐藏
                 formatter: function (value, row, index) {
-
+                    if (row.like_total_num=='null'||row.like_total_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.like_total_num;
+                    };
                 }
             },
             {
                 title: "被私信",//标题
-                field: "",//键名
+                field: "private_total_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT1,//控制显示隐藏
                 formatter: function (value, row, index) {
-
+                    if (row.private_total_num=='null'||row.private_total_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.private_total_num;
+                    };
                 }
             },
             {
                 title: "被@数",//标题
-                field: "",//键名
+                field: "at_total_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT1,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.at_total_num=='null'||row.at_total_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.at_total_num;
+                    };
+                }
             },
             {
                 title: "被转发",//标题
-                field: "",//键名
+                field: "retweet_total_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT1,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.retweet_total_num=='null'||row.retweet_total_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.retweet_total_num;
+                    };
+                }
             },
             //-----渗透力
             {
                 title: "关注群体敏感度",//标题
-                field: "",//键名
+                field: "follow_group_sensitive_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT2,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.follow_group_sensitive_info=='null'||row.follow_group_sensitive_info=='unknown'){
+                        return 0;
+                    }else {
+                        return row.follow_group_sensitive_info;
+                    };
+                }
             },
             {
                 title: "粉丝群体敏感度",//标题
-                field: "",//键名
+                field: "fans_group_sensitive_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT2,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.fans_group_sensitive_info=='null'||row.fans_group_sensitive_info=='unknown'){
+                        return 0;
+                    }else {
+                        return row.fans_group_sensitive_info;
+                    };
+                }
             },
             {
                 title: "发布信息敏感度",//标题
-                field: "",//键名
+                field: "self_info_sensitive_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT2,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.self_info_sensitive_info=='null'||row.self_info_sensitive_info=='unknown'){
+                        return 0;
+                    }else {
+                        return row.self_info_sensitive_info;
+                    };
+                }
             },
             {
                 title: "社交反馈敏感度",//标题
-                field: "",//键名
+                field: "feedback_total_sensitive_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT2,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.feedback_total_sensitive_info=='null'||row.feedback_total_sensitive_info=='unknown'){
+                        return 0;
+                    }else {
+                        return row.feedback_total_sensitive_info;
+                    };
+                }
             },
             {
                 title: "预警上报敏感度",//标题
-                field: "",//键名
+                field: "warning_report_total_sensitive_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT2,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                        return 0;
+                    }else {
+                        return row.warning_report_total_sensitive_info;
+                    };
+                }
             },
             //------安全性
             {
-                title: "发帖量",//标题
-                field: "",//键名
+                title: "总发帖量",//标题
+                field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.total_post_sum=='null'||row.total_post_sum=='unknown'){
+                        return 0;
+                    }else {
+                        return row.total_post_sum;
+                    };
+                }
+            },
+            {
+                title: "日常发帖",//标题
+                field: "daily_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.daily_post_num=='null'||row.daily_post_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.daily_post_num;
+                    };
+                }
+            },
+            {
+                title: "热点跟随",//标题
+                field: "hot_follower_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.hot_follower_num=='null'||row.hot_follower_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.hot_follower_num;
+                    };
+                }
+            },
+            {
+                title: "业务发帖",//标题
+                field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.business_post_num=='null'||row.business_post_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.business_post_num;
+                    };
+                }
+            },
+            {
+                title: "跟随转发",//标题
+                field: "trace_follow_tweet_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.trace_follow_tweet_num=='null'||row.trace_follow_tweet_num=='unknown'){
+                        return 0;
+                    }else {
+                        return row.trace_follow_tweet_num;
+                    };
+                }
+            },
+            {
+                title: "其他",//标题
+                field: "other",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                visible:FT3,//控制显示隐藏
+                formatter: function (value, row, index) {
+                    if (row.other=='null'||row.other=='unknown'){
+                        return 0;
+                    }else {
+                        return row.other;
+                    };
+                }
             },
         ],
     });
+    $('.chartContent').show();
+    $('.load').hide();
 };
