@@ -23,6 +23,7 @@ from pyvirtualdisplay import Display
 display = Display(visible=0, size=(1024,768))
 display.start()
 driver = webdriver.Firefox()
+#driver = webdriver.Chrome()
 
 source_list = [
 "http://widget.weibo.com/dialog/PublishWeb.php?refer=y&app_src=3o33sO&button=pubilish", # 发布窗
