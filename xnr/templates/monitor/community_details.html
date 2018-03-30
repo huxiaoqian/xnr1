@@ -61,10 +61,10 @@
         background-color: #2a556f!important;
     }
     /* tab栏社区详情  边框*/
-    #member-change-1 ,#member-change-2, #member-change-3, #leave-person-content {
+    #member-change-1 ,#member-change-2 {
         border-bottom:none;
     }
-    #member-change-1 thead th ,#member-change-2 thead th, #member-change-3 thead th, #leave-person-content thead th{
+    #member-change-1 thead th ,#member-change-2 thead th{
         border-top:none;
     }
     /* 蓝色小标题 */
@@ -138,8 +138,6 @@
     }
     #social-content-2 {
         margin-top:20px;
-        height: 500px;
-        /* border-bottom: 1px solid #ddd; */
     }
 </style>
 {% endblock %}
@@ -159,39 +157,18 @@
             <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
             <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
         </p>
-
-        <!-- 折线图放在预警详情页 -->
-        <!-- 人数变化图 -->
-        <!-- <div id="people-num"> -->
-            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        <!-- </div> -->
-        <!-- 平均敏感度变化折线图 -->
-        <!-- <div id="sensitivity"> -->
-            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        <!-- </div> -->
-        <!-- 平均影响力变化折线图 -->
-        <!-- <div id="influence"> -->
-            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        <!-- </div> -->
-        <!-- 聚集系数变化折线图 -->
-        <!-- <div id="convergence"> -->
-            <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-        <!-- </div> -->
     </div>
     <!-- tab栏 -->
     <div class="type_page">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-                <a href="#community-details" role="tab" data-toggle="tab"><b class="icon icon-lightbulb"></b>&nbsp;社区详情</a>
+                <a href="#community-details" role="tab" data-toggle="tab"><b class="icon icon-lightbulb"></b>&nbsp;社区人员</a>
             </li>
             <li role="penetration">
-                <a href="#basic" role="tab" data-toggle="tab"><b class="icon icon-tint"></b>&nbsp;基本特征</a>
+                <a href="#basic" role="tab" data-toggle="tab"><b class="icon icon-tint"></b>&nbsp;社区内容</a>
             </li>
             <li role="presentation">
                 <a href="#social" role="tab" data-toggle="tab"><b class="icon icon-glass"></b>&nbsp;社交特征</a>
-            </li>
-            <li role="presentation">
-                <a href="#leave-person" role="tab" data-toggle="tab"><b class="icon icon-share-alt"></b>&nbsp;离去人员</a>
             </li>
         </ul>
         <div class="behavior">
@@ -199,20 +176,14 @@
                 <!-- 社区详情 -->
                 <div role="tabpanel" class="tab-pane active" id="community-details">
                     <!-- 成员变换信息 -->
-                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 成员变换信息</p>
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员列表</p>
                     <div id="member-change-1">
                         <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                     </div>
 
                     <!-- 社区成员列表 -->
-                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员列表</p>
+                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员变化列表</p>
                     <div id="member-change-2">
-                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
-                    </div>
-
-                    <!-- 核心成员变化信息 -->
-                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 核心成员变化信息</p>
-                    <div id="member-change-3">
                         <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                     </div>
                 </div>
@@ -232,6 +203,10 @@
                                 <input class="demo-radio" type="radio" name="sort" value='1'>
                                 <span class="demo-checkbox demo-radioInput"></span> 按热度
                             </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="sort" value='2'>
+                                <span class="demo-checkbox demo-radioInput"></span> 按时间
+                            </label>
                         </div>
                         <div id="basic-3-content">
                             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
@@ -240,19 +215,11 @@
                 </div>
                 <!-- 社交特征 -->
                 <div role="tabpanel" class="tab-pane" id="social">
-                    <div id="social-content">
+                    <div id="social-content"></div>
+                    <div class="social-content-2">
+                        <div id="social-content-2"></div>
+                    </div>
 
-                    </div>
-                    <div id="social-content-2">
-
-                    </div>
-                </div>
-                <!-- 离去人员 -->
-                <div role="tabpanel" class="tab-pane" id="leave-person">
-                    <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 离去人员列表</p>
-                    <div id="leave-person-content">
-                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
-                    </div>
                 </div>
             </div>
         </div>

@@ -70,7 +70,7 @@ $('.sureCompare').on('click',function () {
         return false;
     }else {
         dim=$('.com-2-choose input:checked').val();
-        $('.chartContent').show();
+        $('.load').show();
         var TIME=$('.choosetime input:checked').val();
         chooseTime(TIME);
     };
@@ -191,7 +191,6 @@ function compareData(data) {
 //表格
 var _id='',FT1,FT2,FT3;
 function tableAry(data) {
-    console.log(data);
     $('#'+_id).bootstrapTable('load', data);
     $('#'+_id).bootstrapTable({
         data:data,
@@ -407,81 +406,81 @@ function tableAry(data) {
             },
             {
                 title: "日常发帖",//标题
-                field: "",//键名
+                field: "daily_post_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                    if (row.daily_post_num=='null'||row.daily_post_num=='unknown'){
                         return 0;
                     }else {
-                        return row.warning_report_total_sensitive_info;
+                        return row.daily_post_num;
                     };
                 }
             },
             {
                 title: "热点跟随",//标题
-                field: "",//键名
+                field: "hot_follower_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                    if (row.hot_follower_num=='null'||row.hot_follower_num=='unknown'){
                         return 0;
                     }else {
-                        return row.warning_report_total_sensitive_info;
+                        return row.hot_follower_num;
                     };
                 }
             },
             {
                 title: "业务发帖",//标题
-                field: "",//键名
+                field: "business_post_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                    if (row.business_post_num=='null'||row.business_post_num=='unknown'){
                         return 0;
                     }else {
-                        return row.warning_report_total_sensitive_info;
+                        return row.business_post_num;
                     };
                 }
             },
             {
                 title: "跟随转发",//标题
-                field: "",//键名
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                    if (row.trace_follow_tweet_num=='null'||row.trace_follow_tweet_num=='unknown'){
                         return 0;
                     }else {
-                        return row.warning_report_total_sensitive_info;
+                        return row.trace_follow_tweet_num;
                     };
                 }
             },
             {
                 title: "其他",//标题
-                field: "",//键名
+                field: "other",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 visible:FT3,//控制显示隐藏
                 formatter: function (value, row, index) {
-                    if (row.warning_report_total_sensitive_info=='null'||row.warning_report_total_sensitive_info=='unknown'){
+                    if (row.other=='null'||row.other=='unknown'){
                         return 0;
                     }else {
-                        return row.warning_report_total_sensitive_info;
+                        return row.other;
                     };
                 }
             },
