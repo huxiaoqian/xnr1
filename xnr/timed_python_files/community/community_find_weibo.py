@@ -16,7 +16,7 @@ from global_utils import es_flow_text,retweet_index_name_pre,retweet_index_type,
                          weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
 
 
-from global_config import S_TYPE,R_BEGIN_TIME,S_DATE
+from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
@@ -207,9 +207,10 @@ def get_evaluate_max(index_name,index_type,field):
         }
     try:
         result = user_es.search(index=index_name, doc_type=index_type, body=query_body)['hits']['hits']
+        max_evaluate = result[0]['_source'][field]
     except Exception, e:
         raise e
-    max_evaluate = result[0]['_source'][field]
+        max_evaluate = 1
     return max_evaluate
 
 
@@ -287,8 +288,15 @@ def ExtendQ(G,coms_list):
 
 #组织社区生成
 def create_weibo_community():
-    # xnr_user_no_list = get_compelete_wbxnr()
-    xnr_user_no_list = ['WXNR0004']
+    
+    if S_TYPE == 'test':
+        today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
+        xnr_user_no_list = ['WXNR0004']
+    else:
+        today_time = time.time()
+        xnr_user_no_list = get_compelete_wbxnr()
+
+    # xnr_user_no_list = ['WXNR0004']
     for xnr_user_no in xnr_user_no_list:
         #给定的nodes可能会因为网络结构或排序被删掉
         s = time.time()
@@ -302,7 +310,7 @@ def create_weibo_community():
         print 'allG nodes:',allG.number_of_nodes()        
         print 'G nodes:',G.number_of_nodes()
 
-        file_path = './weibo_data/' + xnr_user_no + '_' + ts2datetime(int(time.time())) + '_' +'save_com.json'
+        file_path = './weibo_data/' + xnr_user_no + '_' + ts2datetime(today_time) + '_' +'save_com.json'
         print 'file_path:',file_path
         f = open(file_path,'w')
         for k,v in enumerate(coms_list):
