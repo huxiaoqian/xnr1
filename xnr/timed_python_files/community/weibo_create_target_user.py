@@ -267,13 +267,20 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
     origin_relationer_uidlist = detect_by_seed_users(xnr_relationer)
     origin_relationer_uidlist.extend(origin_keywords_uidlist)
 
-    expand_userid_list = origin_relationer_uidlist
+    expand_userid_list = list(set(origin_relationer_uidlist))
     uid_num = len(expand_userid_list)
 
-    while uid_num <= MIN_TARGET_USER_NUM:
-        temp_uidlist = detect_by_seed_users(expand_userid_list)
-        expand_userid_list.extend(temp_uidlist)
-        uid_num = len(expand_userid_list)
+    # while uid_num <= MIN_TARGET_USER_NUM:
+    if uid_num <= MIN_TARGET_USER_NUM:
+    	for i in range(0,5):
+            temp_uidlist = detect_by_seed_users(expand_userid_list)
+            expand_userid_list.extend(temp_uidlist)
+            expand_userid_list = list(set(expand_userid_list))
+            uid_num = len(expand_userid_list)
+            i = i+1   
+            print 'uid_num::',uid_num
+    else:
+    	pass
 
     return expand_userid_list
 
