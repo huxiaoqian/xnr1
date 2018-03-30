@@ -14,7 +14,7 @@ from xnr.time_utils import datetime2ts, ts2datetime
 from utils import get_create_writing_task, get_show_writing_task, get_delete_writing_task,\
                 get_topics_river, get_symbol_weibo, get_opinions_results, get_model_text_results,\
                 get_add_opinion_corpus, get_delete_opinion_corpus, get_show_opinion_corpus_name,\
-                get_show_opinion_corpus_content
+                get_show_opinion_corpus_content, get_one_click_evaluation
 
 mod = Blueprint('intelligent_writing', __name__, url_prefix='/intelligent_writing')
 
@@ -191,3 +191,16 @@ def ajax_delete_opinion_corpus():
     results = get_delete_opinion_corpus(task_detail)
 
     return json.dumps(results)   # True False
+
+
+# 一键审核
+
+@mod.route('/one_click_evaluation/')
+def ajax_one_click_evaluation():
+
+    task_detail = dict()
+    task_detail['text'] = request.args.get('text','')
+
+    results = get_one_click_evaluation(task_detail)  # [sensitive_mark, sensitive_words_list]
+
+    return json.dumps(results)

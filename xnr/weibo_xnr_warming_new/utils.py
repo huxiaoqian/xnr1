@@ -654,7 +654,7 @@ def get_hashtag(today_datetime):
     }
     weibo_text_exist=es_flow_text.search(index=weibo_flow_text_index_name,doc_type=flow_text_index_type,\
                 body=query_body)['aggregations']['all_hashtag']['buckets']
-    print 'weibo_hashtag:',weibo_text_exist
+    # print 'weibo_hashtag:',weibo_text_exist
     hashtag_list = []
     for item in weibo_text_exist:
         event_dict=dict()
@@ -668,7 +668,7 @@ def get_hashtag(today_datetime):
             pass
 
     hashtag_list.sort(key=lambda k:(k.get('event_sensitive',0),k.get('event_count',0)),reverse=True)
-    print 'hashtag_list:',hashtag_list
+    # print 'hashtag_list:',hashtag_list
     return hashtag_list
 
 
@@ -693,11 +693,11 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
     for event_item in hashtag_list:
         event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
-        event_warming_content['event_name']=event_item[0]
-        print 'event_name:',event_item
+        event_warming_content['event_name']=event_item['event_name']
+        # print 'event_name:',event_item
         event_num=event_num+1
-        print 'event_num:::',event_num
-        print 'first_time:::',int(time.time())
+        # print 'event_num:::',event_num
+        # print 'first_time:::',int(time.time())
         event_influence_sum=0
         event_time_sum=0       
         query_body={
@@ -727,7 +727,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             fans_num_dict=dict()
             followers_num_dict=dict()
             alluser_num_dict=dict()
-            print 'sencond_time:::',int(time.time())
+            # print 'sencond_time:::',int(time.time())
             for item in event_results:
                 #print 'event_content:',item['_source']['text']          
                 
@@ -755,7 +755,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
                 event_influence_sum=event_influence_sum+item['_source']['weibo_influence_value']
                 event_time_sum=event_time_sum+item['_source']['timestamp']            
         
-            print 'third_time:::',int(time.time())
+            # print 'third_time:::',int(time.time())
             #典型微博信息
             weibo_result.sort(key=lambda k:(k.get('weibo_influence_value',0)),reverse=True)
             event_warming_content['main_weibo_info']=json.dumps(weibo_result)
@@ -801,7 +801,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
 
         # except:
             # event_warming_content['main_user_info']=[]
-            print 'fourth_time:::',int(time.time())
+            # print 'fourth_time:::',int(time.time())
             event_warming_content['xnr_user_no']=xnr_user_no
             event_warming_content['validity']=0
             event_warming_content['timestamp']=today_datetime
@@ -813,7 +813,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
         
           
             if write_mark:
-                print 'today_datetime:::',ts2datetime(today_datetime)
+                # print 'today_datetime:::',ts2datetime(today_datetime)
                 mark=write_envent_warming(today_datetime,event_warming_content,task_id)
                 event_warming_list.append(mark)
             else:
@@ -821,7 +821,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
 
         else:
             pass
-        print 'fifth_time:::',int(time.time())
+        # print 'fifth_time:::',int(time.time())
     return event_warming_list
 
 
