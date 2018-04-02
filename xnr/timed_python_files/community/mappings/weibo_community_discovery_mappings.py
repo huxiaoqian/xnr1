@@ -6,7 +6,7 @@ import sys
 sys.path.append('../../../')
 from parameter import DAY
 from time_utils import ts2datetime
-from global_config import S_TYPE,S_DATE
+from global_config import S_TYPE,S_DATE,WEIBO_COMMUNITY_DATE
 from global_utils import es_xnr as es
 from global_utils import weibo_community_index_name_pre,weibo_community_index_type
 
@@ -133,7 +133,7 @@ def weibo_community_mappings(date_name):
 
 if __name__ == '__main__':
      if S_TYPE == 'test':
-          date_name = S_DATE
+          date_name = WEIBO_COMMUNITY_DATE
      else:
           now_time = int(time.time())
           date_name = ts2datetime(now_time)

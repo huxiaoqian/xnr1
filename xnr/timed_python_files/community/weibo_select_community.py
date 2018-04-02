@@ -15,7 +15,7 @@ from parameter import DAY
 
 from time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 
-from global_config import S_TYPE,R_BEGIN_TIME,S_DATE
+from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
 
 from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace_community_index_type,\
                          weibo_community_index_name_pre,weibo_community_index_type,\
@@ -223,7 +223,7 @@ def get_newcommunity_warning(community,trace_community_detail):
 #补全社区人员信息，注意标记核心人物
 def get_community_userinfo(uid_list,core_uidlist,outer_uidlist):
     user_list = []
-    print 'es_user_profile::',es_user_profile
+    # print 'es_user_profile::',es_user_profile
     user_result = es_user_profile.mget(index = profile_index_name,doc_type = profile_index_type,body = {'ids':uid_list})['docs']
     
     core_user = []
@@ -412,8 +412,11 @@ def get_community_coreuser_socail(uid_list,timestamp):
         # print 'comment_result:',comment_result
         for item in comment_result:
             uid = item['_id']
-            if item['found'] == True:
-                comment_dict[uid] = json.loads(item['_source']['uid_comment'])
+            try:
+                if item['found'] == True:
+                    comment_dict[uid] = json.loads(item['_source']['uid_comment'])
+            except:
+            	pass
         #step5:mget be_retweet
         try:
             be_retweet_result = es_retweet.mget(index=be_retweet_index_name, doc_type=be_retweet_index_type, \
@@ -461,15 +464,15 @@ def get_community_coreuser_socail(uid_list,timestamp):
             # 
             # uid_in_record = [[iter_uid, ruid, filter_in_dict[ruid], uid2uname[iter_uid], uid2uname[ruid]] for ruid in filter_in_dict if iter_uid != ruid]
             # 
-            print 'filter_in_dict:',filter_in_dict
-            print 'filter_out_dict:',filter_out_dict
+            # print 'filter_in_dict:',filter_in_dict
+            # print 'filter_out_dict:',filter_out_dict
             # uid_in_record = [[iter_uid,uid2uname[iter_uid],ruid,uid2uname[ruid],filter_in_dict[ruid]] for ruid in filter_in_dict if iter_uid != ruid]
             uid_in_record = []
             for ruid in filter_in_dict:
-                print 'ruid:',ruid
+                # print 'ruid:',ruid
                 item_list = []
                 if iter_uid != ruid:
-                    print 'aaaa'
+                    # print 'aaaa'
                     item_list.append(iter_uid)
 
                     if uid2uname.has_key(iter_uid):
@@ -493,8 +496,8 @@ def get_community_coreuser_socail(uid_list,timestamp):
                         pass
                 else:
                     pass
-                print 'item_list:',item_list
-            print 'uid_in_record:',uid_in_record
+                # print 'item_list:',item_list
+            # print 'uid_in_record:',uid_in_record
             # in_record = [uid_in_record]
             all_in_record.extend(uid_in_record)  # [[uid1, ruid1, count1],[uid1,ruid2,count2],[uid2,ruid2,count3],...]
             #step9: record the retweet/comment/be_retweet/be_comment relation out group uid
@@ -550,18 +553,18 @@ def get_community_coreuser_socail(uid_list,timestamp):
     #core_uidlist,outer_uidlist,community_dict['core_user_socail'],community_dict['core_outer_socail']
     core_user_socail = [item for item in sort_in_record if item[4] > 2]
     core_uidlist = list(set([item[0] for item in core_user_socail]))
-    print 'core_uidlist:',core_uidlist
-    print 'core_user_socail:',core_user_socail
+    # print 'core_uidlist:',core_uidlist
+    # print 'core_user_socail:',core_user_socail
     core_outer_socail_temp = [item for item in sort_out_record if (len(list(set(item[2].split())&set(core_uidlist)))>0 or len(list(set(item[0].split())&set(core_uidlist)))>0) and item[4] > 10]
     # core_outer_socail = [item for item in sort_out_record if (len(list(set(item[2])&set(core_uidlist)))>0  or len(list(set(item[0].split())&set(core_uidlist)))>0)]
     core_outer_socail = sorted(core_outer_socail_temp,key=lambda x:x[4],reverse=True)[0:30]
-    print 'core_outer_socail::',core_outer_socail
+    # print 'core_outer_socail::',core_outer_socail
     outer_uidlist = [item[0] for item in core_outer_socail]
 
-    print 'core_user_socail:',type(core_user_socail)
-    print 'core_outer_socail:',type(core_outer_socail)
-    print 'core_uidlist::',type(core_uidlist)
-    print 'outer_uidlist::',type(outer_uidlist)
+    # print 'core_user_socail:',type(core_user_socail)
+    # print 'core_outer_socail:',type(core_outer_socail)
+    # print 'core_uidlist::',type(core_uidlist)
+    # print 'outer_uidlist::',type(outer_uidlist)
     # return json.loads(core_uidlist),json.loads(outer_uidlist),json.loads(core_user_socail),json.loads(core_outer_socail)
     return core_uidlist,outer_uidlist,core_user_socail,core_outer_socail
 
@@ -711,7 +714,8 @@ def get_select_community(xnr_user_no,date_time):
 
 #旧社区上一周期预警判断
 def get_community_warning_traceresult(community,date_time):
-    weibo_trace_community_index_name = weibo_trace_community_index_name_pre + community['xnr_user_no'].lower()
+    # print 'community::::',community,type(community)
+    weibo_trace_community_index_name = weibo_trace_community_index_name_pre + community["xnr_user_no"].lower()
     start_time = date_time - 7*DAY
     query_body = {
 	    'query':{
@@ -731,7 +735,7 @@ def get_community_warning_traceresult(community,date_time):
         doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
     warning_mark = 0
     for item in trace_result:
-        if item['warning_rank'] > 0:
+        if item['_source']['warning_rank'] > 0:
             warning_mark = warning_mark + 1
         else:
             pass
@@ -754,23 +758,24 @@ def get_old_community(xnr_user_no,date_time):
             }
         }
     }
-    weibo_community_index_name = weibo_community_index_name_pre + ts2datetime(date_time - 8*DAY)
+    weibo_community_index_name = weibo_community_index_name_pre + ts2datetime(date_time - 7*DAY)
+    print 'old_community:::',weibo_community_index_name
     community_list = []
 
     if es_xnr.indices.exists(weibo_community_index_name):
         community_result = es_xnr.search(index = weibo_community_index_name,doc_type = weibo_community_index_type,body = query_body)['hits']['hits']
         for community in community_result:
             #获取社区预警情况，在上一周期内是否出现预警
-            warning_mark = get_community_warning_traceresult(community,date_time)
+            warning_mark = get_community_warning_traceresult(community['_source'],date_time)
             if warning_mark > 0:
                 pass
             else:
-            	item['_source']['warning_remind'] = item['_source']['warning_remind'] + 1
+            	community['_source']['warning_remind'] = community['_source']['warning_remind'] + 1
 
-            if item['_source']['warning_remind'] > 4 and item['_source']['community_status'] != -2:
+            if community['_source']['warning_remind'] > 4 and community['_source']['community_status'] != -2:
             	pass
             else:
-                community_list.append(item['_source'])
+                community_list.append(community['_source'])
     else:
         pass
 
@@ -817,7 +822,7 @@ def get_final_community(xnr_user_no,date_time):
     create_communitylist = get_select_community(xnr_user_no,date_time)
     #已有社区列表
     old_communitylist = get_old_community(xnr_user_no,date_time)
-   
+    print 'old_communitylist::',len(old_communitylist)
     #新旧社区对比
     #step.1 若旧社区为空，则直接保留新社区,存储至es；
     # 若旧社区不为空，则对新旧社区进行对比
@@ -828,10 +833,10 @@ def get_final_community(xnr_user_no,date_time):
         newid_list = []
         for new_community in create_communitylist:
             similarity_oldid = old_communitylist[0]['community_id']
-            similarity_firstlen = len(list(set(json.loads(new_community['nodes']),json.loads(old_community[0]['nodes']))))
-            similarity_first = similarity_firstlen / old_community['num']       	
+            similarity_firstlen = len(list(set(new_community['nodes'])&set(old_communitylist[0]['nodes'])))
+            similarity_first = similarity_firstlen / old_communitylist[0]['num']       	
             for old_community in old_communitylist[1:]:
-                similarity_uidlen = len(list(set(json.loads(new_community['nodes']),json.loads(old_community['nodes']))))
+                similarity_uidlen = len(list(set(new_community['nodes'])&set(old_community['nodes'])))
                 similarity = similarity_uidlen / old_community['num']
                 if similarity > similarity_first:
                     similarity_first = similarity
@@ -859,6 +864,7 @@ def get_final_community(xnr_user_no,date_time):
         		result_mark = save_community_detail(old_community,date_time)
 
     else:
+    	print 'newnew!!!'
         for new_community in create_communitylist:
         	new_community['community_status'] = 1
         	result_mark = save_community_detail(new_community,date_time)
@@ -879,7 +885,7 @@ if __name__ == '__main__':
     # outer_uidlist = [ "5586779165", "1236103277"]
     # get_community_userinfo(uid_list,core_uidlist,outer_uidlist)
     if S_TYPE == 'test':
-    	datetime = datetime2ts(S_DATE)
+    	datetime = datetime2ts(WEIBO_COMMUNITY_DATE)
     	xnr_user_no_list = ['WXNR0004']
     else:
     	datetime = int(time.time())
