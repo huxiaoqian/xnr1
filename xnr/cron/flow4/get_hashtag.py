@@ -26,7 +26,7 @@ def input_hashtag(index_pos):
 
 	# print 'results...',results
 	es_scan = scan(es_flow_text,index=index_name,doc_type=flow_text_index_type,\
-					query=query_body,size=1000)
+					query=query_body,size=500)
 
 	bulk_action = []
 	
@@ -53,8 +53,8 @@ def input_hashtag(index_pos):
 
 			bulk_action.extend([{'update':{'_id':_id}}, {'doc':{'hashtag':hashtag}}])
 
-			if count % 1000 == 0 and count != 0:
-				es_flow_text.bulk(bulk_action, index=index_name,doc_type=flow_text_index_type,timeout=600)
+			if count % 500 == 0 and count != 0:
+				es_flow_text.bulk(bulk_action, index=index_name,doc_type=flow_text_index_type,timeout=800)
 				bulk_action = []
 				print count
 
@@ -66,7 +66,7 @@ def input_hashtag(index_pos):
 
 	if bulk_action:
 		
-		print es_flow_text.bulk(bulk_action, index=index_name,doc_type=flow_text_index_type,timeout=600)
+		print es_flow_text.bulk(bulk_action, index=index_name,doc_type=flow_text_index_type,timeout=800)
 
 
 date_st = '2016-11-08'

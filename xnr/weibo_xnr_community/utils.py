@@ -327,3 +327,33 @@ def get_community_detail(now_time,model,community_id,order_by):
     # print 'result:::',result
     return result
 
+
+#用户信息
+def get_user_detail(uid):
+    user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+    user_detail = dict()
+    if user_result:
+        user_detail['user_url'] = "http://weibo.com/" + uid 
+        user_detail['uid'] = uid
+        user_detail['nick_name'] = user_result['nick_name']
+        user_detail['photo_url'] = user_result['photo_url']
+        user_detail['user_location'] = user_result['user_location']
+        user_detail['sex'] = user_result['sex']
+        user_detail['fansnum'] = user_result['fansnum']
+        user_detail['friendsnum'] = user_result['friendsnum']
+    else:        
+        user_detail['user_url'] = "http://weibo.com/" + uid 
+        user_detail['uid'] = uid
+        user_detail['nick_name'] = ''
+        user_detail['photo_url'] = ''
+        user_detail['user_location'] = ''
+        user_detail['sex'] = 0
+        user_detail['fansnum'] = 0
+        user_detail['friendsnum'] = 0
+    return user_detail
+
+#删除社区
+def delete_community(community_id):
+    weibo_community_index_name = 'weibo_community_2016-11-20'
+    mark = es_xnr.delete(index=weibo_community_index_name,doc_type=weibo_community_index_type,id=community_id)
+    return mark
