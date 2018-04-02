@@ -7,7 +7,7 @@ import json
 import time
 import sys
 reload(sys)
-import sqlite
+# import sqlite
 import sqlite3
 sys.path.append('../../')
 # from timed_python_files.system_log_create import get_user_account_list
@@ -30,7 +30,7 @@ from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fa
 #连接数据库,获取账户列表
 def get_user_account_list():     
     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
-    # cx = sqlite3.connect("/home/xnr_0110/xnr1/xnr/flask-admin.db")
+    #cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db") 
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
@@ -378,7 +378,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
     for event_item in hashtag_list:
         event_sensitive_count=0
         event_warming_content=dict()     #事件名称、主要参与用户、典型微博、事件影响力、事件平均时间
-        event_warming_content['event_name']=event_item[0]
+        event_warming_content['event_name']=event_item['event_name']
         print 'event_name:',event_item
         event_num=event_num+1
         print 'event_num:::',event_num
@@ -629,8 +629,8 @@ def lookup_weibo_date_warming(keywords, today_datetime):
         date_result=[]
         print keyword_query_list
         for item in temp_result:
-            print 'item-text:', item['_source']['text'], type(item['_source']['text'])
-            # item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
+            # print 'item-text:', item['_source']['text'], type(item['_source']['text'])
+            item['_source']['nick_name']=get_user_nickname(item['_source']['uid'])
             date_result.append(item['_source'])
         #except:
         #        date_result=[]

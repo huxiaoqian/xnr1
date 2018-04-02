@@ -266,6 +266,14 @@ weibo_keyword_count_index_type='text'
 weibo_community_target_user_index_name_pre = 'weibo_community_target_user_'
 weibo_community_target_user_index_type = 'user'
 
+#use to save trace info
+weibo_trace_community_index_name_pre = 'weibo_trace_community_'
+weibo_trace_community_index_type = 'trace_warning'
+ 
+#use to save community info
+weibo_community_index_name_pre = 'weibo_community_'
+weibo_community_index_type = 'community'
+
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
