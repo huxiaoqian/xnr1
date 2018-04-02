@@ -625,6 +625,9 @@ def create_history_count(task_detail):
         mark=False
     return mark
 
+
+###################by qxk
+
 #step 4.2: timing task list
 ###########获取定时发送任务列表##############
 def show_timing_tasks(xnr_user_no,start_time,end_time):
@@ -636,13 +639,8 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
         start_time=datetime2ts(ts2datetime(end_time-DAY*test_datetime_gap))
     else:
         pass
-    print start_time,end_time
-    #print start_time,end_time
-    #获取虚拟人编号
-    #user_no_str=xnr_user_no[4:8]
-    #print user_no_str
-    #user_no=long(user_no_str)
-    #print user_no
+    # print start_time,end_time
+
     query_body={
         'query':{
             'filtered':{
@@ -665,7 +663,7 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
         'size':MAX_VALUE,
         'sort':{'post_time':{'order':'desc'}}   #按发送时间排序
     }
-    results=es_xnr.search(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,body=query_body)['hits']['hits']
+    results=es_xnr.search(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,body=query_body)['hits']['hits']
     result=[]
     for item in results:
         item['_source']['id']=item['_id']
@@ -675,7 +673,7 @@ def show_timing_tasks(xnr_user_no,start_time,end_time):
 
 ###########针对任务进行操作——查看##############
 def wxnr_timing_tasks_lookup(task_id):
-    result=es_xnr.get(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id)['_source']
+    result=es_xnr.get(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,id=task_id)['_source']
     return result
 
 ###########针对任务进行操作——修改##############
@@ -688,7 +686,7 @@ def wxnr_timing_tasks_change(task_id,task_change_info):
     remark=task_change_info[5]
 
     try:
-        es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id,\
+        es_xnr.update(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,id=task_id,\
             body={"doc":{'task_source':task_source,'operate_type':operate_type,'create_time':create_time,\
             'post_time':post_time,'text':text,'remark':remark}})
         result=True
@@ -698,14 +696,14 @@ def wxnr_timing_tasks_change(task_id,task_change_info):
 
 ###########针对任务进行操作——撤销##############
 def wxnr_timing_tasks_revoked(task_id):
-    task_result=es_xnr.get(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id)['_source']
+    task_result=es_xnr.get(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,id=task_id)['_source']
     task_status=task_result['task_status']
     #撤销操作即调整任务状态，将task_status状态设置为-1，只有未发送的任务可以撤销
     
     if task_status == 0:
         task_status = -1
         try:
-            es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=weibo_xnr_timing_list_index_type,id=task_id,\
+            es_xnr.update(index=fb_xnr_timing_list_index_name,doc_type=fb_xnr_timing_list_index_type,id=task_id,\
                 body={"doc":{'task_status':task_status}})
             result=True
         except:
