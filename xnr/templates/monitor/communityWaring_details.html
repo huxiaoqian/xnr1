@@ -171,9 +171,9 @@
     <div class="community-detail clearfix">
         <!-- 基本信息 -->
         <p class="essential-information">
-            <span class="det-span"><span>社区名称：</span><span class="det det1">七七</span></span>
-            <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
-            <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
+            <span class="det-span"><span>社区名称：</span><span class="det det1"></span></span>
+            <span class="det-span"><span>初次创建时间：</span><span class="det det2"></span></span>
+            <span class="det-span"><span>社区人数：</span><span class="det det3"></span></span>
         </p>
         <div class="parent-box clearfix">
             <!-- 人数变化图 -->
@@ -247,9 +247,8 @@
         $('#start').datetimepicker('setEndDate',ev.date);
     });
 
-    var flag = '{{flag}}';
-    console.log(flag);
-    if(flag == 0){
+    var oldNew = '{{oldNew}}';
+    if(oldNew == 0){
         // 新发现社区预警页 不显示折线图
         $('#people-num').hide();
         $('#sensitivity').hide();
@@ -261,10 +260,10 @@
         $('#influence').show();
         $('#convergence').show();
     }
+    var communityId='{{comId}}';
 </script>
 
-<script src="/static/js/dark.js"></script>
-<!-- <script src="/static/js/echarts-2/build/dist/echarts.js"></script> -->
+<script src="/static/js/chalk.js"></script>
 <script src="/static/js/communityWaring_detail.js"></script>
 
 
