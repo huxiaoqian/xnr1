@@ -1263,7 +1263,7 @@ def get_tweets_distribute(xnr_user_no):
         #     id=uid)['_source']
         # topic_string = xnr_results['topic_string'].split('&')
         # topic_xnr_count = Counter(topic_string)
-    print 'topic_list_followers_count:::',topic_list_followers_count
+    #print 'topic_list_followers_count:::',topic_list_followers_count
 
     if S_TYPE == 'test':
         current_time = datetime2ts('2017-10-08')
@@ -1315,8 +1315,8 @@ def get_tweets_distribute(xnr_user_no):
     #         except:
     #             continue
     #         topic_distribute_dict['radar'][topic] = topic_value
-    print 'topic_distribute_dict:::',topic_distribute_dict
-    print 'topic_xnr_count:::',topic_xnr_count
+    #print 'topic_distribute_dict:::',topic_distribute_dict
+    #print 'topic_xnr_count:::',topic_xnr_count
     if topic_xnr_count:
         for topic, value in topic_list_followers_count.iteritems():
             topic_xnr_count[topic] = min([topic_xnr_count[topic],value])
@@ -1558,11 +1558,89 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     return results_all
 
 
+def create_xnr_history_info_count_today(xnr_user_no):
+    
+    #create_date=ts2datetime(create_time)
+
+    current_date = ts2datetime(time.time())
+
+    weibo_xnr_flow_text_name=xnr_flow_text_index_name_pre+current_date
+
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'xnr_user_no':xnr_user_no}
+                }
+            }
+        },
+        'aggs':{
+            'all_task_source':{
+                'terms':{
+                    'field':'task_source'
+                }
+            }
+        }
+    }
+
+    xnr_user_detail=dict()
+    #时间
+    xnr_user_detail['date_time']=current_date
+
+    try:
+
+        xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+        
+
+        # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
+        for item in xnr_result['aggregations']['all_task_source']['buckets']:
+            if item['key'] == 'daily_post':
+                xnr_user_detail['daily_post_num']=item['doc_count']
+            elif item['key'] == 'business_post':
+                xnr_user_detail['business_post_num']=item['doc_count']
+            elif item['key'] == 'hot_post':
+                xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
+        #总发帖量
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
+        
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
+        #xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
+    except:
+        
+        xnr_user_detail['daily_post_num']=0
+        xnr_user_detail['business_post_num']=0
+        xnr_user_detail['hot_follower_num']=0
+        #xnr_user_detail['total_post_sum']=0
+        xnr_user_detail['trace_follow_tweet_num']=0
+
+    xnr_user_detail['xnr_user_no']=xnr_user_no
+
+    return xnr_user_detail
+
 def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
 
     results_all = {}
     results_all['trend'] = {}
-    results_all['table'] = {}
+    results_all['table'] = []
 
 
     xnr_user_no_list = xnr_user_no_list.split(',')
@@ -1578,74 +1656,96 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
     for xnr_user_no in xnr_user_no_list:
 
         results_all['trend'][xnr_user_no] = {}
-        results_all['table'][xnr_user_no] = {}
+        
+        table_result = {}
         
         for timestamp in timestamp_list:
             date = ts2datetime(timestamp)
             _id = xnr_user_no + '_' + date
-            print '_id...',_id
+            #print '_id...',_id
             try:
                 get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
                     id=_id)['_source']
             except:
                 get_result = {}
 
-            print 'get_result...',get_result
+            #print 'get_result...',get_result
             if get_result:
 
                 if dim == 'influence':
 
                     results_all['trend'][xnr_user_no][timestamp] = get_result['influence']
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = get_result['comment_total_num']
-                    results_all['table'][xnr_user_no][timestamp]['like_total_num'] = get_result['like_total_num']
-                    results_all['table'][xnr_user_no][timestamp]['private_total_num'] = get_result['private_total_num']
-                    results_all['table'][xnr_user_no][timestamp]['at_total_num'] = get_result['at_total_num']
-                    results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = get_result['retweet_total_num']
+                    
+                    # 最新时间
+                    table_result['comment_total_num'] = get_result['comment_total_num']
+                    table_result['like_total_num'] = get_result['like_total_num']
+                    table_result['private_total_num'] = get_result['private_total_num']
+                    table_result['at_total_num'] = get_result['at_total_num']
+                    table_result['retweet_total_num'] = get_result['retweet_total_num']
+                    table_result['xnr'] = xnr_user_no
 
                 elif dim == 'penetration':
 
                     results_all['trend'][xnr_user_no][timestamp] = get_result['penetration']
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = get_result['follow_group_sensitive_info']
-                    results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = get_result['fans_group_sensitive_info']
-                    results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = get_result['self_info_sensitive_info']
-                    results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = get_result['feedback_total_sensitive_info']
-                    results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = get_result['warning_report_total_sensitive_info']
+                    
+                    table_result['follow_group_sensitive_info'] = get_result['follow_group_sensitive_info']
+                    table_result['fans_group_sensitive_info'] = get_result['fans_group_sensitive_info']
+                    table_result['self_info_sensitive_info'] = get_result['self_info_sensitive_info']
+                    table_result['feedback_total_sensitive_info'] = get_result['feedback_total_sensitive_info']
+                    table_result['warning_report_total_sensitive_info'] = get_result['warning_report_total_sensitive_info']
+                    table_result['xnr'] = xnr_user_no
 
                 else:
 
                     results_all['trend'][xnr_user_no][timestamp] = get_result['safe']
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = get_result['total_post_sum']
+                    
+                    table_result['total_post_sum'] = get_result['total_post_sum']
+                    table_result['daily_post_num'] = get_result['daily_post_num']
+                    table_result['hot_follower_num'] = get_result['hot_follower_num']
+                    table_result['business_post_num'] = get_result['business_post_num']
+                    table_result['trace_follow_tweet_num'] = get_result['trace_follow_tweet_num']
+                    table_result['other'] = get_result['total_post_sum'] - get_result['daily_post_num'] - get_result['hot_follower_num'] - get_result['business_post_num'] - get_result['trace_follow_tweet_num']
+                    table_result['xnr'] = xnr_user_no
+                    
             else:
 
                 if dim == 'influence':
 
                     results_all['trend'][xnr_user_no][timestamp] = 0
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['like_total_num'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['private_total_num'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['at_total_num'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = 0
+                    table_result['comment_total_num'] = 0
+                    table_result['like_total_num'] = 0
+                    table_result['private_total_num'] = 0
+                    table_result['at_total_num'] = 0
+                    table_result['retweet_total_num'] = 0
+                    table_result['xnr'] = xnr_user_no
 
                 elif dim == 'penetration':
 
                     results_all['trend'][xnr_user_no][timestamp] = 0
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = 0
-                    results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = 0
+                    
+                    table_result['follow_group_sensitive_info'] = 0
+                    table_result['fans_group_sensitive_info'] = 0
+                    table_result['self_info_sensitive_info'] = 0
+                    table_result['feedback_total_sensitive_info'] = 0
+                    table_result['warning_report_total_sensitive_info'] = 0
+                    table_result['xnr'] = xnr_user_no
+
 
                 else:
 
                     results_all['trend'][xnr_user_no][timestamp] = 0
-                    results_all['table'][xnr_user_no][timestamp] = {}
-                    results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = 0
+                    table_result = {}
+                    table_result['total_post_sum'] = 0
+                    table_result['daily_post_num'] = 0
+                    table_result['hot_follower_num'] = 0
+                    table_result['business_post_num'] = 0
+                    table_result['trace_follow_tweet_num'] = 0
+                    table_result['other'] = 0
+                    table_result['xnr'] = xnr_user_no
+
             
+        results_all['table'].append(table_result)
+
     return results_all
 
 
@@ -1653,7 +1753,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
 
     results_all = {}
     results_all['trend'] = {}
-    results_all['table'] = {}
+    results_all['table'] = []
 
     timestamp = int(time.time())
 
@@ -1662,7 +1762,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
     for xnr_user_no in xnr_user_no_list:
 
         results_all['trend'][xnr_user_no] = {}
-        results_all['table'][xnr_user_no] = {}
+        table_result = {}
 
 
         if dim == 'influence':
@@ -1670,69 +1770,82 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
             try:
                 results_all['trend'][xnr_user_no][timestamp] = compute_influence_num(xnr_user_no)
         
-                results_all['table'][xnr_user_no][timestamp] = {}
-
                 result = get_influence_total_trend_today(xnr_user_no)
 
-                results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = list(result['total_trend']['comment'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['like_total_num'] = list(result['total_trend']['like'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['private_total_num'] = list(result['total_trend']['private'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['at_total_num'] = list(result['total_trend']['at'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = list(result['total_trend']['retweet'].values())[0]
-            
+                table_result['comment_total_num'] = list(result['total_trend']['comment'].values())[0]
+                table_result['like_total_num'] = list(result['total_trend']['like'].values())[0]
+                table_result['private_total_num'] = list(result['total_trend']['private'].values())[0]
+                table_result['at_total_num'] = list(result['total_trend']['at'].values())[0]
+                table_result['retweet_total_num'] = list(result['total_trend']['retweet'].values())[0]
+                table_result['xnr'] = xnr_user_no
+
             except:
                 results_all['trend'][xnr_user_no][timestamp] = 0
         
-                results_all['table'][xnr_user_no][timestamp] = {}
+                table_result = {}
 
-                results_all['table'][xnr_user_no][timestamp]['comment_total_num'] = 0
-                results_all['table'][xnr_user_no][timestamp]['like_total_num'] = 0
-                results_all['table'][xnr_user_no][timestamp]['private_total_num'] = 0
-                results_all['table'][xnr_user_no][timestamp]['at_total_num'] = 0
-                results_all['table'][xnr_user_no][timestamp]['retweet_total_num'] = 0
-
+                table_result['comment_total_num'] = 0
+                table_result['like_total_num'] = 0
+                table_result['private_total_num'] = 0
+                table_result['at_total_num'] = 0
+                table_result['retweet_total_num'] = 0
+                table_result['xnr'] = xnr_user_no
 
         elif dim == 'penetration':
 
             try:
                 results_all['trend'][xnr_user_no][timestamp] = compute_penetration_num(xnr_user_no)
-                results_all['table'][xnr_user_no][timestamp] = {}
+                
 
                 result = penetration_total_today(xnr_user_no)
 
-                results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = list(result['follow_group'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = list(result['fans_group'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = list(result['self_info'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = list(result['feedback_total'].values())[0]
-                results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = list(result['warning_report_total'].values())[0]
+                table_result['follow_group_sensitive_info'] = list(result['follow_group'].values())[0]
+                table_result['fans_group_sensitive_info'] = list(result['fans_group'].values())[0]
+                table_result['self_info_sensitive_info'] = list(result['self_info'].values())[0]
+                table_result['feedback_total_sensitive_info'] = list(result['feedback_total'].values())[0]
+                table_result['warning_report_total_sensitive_info'] = list(result['warning_report_total'].values())[0]
+                table_result['xnr'] = xnr_user_no
 
             except:
 
                 results_all['trend'][xnr_user_no][timestamp] = 0
-                results_all['table'][xnr_user_no][timestamp] = {}
+                
 
-                results_all['table'][xnr_user_no][timestamp]['follow_group_sensitive_info'] = 0
-                results_all['table'][xnr_user_no][timestamp]['fans_group_sensitive_info'] = 0
-                results_all['table'][xnr_user_no][timestamp]['self_info_sensitive_info'] = 0
-                results_all['table'][xnr_user_no][timestamp]['feedback_total_sensitive_info'] = 0
-                results_all['table'][xnr_user_no][timestamp]['warning_report_total_sensitive_info'] = 0
+                table_result['follow_group_sensitive_info'] = 0
+                table_result['fans_group_sensitive_info'] = 0
+                table_result['self_info_sensitive_info'] = 0
+                table_result['feedback_total_sensitive_info'] = 0
+                table_result['warning_report_total_sensitive_info'] = 0
+                table_result['xnr'] = xnr_user_no
 
         else:
 
             try:
                 results_all['trend'][xnr_user_no][timestamp] = compute_safe_num(xnr_user_no)
-                results_all['table'][xnr_user_no][timestamp] = {}
+                
                 result = get_safe_active_today(xnr_user_no)
+                xnr_result = create_xnr_history_info_count_today(xnr_user_no)
 
-                results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = list(result.values())[0]
+                table_result['total_post_sum'] = list(result.values())[0]
+                table_result['daily_post_num'] = xnr_result['daily_post_num']
+                table_result['hot_follower_num'] = xnr_result['hot_follower_num']
+                table_result['business_post_num'] = xnr_result['business_post_num']
+                table_result['trace_follow_tweet_num'] = xnr_result['trace_follow_tweet_num']
+                table_result['other'] = list(result.values())[0] - xnr_result['daily_post_num'] - xnr_result['hot_follower_num'] - xnr_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+                table_result['xnr'] = xnr_user_no
 
             except:
 
                 results_all['trend'][xnr_user_no][timestamp] = 0
-                results_all['table'][xnr_user_no][timestamp] = {}
 
-                results_all['table'][xnr_user_no][timestamp]['total_post_sum'] = 0
+                table_result['total_post_sum'] = 0
+                table_result['daily_post_num'] = 0
+                table_result['hot_follower_num'] = 0
+                table_result['business_post_num'] = 0
+                table_result['trace_follow_tweet_num'] = 0
+                table_result['other'] = 0
+                table_result['xnr'] = xnr_user_no
 
-
+        results_all['table'].append(table_result)
 
     return results_all

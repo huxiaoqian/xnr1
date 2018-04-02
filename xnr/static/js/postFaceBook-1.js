@@ -468,7 +468,7 @@ $('#sure_post').on('click',function () {
     };
     var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+Check(txt);
-    if (imgRoad.length!=0){post_url_1+='&p_url='+JSON.stringify(imgRoad);}
+    // if (imgRoad.length!=0&&imgRoad.length==1){post_url_1+='&p_url='+Check(imgRoad[0]);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
             var a=Date.parse(new Date($('.start').val()))/1000;
@@ -484,7 +484,30 @@ $('#sure_post').on('click',function () {
     // if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
     public_ajax.call_request('get',post_url_1,postYES)
 });
-
+//一键审核
+$("#oneClick").on('click',function () {
+    var txt=Check($('#post-2-content').text());
+    if(!txt){
+        $('#pormpt p').text('请检查您的发帖内容，不能为空。');
+        $('#pormpt').modal('show');
+        return false;
+    }
+    var oneJugement_url='/intelligent_writing/one_click_evaluation/?text='+txt;
+    public_ajax.call_request('get',oneJugement_url,oneJugement);
+});
+function oneJugement(data) {
+    $('#oneJuge .one-1 b').text(data[0]);
+    var word='<span style="display:inline-block;">敏感词：</span>';
+    if(data[1].length==0){
+        word+='<b style="color:salmon;display:inline-block;margin:0 5px;">暂无敏感词。</b>';
+    }else {
+        $.each(data[1],function (index,item) {
+            word+='<b style="color:salmon;display:inline-block;margin:0 5px;">'+item+'</b>';
+        })
+    }
+    $('#oneJuge .one-2').html(word);
+    $('#oneJuge').modal('show');
+}
 //群可见的情况
 // var rankidList=[];
 // function groupSure() {

@@ -159,7 +159,8 @@ def add_user_xnraccount(account_id,xnr_accountid):
 
 #show all users account
 #连接数据库,获取账户列表
-def get_user_account_list():     
+def get_user_account_list():
+    # cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db") 
     cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
     cu=cx.cursor()
     cu.execute("select email from user") 

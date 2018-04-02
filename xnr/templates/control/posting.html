@@ -206,14 +206,14 @@
                 <img src='' alt='' id='imgimg' style="display: none;"/>
                 <div class="add_thing">
                     <div class="emotion"><img src="/static/images/post-1.png">&nbsp;<span>表情</span></div>
-                    <div onclick="selectFile();"><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
+                    <div onclick="selectFile();" title="只能上传一张图片" id="oneImg"><img src="/static/images/post-2.png">&nbsp;<span>图片</span></div>
                     <!--<input type="file" id="file" onchange="getFilePath()"-->
                            <!--style="filter:alpha(opacity=0);opacity:0;width: 0;height: 0;display: none;"/>-->
                     <!--<form action="/upload/" method='post' enctype='multipart/form-data' id="imgPath">-->
                         <!--<input type='file' name='file' id="iptfileupload" onchange="show()">-->
                         <!--<input type='submit' value='Upload'>-->
                     <!--</form>-->
-                    <form action='' method='' name='myform' style="display: none;">
+                    <form action='/upload/' method='' name='myform' style="display: none;">
                         <input type='file' id='iptfileupload' onchange='show()' value=''/>
                     </form>
                     <!--<div><img src="/static/images/post-3.png">&nbsp;<span>视频</span></div>-->
@@ -238,19 +238,20 @@
                         </label>
                         <!--<input type="checkbox" class="" style="position: relative;top: 2px;margin-right: 3px;">定时-->
                         <div class="ttime">
-                            <input type="text" size="22" id="_timing1" class="form_datetime start disableCss" placeholder="开始时间"
+                            <input type="text" size="18" id="_timing1" class="form_datetime start disableCss" placeholder="开始时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing2" class="form_datetime end disableCss" placeholder="结束时间"
+                            <input type="text" size="18" id="_timing2" class="form_datetime end disableCss" placeholder="结束时间"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
-                            <input type="text" size="22" id="_timing3" class="remarks" placeholder="备注信息"
+                            <input type="text" size="18" id="_timing3" class="remarks" placeholder="备注信息"
                                    style="height: 20px;font-size: 10px;color: white;text-align: center;
                         padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
                         </div>
                     </div>
                     <button type="button" class="btn btn-info btn-xs" id="sure_post"
                             data-toggle="modal" data-target="#sameRoad">发布</button>
+                    <button type="button" class="btn btn-info btn-xs" id="oneClick">一键审核</button>
                 </div>
             </div>
             <div id="user_recommend">
@@ -866,6 +867,25 @@
     </div>
 </div>
 
+<!--一键审核-->
+<div class="modal fade" id="oneJuge" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">审核结果</h4>
+            </div>
+            <div class="modal-body" style="font-size: 18px;color: white;">
+                <div class="one-1">
+                    <span>敏感值：</span><b style="color: salmon"></b>
+                </div>
+                <div class="one-2" style="margin: 10px 0;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--推荐内容-->
 <div class="modal fade" id="content_recommend" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -1012,7 +1032,11 @@
     judgment('2');
     function selectFile(){
         $("#iptfileupload").trigger("click");
-    }
+    };
+    document.getElementById('post-2-content').addEventListener('DOMSubtreeModified',function (e) {
+        var g=$('#post-2-content').find('.oneone')[0];
+        if(!g){$('#oneImg').removeClass('disableCss')}
+    }, false);
     /* 获取 文件的路径 ，用于测试*/
     function getPath(obj,fileQuery,transImg) {
         var imgSrc = '', imgArr = [], strSrc = '' ;
@@ -1062,53 +1086,48 @@
                 strSrc = imgArr[imgArr.length - 1].toLowerCase() ;
                 if(strSrc.localeCompare('jpg') === 0 || strSrc.localeCompare('jpeg') === 0 || strSrc.localeCompare('gif') === 0 || strSrc.localeCompare('png') === 0){
                     obj.setAttribute("src", e.target.result) ;
-                var editor = document.getElementById('post-2-content');
-                var img = document.createElement('img');
-                img.style.width = '30px';
-                img.style.height = '30px';
-                img.src = e.target.result;
-                editor.appendChild(img);
-                var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
-                var rr=res.substring(0,res.length);
-                $.ajax({
-                    type:'GET',
-                    url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
-                    async:true,
-                    //timeout:300,
-                    //data:{"name":"xm"},//传参数
-                    dataType:"json",
-                    success:uploadIMG,
-                    error:function (xhr,textStatus,errorThrown) {
-                        //请求失败执行的函数
-                        console.log("请求失败",textStatus,errorThrown)
-                    },
-                    global:false//是否触发全局请求,需要触发就是true,不需要false
-                });
-            }else{
-                //try{
-                throw new Error('File type Error! please image file upload..') ;
-                //}catch(e){
-                // alert('name: ' + e.name + 'message: ' + e.message) ;
-                //}
+                    var editor = document.getElementById('post-2-content');
+                    var img = document.createElement('img');
+                    img.className='oneone';
+                    img.style.width = '30px';
+                    img.style.height = '30px';
+                    img.src = e.target.result;
+                    editor.appendChild(img);
+                    var res=e.target.result.toString().replace(/data:image.+base64,/g,'');
+                    var rr=res.substring(0,res.length);
+                    $.ajax({
+                        type:'GET',
+                        url:'/weibo_xnr_operate/get_image_path/?image_code='+rr,
+                        async:true,
+                        //timeout:300,
+                        //data:{"name":"xm"},//传参数
+                        dataType:"json",
+                        success:uploadIMG,
+                        error:function (xhr,textStatus,errorThrown) {
+                            //请求失败执行的函数
+                            console.log("请求失败",textStatus,errorThrown)
+                        },
+                        global:false//是否触发全局请求,需要触发就是true,不需要false
+                    });
+                }else{
+                    throw new Error('File type Error! please image file upload..') ;
+                }
             }
-
-            // alert(e.target.result);
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
-    }
-
     }
     var imgRoad=[];
     function uploadIMG(data) {
+        imgRoad=[];
+        $('#oneImg').addClass('disableCss');
         imgRoad.push(data[0]);
     }
     function show(){
         //以下即为完整客户端路径
         var file_img=document.getElementById("imgimg"),
-            iptfileupload = document.getElementById('iptfileupload') ;
+            iptfileupload = document.getElementById('iptfileupload');
         getPath(file_img,iptfileupload,file_img) ;
     }
-
     //==================================以下====关于群可见后的操作==================================================
     $('.friends .dropdown-menu li').on('click',function(e) {
         if (e.target.innerHTML||e.target.innerHTML.toString().substring(1,4)=='img'){

@@ -36,15 +36,15 @@
             <p style="font-size: 18px;font-weight:800;"><i class="icon icon-asterisk"></i>&nbsp;评估维度</p>
             <div class="com-2-choose" style="padding:10px;overflow: hidden;">
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="com2" value='' checked>
+                    <input class="demo-radio" type="radio" name="com2" value='influence' checked>
                     <span class="demo-checkbox demo-radioInput"></span> 影响力评估
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="com2" value=''>
+                    <input class="demo-radio" type="radio" name="com2" value='penetration'>
                     <span class="demo-checkbox demo-radioInput"></span> 渗透力评估
                 </label>
                 <label class="demo-label">
-                    <input class="demo-radio" type="radio" name="com2" value=''>
+                    <input class="demo-radio" type="radio" name="com2" value='safe'>
                     <span class="demo-checkbox demo-radioInput"></span> 安全性评估
                 </label>
                 <!--<label class="demo-label">-->
@@ -55,7 +55,8 @@
         </div>
         <button type="button" class="btn btn-primary btn-sm sureCompare" style="float:right;margin-right:10%;">开始对比</button>
     </div>
-    <div class="chartContent">
+    <h4 class="load" style="width: 100%;color: white;margin: 20px 0;text-align: center;display: none;">正在拼命加载中...</h4>
+    <div class="chartContent" style="display: none;">
         <p style="font-size:18px;font-weight:800;"><i class="icon icon-bar-chart"></i>&nbsp;对比分析</p>
         <div class="choosetime" style="padding:10px;">
             <label class="demo-label">
@@ -88,17 +89,20 @@
         </div>
         <div class="compare">
             <h3 class="vs" style="width: 100%;text-align:center;"></h3>
-            <div id="compare" style="width:100%;height: 400px;margin: 20px;"></div>
-            <h4><i class="icon icon-lightbulb"></i>&nbsp;影响力评估</h4>
+            <div id="compare" style="width:900px;height: 400px;margin:20px auto;"></div>
+
             <div class="table-1" style="margin: 20px 0;">
+                <h4 style="margin-bottom: 20px;"><i class="icon icon-lightbulb"></i>&nbsp;影响力评估</h4>
                 <div id="table-1"></div>
             </div>
-            <h4><i class="icon icon-tint"></i>&nbsp;渗透力评估</h4>
+
             <div class="table-2" style="margin: 20px 0;">
+                <h4 style="margin-bottom: 20px;"><i class="icon icon-tint"></i>&nbsp;渗透力评估</h4>
                 <div id="table-2"></div>
             </div>
-            <h4><i class="icon icon-glass"></i>&nbsp;安全性评估</h4>
+
             <div class="table-3" style="margin: 20px 0;">
+                <h4 style="margin-bottom: 20px;"><i class="icon icon-glass"></i>&nbsp;安全性评估</h4>
                 <div id="table-3"></div>
             </div>
         </div>
