@@ -452,7 +452,8 @@ facebook_user_index_type = 'user'
 
 fb_xnr_flow_text_index_name_pre = 'fb_xnr_flow_text_'
 fb_xnr_flow_text_index_type = 'text'
-
+new_fb_xnr_flow_text_index_name_pre = 'new_fb_xnr_flow_text_'
+new_fb_xnr_flow_text_index_type = 'text'
 
 # use to publish tweet at future time
 fb_xnr_timing_list_index_name = 'fb_tweet_timing_list'
