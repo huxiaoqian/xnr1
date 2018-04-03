@@ -6,7 +6,8 @@ from flask import Blueprint, url_for, render_template, request,\
         abort, flash, session, redirect
 from utils import get_influence_total_trend, compute_influence_num, penetration_total,\
                     compute_penetration_num,compute_safe_num, get_safe_active,\
-                    get_influence_total_trend_today, penetration_total_today, get_safe_active_today
+                    get_influence_total_trend_today, penetration_total_today, get_safe_active_today,\
+                    get_tweets_distribute, get_safe_tweets
 
 mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
 
@@ -105,7 +106,7 @@ def ajax_safe_active_today():
     results = get_safe_active_today(xnr_user_no)
 
     return json.dumps(results)
-'''
+
 # 发帖内容分布
 @mod.route('/tweets_distribute/')
 def ajax_tweets_distribute():
@@ -123,7 +124,7 @@ def ajax_safe_tweets_topic():
     results = get_safe_tweets(xnr_user_no,topic,sort_item)
     
     return json.dumps(results)
-'''
+
 
 """
 #2018-3-8 11:19:09

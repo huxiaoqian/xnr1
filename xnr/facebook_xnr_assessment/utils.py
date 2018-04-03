@@ -24,11 +24,10 @@ from xnr.global_utils import es_user_profile,facebook_feedback_comment_index_nam
                         fb_portrait_index_name as portrait_index_name, fb_portrait_index_type as portrait_index_type,\
                         fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre ,\
                         fb_xnr_flow_text_index_type as xnr_flow_text_index_type
-from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list
-
-
-
-
+from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list,\
+                        ts2datetime,datetime2ts, get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list
+from xnr.utils import fb_xnr_user_no2uid as xnr_user_no2uid, fb_uid2nick_name_photo as uid2nick_name_photo
+from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT
 
 
 
@@ -49,11 +48,8 @@ from xnr.global_utils import weibo_xnr_fans_followers_index_name,weibo_xnr_fans_
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
-
-from xnr.utils import xnr_user_no2uid,uid2nick_name_photo
-from xnr.time_utils import ts2datetime,datetime2ts,get_xnr_flow_text_index_list
-from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
-                        TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
+from xnr.parameter import PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
+                        ACTIVE_UID
 
 
 def get_influence_total_trend(xnr_user_no,start_time,end_time):
@@ -1303,18 +1299,15 @@ def get_safe_active_today(xnr_user_no):
 
 
 def get_tweets_distribute(xnr_user_no):
-
     topic_distribute_dict = {}
     topic_distribute_dict['radar'] = {}
-
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
         es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
-        followers_list = es_results['followers_list']
-
-    # 关注者topic分布
+        # followers_list = es_results['followers_list']
+        followers_list = es_results['fans_list']
 
     results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
         body={'ids':followers_list})['docs']
@@ -1332,7 +1325,7 @@ def get_tweets_distribute(xnr_user_no):
     print 'topic_list_followers_count:::',topic_list_followers_count
 
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-08')
+        current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time())
 
@@ -1355,8 +1348,6 @@ def get_tweets_distribute(xnr_user_no):
             'sort':{'timestamp':{'order':'desc'}}
         }
         try:
-            #print 'index_name_day:::',index_name_day
-
             es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
             #print 'es_results::',es_results
             for topic_result in es_results:
@@ -1369,18 +1360,6 @@ def get_tweets_distribute(xnr_user_no):
             continue
 
     topic_xnr_count = Counter(topic_string)
-    #print 'topic_xnr_count:::',topic_xnr_count
-    #except:
-        #topic_xnr_count = {}
-        
-    # 整理雷达图数据
-    # if topic_xnr_count:
-    #     for topic, value in topic_xnr_count.iteritems():
-    #         try:
-    #             topic_value = float(value)/(topic_list_followers_count[topic])
-    #         except:
-    #             continue
-    #         topic_distribute_dict['radar'][topic] = topic_value
     print 'topic_distribute_dict:::',topic_distribute_dict
     print 'topic_xnr_count:::',topic_xnr_count
     if topic_xnr_count:
@@ -1401,33 +1380,14 @@ def get_tweets_distribute(xnr_user_no):
 
             try:
                 mark += float(value)/(topic_list_followers_count[topic]*n_topic)
-                # print topic 
-                # print mark
             except:
                 continue
-    # print 'mark::',mark
     topic_distribute_dict['mark'] = round(mark,4)
 
     return topic_distribute_dict
 
 
 def get_safe_tweets(xnr_user_no,topic,sort_item):
-
-    # if S_TYPE == 'test':
-
-    #     current_time = datetime2ts(S_DATE)
-    #     index_name_list = get_flow_text_index_list(current_time)
-    #     query_body = {
-    #         'query':{
-    #             'match_all':{}
-    #         },
-    #         'size':TOP_WEIBOS_LIMIT,
-    #         'sort':{sort_item:{'order':'desc'}}
-    #     }
-
-    #     es_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
-    
-    # else:
     if S_TYPE == 'test':
         current_time = 1507362127  # 10月7日
 
