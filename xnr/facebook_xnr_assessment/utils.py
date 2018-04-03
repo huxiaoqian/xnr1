@@ -29,9 +29,9 @@ from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_lis
                         ts2datetime,datetime2ts, get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
                         get_new_fb_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list
 from xnr.utils import fb_xnr_user_no2uid as xnr_user_no2uid, fb_uid2nick_name_photo as uid2nick_name_photo
-from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT
-
-
+from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT,\
+                        fb_domain_en2ch_dict as domain_en2ch_dict, fb_domain_ch2en_dict as domain_ch2en_dict
+from xnr.global_utils import r_fb_followers_uid_list_datetime_pre as r_followers_uid_list_datetime_pre
 
 
 
@@ -49,7 +49,7 @@ from xnr.global_utils import weibo_xnr_fans_followers_index_name,weibo_xnr_fans_
                         
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
-                r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
+                r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
 from xnr.parameter import PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
                         ACTIVE_UID
 
@@ -1435,76 +1435,61 @@ def get_follow_group_distribute(xnr_user_no):
     
     domain_distribute_dict = {}
     domain_distribute_dict['radar'] = {}
-
-    # if S_TYPE == 'test':
-    #     followers_list=PORTRAIT_UID_LIST
-    #     followers_list_today = FOLLOWERS_TODAY
-    # else:
     # 获取所有关注者
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    followers_list = es_results['followers_list']
+    followers_list = es_results['fans_list']
 
     # 获取今日关注者
     if S_TYPE == 'test':
-        current_time = datetime2ts('2017-10-02')  # 10月7日
-
+        current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time())
     current_date = ts2datetime(current_time)
     r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
     followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
-    # print 'followers_results::',followers_results
+
     if followers_results != None:
         followers_list_today = json.loads(followers_results)
     else:
         followers_list_today = []
 
     # 所有关注者领域分布
-
-    results = es.mget(index=user_domain_index_name,doc_type=user_domain_index_type,\
+    results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
         body={'ids':followers_list})['docs']
     
     domain_list_followers = []
-
     for result in results:
         if result['found'] == True:
             result = result['_source']
-            domain_name = result['domain_name']
-            domain_list_followers.append(domain_name)
+            # domain_name = result['domain_name']
+            domain = result['domain']
+            if domain:
+                domain_name = domain_en2ch_dict[domain]
+                domain_list_followers.append(domain_name)
 
     domain_list_followers_count = Counter(domain_list_followers)
-
-    #domain_distribute_dict['domain_follower'] = domain_list_followers_count
-    
+   
     # 今日关注者
     #followers_list_today = FOLLOWERS_TODAY
     try:
-        today_results = es.mget(index=user_domain_index_name,doc_type=user_domain_index_type,\
+        today_results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
             body={'ids':followers_list_today})['docs']
-        #print 'today_results:::',today_results
         domain_list_followers_today = []
 
         for result in today_results:
             if result['found'] == True:
                 result = result['_source']
-                domain_name = result['domain_name']
-                domain_list_followers_today.append(domain_name)
+                # domain_name = result['domain_name']
+                domain = result['domain']
+                if domain:
+                    domain_name = domain_en2ch_dict[domain]
+                    domain_list_followers_today.append(domain_name)
 
         domain_list_followers_today_count = Counter(domain_list_followers_today)
 
     except:
         domain_list_followers_today_count = {}
-
-
-    # 整理雷达图数据
-    # if domain_list_followers_today_count:
-    #     for domain, value in domain_list_followers_today_count.iteritems():
-    #         try:
-    #             domain_value = float(value)/(domain_list_followers_count[domain])
-    #         except:
-    #             continue
-    #         domain_distribute_dict['radar'][domain] = domain_value
 
     
     for domain, value in domain_list_followers_count.iteritems():
@@ -1517,10 +1502,6 @@ def get_follow_group_distribute(xnr_user_no):
                 domain_value = 0
         else:
             domain_value = 0
-            # try:
-            #     domain_value = float(domain_list_followers_today_count[domain])/value
-            # except:
-            #     continue
         domain_value = min([domain_value,value])
         domain_distribute_dict['radar'][domain] = domain_value
 
@@ -1545,23 +1526,28 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     else:
         current_time = int(time.time())
 
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    followers_list = es_results['followers_list']
+    followers_list = es_results['fans_list']
+
+    print 'domain', domain
+    domain_en = domain_ch2en_dict[domain]
+    print 'domain_en', domain_en
 
     domain_query_body = {
         'query':{
             'bool':{
                 'must':[
                     {'terms':{'uid':followers_list}},
-                    {'term':{'domain_name':domain}}
+                    # {'term':{'domain_name':domain}}
+                    {'term':{'domain':domain_en}}
                 ]
             }
         }
     }
 
-    domain_search_results = es.search(index=user_domain_index_name,\
-        doc_type=user_domain_index_type,body=domain_query_body)['hits']['hits']
+    domain_search_results = es.search(index=portrait_index_name,\
+        doc_type=portrait_index_type,body=domain_query_body)['hits']['hits']
 
     domain_uid_list = []
 
