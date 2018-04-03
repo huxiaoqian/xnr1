@@ -605,7 +605,7 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #日更新
-    print 'update_influence: ', update_influence(uid_list)
+    print 'update_baseinfo: ', update_baseinfo(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
@@ -613,13 +613,11 @@ def update_all():
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
-    print 'update_sensitive: ', update_sensitive(uid_list)
+    print 'update_influence: ', update_influence(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
-
-
-    print 'update_sentiment: ', update_sentiment(uid_list)
+    print 'update_sensitive: ', update_sensitive(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
@@ -643,6 +641,25 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    update_baseinfo(load_uid_list())
+    update_all()
+    # update_baseinfo(load_uid_list())
     
+# total num:  104
+# time used:  0.0210788249969
+# update_baseinfo:  True
+# time used:  0.202018022537
+# update_hashtag:  True
+# time used:  0.387202978134
+# update_influence:  True
+# time used:  0.172748088837
+# update_sensitive:  True
+# time used:  0.489547967911
+# update_domain:  True
+# time used:  39.968378067
+# update_sentiment:  True
+# time used:  0.341555833817
+# update_topic:  True
+# time used:  30.8768241405
+# update_keywords: True
+# time used:  4.85285305977
+
