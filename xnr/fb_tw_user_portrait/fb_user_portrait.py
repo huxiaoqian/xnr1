@@ -630,21 +630,23 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    update_baseinfo(load_uid_list())
+    update_all()
+    # update_baseinfo(load_uid_list())
 # total num:  92
-# time used:  0.0138351917267
+# time used:  0.0157630443573
+# update_baseinfo:  True
+# time used:  0.154299974442
 # update_hashtag:  True
-# time used:  0.219952821732
+# time used:  0.46758389473
 # update_influence:  True
-# time used:  0.145478010178
+# time used:  0.33092212677
 # update_sensitive:  True
-# time used:  0.242365121841
+# time used:  0.285825967789
 # update_keywords: True
-# time used:  1.23831295967
+# time used:  1.21863102913
 # update_sentiment:  True
-# time used:  0.215330123901
+# time used:  0.325371980667
 # update_domain:  True
-# time used:  62.3806529045
+# time used:  65.2284970284
 # update_topic:  True
-# time used:  11.7983570099
+# time used:  12.6456358433
