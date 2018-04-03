@@ -13,6 +13,7 @@ class Comment():
 		self.es = Es_fb()
 		self.comment_list = self.launcher.get_comment_list()
 		self.list = []
+		self.update_time = int(time.time())
 
 	def get_comment(self):
 		for url in self.comment_list:
@@ -26,23 +27,38 @@ class Comment():
 				pass
 
 			try:
-				root_content = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]').text
+				try:
+					root_text = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[2]/div[1]/div[2]/div[2]').text
+				except:
+					root_text = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]').text
 			except:
-				root_content = self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]').text
+				root_text = 'None'
 			try:
-				root_time = self.driver.find_element_by_xpath('//abbr[@class="_5ptz"]').get_attribute('data-utime')
+				try:
+					root_mid = ''.join(re.findall(re.compile('story_fbid=(\d+)'),self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href')))
+				except:
+					root_mid = ''.join(re.findall(re.compile('story_fbid=(\d+)'),self.driver.find_element_by_xpath('//div[@role="feed"]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href')))
 			except:
-				root_time = self.driver.find_element_by_xpath('//abbr[@class="_5ptz timestamp livetimestamp"]').get_attribute('data-utime')
+				root_mid = 'None'
 			for each in self.driver.find_elements_by_xpath('//div[@aria-label="评论"]'):
 				try:
-					author_name = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[1]/a').text
+					try:
+						author_name = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[1]/a').text
+					except:
+						author_name = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[1]/a').text					
 				except:
-					author_name = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[1]/a').text					
+					author_name = 'None'
 				try:
-					author_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[1]/a').get_attribute('data-hovercard')))
+					try:
+						author_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[1]/a').get_attribute('data-hovercard')))
+					except:
+						author_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[1]/a').get_attribute('data-hovercard')))					
+				except:	
+					author_id = 'None'
+				try:
+					pic_url = each.find_element_by_xpath('./div/div/div/div[1]/a/img').get_attribute('src')
 				except:
-					author_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/span/span[1]/a').get_attribute('data-hovercard')))					
-				pic_url = each.find_element_by_xpath('./div/div/div/div[1]/a/img').get_attribute('src')
+					pic_url = 'None'
 				try:
 					content = each.find_element_by_xpath('./div/div/div/div[2]/div/div/div/div/div/span/span[2]/span/span/span/span').text
 				except:
@@ -51,7 +67,8 @@ class Comment():
 					ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[4]/a/abbr').get_attribute('data-utime'))
 				except:
 					ti = int(each.find_element_by_xpath('./div/div/div/div[2]/div/div/div[2]/span[5]/a/abbr').get_attribute('data-utime'))					
-				self.list.append({'nick_name':author_name,'uid':author_id,'photo_url':pic_url,'text':content,'timestamp':ti})
+				self.list.append({'uid':author_id, 'photo_url':pic_url, 'nick_name':author_name, 'mid':root_mid, 'timestamp':ti, 'text':content,\
+									 'update_time':self.update_time, 'root_text':root_text, 'root_mid':root_mid})
 		return self.list
 
 	def save(self,indexName,typeName,list):

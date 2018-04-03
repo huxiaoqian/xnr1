@@ -12,6 +12,7 @@ class Message():
 		self.driver = self.launcher.login()
 		self.es = Es_fb()
 		self.list = []
+		self.update_time = int(time.time())
 
 	def get_list(self):
 		self.driver.get('https://www.facebook.com/messages/t/')
@@ -23,10 +24,24 @@ class Message():
 
 		sx_list = []
 		for each in self.driver.find_elements_by_xpath('//ul[@aria-label="对话列表"]/li'):
-			author_name = each.find_element_by_xpath('./div/a/div[2]/div[1]/span').text
-			pic_url = each.find_element_by_xpath('./div/a/div[1]/div/div/div//img').get_attribute('src')
-			message_url = each.find_element_by_xpath('./div/a').get_attribute('data-href')
-			sx_list.append({'name':author_name,'pic':pic_url,'message_url':message_url})
+			try:
+				author_name = each.find_element_by_xpath('./div/a/div[2]/div[1]/span').text
+			except:
+				author_name = 'None'
+			try:
+				author_id = ''.join(re.findall(re.compile('row_header_id_user:(\d+)'),each.find_element_by_xpath('./div').get_attribute('id')))
+			except:
+				author_id = 'None'
+			try:
+				pic_url = each.find_element_by_xpath('./div/a/div[1]/div/div/div//img').get_attribute('src')
+			except:
+				pic_url = 'None'
+			try:
+				message_url = each.find_element_by_xpath('./div/a').get_attribute('data-href')
+			except:
+				message_url = False
+			if message_url:
+				sx_list.append({'name':author_name, 'pic':pic_url, 'message_url':message_url, 'author_id':author_id})
 		return sx_list
 
 	def get_message(self):
@@ -42,16 +57,30 @@ class Message():
 
 			for message in self.driver.find_elements_by_xpath('//div[@class="_41ud"]'):
 				try:
-					mes = message.find_element_by_xpath('./div/div/div/span').text
-				except Exception as e:
-					mes = 'None'
-			try:
-				ti = [each for each in self.driver.find_elements_by_xpath('//div[@aria-label="消息"]//time')][-1].text
-				ti = '-'.join([i for i in re.findall(re.compile('(\d+)年(\d+)月(\d+)日'),ti)[0]])
-				timestamp = int(time.mktime(time.strptime(ti,"%Y-%m-%d")))
-			except:
-				timestamp = int(time.time())
-			self.list.append({'nick_name':sx['name'],'text':mes,'timestamp':timestamp})
+					ymd = '-'.join([t for t in re.findall(re.compile('(\d+)年(\d+)月(\d+)日'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
+					hm = ':'.join([q for q in re.findall(re.compile('(\d+):(\d+)'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
+					messagetime = ymd + ' ' + hm + ':00'
+					messageTime = int(time.mktime(time.strptime(messagetime,'%Y-%m-%d %H:%M:%S')))
+				except:
+					messageTime = 0
+
+				try:
+					messageId = re.findall(re.compile('"fbid:(\d+)"'),message.find_element_by_xpath('./div/div').get_attribute('participants'))[-1]
+					if messageId == sx['author_id']:
+						private_type = 'receive'
+						text = message.text
+						root_text = 'None'
+					else:
+						private_type = 'make'
+						text = 'None'
+						root_text = message.text
+				except:
+						private_type = 'unknown'
+						text = 'None'
+						root_text = 'None'
+
+
+			self.list.append({'uid':sx['author_id'], 'photo_url':sx['pic'], 'nick_name':sx['name'], 'timestamp':messageTime, 'update_time':self.update_time, 'text':text, 'root_text':root_text, 'private_type':private_type})
 		return self.list
 
 	def save(self, indexName, typeName, list):

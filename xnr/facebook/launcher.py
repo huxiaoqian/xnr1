@@ -123,31 +123,19 @@ class Launcher():
 		#加载更多
 		length=100
 		for i in range(0,20):
-			js="var q=document.documentElement.scrollTop="+str(length) 
-			self.driver.execute_script(js) 
-			time.sleep(2)
+			js="var q=document.documentElement.scrollTop="+str(length)
+			self.driver.execute_script(js)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
-		like_list = []
-		share_list = []
 		mention_list = []
-		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				like_list.append(url)
-			if type == "story_reshare":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				share_list.append(url)
 			if type == "mention" or type == "tagged_with_story":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				mention_list.append(url)
-			if type == "feed_comment":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				comment_list.append(url)
 		return mention_list
 
 	def get_comment_list(self):
@@ -164,26 +152,14 @@ class Launcher():
 		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
-			time.sleep(2)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
-		like_list = []
-		share_list = []
-		mention_list = []
 		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				like_list.append(url)
-			if type == "story_reshare":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				share_list.append(url)
-			if type == "mention" or type == "tagged_with_story":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				mention_list.append(url)
 			if type == "feed_comment":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				comment_list.append(url)
