@@ -131,18 +131,17 @@ def new_facebook_xnr_flow_text_mappings(index_name):
                             'type':'long'
                             },
                         'topic_field_first':{
-                        	'type':'string',
-                        	'index':'not_analyzed'
-                        	},
+                            'type':'string',
+                            'index':'not_analyzed'
+                            },
                         'topic_field':{
-                        	'type':'string',
-                        	'index':'not_analyzed'
-                        	}
+                            'type':'string',
+                            'index':'not_analyzed'
+                            }
                         }
                     }
                 }
             }
     exist_indice = es.indices.exists(index=index_name)
-    print '11'
     if not exist_indice:
         es.indices.create(index=index_name, body=index_info, ignore=400)
