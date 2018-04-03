@@ -23,9 +23,11 @@ from xnr.global_utils import es_user_profile,facebook_feedback_comment_index_nam
                         facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
                         fb_portrait_index_name as portrait_index_name, fb_portrait_index_type as portrait_index_type,\
                         fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre ,\
-                        fb_xnr_flow_text_index_type as xnr_flow_text_index_type
+                        fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
+                        new_fb_xnr_flow_text_index_type as new_xnr_flow_text_index_type
 from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list,\
-                        ts2datetime,datetime2ts, get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list
+                        ts2datetime,datetime2ts, get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
+                        get_new_fb_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list
 from xnr.utils import fb_xnr_user_no2uid as xnr_user_no2uid, fb_uid2nick_name_photo as uid2nick_name_photo
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT
 
@@ -1389,12 +1391,12 @@ def get_tweets_distribute(xnr_user_no):
 
 def get_safe_tweets(xnr_user_no,topic,sort_item):
     if S_TYPE == 'test':
-        current_time = 1507362127  # 10月7日
+        current_time = datetime2ts(S_DATE)
 
     else:
         current_time = int(time.time())
 
-    index_name_list = get_xnr_flow_text_index_list(current_time)
+    index_name_list = get_new_xnr_flow_text_index_list(current_time)
     es_results_all = []
     
     for index_name_day in index_name_list:
@@ -1412,7 +1414,7 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
             'sort':{sort_item:{'order':'desc'}}
         }
         try:
-            es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            es_results = es.search(index=index_name_day,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
             es_results_all.extend(es_results)
 
         except:
