@@ -321,6 +321,8 @@ def create_weibo_community():
 
 
 if __name__ == '__main__':
-
+    start_time = int(time.time())
     create_weibo_community()
+    end_time = int(time.time())
+    print 'cost_time:::',end_time - start_time
 

@@ -553,6 +553,6 @@ def get_user_detail(uid):
 
 #删除社区
 def delete_community(community_id):
-    weibo_community_index_name = 'weibo_community_2016-11-20'
-    mark = es_xnr.delete(index=weibo_community_index_name,doc_type=weibo_community_index_type,id=community_id)
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
