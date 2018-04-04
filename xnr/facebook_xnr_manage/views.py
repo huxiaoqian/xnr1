@@ -11,7 +11,8 @@ from xnr.time_utils import datetime2ts
 from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get_xnr_detail,\
 					 show_history_count, lookup_xnr_assess_info
 
-from utils import show_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked
+from utils import show_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
+                  wxnr_list_friends
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
@@ -154,6 +155,7 @@ def ajax_wxnr_timing_tasks_change():
 	results=wxnr_timing_tasks_change(task_id,task_change_info)
 	return json.dumps(results)
 
+
 #撤销未发送的任务
 #http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks_revoked/?task_id=FXNR0005_1522641703
 @mod.route('/wxnr_timing_tasks_revoked/')
@@ -165,16 +167,20 @@ def ajax_wxnr_timing_tasks_revoked():
 
 
 
-
-
-
-
+#step 4.4: list of concerns
+#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_list_concerns/?user_id=WXNR0004&order_type=influence
+@mod.route('/wxnr_list_friends/')
+def ajax_wxnr_list_friends(): 
+	user_id=request.args.get('user_id','')
+	#order_type 影响力:ifluence  敏感度:sensitive
+	order_type=request.args.get('order_type','')
+	results=wxnr_list_friends(user_id,order_type)
+	return json.dumps(results)
+ 
 
 
 
 """
-
-
 
 #step 4.3: history information
 #step 4.3.1:show history posting
@@ -190,6 +196,8 @@ def ajax_show_history_posting():
 	require_detail['end_time']=int(request.args.get('end_time',''))
 	results=show_history_posting(require_detail)
 	return json.dumps(results)
+
+
 
 #step 4.3.2:show at content
 #http://219.224.134.213:9209/weibo_xnr_manage/show_at_content/?xnr_user_no=WXNR0004&content_type=weibo,at&start_time=1501948800&end_time=1504627200
@@ -275,24 +283,7 @@ def ajax_lookup_detail_weibouser():
 	results=lookup_detail_weibouser(uid)
 	return json.dumps(results)
 
-#step 4.4: list of concerns
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_list_concerns/?user_id=WXNR0004&order_type=influence
-@mod.route('/wxnr_list_concerns/')
-def ajax_wxnr_list_concerns(): 
-	user_id=request.args.get('user_id','')
-	#order_type 影响力:ifluence  敏感度:sensitive
-	order_type=request.args.get('order_type','')
-	results=wxnr_list_concerns(user_id,order_type)
-	return json.dumps(results)
- 
-#step 4.5: list of fans
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_list_fans/?user_id=WXNR0004&order_type=influence
-@mod.route('/wxnr_list_fans/')
-def ajax_wxnr_list_fans():
-	user_id=request.args.get('user_id','')
-	order_type=request.args.get('order_type','')
-	results=wxnr_list_fans(user_id,order_type)
-	return json.dumps(results)
+
 
 
 
