@@ -823,6 +823,7 @@ def get_final_community(xnr_user_no,date_time):
     #已有社区列表
     old_communitylist = get_old_community(xnr_user_no,date_time)
     print 'old_communitylist::',len(old_communitylist)
+    print 'new_community::',len(create_communitylist)
     #新旧社区对比
     #step.1 若旧社区为空，则直接保留新社区,存储至es；
     # 若旧社区不为空，则对新旧社区进行对比
@@ -842,24 +843,31 @@ def get_final_community(xnr_user_no,date_time):
                     similarity_first = similarity
                     similarity_oldid = old_community['community_id']
             if similarity_first > COMMUNITY_SIMILARITY:
+            	print 'similarity:::',similarity_first
                 newid_list.append(similarity_oldid)
             else:
             	similarity_oldid = 'a'
             	newid_list.append(similarity_oldid)
-
+            	
+        print 'similarity_oldid::',similarity_oldid
         for idx,new_community in enumerate(create_communitylist):
             old_community_list = [c for c in old_communitylist if c['community_id'] == newid_list[idx]]
             if len(old_community_list) > 0:
             	old_community = old_communitylist[0]
+            	new_community['community_id'] = old_community['community_id']
+            	new_community['create_time'] = old_community['create_time']
+            	new_community['community_name'] = old_community['community_name']
+            	new_community['community_status'] = old_community['community_status']
             	new_community['core_user_change'] = get_user_change(new_community['core_user'],old_community['core_user'])
                 new_community['community_user_change'] = get_user_change(new_community['community_user_list'],old_community['community_user_list'])
                 result_mark = save_community_detail(new_community,date_time)
             else:
+            	print 'new_community:::',new_community['community_name']
             	result_mark = save_community_detail(new_community,date_time)
 
         for old_community in old_communitylist:
         	if old_community['community_id'] in newid_list:
-        		pass
+        		print 'old_community::::',old_community['community_name']
         	else:
         		result_mark = save_community_detail(old_community,date_time)
 
