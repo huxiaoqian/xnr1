@@ -523,9 +523,13 @@ def trace_xnr_community(trace_datetime): #传的是ts
 if __name__ == '__main__':
     if S_TYPE == 'test':
         test_date = WEIBO_COMMUNITY_DATE
-        now_time = datetime2ts(test_date)
+        now_time = datetime2ts(test_date) - 7*DAY
+        for i in range(0,7):
+            test_time = now_time + i*DAY
+            trace_xnr_community(test_time)
+            i = i+1
     else:
         now_time = int(time.time())
 
-    trace_xnr_community(now_time)
+        trace_xnr_community(now_time)
     
