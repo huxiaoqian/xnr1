@@ -107,14 +107,15 @@ function chooseTime(TIME) {
     public_ajax.call_request('get',compareData_url,compareData);
 }
 $('.choosetime .demo-label input').on('click',function () {
-    $('.chartContent').hide();
-    $('.load').show();
     var _val=$(this).val();
     if (_val=='mize'){
         $('#start_1').show();
         $('#end_1').show();
         $('.sureTime').show();
     }else {
+        $('.chartContent').hide();
+        $('.load').show();
+        //--------------
         $('#start_1').hide();
         $('#end_1').hide();
         $('.sureTime').hide();
@@ -125,6 +126,7 @@ $('.choosetime .demo-label input').on('click',function () {
 function compareData(data) {
     var trendData=data['trend'];
     var legendData=Object.keys(trendData);
+    console.log(trendData)
     var time=[],sriesData=[];
     Object.keys(trendData[legendData[0]]).forEach(function(t,s){time.push(getLocalTime(t))});
     $.each(legendData,function (index,item) {
