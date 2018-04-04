@@ -9,7 +9,7 @@ import numpy as np
 from collections import Counter
 from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM,TARGET_KEYWORD_NUM,WORD2VEC_PATH,MAX_DETECT_COUNT
 from time_utils import ts2datetime,datetime2ts
-from global_config import S_TYPE,R_BEGIN_TIME,S_DATE
+from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
 
 from global_utils import es_xnr,xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
                          weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
@@ -291,7 +291,7 @@ def create_xnr_targetuser(xnr_user_no):
 
     #step2：设置时间范围
     if S_TYPE == 'test':
-        now_time = datetime2ts(S_DATE)
+        now_time = datetime2ts(WEIBO_COMMUNITY_DATE)
     else:
         now_time = int(time.time())
     end_ts = datetime2ts(ts2datetime(now_time))
