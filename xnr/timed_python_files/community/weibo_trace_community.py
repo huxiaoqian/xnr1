@@ -269,14 +269,15 @@ def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
         },
         'size':1,
         'sort':{'trace_time':{'order':'desc'}}
-    }   
-    # try:
-    es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
-        doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
-    for item in es_community:
-        old_index = item['_source'][index_type]
-    # except:
-        # old_index = 0 
+    } 
+    old_index = 0  
+    try:
+        es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
+            doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
+        for item in es_community:
+            old_index = item['_source'][index_type]
+    except:
+        old_index = 0 
     index_diff = index_value - old_index
     return old_index,index_diff
 
@@ -289,7 +290,7 @@ def get_warning_content(nodes,content_type,trace_datetime):
                 'filter':{
                     'bool':{
                         'must':[
-                        {'term':{'uid':nodes}},
+                        {'terms':{'uid':nodes}},
                         {'range':{content_type:{'gt':0}}}
                         ]
                     }
@@ -300,6 +301,8 @@ def get_warning_content(nodes,content_type,trace_datetime):
         'sort':{content_type:{'order':'desc'}}
     }
     flow_text_index_name = flow_text_index_name_pre + ts2datetime(trace_datetime)
+    print 'flow_text_index_name::',flow_text_index_name
+    print 'content_type::',content_type
     try:
         es_content = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         warning_content = []
@@ -335,6 +338,8 @@ def get_sensitive_warning(community,trace_datetime):
     #step 2:获取敏感内容
     content_type = 'sensitive'
     warning_content = get_warning_content(community['nodes'],content_type,trace_datetime)
+    # print 'sensitive_warning_descrp::',warning_descp
+    # print 'sensitive_warning_content::',warning_content
 
     return warning_descp,json.dumps(warning_content)
 
