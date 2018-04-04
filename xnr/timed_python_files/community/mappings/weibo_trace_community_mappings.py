@@ -76,7 +76,7 @@ def weibo_trace_community_mappings(xnr_user_no):
                          'type':'string',
                          'index':'not_analyzed'
                     },
-                    'num_warning_content':{ #人物预警内容
+                    'num_warning_content':{ #人物预警内容 
                          'type':'string',
                          'index':'no'
                     },
