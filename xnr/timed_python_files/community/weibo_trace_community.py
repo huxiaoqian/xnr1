@@ -268,7 +268,7 @@ def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
             }
         },
         'size':1,
-        'sort':{'trace_time':{'order':'desc'}}
+        'sort':{'trace_time':{'order':'asc'}}
     }   
     # try:
     es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
@@ -522,14 +522,17 @@ def trace_xnr_community(trace_datetime): #传的是ts
 
 if __name__ == '__main__':
     if S_TYPE == 'test':
-        test_date = WEIBO_COMMUNITY_DATE
-        now_time = datetime2ts(test_date) - 7*DAY
-        for i in range(0,7):
-            test_time = now_time + i*DAY
-            trace_xnr_community(test_time)
-            i = i+1
+        # test_date = WEIBO_COMMUNITY_DATE
+        test_date = '2016-11-27'
+        now_time = datetime2ts(test_date)
+        # for i in range(0,7):
+        #     test_time = now_time + i*DAY
+        #     trace_xnr_community(test_time)
+        #     i = i+1
     else:
         now_time = int(time.time())
-
-        trace_xnr_community(now_time)
+    start_time = int(time.time())
+    trace_xnr_community(now_time)
+    end_time = int(time.time())
+    print 'cost_tiime',end_time - start_time
     
