@@ -159,11 +159,11 @@ function socialContent(data) {
     setTimeout(function () {
         basicWORD(data['topic_wordcloud'],'basic-2','微话题关键词云');
     },500);
-    basicPOST(data['content_post'])
+    basicPOST(data['content_post']);
 }
 function basicWORD(data,id,_title){
     if (isEmptyObject(data)){
-        $('#'+id).css({textAlign:'center',lineHeight:'300px'}).text('暂无数据');
+        $('#'+id).css({textAlign:'center',lineHeight:'300px'}).text(_title+'暂无数据');
         return false;
     }
     var wordData=[];
@@ -226,8 +226,8 @@ function basicWORD(data,id,_title){
 };
 // 典型帖子
 $('.orderType input').on('click',function () {
-    $('#basic-3-content').hide();
-    $('#basic-3-content p').show();
+    $('.basic-3-content').children().hide();
+    $('.basic-3-content p').show();
     var _val=$(this).val();
     var community_content_url='/weibo_xnr_community/get_community_detail/?model=content&order_by='+_val+'&community_id='+communityId;
     public_ajax.call_request('GET',community_content_url,socialContent);
@@ -351,7 +351,7 @@ function basicPOST(data){
 
         ],
     });
-    $('#basic-3-content').show();
+    $('.basic-3-content').children().show();
     $('.basic-3-content p').slideUp(30);
 }
 // 社交特征
