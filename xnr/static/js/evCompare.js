@@ -126,7 +126,6 @@ $('.choosetime .demo-label input').on('click',function () {
 function compareData(data) {
     var trendData=data['trend'];
     var legendData=Object.keys(trendData);
-    console.log(trendData)
     var time=[],sriesData=[];
     Object.keys(trendData[legendData[0]]).forEach(function(t,s){time.push(getLocalTime(t))});
     $.each(legendData,function (index,item) {
@@ -182,7 +181,7 @@ function compareData(data) {
     }else if (dim=='safe'){
         FT1=false,FT2=false,FT3=true;
     }
-    tableAry(data['trend']);
+    tableAry(data['table']);
 };
 // 影响力评估
 // tableAry('table-1',[{a:2,b:3}],true,false,false);
@@ -193,6 +192,7 @@ function compareData(data) {
 //表格
 var _id='',FT1,FT2,FT3;
 function tableAry(data) {
+    console.log(data)
     $('#'+_id).bootstrapTable('load', data);
     $('#'+_id).bootstrapTable({
         data:data,
@@ -214,16 +214,16 @@ function tableAry(data) {
         columns: [
             {
                 title: "虚拟人",//标题
-                field: "xnr_user_no",//键名
+                field: "xnr",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.xnr_user_no==''||row.xnr_user_no=='null'||row.xnr_user_no=='unknown'){
+                    if (row.xnr==''||row.xnr=='null'||row.xnr=='unknown'){
                         return '未知';
                     }else {
-                        return row.xnr_user_no;
+                        return row.xnr;
                     };
                 }
             },
