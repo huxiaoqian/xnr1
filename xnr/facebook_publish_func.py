@@ -15,7 +15,7 @@ def fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text, message_type):
     current_time = int(time.time())
     current_date = ts2datetime(current_time)
     xnr_flow_text_index_name = fb_xnr_flow_text_index_name_pre + current_date
-
+    print 'xnr_flow_text_index_name...',xnr_flow_text_index_name
     item_detail = {}
     item_detail['uid'] = fb_xnr_user_no2uid(xnr_user_no)
     item_detail['xnr_user_no'] = xnr_user_no
@@ -28,43 +28,42 @@ def fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text, message_type):
     
     #classify_results = topic_classfiy(classify_mid_list, classify_text_dict)
 
-    try:
+    #try:
         
-        result = fb_xnr_flow_text_mappings(xnr_flow_text_index_name)
+    result = fb_xnr_flow_text_mappings(xnr_flow_text_index_name)
         
-        index_result = es.index(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,\
+    index_result = es.index(index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,\
                 id=task_id,body=item_detail)
         
-        mark = True
+    mark = True
 
-    except:
-        mark = False
+    #except:
+    #    mark = False
 
     return mark
 
 
 # 发帖
 def fb_publish(account_name, password, text, tweet_type, xnr_user_no):
+    print '123'
     print 'account_name,password..',account_name,password
     operation = Operation(account_name,password)
-    
-    #try:
-    print 'fb111'
+    print 'operation...',operation
     print operation.publish(text)
-    print 'fb222'
     mark = True
     # except:
     #     mark = False
 
     message_type = 1 # 原创
 
-    try:
-        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
+    #try:
+    save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    print 'save_mark..',save_mark
+    #except:
+    #    print '保存微博过程遇到错误！'
+    #    save_mark = False
 
-    return mark
+    return save_mark
 
 
 # 评论
@@ -80,13 +79,13 @@ def fb_comment(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     message_type = 2 # 评论
     
-    # try:
-    #     save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    # except:
-    #     print '保存微博过程遇到错误！'
-    #     save_mark = False
+    try:
+        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
 
-    return mark
+    return save_mark
 
 
 # 转发
@@ -103,13 +102,13 @@ def fb_retweet(account_name, password, _id, uid, text, tweet_type, xnr_user_no):
 
     message_type = 3 # 转发
     
-    # try:
-    #     save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
-    # except:
-    #     print '保存微博过程遇到错误！'
-    #     save_mark = False
+    try:
+        save_mark = fb_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    except:
+        print '保存微博过程遇到错误！'
+        save_mark = False
 
-    return mark
+    return save_mark
 
 # 关注
 def fb_follow(account_name, password, uid, xnr_user_no, trace_type):
