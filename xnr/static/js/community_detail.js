@@ -358,8 +358,7 @@ function basicPOST(data){
 var divBox_1='social-content-1',divBox_2='social-content-2';
 var socialData;
 function social(data){
-    socialData=data;
-    var thisData=data;
+      var thisData=data;
     if (divBox_1=='social-content-1'&&divBox_2=='social-content-2'){
         thisData=data['core_user_socail'];
     };
