@@ -21,8 +21,8 @@ def fb_xnr_flow_text_mappings(index_name):
             'mappings':{
                 'text':{
                     'properties':{
-                        'task_source':{  # 日常发帖，热点跟随，业务发帖
-                            'type':'string',
+                        'task_source':{  # 参数传对应英文 ，#u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
+                            'type':'string',             #u'跟随转发':'trace_post',u'智能发帖':'intel_post', u'信息监测':'info_detect'，u'预警': 'info_warning'
                             'index':'not_analyzed'
                         },
                         'xnr_user_no':{
