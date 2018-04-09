@@ -250,14 +250,22 @@ $('#container .quota .quota-opt .demo-label input').on('click',function () {
         $('#quota-1').show();
         $('#quota-2').hide();
         $('#quota-3').hide();
-    }else if (a=='totalValue') {
+        $('#quota-1 p').show();
+        if (t1==0){
+            $('#quota-1 p').slideUp(700);
+        }
+    }else if(a=='totalValue'){
         $('#quota-1').hide();
         $('#quota-2').hide();
         $('#quota-3').show();
-    }else {
+        $('#quota-2 p').show();
+        total();
+    }else{
         $('#quota-1').hide();
         $('#quota-2').show();
         $('#quota-3').hide();
+        $('#quota-3 p').show();
+        increase();
     }
 })
 var influe_url='/twitter_xnr_assessment/influence_total/?xnr_user_no='+ID_Num+
@@ -283,10 +291,10 @@ function influe(data) {
     //total_num、day_num、growth_rate
     //粉丝数   被转发   被评论   被点赞   被@  被私信
     $('#quota-1 p').show();
-    $('#quota-2 p').show();
-    $('#quota-3 p').show();
-    if (isEmptyObject(data)){
-        $('#quota-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+    if (isEmptyObject(data)||isEmptyObject(data['day_num'])){
+        t1=0;
+        $('#quota-1 h2').remove();
+        $('#quota-1').append('<h2 style="width: 100%;line-height: 400px;text-align: center;">暂无数据</h2>');
     }else {
         var legend=[],atData=[],fansData=[],commentData=[],likeData=[],privateData=[],retweetData=[];
         for (var t in data['day_num']['at']){time.push(getLocalTime(t))}
@@ -433,6 +441,14 @@ function influe(data) {
             ]
         };
         myChart.setOption(option);
+    }
+    $('#quota-1 p').slideUp(700);
+    if (isEmptyObject(data)||isEmptyObject(data['total_trend'])){
+        t2=0;
+        $('#quota-3 h2').remove();
+        $('#quota-3').append('<h2 style="width:100%;line-height:400px;text-align:center;">暂无数据</h2>');
+    }else{
+        t2=1;
         for (var m in data['total_trend']){
             if (m=='at'){legend2.push('被@总数');totalAt2=publicData(data['total_trend'][m])}
             else if (m=='comment'){legend2.push('被评论总数');totalComment2=publicData(data['total_trend'][m])}
@@ -440,7 +456,14 @@ function influe(data) {
             else if (m=='like'){legend2.push('被点赞总数');totallike2=publicData(data['total_trend'][m])}
             else if (m=='private'){legend2.push('被私信总数');totalPrivate2=publicData(data['total_trend'][m])}
             else if (m=='retweet'){legend2.push('被转发总数');totalRetweet2=publicData(data['total_trend'][m])}
-        }
+        };
+    }
+    if (isEmptyObject(data)||isEmptyObject(data['growth_rate'])){
+        t3=0;
+        $('#quota-2 h2').remove();
+        $('#quota-2').append('<h2 style="width:100%;line-height:400px;text-align:center;">暂无数据</h2>');
+    }else{
+        t3=1;
         for (var h in data['growth_rate']){
             if (h=='at'){growLEG.push('被@增长率');growthatData=publicData(data['growth_rate'][h])}
             else if (h=='comment'){growLEG.push('被评论增长率');growthcommentData=publicData(data['growth_rate'][h])}
@@ -449,15 +472,15 @@ function influe(data) {
             else if (h=='private'){growLEG.push('被私信增长率');growthprivateData=publicData(data['growth_rate'][h])}
             else if (h=='retweet'){growLEG.push('被转发增长率');growthretweetData=publicData(data['growth_rate'][h])}
         };
-        total();
-        increase();
     }
-    $('#quota-1 p').slideUp(700);
-    $('#quota-2 p').slideUp(700);
-    $('#quota-3 p').slideUp(700);
 }
+var t1,t2,t3;
 //累计值
 function total() {
+    if (t2==0){
+        $('#quota-3 p').slideUp(700);
+        return false;
+    }
     var myChart = echarts.init(document.getElementById('quota-3'),'dark');
     var option = {
         backgroundColor:'transparent',
@@ -600,6 +623,10 @@ function total() {
 }
 //增长率
 function increase() {
+    if (t3==0){
+        $('#quota-2 p').slideUp(700);
+        return false;
+    }
     var myChart = echarts.init(document.getElementById('quota-2'),'dark');
     var option = {
         backgroundColor:'transparent',
