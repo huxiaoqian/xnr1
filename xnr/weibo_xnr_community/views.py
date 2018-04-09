@@ -6,7 +6,7 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from utils import show_trace_community,show_new_community,get_community_warning,get_community_detail,\
-                  update_trace_status
+                  update_trace_status,delete_community
 
 from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
 from time_utils import ts2datetime,datetime2ts
@@ -86,3 +86,20 @@ def ajax_get_community_detail():
     result = get_community_detail(now_time,model,community_id,order_by)
     return json.dumps(result)
  
+
+
+# 社交网络中的用户信息
+@mod.route('/get_user_detail/')
+def ajax_get_user_detail():
+	uid = request.args.get('uid','')
+	result = get_user_detail(uid)
+	return json.dumps(result)
+
+
+#不需要连接
+#http://219.224.134.213:9207/weibo_xnr_community/delete_community/?community_id=WXNR0004_2016-11-20哆啦_绿茶_2016-11-19
+@mod.route('/delete_community/')
+def ajax_delete_community():
+    community_id = request.args.get('community_id','')    
+    result = delete_community(community_id)
+    return json.dumps(result)

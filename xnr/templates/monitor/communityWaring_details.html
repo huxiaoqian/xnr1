@@ -3,7 +3,6 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/community-detail.css">
 <style>
-
     /* 基本信息 */
     .essential-information {
         font-size:18px;
@@ -12,7 +11,7 @@
         padding:10px 0 20px 0;
     }
     .essential-information .det-span {
-        margin:10px 30px;
+        margin:10px 20px;
     }
     .essential-information .det {
         color:#f98077;
@@ -20,11 +19,11 @@
 
     /* 人数变化 死歌扎线图 */
     #people-num  ,#sensitivity ,#influence ,#convergence {
-        float:left;
+        /*float:left;*/
         width:100%;
         height:300px;
         /* border: 1px solid #01b4ff; */
-        border-bottom:1px solid #ddd;
+        /*border-bottom:1px solid #ddd;*/
     }
     #people-num  ,#sensitivity ,#influence{
         /* margin-bottom:20px; */
@@ -42,15 +41,17 @@
 
     /* 蓝色小标题 */
     .details-title {
-        margin:20px auto 10px;
-        float: left;
-        width: 100%;
+        /*margin:20px auto 10px;*/
+        /*float: left;*/
+        /*width: 100%;*/
     }
     .relevant {
         padding-left:30px;
         text-indent:2em;
         float: left;
         width: 100%;
+        text-align: left;
+        margin-top: 10px;
     }
 
 
@@ -75,7 +76,7 @@
         }
         /* 表格样式 */
         .bootstrap-table .table>thead>tr>th{
-            width: 9%;
+            width: 5%;
         }
         .fixed-table-container tbody .selected td {
             background-color: #2a556f!important;
@@ -156,6 +157,28 @@
             height: 500px;
         }
     /* ---------------------- */
+    .noBorder .table-no-bordered,.noBorder .table>tbody>tr>td,.noBorder .fixed-table-container,
+    .noBorder .bootstrap-table .table>thead>tr>th,.noBorder .bootstrap-table .table,.noBorder .table>tbody>tr>td{
+        border: none;
+    }
+    .table>tbody>tr>td {vertical-align: middle!important;}
+    .noBorder .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    /*.noBorder .fixed-table-body {*/
+        /*height: auto!important;*/
+        /*overflow-y: hidden;*/
+    /*}*/
+    .noBorder .bootstrap-table .table:not(.table-condensed),.noBorder .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .noBorder .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .noBorder .fixed-table-container thead th .th-inner {padding:0;}
+    /*.fixed-table-container {top: 15px;}*/
+    .noBorder .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .noBorder .fixed-table-container thead th .both {background-image: none!important;}
 
 </style>
 {% endblock %}
@@ -171,42 +194,55 @@
     <div class="community-detail clearfix">
         <!-- 基本信息 -->
         <p class="essential-information">
-            <span class="det-span"><span>社区名称：</span><span class="det det1">七七</span></span>
-            <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
-            <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
+            <span class="det-span"><span>社区名称：</span><span class="det det1"></span></span>
+            <span class="det-span"><span>初次创建时间：</span><span class="det det2"></span></span>
+            <span class="det-span"><span>社区人数：</span><span class="det det3"></span></span>
         </p>
         <div class="parent-box clearfix">
             <!-- 人数变化图 -->
-            <div id="people-num">
-                <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
+            <div id="people-num"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-desktop"></i> 人数变化描述</p>
+            <div class="thisDEC_1" style="width: 100%;margin:10px 0;color: white;"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 人数变化相关信息</p>
+            <div class="table-1">
+                <div id="table-1"></div>
             </div>
-            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 人数变换相关信息</p>
-            <p class="relevant">中国进步遥遥无期，如今的自由民主人权宪政只是想自由民主人权宪政的腐败，自由民主人权宪政的成为资产阶级，它们绝对不可能不坚持某种特色主义的继续专制独贪暴政，它们绝对不可能给广大人民群众自由民主人权宪政，它们绝对不会停止对广大人民群众自由民主人权宪政的封杀，截访。</p>
         </div>
 
         <div class="parent-box clearfix">
             <!-- 平均敏感度变化折线图 -->
-            <div id="sensitivity">
-                <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-            </div>
-            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 平均敏感度变化相关信息</p>
-            <p class="relevant">正在访港的“末代港督”彭定康，出席外国记者协会午餐会时主动提到“港独”问题，认为若将追求“民主”与“港独”混为一谈，是不诚实和可耻的，直指“港独”不可能成事，讨论“港独”更会冲淡港人对“民主”的支持。他形容“港独”为追求“民主”的社会，带来不必要的滑稽。英国《金融时报》报道称，彭</p>
+            <div id="sensitivity"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-desktop"></i> 敏感度变化描述</p>
+            <div class="thisDEC_2" style="width: 100%;margin:10px 0;color: white;"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 敏感度变化相关信息</p>
+            <div class="table-2 noBorder"><div id="table-2"></div></div>
+            <!--<p class="relevant"></p>-->
         </div>
         <div class="parent-box clearfix">
             <!-- 平均影响力变化折线图 -->
-            <div id="influence">
-                <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-            </div>
-            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 平均影响力变化相关信息</p>
-            <p class="relevant">饭局常务副局长:独裁不好吗？或者民主就是好的？还是你想民主那独裁就不好？你想独裁民主就不好？什么是独裁？这个宇宙不是黑白分明的，适合自己才是好的，在寻找合适的道路上总是充满曲折的。//@饭局常务副局长:说的好像英雄似的，1个人之所以能对抗11个美国总体，恰恰说明他是个独裁者。</p>
+            <div id="influence"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-desktop"></i> 影响力变化描述</p>
+            <div class="thisDEC_3" style="width: 100%;margin:10px 0;color: white;"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 影响力变化相关信息</p>
+            <div class="table-3 noBorder"><div id="table-3"></div></div>
         </div>
         <div class="parent-box clearfix">
             <!-- 聚集系数变化折线图 -->
-            <div id="convergence">
-                <!-- <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p> -->
-            </div>
+            <div id="convergence"></div>
+            <hr/>
+            <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-desktop"></i> 聚集系数变化描述</p>
+            <div class="thisDEC_4" style="width: 100%;margin:10px 0;color: white;"></div>
+            <hr/>
             <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 聚集系数变化相关信息</p>
-            <p class="relevant">以史为鉴，不管将来是以和平的方式，或以暴力的方式改朝换代，都要建立起权力民选制度。不要再进入恶性循环：旧独裁灭亡，新独裁诞生。民主意识必须深入民心，不要再把大独裁者当作民主先生！照顾一部分人，陷害另一部分人，不是民主。民主启蒙，民主呼声。敬请转发！</p>
+            <div class="table-4">
+                <div id="table-4"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -247,24 +283,23 @@
         $('#start').datetimepicker('setEndDate',ev.date);
     });
 
-    var flag = '{{flag}}';
-    console.log(flag);
-    if(flag == 0){
-        // 新发现社区预警页 不显示折线图
-        $('#people-num').hide();
-        $('#sensitivity').hide();
-        $('#influence').hide();
-        $('#convergence').hide();
-    }else {
-        $('#people-num').show();
-        $('#sensitivity').show();
-        $('#influence').show();
-        $('#convergence').show();
-    }
+    var oldNew = '{{oldNew}}';
+//    if(oldNew == 0){
+//        // 新发现社区预警页 不显示折线图
+//        $('#people-num').hide();
+//        $('#sensitivity').hide();
+//        $('#influence').hide();
+//        $('#convergence').hide();
+//    }else {
+//        $('#people-num').show();
+//        $('#sensitivity').show();
+//        $('#influence').show();
+//        $('#convergence').show();
+//    }
+    var communityId='{{comId}}';
 </script>
 
-<script src="/static/js/dark.js"></script>
-<!-- <script src="/static/js/echarts-2/build/dist/echarts.js"></script> -->
+<script src="/static/js/chalk.js"></script>
 <script src="/static/js/communityWaring_detail.js"></script>
 
 

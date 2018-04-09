@@ -3,7 +3,6 @@
 {% block my_css %}
 <link rel="stylesheet" href="/static/css/community-detail.css">
 <style>
-
     /* 基本信息 */
     .essential-information {
         font-size:18px;
@@ -131,13 +130,17 @@
     }
 
     /* 社交特征 */
-    #social-content {
-        margin-top:20px;
-        height: 500px;
-        border-bottom: 1px solid #ddd;
-    }
-    #social-content-2 {
-        margin-top:20px;
+    #social {overflow: hidden;}
+    /*.social-content-1,.social-content-3 {*/
+        /*float: left;*/
+    /*}*/
+    /*.social-content-2,.social-content-4{*/
+        /*float: right;*/
+    /*}*/
+    #social-content-1, #social-content-3{
+        height:400px;
+        width:800px;
+        margin: 20px auto 0;
     }
 </style>
 {% endblock %}
@@ -153,21 +156,21 @@
     <div class="community-detail clearfix">
         <!-- 基本信息 -->
         <p class="essential-information">
-            <span class="det-span"><span>社区名称：</span><span class="det det1">七七</span></span>
-            <span class="det-span"><span>初次创建时间：</span><span class="det det2">2018-2-2</span></span>
-            <span class="det-span"><span>社区人数：</span><span class="det det3">888</span></span>
+            <span class="det-span"><span>社区名称：</span><span class="det det1"></span></span>
+            <span class="det-span"><span>初次创建时间：</span><span class="det det2"></span></span>
+            <span class="det-span"><span>社区人数：</span><span class="det det3"></span></span>
         </p>
     </div>
     <!-- tab栏 -->
     <div class="type_page">
         <ul id="myTabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active">
+            <li role="presentation" class="active" thisModal="user" task="community_user">
                 <a href="#community-details" role="tab" data-toggle="tab"><b class="icon icon-lightbulb"></b>&nbsp;社区人员</a>
             </li>
-            <li role="penetration">
+            <li role="penetration" thisModal="content" task="socialContent">
                 <a href="#basic" role="tab" data-toggle="tab"><b class="icon icon-tint"></b>&nbsp;社区内容</a>
             </li>
-            <li role="presentation">
+            <li role="presentation" thisModal="netgragh" task="social">
                 <a href="#social" role="tab" data-toggle="tab"><b class="icon icon-glass"></b>&nbsp;社交特征</a>
             </li>
         </ul>
@@ -177,49 +180,61 @@
                 <div role="tabpanel" class="tab-pane active" id="community-details">
                     <!-- 成员变换信息 -->
                     <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员列表</p>
-                    <div id="member-change-1">
-                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    <div class="member-change-1">
+                        <div id="member-change-1"><p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p></div>
                     </div>
-
                     <!-- 社区成员列表 -->
                     <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 社区成员变化列表</p>
-                    <div id="member-change-2">
-                        <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    <div class="member-change-2">
+                        <div id="member-change-2"><p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p></div>
                     </div>
                 </div>
                 <!-- 基本特征 -->
                 <div role="tabpanel" class="tab-pane clearfix " id="basic">
                     <div id="basic-1"></div>
                     <div id="basic-2"></div>
-
                     <div id="basic-3">
                         <p class="details-title" style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 典型帖子</p>
-                        <div>排序方式：
+                        <div class="orderType">
+                            排序方式：
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="sort" value='0' checked>
+                                <input class="demo-radio" type="radio" name="sort" value='sensitive' checked>
                                 <span class="demo-checkbox demo-radioInput"></span> 按敏感度
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="sort" value='1'>
+                                <input class="demo-radio" type="radio" name="sort" value='retweeted'>
                                 <span class="demo-checkbox demo-radioInput"></span> 按热度
                             </label>
                             <label class="demo-label">
-                                <input class="demo-radio" type="radio" name="sort" value='2'>
+                                <input class="demo-radio" type="radio" name="sort" value='timestamp'>
                                 <span class="demo-checkbox demo-radioInput"></span> 按时间
                             </label>
                         </div>
-                        <div id="basic-3-content">
+                        <div class="basic-3-content">
                             <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                            <div id="basic-3-content"></div>
                         </div>
                     </div>
                 </div>
                 <!-- 社交特征 -->
                 <div role="tabpanel" class="tab-pane" id="social">
-                    <div id="social-content"></div>
-                    <div class="social-content-2">
-                        <div id="social-content-2"></div>
+                    <div class="social" style="overflow: hidden">
+                        <div class="social-content-1">
+                            <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i>  社区内部核心用户交互关系</p>
+                            <div id="social-content-1"></div>
+                        </div>
+                        <div class="social-content-2">
+                            <div id="social-content-2"></div>
+                        </div>
                     </div>
-
+                    <hr/>
+                    <div class="social-content-3">
+                        <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i>  外部用户与核心用户交互关系</p>
+                        <div id="social-content-3"></div>
+                    </div>
+                    <div class="social-content-4">
+                        <div id="social-content-4"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -262,14 +277,14 @@
     $('#end').on('changeDate', function(ev){
         $('#start').datetimepicker('setEndDate',ev.date);
     });
+    $('.det1').text('{{communityName}}');
+    $('.det2').text(getLocalTime('{{communityTime}}'));
+    $('.det3').text('{{communityPeople}}');
+    var communityId='{{communityID}}';
 </script>
 
-<script src="/static/js/dark.js"></script>
-<script src="/static/js/echarts-2/build/dist/echarts.js"></script>
-
-<!-- <script src="/static/echarts/LLecharts.min.js"></script>
-<script src="/static/echarts/LLdataTool.min.js"></script> -->
-
+<script src="/static/js/chalk.js"></script>
+<script src="/static/echarts/wordcloud.min.js"></script>
 <script src="/static/js/community_detail.js"></script>
 
 {% endblock %}
