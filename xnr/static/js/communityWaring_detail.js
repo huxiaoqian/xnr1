@@ -4,10 +4,11 @@ var communityDetails_url='/weibo_xnr_community/get_community_warning/?xnr_user_n
 public_ajax.call_request('GET',communityDetails_url,communityDetailsFun);
 var time;
 function communityDetailsFun(data) {
-    console.log(data);
     $('.det1').text(data.community_name);
-    $('.det2').text(getLocalTime(data.trace_time));
-    $('.det3').text(data.num[data.num.length-1]);
+    var a=data.trace_time?getLocalTime(data.trace_time):'无数据';
+    $('.det2').text(a);
+    var b=data.num?data.num[data.num.length-1]:'无数据';
+    $('.det3').text(b);
     time=data.trace_date;
     //人数===
     chartNum('人数变化图','people-num',data.num,'');//折线图
@@ -34,6 +35,10 @@ function communityDetailsFun(data) {
 }
 // 人数变化图
 function chartNum(tit,ID,peopleData,flag){
+    if(!peopleData){
+        $('#'+ID).html('<h4 style="width:100%;text-align:center;margin-top:140px;">人数变化图暂无数据</h4>');
+        return false;
+    }
     var myChart = echarts.init(document.getElementById(ID),'chalk');
     var option = {
         backgroundColor:'transparent',
@@ -116,8 +121,10 @@ function chartNum(tit,ID,peopleData,flag){
 function descript(id,descrp) {
     var str='';
     for(var i=0;i<descrp.length;i++){
+        var t;
+        try{t=time[i]}catch(e){t='未知'}
         if(descrp[i]!=''){
-            str+='<p style="margin:5px 10px;font-size: 14px;">● '+time[i]+'：'+descrp[i]+'</p>';
+            str+='<p style="margin:5px 10px;font-size: 14px;">● '+t+'：'+descrp[i]+'</p>';
         }
     }
     if (str==''){$('.'+id).html('<p style="margin-left:25px;font-size: 14px;">此时间段内无任何描述。</p>')}else {
@@ -254,6 +261,3 @@ function tablePic(id,data) {
         columns:tableColumns,
     });
 };
-$(document).ajaxComplete(function() {
-    console.log( "Triggered ajaxComplete handler." );
-});
