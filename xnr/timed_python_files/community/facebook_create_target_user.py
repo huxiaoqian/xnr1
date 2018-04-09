@@ -3,20 +3,36 @@ import os
 import json
 import time
 import sys
-sys.path.append('../')
+sys.path.append('../../')
 import gensim
 import numpy as np
 from collections import Counter
-from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM
+from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM,TARGET_KEYWORD_NUM,WORD2VEC_PATH,MAX_DETECT_COUNT
 from time_utils import ts2datetime,datetime2ts
 from global_config import S_TYPE,FACEBOOK_COMMUNITY_DATE
-from timed_python_files.community.facebook_publicfunc import get_compelete_fbxnr
+
 from global_utils import es_xnr,facebook_community_target_user_index_name_pre,facebook_community_target_user_index_type,\
                          facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
                          fb_be_retweet_index_name_pre,fb_be_retweet_index_type,\
                          fb_xnr_flow_text_index_name_pre,fb_xnr_flow_text_index_type,\
                          fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type
 
+r_beigin_ts = datetime2ts(R_BEGIN_TIME)
+
+sys.path.append('../../timed_python_files/community/')
+from facebook_publicfunc import get_compelete_fbxnr
+
+#use to merge dict
+#input: dict1, dict2, dict3...
+#output: merge dict
+def union_dict(*objs):
+    _keys = set(sum([obj.keys() for obj in objs], []))
+    _total = {}
+    for _key in _keys:
+        _total[_key] = sum([int(obj.get(_key, 0)) for obj in objs])
+    
+    return _total
+    
 #查找虚拟人发布的关键词
 def get_xnr_keywords(xnr_user_no,datetime_list):
     query_body={
@@ -103,7 +119,7 @@ def detect_by_keywords(keywords,datetime_list):
 
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
-    en_keywords_list = trans(keywords_list, target_language='en')
+    # en_keywords_list = trans(keywords_list, target_language='en')
     for i in range(len(keywords_list)):
         keyword = keywords_list[i]
         traditional_keyword = simplified2traditional(keyword)

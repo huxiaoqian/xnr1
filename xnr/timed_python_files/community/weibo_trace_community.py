@@ -39,6 +39,7 @@ def get_community_index(date_time):
             index_name_list.append(index_name)
         else:
         	pass
+    print index_name_list
     return index_name_list
 
 
@@ -117,13 +118,16 @@ def get_evaluate_max(index_name,index_type,field):
 
 
 #更新社区的预警等级
-def update_warning_rank(trace_datetime,community_id,warning_rank,warning_type):
+def update_warning_rank(community,trace_datetime):
     weibo_community_index_name = get_community_index(trace_datetime)
     # community_get = es_xnr.get(index=weibo_community_index_type,doc_type=weibo_community_index_type,id=community_id)['_source']
     # warning_
     try:
         update_result = es_xnr.update(index=weibo_community_index_name,doc_type=weibo_community_index_type,\
-            id=community_id,body={'doc':{'warning_rank':warning_rank,'warning_type':warning_type}})
+            id=community['community_id'],body={'doc':{'warning_rank':community['warning_rank'],\
+            'warning_type':community['warning_type'],'density':community['density'],'cluster':community['cluster'],\
+            'max_influence':community['max_influence'],'mean_influence':community['mean_influence'],\
+            'max_sensitive':community['max_sensitive'],'mean_sensitive':community['mean_sensitive']}})
         mark = True
     except:
         mark = False
@@ -155,7 +159,7 @@ def get_bound_uplowerlist(community_id,xnr_user_no,bound_type,bound_value):
             }
         },
         'size':7,
-        'sort':{'trace_time':{'order':'desc'}}
+        'sort':{'trace_time':{'order':'asc'}}
     }
     try:
         es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
@@ -236,7 +240,7 @@ def get_person_warning(community_id,new_nodes):
             }
         },
         'size':1,
-        'sort':{'trace_time':{'order':'desc'}}
+        'sort':{'trace_time':{'order':'asc'}}
     }   
     try:
         es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
@@ -268,15 +272,20 @@ def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
             }
         },
         'size':1,
-        'sort':{'trace_time':{'order':'desc'}}
-    }   
-    # try:
-    es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
-        doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
-    for item in es_community:
-        old_index = item['_source'][index_type]
-    # except:
-        # old_index = 0 
+        'sort':{'trace_time':{'order':'asc'}}
+    }  
+    old_index = 0
+    try:
+        es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
+            doc_type=weibo_trace_community_index_type,body=query_body)['hits']['hits']
+        for item in es_community:
+            old_index = item['_source'][index_type]
+    except:
+        old_index = 0 
+    print 'community_id::',community_id
+    print 'index_type::',index_type
+    print 'index_value::',index_value
+    print 'old_index::',old_index
     index_diff = index_value - old_index
     return old_index,index_diff
 
@@ -289,7 +298,7 @@ def get_warning_content(nodes,content_type,trace_datetime):
                 'filter':{
                     'bool':{
                         'must':[
-                        {'term':{'uid':nodes}},
+                        {'terms':{'uid':nodes}},
                         {'range':{content_type:{'gt':0}}}
                         ]
                     }
@@ -300,6 +309,8 @@ def get_warning_content(nodes,content_type,trace_datetime):
         'sort':{content_type:{'order':'desc'}}
     }
     flow_text_index_name = flow_text_index_name_pre + ts2datetime(trace_datetime)
+    print 'flow_text_index_name::',flow_text_index_name
+    print 'content_type::',content_type
     try:
         es_content = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,body=query_body)['hits']['hits']
         warning_content = []
@@ -335,6 +346,8 @@ def get_sensitive_warning(community,trace_datetime):
     #step 2:获取敏感内容
     content_type = 'sensitive'
     warning_content = get_warning_content(community['nodes'],content_type,trace_datetime)
+    # print 'sensitive_warning_descrp::',warning_descp
+    # print 'sensitive_warning_content::',warning_content
 
     return warning_descp,json.dumps(warning_content)
 
@@ -489,7 +502,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
         community_detail['mean_sensitive'] = trace_index_result['mean_sensitive']
 
         #预警处理
-        warning_result = get_warning_reslut(community,trace_datetime)
+        warning_result = get_warning_reslut(community_detail,trace_datetime)
         community_detail['warning_type'] = warning_result['warning_type']
 
         community_detail['num_warning'] = warning_result['num_warning']
@@ -509,8 +522,8 @@ def trace_xnr_community(trace_datetime): #传的是ts
         community_detail['density_warning_content'] = warning_result['density_warning_content']
 
         community_detail['warning_rank'] = warning_result['num_warning'] + warning_result['sensitive_warning'] + warning_result['influence_warning'] + warning_result['density_warning']
-        #更新显示预警等级
-        update_warningrank_mark = update_warning_rank(trace_datetime,community['community_id'],community_detail['warning_rank'],community_detail['warning_type'])
+        #更新显示
+        update_warningrank_mark = update_warning_rank(community_detail,trace_datetime)
 
         #存储至数据库
         save_community_mark = save_community_detail(community_detail,community['xnr_user_no'])
@@ -522,10 +535,17 @@ def trace_xnr_community(trace_datetime): #传的是ts
 
 if __name__ == '__main__':
     if S_TYPE == 'test':
-        test_date = WEIBO_COMMUNITY_DATE
+        # test_date = WEIBO_COMMUNITY_DATE
+        test_date = '2016-11-27'
         now_time = datetime2ts(test_date)
+        # for i in range(0,7):
+        #     test_time = now_time + i*DAY
+        #     trace_xnr_community(test_time)
+        #     i = i+1
     else:
         now_time = int(time.time())
-
+    start_time = int(time.time())
     trace_xnr_community(now_time)
+    end_time = int(time.time())
+    print 'cost_tiime',end_time - start_time
     
