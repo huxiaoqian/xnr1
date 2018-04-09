@@ -74,14 +74,14 @@ def get_users(xnr_user_no,nodes=None):
 	
     G = nx.Graph()
     for i in retweet_result:
-        print 'i:',i
+        # print 'i:',i
         if not i['found']:
             continue
         uid_retweet = json.loads(i['_source']['uid_retweet'])
         max_count = max([int(n) for n in uid_retweet.values()])
         G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
     for i in comment_result:
-    	print 'comment_i:',i
+    	# print 'comment_i:',i
         if not i['found']:
             continue
         uid_comment = json.loads(i['_source']['uid_comment'])
