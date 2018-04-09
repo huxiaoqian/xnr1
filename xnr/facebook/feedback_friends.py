@@ -46,16 +46,19 @@ class Friend():
 		self.update_time = self.current_ts
 
 	def get_friend(self):
-		for each in self.driver.find_elements_by_xpath('//div[@class="_5h60 _30f"]//ul//li'):
-			try:
-				pic_url = each.find_element_by_xpath('./div/a/img').get_attribute('src')
-				name = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').text
-				user_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('data-hovercard')))
-				friends = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/a').text
-				profile_url = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('href') + '&sk=about'
-			except:
-				pass
-			self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url})
+		try:
+			for each in self.driver.find_elements_by_xpath('//div[@class="_5h60 _30f"]//ul//li'):
+				try:
+					pic_url = each.find_element_by_xpath('./div/a/img').get_attribute('src')
+					name = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').text
+					user_id = ''.join(re.findall(re.compile('id=(\d+)'),each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('data-hovercard')))
+					friends = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/a').text
+					profile_url = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('href') + '&sk=about'
+				except:
+					pass
+				self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url})
+		finally:
+			self.driver.close()
 		return self.list
 
 	def save(self, indexName, typeName, list):

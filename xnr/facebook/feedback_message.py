@@ -45,42 +45,43 @@ class Message():
 		return sx_list
 
 	def get_message(self):
-		sx_list = self.get_list()
-		for sx in sx_list:
-			self.driver.get(sx['message_url'])
-			time.sleep(1)
-			# 退出通知弹窗进入页面
-			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
-			except:
-				pass
-
-			for message in self.driver.find_elements_by_xpath('//div[@class="_41ud"]'):
+		try:
+			sx_list = self.get_list()
+			for sx in sx_list:
+				self.driver.get(sx['message_url'])
+				time.sleep(1)
+				# 退出通知弹窗进入页面
 				try:
-					ymd = '-'.join([t for t in re.findall(re.compile('(\d+)年(\d+)月(\d+)日'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
-					hm = ':'.join([q for q in re.findall(re.compile('(\d+):(\d+)'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
-					messagetime = ymd + ' ' + hm + ':00'
-					messageTime = int(time.mktime(time.strptime(messagetime,'%Y-%m-%d %H:%M:%S')))
+					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
-					messageTime = 0
+					pass
 
-				try:
-					messageId = re.findall(re.compile('"fbid:(\d+)"'),message.find_element_by_xpath('./div/div').get_attribute('participants'))[-1]
-					if messageId == sx['author_id']:
-						private_type = 'receive'
-						text = message.text
-						root_text = 'None'
-					else:
-						private_type = 'make'
-						text = 'None'
-						root_text = message.text
-				except:
-						private_type = 'unknown'
-						text = 'None'
-						root_text = 'None'
+				for message in self.driver.find_elements_by_xpath('//div[@class="_41ud"]'):
+					try:
+						ymd = '-'.join([t for t in re.findall(re.compile('(\d+)年(\d+)月(\d+)日'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
+						hm = ':'.join([q for q in re.findall(re.compile('(\d+):(\d+)'),message.find_element_by_xpath('./div/div').get_attribute('data-tooltip-content'))[0]])
+						messagetime = ymd + ' ' + hm + ':00'
+						messageTime = int(time.mktime(time.strptime(messagetime,'%Y-%m-%d %H:%M:%S')))
+					except:
+						messageTime = 0
 
-
-			self.list.append({'uid':sx['author_id'], 'photo_url':sx['pic'], 'nick_name':sx['name'], 'timestamp':messageTime, 'update_time':self.update_time, 'text':text, 'root_text':root_text, 'private_type':private_type})
+					try:
+						messageId = re.findall(re.compile('"fbid:(\d+)"'),message.find_element_by_xpath('./div/div').get_attribute('participants'))[-1]
+						if messageId == sx['author_id']:
+							private_type = 'receive'
+							text = message.text
+							root_text = 'None'
+						else:
+							private_type = 'make'
+							text = 'None'
+							root_text = message.text
+					except:
+							private_type = 'unknown'
+							text = 'None'
+							root_text = 'None'
+				self.list.append({'uid':sx['author_id'], 'photo_url':sx['pic'], 'nick_name':sx['name'], 'timestamp':messageTime, 'update_time':self.update_time, 'text':text, 'root_text':root_text, 'private_type':private_type})
+		finally:
+			self.driver.close()
 		return self.list
 
 	def save(self, indexName, typeName, list):
