@@ -172,8 +172,10 @@ function safe_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     if (data.length==0){
-        nearTime.push($_time);
-        nearData.push(0);
+        $('#near_7_day h2').remove();
+        $('#near_7_day p').slideUp(700);
+        $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
+        return false;
     }else {
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
