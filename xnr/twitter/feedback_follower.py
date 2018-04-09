@@ -10,7 +10,6 @@ class Follower():
 		self.launcher = Launcher(username, password)
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
-		self.update_time = current_ts
 		self.list = []
 		try:
 			self.uid = args[0]
@@ -23,13 +22,14 @@ class Follower():
 				name = each.name
 				screen_name = each.screen_name
 				id = each.id
-				root_uid = self.api.me().id
+				photo_url = each.profile_image_url_https
+				profile_url = 'https://twitter.com/' + screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time,
-					'root_uid':root_uid
+					'photo_url':photo_url,
+					'profile_url':profile_url
 				}
 				self.list.append(item)
 		except Exception as e:
@@ -37,13 +37,14 @@ class Follower():
 				name = each.name
 				screen_name = each.screen_name
 				id = each.id
-				root_uid = self.api.me().id
+				photo_url = each.profile_image_url_https
+				profile_url = 'https://twitter.com/' + screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time,
-					'root_uid':root_uid
+					'photo_url':photo_url,
+					'profile_url':profile_url
 				}
 				self.list.append(item)
 		return self.list
