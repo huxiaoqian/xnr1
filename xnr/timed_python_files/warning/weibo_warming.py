@@ -677,4 +677,7 @@ def create_weibo_warning():
 
 
 if __name__ == '__main__':
+    first_time = int(time.time())
     create_weibo_warning()
+    end_time = int(time.time())
+    print 'cost_time::',end_time - first_time

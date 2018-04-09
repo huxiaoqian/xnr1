@@ -372,7 +372,7 @@ def get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time):
             	warning_result['warning_rank'] = warning_result['warning_rank'] + 1
                 density_warning_descrp,density_warning_content = get_density_warning(community_result,end_time)
                 density_desp.append(density_warning_descrp)
-                density_content = json.loads.append(density_warning_content)
+                density_content = json.loads(density_warning_content)
         
     else:
         pass
@@ -574,6 +574,6 @@ def get_user_detail(uid):
 
 #删除社区
 def delete_community(community_id):
-    weibo_community_index_name = 'weibo_community_2016-11-20'
-    mark = es_xnr.delete(index=weibo_community_index_name,doc_type=weibo_community_index_type,id=community_id)
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
