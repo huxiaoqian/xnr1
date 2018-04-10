@@ -177,9 +177,9 @@ def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
         sub_g = G.subgraph(nodes)
     else:
         sub_g = get_users(xnr_user_no,nodes)
-    result['density'] = nx.density(sub_g)
-    result['cluster'] = nx.average_clustering(sub_g)
-    result['transitivity'] = nx.transitivity(sub_g)
+    result['density'] = round(nx.density(sub_g),4)
+    result['cluster'] = round(nx.average_clustering(sub_g),4)
+    result['transitivity'] = round(nx.transitivity(sub_g),4)
 
 	# for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
 		# print i#['fields']['sensitive_week_ave']
@@ -188,11 +188,11 @@ def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
     sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
 
 
-    result['max_influence'] = max(influence_result)/float(all_influence)
-    result['mean_influence'] = (sum(influence_result)/len(influence_result))/float(all_influence)
+    result['max_influence'] = round((max(influence_result)/float(all_influence))*100,4)
+    result['mean_influence'] = round(((sum(influence_result)/len(influence_result))/float(all_influence))*100,4)
 
-    result['max_sensitive'] = max(sensitive_result)/float(all_sensitive)
-    result['mean_sensitive'] = (sum(sensitive_result)/len(sensitive_result))/float(all_sensitive)
+    result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*100000,4)
+    result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*100000,4)
 
 
     return result
