@@ -132,7 +132,17 @@ function descript(id,descrp) {
     }
 };
 //表格
-function tablePic(id,data) {
+function tablePic(id,_data) {
+    var data=_data;
+    if(id=='table-4'){
+        data=[];
+        $.each(_data,function (index,item) {
+            data.push({
+                'id1':item[0],'name1':item[1],
+                'id2':item[2],'name2':item[3],'count':item[4]
+            })
+        });
+    }
     $('#'+id).bootstrapTable('load', data);
     var tableColumns=[
         {
@@ -227,19 +237,157 @@ function tablePic(id,data) {
             align: "center",//水平
             valign: "middle",//垂直
             formatter: function (value, row, index) {
-                var img;
-                if(row.photo_url == '' || row.photo_url == 'null' || row.photo_url == 'unknown'||!row.photo_url){
-                    img='<img style="width: 32px;height: 32x;" src="/static/images/unknown.png"/>  ';
+                var name,txt,txt2,img;
+                if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'||!row.nick_name){
+                    name=row.uid;
                 }else {
-                    img='<img style="width: 32px;height: 32px;" src="'+row.photo_url+'"/>   ';
+                    name=row.nick_name;
                 };
-                var str='<p class="relevant">中新网4月4日电 据外交部网站消息，外交部发言人陆慷就美国贸易代表办公室公布对华301调查' +
-                    '征税产品建议清单答记者问。陆慷指出，美方做法严重违反了世贸组织的基本原则和精神，中方将立即将美方这一错误做法诉诸' +
-                    '世贸组织争端解决机制。同时，我们准备对美产品采取同等力度、同等规模的对等措施。我们有信心、有能力应对美方任何贸易保护主义措施。' +
-                    '</p>';
+                if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url){
+                    img='/static/images/unknown.png';
+                }else {
+                    img=row.photo_url;
+                };
+                var all='';
+                if (row.text==''||row.text=='null'||row.text=='unknown'){
+                    txt='暂无内容';
+                }else {
+                    if (row.sensitive_words_string||!isEmptyObject(row.sensitive_words_string)){
+                        var keyword_d=row.sensitive_words_string.split('&');
+                        for (var f of keyword_d){
+                            txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                        }
+                        var rrr=row.text;
+                        if (rrr.length>=160){
+                            rrr=rrr.substring(0,160)+'...';
+                            all='inline-block';
+                        }else {
+                            rrr=row.text;
+                            all='none';
+                        }
+                        for (var f of keyword_d){
+                            txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                        }
+                    }else {
+                        txt=row.text;
+                        if (txt.length>=160){
+                            txt2=txt.substring(0,160)+'...';
+                            all='inline-block';
+                        }else {
+                            txt2=txt;
+                            all='none';
+                        }
+                    };
+                };
+                var str=
+                    '<div class="post_perfect" style="margin-bottom:10px;">'+
+                    '   <div class="post_center-hot">'+
+                    '       <img src="'+img+'" alt="" class="center_icon">'+
+                    '       <div class="center_rel" style="text-align:left">'+
+                    '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
+                    '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                    '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
+                    '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
+                    '           <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span>  '+
+                    '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
+                    '           <p class="allall1" style="display:none;">'+txt+'</p>'+
+                    '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
+                    '           <span class="center_2">'+txt2+'</span>'+
+                    '       </div>'+
+                    '    </div>'+
+                    '</div>';
                 return str;
             }
         }]
+    }else if(id=='table-4'){
+        tableColumns=[
+            {
+                title: "用户ID",//标题
+                field: "id1",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.id1=='null'||row.id1=='unknown'||row.id1==''){
+                        return '未知';
+                    }else {
+                        return row.id1;
+                    }
+                }
+            },
+            {
+                title: "用户名",//标题
+                field: "name1",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.name1=='null'||row.name1=='unknown'||row.name1==''){
+                        return row.id1;
+                    }else {
+                        return row.name1;
+                    }
+                }
+            },
+            {
+                title: "",//标题
+                field: "",//键名
+                sortable: false,//是否可排序
+                order: "",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    return '<img src="/static/images/arrow.png"/>'
+                }
+            },
+            {
+                title: "用户ID",//标题
+                field: "id2",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.id2=='null'||row.id2=='unknown'||row.id2==''){
+                        return '未知';
+                    }else {
+                        return row.id2;
+                    }
+                }
+            },
+            {
+                title: "用户名",//标题
+                field: "name2",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.name2=='null'||row.name2=='unknown'||row.name2==''){
+                        return row.id2;
+                    }else {
+                        return row.name2;
+                    }
+                }
+            },
+            {
+                title: "转发数",//标题
+                field: "count",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+                formatter: function (value, row, index) {
+                    if (row.count=='null'||row.count=='unknown'||row.count==''){
+                        return '未知';
+                    }else {
+                        return row.count;
+                    }
+                }
+            },
+        ]
     }
     $('#'+id).bootstrapTable({
         data:data,
