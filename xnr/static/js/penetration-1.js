@@ -259,7 +259,7 @@ function penetration(data) {
     $('#penetration p').show();
     //total_num、day_num、growth_rate
     if (isEmptyObject(data)){
-        $('#penContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#penetration').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],fans_group=[];
         for (var i in data['fans_group']){

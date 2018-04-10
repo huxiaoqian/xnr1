@@ -127,7 +127,7 @@ function descript(id,descrp) {
             str+='<p style="margin:5px 10px;font-size: 14px;">● '+t+'：'+descrp[i]+'</p>';
         }
     }
-    if (str==''){$('.'+id).html('<p style="margin-left:25px;font-size: 14px;">此时间段内无任何描述。</p>')}else {
+    if (str==''){$('.'+id).html('<p style="margin-left:25px;font-size: 14px;">此时间段内无任何预警。</p>')}else {
         $('.'+id).html(str);
     }
 };
