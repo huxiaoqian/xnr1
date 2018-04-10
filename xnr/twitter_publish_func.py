@@ -50,20 +50,21 @@ def tw_publish(account_name, password, text, tweet_type, xnr_user_no):
     
     try:
         operation.publish(text)
-        #print 'publish....',
+        print 'publish....',
         mark = True
     except:
         mark = False
     
     message_type = 1 # 原创
 
-    try:  
-        save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    #try:  
+    save_mark = tw_save_to_xnr_flow_text(tweet_type,xnr_user_no,text,message_type)
+    '''
     except:
         print '保存微博过程遇到错误！'
         save_mark = False
-
-    return mark
+    '''
+    return save_mark
 
 
 # 评论

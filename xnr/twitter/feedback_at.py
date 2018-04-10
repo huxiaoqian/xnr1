@@ -12,6 +12,7 @@ class At():
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
 		self.list = []
+		self.update_time = int(time.time())
 
 	def get_mention(self):
 		for each in self.api.mentions_timeline():
@@ -25,18 +26,17 @@ class At():
 				user_mention_id = each.entities['user_mentions'][0]['id']
 				timestamp = int(time.mktime(each.created_at.timetuple()))
 				mid = each.id
+				photo_url = each.author.profile_image_url_https
 
 				item = {
+					'uid': user_id,
+					'photo_url': photo_url,
 					'user_name': user_screen_name,
 					'nick_name': user_name,
-					'uid': user_id,
-					'text': text,
-					'user_mention_screen_name': user_mention_screen_name,
-					'user_mention_name': user_mention_name,
-					'user_mention_id': user_mention_id,
-					'root_uid':user_mention_id,
+					'mid': mid,
 					'timestamp': timestamp,
-					'mid':mid
+					'text': text,
+					'update_time': self.update_time
 				}
 				self.list.append(item)
 			except:
@@ -49,7 +49,8 @@ class At():
 if __name__ == '__main__':
 	at = At('8617078448226','xnr123456')
 	list = at.get_mention()
-	at.save('twitter_feedback_at','text',list)
+	print(list)
+	#at.save('twitter_feedback_at','text',list)
 
 
 

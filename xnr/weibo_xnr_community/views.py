@@ -97,7 +97,7 @@ def ajax_get_user_detail():
 
 
 #不需要连接
-#http://219.224.134.213:9207/weibo_xnr_community/delete_community/?community_id=WXNR0004_2016-11-20维维_演唱会
+#http://219.224.134.213:9207/weibo_xnr_community/delete_community/?community_id=WXNR0004_2016-11-20哆啦_绿茶_2016-11-19
 @mod.route('/delete_community/')
 def ajax_delete_community():
     community_id = request.args.get('community_id','')    
