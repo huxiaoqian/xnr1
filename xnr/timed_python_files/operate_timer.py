@@ -44,7 +44,8 @@ def operate_out_of_redis():
 		if channel == 'facebook':
 			if operate_type == 'publish':
 				try:
-				    mark = get_submit_tweet_fb(task_detail)
+					print 'task_detail..',task_detail
+					mark = get_submit_tweet_fb(task_detail)
 				except:
 					add_operate2redis(queue_dict)
 

@@ -171,8 +171,10 @@ function penetration_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     if (data.length==0){
-        nearTime.push($_time);
-        nearData.push(0);
+        $('#near_7_day h2').remove();
+        $('#near_7_day p').slideUp(700);
+        $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
+        return false;
     }else {
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
@@ -257,7 +259,7 @@ function penetration(data) {
     $('#penetration p').show();
     //total_num、day_num、growth_rate
     if (isEmptyObject(data)){
-        $('#penContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#penetration').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],fans_group=[];
         for (var i in data['fans_group']){

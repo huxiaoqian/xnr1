@@ -58,7 +58,7 @@ function trackCommunity(data){
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.warning_rank==''||row.warning_rank=='null'||row.warning_rank=='unknown'||!row.warning_rank){
+                    if (row.warning_rank=='null'||row.warning_rank=='unknown'){
                         return '未知';
                     }else {
                         var a='<i class="icon icon-star" style="color:#fa7d3c;"></i>  ';
@@ -76,7 +76,7 @@ function trackCommunity(data){
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.warning_type==''||row.warning_type=='null'||row.warning_type=='unknown'||!row.warning_type){
-                        return '未知';
+                        return '无预警';
                     }else {
                         return row.warning_type.join('，');
                     }

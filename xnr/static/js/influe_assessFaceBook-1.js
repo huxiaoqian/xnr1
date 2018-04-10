@@ -39,16 +39,16 @@ function historyTotal(dataTable) {
                 }
             },
             {
-                title: "总粉丝数",//标题
-                field: "user_fansnum",//键名
+                title: "总发帖量",//标题
+                field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
             },
             {
-                title: "总发帖量",//标题
-                field: "total_post_sum",//键名
+                title: "好友数",//标题
+                field: "user_friendsnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -73,6 +73,14 @@ function historyTotal(dataTable) {
             {
                 title: "业务发帖",//标题
                 field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "跟踪转发",//标题
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -250,14 +258,22 @@ $('#container .quota .quota-opt .demo-label input').on('click',function () {
         $('#quota-1').show();
         $('#quota-2').hide();
         $('#quota-3').hide();
-    }else if (a=='totalValue') {
+        $('#quota-1 p').show();
+        if (t1==0){
+            $('#quota-1 p').slideUp(700);
+        }
+    }else if(a=='totalValue'){
         $('#quota-1').hide();
         $('#quota-2').hide();
         $('#quota-3').show();
-    }else {
+        $('#quota-2 p').show();
+        total();
+    }else{
         $('#quota-1').hide();
         $('#quota-2').show();
         $('#quota-3').hide();
+        $('#quota-3 p').show();
+        increase();
     }
 })
 var influe_url='/facebook_xnr_assessment/influence_total/?xnr_user_no='+ID_Num+
@@ -273,21 +289,22 @@ function publicData(data) {
 }
 var time=[],growLEG=[],
     growthatData=[],growthfansData=[],growthcommentData=[],
-    growthlikeData=[], growthprivateData=[],growthretweetData=[],
+    growthlikeData=[],growthprivateData=[],growthretweetData=[],
     legend2=[],totalAt2=[],totalFans2=[],totalComment2=[],totallike2=[],totalPrivate2=[],totalRetweet2=[];
 function influe(data) {
     time=[],growLEG=[],
         growthatData=[],growthfansData=[],growthcommentData=[],
-        growthlikeData=[], growthprivateData=[],growthretweetData=[],
+        growthlikeData=[],growthprivateData=[],growthretweetData=[],
         legend2=[],totalAt2=[],totalFans2=[],totalComment2=[],totallike2=[],totalPrivate2=[],totalRetweet2=[];
     //total_num、day_num、growth_rate
     //粉丝数   被转发   被评论   被点赞   被@  被私信
     $('#quota-1 p').show();
-    $('#quota-2 p').show();
-    $('#quota-3 p').show();
-    if (isEmptyObject(data)){
-        $('#quota-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+    if (isEmptyObject(data)||isEmptyObject(data['day_num'])){
+        t1=0;
+        $('#quota-1 h2').remove();
+        $('#quota-1').append('<h2 style="width: 100%;line-height: 400px;text-align: center;">暂无数据</h2>');
     }else {
+        t1=1;
         var legend=[],atData=[],fansData=[],commentData=[],likeData=[],privateData=[],retweetData=[];
         for (var t in data['day_num']['at']){time.push(getLocalTime(t))}
         for (var i in data['day_num']){
@@ -302,8 +319,7 @@ function influe(data) {
         var option = {
             backgroundColor:'transparent',
             title : {
-                text: '',
-                subtext: ''
+                text: '当天值',
             },
             tooltip : {
                 trigger: 'axis'
@@ -433,6 +449,14 @@ function influe(data) {
             ]
         };
         myChart.setOption(option);
+    }
+    $('#quota-1 p').slideUp(700);
+    if (isEmptyObject(data)||isEmptyObject(data['total_trend'])){
+        t2=0;
+        $('#quota-3 h2').remove();
+        $('#quota-3').append('<h2 style="width:100%;line-height:400px;text-align:center;">暂无数据</h2>');
+    }else{
+        t2=1;
         for (var m in data['total_trend']){
             if (m=='at'){legend2.push('被@总数');totalAt2=publicData(data['total_trend'][m])}
             else if (m=='comment'){legend2.push('被评论总数');totalComment2=publicData(data['total_trend'][m])}
@@ -440,7 +464,14 @@ function influe(data) {
             else if (m=='like'){legend2.push('被点赞总数');totallike2=publicData(data['total_trend'][m])}
             else if (m=='private'){legend2.push('被私信总数');totalPrivate2=publicData(data['total_trend'][m])}
             else if (m=='retweet'){legend2.push('被转发总数');totalRetweet2=publicData(data['total_trend'][m])}
-        }
+        };
+    }
+    if (isEmptyObject(data)||isEmptyObject(data['growth_rate'])){
+        t3=0;
+        $('#quota-2 h2').remove();
+        $('#quota-2').append('<h2 style="width:100%;line-height:400px;text-align:center;">暂无数据</h2>');
+    }else{
+        t3=1;
         for (var h in data['growth_rate']){
             if (h=='at'){growLEG.push('被@增长率');growthatData=publicData(data['growth_rate'][h])}
             else if (h=='comment'){growLEG.push('被评论增长率');growthcommentData=publicData(data['growth_rate'][h])}
@@ -449,21 +480,20 @@ function influe(data) {
             else if (h=='private'){growLEG.push('被私信增长率');growthprivateData=publicData(data['growth_rate'][h])}
             else if (h=='retweet'){growLEG.push('被转发增长率');growthretweetData=publicData(data['growth_rate'][h])}
         };
-        total();
-        increase();
     }
-    $('#quota-1 p').slideUp(700);
-    $('#quota-2 p').slideUp(700);
-    $('#quota-3 p').slideUp(700);
-}
+};
+var t1,t2,t3;
 //累计值
 function total() {
+    if (t2==0){
+        $('#quota-3 p').slideUp(700);
+        return false;
+    }
     var myChart = echarts.init(document.getElementById('quota-3'),'dark');
     var option = {
         backgroundColor:'transparent',
         title: {
-            text: '',
-            subtext: ''
+            text: '累计值',
         },
         tooltip: {
             trigger: 'axis'
@@ -600,6 +630,10 @@ function total() {
 }
 //增长率
 function increase() {
+    if (t3==0){
+        $('#quota-2 p').slideUp(700);
+        return false;
+    }
     var myChart = echarts.init(document.getElementById('quota-2'),'dark');
     var option = {
         backgroundColor:'transparent',

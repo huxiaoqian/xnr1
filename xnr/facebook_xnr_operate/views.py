@@ -42,6 +42,7 @@ def ajax_submit_daily_tweet():
     queue_dict['channel'] = 'facebook'
     queue_dict['operate_type'] = 'publish'
     queue_dict['content'] = task_detail
+    
     mark = add_operate2redis(queue_dict)
 
     # mark = get_submit_tweet_fb(task_detail)

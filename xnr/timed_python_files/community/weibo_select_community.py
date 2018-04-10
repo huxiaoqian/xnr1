@@ -898,6 +898,8 @@ if __name__ == '__main__':
     else:
     	datetime = int(time.time())
     	xnr_user_no_list = get_compelete_wbxnr()
-
+    start_time = int(time.time())
     for xnr_user_no in xnr_user_no_list:
         get_final_community(xnr_user_no,datetime)
+    end_time = int(time.time())
+    print 'cost_time::',end_time - start_time

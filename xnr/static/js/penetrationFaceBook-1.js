@@ -39,16 +39,16 @@ function historyTotal(dataTable) {
                 }
             },
             {
-                title: "总粉丝数",//标题
-                field: "user_fansnum",//键名
+                title: "总发帖量",//标题
+                field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
             },
             {
-                title: "总发帖量",//标题
-                field: "total_post_sum",//键名
+                title: "好友数",//标题
+                field: "user_friendsnum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -73,6 +73,14 @@ function historyTotal(dataTable) {
             {
                 title: "业务发帖",//标题
                 field: "business_post_num",//键名
+                sortable: true,//是否可排序
+                order: "desc",//默认排序方式
+                align: "center",//水平
+                valign: "middle",//垂直
+            },
+            {
+                title: "跟踪转发",//标题
+                field: "trace_follow_tweet_num",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
@@ -262,7 +270,7 @@ function penetration(data) {
     $('#penetration p').show();
     //total_num、day_num、growth_rate
     if (isEmptyObject(data)){
-        $('#penContent').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#penetration').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],fans_group=[];
         for (var i in data['fans_group']){
