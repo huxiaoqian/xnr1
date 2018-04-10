@@ -22,122 +22,117 @@ def new_facebook_xnr_flow_text_mappings(index_name):
             'mappings':{
                 'text':{
                     'properties':{
-                        'task_source':{  # 日常发帖，热点跟随，业务发帖
+                        'task_source':{  # 日常发帖，热点跟随，业务发帖，此处为空
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'xnr_user_no':{
+                        'xnr_user_no':{  #虚拟人编号，从数据库查询
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'uid':{
+                        'uid':{ #用户id
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'text':{
+                        'text':{ #帖子文本
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'picture_url':{
+                        'picture_url':{ #帖子图片url
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'vedio_url':{
+                        'vedio_url':{  #帖子视频url
                             'type':'string',
                             'index':'not_analyzed'
                         },
-                        'user_fansnum':{
+                        'user_friendsnum':{ #用户好友数
                             'type':'long'
                         },
-                        'user_followersum':{
+                        'user_followersum':{ #用户关注者数，此处为空
                             'type':'long'
                         },
-                        'weibos_sum':{
+                        'weibos_sum':{ #帖子总量
                             'type':'long'
                         },
-                        'mid':{
+                        'fid':{ #帖子id
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'ip':{
+                        'ip':{ #ip地址
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'directed_uid':{
+                        'directed_uid':{ #直接转发帖子的源uid
                             'type':'long',
                             },
-                        'directed_uname':{
+                        'directed_uname':{ #直接转发帖子的源用户昵称
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'timestamp':{
+                        'timestamp':{ #时间戳
                             'type': 'long'
                             },
                         'sentiment': {
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'geo':{
+                        'geo':{ #地理位置
                             'type': 'string',
                             'analyzer': 'my_analyzer'
                             },
-                        'keywords_dict':{
+                        'keywords_dict':{ #关键词dict
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'keywords_string':{
+                        'keywords_string':{ #关键词string
                             'type': 'string',
                             'analyzer': 'my_analyzer'
                             },
-                        'sensitive_words_dict':{
+                        'sensitive_words_dict':{ #敏感词dict
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'sensitive_words_string':{
+                        'sensitive_words_string':{ #敏感词string
                             'type': 'string',
                             'analyzer': 'my_analyzer'
                             },
-                        'message_type':{
+                        'message_type':{ #数据类型，、原创——1、转发——2、评论——3
                             'type': 'long'
                             },
-                        'root_uid':{
+                        'root_uid':{ #源头帖子的uid
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'root_mid':{
+                        'root_mid':{#源头帖子的fid
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
                          # uncut weibo text
-                        'origin_text':{
+                        'origin_text':{#源头帖子的文本
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'origin_keywords_dict':{
+                        'origin_keywords_dict':{#源头帖子的dict
                             'type': 'string',
                             'index': 'not_analyzed'
                             },
-                        'origin_keywords_string':{
+                        'origin_keywords_string':{#源头帖子的string
                             'type': 'string',
                             'analyzer': 'my_analyzer'
                             },
-                        'comment':{
+                        'comment':{ #评论数
                             'type':'long'
                             },
-                        'sensitive':{
+                        'sensitive':{#敏感度
                             'type':'long'
                             },
-                        'retweeted':{
+                        'retweeted':{#转发数
                             'type':'long'
                             },
-                        'topic_field_first':{
-                            'type':'string',
-                            'index':'not_analyzed'
-                            },
-                        'topic_field':{
-                            'type':'string',
-                            'index':'not_analyzed'
-                            }
+                        'like':{ #点赞数
+                            'type':'long'
+                        }
                         }
                     }
                 }
