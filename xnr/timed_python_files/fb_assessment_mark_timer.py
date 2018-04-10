@@ -66,13 +66,15 @@ def compute_influence_num(xnr_user_no,current_time_old):
     index_name = facebook_bci_index_name_pre + datetime
 
     try:
-        
         bci_xnr = es.get(index=index_name,doc_type=facebook_bci_index_type,id=uid)['_source']['influence']
         bci_max = es.search(index=index_name,doc_type=facebook_bci_index_type,body=\
             {'query':{'match_all':{}},'sort':{'influence':{'order':'desc'}}})['hits']['hits'][0]['_source']['influence']
 
         influence = float(bci_xnr)/bci_max*100
         influence = round(influence,2)  # 保留两位小数
+        print 'bci_xnr', bci_xnr
+        print 'bci_max', bci_max
+
     except Exception,e:
         print e
         influence = 0
@@ -1574,15 +1576,14 @@ def cron_compute_mark(current_time):
 
         print 'xnr_user_detail', xnr_user_detail
 
-        try:
-
-            es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
-                id=_id,body=xnr_user_detail)
-            mark = True
-        except Exception,e:
-            print e
-            mark = False
-        return mark
+        # try:
+        #     es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+        #         id=_id,body=xnr_user_detail)
+        #     mark = True
+        # except Exception,e:
+        #     print e
+        #     mark = False
+        # return mark
 
 
 
