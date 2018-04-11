@@ -585,11 +585,18 @@ def update_baseinfo(uid_list=[]):
             }
     return save_data2es(user_baseinfo)
 
-def update_all():
+def update_all(uid_list=[]):
     time_list = []
     time_list.append(time.time())
 
-    uid_list = load_uid_list()
+    flag = False
+    if uid_list:    #如果没有提供uid_list，则是日常更新，按照属性的周更新和日更新来。如果提供了则所有的属性都要更新。
+        flag = True
+    else:
+        uid_list = load_uid_list()
+        if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+            flag = True
+
     print 'total num: ', len(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
@@ -612,7 +619,7 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #周更新
-    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+    if flag:
         print 'update_keywords:', update_keywords(uid_list)
         time_list.append(time.time())
         print 'time used: ', time_list[-1] - time_list[-2]
@@ -630,7 +637,8 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    update_all()
+    update_all(uid_list=['100018797745111'])
+    print '111'
     # update_baseinfo(load_uid_list())
 # total num:  92
 # time used:  0.0157630443573
