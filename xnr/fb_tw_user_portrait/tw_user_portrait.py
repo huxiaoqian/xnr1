@@ -595,21 +595,32 @@ def update_baseinfo(uid_list=[]):
             }
     return save_data2es(user_baseinfo)
 
-def update_all():
+def update_all(uid_list=[]):
     time_list = []
     time_list.append(time.time())
 
-    uid_list = load_uid_list()
+    flag = False
+    if uid_list:    #如果没有提供uid_list，则是日常更新，按照属性的周更新和日更新来。如果提供了则所有的属性都要更新。
+        flag = True
+    else:
+        uid_list = load_uid_list()
+        if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+            flag = True
+
     print 'total num: ', len(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #日更新
-    print 'update_influence: ', update_influence(uid_list)
+    print 'update_baseinfo: ', update_baseinfo(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
     print 'update_hashtag: ', update_hashtag(uid_list)
+    time_list.append(time.time())
+    print 'time used: ', time_list[-1] - time_list[-2]
+
+    print 'update_influence: ', update_influence(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
 
@@ -618,14 +629,8 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
 
-
-    print 'update_sentiment: ', update_sentiment(uid_list)
-    time_list.append(time.time())
-    print 'time used: ', time_list[-1] - time_list[-2]
-
-
     #周更新
-    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_TW)) % (WEEK*DAY)):
+    if flag:
         print 'update_domain: ', update_domain(uid_list)
         time_list.append(time.time())
         print 'time used: ', time_list[-1] - time_list[-2]
@@ -643,6 +648,25 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    update_baseinfo(load_uid_list())
+    update_all()
+    # update_baseinfo(load_uid_list())
     
+# total num:  104
+# time used:  0.0210788249969
+# update_baseinfo:  True
+# time used:  0.202018022537
+# update_hashtag:  True
+# time used:  0.387202978134
+# update_influence:  True
+# time used:  0.172748088837
+# update_sensitive:  True
+# time used:  0.489547967911
+# update_domain:  True
+# time used:  39.968378067
+# update_sentiment:  True
+# time used:  0.341555833817
+# update_topic:  True
+# time used:  30.8768241405
+# update_keywords: True
+# time used:  4.85285305977
+

@@ -26,6 +26,8 @@ from global_utils import facebook_feedback_comment_index_name,facebook_feedback_
                         fb_xnr_index_name as facebook_xnr_index_name,fb_xnr_index_type as facebook_xnr_index_type,\
                         fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,\
                         fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
+                        new_fb_xnr_flow_text_index_name_pre as new_xnr_flow_text_index_name_pre,\
+                        new_fb_xnr_flow_text_index_type as new_xnr_flow_text_index_type,\
                         facebook_xnr_count_info_index_name,facebook_xnr_count_info_index_type,\
                         facebook_feedback_retweet_index_name_pre, facebook_feedback_comment_index_name_pre,\
                         facebook_feedback_like_index_name_pre, facebook_feedback_at_index_name_pre,\
@@ -39,6 +41,7 @@ from global_utils import r_fb_fans_uid_list_datetime_pre as r_fans_uid_list_date
 from global_config import S_TYPE,S_DATE_FB as S_DATE,S_UID_FB as S_UID,S_DATE_BCI_FB as S_DATE_BCI
 from time_utils import ts2datetime,datetime2ts,fb_get_flow_text_index_list as get_flow_text_index_list,\
                         get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
+                        get_new_fb_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list,\
                         get_timeset_indexset_list
 from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT,\
                     FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID,\
@@ -66,13 +69,15 @@ def compute_influence_num(xnr_user_no,current_time_old):
     index_name = facebook_bci_index_name_pre + datetime
 
     try:
-        
         bci_xnr = es.get(index=index_name,doc_type=facebook_bci_index_type,id=uid)['_source']['influence']
         bci_max = es.search(index=index_name,doc_type=facebook_bci_index_type,body=\
             {'query':{'match_all':{}},'sort':{'influence':{'order':'desc'}}})['hits']['hits'][0]['_source']['influence']
 
         influence = float(bci_xnr)/bci_max*100
         influence = round(influence,2)  # 保留两位小数
+        print 'bci_xnr', bci_xnr
+        print 'bci_max', bci_max
+
     except Exception,e:
         print e
         influence = 0
@@ -107,6 +112,8 @@ def compute_penetration_num(xnr_user_no,current_time_old):
         top_sensitive_uid_list.append(user['uid'])
 
 
+    # print 'top_sensitive_uid_list'
+    # print top_sensitive_uid_list
     # 计算top敏感用户的微博敏感度均值
     query_body_count = {
         'query':{
@@ -172,13 +179,14 @@ def compute_safe_num(xnr_user_no,current_time_old):
         'query':{
             'match_all':{}
         },
-        'sort':{'activeness':{'order':'desc'}},
+        # 'sort':{'activeness':{'order':'desc'}},
+        'sort':{'influence':{'order':'desc'}},
         'size':TOP_ASSESSMENT_NUM
     }
     top_active_users = es.search(index=portrait_index_name,doc_type=portrait_index_type,\
                 body=query_body)['hits']['hits']
     
-    # print 'top_active_users'
+    # print 'compute_safe_num  top_active_users'
     # print top_active_users
 
     top_active_uid_list = []
@@ -186,8 +194,8 @@ def compute_safe_num(xnr_user_no,current_time_old):
         user = user['_source']
         top_active_uid_list.append(user['uid'])
 
-    print 'top_active_uid_list'
-    print top_active_uid_list
+    # print 'top_active_uid_list'
+    # print top_active_uid_list
 
     query_body_count = {
         'query':{
@@ -227,14 +235,27 @@ def compute_safe_num(xnr_user_no,current_time_old):
             }
         }
     }
-    es_xnr_count_results = es.count(index=index_name,doc_type=flow_text_index_type,body=xnr_query_body_count)
+    #xnr发帖在流数据里匹配不到，弃用，@2018-4-11 00:30:40
+    #es_xnr_count_results = es.count(index=index_name,doc_type=flow_text_index_type,body=xnr_query_body_count)
+    #要在new_xnr_flow_text中才能匹配到
+    new_index_name = new_xnr_flow_text_index_name_pre + current_date
+    try:
+        es_xnr_count_results = es.count(index=new_index_name,doc_type=new_xnr_flow_text_index_type,body=xnr_query_body_count)
+        print 'es_xnr_count_results'
+        print es_xnr_count_results
 
-    if es_xnr_count_results['_shards']['successful'] != 0:
-       xnr_tweets_count = es_xnr_count_results['count']
+        if es_xnr_count_results['_shards']['successful'] != 0:
+           xnr_tweets_count = es_xnr_count_results['count']
 
-    else:
-        print 'es index rank error'
+        else:
+            print 'es index rank error'
+            xnr_tweets_count = 0
+    except Exception,e:
+        print e
         xnr_tweets_count = 0
+
+
+
     try:
         active_mark = float(xnr_tweets_count)/tweets_top_avg
     except:
@@ -244,7 +265,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
     print active_mark
 
     ## 计算分数
-    topic_distribute_dict = get_tweets_distribute(xnr_user_no)
+    topic_distribute_dict = get_tweets_distribute(xnr_user_no, current_time)
 #     domain_distribute_dict = get_follow_group_distribute(xnr_user_no)
     domain_distribute_dict = get_fans_group_distribute(xnr_user_no)
     
@@ -255,7 +276,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
     safe_mark = round(safe_mark*100,2)
     return safe_mark
 
-def get_tweets_distribute(xnr_user_no):
+def get_tweets_distribute(xnr_user_no, current_time):
 
     topic_distribute_dict = {}
     topic_distribute_dict['radar'] = {}
@@ -295,14 +316,51 @@ def get_tweets_distribute(xnr_user_no):
     print 'topic_list_fans_count'
     print topic_list_fans_count
 
+
+
+
+
+
     # 虚拟人topic分布
-    try:
-        xnr_results = es.get(index=portrait_index_name,doc_type=portrait_index_type,\
-            id=uid)['_source']
-        topic_string = xnr_results['topic_string'].split('&')
-        topic_xnr_count = Counter(topic_string)
-    except:
-        topic_xnr_count = {}
+    # 不能这么计算吧，如果这样去画像里面去找xnr的topic的话，xnr被加进系统以后什么时候去计算的画像信息呢
+    # 
+    # try:
+    #     xnr_results = es.get(index=portrait_index_name,doc_type=portrait_index_type,\
+    #         id=uid)['_source']
+    #     topic_string = xnr_results['topic_string'].split('&')
+    #     topic_xnr_count = Counter(topic_string)
+    # except:
+    #     topic_xnr_count = {}
+    index_name_list = get_new_xnr_flow_text_index_list(current_time)
+    topic_string = []
+    for index_name_day in index_name_list:
+
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        
+                        {'term':{'xnr_user_no':xnr_user_no}}
+                    ]
+                }
+            },
+            'size':TOP_WEIBOS_LIMIT,
+            'sort':{'timestamp':{'order':'desc'}}
+        }
+        try:
+            es_results = es.search(index=index_name_day,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            #print 'es_results::',es_results
+            for topic_result in es_results:
+                #print 'topic_result::',topic_result
+                topic_result = topic_result['_source']
+                topic_field = topic_result['topic_field_first'][:3]
+            topic_string.append(topic_field)
+
+        except:
+            continue
+
+    topic_xnr_count = Counter(topic_string)
+
 
     print 'topic_xnr_count'
     print topic_xnr_count
@@ -1573,16 +1631,17 @@ def cron_compute_mark(current_time):
 
 
         print 'xnr_user_detail', xnr_user_detail
+        for k, v in xnr_user_detail.items():
+            print k, v
 
-        try:
-
-            es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
-                id=_id,body=xnr_user_detail)
-            mark = True
-        except Exception,e:
-            print e
-            mark = False
-        return mark
+        # try:
+        #     es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+        #         id=_id,body=xnr_user_detail)
+        #     mark = True
+        # except Exception,e:
+        #     print e
+        #     mark = False
+        # return mark
 
 
 

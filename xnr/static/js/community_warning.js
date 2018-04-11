@@ -76,7 +76,7 @@ function trackCommunity(data){
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     if (row.warning_type==''||row.warning_type=='null'||row.warning_type=='unknown'||!row.warning_type){
-                        return '未知';
+                        return '无预警';
                     }else {
                         return row.warning_type.join('，');
                     }
