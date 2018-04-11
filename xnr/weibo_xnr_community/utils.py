@@ -3,6 +3,7 @@
 '''
 weibo community function 
 '''
+import os
 import sys
 import json
 import time,datetime
@@ -16,8 +17,11 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
 from xnr.parameter import DAY,MAX_SEARCH_SIZE
 from xnr.global_config import S_TYPE,S_DATE,WEIBO_COMMUNITY_DATE
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-sys.path.append('xnr/timed_python_files/community/')
-from weibo_trace_community import get_person_warning,\
+#sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/xnr/timed_python_files/community/')
+# os.path.abspath('weibo_trace_community.py')
+# os.path.dirname(os.path.abspath('weibo_trace_community.py'))
+#sys.path.append('./xnr/timed_python_files/community/')
+from xnr.timed_python_files.community.weibo_trace_community import get_person_warning,\
                             get_sensitive_warning,get_influence_warning,get_density_warning
 
 #计算当前日期周期内的community index
@@ -590,6 +594,7 @@ def delete_community(community_id):
     weibo_community_index_name = 'weibo_trace_community_wxnr0004'
     mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
+
 
 def upadate_community(community_id):
     warning_type_list = ["敏感度剧增预警","影响力剧增预警","社区聚集预警"]

@@ -585,11 +585,18 @@ def update_baseinfo(uid_list=[]):
             }
     return save_data2es(user_baseinfo)
 
-def update_all():
+def update_all(uid_list=[]):
     time_list = []
     time_list.append(time.time())
 
-    uid_list = load_uid_list()
+    flag = False
+    if uid_list:    #如果没有提供uid_list，则是日常更新，按照属性的周更新和日更新来。如果提供了则所有的属性都要更新。
+        flag = True
+    else:
+        uid_list = load_uid_list()
+        if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+            flag = True
+
     print 'total num: ', len(uid_list)
     time_list.append(time.time())
     print 'time used: ', time_list[-1] - time_list[-2]
@@ -612,7 +619,7 @@ def update_all():
     print 'time used: ', time_list[-1] - time_list[-2]
 
     #周更新
-    if not ((datetime2ts(ts2datetime(time.time())) - datetime2ts(S_DATE_FB)) % (WEEK*DAY)):
+    if flag:
         print 'update_keywords:', update_keywords(uid_list)
         time_list.append(time.time())
         print 'time used: ', time_list[-1] - time_list[-2]
@@ -630,21 +637,24 @@ def update_all():
         print 'time used: ', time_list[-1] - time_list[-2]
 
 if __name__ == '__main__':
-    # update_all()
-    update_baseinfo(load_uid_list())
+    update_all(uid_list=['100018797745111'])
+    print '111'
+    # update_baseinfo(load_uid_list())
 # total num:  92
-# time used:  0.0138351917267
+# time used:  0.0157630443573
+# update_baseinfo:  True
+# time used:  0.154299974442
 # update_hashtag:  True
-# time used:  0.219952821732
+# time used:  0.46758389473
 # update_influence:  True
-# time used:  0.145478010178
+# time used:  0.33092212677
 # update_sensitive:  True
-# time used:  0.242365121841
+# time used:  0.285825967789
 # update_keywords: True
-# time used:  1.23831295967
+# time used:  1.21863102913
 # update_sentiment:  True
-# time used:  0.215330123901
+# time used:  0.325371980667
 # update_domain:  True
-# time used:  62.3806529045
+# time used:  65.2284970284
 # update_topic:  True
-# time used:  11.7983570099
+# time used:  12.6456358433

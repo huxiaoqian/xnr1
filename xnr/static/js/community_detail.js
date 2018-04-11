@@ -358,7 +358,8 @@ function basicPOST(data){
 var divBox_1='social-content-1',divBox_2='social-content-2';
 var socialData;
 function social(data){
-      var thisData=data;
+    socialData=data;
+    var thisData=data;
     if (divBox_1=='social-content-1'&&divBox_2=='social-content-2'){
         thisData=data['core_user_socail'];
     };
@@ -562,7 +563,7 @@ function chartTable(dataVal){
         setTimeout(function () {
             divBox_1='social-content-3',divBox_2='social-content-4';
             social(socialData['core_outer_socail']);
-        },600)
+        },800)
     }
 }
 

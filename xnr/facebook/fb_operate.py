@@ -37,8 +37,12 @@ class Operation():
 				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
 				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
 			except:
-				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
-				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
+				try:
+					self.driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').click()
+					self.driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').send_keys(text)
+				except:
+					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
+					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
 			try:
 				self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
 			except:
@@ -401,9 +405,9 @@ class Operation():
 			driver.close()
 
 if __name__ == '__main__':
-	operation = Operation('8618348831412','Z1290605918')
+	operation = Operation('13041233988','han8528520258')
 	time.sleep(1)
-	list = operation.publish(u'天气真差')
+	list = operation.publish(u'四月十日')
 	print(list)
 	#operation.mention('xxx','4.9')
 	#operation.not_follow('100023080760480')
