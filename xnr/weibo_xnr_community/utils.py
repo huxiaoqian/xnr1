@@ -58,6 +58,7 @@ def get_community_info(community_id,now_time):
         },
         'size':1
     }
+    community = dict()
     try:
         community_result = es_xnr.search(index=weibo_community_index_name,\
             doc_type=weibo_community_index_type,body=query_body)['hits']['hits']
@@ -311,10 +312,14 @@ def get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time):
     trace_time_list = []
     trace_date_list = []
     num_list = []
-    
-    warning_result['trace_time'] = trace_time_list.append(end_time)
-    warning_result['trace_date'] = trace_date_list.append(ts2datetime(end_time))
-    warning_result['num'] = num_list.append(community_result['num'])
+    trace_time_list.append(end_time)
+    trace_date_list.append(ts2datetime(end_time))
+    num_list.append(community_result['num'])
+    warning_result['trace_time'] = trace_time_list
+    # print "warning_result['trace_time']",warning_result['trace_time']
+    warning_result['trace_date'] = trace_date_list
+    # print "warning_result['trace_date']",warning_result['trace_date']
+    warning_result['num'] = num_list
     
     
     density_value = []
@@ -323,12 +328,18 @@ def get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time):
     mean_influence_value = []
     max_sensitive_value = []
     mean_sensitive_value = []
-    warning_result['density'] = density_value.append(community_result['density'])
-    warning_result['cluster'] = cluster_value.append(community_result['cluster'])
-    warning_result['max_influence'] = max_influence_vlue.append(community_result['max_influence'])
-    warning_result['mean_influence'] = mean_influence_value.append(community_result['mean_influence'])
-    warning_result['max_sensitive'] = max_sensitive_value.append(community_result['max_sensitive'])
-    warning_result['mean_sensitive'] = mean_sensitive_value.append(community_result['mean_sensitive'])
+    density_value.append(community_result['density'])
+    cluster_value.append(community_result['cluster'])
+    max_influence_vlue.append(community_result['max_influence'])
+    mean_influence_value.append(community_result['mean_influence'])
+    max_sensitive_value.append(community_result['max_sensitive'])
+    mean_sensitive_value.append(community_result['mean_sensitive'])
+    warning_result['density'] = density_value
+    warning_result['cluster'] = cluster_value
+    warning_result['max_influence'] = max_influence_vlue
+    warning_result['mean_influence'] = mean_influence_value
+    warning_result['max_sensitive'] = max_sensitive_value
+    warning_result['mean_sensitive'] = mean_sensitive_value
 
     num_desp = []
     sensitive_desp = []
@@ -430,6 +441,7 @@ def show_trace_community(xnr_user_no,now_time):
             else:
                 item['_source']['trace_message'] = u''
             community_list.append(item['_source'])
+        community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)
     except:
         community_list = []
     return community_list
@@ -462,6 +474,7 @@ def show_new_community(xnr_user_no,now_time):
         community_list = []
         for item in community_result:
             community_list.append(item['_source'])
+        community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)        
     except:
         community_list = []
     return community_list
@@ -496,7 +509,7 @@ def get_community_warning(xnr_user_no,community_id,start_time,end_time):
         pass
     weibo_trace_community_index_name = weibo_trace_community_index_name_pre + xnr_user_no.lower()
     # print 'weibo_trace_community_index_name:',weibo_trace_community_index_name
-    # print 'time:',ts2datetime(start_time),ts2datetime(end_time)
+    print 'time:',ts2datetime(start_time),ts2datetime(end_time)
     query_body = {
         'query':{
             'filtered':{
