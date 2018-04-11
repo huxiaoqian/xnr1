@@ -193,7 +193,10 @@ def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
 
     result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*100000,4)
     result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*100000,4)
-
+    
+    # result['mean_sensitive'] = 0.4670
+    # result['mean_influence'] = 25.9874
+    # result['density'] = 0.0068
 
     return result
 

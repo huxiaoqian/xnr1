@@ -10,13 +10,11 @@ from community_shuaijian_gailv import find_community
 import json,os,time,community
 
 sys.path.append('../../')
-from global_utils import es_flow_text,retweet_index_name_pre,retweet_index_type,\
-                         comment_index_name_pre,comment_index_type,\
-                         weibo_bci_history_index_name,weibo_bci_history_index_type,\
-                         weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
+                         
+from global_utils import es_xnr,fb_be_retweet_index_name_pre,fb_be_retweet_index_type
 
 
-from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
+from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,FACEBOOK_COMMUNITY_DATE
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
@@ -33,7 +31,7 @@ PATH = ''
 FILE_NAME = 'graph_edges1.txt'
 
 
-user_es = es_flow_text
+user_es = es_xnr
 
 def get_db_num(timestamp):
     date = ts2datetime(timestamp)
@@ -46,14 +44,16 @@ def get_db_num(timestamp):
 
 now_ts = time.time()
 db_number = get_db_num(now_ts)
-retweet_index = retweet_index_name_pre + str(db_number)
-retweet_type = retweet_index_type
-comment_index = comment_index_name_pre + str(db_number)
-comment_type = comment_index_type
-influence_index = weibo_bci_history_index_name
-influence_type = weibo_bci_history_index_type  #bci_week_ave
-sensitive_index = weibo_sensitive_history_index_name
-sensitive_type = weibo_sensitive_history_index_type #sensitive_week_ave 
+be_retweet_index = fb_be_retweet_index_name_pre + str(db_number)
+be_retweet_index_type = fb_be_retweet_index_type
+# retweet_index = retweet_index_name_pre + str(db_number)
+# retweet_type = retweet_index_type
+# comment_index = comment_index_name_pre + str(db_number)
+# comment_type = comment_index_type
+# influence_index = weibo_bci_history_index_name
+# influence_type = weibo_bci_history_index_type  #bci_week_ave
+# sensitive_index = weibo_sensitive_history_index_name
+# sensitive_type = weibo_sensitive_history_index_type #sensitive_week_ave 
 
 
 
@@ -69,24 +69,33 @@ def get_users(xnr_user_no,nodes=None):
     else:
         print 'have input nodes...'
         uids = nodes
-    retweet_result = user_es.mget(index=retweet_index, doc_type=retweet_type,body={'ids':uids}, _source=True)['docs']
-    comment_result = user_es.mget(index=comment_index, doc_type=comment_type,body={'ids':uids}, _source=True)['docs']
+    # retweet_result = user_es.mget(index=retweet_index, doc_type=retweet_type,body={'ids':uids}, _source=True)['docs']
+    # comment_result = user_es.mget(index=comment_index, doc_type=comment_type,body={'ids':uids}, _source=True)['docs']
+    be_retweet_result = user_es.mget(index=be_retweet_index,doc_type=be_retweet_index_type,body={'ids':uids},_source=True)['docs']
 	
     G = nx.Graph()
-    for i in retweet_result:
+    for i in be_retweet_result:
         print 'i:',i
         if not i['found']:
             continue
-        uid_retweet = json.loads(i['_source']['uid_retweet'])
-        max_count = max([int(n) for n in uid_retweet.values()])
-        G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
-    for i in comment_result:
-    	print 'comment_i:',i
-        if not i['found']:
-            continue
-        uid_comment = json.loads(i['_source']['uid_comment'])
-        max_count = max([int(n) for n in uid_comment.values()])
-        G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+        uid_be_retweet = json.loads(i['_source']['uid_be_retweet'])
+        max_count = max([int(n) for n in uid_be_retweet.values()])
+        G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_be_retweet[j])/max_count) for j in uid_be_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+
+    # for i in retweet_result:
+    #     print 'i:',i
+    #     if not i['found']:
+    #         continue
+    #     uid_retweet = json.loads(i['_source']['uid_retweet'])
+    #     max_count = max([int(n) for n in uid_retweet.values()])
+    #     G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+    # # for i in comment_result:
+    # 	print 'comment_i:',i
+    #     if not i['found']:
+    #         continue
+    #     uid_comment = json.loads(i['_source']['uid_comment'])
+    #     max_count = max([int(n) for n in uid_comment.values()])
+    #     G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
     
     return G 
 
@@ -103,7 +112,7 @@ def find_from_uid_list(xnr_user_no,nodes=None,path=PATH,file_name=FILE_NAME,com_
     node_clus = nx.clustering(G) #50w
     print 'number of users:',len(node_clus)
     nodes = [i for i in node_clus if node_clus[i]>0]#7w
-    print 'node clustering > 0:',len(nodes)	
+    print 'node clustering > 0:',len(nodes) 
     allG = G
     print 'allg',allG.number_of_nodes()
 
@@ -140,7 +149,7 @@ def find_from_uid_list(xnr_user_no,nodes=None,path=PATH,file_name=FILE_NAME,com_
         coms_list = coms.values()
     else:
         #传边
-        file_path = './weibo_data/' + ts2datetime(int(time.time())) + '_' + str(int(time.time()))
+        file_path = './facebook_data/' + ts2datetime(int(time.time())) + '_' + str(int(time.time()))
         coms_list = find_community(degree_dict,G,file_path)
     print 'find community time:',time.time()-start
     print 'post process...'
@@ -177,23 +186,27 @@ def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
         sub_g = G.subgraph(nodes)
     else:
         sub_g = get_users(xnr_user_no,nodes)
-    result['density'] = nx.density(sub_g)
-    result['cluster'] = nx.average_clustering(sub_g)
-    result['transitivity'] = nx.transitivity(sub_g)
+    result['density'] = round(nx.density(sub_g),4)
+    result['cluster'] = round(nx.average_clustering(sub_g),4)
+    result['transitivity'] = round(nx.transitivity(sub_g),4)
 
-	# for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
-		# print i#['fields']['sensitive_week_ave']
-	
-    influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in user_es.mget(index=influence_index, doc_type=influence_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
-    sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
+    # for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
+        # print i#['fields']['sensitive_week_ave']
+    
+    # influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in user_es.mget(index=influence_index, doc_type=influence_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
+    # sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in user_es.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
 
+    # influence_result = get_index_result_list(nodes,index_type='influence')
 
-    result['max_influence'] = max(influence_result)/float(all_influence)
-    result['mean_influence'] = (sum(influence_result)/len(influence_result))/float(all_influence)
+    result['max_influence'] = round((max(influence_result)/float(all_influence))*100,4)
+    result['mean_influence'] = round(((sum(influence_result)/len(influence_result))/float(all_influence))*100,4)
 
-    result['max_sensitive'] = max(sensitive_result)/float(all_sensitive)
-    result['mean_sensitive'] = (sum(sensitive_result)/len(sensitive_result))/float(all_sensitive)
-
+    result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*100000,4)
+    result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*100000,4)
+    
+    # result['mean_sensitive'] = 0.4670
+    # result['mean_influence'] = 25.9874
+    # result['density'] = 0.0068
 
     return result
 
@@ -290,11 +303,11 @@ def ExtendQ(G,coms_list):
 def create_facebook_community():
     
     if S_TYPE == 'test':
-        today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
-        xnr_user_no_list = ['FXNR0005']
+        today_time = datetime2ts(FACEBOOK_COMMUNITY_DATE)
+        xnr_user_no_list = ['FXNR0004']
     else:
         today_time = time.time()
-        xnr_user_no_list = get_compelete_wbxnr()
+        xnr_user_no_list = get_compelete_fbxnr()
 
     # xnr_user_no_list = ['WXNR0004']
     for xnr_user_no in xnr_user_no_list:
@@ -321,6 +334,8 @@ def create_facebook_community():
 
 
 if __name__ == '__main__':
-
+    start_time = int(time.time())
     create_facebook_community()
+    end_time = int(time.time())
+    print 'cost_time:::',end_time - start_time
 
