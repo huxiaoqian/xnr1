@@ -21,6 +21,7 @@ from facebook_feedback_mappings_timer import facebook_feedback_like_mappings, fa
 
 
 root_uid = '100018797745111'
+root_nick_name = u'韩梦成'
 
 def random_uid():
     return random.choice(["100023849442394", "100023545574584"])  
@@ -40,14 +41,46 @@ def random_comment_type():
 def random_private_type():
     return random.choice(["make", "receive"])  
 
+def random_photo_url():
+    return random.choice(["https://scontent-nrt1-1.xx.fbcdn.net/v/t1.0-1/p80x80/10649505_1460124810970956_1628262998961013775_n.png?_nc_cat=0&oh=fc8f06349cc4b8738b3a7fec924c35d9&oe=5B2D4748","https://scontent-nrt1-1.xx.fbcdn.net/v/t1.0-1/p80x80/18446550_164946100704038_7371507250489390884_n.jpg?_nc_cat=0&oh=667d58961b1c2cb35678f0d8386fa6af&oe=5B6FAF58"])
+
+def random_nick_name():
+    return random.choice(['國破山河在',"良知媒體","紅冰袁"])
+
+def random_update_time(date):
+    return datetime2ts(date) + random.randint(1,500)
+
+def random_facebook_type():
+    return random.choice(["好友", "陌生人"])  
+
+def random_retweet_num():
+    return random.choice([0,1,3,4,5,7,12])  
+
+def random_like_num():
+    return random.choice([0,1,3,4,5,7,12])  
+
+def random_comment_num():
+    return random.choice([0,1,3,4,5,7,12])  
+
+def random_friends_num():
+    return random.choice([0,15,32,47,52,70,125])
+
 # 点赞
 def like(date):
     facebook_feedback_like_index_name = facebook_feedback_like_index_name_pre + date
+    nick_name = random_nick_name()
     data = {
-        'root_uid': root_uid,
         'uid': random_uid(),
+        'photo_url': random_photo_url(),
+        'nick_name': nick_name,
         'timestamp': load_timestamp(date),
-        'text': random_text(),
+        'text': nick_name + '赞同了您的帖子',
+        'update_time': random_update_time(date),
+        'root_text': random_text(),
+        'root_mid': random_mid(),
+        'root_uid': root_uid,
+        'root_nick_name': root_nick_name,
+        'facebook_type': random_facebook_type(),
     }
     facebook_feedback_like_mappings(facebook_feedback_like_index_name)
     print es.index(index=facebook_feedback_like_index_name, doc_type=facebook_feedback_like_index_type, body=data)
@@ -56,10 +89,21 @@ def like(date):
 def retweet(date):
     facebook_feedback_retweet_index_name = facebook_feedback_retweet_index_name_pre + date
     data = {
-        'root_uid': root_uid,
         'uid': random_uid(),
+        'photo_url': random_photo_url(),
+        'nick_name': random_nick_name(),
+        'mid': random_mid(),
         'timestamp': load_timestamp(date),
         'text': random_text(),
+        'update_time': random_update_time(date),
+        'root_text': random_text(),
+        'root_mid': random_mid(),
+        'root_uid': root_uid,
+        'root_nick_name': root_nick_name,
+        'facebook_type': random_facebook_type(),
+        'retweet': random_retweet_num(),
+        'comment': random_comment_num(),
+        'like': random_like_num(),
     }
     facebook_feedback_retweet_mappings(facebook_feedback_retweet_index_name)
     print es.index(index=facebook_feedback_retweet_index_name, doc_type=facebook_feedback_retweet_index_type, body=data)
@@ -67,11 +111,18 @@ def retweet(date):
 # 标记
 def at(date):
     facebook_feedback_at_index_name = facebook_feedback_at_index_name_pre + date
+    nick_name = random_nick_name()
     data = {
-        'root_uid': root_uid,
         'uid': random_uid(),
+        'photo_url': random_photo_url(),
+        'nick_name': nick_name, 
+        'mid': random_mid(),
         'timestamp': load_timestamp(date),
-        'text': random_text(),
+        'text': nick_name + '提到了你',
+        'update_time': random_update_time(date),
+        'root_uid': root_uid,
+        'root_nick_name': root_nick_name,
+        'facebook_type': random_facebook_type(),
     }
     facebook_feedback_at_mappings(facebook_feedback_at_index_name)
     print es.index(index=facebook_feedback_at_index_name, doc_type=facebook_feedback_at_index_type, body=data)
@@ -80,10 +131,18 @@ def at(date):
 def comment(date):
     facebook_feedback_comment_index_name = facebook_feedback_comment_index_name_pre + date
     data = {
-        'root_uid': root_uid,
         'uid': random_uid(),
+        'photo_url': random_photo_url(),
+        'nick_name': random_nick_name(),
+        'mid': random_mid(),
         'timestamp': load_timestamp(date),
         'text': random_text(),
+        'update_time': random_update_time(date),
+        'root_text': random_text(),
+        'root_mid': random_mid(),
+        'root_uid': root_uid,
+        'root_nick_name': root_nick_name,
+        'facebook_type': random_facebook_type(),
         'comment_type': random_comment_type(),
     }
     facebook_feedback_comment_mappings(facebook_feedback_comment_index_name)
@@ -93,10 +152,16 @@ def comment(date):
 def private(date):
     facebook_feedback_private_index_name = facebook_feedback_private_index_name_pre + date
     data = {
-        'root_uid': root_uid,
         'uid': random_uid(),
+        'photo_url': random_photo_url(),
+        'nick_name': random_nick_name(),
         'timestamp': load_timestamp(date),
         'text': random_text(),
+        'update_time': random_update_time(date),
+        'root_text': random_text(),
+        'root_uid': root_uid,
+        'root_nick_name': root_nick_name,
+        'facebook_type': random_facebook_type(),
         'private_type': random_private_type(),
     }
     facebook_feedback_private_mappings(facebook_feedback_private_index_name)
@@ -104,24 +169,32 @@ def private(date):
 
 # 好友列表
 def friends(date):
+    uid = random_uid()
     data = {
+        'uid': uid,
+        'photo_url': random_photo_url(),
+        'nick_name': random_nick_name(),
+        'friends': random_friends_num(),
+        'profile_url': 'https://www.facebook.com/profile.php?id=' + uid,
+        'update_time': random_update_time(date),
         'root_uid': root_uid,
-        'uid': random_uid(),
-        'timestamp': load_timestamp(date),
-        'text': random_text(),
+        'root_nick_name': root_nick_name,
+        'facebook_type': '好友',
     }
-    facebook_feedback_friends_mappings(facebook_feedback_friends_index_name)
+    facebook_feedback_friends_mappings()
     print es.index(index=facebook_feedback_friends_index_name, doc_type=facebook_feedback_friends_index_type, body=data)
 
 
 if __name__ == '__main__':
-    #2017-10-25     2017-10-31 
-    date = '2017-10-31'
-    for i in range(random.randint(2,5)):
-        # like(date)
-        # retweet(date)
-        # at(date)
-        # comment(date)
-        # private(date)
-        friends(date)
+    #2017-10-15     2017-10-30
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        print 'date', date
+        for i in range(random.randint(2,5)):
+            like(date)
+            retweet(date)
+            at(date)
+            comment(date)
+            private(date)
+            friends(date)
 
