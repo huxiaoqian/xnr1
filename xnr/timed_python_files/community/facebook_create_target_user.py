@@ -9,7 +9,7 @@ import numpy as np
 from collections import Counter
 from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM,TARGET_KEYWORD_NUM,WORD2VEC_PATH,MAX_DETECT_COUNT
 from time_utils import ts2datetime,datetime2ts
-from global_config import S_TYPE,FACEBOOK_COMMUNITY_DATE
+from global_config import S_TYPE,FACEBOOK_COMMUNITY_DATE,R_BEGIN_TIME
 
 from global_utils import es_xnr,facebook_community_target_user_index_name_pre,facebook_community_target_user_index_type,\
                          facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
@@ -238,7 +238,7 @@ def detect_by_seed_users(seed_users):
         #union four type user set
         
         #union_result = union_dict(uid_retweet_dict, uid_be_retweet_dict, uid_comment_dict, uid_be_comment_dict)
-        union_result = uid_be_comment_dict
+        union_result = uid_be_retweet_dict
         all_union_result_dict[iter_search_uid] = union_result
 
    
@@ -262,13 +262,20 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
     origin_relationer_uidlist = detect_by_seed_users(xnr_relationer)
     origin_relationer_uidlist.extend(origin_keywords_uidlist)
 
-    expand_userid_list = origin_relationer_uidlist
+    expand_userid_list = list(set(origin_relationer_uidlist))
     uid_num = len(expand_userid_list)
 
-    while uid_num >= MIN_TARGET_USER_NUM:
-        temp_uidlist = detect_by_seed_users(expand_userid_list)
-        expand_userid_list.extend(temp_uidlist)
-        uid_num = len(expand_userid_list)
+    # while uid_num <= MIN_TARGET_USER_NUM:
+    if uid_num <= MIN_TARGET_USER_NUM:
+        for i in range(0,5):
+            temp_uidlist = detect_by_seed_users(expand_userid_list)
+            expand_userid_list.extend(temp_uidlist)
+            expand_userid_list = list(set(expand_userid_list))
+            uid_num = len(expand_userid_list)
+            i = i+1   
+            print 'uid_num::',uid_num
+    else:
+        pass
 
     return expand_userid_list
 
@@ -313,6 +320,6 @@ def create_xnr_targetuser(xnr_user_no):
 
 
 if __name__ == '__main__':
-    xnr_user_no = 'FXNR0001'
+    xnr_user_no = 'FXNR0005'
     uid_list = create_xnr_targetuser(xnr_user_no)
     print 'uid_list:',uid_list
