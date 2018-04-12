@@ -56,7 +56,7 @@ class Friend():
 					profile_url = each.find_element_by_xpath('./div/div/div[2]/div/div[2]/div/a').get_attribute('href') + '&sk=about'
 				except:
 					pass
-				self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url})
+				self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url, 'update_time':self.update_time})
 		finally:
 			self.driver.close()
 		return self.list
