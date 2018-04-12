@@ -140,7 +140,7 @@ def ajax_wxnr_timing_tasks_lookup():
 
 #修改某一具体任务
 #说明：点击修改这一操作时，首先是执行查看某一具体任务这一功能，然后修改页面内容后，提交时调用该修改函数
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks_change/?task_id=FXNR0005_1522641703&task_source=日常发帖&operate_type=origin&create_time=1522641377&post_time=1522651377&text=放假有一起去长城的吗？我想参加&remark=待定
+#http://219.224.134.213:9209/facebook_xnr_manage/wxnr_timing_tasks_change/?task_id=FXNR0005_1522641703&task_source=日常发帖&operate_type=origin&create_time=1522641377&post_time=1522651377&text=放假有一起去长城的吗？我想参加&remark=待定
 @mod.route('/wxnr_timing_tasks_change/')
 def ajax_wxnr_timing_tasks_change():
 	task_id=request.args.get('task_id','')      #指_id这个字段

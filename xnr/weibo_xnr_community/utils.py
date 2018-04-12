@@ -594,3 +594,13 @@ def delete_community(community_id):
     weibo_community_index_name = 'weibo_trace_community_wxnr0004'
     mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
+
+
+def upadate_community(community_id):
+    warning_type_list = ["敏感度剧增预警","影响力剧增预警","社区聚集预警"]
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.update(index=weibo_community_index_name,doc_type="trace_warning",id=community_id,body={'doc':{'warning_rank':3,\
+            'density':0.0068,\
+            'warning_type':warning_type_list
+            }})
+    return mark    
