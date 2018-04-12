@@ -35,20 +35,20 @@ function recommendlist(data) {
 //------
 $('#container .type_page #myTabs a').on('click',function () {
     var arrow=$(this).attr('href'),arrowName='';
-    if (arrow == '#everyday'){
+    if (arrow == '#everyday'){obtain('o');
         // arrowName='@用户推荐';
         // recommendUrl='/twitter_xnr_operate/daily_recommend_at_user/?xnr_user_no='+xnrUser;
         $('#container .post_post .post-2 #post-2-content').css({'width':'100%'});
         $('#container .post_post .post-2 .add_thing').css({'width':'100%'});
         $('#user_recommend').hide();
-    }else if (arrow=='#hot'){
+    }else if (arrow=='#hot'){obtain('r');
         arrowName='@用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
         $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
         $('#user_recommend').show();
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
         recommendUrl='/twitter_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share';
-    }else if (arrow=='#business'){
+    }else if (arrow=='#business'){obtain('c');
         arrowName='@敏感用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
         $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
@@ -59,9 +59,8 @@ $('#container .type_page #myTabs a').on('click',function () {
         $('.post_post').hide();
         public_ajax.call_request('get',flow_faw_url,flow_faw);
         public_ajax.call_request('get',focus_main_url,focus_main);
-    }else {
+    }else {obtain('t');
         arrowName='@用户推荐';
-        operateType='intel_post';
         $('#intell_type').show();
         var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
         // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
@@ -446,6 +445,8 @@ function obtain(t) {
         operateType='hot_post';
     }else if (t== 'c'){
         operateType='business_post';
+    }else if (t== 't'){
+        operateType='intel_post';
     }
 }
 //actType=$('#myTabs li.active a').text().toString().trim();
