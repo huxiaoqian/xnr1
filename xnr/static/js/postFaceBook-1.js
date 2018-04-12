@@ -36,6 +36,7 @@ function recommendlist(data) {
 $('#container .type_page #myTabs a').on('click',function () {
     var arrow=$(this).attr('href'),arrowName='';
     if (arrow == '#everyday'){
+        obtain('o');
         //arrowName='@用户推荐';
         //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?xnr_user_no='+xnrUser;
         //recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=timestamp';
@@ -43,6 +44,7 @@ $('#container .type_page #myTabs a').on('click',function () {
         $('#container .post_post .post-2 .add_thing').css({'width':'100%'});
         $('#user_recommend').hide();
     }else if (arrow=='#hot'){
+        obtain('r');
         arrowName='@用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
         $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
@@ -50,6 +52,7 @@ $('#container .type_page #myTabs a').on('click',function () {
         public_ajax.call_request('get',hotWeiboUrl,hotWeibo);
         recommendUrl='/facebook_xnr_operate/hot_sensitive_recommend_at_user/?sort_item=share';
     }else if (arrow=='#business'){
+        obtain('c');
         arrowName='@敏感用户推荐';
         $('#container .post_post .post-2 #post-2-content').width('736px');
         $('#container .post_post .post-2 .add_thing').css({'width':'81%'});
@@ -62,7 +65,7 @@ $('#container .type_page #myTabs a').on('click',function () {
         public_ajax.call_request('get',focus_main_url,focus_main);
     }else {
         arrowName='@用户推荐';
-        operateType='intel_post';
+        obtain('t');
         $('#intell_type').show();
         var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source='+intelligentType+'&xnr_user_no='+ID_Num;
         // var intelligent_writing_url='/intelligent_writing/show_writing_task/?task_source=facebook&xnr_user_no=FXNR0005';
@@ -85,7 +88,7 @@ $('#container .type_page #myTabs a').on('click',function () {
 //=========跟踪转发===========
 var flow_faw_url='/facebook_xnr_operate/show_retweet_timing_list_future/?xnr_user_no=FXNR0003'+'&start_ts='+todayTimetamp()+
     '&end_ts='+(Date.parse(new Date())/1000);
-var focus_main_url='/facebook_xnr_operate/show_trace_followers/?xnr_user_no=FXNR0003'//+ID_Num;
+var focus_main_url='/facebook_xnr_operate/show_trace_followers/?xnr_user_no='+ID_Num;
 $('.choosetime .demo-label input[name="time1"]').on('click',function () {
     var _val=$(this).val();
     var flow_faw_url;
@@ -443,7 +446,7 @@ function addSuccess(data) {
 
 //=======正常发帖=============
 //
-var operateType;
+var operateType='daily_post';
 function obtain(t) {
     if (t == 'o'){
         operateType='daily_post';
@@ -451,11 +454,12 @@ function obtain(t) {
         operateType='hot_post';
     }else if (t== 'c'){
         operateType='business_post';
+    }else if (t== 't'){
+        operateType='intel_post';
     }
     //actType=$('#myTabs li.active a').text().toString().trim();
-}
+};
 $('#sure_post').on('click',function () {
-    obtain('o');
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");
     var middle_timing='submit_tweet';
     //if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
