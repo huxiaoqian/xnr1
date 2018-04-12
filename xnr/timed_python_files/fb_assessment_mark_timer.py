@@ -472,75 +472,53 @@ def get_follow_group_distribute(xnr_user_no):
     return domain_distribute_dict
 
 
-
-
-
-
-
-
-
-
-
-
-def get_fans_group_distribute(xnr_user_no):
-    
+def get_fans_group_distribute(xnr_user_no):    
     domain_distribute_dict = {}
     domain_distribute_dict['radar'] = {}
 
-    if S_TYPE == 'test':
-        fans_list=PORTRAIT_UID_LIST
-        fans_list_today = FANS_TODAY
-    else:
-        # 获取所有关注者
-        es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
-                                id=xnr_user_no)["_source"]
-        fans_list = es_results['fans_list']
+    # 获取所有关注者
+    es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
+                            id=xnr_user_no)["_source"]
+    fans_list = es_results['fans_list']
 
-        # 获取今日关注者
-        current_time = int(time.time()-DAY)
-        current_date = ts2datetime(current_time)
-        r_uid_list_datetime_index_name = r_fans_uid_list_datetime_pre + current_date
-        fans_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
+    # 获取今日关注者
+    fans_list_today = []
+    current_time = int(time.time()-DAY)
+    current_date = ts2datetime(current_time)
+    r_uid_list_datetime_index_name = r_fans_uid_list_datetime_pre + current_date
+    fans_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
+    if fans_results:
         fans_list_today = json.loads(fans_results)
+    else:
+        if S_TYPE == 'test':
+            fans_list_today = FANS_TODAY
 
     # 所有关注者领域分布
-
     results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
         body={'ids':fans_list})['docs']
-    
     domain_list_fans = []
-
     for result in results:
         if result['found'] == True:
             result = result['_source']
             domain_name = result['domain']
             domain_list_fans.append(domain_name)
-
     domain_list_fans_count = Counter(domain_list_fans)
 
-    
-    try:
-        today_results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
-            body={'ids':fans_list_today})['docs']
-
-        print 'today_results'
-        print today_results
-
-        domain_list_fans_today = []
-
-        for result in today_results:
-            if result['found'] == True:
-                result = result['_source']
-                domain_name = result['domain']
-                domain_list_fans_today.append(domain_name)
-
-        domain_list_fans_today_count = Counter(domain_list_fans_today)
-
-    except Exception,e:
-        print e
-        domain_list_fans_today_count = {}
-
-
+    domain_list_fans_today_count = {}
+    if fans_list_today:
+        try:
+            today_results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+                body={'ids':fans_list_today})['docs']
+            domain_list_fans_today = []
+            for result in today_results:
+                if result['found'] == True:
+                    result = result['_source']
+                    domain_name = result['domain']
+                    domain_list_fans_today.append(domain_name)
+            domain_list_fans_today_count = Counter(domain_list_fans_today)
+        except Exception,e:
+            print e
+            
     if domain_list_fans_today_count:
         for domain, value in domain_list_fans_today_count.iteritems():
             try:
@@ -549,10 +527,9 @@ def get_fans_group_distribute(xnr_user_no):
                 continue
             domain_distribute_dict['radar'][domain] = domain_value
 
+
     # 整理仪表盘数据
     mark = 0
-    print 'domain_list_fans_today_count::',domain_list_fans_today_count
-    print 'domain_distribute_dict::',domain_distribute_dict
     if domain_list_fans_today_count:
         n_domain = len(domain_list_fans_count.keys())
         for domain,value in domain_list_fans_today_count.iteritems():
@@ -563,22 +540,6 @@ def get_fans_group_distribute(xnr_user_no):
     domain_distribute_dict['mark'] = mark
 
     return domain_distribute_dict
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def xnr_user_no2uid(xnr_user_no):
@@ -603,9 +564,7 @@ def uid2nick_name_photo(uid):
 
 #统计信息表
 def create_xnr_history_info_count(xnr_user_no,current_date):
-    #create_date=ts2datetime(create_time)
     facebook_xnr_flow_text_name=xnr_flow_text_index_name_pre+current_date
-
     query_body={
         'query':{
             'filtered':{
@@ -632,8 +591,6 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     except Exception,e:
         xnr_result = []
         print e
-
-
 
     if xnr_result:
         #今日总粉丝数
@@ -745,12 +702,13 @@ def get_influ_fans_num(xnr_user_no,current_time):
     r_fans_count = r_fans_count_datetime_xnr_pre + current_date + '_' + xnr_user_no
     r_fans_uid_list = r_fans_uid_list_datetime_pre + current_date
 
+    #day_num今天的粉丝(好友)数
     datetime_count = r_fans_followers.get(r_fans_count)
+    #total_num总的粉丝(好友)数
     fans_uid_list = r_fans_followers.hget(r_fans_uid_list,xnr_user_no)
 
     if not datetime_count:
         datetime_count = 0
-
     if not fans_uid_list:
         datetime_total = 0
     else:
@@ -773,16 +731,10 @@ def get_influ_fans_num(xnr_user_no,current_time):
         fans_total_num_last = 1
 
     fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
-
-    #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
-
     return fans_dict
 
 def get_influ_retweeted_num(xnr_user_no,current_time):
-
     retweet_dict = {}
-
-
     uid = xnr_user_no2uid(xnr_user_no)
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
@@ -813,8 +765,6 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     }
 
     try:
-        print 'index_name_day'
-        print index_name_day
         es_day_count_result = es.count(index=index_name_day, doc_type=facebook_feedback_retweet_index_type,\
                     body=query_body_day,request_timeout=999999)
         if es_day_count_result['_shards']['successful'] != 0:
@@ -827,8 +777,6 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
 
 
     try:
-        print 'index_name_total'
-        print index_name_total
         es_total_count_result = es.count(index=index_name_total,doc_type=facebook_feedback_retweet_index_type,\
                         body=query_body_total,request_timeout=999999)
 
@@ -932,17 +880,11 @@ def get_influ_commented_num(xnr_user_no,current_time):
     except Exception,e:
         print e
         comment_total_num_last = 1
-    
-
     comment_dict['growth_rate'] = round(float(es_day_count)/comment_total_num_last,2)
-
     return comment_dict
 
 def get_influ_like_num(xnr_user_no,current_time):
-
     like_dict = {}
-
-
     uid = xnr_user_no2uid(xnr_user_no)
 
     current_date = ts2datetime(current_time)
@@ -1154,9 +1096,7 @@ def get_influ_private_num(xnr_user_no,current_time):
 ## 渗透力评估 各指标
 
 def penetration_total(xnr_user_no,current_time):
-    
     total_dict = {}
-
 
     # follow_group = get_pene_follow_group_sensitive(xnr_user_no,current_time)
     fans_group = get_pene_fans_group_sensitive(xnr_user_no,current_time)
@@ -1176,13 +1116,11 @@ def penetration_total(xnr_user_no,current_time):
     warning_report_total = round(float(warning_report['event']+ \
         warning_report['user'] + warning_report['tweet'])/3,2)
 
-
     # total_dict['follow_group'] = follow_group['sensitive_info']
     total_dict['fans_group'] = fans_group['sensitive_info']
     total_dict['self_info'] = self_info['sensitive_info']
     total_dict['warning_report_total'] = warning_report_total
     total_dict['feedback_total'] = feedback_total['sensitive_info']
-
     return total_dict
 
 def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
@@ -1236,24 +1174,20 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
     return follow_group_sensitive
 
 def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
-
-    #if xnr_user_no:
     es_results = es.get(index=facebook_xnr_fans_followers_index_name,doc_type=facebook_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
     fans_list = es_results['fans_list']
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_BCI)
-    else:
-        current_time = current_time_old
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE_BCI)
+    # else:
+    current_time = current_time_old
     
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
     index_name = flow_text_index_name_pre + current_date
-
     fans_group_sensitive = {}
-
     query_body_info = {
         'query':{
             'filtered':{
@@ -1277,18 +1211,15 @@ def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
     if sensitive_value == None:
         sensitive_value = 0.0
     fans_group_sensitive['sensitive_info'] = sensitive_value
-
     return fans_group_sensitive
 
 def get_pene_infor_sensitive(xnr_user_no,current_time_old):
-    
     uid = xnr_user_no2uid(xnr_user_no)
-
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_BCI)
-        uid = S_UID
-    else:
-        current_time = current_time_old
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE_BCI)
+    #     uid = S_UID
+    # else:
+    current_time = current_time_old
     
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
@@ -1319,13 +1250,12 @@ def get_pene_infor_sensitive(xnr_user_no,current_time_old):
     if sensitive_value == None:
         sensitive_value = 0.0
     my_info_sensitive['sensitive_info'] = sensitive_value
-
+    print 'my_info_sensitive'
+    print my_info_sensitive
     return my_info_sensitive
 
 def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
-    
     uid = xnr_user_no2uid(xnr_user_no)
-
     if sort_item == 'be_at':
         index_name_sort = facebook_feedback_at_index_name
         index_type_sort = facebook_feedback_at_index_type
@@ -1336,20 +1266,16 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
         index_name_sort = facebook_feedback_comment_index_name
         index_type_sort = facebook_feedback_comment_index_type
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE_BCI)
-    else:
-        current_time = current_time_old
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE_BCI)
+    # else:
+    current_time = current_time_old
 
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
-
-    #到底用哪个时间？？？？
     index_name_sort = index_name_sort + '_' + ts2datetime(current_time_new)
-
     feedback_sensitive_dict = {}
-
     query_body = {
         'query':{
             'bool':{
@@ -1369,10 +1295,6 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
     }
     try:
         es_sensitive_result = es.search(index=index_name_sort,doc_type=index_type_sort,body=query_body)['aggregations']
-        print 'index_name_sort'
-        print index_name_sort
-        print 'es_sensitive_result', es_sensitive_result
-
         sensitive_value = es_sensitive_result['avg_sensitive']['value']
         if sensitive_value == None:
             sensitive_value = 0.0
@@ -1380,30 +1302,20 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
         print e
         sensitive_value = 0.0
 
-
     feedback_sensitive_dict['sensitive_info'] = sensitive_value
-    print 'feedback_sensitive_dict'
-    print feedback_sensitive_dict
     return feedback_sensitive_dict
 
 def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
-
     sensitive_report_dict = {}
 
     report_type_list = [u'人物',u'事件',u'言论']
     
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE)
-    else:
-        current_time = current_time_old
-
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE)
+    # else:
+    current_time = current_time_old
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
-
-    print 'current_date'
-    print current_date
-    print 'current_time_new'
-    print current_time_new
 
     index_name = facebook_report_management_index_name_pre + current_date
 
@@ -1456,7 +1368,6 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
                         mid_tweet_list.append(facebook['mid'])
 
     ## 事件平均敏感度
-    
     query_body_event = {
         'query':{
             'filtered':{
@@ -1485,7 +1396,6 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
     if event_sensitive_avg == None:
         event_sensitive_avg = 0.0
-
 
     ## 人物平均敏感度
     query_body_user = {
@@ -1548,7 +1458,6 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     sensitive_report_dict['event'] = event_sensitive_avg
     sensitive_report_dict['user'] = user_sensitive_avg
     sensitive_report_dict['tweet'] = tweet_sensitive_avg
-
     return sensitive_report_dict 
 
 ## 安全性评估 各指标
@@ -1629,19 +1538,15 @@ def cron_compute_mark(current_time):
         print 'total time: ',end_time - start_time
 
 
-
-        print 'xnr_user_detail', xnr_user_detail
-        for k, v in xnr_user_detail.items():
-            print k, v
-
-        # try:
-        #     es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
-        #         id=_id,body=xnr_user_detail)
-        #     mark = True
-        # except Exception,e:
-        #     print e
-        #     mark = False
-        # return mark
+        #存es
+        try:
+            es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+                id=_id,body=xnr_user_detail)
+            mark = True
+        except Exception,e:
+            print e
+            mark = False
+        return mark
 
 
 
@@ -1654,11 +1559,11 @@ if __name__ == '__main__':
     else:
         current_time = int(time.time()-DAY)
 
-    # current_time_now = int(time.time())
-    # for i in range(11,-1,-1):
+    #2017-10-15  2017-10-30
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        print 'date', date
+        current_time = datetime2ts(date)
 
-    #     current_time = current_time_now - i*24*3600
-    #     print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
-
-    cron_compute_mark(current_time)
+        cron_compute_mark(current_time)
 
