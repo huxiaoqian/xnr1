@@ -212,13 +212,13 @@ def get_warning_orgnize(result):
     sensitive_content = []
     influence_content = []
     # print "result[0]['num_warning_content']::::",type(result[0]['num_warning_content']),result[0]['num_warning_content']
-    if result[0]['num_warning_content']:
-        num_content = json.loads(result[0]['num_warning_content'])
+    if result[-1]['num_warning_content']:
+        num_content = json.loads(result[-1]['num_warning_content'])
     else:
     	num_content = []
 
-    if result[0]['density_warning_content']:
-        density_content = json.loads(result[0]['density_warning_content'])
+    if result[-1]['density_warning_content']:
+        density_content = json.loads(result[-1]['density_warning_content'])
     else:
     	density_content = []
 
