@@ -261,12 +261,16 @@ def get_tweets_distribute(xnr_user_no):
     try:
         xnr_results = es_user_portrait.get(index=portrait_index_name,doc_type=portrait_index_type,\
             id=uid)['_source']
+        # print 'xnr_results'
+        # print xnr_results
         topic_string = xnr_results['topic_string'].split('&')
         topic_xnr_count = Counter(topic_string)
         #topic_distribute_dict['topic_xnr'] = topic_xnr_count
 
     except:
         topic_xnr_count = {}
+    # print 'topic_xnr_count'
+    # print topic_xnr_count
         #topic_distribute_dict['topic_xnr'] = topic_xnr_count
 
     # 整理雷达图数据
@@ -1519,4 +1523,5 @@ if __name__ == '__main__':
     #     print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
 
     cron_compute_mark(current_time)
+    # get_tweets_distribute(xnr_user_no='WXNR0004')
 

@@ -20,6 +20,11 @@ from tw_op_utils import get_submit_tweet_tw, get_comment_operate_tw, get_retweet
 
 
 sys.path.append(WEIBO_XNR_OPERATE_PATH)
+# os.path.dirname('wb_op_utils.py')
+# a = os.path.dirname(os.path.abspath('wb_op_utils.py'))
+#a=os.path.abspath("../weibo_xnr_operate/")
+
+
 from wb_op_utils import get_submit_tweet, get_reply_total, get_reply_comment, get_reply_retweet, get_reply_private, \
 				get_reply_follow, get_reply_unfollow, get_like_operate
 

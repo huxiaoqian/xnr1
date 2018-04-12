@@ -64,17 +64,17 @@ def get_xnr_keywords(xnr_user_no,datetime_list):
             pass
 
     #添加容错
-    #try:
-    es_results = es_xnr.search(index = xnr_flow_text_index_name_list,doc_type = xnr_flow_text_index_type,body=query_body)['hits']['hits']
-    keywords_list = []
-    for item in es_results:
-        keywords_string = item['_source']['keywords_string']
-        if keywords_string:
-            keywords_list.extend(keywords_string.split('&'))
-        else:
-            pass
-    #except:
-        #keywords_list=[]
+    try:
+        es_results = es_xnr.search(index = xnr_flow_text_index_name_list,doc_type = xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        keywords_list = []
+        for item in es_results:
+            keywords_string = item['_source']['keywords_string']
+            if keywords_string:
+                keywords_list.extend(keywords_string.split('&'))
+            else:
+                pass
+    except:
+        keywords_list=[]
     return keywords_list
 
 
@@ -272,7 +272,7 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
 
     # while uid_num <= MIN_TARGET_USER_NUM:
     if uid_num <= MIN_TARGET_USER_NUM:
-    	for i in range(0,5):
+        for i in range(0,5):
             temp_uidlist = detect_by_seed_users(expand_userid_list)
             expand_userid_list.extend(temp_uidlist)
             expand_userid_list = list(set(expand_userid_list))
@@ -280,7 +280,7 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
             i = i+1   
             print 'uid_num::',uid_num
     else:
-    	pass
+        pass
 
     return expand_userid_list
 
