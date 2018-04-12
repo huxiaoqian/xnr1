@@ -43,9 +43,10 @@ function trackCommunity(data){
                     if (row.community_name == '' || row.community_name == 'null' || row.community_name == 'unknown'||!row.community_name) {
                         return row.community_id;
                     } else {
-                        var b='';
-                        if (row.trace_message){b=' <i class="icon icon-bell-alt" onclick="isSuretrack(\''+row.community_id+'\')"></i>'}
-                        var str =  row.community_name + b;
+                        var b='<i class="icon icon-bell-alt" onclick="isSuretrack(\''+row.community_id+'\')" ' +
+                            'style="display:inline-block;margin-right:10px;cursor: pointer;color: #fa7d3c;"></i>';
+                        // if (row.trace_message){}
+                        var str = b + row.community_name;
                         return str;
                     };
                 }
@@ -58,13 +59,10 @@ function trackCommunity(data){
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.warning_rank=='null'||row.warning_rank=='unknown'){
-                        return '未知';
-                    }else {
-                        var a='<i class="icon icon-star" style="color:#fa7d3c;"></i>  ';
-                        var b='<i class="icon icon-star-empty" style="color:#fa7d3c;"></i>  ';
-                        return a.repeat(row.warning_rank)+b.repeat(4-row.warning_rank);
-                    }
+                    if(row.warning_rank=='null'||row.warning_rank=='unknown'||row.warning_rank<0){row.warning_rank=0}
+                    var a='<i class="icon icon-star" style="color:#fa7d3c;"></i>  ';
+                    var b='<i class="icon icon-star-empty" style="color:#fa7d3c;"></i>  ';
+                    return a.repeat(row.warning_rank)+b.repeat(4-row.warning_rank);
                 }
             },
             {
@@ -98,7 +96,7 @@ function trackCommunity(data){
                 }
             },
             {
-                title: "平均聚集系数",//标题
+                title: "聚集系数",//标题
                 field: "density",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -213,7 +211,9 @@ function trackCommunity(data){
 var this_community_id='';
 function isSuretrack(_id) {
     this_community_id=_id;
-    $('#trackModal h5').text(trackCommunityData[_id].trace_message);
+    if(trackCommunityData[_id].trace_message){$('.tk1').hide();$('.tk2').show()}
+    else {$('.tk1').show();$('.tk2').hide()}
+    $('#trackModal h5').text(trackCommunityData[_id].trace_message||'该社区暂无预警信息。');
     $('#trackModal').modal('show');
 }
 function sureTrackModal() {
