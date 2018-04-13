@@ -7,8 +7,8 @@ import datetime
 import time
 
 class At():
-	def __init__(self, username, password):
-		self.launcher = Launcher(username, password)
+	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
+		self.launcher = Launcher(username, password, consumer_key, consumer_secret, access_token, access_secret)
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
 		self.list = []
@@ -47,7 +47,7 @@ class At():
 		self.es.executeES(indexName,typeName, list)
 
 if __name__ == '__main__':
-	at = At('8617078448226','xnr123456')
+	at = At('8617078448226','xnr123456', 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9')
 	list = at.get_mention()
 	print(list)
 	#at.save('twitter_feedback_at','text',list)
