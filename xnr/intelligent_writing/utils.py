@@ -305,6 +305,8 @@ def get_add_opinion_corpus(task_detail):
     item_dict['corpus_name'] = corpus_name
     item_dict['corpus_pinyin'] = corpus_pinyin
     item_dict['submitter'] = task_detail['submitter']
+    item_dict['status'] = 0
+
 
     try:
         es.get(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,id=corpus_pinyin)
