@@ -111,17 +111,21 @@ def ajax_safe_active_today():
 @mod.route('/tweets_distribute/')
 def ajax_tweets_distribute():
     xnr_user_no = request.args.get('xnr_user_no','')
-    results = get_tweets_distribute(xnr_user_no)
+    start_time = request.args.get('start_time','')
+    end_time = request.args.get('end_time','')
+    results = get_tweets_distribute(xnr_user_no,start_time,end_time)
     return json.dumps(results)
 
 # 发帖内容 --话题
 @mod.route('/safe_tweets_topic/')
 def ajax_safe_tweets_topic():
     xnr_user_no = request.args.get('xnr_user_no','')
+    start_time = request.args.get('start_time','')
+    end_time = request.args.get('end_time','')
     topic = request.args.get('topic',u'民生类_法律')
     sort_item = request.args.get('sort_item','timestamp')  # 按时间 -- timestamp  按热度---retweeted
     # print 'topic::::',topic
-    results = get_safe_tweets(xnr_user_no,topic,sort_item)
+    results = get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item)
     
     return json.dumps(results)
 
