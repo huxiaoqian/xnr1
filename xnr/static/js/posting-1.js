@@ -392,24 +392,26 @@ function addSuccess(data) {
 //====================
 //
 var operateType,actType;
-function obtain(t) {
-    if (t == 'o'){
-        operateType='origin';
-    }else if (t=='r'){
-        operateType='retweet';
-    }else if (t== 'c'){
-        operateType='comment';
-    }
+function obtain() {
+    // if (t == 'o'){
+    //     operateType='origin';
+    // }else if (t=='r'){
+    //     operateType='retweet';
+    // }else if (t== 'c'){
+    //     operateType='comment';
+    // }else if (t== 't'){
+    //     operateType='intel_post';
+    // }
     actType=$('#myTabs li.active a').text().toString().trim();
 }
 $('#sure_post').on('click',function () {
-    obtain('o');
+    obtain();
     var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");;
     var flag=$('.friends button b').text(),rank='',middle_timing='submit_tweet';
     if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
     if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
     //原创
-    var post_url_1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&operate_type='+operateType+
+    var post_url_1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+//'&operate_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+Check(txt)+'&rank='+rank;
     if (imgRoad.length!=0&&imgRoad.length==1){post_url_1+='&p_url='+Check(imgRoad[0]);}
     if ($("input[name='demo']")[0].checked){

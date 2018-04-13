@@ -216,13 +216,13 @@ def get_warning_orgnize(result):
     sensitive_content = []
     influence_content = []
     # print "result[0]['num_warning_content']::::",type(result[0]['num_warning_content']),result[0]['num_warning_content']
-    if result[0]['num_warning_content']:
-        num_content = json.loads(result[0]['num_warning_content'])
+    if result[-1]['num_warning_content']:
+        num_content = json.loads(result[-1]['num_warning_content'])
     else:
     	num_content = []
 
-    if result[0]['density_warning_content']:
-        density_content = json.loads(result[0]['density_warning_content'])
+    if result[-1]['density_warning_content']:
+        density_content = json.loads(result[-1]['density_warning_content'])
     else:
     	density_content = []
 
@@ -594,3 +594,13 @@ def delete_community(community_id):
     weibo_community_index_name = 'weibo_trace_community_wxnr0004'
     mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
+
+
+def upadate_community(community_id):
+    warning_type_list = ["敏感度剧增预警","影响力剧增预警","社区聚集预警"]
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.update(index=weibo_community_index_name,doc_type="trace_warning",id=community_id,body={'doc':{'warning_rank':3,\
+            'density':0.0068,\
+            'warning_type':warning_type_list
+            }})
+    return mark    
