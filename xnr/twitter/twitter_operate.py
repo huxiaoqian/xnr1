@@ -19,8 +19,8 @@ from launcher import Launcher
 from Elasticsearch_tw import Es_twitter
 
 class Operation():
-	def __init__(self, username, password):
-		self.launcher = Launcher(username, password)
+	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
+		self.launcher = Launcher(username, password, consumer_key, consumer_secret, access_token, access_secret)
 		self.api = self.launcher.api()
 		self.list = []
 
@@ -137,7 +137,7 @@ class Operation():
 
 
 if __name__ == '__main__':
-	operation = Operation('8617078448226','xnr123456')
+	operation = Operation('8617078448226','xnr123456', 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9')
 	#operation.publish('12.26 test')
 	#operation.message('lvleilei1',text='test')
 	#operation.do_comment('871936760573382658','922897194100826112','.....')
