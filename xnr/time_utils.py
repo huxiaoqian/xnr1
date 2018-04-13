@@ -237,9 +237,10 @@ def get_facebook_flow_text_index_list(date_range_end_ts):
     
     return index_name_list
 
-def get_fb_xnr_flow_text_index_list(date_range_end_ts):
+#days_num变成可选参数
+def get_fb_xnr_flow_text_index_list(date_range_end_ts, days_num=MAX_FLOW_TEXT_DAYS):
     index_name_list = []
-    days_num = MAX_FLOW_TEXT_DAYS
+    # days_num = MAX_FLOW_TEXT_DAYS
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
@@ -248,9 +249,10 @@ def get_fb_xnr_flow_text_index_list(date_range_end_ts):
     
     return index_name_list
 
-def get_new_fb_xnr_flow_text_index_list(date_range_end_ts):
+#days_num变成可选参数
+def get_new_fb_xnr_flow_text_index_list(date_range_end_ts, days_num=MAX_FLOW_TEXT_DAYS):
     index_name_list = []
-    days_num = MAX_FLOW_TEXT_DAYS
+    # days_num = MAX_FLOW_TEXT_DAYS
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)

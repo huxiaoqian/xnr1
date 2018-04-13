@@ -1303,7 +1303,7 @@ def get_safe_active_today(xnr_user_no):
     return safe_active_dict
 
 
-def get_tweets_distribute(xnr_user_no):
+def get_tweets_distribute(xnr_user_no,start_time,end_time):
     topic_distribute_dict = {}
     topic_distribute_dict['radar'] = {}
     uid = xnr_user_no2uid(xnr_user_no)
@@ -1326,24 +1326,19 @@ def get_tweets_distribute(xnr_user_no):
     topic_list_followers_count = Counter(topic_list_followers)
     print 'topic_list_followers_count:::',topic_list_followers_count
 
-
-
-
-
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE)
+    # 查询的时间范围
+    start_time = int(start_time)
+    end_time = int(end_time)
+    if start_time < datetime2ts(S_DATE):
+        start_time = datetime2ts(S_DATE)
     else:
-        current_time = int(time.time())
-
-
-
-
-
-
-
-    index_name_list = get_xnr_flow_text_index_list(current_time)
+        start_time = datetime2ts(ts2datetime(start_time))
+    end_time = datetime2ts(ts2datetime(end_time))
+    days_num = (end_time - start_time)/DAY
+    # index_name_list = get_xnr_flow_text_index_list(end_time,days_num)
+    index_name_list = get_new_xnr_flow_text_index_list(end_time,days_num)
+    
     topic_string = []
-
     for index_name_day in index_name_list:
 
         query_body = {
@@ -1359,7 +1354,7 @@ def get_tweets_distribute(xnr_user_no):
             'sort':{'timestamp':{'order':'desc'}}
         }
         try:
-            es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            es_results = es.search(index=index_name_day,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
             print 'es_results::',es_results
             for topic_result in es_results:
                 #print 'topic_result::',topic_result
@@ -1367,7 +1362,7 @@ def get_tweets_distribute(xnr_user_no):
                 topic_field = topic_result['topic_field_first'][:3]
             topic_string.append(topic_field)
         except Exception,e:
-            print e
+            # print e
             continue
 
     topic_xnr_count = Counter(topic_string)
@@ -1384,7 +1379,6 @@ def get_tweets_distribute(xnr_user_no):
             
     # 整理仪表盘数据
     mark = 0
-    
     if topic_xnr_count:
         n_topic = len(topic_list_followers_count.keys())
         for topic,value in topic_xnr_count.iteritems():
@@ -1398,18 +1392,22 @@ def get_tweets_distribute(xnr_user_no):
     return topic_distribute_dict
 
 
-def get_safe_tweets(xnr_user_no,topic,sort_item):
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE)
-
+def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
+    # 查询的时间范围
+    start_time = int(start_time)
+    end_time = int(end_time)
+    if start_time < datetime2ts(S_DATE):
+        start_time = datetime2ts(S_DATE)
     else:
-        current_time = int(time.time())
+        start_time = datetime2ts(ts2datetime(start_time))
+    end_time = datetime2ts(ts2datetime(end_time))
+    days_num = (end_time - start_time)/DAY
+    # index_name_list = get_new_xnr_flow_text_index_list(current_time)
+    index_name_list = get_new_xnr_flow_text_index_list(end_time,days_num)
 
-    index_name_list = get_new_xnr_flow_text_index_list(current_time)
-    es_results_all = []
     
+    es_results_all = []
     for index_name_day in index_name_list:
-
         query_body = {
             'query':{
                 'bool':{
@@ -1426,7 +1424,8 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
             es_results = es.search(index=index_name_day,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
             es_results_all.extend(es_results)
 
-        except:
+        except Exception,e:
+            print e
             continue
 
     
@@ -1441,7 +1440,6 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
     return results_all
 
 def get_follow_group_distribute(xnr_user_no):
-    
     domain_distribute_dict = {}
     domain_distribute_dict['radar'] = {}
     # 获取所有关注者
@@ -1479,6 +1477,11 @@ def get_follow_group_distribute(xnr_user_no):
 
     domain_list_followers_count = Counter(domain_list_followers)
    
+
+    print 'domain_list_followers_count'
+    print domain_list_followers_count
+
+
     # 今日关注者
     #followers_list_today = FOLLOWERS_TODAY
     try:
@@ -1497,15 +1500,14 @@ def get_follow_group_distribute(xnr_user_no):
 
         domain_list_followers_today_count = Counter(domain_list_followers_today)
 
-    except:
+    except Exception,e:
+        print e
         domain_list_followers_today_count = {}
 
     
     for domain, value in domain_list_followers_count.iteritems():
-        
         if domain_list_followers_today_count:
             try:
-            
                 domain_value = round(float(domain_list_followers_today_count[domain])/value,2)
             except:
                 domain_value = 0
@@ -1516,7 +1518,6 @@ def get_follow_group_distribute(xnr_user_no):
 
     # 整理仪表盘数据
     mark = 0
-
     if domain_list_followers_today_count:
         n_domain = len(domain_list_followers_count.keys())
         for domain,value in domain_list_followers_today_count.iteritems():
