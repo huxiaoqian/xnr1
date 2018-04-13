@@ -109,23 +109,24 @@ def get_weibo(text,n_gram=2,n_count=20):
         uid_word = dict()
     return uid_word
 
-def load_fb_flow_text(fb_flow_text_index_list, uid_list):
-    fb_flow_text_query_body = {
-        'query':{
-            "filtered":{
-                "filter": {
-                    "bool": {
-                        "must": [
-                            {"terms": {"uid": uid_list}},
-                        ]
-                     }
+def load_fb_flow_text(fb_flow_text_index_list, uid_list, fb_flow_text_query_body={}):
+    if not fb_flow_text_query_body:
+        fb_flow_text_query_body = {
+            'query':{
+                "filtered":{
+                    "filter": {
+                        "bool": {
+                            "must": [
+                                {"terms": {"uid": uid_list}},
+                            ]
+                         }
+                    }
                 }
-            }
-        },
-        'size': MAX_SEARCH_SIZE,
-        "sort": {"timestamp": {"order": "desc"}},
-        "fields": ["text", "uid"]
-    }
+            },
+            'size': MAX_SEARCH_SIZE,
+            "sort": {"timestamp": {"order": "desc"}},
+            "fields": ["text", "uid"]
+        }
     fb_flow_text = {}
     for index_name in fb_flow_text_index_list:
         try:
@@ -197,7 +198,8 @@ def save_and_trans(text_dict):
                 print save_result
         except Exception,e:
             print e
-    return text_dict.values()
+    # return text_dict.values()
+    return text_dict
 
 def get_filter_keywords(fb_flow_text_index_list, uid_list):
     global black
@@ -224,13 +226,70 @@ def get_filter_keywords(fb_flow_text_index_list, uid_list):
             if get_weibo(sample_text_list):
                 result = get_weibo(text_dict.values())
             else:
-                result = get_weibo(save_and_trans(text_dict))
+                text_dict_translated = save_and_trans(text_dict)
+                result = get_weibo(text_dict_translated.values())
             filter_keywords_result[uid] = result
         else:
             filter_keywords_result[uid] = {}
-
     return filter_keywords_result
-    
+
+#提供给 计算new_xnr_flow_text_里面的topic_field_first字段 用
+def get_filter_keywords_for_match_function(fb_flow_text_index_list, uid_list):
+    global black
+    black = load_black_words()
+    filter_keywords_result = {}
+    fb_flow_text_query_body = {
+        'query':{
+            "filtered":{
+                "filter": {
+                    "bool": {
+                        "must": [
+                            {"terms": {"uid": uid_list}},
+                        ],
+                        "must_not": {
+                            "exists": {
+                                "field": "topic_field_first"
+                            }
+                        },
+                    }
+                }
+            }
+        },
+        'size': 999,
+        "sort": {"timestamp": {"order": "desc"}},
+        "fields": ["text", "uid"]
+    }
+    fb_flow_text = load_fb_flow_text(fb_flow_text_index_list, uid_list, fb_flow_text_query_body)
+
+    for uid, content in fb_flow_text.items():
+        filter_keywords_result[uid] = {}
+        #对于一个用户的微博文本list，先随机抽取一定比例(k)的文章进行计算关键词，
+        #如果没有结果则对其进行翻译，得到最终结果；反之，不用进行翻译直接进行重新计算得到最终结果
+        text_dict = content['text_dict']
+        #text_dict = {'mid1': text1, 'mid2': text2, ...}
+       
+        sample_num = min([int(0.1*len(text_dict)), 20])
+        if len(text_dict):  #如果有内容的话，至少抽取一篇
+            if not sample_num:
+                sample_num = 1
+            sample_text_keys = random.sample(text_dict, sample_num)
+            sample_text_list = []
+            
+            for key in sample_text_keys:
+                sample_text_list.append(text_dict[key])
+            
+            if get_weibo(sample_text_list): #说明不需要进行翻译
+                pass
+            else:
+                text_dict = save_and_trans(text_dict)
+
+            for mid,text in text_dict.items():
+                result = get_weibo_single(text)
+                if result:
+                    filter_keywords_result[uid][mid] = result
+    return filter_keywords_result
+
+
 if __name__ == '__main__':
     # uid_list = ['100010739386824']
     # type = 'test'
@@ -244,4 +303,6 @@ if __name__ == '__main__':
     #     print uid
     #     for key, val in filter_keywords.items():
     #         print key, val
-    load_black_words()
+    # load_black_words()
+    # print load_fb_flow_text(['facebook_flow_text_2017-10-15'],['100012258524129'])
+    print get_filter_keywords_for_match_function(['facebook_flow_text_2017-10-15'],['100012258524129'])
