@@ -6,8 +6,8 @@ from Elasticsearch_tw import Es_twitter
 import time
 
 class Like():
-	def __init__(self, username, password):
-		self.launcher = Launcher(username, password)	
+	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
+		self.launcher = Launcher(username, password, consumer_key, consumer_secret, access_token, access_secret)	
 		self.driver = self.launcher.login()
 		self.es = Es_twitter()
 		self.api = self.launcher.api()
@@ -51,7 +51,7 @@ class Like():
 		self.es.executeES(indexName,typeName,list)
 
 if __name__ == '__main__':
-	like = Like('18538728360@163.com','zyxing,0513')
+	like = Like('18538728360@163.com', 'zyxing,0513', 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9')
 	list = like.get_like()
 	print(list)
 	#like.save('twitter_feedback_like','text',list)
