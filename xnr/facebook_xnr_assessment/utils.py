@@ -24,7 +24,9 @@ from xnr.global_utils import es_user_profile,facebook_feedback_comment_index_nam
                         fb_portrait_index_name as portrait_index_name, fb_portrait_index_type as portrait_index_type,\
                         fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre ,\
                         fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
-                        new_fb_xnr_flow_text_index_type as new_xnr_flow_text_index_type
+                        new_fb_xnr_flow_text_index_type as new_xnr_flow_text_index_type,\
+                        fb_xnr_fans_followers_index_name as facebook_xnr_fans_followers_index_name,\
+                        fb_xnr_fans_followers_index_type as facebook_xnr_fans_followers_index_type
 from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_list as get_flow_text_index_list,\
                         ts2datetime,datetime2ts, get_fb_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
                         get_new_fb_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list
@@ -756,8 +758,9 @@ def compute_penetration_num(xnr_user_no):
 def penetration_total(xnr_user_no,start_time,end_time):
     
     total_dict = {}
-    total_dict['follow_group'] = {}
-    total_dict['fans_group'] = {}
+    # total_dict['follow_group'] = {}
+    # total_dict['fans_group'] = {}
+    total_dict['friends_group'] = {}
     total_dict['feedback_total'] = {}
     total_dict['self_info'] = {}
     total_dict['warning_report_total'] = {}
@@ -779,8 +782,8 @@ def penetration_total(xnr_user_no,start_time,end_time):
     search_results = es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
         body=query_body)['hits']['hits']
     if not search_results:
-    	return {}
-    	
+        return {}
+        
     # follow_group = {}
     # fans_group = {}
     friends_group = {}
@@ -1315,21 +1318,27 @@ def get_tweets_distribute(xnr_user_no):
         body={'ids':followers_list})['docs']
 
     topic_list_followers = []
-
     for result in results:
         if result['found'] == True:
             result = result['_source']
             topic_string_first = result['topic_string'].split('&')
             topic_list_followers.extend(topic_string_first)
-
     topic_list_followers_count = Counter(topic_list_followers)
-
     print 'topic_list_followers_count:::',topic_list_followers_count
+
+
+
+
 
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time())
+
+
+
+
+
 
 
     index_name_list = get_xnr_flow_text_index_list(current_time)
@@ -1351,14 +1360,14 @@ def get_tweets_distribute(xnr_user_no):
         }
         try:
             es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
-            #print 'es_results::',es_results
+            print 'es_results::',es_results
             for topic_result in es_results:
                 #print 'topic_result::',topic_result
                 topic_result = topic_result['_source']
                 topic_field = topic_result['topic_field_first'][:3]
             topic_string.append(topic_field)
-
-        except:
+        except Exception,e:
+            print e
             continue
 
     topic_xnr_count = Counter(topic_string)

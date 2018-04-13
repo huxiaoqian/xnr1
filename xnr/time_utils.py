@@ -8,7 +8,9 @@ from global_utils import flow_text_index_name_pre,group_message_index_name_pre,x
                         xnr_flow_text_index_type, wx_group_message_index_name_pre, \
                         fb_bci_index_name_pre, tw_bci_index_name_pre, facebook_flow_text_index_name_pre,\
                         twitter_flow_text_index_name_pre, tw_xnr_flow_text_index_name_pre,\
-                        new_fb_xnr_flow_text_index_name_pre, new_xnr_flow_text_index_name_pre
+                        new_fb_xnr_flow_text_index_name_pre, new_xnr_flow_text_index_name_pre,\
+                        fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type,\
+                        fb_xnr_flow_text_index_name_pre, fb_xnr_flow_text_index_type
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE, FB_FLOW_TEXT_START_DATE, TW_FLOW_TEXT_START_DATE
 
