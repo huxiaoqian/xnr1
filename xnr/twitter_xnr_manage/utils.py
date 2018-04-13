@@ -7,6 +7,8 @@ import os
 import time
 import datetime
 import json
+import sys
+sys.path.append('../../')
 from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
                              tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
                              twitter_user_index_name as profile_index_name, twitter_user_index_type as profile_index_type,\
@@ -45,6 +47,9 @@ from xnr.global_utils import weibo_xnr_save_like_index_name,weibo_xnr_save_like_
                              weibo_date_remind_index_name,weibo_date_remind_index_type,\
                              weibo_feedback_follow_index_name,weibo_feedback_follow_index_type,\
                              weibo_feedback_fans_index_name,weibo_feedback_fans_index_type
+
+
+
 ##获取索引
 def get_xnr_set_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
     index_name_list=[]

@@ -1153,10 +1153,10 @@ def compute_domain_base():
 
 if __name__ == '__main__':
     
-    print 'start_time::',time.ctime()
+    start_ts = time.time()
     print 'start!'
     compute_domain_base()
-    print 'end_time::',time.ctime()
+    print 'total time used:', time.time() - start_ts
     # uid_list = ['1140849537', '443835769306299', '288733581614500']
     # create_time = datetime2ts(S_DATE)
     # datetime_list = get_flow_text_datetime_list(create_time)

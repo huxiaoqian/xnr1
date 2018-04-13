@@ -161,8 +161,6 @@ def fb_xnr_fans_followers_mappings():
         
         #create
         es.indices.create(index=fb_xnr_fans_followers_index_name,body=index_info,ignore=400)
-   
-
 
 if __name__=='__main__':
   
