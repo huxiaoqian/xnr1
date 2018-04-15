@@ -109,7 +109,8 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     top_sensitive_uid_list = []
     for user in top_sensitive_users:
         user = user['_source']
-        top_sensitive_uid_list.append(user['uid'])
+        if user.has_key('uid'):
+            top_sensitive_uid_list.append(user['uid'])
 
 
     # print 'top_sensitive_uid_list'
