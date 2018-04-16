@@ -200,7 +200,7 @@
 //==========登录一个微信虚拟人=========
 	var $this_WX,$this_WXbot_id,$this_wx_id;
 	function loginIN(_this, wxbot_id, wx_id,status) {
-		console.log('===登录用户===')
+		console.log('===登录用户===');
 		$this_WX=_this;
 		$this_WXbot_id=wxbot_id;
 		$this_wx_id = wx_id;
@@ -216,6 +216,7 @@
 				$($this_WX).attr('in_out','in');
 			})
 		}else{
+			$('#loadingJump').modal('show');//显示加载
 			var login_1_url='/wx_xnr_manage/login/?wxbot_id='+$this_WXbot_id;
 			// console.log(login_1_url)
 			public_ajax.call_request('get',login_1_url,login_QR_code);
@@ -223,6 +224,7 @@
 	}
 
 	function login_QR_code(data) {
+		$('#loadingJump').modal('hide');//消失加载
 		// console.log(data)
 		if (data){
 			var kl=data.toString();
@@ -256,7 +258,7 @@
 							},300000)
 						}
 					}
-				}, 500)
+				}, 3000)
 				// 模态框关闭之后重新画表
 				$('#QR_code').one('shown.bs.modal', function (e) {
 					$('#QR_code').one('hidden.bs.modal', function (e) {
