@@ -17,7 +17,10 @@ from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              facebook_feedback_comment_index_name,facebook_feedback_comment_index_name_pre,facebook_feedback_comment_index_type,\
                              facebook_feedback_like_index_name,facebook_feedback_like_index_name_pre,facebook_feedback_like_index_type,\
                              facebook_xnr_count_info_index_name, facebook_xnr_count_info_index_type
-es_user_profile = es_xnr                            
+es_user_profile = es_xnr   
+from xnr.global_utils import facebook_feedback_friends_index_name,facebook_feedback_friends_index_type,\
+                             fb_portrait_index_name,fb_portrait_index_type,\
+                             fb_bci_index_name_pre,fb_bci_index_type              
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FB_FLOW_TEXT_START_DATE as FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
 from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_DATE_FB
@@ -730,18 +733,18 @@ def show_history_posting(require_detail):
     xnr_user_no=require_detail['xnr_user_no']   
     task_source=require_detail['task_source']
     try:
-        es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        es_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
         uid=es_result['uid']
     except:
         uid=''
 
 
-    temp_weibo_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
-    weibo_xnr_flow_text_listname=[]
-    for index_name in temp_weibo_xnr_flow_text_listname:
+    temp_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+    xnr_flow_text_listname=[]
+    for index_name in temp_xnr_flow_text_listname:
         #print 'index_name:',index_name
         if es_xnr.indices.exists(index=index_name):
-            weibo_xnr_flow_text_listname.append(index_name)
+            xnr_flow_text_listname.append(index_name)
 
         else:
             #print 'not_',index_name
@@ -766,8 +769,8 @@ def show_history_posting(require_detail):
 
     try:
         #print weibo_xnr_flow_text_listname
-        if weibo_xnr_flow_text_listname:
-            result=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+        if xnr_flow_text_listname:
+            result=es_xnr.search(index=xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
             post_result=[]
             for item in result:
                 post_result.append(item['_source'])
@@ -1176,75 +1179,27 @@ def attach_fans_follow(task_detail):
 
 #查看详情
 def lookup_detail_weibouser(uid):
-    result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+    result=es_xnr.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
     return result
 
 #step 4.4: list of concerns
-'''
-def wxnr_list_concerns(user_id,order_type):
-    try:
-        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
-        followers_list=result['_source']['followers_list']
-    except:
-        followers_list=[]
 
-    user_result=[]
-    if followers_list:
-        followers_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':followers_list})['docs']
-        
-        for item in followers_result:
-            user_dict=dict()
-            uid=item['_id']
-            user_dict['uid']=item['_id']
-            #计算影响力
-            user_dict['influence']=count_weibouser_influence(uid)
-            #敏感度查询,话题领域
-            try:
-                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-                user_dict['sensitive']=temp_user_result['sensitive']
-                user_dict['topic_string']=temp_user_result['topic_string']
-            except:
-                user_dict['sensitive']=0
-                user_dict['topic_string']=''
-
-            if item['found']:
-                user_dict['photo_url']=item['_source']['photo_url']            
-                user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
-                user_dict['user_birth']=item['_source']['user_birth']
-                user_dict['create_at']=item['_source']['create_at']
-                user_dict['user_location']=item['_source']['user_location']
-            else:
-                user_dict['photo_url']=''            
-                user_dict['nick_name']=''
-                user_dict['sex']=''
-                user_dict['user_birth']=''
-                user_dict['create_at']=''
-                user_dict['user_location']=''
-            user_result.append(user_dict)
-    else:
-        user_result=[]
-
-    #对结果按要求排序
-    user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-    return user_result
-'''
 def lookup_xnr_fans_followers(user_id,lookup_type):
     try:
-        xnr_result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)['_source']
+        xnr_result=es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=user_id)['_source']
         lookup_list=xnr_result[lookup_type]
     except:
         lookup_list=[]
     return lookup_list
 
-def wxnr_list_concerns(user_id,order_type):
+def wxnr_list_friends(user_id,order_type):
     try:
-        xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=user_id)['_source']
+        xnr_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=user_id)['_source']
         xnr_uid=xnr_result['uid']
     except:
         xnr_uid=''
 
-    lookup_type='followers_list'
+    lookup_type='fans'
     followers_list=lookup_xnr_fans_followers(user_id,lookup_type)
 
     query_body={
@@ -1261,17 +1216,17 @@ def wxnr_list_concerns(user_id,order_type):
     }
     xnr_followers_result=[]
     if xnr_uid:
-        followers_result=es_xnr.search(index=weibo_feedback_follow_index_name,doc_type=weibo_feedback_follow_index_type,body=query_body)['hits']['hits']
+        followers_result=es_xnr.search(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,body=query_body)['hits']['hits']
         for item in followers_result:
             user_dict=dict()
             follower_uid=item['_source']['uid']
             if follower_uid in followers_list:
                 user_dict['uid']=follower_uid
                 #计算影响力
-                user_dict['influence']=count_weibouser_influence(follower_uid)
+                user_dict['influence']=count_user_influence(follower_uid)
                 #敏感度查询,话题领域
                 try:
-                    temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=follower_uid)['_source']
+                    temp_user_result=es_xnr.get(index=fb_portrait_index_name,doc_type=fb_portrait_index_type,id=follower_uid)['_source']
                     user_dict['sensitive']=temp_user_result['sensitive']
                     user_dict['topic_string']=temp_user_result['topic_string']
                 except:
@@ -1300,10 +1255,10 @@ def wxnr_list_concerns(user_id,order_type):
 
 
 #计算影响力
-def count_weibouser_influence(uid):
+def count_user_influence(uid):
     now_time=int(time.time())
     date_time=ts2datetimestr(now_time-DAY)
-    index_name=weibo_bci_index_name_pre+date_time
+    index_name=fb_bci_index_name_pre+date_time
     
     query_body={
         'query':{
@@ -1313,11 +1268,11 @@ def count_weibouser_influence(uid):
         'sort':{'user_index':{'order':'desc'}}
     }
     try:
-        max_result=es_user_profile.search(index=index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+        max_result=es_user_profile.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
            max_user_index=item['_source']['user_index']
 
-        user_result=es_user_profile.get(index=index_name,doc_type=weibo_bci_index_type,id=uid)['_source']
+        user_result=es_user_profile.get(index=index_name,doc_type=fb_bci_index_type,id=uid)['_source']
         user_index=user_result['user_index']
         infulence_value=user_index/max_user_index*100
     except:
@@ -1325,109 +1280,7 @@ def count_weibouser_influence(uid):
     return infulence_value
 
 
-#step 4.5: list of fans
-'''
-def wxnr_list_fans(user_id,order_type):
-    try:
-        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
-        fans_list=result['_source']['fans_list']
-    except:
-        fans_list=[]
 
-    if fans_list:
-        fans_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':fans_list})['docs']
-        user_result=[]
-        for item in fans_result:
-            user_dict=dict()
-            uid=item['_id']
-            user_dict['uid']=item['_id']
-            #计算影响力
-            user_dict['influence']=count_weibouser_influence(uid)
-            #敏感度查询
-            try:
-                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-                user_dict['sensitive']=temp_user_result['sensitive']
-            except:
-                user_dict['sensitive']=0
-
-            if item['found']:
-                user_dict['photo_url']=item['_source']['photo_url']            
-                user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
-                user_dict['user_birth']=item['_source']['user_birth']
-                user_dict['create_at']=item['_source']['create_at']
-                user_dict['user_location']=item['_source']['user_location']
-            else:
-                user_dict['photo_url']=''            
-                user_dict['nick_name']=''
-                user_dict['sex']=''
-                user_dict['user_birth']=''
-                user_dict['create_at']=''
-                user_dict['user_location']=''
-            user_result.append(user_dict)
-    else:
-        user_result=[]
-    #对结果按要求排序
-    user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-    return user_result
-'''
-def wxnr_list_fans(user_id,order_type):
-    try:
-        xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=user_id)['_source']
-        xnr_uid=xnr_result['uid']
-    except:
-        xnr_uid=''
-    
-    lookup_type='fans_list'
-    fans_list=lookup_xnr_fans_followers(user_id,lookup_type)
-
-    query_body={
-        'query':{
-            'filtered':{
-                'filter':{
-                    'bool':{
-                       'must':{'term':{'root_uid':xnr_uid}}
-                    }
-                }
-            }
-        },
-        'size':MAX_VALUE
-    }
-    xnr_fans_result=[]
-    if xnr_uid:
-        fans_result=es_xnr.search(index=weibo_feedback_fans_index_name,doc_type=weibo_feedback_fans_index_type,body=query_body)['hits']['hits']
-        for item in fans_result:
-            user_dict=dict()
-            fans_uid=item['_source']['uid']
-            if fans_uid in fans_list:
-                user_dict['uid']=fans_uid
-                #计算影响力
-                user_dict['influence']=count_weibouser_influence(fans_uid)
-                #敏感度查询,话题领域
-                try:
-                    temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=fans_uid)['_source']
-                    user_dict['sensitive']=temp_user_result['sensitive']
-                    user_dict['topic_string']=temp_user_result['topic_string']
-                except:
-                    user_dict['sensitive']=0
-                    user_dict['topic_string']=''
-
-                user_dict['photo_url']=item['_source']['photo_url']            
-                user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
-                #user_dict['user_birth']=item['_source']['user_birth']
-                #user_dict['create_at']=item['_source']['create_at']
-                user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
-                user_dict['user_location']=item['_source']['geo']
-                xnr_fans_result.append(user_dict)
-            else:
-                pass
-    else:
-        xnr_fans_result=[]
-
-    #对结果按要求排序
-    xnr_fans_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-    return xnr_fans_result
 
 
 #########################################################

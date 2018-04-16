@@ -3,6 +3,7 @@
 '''
 weibo community function 
 '''
+import os
 import sys
 import json
 import time,datetime
@@ -16,7 +17,12 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
 from xnr.parameter import DAY,MAX_SEARCH_SIZE
 from xnr.global_config import S_TYPE,S_DATE,WEIBO_COMMUNITY_DATE
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-
+#sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/xnr/timed_python_files/community/')
+# os.path.abspath('weibo_trace_community.py')
+# os.path.dirname(os.path.abspath('weibo_trace_community.py'))
+#sys.path.append('./xnr/timed_python_files/community/')
+from xnr.timed_python_files.community.weibo_trace_community import get_person_warning,\
+                            get_sensitive_warning,get_influence_warning,get_density_warning
 
 #计算当前日期周期内的community index
 def get_community_index(date_time):
@@ -52,6 +58,7 @@ def get_community_info(community_id,now_time):
         },
         'size':1
     }
+    community = dict()
     try:
         community_result = es_xnr.search(index=weibo_community_index_name,\
             doc_type=weibo_community_index_type,body=query_body)['hits']['hits']
@@ -177,6 +184,228 @@ def get_community_content(now_time,uid_list,order_by):
     return result_dict
 
 
+#预警内容组织
+def get_warning_orgnize(result):
+    warning_result = dict()
+    warning_result['xnr_user_no'] = result[0]['xnr_user_no']
+    warning_result['community_id'] = result[0]['community_id']
+    warning_result['community_name'] = result[0]['community_name']
+    warning_result['create_time'] = result[0]['create_time']
+    warning_result['nodes'] = result[0]['nodes']
+    
+    trace_time_list = []
+    trace_date_list = []
+
+    num_list = []
+    density_list = []
+    cluster_list = []
+    max_influence_list = []
+    mean_influence_list = []
+    max_sensitive_list = []
+    mean_sensitive_list = []
+
+    num_desp = []
+    sensitive_desp = []
+    influence_desp = []
+    density_desp = []
+    num_warning = 0
+    sensitive_warning = 0
+    influence_warning = 0
+    density_warning = 0
+    
+    sensitive_content = []
+    influence_content = []
+    # print "result[0]['num_warning_content']::::",type(result[0]['num_warning_content']),result[0]['num_warning_content']
+    if result[-1]['num_warning_content']:
+        num_content = json.loads(result[-1]['num_warning_content'])
+    else:
+    	num_content = []
+
+    if result[-1]['density_warning_content']:
+        density_content = json.loads(result[-1]['density_warning_content'])
+    else:
+    	density_content = []
+
+    warning_type = []
+     
+    for trace_result in result:
+        trace_time_list.append(trace_result['trace_time'])
+        trace_date_list.append(trace_result['trace_date'])
+        num_list.append(trace_result['num'])
+        density_list.append(trace_result['density'])
+        cluster_list.append(trace_result['cluster'])
+        max_influence_list.append(trace_result['max_influence'])
+        mean_influence_list.append(trace_result['mean_influence'])
+        max_sensitive_list.append(trace_result['max_sensitive'])
+        mean_sensitive_list.append(trace_result['mean_sensitive'])
+
+        num_desp.append(trace_result['num_warning_descrp'])
+        sensitive_desp.append(trace_result['sensitive_warning_descrp'])
+        influence_desp.append(trace_result['influence_warning_descrp'])
+        density_desp.append(trace_result['density_warning_descrp'])
+
+        num_warning = num_warning + trace_result['num_warning']
+        sensitive_warning = sensitive_warning + trace_result['sensitive_warning']
+        density_warning = density_warning + trace_result['density_warning']
+        influence_warning = influence_warning + trace_result['influence_warning']
+
+        if trace_result['sensitive_warning_content']:
+            sensitive_content.extend(json.loads(trace_result['sensitive_warning_content']))
+        else:
+        	pass
+        if trace_result['influence_warning_content']:
+            influence_content.extend(json.loads(trace_result['influence_warning_content']))
+        else:
+        	pass
+
+        warning_type.extend(trace_result['warning_type'])
+   
+    # print 'warning_type:::',type(warning_type)
+    # print warning_type
+    # print set(warning_type) 
+    warning_result['warning_type'] = list(set(warning_type))
+    warning_result['trace_time'] = trace_time_list
+    warning_result['trace_date'] = trace_date_list
+    warning_result['num'] = num_list
+    warning_result['density'] = density_list
+    warning_result['cluster'] = cluster_list
+    warning_result['max_influence'] = max_influence_list
+    warning_result['mean_influence'] = mean_influence_list
+    warning_result['max_sensitive'] = max_sensitive_list
+    warning_result['mean_sensitive'] = mean_sensitive_list
+    warning_result['warning_rank'] = num_warning + sensitive_warning + influence_warning + density_warning
+
+    warning_result['num_warning'] = num_warning
+    warning_result['sensitive_warning'] = sensitive_warning
+    warning_result['density_warning'] = density_warning
+    warning_result['influence_warning'] = influence_warning
+
+    warning_result['num_warning_descrp'] = num_desp
+    warning_result['sensitive_warning_descrp'] = sensitive_desp
+    warning_result['influence_warning_descrp'] = influence_desp
+    warning_result['density_warning_descrp'] = density_desp
+
+    warning_result['num_warning_content'] = num_content
+    warning_result['sensitive_warning_content'] = sensitive_content
+    warning_result['influence_warning_content'] = influence_content
+    warning_result['density_warning_content'] = density_content
+        
+    return warning_result
+
+
+#新社区预警内容组织
+def get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time):
+    weibo_community_index_name = get_community_index(end_time)
+    community_result = es_xnr.get(index=weibo_community_index_name,\
+    	doc_type=weibo_community_index_type,id=community_id)['_source']
+    warning_type = community_result['warning_type']
+
+    warning_result = dict()
+    warning_result['xnr_user_no'] = community_result['xnr_user_no']
+    warning_result['community_id'] = community_result['community_id']
+    warning_result['community_name'] = community_result['community_name']
+    warning_result['create_time'] = community_result['create_time']
+    warning_result['nodes'] = community_result['nodes']
+
+    warning_result['warning_type'] = warning_type
+
+    trace_time_list = []
+    trace_date_list = []
+    num_list = []
+    trace_time_list.append(end_time)
+    trace_date_list.append(ts2datetime(end_time))
+    num_list.append(community_result['num'])
+    warning_result['trace_time'] = trace_time_list
+    # print "warning_result['trace_time']",warning_result['trace_time']
+    warning_result['trace_date'] = trace_date_list
+    # print "warning_result['trace_date']",warning_result['trace_date']
+    warning_result['num'] = num_list
+    
+    
+    density_value = []
+    cluster_value = []
+    max_influence_vlue = []
+    mean_influence_value = []
+    max_sensitive_value = []
+    mean_sensitive_value = []
+    density_value.append(community_result['density'])
+    cluster_value.append(community_result['cluster'])
+    max_influence_vlue.append(community_result['max_influence'])
+    mean_influence_value.append(community_result['mean_influence'])
+    max_sensitive_value.append(community_result['max_sensitive'])
+    mean_sensitive_value.append(community_result['mean_sensitive'])
+    warning_result['density'] = density_value
+    warning_result['cluster'] = cluster_value
+    warning_result['max_influence'] = max_influence_vlue
+    warning_result['mean_influence'] = mean_influence_value
+    warning_result['max_sensitive'] = max_sensitive_value
+    warning_result['mean_sensitive'] = mean_sensitive_value
+
+    num_desp = []
+    sensitive_desp = []
+    influence_desp = []
+    density_desp = []
+
+    num_content = []
+    sensitive_content = []
+    influence_content = []
+    density_content = []
+    warning_result['warning_rank'] = 0  
+
+    num_warning = 0
+    sensitive_warning = 0
+    influence_warning = 0
+    density_warning = 0   
+
+    if warning_type:
+        for item in warning_type:
+            print 'item ::',item
+            if item == u'人物突增预警':
+                num_warning = 1
+                warning_result['warning_rank'] = warning_result['warning_rank'] + 1
+                num_warning_descrp,num_warning_content = get_person_warning(community_id,community_result['nodes'])
+                num_desp.append(num_warning_descrp)
+                num_content = json.loads(num_warning_content)
+            elif item == u'敏感度剧增预警':
+                sensitive_warning = 1
+                warning_result['warning_rank'] = warning_result['warning_rank'] + 1
+                senseitive_warning_descrp,sensitive_warning_content =  get_sensitive_warning(community_result,end_time)
+                # print 'sensitive_warning_descrp::',senseitive_warning_descrp
+                # print 'sensitive_warning_content::',sensitive_warning_content
+                sensitive_desp.append(senseitive_warning_descrp)
+                sensitive_content = json.loads(sensitive_warning_content)
+                # print 'sensitive_desp::',sensitive_desp
+
+            elif item == u'影响力剧增预警':
+                influence_warning = 1
+                warning_result['warning_rank'] = warning_result['warning_rank'] + 1
+                influence_warning_descrp,influence_warning_content = get_influence_warning(community_result,end_time)
+                influence_desp.append(influence_warning_descrp)
+                influence_content = json.loads(influence_warning_content)
+            elif item == u'社区聚集预警':
+            	density_warning = 1
+            	warning_result['warning_rank'] = warning_result['warning_rank'] + 1
+                density_warning_descrp,density_warning_content = get_density_warning(community_result,end_time)
+                density_desp.append(density_warning_descrp)
+                density_content = json.loads(density_warning_content)
+        
+    else:
+        pass
+    warning_result['num_warning'] = num_warning
+    warning_result['sensitive_warning'] = sensitive_warning
+    warning_result['influence_warning'] = influence_warning
+    warning_result['density_warning'] = density_warning
+
+    warning_result['num_warning_descrp'] = num_desp  
+    warning_result['num_warning_content'] = num_content
+    warning_result['sensitive_warning_descrp'] = sensitive_desp
+    warning_result['sensitive_warning_content'] = sensitive_content
+    warning_result['influence_warning_descrp'] = influence_desp
+    warning_result['influence_warning_content'] = influence_content
+    warning_result['density_warning_descrp'] = density_desp
+    warning_result['density_warning_content'] = density_content
+
+    return warning_result
 
 ################主功能函数
 #跟踪社区
@@ -212,6 +441,7 @@ def show_trace_community(xnr_user_no,now_time):
             else:
                 item['_source']['trace_message'] = u''
             community_list.append(item['_source'])
+        community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)
     except:
         community_list = []
     return community_list
@@ -244,6 +474,7 @@ def show_new_community(xnr_user_no,now_time):
         community_list = []
         for item in community_result:
             community_list.append(item['_source'])
+        community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)        
     except:
         community_list = []
     return community_list
@@ -277,7 +508,7 @@ def get_community_warning(xnr_user_no,community_id,start_time,end_time):
     else:
         pass
     weibo_trace_community_index_name = weibo_trace_community_index_name_pre + xnr_user_no.lower()
-    print 'weibo_trace_community_index_name:',weibo_trace_community_index_name
+    # print 'weibo_trace_community_index_name:',weibo_trace_community_index_name
     print 'time:',ts2datetime(start_time),ts2datetime(end_time)
     query_body = {
         'query':{
@@ -293,7 +524,7 @@ def get_community_warning(xnr_user_no,community_id,start_time,end_time):
             }
         },
         'size':30,
-        'sort':{'trace_time':{'order':'desc'}}
+        'sort':{'trace_time':{'order':'asc'}}
     }
     try:
         community_result = es_xnr.search(index=weibo_trace_community_index_name,\
@@ -304,7 +535,13 @@ def get_community_warning(xnr_user_no,community_id,start_time,end_time):
             result.append(item['_source'])
     except:
         result = []
-    return result
+
+    if result:
+        #对预警内容进行融合
+        warning_result = get_warning_orgnize(result)
+    else:
+        warning_result = get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time)
+    return warning_result
 
 
 # 社区详情
@@ -354,6 +591,16 @@ def get_user_detail(uid):
 
 #删除社区
 def delete_community(community_id):
-    weibo_community_index_name = 'weibo_community_2016-11-20'
-    mark = es_xnr.delete(index=weibo_community_index_name,doc_type=weibo_community_index_type,id=community_id)
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.delete(index=weibo_community_index_name,doc_type="trace_warning",id=community_id)
     return mark
+
+
+def upadate_community(community_id):
+    warning_type_list = ["敏感度剧增预警","影响力剧增预警","社区聚集预警"]
+    weibo_community_index_name = 'weibo_trace_community_wxnr0004'
+    mark = es_xnr.update(index=weibo_community_index_name,doc_type="trace_warning",id=community_id,body={'doc':{'warning_rank':3,\
+            'density':0.0068,\
+            'warning_type':warning_type_list
+            }})
+    return mark    

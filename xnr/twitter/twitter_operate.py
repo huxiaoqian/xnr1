@@ -19,55 +19,69 @@ from launcher import Launcher
 from Elasticsearch_tw import Es_twitter
 
 class Operation():
-	def __init__(self, username, password):
-		self.launcher = Launcher(username, password)
+	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
+		self.launcher = Launcher(username, password, consumer_key, consumer_secret, access_token, access_secret)
 		self.api = self.launcher.api()
 		self.list = []
 
 	def publish(self, text):
 		try:
 			self.api.update_status(text)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 
 	#API.update_with_media(filename[, status][, in_reply_to_status_id][, auto_populate_reply_metadata][, lat][, long][, source][, place_id][, file])
 	def publish_with_media(self, filename, text):
 		try:
 			self.api.update_with_media(filename, text)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 	def mention(self, text):
 		#text = '@lvleilei1 test'
 		try:
 			self.api.update_status(text)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 	def message(self, uid, text):
 		try:
 			print self.api.send_direct_message(uid, text=text)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-		 	print(e)
+			return [False, e]
 
 	def follow(self, uid):
 		try:
 			self.api.create_friendship(uid)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 	def destroy_friendship(self, uid):
 		try:
 			self.api.destroy_friendship(uid)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 	def do_retweet(self, tid):
 		try:
 			self.api.retweet(tid)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-		 	print(e)
+			return [False, e]
 
 	def do_retweet_text(self, uid, tid, text):
 		try:
@@ -84,14 +98,20 @@ class Operation():
 			driver.find_element_by_xpath('//div[@id="retweet-with-comment"]').click()
 			driver.find_element_by_xpath('//div[@id="retweet-with-comment"]').send_keys(text)
 			driver.find_element_by_xpath('//button[@class="EdgeButton EdgeButton--primary retweet-action"]').click()
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
+		finally:
+			driver.close()
 
 	def do_favourite(self, tid):
 		try:
 			self.api.create_favorite(tid)
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
 
 	def do_comment(self, uid, tid, text):
 		try:
@@ -107,13 +127,17 @@ class Operation():
 			driver.find_element_by_xpath('//div[@id="tweet-box-reply-to-%s"]'%primary_id).send_keys(text)
 			time.sleep(1)
 			driver.find_element_by_xpath('//button[@class="tweet-action EdgeButton EdgeButton--primary js-tweet-btn"]').click()
+			time.sleep(2)
+			return [True, ' ']
 		except Exception as e:
-			print(e)
+			return [False, e]
+		finally:
+			driver.close()
 
 
 
 if __name__ == '__main__':
-	operation = Operation('8617078448226','xnr123456')
+	operation = Operation('8617078448226','xnr123456', 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9')
 	#operation.publish('12.26 test')
 	#operation.message('lvleilei1',text='test')
 	#operation.do_comment('871936760573382658','922897194100826112','.....')

@@ -15,7 +15,6 @@ class Launcher():
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
 		self.driver = webdriver.Firefox()
-		#self.driver = webdriver.Chrome()
 		self.req = requests.Session()
 
 	def login(self):
@@ -70,29 +69,17 @@ class Launcher():
 		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
-			time.sleep(2)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
 		like_list = []
-		share_list = []
-		mention_list = []
-		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
 			if type == "like" or type == "like_tagged" or type == "feedback_reaction_generic":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				like_list.append(url)
-			if type == "story_reshare":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				share_list.append(url)
-			if type == "mention" or type == "tagged_with_story":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				mention_list.append(url)
-			if type == "feed_comment":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				comment_list.append(url)
 		return like_list
 
 	def get_share_list(self):
@@ -109,29 +96,17 @@ class Launcher():
 		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
-			time.sleep(2)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
-		like_list = []
 		share_list = []
-		mention_list = []
-		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				like_list.append(url)
 			if type == "story_reshare":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				share_list.append(url)
-			if type == "mention" or type == "tagged_with_story":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				mention_list.append(url)
-			if type == "feed_comment":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				comment_list.append(url)
 		return share_list
 
 
@@ -147,31 +122,19 @@ class Launcher():
 		#加载更多
 		length=100
 		for i in range(0,20):
-			js="var q=document.documentElement.scrollTop="+str(length) 
-			self.driver.execute_script(js) 
-			time.sleep(2)
+			js="var q=document.documentElement.scrollTop="+str(length)
+			self.driver.execute_script(js)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
-		like_list = []
-		share_list = []
 		mention_list = []
-		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				like_list.append(url)
-			if type == "story_reshare":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				share_list.append(url)
 			if type == "mention" or type == "tagged_with_story":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				mention_list.append(url)
-			if type == "feed_comment":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				comment_list.append(url)
 		return mention_list
 
 	def get_comment_list(self):
@@ -188,26 +151,14 @@ class Launcher():
 		for i in range(0,20):
 			js="var q=document.documentElement.scrollTop="+str(length) 
 			self.driver.execute_script(js) 
-			time.sleep(2)
+			time.sleep(1)
 			length+=length
 
 		lis = self.driver.find_elements_by_xpath('//ul[@data-testid="see_all_list"]/li')
-		like_list = []
-		share_list = []
-		mention_list = []
 		comment_list = []
 		for li in lis:
 			data_gt = json.loads(li.get_attribute('data-gt'))
 			type = data_gt['notif_type']
-			if type == "like" or type == "like_tagged":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				like_list.append(url)
-			if type == "story_reshare":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				share_list.append(url)
-			if type == "mention" or type == "tagged_with_story":
-				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
-				mention_list.append(url)
 			if type == "feed_comment":
 				url = li.find_element_by_xpath('./div/div/a').get_attribute('href')
 				comment_list.append(url)

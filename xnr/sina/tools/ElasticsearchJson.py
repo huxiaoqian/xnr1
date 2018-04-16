@@ -85,7 +85,7 @@ def executeES(indexName, typeName, listData):
             data['trace_follow_mark'] = trace_follow_mark
 
             data['sensitive_info'] = get_sensitive_info(data['timestamp'],data['mid'])
-            data['sensitive_user'] = get_sensitive_user(data['uid'])
+            data['sensitive_user'] = get_sensitive_user(data['timestamp'],data['uid'])
 
         # else:
         #     print 'group index else'

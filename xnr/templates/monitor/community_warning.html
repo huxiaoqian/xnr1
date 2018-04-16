@@ -21,57 +21,14 @@
     .fixed-table-container tbody .selected td {
         background-color: #2a556f!important;
     }
-    /* 社区名称下拉选选项 */
-    #track-community thead th[data-field="b"]:hover{
-        cursor:pointer;
-    }
-    #track-community thead th[data-field="b"] {
-        position:relative;
-    }
-    #track-community thead th[data-field="b"] div.th-inner{
-        position:relative;
-        overflow:visible;
-    }
-    #track-community thead th[data-field="b"] #downbox {
-        position:absolute;
-        /* left:0; */
-        display:none;
-        z-index:9999;
-    }
-    #downbox {
-        background-color: #0a1f3b;
-        width:150px;
-        position:absolute;
-        display:none;
-        z-index:9999;
-    }
-    #downbox li {
-        border: 1px solid silver;
-    }
-    #downbox li:hover{
-        cursor:pointer;
-        background-color: #2a556f;
-    }
-    .community-name-box {
-        position:relative;
-        /* overflow:visible; */
-        cursor:pointer;
-    }
-    .fixed-table-body {
-        overflow:visible;
-    }
     /* 核心人物列表、关键词、影响力 */
-    .detailed-content {
-        display:none;
-    }
-    .table-striped>tbody>tr:nth-of-type(odd){
-        background-color: transparent;
-    }
+    .person-list .fixed-table-pagination .pagination-detail,
+    .person-list .fixed-table-toolbar .search{display: none;}
     /* 关键词 */
     #keyword {
         height: 300px;
-        width: 100%;
-        display:block;
+        width: 750px;
+        margin:0 auto;
     }
     /* 核心人物列表 关键词 --标题*/
     .detailed-content-title{
@@ -79,6 +36,8 @@
         font-weight:600;
         margin-bottom:18px;
     }
+
+    .modal.in .modal-dialog {width: 800px;margin: 100px auto 20px;}
 </style>
 {% endblock %}
 {% block main %}
@@ -102,21 +61,21 @@
     </div>
 </div>
 
-<!--提示弹框-->
-<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+<!--社区简介-->
+<div class="modal fade" id="introduction" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"></h4>
+                <h4 class="modal-title">社区简介</h4>
             </div>
             <div class="modal-body">
                 <div class="detailed-content">
                     <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 核心人物列表</span></h3>
                     <!-- 核心人物列表 -->
-                    <div id="person-list"></div>
+                    <div class="person-list"><div id="person-list"></div></div>
                     <!-- 关键词 -->
-                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 微话题关键词云</span></h3>
+                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 关键词云</span></h3>
                     <div id="keyword"></div>
                 </div>
             </div>
@@ -124,6 +83,37 @@
     </div>
 </div>
 <!--模态框-->
+
+<!--是否强制、取消-->
+<div class="modal fade" id="trackModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">跟踪操作</h4>
+            </div>
+            <div class="modal-body">
+                <h5 style="margin:15px 0 15px 10px;"></h5>
+                <label class="demo-label" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='-1'>
+                    <span class="demo-checkbox demo-radioInput"></span> 放弃跟踪
+                </label>
+                <label class="demo-label tk1" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='1'>
+                    <span class="demo-checkbox demo-radioInput"></span> 普通跟踪
+                </label>
+                <label class="demo-label tk2" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='-2'>
+                    <span class="demo-checkbox demo-radioInput"></span> 强制跟踪
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureTrackModal()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block my_js %}

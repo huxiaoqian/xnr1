@@ -6,11 +6,10 @@ from Elasticsearch_tw import Es_twitter
 import time
 
 class Follower():
-	def __init__(self, username, password, current_ts, *args):
-		self.launcher = Launcher(username, password)
+	def __init__(self, username, password, current_ts, consumer_key, consumer_secret, access_token, access_secret, *args):
+		self.launcher = Launcher(username, password, consumer_key, consumer_secret, access_token, access_secret)
 		self.api = self.launcher.api()
 		self.es = Es_twitter()
-		self.update_time = current_ts
 		self.list = []
 		try:
 			self.uid = args[0]
@@ -23,13 +22,14 @@ class Follower():
 				id = each
 				name = self.api.get_user(each).name
 				screen_name = self.api.get_user(each).screen_name
-				root_uid = self.api.me().id
+				photo_url = self.api.get_user(each).profile_image_url_https
+				profile_url = 'https://twitter.com/' + screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time,
-					'root_uid':root_uid
+					'photo_url':photo_url,
+					'profile_url':profile_url
 				}
 				self.list.append(item)
 		except Exception as e:
@@ -37,13 +37,14 @@ class Follower():
 				id = each
 				name = self.api.get_user(each).name
 				screen_name = self.api.get_user(each).screen_name
-				root_uid = self.api.me().id
+				photo_url = self.api.get_user(each).profile_image_url_https
+				profile_url = 'https://twitter.com/' + screen_name
 				item = {
 					'user_name':name,
 					'nick_name':screen_name,
 					'uid':id,
-					'update_time':self.update_time,
-					'root_uid':root_uid
+					'photo_url':photo_url,
+					'profile_url':profile_url
 				}
 				self.list.append(item)
 		return self.list
@@ -54,7 +55,7 @@ class Follower():
 
 if __name__ == '__main__':
 	current_ts = int(time.time())
-	follower = Follower('8617078448226','xnr123456',current_ts) #传uid
+	follower = Follower('8617078448226','xnr123456',current_ts, 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9') #传uid
 	
 	list = follower.get_follow()
 	follower.save('twitter_feedback_follow', 'text', list)
