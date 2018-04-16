@@ -6,7 +6,8 @@ from flask import Blueprint, url_for, render_template, request,\
                   abort, flash, session, redirect
 
 from utils import show_trace_community,show_new_community,get_community_warning,get_community_detail,\
-                  update_trace_status,delete_community,upadate_community
+                  update_trace_status,delete_community,upadate_community,\
+                  delete_opnions_corpus,upadate_opnions_corpus
 
 from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
 from time_utils import ts2datetime,datetime2ts
@@ -109,4 +110,18 @@ def ajax_delete_community():
 def ajax_upadate_community():
     community_id = request.args.get('community_id','')    
     result = upadate_community(community_id)
+    return json.dumps(result)
+
+#http://219.224.134.213:9207/weibo_xnr_community/delete_opnions_corpus/?task_id=1_2_3
+@mod.route('/delete_opnions_corpus/')
+def ajax_delete_opnions_corpus():
+    task_id = request.args.get('task_id','')    
+    result = delete_opnions_corpus(task_id)
+    return json.dumps(result)
+
+#http://219.224.134.213:9207/weibo_xnr_community/upadate_opnions_corpus/?task_id=chuang_ye
+@mod.route('/upadate_opnions_corpus/')
+def ajax_upadate_opnions_corpus():
+    task_id = request.args.get('task_id','')      
+    result = upadate_opnions_corpus(task_id)
     return json.dumps(result)

@@ -32,20 +32,21 @@ class TopkHeap(object):
         return [x for x in reversed([heapq.heappop(self.data) for x in xrange(len(self.data))])]
 
 ##以下是es的配置文件
-user_profile_host = ["219.224.134.216:9201"]
-es_user_profile = Elasticsearch(user_profile_host, timeout=600)
+user_profile_host = ["219.224.134.216:9201","219.224.134.218:9201"]
+es_user_profile = Elasticsearch(user_profile_host, timeout=800)
 profile_index_name = "weibo_user"
 profile_index_type = "user"
 portrat_index_name = "user_portrait_1222"
 portrat_index_type = "user"
-flow_text_host = ["219.224.134.216:9201"]
-es_text = Elasticsearch(flow_text_host, timeout=600)
+flow_text_host = ["219.224.134.216:9201","219.224.134.218:9201"]
+es_text = Elasticsearch(flow_text_host, timeout=800)
 flow_text_index_name_pre = 'flow_text_' # flow text: 'flow_text_2013-09-01'
 flow_text_index_type = 'text'
-time_list = ['2016-11-11','2016-11-12','2016-11-13','2016-11-14','2016-11-15','2016-11-16',\
-             '2016-11-17','2016-11-18','2016-11-19','2016-11-20','2016-11-21','2016-11-22','2016-11-23','2016-11-24','2016-11-25','2016-11-26',\
-             '2016-11-27']   
-
+# time_list = ['2016-11-11','2016-11-12','2016-11-13','2016-11-14','2016-11-15','2016-11-16',\
+#              '2016-11-17','2016-11-18','2016-11-19','2016-11-20','2016-11-21','2016-11-22','2016-11-23','2016-11-24','2016-11-25','2016-11-26',\
+#              '2016-11-27']   
+time_list = time_list = ['2016-11-11','2016-11-12']
+             
 def get_weibo_text(key_list,name):
 
     if len(key_list) == 0:
@@ -56,11 +57,12 @@ def get_weibo_text(key_list,name):
     
     query_body = {'query':{'bool':{'should':keywords_list,'minimum_should_match':1}}}
 
+    text_result = []
     for t_name in time_list:
         print t_name
         index_list = flow_text_index_name_pre+t_name
         s_re = scan(es_text,index=index_list,doc_type=flow_text_index_type,query=query_body)#{'query':{'match_all':{}}})
-        text_result = []
+        
         count = 0
         while True:
             try:
@@ -83,13 +85,13 @@ def get_weibo_text(key_list,name):
                 print "all done"
                 break
 
-        with open('./text_data/opinion/text_%s_%s.csv' % (name,t_name), 'wb') as f:
-        # with open('./corpus/text_%s.csv' % name, 'wb') as f:
-            writer = csv.writer(f)
-            for i in range(0,len(text_result)):
-                writer.writerow(text_result[i])
+        # with open('./text_data/opinion/text_%s_%s.csv' % (name,t_name), 'wb') as f:
+    with open('../cron/opinion_question/corpus/text_%s.csv' % name, 'wb') as f:
+        writer = csv.writer(f)
+        for i in range(0,len(text_result)):
+            writer.writerow(text_result[i])
 
-        f.close()
+    f.close()
 
     return 1
 
