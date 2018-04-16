@@ -63,6 +63,7 @@ def voice2text(voice_path):
     #调用百度语音API，进行识别
     client = AipSpeech(BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY)
     res = client.asr(speech=get_file_content(wav_file), format='wav', rate=8000, options={'lan': 'zh',})
+    #转换完成之后，立即删除中间文件.wav。还没写这一点。。。
     try:
         if not res['err_no']:   #成功
             return res['result'][0]
