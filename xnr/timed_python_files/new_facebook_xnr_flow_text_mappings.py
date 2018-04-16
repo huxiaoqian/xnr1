@@ -132,6 +132,10 @@ def new_facebook_xnr_flow_text_mappings(index_name):
                             },
                         'like':{ #点赞数
                             'type':'long'
+                        },
+                        'topic_field_first': {
+                            'index': 'not_analyzed',
+                            'type': 'string'
                         }
                         }
                     }
@@ -140,3 +144,12 @@ def new_facebook_xnr_flow_text_mappings(index_name):
     exist_indice = es.indices.exists(index=index_name)
     if not exist_indice:
         es.indices.create(index=index_name, body=index_info, ignore=400)
+
+
+
+
+# if __name__=='__main__':
+#     new_xnr_flow_text_index_list = ['']
+#     es.indices.put_mapping(index=new_xnr_flow_text_index_list, doc_type=new_xnr_flow_text_index_type, \
+#             body={'properties':{'topic_field_first': {'index': 'not_analyzed','type': 'string'},\
+#             }}, ignore=400)
