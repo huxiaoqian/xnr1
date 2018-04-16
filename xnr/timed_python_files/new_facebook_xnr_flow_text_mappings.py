@@ -136,7 +136,11 @@ def new_facebook_xnr_flow_text_mappings(index_name):
                         'topic_field_first': {
                             'index': 'not_analyzed',
                             'type': 'string'
-                        }
+                        },
+                        'topic_field':{
+                            'type':'string',
+                            'index':'not_analyzed'
+                            }
                         }
                     }
                 }
