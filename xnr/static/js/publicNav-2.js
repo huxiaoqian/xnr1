@@ -61,6 +61,14 @@ function isEmptyObject(e) {
         return !1;
     return !0
 }
+//判断在数组中是否有该值
+function isInArray(arr,value){
+    var index = $.inArray(value,arr);
+    if(index >= 0){
+        return true;
+    }
+    return false;
+};
 //删除数组指定项
 Array.prototype.removeByValue = function(val) {
     for(var i=0; i<this.length; i++) {
