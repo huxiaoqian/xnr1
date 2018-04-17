@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #encoding: utf-8
-
+ 
 from selenium import webdriver
 import tweepy
 from tweepy import OAuthHandler
@@ -9,13 +9,13 @@ import time
 from pyvirtualdisplay import Display
 
 class Launcher():
-	def __init__(self,username,password):
+	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
 		self.username = username
 		self.password = password
-		self.consumer_key = 'N1Z4pYYHqwcy9JI0N8quoxIc1'
-		self.consumer_secret = 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2'
-		self.access_token = '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr'
-		self.access_secret = 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9'
+		self.consumer_key = consumer_key
+		self.consumer_secret = consumer_secret
+		self.access_token = access_token
+		self.access_secret = access_secret
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
 	def login(self):
@@ -49,11 +49,9 @@ class Launcher():
 		return screen_name
 
 if __name__ == '__main__':
-	launcher = Launcher('8617078448226','xnr123456')
+	launcher = Launcher('8617078448226', 'xnr123456', 'N1Z4pYYHqwcy9JI0N8quoxIc1', 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2', '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr', 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9')
 	driver = launcher.login()
 	api = launcher.api()
-
-
 
 
 

@@ -604,3 +604,16 @@ def upadate_community(community_id):
             'warning_type':warning_type_list
             }})
     return mark    
+
+
+#删除观点语料库数据
+def delete_opnions_corpus(task_id):
+    index_name = 'opinion_corpus'
+    mark = es_xnr.delete(index=index_name,doc_type="text",id=task_id)
+    return mark
+
+
+def upadate_opnions_corpus(task_id):
+    index_name = 'opinion_corpus'
+    mark = es_xnr.update(index=index_name,doc_type="text",id=task_id,body={'doc':{'status':0}})
+    return mark 

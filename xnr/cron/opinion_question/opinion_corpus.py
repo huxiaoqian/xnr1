@@ -84,6 +84,7 @@ def get_weibo_text(key_list,name):
                 break
 
         with open('./text_data/opinion/text_%s_%s.csv' % (name,t_name), 'wb') as f:
+        # with open('./corpus/text_%s.csv' % name, 'wb') as f:
             writer = csv.writer(f)
             for i in range(0,len(text_result)):
                 writer.writerow(text_result[i])

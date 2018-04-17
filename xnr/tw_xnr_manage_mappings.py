@@ -161,10 +161,131 @@ def tw_xnr_fans_followers_mappings():
         
         #create
         es.indices.create(index=tw_xnr_fans_followers_index_name,body=index_info,ignore=400)
-   
+
+def update_tw_xnr_mapping():
+    #增添consumer_key consumer_secret access_token access_secret四个字段
+    new_index_info = {
+                'properties':{
+                    'submitter':{           # 当前管理用户
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'user_no':{                    #虚拟人编号数字
+                        'type':'long'
+                    },
+                    'xnr_user_no':{               # 虚拟人编号
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'uid':{                     # uid
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'tw_mail_account':{        #所绑定的微博邮箱账号
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'tw_phone_account':{        #所绑定的微博手机账号
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },        
+                    'nick_name':{                #昵称
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'password':{                #密码
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'create_time':{              #创建时间
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'domain_name':{              #渗透领域
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'role_name':{                 #角色定位
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'political_side':{         #政治倾向
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'psy_feature':{  #心理特征
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'business_goal':{            #业务目标
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'daily_interests':{   # 日常兴趣，字符串，以&连接
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'monitor_keywords':{   # 检测关键词，字符串，以&连接
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'age':{            #年龄
+                        'type':'long'
+                    },
+                    'sex':{            #性别
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'location':{        #所在地
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'career':{            #职业
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'description':{        #个人描述
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'active_time':{              #活跃时间 
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'day_post_average':{            #日发帖量设置：从不，1-2，3-5……
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },            
+                    'create_status':{        #虚拟人创建状态
+                        'type':'long'           #0表示第一步完成，1表示第二步完成 2表示第三步完成，即最终完成创建。
+                    },
+                    'consumer_key':{              #twitter应用api
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'consumer_secret':{              #twitter应用api
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'access_token':{              #twitter应用api
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'access_secret':{              #twitter应用api
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                }
+            }
+
+    print es.indices.put_mapping(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body=new_index_info,ignore=400)
+
 
 
 if __name__=='__main__':
   
     tw_xnr_mappings()
     tw_xnr_fans_followers_mappings()
+
+    # update_tw_xnr_mapping()
+
