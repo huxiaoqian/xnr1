@@ -15,17 +15,11 @@ import sys
 sys.path.append('../')
 from timed_python_files import new_tw_xnr_flow_text_mappings as mapping
 
-# 韩梦成：
-# consumer_key = 'CW55q0mrW9sSznJ4roYub8FOl'
-# consumer_secret = 'SZVCGTHbb7vJJo9XuZSKnHydQDeWS1HXxsSnkkZu1vZVqfY9yW'
-# access_token = '747226658457927680-hWnMKEQqxSXNswJeqkIpA3cMlUwLx8u'
-# access_secret = 'C7YEqrYlxh3R2fvykXg4h6c2IJkOuCsd5EnhDH9n6Q9Es'
-
-# 巨星大大
-# consumer_key = 'N1Z4pYYHqwcy9JI0N8quoxIc1'
-# consumer_secret = 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2'
-# access_token = '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr'
-# access_secret = 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9'
+endDate = '2017-10-25'
+dateList = []
+for i in range(0,11):
+	date = datetime.strptime(endDate,"%Y-%m-%d") - timedelta(days=i)
+	dateList.append(datetime.strftime(date,"%Y-%m-%d"))
 
 es = Elasticsearch([{'host':'219.224.134.213','port':9205}])
 # 获取已创建xnr的数据
@@ -69,7 +63,8 @@ for xnr in xnrData:
 			tid = each.id
 			ip = None
 			timestampStr = datetime.strftime(each.created_at,"%Y-%m-%d")
-			timestamp = int(time.mktime(time.strptime(timestampStr,"%Y-%m-%d")))
+			#timestamp = int(time.mktime(time.strptime(timestampStr,"%Y-%m-%d")))
+			timestamp = int(time.mktime(time.strptime(dateList[random.randint(1,10)],"%Y-%m-%d")))
 			geo = each.geo
 			retweeted = each.retweet_count
 			like = each.favorite_count
@@ -132,7 +127,7 @@ for xnr in xnrData:
 					       "origin_text":origin_text}
 			print(dict)
 
-			index_name = mapping.new_tw_xnr_flow_text_index_name_pre + '_' + time.strftime("%Y-%m-%d",time.localtime(dict['timestamp']))
+			index_name = mapping.new_tw_xnr_flow_text_index_name_pre + time.strftime("%Y-%m-%d",time.localtime(dict['timestamp']))
 			mapping.new_tw_xnr_flow_text_mappings(index_name)
 			time.sleep(2)
 			es.index(index=index_name, doc_type=mapping.new_tw_xnr_flow_text_index_type, id=dict['tid'], body=dict)
