@@ -336,19 +336,33 @@ class MyBot(Bot):
                     print e
                 '''
                 #保存到本地
-                filename = str(msg.id) + '.png'
+                # filename = str(msg.id) + '.png'
+                filename = str(msg.id) + str(msg.file_name) #按图片类型.png .jpg .gif来存储
                 filepath = os.path.join(WX_IMAGE_ABS_PATH, ts2datetime(time.time()))
                 if not os.path.isdir(filepath):
                     os.mkdir(filepath)
-                    remove_wx_media_old_files(WX_IMAGE_ABS_PATH, period=30)
-                print msg.get_file(save_path = os.path.join(filepath, filename))
+                    #定期清理放在timed_python_files/wx_regular_cleaning.py定时文件中
+                    # remove_wx_media_old_files(WX_IMAGE_ABS_PATH, period=30)
+                save_path = os.path.join(filepath, filename)
+                print msg.get_file(save_path)
+                #对图片进行压缩
+                #.gif图片不处理, .png图片处理, .jpg图片处理
+                image_type = filename.split('.')[-1]
+                if image_type == 'gif':
+                    pass
+                elif image_type == 'png':
+                    os.popen("optipng " + save_path + " -snip")
+                elif image_type == 'jpg':
+                    os.popen("jpegoptim " + save_path)
+                ####
                 data['text'] = os.path.join(filepath, filename)
             elif msg_type == 'Recording':
                 filename = str(msg.id) + '.mp3'
                 filepath = os.path.join(WX_VOICE_ABS_PATH, ts2datetime(time.time()))
                 if not os.path.isdir(filepath):
                     os.mkdir(filepath)
-                    remove_wx_media_old_files(WX_VOICE_ABS_PATH, period=30)
+                    #定期清理放在timed_python_files/wx_regular_cleaning.py定时文件中
+                    # remove_wx_media_old_files(WX_VOICE_ABS_PATH, period=30)
                 print msg.get_file(save_path = os.path.join(filepath, filename))
                 data['text'] = os.path.join(filepath, filename)
             #存储msg到es中

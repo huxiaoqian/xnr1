@@ -10,7 +10,8 @@ from global_utils import flow_text_index_name_pre,group_message_index_name_pre,x
                         twitter_flow_text_index_name_pre, tw_xnr_flow_text_index_name_pre,\
                         new_fb_xnr_flow_text_index_name_pre, new_xnr_flow_text_index_name_pre,\
                         fb_xnr_fans_followers_index_name, fb_xnr_fans_followers_index_type,\
-                        fb_xnr_flow_text_index_name_pre, fb_xnr_flow_text_index_type
+                        fb_xnr_flow_text_index_name_pre, fb_xnr_flow_text_index_type,\
+                        new_tw_xnr_flow_text_index_name_pre
 from global_config import R_BEGIN_TIME,S_TYPE
 from parameter import MAX_FLOW_TEXT_DAYS,DAY,FLOW_TEXT_START_DATE, FB_FLOW_TEXT_START_DATE, TW_FLOW_TEXT_START_DATE
 
@@ -327,7 +328,20 @@ def get_tw_xnr_feedback_index_listname(index_name_pre,date_range_end_ts):
         index_name=index_name_pre+date_range_start_date
         index_name_list.append(index_name)
     return index_name_list
+
+#days_num变成可选参数
+def get_new_tw_xnr_flow_text_index_list(date_range_end_ts, days_num=MAX_FLOW_TEXT_DAYS):
+    index_name_list = []
+    # days_num = MAX_FLOW_TEXT_DAYS
+    for i in range(1,(days_num+1)):
+        date_range_start_ts = date_range_end_ts - i*DAY
+        date_range_start_datetime = ts2datetime(date_range_start_ts)
+        # index_name = new_tw_xnr_flow_text_index_name_pre + date_range_start_datetime
+        index_name = 'new_tw_xnr_flow_text__' + date_range_start_datetime
+        index_name_list.append(index_name)
     
+    return index_name_list
+
 def get_twitter_flow_text_index_list(date_range_end_ts):
     ## 不包括 date_range_end_ts 这天
     index_name_list = []

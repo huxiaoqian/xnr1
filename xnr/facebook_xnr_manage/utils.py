@@ -30,7 +30,7 @@ from xnr.time_utils import get_fb_xnr_feedback_index_listname as get_xnr_feedbac
 
 
 from xnr.facebook_publish_func import fb_retweet,fb_comment,fb_like,fb_unfollow,fb_follow
-
+from xnr.global_utils import new_fb_xnr_flow_text_index_name_pre,new_fb_xnr_flow_text_index_type
 
 
 
@@ -739,7 +739,7 @@ def show_history_posting(require_detail):
         uid=''
 
 
-    temp_xnr_flow_text_listname=get_xnr_flow_text_index_listname(xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
+    temp_xnr_flow_text_listname=get_xnr_flow_text_index_listname(new_fb_xnr_flow_text_index_name_pre,date_range_start_ts,date_range_end_ts)
     xnr_flow_text_listname=[]
     for index_name in temp_xnr_flow_text_listname:
         #print 'index_name:',index_name
@@ -770,7 +770,7 @@ def show_history_posting(require_detail):
     try:
         #print weibo_xnr_flow_text_listname
         if xnr_flow_text_listname:
-            result=es_xnr.search(index=xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            result=es_xnr.search(index=xnr_flow_text_listname,doc_type=new_fb_xnr_flow_text_index_type,body=query_body)['hits']['hits']
             post_result=[]
             for item in result:
                 post_result.append(item['_source'])
@@ -783,7 +783,7 @@ def show_history_posting(require_detail):
 #step 4.3.2:show at content
 def show_at_content(require_detail):
     xnr_user_no=require_detail['xnr_user_no']
-    es_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    es_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
     uid=es_result['uid']
 
     #content_type='weibo'表示@我的微博，='at'表示@我的评论
@@ -825,16 +825,16 @@ def show_at_content(require_detail):
     index_name_list=[]
     index_type_list=[]
     #condition_list=[]
-    weibo_feedback_retweet_index_name_list = get_xnr_set_index_listname(weibo_feedback_retweet_index_name_pre,start_time,end_time)
-    weibo_feedback_at_index_name_list = get_xnr_set_index_listname(weibo_feedback_at_index_name_pre,start_time,end_time)
+    feedback_retweet_index_name_list = get_xnr_set_index_listname(facebook_feedback_retweet_index_name_pre,start_time,end_time)
+    feedback_at_index_name_list = get_xnr_set_index_listname(facebook_feedback_at_index_name_pre,start_time,end_time)
 
     for i in xrange(0,len(content_type)):
         if content_type[i]=='weibo':
-            index_name_list.append(weibo_feedback_retweet_index_name_list)
-            index_type_list.append(weibo_feedback_retweet_index_type)
+            index_name_list.append(feedback_retweet_index_name_list)
+            index_type_list.append(facebook_feedback_retweet_index_type)
         elif content_type[i]=='at':
-            index_name_list.append(weibo_feedback_at_index_name_list)
-            index_type_list.append(weibo_feedback_at_index_type)
+            index_name_list.append(feedback_at_index_name_list)
+            index_type_list.append(facebook_feedback_at_index_type)
 
     result=[]
     for j in xrange(0,len(index_name_list)):
@@ -857,7 +857,7 @@ def show_at_content(require_detail):
 def show_comment_content(require_detail):
     xnr_user_no=require_detail['xnr_user_no']
     comment_type=require_detail['comment_type']
-    es_result = es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    es_result = es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
 
     if S_TYPE == 'test':
@@ -895,12 +895,12 @@ def show_comment_content(require_detail):
         'size':MAX_SEARCH_SIZE
     }
 
-    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,start_time,end_time)
+    feedback_comment_index_name_list = get_xnr_set_index_listname(facebook_feedback_comment_index_name_pre,start_time,end_time)
 
     try:
         results=[]
-        if weibo_feedback_comment_index_name_list:
-            result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
+        if feedback_comment_index_name_list:
+            result=es_xnr.search(index=feedback_comment_index_name_list,doc_type=facebook_feedback_comment_index_type,body=query_body)['hits']['hits']
             for item in result:
                 results.append(item['_source'])
         else:
@@ -914,7 +914,7 @@ def show_comment_content(require_detail):
 #step 4.3.4:show like content
 def show_like_content(require_detail):
     xnr_user_no=require_detail['xnr_user_no']
-    es_result = es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    es_result = es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
     like_type=require_detail['like_type']
 
@@ -964,11 +964,11 @@ def lookup_receive_like(uid,start_time,end_time):
         'sort':{'timestamp':{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-    weibo_feedback_like_index_name_list = get_xnr_set_index_listname(weibo_feedback_like_index_name_pre,start_time,end_time)
+    feedback_like_index_name_list = get_xnr_set_index_listname(facebook_feedback_like_index_name_pre,start_time,end_time)
     try:
         results=[]
-        if weibo_feedback_like_index_name_list:
-            result=es_xnr.search(index=weibo_feedback_like_index_name_list,doc_type=weibo_feedback_like_index_type,body=query_body)['hits']['hits']
+        if feedback_like_index_name_list:
+            result=es_xnr.search(index=feedback_like_index_name_list,doc_type=facebook_feedback_like_index_type,body=query_body)['hits']['hits']
             for item in result:
                 results.append(item['_source'])
         else:
@@ -977,6 +977,8 @@ def lookup_receive_like(uid,start_time,end_time):
         results=[]
     return results
 
+
+##################待修改
 def lookup_send_like(uid,start_time,end_time):
     query_body={
         'query':{
@@ -1119,11 +1121,11 @@ def show_comment_dialog(mid):
         'sort':{'timestamp':{'order':'desc'}},
         'size':MAX_SEARCH_SIZE
     }
-    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,start_time,end_time)
+    feedback_comment_index_name_list = get_xnr_set_index_listname(facebook_feedback_comment_index_name_pre,start_time,end_time)
     try:
-        if weibo_feedback_comment_index_name_list:
+        if feedback_comment_index_name_list:
             results=[]
-            es_result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
+            es_result=es_xnr.search(index=feedback_comment_index_name_list,doc_type=facebook_feedback_comment_index_type,body=query_body)['hits']['hits']
             for item in es_result:
                 results.append(item['_source'])
         else:
@@ -1268,11 +1270,11 @@ def count_user_influence(uid):
         'sort':{'user_index':{'order':'desc'}}
     }
     try:
-        max_result=es_user_profile.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
+        max_result=es_xnr.search(index=index_name,doc_type=fb_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
            max_user_index=item['_source']['user_index']
 
-        user_result=es_user_profile.get(index=index_name,doc_type=fb_bci_index_type,id=uid)['_source']
+        user_result=es_xnr.get(index=index_name,doc_type=fb_bci_index_type,id=uid)['_source']
         user_index=user_result['user_index']
         infulence_value=user_index/max_user_index*100
     except:
