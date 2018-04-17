@@ -85,4 +85,5 @@ if __name__ == '__main__':
     node = createWordTree();
 
     list2 = searchWord("64和达赖太阳花", node)
-    print list2
+    for k,v in list2.items():
+    	print k,v
