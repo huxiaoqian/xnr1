@@ -273,8 +273,16 @@ $('#container .type_page #myTabs li').on('click',function () {
         }else {
             topic=$('#userField input:radio[name="domain"]:checked').val();
         }
+        var td=$('.choosetime input:radio[name="time1"]:checked').val();
+        var t1=getDaysBefore(td),t2=end_time;
+        if (td=='mize'){
+            var s=$('#start_1').val();
+            var d=$('#end_1').val();
+            t1 =(Date.parse(new Date(s))/1000);
+            t2 =(Date.parse(new Date(d))/1000);
+        }
         var readyDoc_url='/facebook_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
-            '&sort_item=timestamp';
+            '&sort_item=timestamp&start_time='+t1+'&end_time='+t2;
         public_ajax.call_request('get',readyDoc_url,weiboData);
         t=$(this).attr('linktype');
         if (t=='area'){
