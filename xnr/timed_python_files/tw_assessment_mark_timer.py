@@ -1495,18 +1495,18 @@ def cron_compute_mark(current_time):
     
 if __name__ == '__main__':
 
-
+    '''
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     cron_compute_mark(current_time)
     
-'''
+    '''
     #2017-10-15  2017-10-30
     for i in range(15, 26, 1):
         date = '2017-10-' + str(i)
         # print 'date', date
         current_time = datetime2ts(date)
         cron_compute_mark(current_time)
-'''
+
