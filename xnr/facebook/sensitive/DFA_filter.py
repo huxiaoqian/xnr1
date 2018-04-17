@@ -28,7 +28,7 @@ def createWordTree():
     #for b in open('sensitive_words.txt', 'rb'):
     #    awords.append(b.strip())
     awords = r.hkeys('sensitive_words')    
-    print awords
+    # print awords
     for word in awords:
         temp = wordTree
         for a in range(0,len(word)):
@@ -80,10 +80,15 @@ def searchWord(str, nodeTree):
     return map_words
 
 if __name__ == '__main__':
-    #reload(sys)  
-    #sys.setdefaultencoding('GBK')  
-    node = createWordTree();
-
-    list2 = searchWord("64和达赖太阳花", node)
-    for k,v in list2.items():
-    	print k,v
+    text_list = [u"64和达赖太阳花"]
+    node = createWordTree()
+    items = []
+    for text in text_list:
+        item = {}
+        sensitive_words_dict = searchWord(text.encode('utf-8', 'ignore'), node)
+        if sensitive_words_dict:
+            item['sensitive_words_string'] = "&".join(sensitive_words_dict.keys())
+            item['sensitive_words_dict'] = json.dumps(sensitive_words_dict)
+        else:
+            item['sensitive_words_string'] = ""
+            item['sensitive_words_dict'] = json.dumps({})
