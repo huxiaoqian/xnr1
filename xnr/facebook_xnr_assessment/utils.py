@@ -1366,7 +1366,6 @@ def get_tweets_distribute(xnr_user_no,start_time,end_time):
             continue
 
     topic_xnr_count = Counter(topic_string)
-    print 'topic_distribute_dict:::',topic_distribute_dict
     print 'topic_xnr_count:::',topic_xnr_count
     if topic_xnr_count:
         for topic, value in topic_list_followers_count.iteritems():
@@ -1405,7 +1404,6 @@ def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
     # index_name_list = get_new_xnr_flow_text_index_list(current_time)
     index_name_list = get_new_xnr_flow_text_index_list(end_time,days_num)
 
-    
     es_results_all = []
     for index_name_day in index_name_list:
         query_body = {
@@ -1425,9 +1423,8 @@ def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
             es_results_all.extend(es_results)
 
         except Exception,e:
-            print e
+            # print e
             continue
-
     
     results_all = []
     for result in es_results_all:

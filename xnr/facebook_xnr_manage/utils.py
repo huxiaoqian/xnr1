@@ -1336,7 +1336,8 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
         assess_result=[]
         for item in xnr_assess_result:
             assess_result.append(item['fields'])
-    except:
+    except Exception,e:
+    	print e
         assess_result=[]
     return assess_result
 
