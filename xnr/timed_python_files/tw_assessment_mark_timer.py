@@ -47,17 +47,11 @@ from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIM
                     TW_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,TW_PORTRAI_UID as PORTRAI_UID,\
                     TW_FANS_TODAY as FANS_TODAY, TW_FOLLOWERS_TODAY as FOLLOWERS_TODAY
 from time_utils import get_timeset_indexset_list
-
+from twitter_count_mappings import twitter_xnr_count_info_mappings
 
 
 
 from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,ACTIVE_UID
-
-
-
-#表名起错了 暂时这样用
-new_xnr_flow_text_index_name_pre = 'new_tw_xnr_flow_text__'
-
 
 # 影响力粉丝数
 def compute_influence_num(xnr_user_no,current_time_old):
@@ -1482,6 +1476,7 @@ def cron_compute_mark(current_time):
         print 'total time: ',end_time - start_time
 
         try:
+            twitter_xnr_count_info_mappings()
             es.index(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,\
                 id=_id,body=xnr_user_detail)
             mark = True
