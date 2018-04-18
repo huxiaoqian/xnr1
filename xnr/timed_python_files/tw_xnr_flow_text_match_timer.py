@@ -6,14 +6,14 @@ import json
 from collections import Counter
 import sys
 sys.path.append('../')
-from global_utils import es_xnr, facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
-                        facebook_flow_text_index_type as  flow_text_index_type,\
-                        fb_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,\
-                        fb_xnr_flow_text_index_type as xnr_flow_text_index_type,\
-                        fb_xnr_index_name, fb_xnr_index_type,\
-                        new_fb_xnr_flow_text_index_name_pre, new_fb_xnr_flow_text_index_type
+from global_utils import es_xnr, twitter_flow_text_index_name_pre as flow_text_index_name_pre,\
+                        twitter_flow_text_index_type as  flow_text_index_type,\
+                        tw_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,\
+                        tw_xnr_flow_text_index_type as xnr_flow_text_index_type,\
+                        tw_xnr_index_name, tw_xnr_index_type,\
+                        new_tw_xnr_flow_text_index_name_pre, new_tw_xnr_flow_text_index_type
 es_flow_text = es_xnr
-from global_config import S_TYPE, S_DATE_FB as S_DATE
+from global_config import S_TYPE, S_DATE_TW as S_DATE
 from time_utils import ts2datetime,datetime2ts
 from parameter import MAX_VALUE,fb_tw_topic_en2ch_dict as topic_en2ch_dict, FB_TW_TOPIC_ABS_PATH
 sys.path.append(FB_TW_TOPIC_ABS_PATH)
@@ -27,13 +27,7 @@ from keyword_extraction import get_filter_keywords_for_match_function
 
 #该函数用于爬取并存储完new_xnr_flow_text_数据后调用，以增添topic_field_first等字段
 def match_flow_text(current_date):
-    '''
-    #mapping有误，暂时不创建及存储数据，2018-4-13 17:11:51
-    new_xnr_flow_text_index_name = new_xnr_flow_text_index_name_pre + current_date
-    new_weibo_xnr_flow_text_mappings(new_xnr_flow_text_index_name)
-    '''
-
-    flow_text_index_name = new_fb_xnr_flow_text_index_name_pre + current_date
+    flow_text_index_name = new_tw_xnr_flow_text_index_name_pre + current_date
 
     query_body = {
         'query':{
@@ -42,7 +36,7 @@ def match_flow_text(current_date):
         'size':MAX_VALUE
     }
     try:
-        search_results = es_xnr.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,\
+        search_results = es_xnr.search(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,\
                             body=query_body)['hits']['hits']
         bulk_action = []
         uid_list = []
@@ -80,7 +74,7 @@ def match_flow_text(current_date):
                 bulk_action.extend([action, {'doc': match_item}])
 
         if bulk_action:
-            es_xnr.bulk(bulk_action,index=flow_text_index_name,doc_type=new_fb_xnr_flow_text_index_type,timeout=600)
+            es_xnr.bulk(bulk_action,index=flow_text_index_name,doc_type=new_tw_xnr_flow_text_index_type,timeout=600)
 
     except Exception,e:
         print e
@@ -100,3 +94,4 @@ if __name__ == '__main__':
     for i in range(15, 26, 1):
         date = '2017-10-' + str(i)
         match_flow_text(current_date=date)
+    
