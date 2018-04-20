@@ -18,6 +18,8 @@ from time_utils import ts2datetime, datetime2ts
 from facebook_feedback_mappings_timer import facebook_feedback_like_mappings, facebook_feedback_retweet_mappings,\
                                             facebook_feedback_at_mappings, facebook_feedback_comment_mappings,\
                                             facebook_feedback_private_mappings, facebook_feedback_friends_mappings
+sys.path.append('../facebook/sensitive')
+from get_sensitive import get_sensitive_info, get_sensitive_user
 
 
 root_uid = '100018797745111'
@@ -30,7 +32,10 @@ def load_timestamp(date):
     return datetime2ts(date) + random.randint(1,500)
 
 def random_text():
-    return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜"])  
+    #普通版
+    # return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜","达赖","达赖太阳花"])
+    #敏感版  
+    return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
 
 def random_mid():
     return random.choice(["4161285573158974", "4161391865302116", "4161391957367337"])  
@@ -185,7 +190,39 @@ def friends(date):
     print es.index(index=facebook_feedback_friends_index_name, doc_type=facebook_feedback_friends_index_type, body=data)
 
 
+def sensitive_func(index_name, ts):
+    bulk_action = []
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'size': 999,
+    }
+    res = es.search(index=index_name, doc_type='text', body=query_body)['hits']['hits']
+    for r in res:
+        _id = r['_id']
+        uid = r['_source']['uid']
+        mid = ''
+        if r['_source'].has_key('mid'):
+            mid = r['_source']['mid']
+        text = ''
+        if r['_source'].has_key('text'):
+            text = r['_source']['text']
+        sensitive_info = get_sensitive_info(ts, mid, text)
+        sensitive_user = get_sensitive_user(ts, uid)
+        item = {
+            'sensitive_info': sensitive_info,
+            'sensitive_user': sensitive_user,
+        }
+
+        action = {'update':{'_id':_id}}
+        bulk_action.extend([action, {'doc': item}])
+    if bulk_action:
+        print es.bulk(bulk_action,index=index_name,doc_type='text',timeout=600)
+
 if __name__ == '__main__':
+    '''
+    #create
     #2017-10-15     2017-10-30
     for i in range(15, 31, 1):
         date = '2017-10-' + str(i)
@@ -197,4 +234,19 @@ if __name__ == '__main__':
             comment(date)
             private(date)
             friends(date)
+    
+    '''
+    #update
+    #2017-10-15     2017-10-30
+    
+    bulk_action = []
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        ts = datetime2ts(date)
+        for index_name_pre in ['facebook_feedback_at_', 'facebook_feedback_comment_', 'facebook_feedback_retweet_', 'facebook_feedback_private_', 'facebook_feedback_like_']:
+            index_name = index_name_pre + date
+            sensitive_func(index_name, ts)
+        sensitive_func('facebook_feedback_friends', ts)
+    
+        
 

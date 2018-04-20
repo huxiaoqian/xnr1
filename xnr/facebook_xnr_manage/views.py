@@ -243,11 +243,11 @@ def ajax_show_like_content():
 ############暂无公共函数可调用#########
 
 #查看对话
-#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_dialog/?mid=4142135114307228
+#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_dialog/?fid=4142135114307228
 @mod.route('/show_comment_dialog/')
 def ajax_show_comment_dialog():
-	mid=request.args.get('mid','')
-	results=show_comment_dialog(mid)
+	fid=request.args.get('fid','')
+	results=show_comment_dialog(fid)
 	return json.dumps(results)
 
 #回复
