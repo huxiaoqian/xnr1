@@ -1666,7 +1666,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             try:
                 get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
                     id=_id)['_source']
-                print 'get_result..',get_result
+                #print 'get_result..',get_result
             except:
                 get_result = {}
 
@@ -1750,7 +1750,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             
         results_all['table'].append(table_result)
 
-    print 'results_all....',results_all
+    #print 'results_all....',results_all
     return results_all
 
 

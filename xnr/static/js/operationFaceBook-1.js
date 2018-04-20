@@ -21,7 +21,7 @@ $('.choosetime .demo-label input').on('click',function () {
                 _start=getDaysBefore(_val);
                 his_timing_task_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+_start+'&end_time='+end_time;
             }
-        }else if (mid=='new_show_history_posting'){
+        }else if (mid=='show_history_posting'){
             var conTP=[];
             $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
                 conTP.push($(this).val());
@@ -60,7 +60,7 @@ $('.sureTime').on('click',function () {
         var his_timing_task_url='/facebook_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
             '&end_time='+(Date.parse(new Date(d))/1000);
         if (mid=='show_history_count'){his_timing_task_url+='&type='};
-        if (mid=='new_show_history_posting'){
+        if (mid=='show_history_posting'){
             var conTP=[];
             $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
                 conTP.push($(this).val());
@@ -92,11 +92,10 @@ function historyTotal(data) {
     historyTotalLine(data[1]);
 }
 function historyTotalLine(data) {
-    var time=[],fansDate=[],totalPostData=[],dailyPost=[],
+    var time=[],totalPostData=[],dailyPost=[],
         hotData=[],businessData=[],traceData=[],influeData=[],pentData=[],safeData=[];
     $.each(data,function (index,item) {
         time.push(item.date_time);
-        fansDate.push(item.user_fansnum)
         totalPostData.push(item.total_post_sum)
         dailyPost.push(item.daily_post_num)
         hotData.push(item.hot_follower_num)
@@ -116,7 +115,7 @@ function historyTotalLine(data) {
             trigger: 'axis'
         },
         legend: {
-            data:['总粉丝数','总微博数','日常发帖','热点跟随','业务发帖','跟踪转发','影响力','渗透力','安全性'],
+            data:['总发帖数','日常发帖','热点跟随','业务发帖','跟踪转发','影响力','渗透力','安全性'],
             width:'400',
             left:'center'
         },
@@ -148,23 +147,7 @@ function historyTotalLine(data) {
         },
         series: [
             {
-                name:'总粉丝数',
-                type:'line',
-                data:fansDate,
-                markPoint: {
-                    data: [
-                        {type: 'max', name: '最大值'},
-                        {type: 'min', name: '最小值'}
-                    ]
-                },
-                markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-                }
-            },
-            {
-                name:'总微博数',
+                name:'总发帖数',
                 type:'line',
                 data:totalPostData,
                 markPoint: {
@@ -333,15 +316,7 @@ function historyTotalTable(dataTable) {
                 }
             },
             {
-                title: "总粉丝数",//标题
-                field: "user_fansnum",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-            },
-            {
-                title: "总微博数",//标题
+                title: "总发帖数",//标题
                 field: "total_post_sum",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
@@ -614,7 +589,7 @@ function successfail(data) {
     $('#successfail').modal('show');
 }
 //------历史消息type分页-------
-var typeDown='new_show_history_posting',boxShoes='historyCenter',MID='message_type';
+var typeDown='show_history_posting',boxShoes='historyCenter',MID='message_type';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
     boxShoes=$(this).attr('box');
     htp=[];
@@ -683,10 +658,10 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
     }
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
-var historyNews_url='/facebook_xnr_manage/new_show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
-    '&start_time='+todayTimetamp()+'&end_time='+end_time;
-// var historyNews_url='/facebook_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
+// var historyNews_url='/facebook_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
 //     '&start_time='+todayTimetamp()+'&end_time='+end_time;
+var historyNews_url='/facebook_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
+    '&start_time='+todayTimetamp()+'&end_time='+end_time;
 public_ajax.call_request('get',historyNews_url,historyNews);
 function historyNews(data) {
     var showHide1='none',showHide2='inline-block',showHide3='none',showHide4='none',C3='';
@@ -736,7 +711,7 @@ function historyNews(data) {
                     }else {
                         time=getLocalTime(row.timestamp);
                     };
-                    f (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
                         row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
                         img='/static/images/unknown.png';
                     }else {
@@ -850,7 +825,7 @@ $('.focusSEN .demo-label input').on('click',function () {
     var ClickFocusOn_url='/facebook_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type='+orderType;
     public_ajax.call_request('get',ClickFocusOn_url,focusOn);
 })
-var focusOn_url='/facebook_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type=influence';
+var focusOn_url='/facebook_xnr_manage/wxnr_list_friends/?user_id='+ID_Num+'&order_type=influence';
 public_ajax.call_request('get',focusOn_url,focusOn);
 function focusOn(data) {
     $('#focus p').show();
@@ -997,7 +972,7 @@ $('.fansSEN .demo-label input').on('click',function () {
     public_ajax.call_request('get',clikcFans_url,fans);
 })
 var fans_url='/facebook_xnr_manage/wxnr_list_fans/?user_id='+ID_Num+'&order_type=influence';
-public_ajax.call_request('get',fans_url,fans);
+// public_ajax.call_request('get',fans_url,fans);
 function fans(data) {
     $('#fans p').show();
     $('#fans').bootstrapTable('load', data);

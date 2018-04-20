@@ -1289,7 +1289,7 @@ def count_user_influence(uid):
 #   step 5：change    and   continue                    #
 #########################################################
 def change_continue_xnrinfo(xnr_user_no):
-    result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+    result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
     return result
 
 

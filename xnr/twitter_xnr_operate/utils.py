@@ -236,7 +236,7 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         current_time = time.time()
 
         if S_TYPE == 'test':
-            current_time = datetime2ts(S_DATE_TW)
+            current_time = datetime2ts('2017-10-25')
         tw_social_sensing_index_name = tw_social_sensing_index_name_pre + ts2datetime(current_time)
 
         es_results = es.search(index=tw_social_sensing_index_name,doc_type=tw_social_sensing_index_type,body=query_body)['hits']['hits']
@@ -341,7 +341,7 @@ def get_tweets_from_flow(monitor_keywords_list,sort_item_new):
     }
 
     if S_TYPE == 'test':
-        now_ts = datetime2ts(S_DATE_TW)    
+        now_ts = datetime2ts('2017-10-25')    
     else:
         now_ts = int(time.time())
     datetime = ts2datetime(now_ts-24*3600)

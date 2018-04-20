@@ -254,8 +254,16 @@ $('#container .type_page #myTabs li').on('click',function () {
     if (mid.indexOf('&')==-1){
         public_ajax.call_request('get',defaultUrl,safe);
     }else {
+        var td=$('.choosetime input:radio[name="time1"]:checked').val();
+        var t1=getDaysBefore(td),t2=end_time;
+        if (td=='mize'){
+            var s=$('#start_1').val();
+            var d=$('#end_1').val();
+            t1 =(Date.parse(new Date(s))/1000);
+            t2 =(Date.parse(new Date(d))/1000);
+        }
         var midTwo=mid.split('&');
-        var readyChart_url='/twitter_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num;
+        var readyChart_url='/twitter_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num+'&start_time='+t1+'&end_time='+t2;
         public_ajax.call_request('get',readyChart_url,radar);
         var topic;
         if (midTwo[1]=='safe_tweets_topic'){
@@ -264,7 +272,7 @@ $('#container .type_page #myTabs li').on('click',function () {
             topic=$('#userField input:radio[name="domain"]:checked').val();
         }
         var readyDoc_url='/twitter_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
-            '&sort_item=timestamp';
+            '&sort_item=timestamp&start_time='+t1+'&end_time='+t2;
         public_ajax.call_request('get',readyDoc_url,weiboData);
         t=$(this).attr('linktype');
         if (t=='area'){
@@ -496,17 +504,16 @@ function weiboData(data) {
                                 txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
                             var rrr=row.text;
-                            if (rrr.length>=50){
-                                rrr=rrr.substring(0,50)+'...';
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
                                 all='inline-block';
                             }else {
                                 rrr=row.text;
                                 all='none';
                             }
                             for (var f of keyword_d){
-                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
-                            txt2=rrr;
                         }else {
                             txt=row.text;
                             if (txt.length>=160){

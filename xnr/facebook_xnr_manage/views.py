@@ -96,9 +96,9 @@ def ajax_show_history_count():
 	return json.dumps(results)
 
 
-'''
+
 #今日提醒
-#http://219.224.134.213:9209/facebook_xnr_manage/xnr_today_remind/?xnr_user_no=FXNR0004
+#http://219.224.134.213:9209/facebook_xnr_manage/xnr_today_remind/?xnr_user_no=FXNR0005
 @mod.route('/xnr_today_remind/')
 def ajax_xnr_today_remind():
 	now_time=int(time.time())
@@ -108,13 +108,13 @@ def ajax_xnr_today_remind():
 
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
-#http://219.224.134.213:9209/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no=WXNR0003
+#http://219.224.134.213:9209/facebook_xnr_manage/change_continue_xnrinfo/?xnr_user_no=FXNR0005
 @mod.route('/change_continue_xnrinfo/')
 def ajax_change_continue_xnrinfo():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=change_continue_xnrinfo(xnr_user_no)
 	return json.dumps(results)
-'''
+
 
 
 ############################by qxk
