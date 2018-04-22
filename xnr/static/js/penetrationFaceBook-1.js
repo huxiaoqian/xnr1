@@ -281,7 +281,7 @@ function penetration(data) {
         var follow_group=publicData(data['follow_group']);
         var self_info=publicData(data['self_info']);
         var warning_report_total=publicData(data['warning_report_total']);
-        var myChart = echarts.init(document.getElementById('penetration'),'chalk');
+        var myChart = echarts.init(document.getElementById('penetration'),'dark');
         var option = {
             backgroundColor:'transparent',
             tooltip: {

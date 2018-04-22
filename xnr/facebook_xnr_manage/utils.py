@@ -731,7 +731,7 @@ def show_history_posting(require_detail):
 
 
     xnr_user_no=require_detail['xnr_user_no']   
-    task_source=require_detail['task_source']
+    message_type=require_detail['message_type']
     try:
         es_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
         uid=es_result['uid']
@@ -757,7 +757,7 @@ def show_history_posting(require_detail):
                     'bool':{
                         'must':[
                             {'term':{'uid':uid}},
-                            {'terms':{'task_source':task_source}}
+                            {'terms':{'message_type':message_type}}
                         ]
                     }                   
                 }
@@ -1219,10 +1219,13 @@ def wxnr_list_friends(user_id,order_type):
     xnr_followers_result=[]
     if xnr_uid:
         followers_result=es_xnr.search(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,body=query_body)['hits']['hits']
+        # print 'friends::::',followers_result
         for item in followers_result:
             user_dict=dict()
             follower_uid=item['_source']['uid']
             if follower_uid in followers_list:
+                print 'followers_uid::',follower_uid
+
                 user_dict['uid']=follower_uid
                 #计算影响力
                 user_dict['influence']=count_user_influence(follower_uid)
@@ -1237,11 +1240,12 @@ def wxnr_list_friends(user_id,order_type):
 
                 user_dict['photo_url']=item['_source']['photo_url']            
                 user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
+                user_dict['sex']=item['_source']['gender']
                 #user_dict['user_birth']=item['_source']['user_birth']
                 #user_dict['create_at']=item['_source']['create_at']
                 user_dict['follow_source']=item['_source']['follow_source']  #微博推荐
                 #user_dict['user_location']=item['_source']['user_location']
+                print 'user_dict:::',user_dict
                 xnr_followers_result.append(user_dict)
             else:
                 pass

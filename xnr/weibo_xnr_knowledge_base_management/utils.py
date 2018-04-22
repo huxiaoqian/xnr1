@@ -844,7 +844,83 @@ def show_corpus_class(create_type,corpus_type):
         results.append(item['_source'])
     return results
 
-    
+def show_condition_corpus(corpus_condition):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':corpus_condition
+                    }
+                }
+            }
+
+        },
+        'size':MAX_VALUE
+    }    
+    result=es.search(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,body=query_body)['hits']['hits']
+    results=[]
+    for item in result:
+        item['_source']['id']=item['_id']
+        results.append(item['_source'])
+    return results
+
+
+def show_different_corpus(task_detail):
+    result = dict()
+    theme_corpus = '主题语料'
+    daily_corpus = '日常语料' 
+    opinion_corpus = '观点语料'
+    if task_detail['corpus_status'] == 0:        
+        result['theme_corpus'] = show_corpus(theme_corpus)
+        
+        result['daily_corpus'] = show_corpus(daily_corpus)
+        
+        result['opinion_corpus'] = ''
+    else:
+        if task_detail['request_type'] == 'all':
+            if task_detail['create_type']:
+                result['theme_corpus'] = show_corpus_class(task_detail['create_type'],theme_corpus)
+                
+                result['daily_corpus'] = show_corpus_class(task_detail['create_type'],daily_corpus)
+            else:
+                pass
+        else:
+            corpus_condition = []
+            if task_detail['create_type']:
+                corpus_condition.append({'term':{'create_type':task_detail['create_type']}})
+            else:
+                pass
+
+            theme_corpus_condition = corpus_condition
+            if task_detail['theme_type_1']:
+                theme_corpus_condition.append({'terms':{'theme_daily_name':task_detail['theme_type_1']}})
+                theme_corpus_condition.append({'term':{'corpus_type':theme_corpus}})
+
+                result['theme_corpus'] = show_condition_corpus(theme_corpus_condition)
+            else:
+                if task_detail['create_type']:
+                    result['theme_corpus'] = show_corpus_class(task_detail['create_type'],theme_corpus)
+                else:
+                    result['theme_corpus'] = show_corpus(theme_corpus)
+
+            daily_corpus_condition = corpus_condition
+            if task_detail['theme_type_2']:
+                daily_corpus_condition.append({'terms':{'theme_daily_name':task_detail['theme_type_2']}})
+                daily_corpus_condition.append({'term':{'corpus_type':daily_corpus}})
+                
+                result['daily_corpus'] = show_condition_corpus(daily_corpus_condition)
+            else:
+                if task_detail['create_type']:
+                    result['daily_corpus'] = show_corpus_class(task_detail['create_type'],daily_corpus)
+                else:
+                    result['daily_corpus'] = show_corpus(daily_corpus)
+
+        result['opinion_corpus'] = ''
+
+    return result
+ 
+
 #step 3: change the corpus
 #explain:carry out show_select_corpus before change,carry out step 3.1 & 3.2
 #step 3.1: show the selected corpus

@@ -8,7 +8,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from utils import get_generate_example_model, get_show_example_model, get_export_example_model, \
                     get_create_type_content, domain_create_task, get_show_domain_group_summary, \
                     get_show_domain_group_detail_portrait, get_show_domain_description, \
-                    get_show_domain_role_info, get_delete_domain
+                    get_show_domain_role_info, get_delete_domain,show_different_corpus,delete_corpus
 
 mod = Blueprint('fb_xnr_knowledge_base_management', __name__, url_prefix='/fb_xnr_knowledge_base_management')
 
@@ -88,6 +88,18 @@ def ajax_delete_domain():
 #######################################################
 #言论知识库
 #######################################################
+@mod.route('/show_different_corpus/')
+def ajax_show_different_corpus():
+    task_detail = dict()
+    task_detail['create_type'] = request.args.get('create_type','') #my_xnrs,all_xnrs
+    task_detail['corpus_status'] = int(request.args.get('corpus_status',''))    #如果是初始进入为0，其他为1
+    task_detail['request_type'] = request.args.get('request_type','') #all,one
+    task_detail['theme_type_1'] = request.args.get('theme_type_1','').split(',')
+    task_detail['theme_type_2'] = request.args.get('theme_type_2','').split(',')
+    task_detail['theme_type_3'] = request.args.get('theme_type_3','').split(',')
+    results = show_different_corpus(task_detail)
+    return json.dumps(results)
+
 #显示语料库
 @mod.route('/show_corpus_class/')
 def ajax_show_corpus_class():

@@ -39,7 +39,7 @@ function chartNum(tit,ID,peopleData,flag){
         $('#'+ID).html('<h4 style="width:100%;text-align:center;margin-top:140px;">人数变化图暂无数据</h4>');
         return false;
     }
-    var myChart = echarts.init(document.getElementById(ID),'chalk');
+    var myChart = echarts.init(document.getElementById(ID),'dark');
     var option = {
         backgroundColor:'transparent',
         title: {

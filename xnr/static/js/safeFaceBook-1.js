@@ -453,11 +453,21 @@ $('.pc-4 input').on('click',function () {
         the=$(this).val();
         theSort=$('.center-2 input:radio[name="th"]:checked').val();
     }
+    var td=$('.choosetime input:radio[name="time1"]:checked').val();
+    var t1=getDaysBefore(td),t2=end_time;
+    if (td=='mize'){
+        var s=$('#start_1').val();
+        var d=$('#end_1').val();
+        t1 =(Date.parse(new Date(s))/1000);
+        t2 =(Date.parse(new Date(d))/1000);
+    }
     var the_url='';
     if (t=='area'){
-        the_url='/facebook_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+
+            theSort+'&start_time='+t1+'&end_time='+t2;
     }else {
-        the_url='/facebook_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+
+            theSort+'&start_time='+t1+'&end_time='+t2;
     }
     public_ajax.call_request('get',the_url,weiboData)
 });

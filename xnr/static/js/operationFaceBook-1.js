@@ -822,7 +822,7 @@ function postYES(data) {
 // =====关注列表====
 $('.focusSEN .demo-label input').on('click',function () {
     var orderType=$(this).val();
-    var ClickFocusOn_url='/facebook_xnr_manage/wxnr_list_concerns/?user_id='+ID_Num+'&order_type='+orderType;
+    var ClickFocusOn_url='/facebook_xnr_manage/wxnr_list_friends/?user_id='+ID_Num+'&order_type='+orderType;
     public_ajax.call_request('get',ClickFocusOn_url,focusOn);
 })
 var focusOn_url='/facebook_xnr_manage/wxnr_list_friends/?user_id='+ID_Num+'&order_type=influence';
