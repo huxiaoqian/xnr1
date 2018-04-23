@@ -1666,7 +1666,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             try:
                 get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
                     id=_id)['_source']
-                #print 'get_result..',get_result
+
             except:
                 get_result = {}
 
@@ -1702,6 +1702,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
                 else:
 
                     results_all['trend'][xnr_user_no][timestamp] = get_result['safe']
+<<<<<<< HEAD
 
 
                     if timestamp == timestamp_list[-1]:    # 结束时间
@@ -1730,6 +1731,16 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
                     # table_result['trace_follow_tweet_num'] = get_result['trace_follow_tweet_num']
                     # table_result['other'] = get_result['total_post_sum'] - get_result['daily_post_num'] - get_result['hot_follower_num'] - get_result['business_post_num'] - get_result['trace_follow_tweet_num']
                     # table_result['xnr'] = xnr_user_no
+=======
+                    
+                    table_result['total_post_sum'] = get_result['total_post_sum']
+                    table_result['daily_post_num'] = get_result['daily_post_num']
+                    table_result['hot_follower_num'] = get_result['hot_follower_num']
+                    table_result['business_post_num'] = get_result['business_post_num']
+                    table_result['trace_follow_tweet_num'] = get_result['trace_follow_tweet_num']
+                    table_result['other'] = get_result['total_post_sum'] - get_result['daily_post_num'] - get_result['hot_follower_num'] - get_result['business_post_num'] - get_result['trace_follow_tweet_num']
+                    table_result['xnr'] = xnr_user_no
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
                     
             else:
 
@@ -1770,6 +1781,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             
         results_all['table'].append(table_result)
 
+<<<<<<< HEAD
     #print 'results_all....',results_all
     return results_all
 
@@ -1864,14 +1876,24 @@ def get_safe_history_count(end_time,start_time,xnr_user_no):
     return Cumulative_statistics_dict
 
 
+=======
+    print 'results_all....',results_all
+    return results_all
+
+
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 def get_compare_assessment_today(xnr_user_no_list, dim):
 
     results_all = {}
     results_all['trend'] = {}
     results_all['table'] = []
 
+<<<<<<< HEAD
     timestamp = datetime2ts(ts2datetime(int(time.time())))
     timestamp_start = FLOW_TEXT_START_DATE
+=======
+    timestamp = int(time.time())
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 
     xnr_user_no_list = xnr_user_no_list.split(',')
 
@@ -1942,6 +1964,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
                 result = get_safe_active_today(xnr_user_no)
                 xnr_result = create_xnr_history_info_count_today(xnr_user_no)
 
+<<<<<<< HEAD
                 today_total = list(result.values())[0]
                 today_daily_post_num = xnr_result['daily_post_num']
                 today_hot_follower_num = xnr_result['hot_follower_num']
@@ -1963,6 +1986,14 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
                 table_result['trace_follow_tweet_num'] = history_trace_follow_tweet_num + today_trace_follow_tweet_num
 
                 table_result['other'] = table_result['total_post_sum'] - table_result['daily_post_num'] - table_result['hot_follower_num'] - table_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+=======
+                table_result['total_post_sum'] = list(result.values())[0]
+                table_result['daily_post_num'] = xnr_result['daily_post_num']
+                table_result['hot_follower_num'] = xnr_result['hot_follower_num']
+                table_result['business_post_num'] = xnr_result['business_post_num']
+                table_result['trace_follow_tweet_num'] = xnr_result['trace_follow_tweet_num']
+                table_result['other'] = list(result.values())[0] - xnr_result['daily_post_num'] - xnr_result['hot_follower_num'] - xnr_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
                 table_result['xnr'] = xnr_user_no
 
             except:

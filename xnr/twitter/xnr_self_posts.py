@@ -15,6 +15,18 @@ import sys
 sys.path.append('../')
 from timed_python_files import new_tw_xnr_flow_text_mappings as mapping
 
+# 韩梦成：
+# consumer_key = 'CW55q0mrW9sSznJ4roYub8FOl'
+# consumer_secret = 'SZVCGTHbb7vJJo9XuZSKnHydQDeWS1HXxsSnkkZu1vZVqfY9yW'
+# access_token = '747226658457927680-hWnMKEQqxSXNswJeqkIpA3cMlUwLx8u'
+# access_secret = 'C7YEqrYlxh3R2fvykXg4h6c2IJkOuCsd5EnhDH9n6Q9Es'
+
+# 巨星大大
+# consumer_key = 'N1Z4pYYHqwcy9JI0N8quoxIc1'
+# consumer_secret = 'VKzMcdUEq74K7nugSSuZBHMWt8dzQqSLNcmDmpGXGdkH6rt7j2'
+# access_token = '943290911039029250-yWtATgV0BLE6E42PknyCH5lQLB7i4lr'
+# access_secret = 'KqNwtbK79hK95l4X37z9tIswNZSr6HKMSchEsPZ8eMxA9'
+
 es = Elasticsearch([{'host':'219.224.134.213','port':9205}])
 # 获取已创建xnr的数据
 xnrData = []
@@ -43,11 +55,16 @@ for xnr in xnrData:
 			break
 		for each in api.user_timeline(page=num):
 			xnr_user_no = xnr['xnr_user_no']
+<<<<<<< HEAD
 			#xnr_user_no = "TXNR0003"
 			uid = xnr['uid']
 			#uid = "747226658457927680"
 			text = each.text
 			#text = random.choice([u"emmmm",u"今天风真大",u"哈哈哈哈哈",u"宿命是上帝为你写的剧本",u"教会你如何去爱去恨",u"天堂为每个人都打开了大门",u"善恶是门票不分身份",u"希望是指南针信仰是扬起的船帆",u"我听说这个时代好像需要信仰",u"那你信什么",u"上帝",u"金钱",u"因特网"])
+=======
+			uid = xnr['uid']
+			text = each.text
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 			try:
 				picture_url = each.entities['media'][0]['media_url_https']
 				vedio_url = each.entities['media'][0]['media_url_https']
@@ -61,7 +78,10 @@ for xnr in xnrData:
 			ip = None
 			timestampStr = datetime.strftime(each.created_at,"%Y-%m-%d")
 			timestamp = int(time.mktime(time.strptime(timestampStr,"%Y-%m-%d")))
+<<<<<<< HEAD
 			#timestamp = int(time.mktime(time.strptime(random.choice(['2017-10-15','2017-10-16','2017-10-17','2017-10-18','2017-10-19','2017-10-20','2017-10-21','2017-10-22','2017-10-23','2017-10-24','2017-10-25']),"%Y-%m-%d")))
+=======
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 			geo = each.geo
 			retweeted = each.retweet_count
 			like = each.favorite_count
@@ -124,7 +144,11 @@ for xnr in xnrData:
 					       "origin_text":origin_text}
 			print(dict)
 
+<<<<<<< HEAD
 			index_name = mapping.new_tw_xnr_flow_text_index_name_pre + time.strftime("%Y-%m-%d",time.localtime(dict['timestamp']))
+=======
+			index_name = mapping.new_tw_xnr_flow_text_index_name_pre + '_' + time.strftime("%Y-%m-%d",time.localtime(dict['timestamp']))
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 			mapping.new_tw_xnr_flow_text_mappings(index_name)
 			time.sleep(2)
 			es.index(index=index_name, doc_type=mapping.new_tw_xnr_flow_text_index_type, id=dict['tid'], body=dict)

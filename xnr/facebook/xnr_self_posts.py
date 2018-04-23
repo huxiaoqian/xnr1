@@ -7,8 +7,11 @@ import time
 from pyvirtualdisplay import Display
 from launcher import Launcher
 from elasticsearch import Elasticsearch
+
 import re
 import random
+
+
 from datetime import datetime, timedelta
 import sys
 sys.path.append('../')
@@ -35,12 +38,22 @@ for each in hits:
 		xnrData.append(each['_source'])
 
 for xnr in xnrData:
+<<<<<<< HEAD
 	account = xnr['fb_mail_account']
 	password = xnr['password']
 
 	# 登录
 	driver = webdriver.Firefox()
 	driver.get('https://www.facebook.com/')
+=======
+	xnr_user_no = xnr['xnr_user_no']
+	uid = xnr['uid']
+	account = xnr['fb_mail_account']
+	password = xnr['password']
+	# 登录
+	driver = webdriver.Firefox()
+	driver.get('https://www.facebook.com')
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 	driver.find_element_by_xpath('//input[@id="email"]').send_keys(account)
 	driver.find_element_by_xpath('//input[@id="pass"]').send_keys(password)
 	driver.find_element_by_xpath('//input[@data-testid="royal_login_button"]').click()
@@ -57,6 +70,7 @@ for xnr in xnrData:
 	except Exception as e:
 		pass
 	time.sleep(1)
+<<<<<<< HEAD
 	driver.find_element_by_xpath('//a[@title="个人主页"]').click()
 	time.sleep(1)
 	#加载更多
@@ -145,6 +159,8 @@ for xnr in xnrData:
 
 	# 退出
 	driver.close()
+=======
+>>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 
 
 
