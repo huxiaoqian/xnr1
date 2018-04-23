@@ -17,12 +17,6 @@ from timed_python_files import new_facebook_xnr_flow_text_mappings as mapping
 display = Display(visible=0, size=(1024,768))
 display.start()
 
-endDate = '2017-10-25'
-dateList = []
-for i in range(0,11):
-	date = datetime.strptime(endDate,"%Y-%m-%d") - timedelta(days=i)
-	dateList.append(datetime.strftime(date,"%Y-%m-%d"))
-
 # 获取已创建xnr的数据
 es = Elasticsearch([{'host':'219.224.134.213','port':9205}])
 xnrData = []
@@ -82,9 +76,12 @@ for xnr in xnrData:
 	for div in driver.find_elements_by_xpath('//div[@id="recent_capsule_container"]/ol/div'):
 		for post in div.find_elements_by_xpath('./div'):
 			xnr_user_no = xnr['xnr_user_no']
+			#xnr_user_no = "FXNR0005"
 			uid = xnr['uid']
+			#uid = "100018797745111"
 			try:
 				text = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[2]/p').text
+				#text = random.choice([u"emmmm",u"今天风真大",u"哈哈哈哈哈",u"宿命是上帝为你写的剧本",u"教会你如何去爱去恨",u"天堂为每个人都打开了大门",u"善恶是门票不分身份",u"希望是指南针信仰是扬起的船帆",u"我听说这个时代好像需要信仰",u"那你信什么",u"上帝",u"金钱",u"因特网"])
 			except:
 				text = None
 			try:
@@ -100,8 +97,8 @@ for xnr in xnrData:
 			except:
 				fid = re.findall(re.compile('posts/(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
 			ip = None
-			#timestamp = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
-			timestamp = int(time.mktime(time.strptime(dateList[random.randint(1,10)],"%Y-%m-%d")))
+			timestamp = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
+			#timestamp = int(time.mktime(time.strptime(random.choice(['2017-10-15','2017-10-16','2017-10-17','2017-10-18','2017-10-19','2017-10-20','2017-10-21','2017-10-22','2017-10-23','2017-10-24','2017-10-25']),"%Y-%m-%d")))
 			for each in driver.find_elements_by_xpath('//div[@class="_50f3"]'):
 				if u'所在地' in each.text:
 					geo = each.find_element_by_xpath('./a').text

@@ -10,6 +10,7 @@ import heapq
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
 #abs_path = './xnr/cron/opinion_question/'
 abs_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/opinion_question'
+global_utils_route = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/'#global_utils.py的绝对路径
 K1 = 1.5
 B = 0.75
 K3 = 500

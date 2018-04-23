@@ -9,7 +9,11 @@ import time
 import json
 import heapq
 import math
-from config import cut_des,K1,B,K3
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
+from config import cut_des,K1,B,K3,global_utils_route
+sys.path.append(global_utils_route)
+from global_utils import all_opinion_corpus_index_name,all_opinion_corpus_index_type,es_xnr
 
 class TopkHeap(object):
     def __init__(self, k):
@@ -28,22 +32,22 @@ class TopkHeap(object):
         return [x for x in reversed([heapq.heappop(self.data) for x in xrange(len(self.data))])]
 
 def load_text_list(file_name):#从文件读取text文本
-
+    
+    query_body = {'query':{'bool':{'must':{'term':{'label':file_name}}}}}
     text_list = []
-    reader = csv.reader(file('./corpus/text_%s.csv' % file_name, 'rb'))
-    count = 0
-    for line in reader:
-        if count == 0:
-            text = line[0].strip('\xef\xbb\xbf')
-        else:
-            text = line[0]
-        count = count + 1
-        if text not in text_list:
-            text_list.append(text)
-##        text_set = text.split('。')
-##        for t in text_set:
-##            if len(t) > 0 and t not in text_list:
-##                text_list.append(t)
+    s_re = scan(es_xnr, query=query_body, index=all_opinion_corpus_index_name, doc_type=all_opinion_corpus_index_type)
+    while True:
+        try:
+            scan_re = s_re.next()['_source']
+            try:
+                text = scan_re['text'].encode('utf-8')
+                if text not in text_list:
+                    text_list.append(text)
+                
+            except:
+                continue
+        except StopIteration:
+            break
     
     return text_list        
 
@@ -111,24 +115,25 @@ def rank_text_list_by_word(text_list,keywords,word_set):#根据关键词匹配�
     if n < 1:
         n = 1
     result_list = TopkHeap(n)
-
-    w_n = int(0.5*len(keywords))
-    if w_n < 1:
-        w_n = 1
-
+        
     for i in range(0,len(text_list)):
         text = text_list[i]
-        words = word_set[i]
-        len_n = len(set(words)&set(keywords))
-        if len_n >= w_n:
-            result_list.Push((len_n,text))
+        
+        if len(text) == 0:
+            continue
+
+        row = []
+        word_sum = 0
+        for key in keywords:
+            if key in text:
+                word_sum = word_sum + text.count(key)
+                row.append(key)
+        if len(row) >= 1:
+            #result_list.Push((float(word_sum)/float(len(row)),text))
+            result_list.Push(((len(row)*word_sum),text))
 
     result = result_list.TopK()
-##    text_list = []
-##    for i in range(0,len(result)):
-##        if result[i][1] not in text_list:
-##            text_list.append(result[i][1])
-
+        
     return result
 
 def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
@@ -149,10 +154,7 @@ def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
     while count < 2:#将三个文本拼成一段话
         max_weight = 0
         max_index = 0
-        len_sw = len(summary_word)
-        w_n = int(0.5*len_sw)
-        if w_n < 1:
-            w_n = 1
+
         for i in range(1,len(rank_text)):
             if flag_dict[i] == 1:#已经选择过了
                 continue
@@ -161,16 +163,25 @@ def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
             word_set = word_dict[i]
             union_set = word_set & summary_word
             weight = len(union_set)
-            if weight > max_weight and weight >= w_n:
-                max_index = i
-                max_weight = weight
+            weight = 0
+            for item in list(union_set):
+                weight = weight + summary.count(item)
+
+            if weight > max_weight and weight >= 2:
+                r = get_s(summary_list,text)
+                if r >= 0.7:
+                    continue
+                else:
+                    max_index = i
+                    max_weight = weight
 
         if max_weight == 0:#没有可以拼接的文本
             break
         else:
-            summary = summary + '\n' +  rank_text[max_index][1]
+            summary = summary + '。' +  rank_text[max_index][1]
             summary_word = summary_word | word_dict[max_index]
             flag_dict[max_index] = 1
+            summary_list.append(rank_text[max_index][1])
 
         count = count + 1
 
@@ -200,7 +211,7 @@ if __name__ == '__main__':
     #for k in k1:
     summary_text = opinion_relevance(keywords,'weiquan')
         #result_dict[k] = summary_text
-    with open('./result/p_%s.csv' % k1, 'w') as f:
+    with open('/home/ubuntu8/yuanshi/opinion_generation/result/p_0422.csv', 'w') as f:
         writer = csv.writer(f)
         row = [summary_text]
         writer.writerow(row)

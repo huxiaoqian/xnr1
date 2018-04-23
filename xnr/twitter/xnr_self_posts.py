@@ -15,12 +15,6 @@ import sys
 sys.path.append('../')
 from timed_python_files import new_tw_xnr_flow_text_mappings as mapping
 
-endDate = '2017-10-25'
-dateList = []
-for i in range(0,11):
-	date = datetime.strptime(endDate,"%Y-%m-%d") - timedelta(days=i)
-	dateList.append(datetime.strftime(date,"%Y-%m-%d"))
-
 es = Elasticsearch([{'host':'219.224.134.213','port':9205}])
 # 获取已创建xnr的数据
 xnrData = []
@@ -49,8 +43,11 @@ for xnr in xnrData:
 			break
 		for each in api.user_timeline(page=num):
 			xnr_user_no = xnr['xnr_user_no']
+			#xnr_user_no = "TXNR0003"
 			uid = xnr['uid']
+			#uid = "747226658457927680"
 			text = each.text
+			#text = random.choice([u"emmmm",u"今天风真大",u"哈哈哈哈哈",u"宿命是上帝为你写的剧本",u"教会你如何去爱去恨",u"天堂为每个人都打开了大门",u"善恶是门票不分身份",u"希望是指南针信仰是扬起的船帆",u"我听说这个时代好像需要信仰",u"那你信什么",u"上帝",u"金钱",u"因特网"])
 			try:
 				picture_url = each.entities['media'][0]['media_url_https']
 				vedio_url = each.entities['media'][0]['media_url_https']
@@ -63,8 +60,8 @@ for xnr in xnrData:
 			tid = each.id
 			ip = None
 			timestampStr = datetime.strftime(each.created_at,"%Y-%m-%d")
-			#timestamp = int(time.mktime(time.strptime(timestampStr,"%Y-%m-%d")))
-			timestamp = int(time.mktime(time.strptime(dateList[random.randint(1,10)],"%Y-%m-%d")))
+			timestamp = int(time.mktime(time.strptime(timestampStr,"%Y-%m-%d")))
+			#timestamp = int(time.mktime(time.strptime(random.choice(['2017-10-15','2017-10-16','2017-10-17','2017-10-18','2017-10-19','2017-10-20','2017-10-21','2017-10-22','2017-10-23','2017-10-24','2017-10-25']),"%Y-%m-%d")))
 			geo = each.geo
 			retweeted = each.retweet_count
 			like = each.favorite_count
