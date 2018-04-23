@@ -564,13 +564,13 @@ tw_xnr_fans_followers_index_type='uids'
 twitter_xnr_assessment_index_name= 'twitter_xnr_assessment'
 twitter_xnr_assessment_index_type = 'score'
 
-<<<<<<< HEAD
+
 #use to save weibo xnr like operate
 twitter_xnr_save_like_index_name='twitter_xnr_save_like'
 twitter_xnr_save_like_index_type='text'
 
-=======
->>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
+
+
 #use to save twitter xnr count info
 twitter_xnr_count_info_index_name='twitter_xnr_count'
 twitter_xnr_count_info_index_type='text'
