@@ -138,7 +138,10 @@ def load_fb_flow_text(fb_flow_text_index_list, uid_list, fb_flow_text_query_body
                     fb_flow_text[uid] = {
                         'text_dict': {}
                     }
-                fb_flow_text[uid]['text_dict'][item['_id']] = traditional2simplified(content['text'][0][:1800]) #对文本内容长度做出限制[:1800]，以免翻译时麻烦
+                if content.has_key('text'):
+                    fb_flow_text[uid]['text_dict'][item['_id']] = traditional2simplified(content['text'][0][:1800]) #对文本内容长度做出限制[:1800]，以免翻译时麻烦
+                else:
+                    fb_flow_text[uid]['text_dict'][item['_id']] = ''
         except Exception,e:
             print e
     #如果没有某个uid对应的记录值，则添上一条空的数据
@@ -287,6 +290,8 @@ def get_filter_keywords_for_match_function(fb_flow_text_index_list, uid_list):
                 result = get_weibo_single(text)
                 if result:
                     filter_keywords_result[uid][mid] = result
+                else:
+                    filter_keywords_result[uid][mid] = {}
     return filter_keywords_result
 
 
@@ -305,4 +310,4 @@ if __name__ == '__main__':
     #         print key, val
     # load_black_words()
     # print load_fb_flow_text(['facebook_flow_text_2017-10-15'],['100012258524129'])
-    print get_filter_keywords_for_match_function(['facebook_flow_text_2017-10-15'],['100012258524129'])
+    print get_filter_keywords_for_match_function(['new_fb_xnr_flow_text_2017-10-15'],['100018797745111'])

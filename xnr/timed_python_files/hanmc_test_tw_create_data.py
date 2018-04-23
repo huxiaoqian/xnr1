@@ -18,6 +18,8 @@ from twitter_feedback_mappings_timer import twitter_feedback_like_mappings, twit
                                             twitter_feedback_at_mappings, twitter_feedback_comment_mappings,\
                                             twitter_feedback_private_mappings, twitter_feedback_fans_mappings,\
                                             twitter_feedback_follow_mappings
+sys.path.append('../facebook/sensitive')
+from get_sensitive import get_sensitive_info, get_sensitive_user
 
 
 root_uid = '747226658457927680'
@@ -31,7 +33,10 @@ def load_timestamp(date):
     return datetime2ts(date) + random.randint(1,500)
 
 def random_text():
-    return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜"])  
+    #普通版
+    # return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜"])  
+    #敏感版  
+    return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
 
 def random_mid():
     return random.choice(["919556871287054337", "919542838899097602", "919370711944359936"])  
@@ -221,10 +226,40 @@ def follow(date):
     twitter_feedback_follow_mappings()
     print es.index(index=twitter_feedback_follow_index_name, doc_type=twitter_feedback_follow_index_type, body=data)
 
+def sensitive_func(index_name, ts):
+    bulk_action = []
+    query_body = {
+        'query':{
+            'match_all':{}
+        },
+        'size': 999,
+    }
+    res = es.search(index=index_name, doc_type='text', body=query_body)['hits']['hits']
+    for r in res:
+        _id = r['_id']
+        uid = r['_source']['uid']
+        mid = ''
+        if r['_source'].has_key('mid'):
+            mid = r['_source']['mid']
+        text = ''
+        if r['_source'].has_key('text'):
+            text = r['_source']['text']
+        sensitive_info = get_sensitive_info(ts, mid, text)
+        sensitive_user = get_sensitive_user(ts, uid)
+        item = {
+            'sensitive_info': sensitive_info,
+            'sensitive_user': sensitive_user,
+        }
+
+        action = {'update':{'_id':_id}}
+        bulk_action.extend([action, {'doc': item}])
+    if bulk_action:
+        print es.bulk(bulk_action,index=index_name,doc_type='text',timeout=600)
 
 if __name__ == '__main__':
+    '''
     #2017-10-15     2017-10-30
-    for i in range(16, 31, 1):
+    for i in range(15, 31, 1):
         date = '2017-10-' + str(i)
         print 'date', date
         for i in range(random.randint(2,5)):
@@ -235,4 +270,17 @@ if __name__ == '__main__':
             private(date)
             fans(date)
             follow(date)
+    '''
+    #update
+    #2017-10-15     2017-10-30
+    bulk_action = []
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        ts = datetime2ts(date)
+        for index_name_pre in ['twitter_feedback_at_', 'twitter_feedback_comment_', 'twitter_feedback_retweet_', 'twitter_feedback_private_', 'twitter_feedback_like_']:
+            index_name = index_name_pre + date
+            sensitive_func(index_name, ts)
+        sensitive_func('twitter_feedback_follow', ts)
+        sensitive_func('twitter_feedback_fans', ts)
+
 

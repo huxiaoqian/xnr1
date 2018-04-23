@@ -336,8 +336,7 @@ def get_new_tw_xnr_flow_text_index_list(date_range_end_ts, days_num=MAX_FLOW_TEX
     for i in range(1,(days_num+1)):
         date_range_start_ts = date_range_end_ts - i*DAY
         date_range_start_datetime = ts2datetime(date_range_start_ts)
-        # index_name = new_tw_xnr_flow_text_index_name_pre + date_range_start_datetime
-        index_name = 'new_tw_xnr_flow_text__' + date_range_start_datetime
+        index_name = new_tw_xnr_flow_text_index_name_pre + date_range_start_datetime
         index_name_list.append(index_name)
     
     return index_name_list

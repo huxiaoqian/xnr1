@@ -47,7 +47,7 @@ from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIM
                     FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID,\
                     FB_FANS_TODAY as FANS_TODAY
 from time_utils import get_timeset_indexset_list
-
+from facebook_count_mappings import facebook_xnr_count_info_mappings
 
 
 
@@ -1481,6 +1481,7 @@ def cron_compute_mark(current_time):
 
         # 存es
         try:
+            facebook_xnr_count_info_mappings()
             es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
                 id=_id,body=xnr_user_detail)
             mark = True
@@ -1493,18 +1494,17 @@ def cron_compute_mark(current_time):
 
     
 if __name__ == '__main__':
-
+    '''
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     cron_compute_mark(current_time)
 
-'''
+    '''
     #2017-10-15  2017-10-30
     for i in range(15, 26, 1):
         date = '2017-10-' + str(i)
         print 'date', date
         current_time = datetime2ts(date)
-        cron_compute_mark(current_time)
-'''
+        cron_compute_mark(current_time) 

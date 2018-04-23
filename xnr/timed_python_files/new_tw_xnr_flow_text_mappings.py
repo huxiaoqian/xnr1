@@ -178,7 +178,7 @@ def tw_daily_inerests_flow_text_mappings(index_name):
 # if __name__ == '__main__':
 
 #     new_tw_xnr_flow_text_mappings(index_name)
-# if __name__=='__main__':
+if __name__=='__main__':
 #     new_xnr_flow_text_index_list = ['new_tw_xnr_flow_text__2017-10-16','new_tw_xnr_flow_text__2017-10-17','new_tw_xnr_flow_text__2017-10-18',\
 # 'new_tw_xnr_flow_text__2017-10-19','new_tw_xnr_flow_text__2017-10-20','new_tw_xnr_flow_text__2017-10-21',\
 # 'new_tw_xnr_flow_text__2017-10-22','new_tw_xnr_flow_text__2017-10-23','new_tw_xnr_flow_text__2017-10-24',\
@@ -187,7 +187,8 @@ def tw_daily_inerests_flow_text_mappings(index_name):
 # 'new_tw_xnr_flow_text__2018-01-10','new_tw_xnr_flow_text__2018-01-15','new_tw_xnr_flow_text__2018-01-18',\
 # 'new_tw_xnr_flow_text__2018-01-19','new_tw_xnr_flow_text__2018-01-23','new_tw_xnr_flow_text__2018-01-24',\
 # 'new_tw_xnr_flow_text__2018-01-26','new_tw_xnr_flow_text__2018-01-30','new_tw_xnr_flow_text__2018-04-01',\
-# 'new_tw_xnr_flow_text__2018-04-03','new_tw_xnr_flow_text__2018-04-09','new_tw_xnr_flow_text__2018-04-12']
+# # 'new_tw_xnr_flow_text__2018-04-03','new_tw_xnr_flow_text__2018-04-09','new_tw_xnr_flow_text__2018-04-12']
+#     new_xnr_flow_text_index_list = ['new_tw_xnr_flow_text__2017-10-15']
 #     es.indices.put_mapping(index=new_xnr_flow_text_index_list, doc_type=new_tw_xnr_flow_text_index_type, \
-#             body={'properties':{'topic_field': {'index': 'not_analyzed','type': 'string'},\
+#             body={'properties':{'topic_field_first': {'index': 'not_analyzed','type': 'string'},\
 #             }}, ignore=400)

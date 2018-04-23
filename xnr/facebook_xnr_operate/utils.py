@@ -1059,6 +1059,8 @@ def get_show_comment(task_detail):
     try:
         es_results = es.search(index=index_name,doc_type=facebook_feedback_comment_index_type,\
                             body=query_body)['hits']['hits']
+        print 'es_results'
+        print es_results
         if es_results:
             for item in es_results:
                 results_all.append(item['_source'])
