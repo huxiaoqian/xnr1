@@ -220,7 +220,7 @@ def ajax_compare_assessment():
 
 	if S_TYPE == 'test':
 		start_time = datetime2ts('2017-10-01')
-		end_time = datetime2ts('2017-10-07')
+		end_time = datetime2ts('2017-10-08')
 
 	results = get_compare_assessment(xnr_user_no_list, dim, start_time, end_time)
 
