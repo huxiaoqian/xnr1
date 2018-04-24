@@ -148,7 +148,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet',current_time)['sensitive_info']
     feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)['sensitive_info']
 
-    pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg
+    pene_mark = float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/(3*sensitive_value_top_avg)
     pene_mark = round(pene_mark,2)
     return pene_mark
 
@@ -237,7 +237,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
     print active_mark, topic_mark, domain_mark
 
     safe_mark = float(active_mark+topic_mark+domain_mark)/3
-    safe_mark = round(safe_mark*100,2)
+    safe_mark = round(safe_mark,2)
     return safe_mark
 
 
