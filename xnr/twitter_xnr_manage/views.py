@@ -15,7 +15,7 @@ from utils import show_completed_twxnr,show_uncompleted_twxnr,delete_tw_xnr, get
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
 				  show_history_posting,show_at_content,show_comment_content,show_like_content,\
-				  wxnr_list_concerns,wxnr_list_fans,count_weibouser_influence,show_history_count
+				  wxnr_list_concerns,wxnr_list_fans,show_history_count
 
 
 from utils import show_comment_dialog,cancel_follow_user,attach_fans_follow,lookup_detail_weibouser
