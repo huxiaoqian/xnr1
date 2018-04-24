@@ -20,7 +20,7 @@ from xnr.global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                         user_domain_index_name,user_domain_index_type,\
-                        new_xnr_flow_text_index_name_pre,xnr_flow_text_index_type
+                        new_xnr_flow_text_index_name_pre,xnr_flow_text_index_type,xnr_flow_text_index_name_pre
                         
 from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
                 r_followers_uid_list_datetime_pre,r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
@@ -29,7 +29,7 @@ from xnr.utils import xnr_user_no2uid,uid2nick_name_photo
 from xnr.global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_new_xnr_flow_text_index_list
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
-                        TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
+                        TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT, FLOW_TEXT_START_DATE
 
 
 def get_influence_total_trend(xnr_user_no,start_time,end_time):
@@ -1666,7 +1666,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             try:
                 get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
                     id=_id)['_source']
-                print 'get_result..',get_result
+
             except:
                 get_result = {}
 
@@ -1701,8 +1701,35 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
 
                 else:
 
-                    results_all['trend'][xnr_user_no][timestamp] = get_result['safe']
-                    
+
+
+                    if timestamp == timestamp_list[-1]:    # 结束时间
+
+                        timestamp_start = FLOW_TEXT_START_DATE  # 开始时间(统计表的开始时间就是系统开始时间)
+
+                        if S_TYPE == 'test':
+                        
+                            timestamp = datetime2ts(ts2datetime(int(time.time())))  # 为了和小主页总量保持一致
+                        
+                        history_result = get_safe_history_count(timestamp,timestamp_start,xnr_user_no)
+                        #print 'history_result..',history_result
+                        table_result['total_post_sum'] = history_result['total_post_sum']
+                        table_result['daily_post_num'] = history_result['daily_post_num']
+                        table_result['hot_follower_num'] = history_result['business_post_num']
+                        table_result['business_post_num'] = history_result['hot_follower_num']
+                        table_result['trace_follow_tweet_num'] = history_result['trace_follow_tweet_num']
+
+                        table_result['other'] = table_result['total_post_sum'] - table_result['daily_post_num'] - table_result['hot_follower_num'] - table_result['business_post_num'] - table_result['trace_follow_tweet_num']
+                        table_result['xnr'] = xnr_user_no
+                        
+                    # table_result['total_post_sum'] = get_result['total_post_sum']
+                    # table_result['daily_post_num'] = get_result['daily_post_num']
+                    # table_result['hot_follower_num'] = get_result['hot_follower_num']
+                    # table_result['business_post_num'] = get_result['business_post_num']
+                    # table_result['trace_follow_tweet_num'] = get_result['trace_follow_tweet_num']
+                    # table_result['other'] = get_result['total_post_sum'] - get_result['daily_post_num'] - get_result['hot_follower_num'] - get_result['business_post_num'] - get_result['trace_follow_tweet_num']
+                    # table_result['xnr'] = xnr_user_no
+                    '''
                     table_result['total_post_sum'] = get_result['total_post_sum']
                     table_result['daily_post_num'] = get_result['daily_post_num']
                     table_result['hot_follower_num'] = get_result['hot_follower_num']
@@ -1710,7 +1737,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
                     table_result['trace_follow_tweet_num'] = get_result['trace_follow_tweet_num']
                     table_result['other'] = get_result['total_post_sum'] - get_result['daily_post_num'] - get_result['hot_follower_num'] - get_result['business_post_num'] - get_result['trace_follow_tweet_num']
                     table_result['xnr'] = xnr_user_no
-                    
+                    '''
             else:
 
                 if dim == 'influence':
@@ -1750,8 +1777,99 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             
         results_all['table'].append(table_result)
 
-    print 'results_all....',results_all
+    #print 'results_all....',results_all
     return results_all
+
+
+def xnr_cumulative_statistics(xnr_date_info):
+    Cumulative_statistics_dict=dict()
+    Cumulative_statistics_dict['date_time']='累计统计'
+    if xnr_date_info: 
+        #print xnr_date_info[0]
+        
+        total_post_sum=0
+        daily_post_num=0
+        business_post_num=0
+        hot_follower_num=0
+        trace_follow_tweet_num=0
+        influence_sum=0
+        penetration_sum=0
+        safe_sum=0
+        number=len(xnr_date_info)
+        for i in xrange(0,len(xnr_date_info)):
+            #print xnr_date_info[i]['date_time']
+            #total_post_sum=total_post_sum+xnr_date_info[i]['total_post_sum']
+            daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
+            business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
+            hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
+            trace_follow_tweet_num=trace_follow_tweet_num+xnr_date_info[i]['trace_follow_tweet_num']
+            #print total_post_sum,daily_post_num
+
+        Cumulative_statistics_dict['total_post_sum']=daily_post_num+business_post_num+hot_follower_num+trace_follow_tweet_num
+        Cumulative_statistics_dict['daily_post_num']=daily_post_num
+        Cumulative_statistics_dict['business_post_num']=business_post_num
+        Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
+        Cumulative_statistics_dict['trace_follow_tweet_num']=trace_follow_tweet_num
+
+    else:
+        
+        Cumulative_statistics_dict['total_post_sum']=0
+        Cumulative_statistics_dict['daily_post_num']=0
+        Cumulative_statistics_dict['business_post_num']=0
+        Cumulative_statistics_dict['hot_follower_num']=0
+        Cumulative_statistics_dict['trace_follow_tweet_num']=0
+
+    return Cumulative_statistics_dict
+
+
+def show_condition_history_count(xnr_user_no,start_time,end_time):
+    query_body={
+        #'fields':['date_time','user_fansnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no}},
+                            {'range':{
+                                'timestamp':{
+                                    'gte':start_time,
+                                    'lt':end_time
+                                }
+                            }}
+                        ]
+                    }
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
+    }
+    #print 'weibo_xnr_count_info_index_name::',weibo_xnr_count_info_index_name
+    #try:
+    xnr_count_result=es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
+    print 'xnr_count_result...',xnr_count_result
+    xnr_date_info=[]
+    for item in xnr_count_result:
+        xnr_date_info.append(item['_source'])
+    # except:
+    #     xnr_date_info=[]
+    return xnr_date_info
+
+def get_safe_history_count(end_time,start_time,xnr_user_no):
+
+    now_time=int(time.time())
+    system_start_time=FLOW_TEXT_START_DATE
+    if end_time > now_time:
+        end_time=now_time
+    if start_time < system_start_time:
+        start_time=system_start_time
+    print 'condition_time:',ts2datetime(start_time),ts2datetime(end_time)
+    xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
+    Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
+
+    return Cumulative_statistics_dict
+
 
 
 def get_compare_assessment_today(xnr_user_no_list, dim):
@@ -1760,7 +1878,8 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
     results_all['trend'] = {}
     results_all['table'] = []
 
-    timestamp = int(time.time())
+    timestamp = datetime2ts(ts2datetime(int(time.time())))
+    timestamp_start = FLOW_TEXT_START_DATE
 
     xnr_user_no_list = xnr_user_no_list.split(',')
 
@@ -1831,12 +1950,36 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
                 result = get_safe_active_today(xnr_user_no)
                 xnr_result = create_xnr_history_info_count_today(xnr_user_no)
 
+
+                today_total = list(result.values())[0]
+                today_daily_post_num = xnr_result['daily_post_num']
+                today_hot_follower_num = xnr_result['hot_follower_num']
+                today_business_post_num = xnr_result['business_post_num']
+                today_trace_follow_tweet_num = xnr_result['trace_follow_tweet_num']
+
+                history_result = get_safe_history_count(timestamp,timestamp_start,xnr_user_no)
+                #print 'history_result..',history_result
+                history_total = history_result['total_post_sum']
+                history_daily_post_num = history_result['daily_post_num']
+                history_hot_follower_num = history_result['business_post_num']
+                history_business_post_num = history_result['hot_follower_num']
+                history_trace_follow_tweet_num = history_result['trace_follow_tweet_num']
+
+                table_result['total_post_sum'] = history_total + today_total
+                table_result['daily_post_num'] = history_daily_post_num + today_daily_post_num
+                table_result['hot_follower_num'] = history_hot_follower_num + today_hot_follower_num
+                table_result['business_post_num'] = history_business_post_num + today_business_post_num
+                table_result['trace_follow_tweet_num'] = history_trace_follow_tweet_num + today_trace_follow_tweet_num
+
+                table_result['other'] = table_result['total_post_sum'] - table_result['daily_post_num'] - table_result['hot_follower_num'] - table_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+                '''
                 table_result['total_post_sum'] = list(result.values())[0]
                 table_result['daily_post_num'] = xnr_result['daily_post_num']
                 table_result['hot_follower_num'] = xnr_result['hot_follower_num']
                 table_result['business_post_num'] = xnr_result['business_post_num']
                 table_result['trace_follow_tweet_num'] = xnr_result['trace_follow_tweet_num']
                 table_result['other'] = list(result.values())[0] - xnr_result['daily_post_num'] - xnr_result['hot_follower_num'] - xnr_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+                '''
                 table_result['xnr'] = xnr_user_no
 
             except:

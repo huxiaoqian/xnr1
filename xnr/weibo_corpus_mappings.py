@@ -3,7 +3,10 @@ import os
 import json
 
 from global_utils import es_xnr as es
-from global_utils import weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type
+from global_utils import weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
+						all_opinion_corpus_index_name, all_opinion_corpus_index_type,\
+						qa_corpus_index_name, qa_corpus_index_type
+
 
 def weibo_xnr_corpus_mappings():
 	index_info = {
@@ -65,7 +68,77 @@ def weibo_xnr_corpus_mappings():
 	if not es.indices.exists(index=weibo_xnr_corpus_index_name):
 		es.indices.create(index=weibo_xnr_corpus_index_name,body=index_info,ignore=400)
 
+
+def opinion_corpus_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			all_opinion_corpus_index_type:{
+				'properties':{
+					'text':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'mid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'label':{
+						'type':'string',
+						'index':'not_analyzed'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=all_opinion_corpus_index_name):
+		es.indices.create(index=all_opinion_corpus_index_name,body=index_info,ignore=400)
+
+
+
+def qa_corpus_mappings():
+	index_info = {
+		'settings':{
+			'number_of_replicas':0,
+			'number_of_shards':5
+		},
+		'mappings':{
+			qa_corpus_index_type:{
+				'properties':{
+					'text':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'mid':{
+						'type':'string',
+						'index':'not_analyzed'
+					},
+					'timestamp':{
+						'type':'long'
+					},
+					'answer_list':{
+						'type':'string',
+						'index':'not_analyzed'
+					}
+				}
+			}
+		}
+	}
+
+	if not es.indices.exists(index=qa_corpus_index_name):
+		es.indices.create(index=qa_corpus_index_name,body=index_info,ignore=400)
+
+
 if __name__ == '__main__':
 
 	weibo_xnr_corpus_mappings()
+	opinion_corpus_mappings()
+	qa_corpus_mappings()
 
