@@ -355,6 +355,15 @@ weibo_warning_corpus_index_type = 'text'
 weibo_xnr_corpus_index_name = 'weibo_corpus'
 weibo_xnr_corpus_index_type = 'text'
 
+# 语料库 -- 观点语料和问答语料
+
+all_opinion_corpus_index_name = 'all_opinion_corpus'
+all_opinion_corpus_index_type = 'text'
+
+qa_corpus_index_name = 'question_answer_corpus'
+qa_corpus_index_type = 'text'
+
+
 ## 上报管理
 weibo_report_management_index_name_pre = 'weibo_report_management_'
 weibo_report_management_index_name = 'weibo_report_management'
@@ -402,6 +411,13 @@ fb_xnr_index_type='user'
 #use to save fb xnr information which should be count
 fb_xnr_fans_followers_index_name='fb_xnr_fans_followers'
 fb_xnr_fans_followers_index_type='uids'
+
+
+#use to save facebook xnr like operate
+facebook_xnr_save_like_index_name='facebook_xnr_save_like'
+facebook_xnr_save_like_index_type='text'
+
+
 
 #use to save facebook xnr count info
 facebook_xnr_count_info_index_name='facebook_xnr_count'
@@ -547,6 +563,13 @@ tw_xnr_fans_followers_index_type='uids'
 # 行为评估分值
 twitter_xnr_assessment_index_name= 'twitter_xnr_assessment'
 twitter_xnr_assessment_index_type = 'score'
+
+
+#use to save weibo xnr like operate
+twitter_xnr_save_like_index_name='twitter_xnr_save_like'
+twitter_xnr_save_like_index_type='text'
+
+
 
 #use to save twitter xnr count info
 twitter_xnr_count_info_index_name='twitter_xnr_count'

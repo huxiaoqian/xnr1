@@ -13,7 +13,9 @@ from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 import heapq
 from collections import Counter
-from global_config import cut_filter
+from config import re_cut,global_utils_route
+sys.path.append(global_utils_route)
+from global_utils import qa_corpus_index_name,qa_corpus_index_type,es_xnr
 
 class TopkHeap(object):
     def __init__(self, k):
@@ -42,14 +44,39 @@ flow_text_host = ["219.224.134.216:9201"]
 es_text = Elasticsearch(flow_text_host, timeout=600)
 flow_text_index_name_pre = 'flow_text_' # flow text: 'flow_text_2013-09-01'
 flow_text_index_type = 'text'
+time_list = ['2016-11-18']
+'''
 time_list = ['2016-11-15','2016-11-16',\
              '2016-11-17','2016-11-18','2016-11-19','2016-11-20','2016-11-21','2016-11-22','2016-11-23','2016-11-24','2016-11-25','2016-11-26',\
              '2016-11-27']
+'''
+
+def save_user_results(bulk_action):
+    print es_xnr.bulk(bulk_action, index=qa_corpus_index_name, doc_type=qa_corpus_index_type, timeout=600)
+    return 'True'
+
+def save_data(data):
+
+    bulk_action = []
+    for d in data:
+        result = dict()
+        mid = d[1]
+        result['mid'] = d[1]
+        result['answer_list'] = '&'.join(d[3])
+        result['text'] = d[0]
+        result['timestamp'] = d[2]
+ 
+        action = {'index':{'_id': mid}}
+        bulk_action.extend([action, result])
+
+    status = save_user_results(bulk_action)
+
+    return status
 
 def cut_flow_text(text):#对流文本切分评论
 
     text_result = dict()
-    text = cut_filter(text)
+    text = re_cut(text)
     if '//@' in text:
         texts = text.split('//@')
     elif '/@' in text:#表示有评论
@@ -81,7 +108,7 @@ def cut_flow_text(text):#对流文本切分评论
     
     return key,text_list[0:len(text_list)-1]
 
-def get_weibo_text_bymessagetype(key_list,name):#根据敏感词获取微博文本
+def get_weibo_text_bymessagetype(key_list,name):#根据消息类型获取微博文本
 
     if len(key_list) == 0:
         return -1
@@ -98,6 +125,7 @@ def get_weibo_text_bymessagetype(key_list,name):#根据敏感词获取微博文�
         index_list = flow_text_index_name_pre+t_name
         s_re = scan(es_text,index=index_list,doc_type=flow_text_index_type,query=query_body)#{'query':{'match_all':{}}})
         text_result = dict()
+        data_result = dict()
         count = 0
         while True:
             try:
@@ -110,6 +138,7 @@ def get_weibo_text_bymessagetype(key_list,name):#根据敏感词获取微博文�
                 uid = source['uid']
                 text = source['text'].encode('utf-8')
                 m_type = source["message_type"]
+                timestamp = source['timestamp']
                 if text.find('//') == 0:
                     continue
                 if m_type != 2 and m_type != 3:
@@ -123,21 +152,60 @@ def get_weibo_text_bymessagetype(key_list,name):#根据敏感词获取微博文�
                     text_result[key] = item
                 except KeyError:
                     text_result[key] = value
+
+                data_result[key] = [mid,timestamp]
             
-            except:
+            except StopIteration:
                 print "all done"
                 break
 
-        with open('./text_data/answer/text_%s_%s.csv' % (name,t_name), 'wb') as f:
+        question_list = []
+        for k,v in text_result.iteritems():
+            question_list.append([k,data_result[k][0],data_result[k][1],v])
+        '''
+        with open('/home/ubuntu8/yuanshi/opinion_generation/text_data/answer/text_0422.csv', 'wb') as f:
             writer = csv.writer(f)
-            for k,v in text_result.iteritems():
-                for item in v:
-                    writer.writerow((k,item))
+            for item in question_list:
+                writer.writerow(item)
 
         f.close()
+        '''
 
-    return 0
+        status = save_data(question_list)#将数据存入es
+
+    return status
+
+def load_question_dict():#加载question语料
+
+    question_dict = dict()
+    lines = []
+    count = 0
+    reader = csv.reader(file('./corpus/corpus_answer.csv', 'rb'))
+    for line in reader:       
+        if count == 0:
+            question = line[0].strip('\xef\xbb\xbf')
+        else:
+            question = line[0]
+        count = count + 1
+        question = question.strip()
+        answer = line[1]
+        try:
+            question_dict[question].append(answer)
+        except KeyError:
+            question_dict[question] = [answer]
+
+    timestamp = time.time()
+    question_list = []
+    mid = 1000000000000000
+    for k,v in question_dict.iteritems():
+        question_list.append([k,str(mid),timestamp,v])
+        mid = mid + 1
+    
+    status = save_data(question_list)
+    print status
 
 if __name__ == '__main__':
 
-    get_weibo_text_bymessagetype(['2','3'],'lawyer')
+    status = get_weibo_text_bymessagetype(['2','3'],'lawyer')
+    print status
+    #load_question_dict()
