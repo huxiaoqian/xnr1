@@ -290,9 +290,9 @@ def trace_follow_tweet():
     
 def xnr_flow_text(date):
     if date < '2017-10-18':
-        user_friendsnum = 3
+        user_fansnum = 3
     else:
-        user_friendsnum = 5
+        user_fansnum = 5
     index_name = tw_xnr_flow_text_index_name_pre + date
     tw_xnr_flow_text_mappings(index_name)
     for post in [daily_post, business_post, host_post, trace_follow_tweet]:
@@ -303,7 +303,7 @@ def xnr_flow_text(date):
             data['xnr_user_no'] = xnr_user_no
             data['tid'] = ''
             data['text'] = random_text()
-            data['user_friendsnum'] = user_friendsnum
+            data['user_fansnum'] = user_fansnum
             print es.index(index=index_name, doc_type=tw_xnr_flow_text_index_type, body=data, id=_id)
 
 
