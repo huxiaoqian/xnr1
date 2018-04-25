@@ -12,7 +12,8 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type,weibo_example_model_index_name,\
-                            weibo_example_model_index_type,profile_index_name,profile_index_type
+                            weibo_example_model_index_type,profile_index_name,profile_index_type,\
+                            opinion_corpus_index_name,opinion_corpus_index_type
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
@@ -866,23 +867,79 @@ def show_condition_corpus(corpus_condition):
     return results
 
 
+#观点语料
+def get_opnion_corpus_type():
+    query_body = {
+    'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':{'term':{'status':1}}
+                    }
+                }
+            }
+
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        result = es.search(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=query_body)['hits']['hits']
+        for item in result:
+            result_type.append(item['_source']['corpus_name'])
+    except:
+        result_type = []
+    return result_type
+
+def show_all_opinion_corpus():
+    query_body={
+        'query':{
+            'match_all':{}
+        },
+        'size':MAX_VALUE,
+        'sort':{'timestamp':{'order':'desc'}}
+    }
+    # try:
+    #     result = es.search(index=)
+    return True
+
+def show_condition_opinion_corpus(theme_type):
+    query_body = {
+    'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':{'terms':{'label':theme_type}}
+                    }
+                }
+            }
+
+        },
+        'size':MAX_VALUE
+    }
+    return True
+
+
 def show_different_corpus(task_detail):
     result = dict()
     theme_corpus = '主题语料'
     daily_corpus = '日常语料' 
     opinion_corpus = '观点语料'
+    result['opinion_corpus_type'] = get_opnion_corpus_type()
     if task_detail['corpus_status'] == 0:        
         result['theme_corpus'] = show_corpus(theme_corpus)
         
         result['daily_corpus'] = show_corpus(daily_corpus)
         
-        result['opinion_corpus'] = ''
+        result['opinion_corpus'] = show_all_opinion_corpus()
     else:
         if task_detail['request_type'] == 'all':
             if task_detail['create_type']:
                 result['theme_corpus'] = show_corpus_class(task_detail['create_type'],theme_corpus)
                 
                 result['daily_corpus'] = show_corpus_class(task_detail['create_type'],daily_corpus)
+
+                result['opinion_corpus'] = show_all_opinion_corpus()
+
             else:
                 pass
         else:
@@ -915,8 +972,11 @@ def show_different_corpus(task_detail):
                     result['daily_corpus'] = show_corpus_class(task_detail['create_type'],daily_corpus)
                 else:
                     result['daily_corpus'] = show_corpus(daily_corpus)
-
-        result['opinion_corpus'] = ''
+            
+            if task_detail['theme_type_3']:
+                result['opinion_corpus'] = show_condition_opinion_corpus(task_detail['theme_type_3'])
+            else:
+                result['opinion_corpus'] = show_all_opinion_corpus()
 
     return result
  
