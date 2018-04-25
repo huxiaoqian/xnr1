@@ -21,7 +21,7 @@ def create_xnr():
         res = utils_create_xnr({'wx_id':wx_id, 'submitter':submitter, 'mail':mail, 'access_id':access_id, 'remark':remark})
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/login/')
 def login():
@@ -30,7 +30,7 @@ def login():
         res = utils_login(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/logout/')
 def logout():
@@ -39,7 +39,7 @@ def logout():
         res = utils_logout(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/checkstatus/')
 def check_status():
@@ -48,7 +48,7 @@ def check_status():
         res = utils_check_status(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/loadallgroups/')
 def load_all_groups():
@@ -58,7 +58,7 @@ def load_all_groups():
         res = utils_load_all_groups(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/setgroups/')
 def set_groups():
@@ -69,14 +69,14 @@ def set_groups():
         res = utils_set_groups(wxbot_id, group_list)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/show/')
 def show_wxxnr():
     res = utils_show_wxxnr()
     if res:
         return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/show_listening_groups/')
 def show_wxxnr_listening_groups():
@@ -85,7 +85,7 @@ def show_wxxnr_listening_groups():
         res = utils_show_wx_xnr_listening_groups(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/delete/')
 def delete():
@@ -94,4 +94,4 @@ def delete():
         res = utils_delete(wxbot_id)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
