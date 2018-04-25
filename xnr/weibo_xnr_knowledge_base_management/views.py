@@ -13,7 +13,8 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   get_create_type_content,domain_create_task,domain_update_task,get_show_domain_group_summary,\
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
                   get_show_domain_role_info,get_delete_domain,get_export_example_model,\
-                  get_generate_example_model,get_show_example_model
+                  get_generate_example_model,get_show_example_model,\
+                  show_different_corpus
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
@@ -397,6 +398,18 @@ def ajax_show_corpus_class():
     create_type=request.args.get('create_type','')
     corpus_type=request.args.get('corpus_type','')
     results=show_corpus_class(create_type,corpus_type)
+    return json.dumps(results)
+
+@mod.route('/show_different_corpus/')
+def ajax_show_different_corpus():
+    task_detail = dict()
+    task_detail['create_type'] = request.args.get('create_type','') #my_xnrs,all_xnrs
+    task_detail['corpus_status'] = int(request.args.get('corpus_status',''))    #如果是初始进入为0，其他为1
+    task_detail['request_type'] = request.args.get('request_type','') #all,one
+    task_detail['theme_type_1'] = request.args.get('theme_type_1','').split(',')
+    task_detail['theme_type_2'] = request.args.get('theme_type_2','').split(',')
+    task_detail['theme_type_3'] = request.args.get('theme_type_3','').split(',')
+    results = show_different_corpus(task_detail)
     return json.dumps(results)
 
 #修改语料

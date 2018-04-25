@@ -60,6 +60,8 @@ from xnr.facebook_xnr_operate.views import mod as facebookxnroperateModule
 from xnr.twitter_xnr_operate.views import mod as twitterxnroperateModule
 from xnr.intelligent_writing.views import mod as intelligentwritingModule
 
+# from xnr.commoncorpusmanagement.views import mod as commoncorpusmanagementModule
+
 #from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users
 from xnr.extensions import db, security, user_datastore, admin, User, Role, roles_users, AdminAccessView_user, AdminAccessView_role
 #from flask.ext.security import SQLAlchemyUserDatastore
@@ -139,6 +141,8 @@ def create_app():
     app.register_blueprint(twitterxnroperateModule)
 
     app.register_blueprint(intelligentwritingModule)
+
+    # app.register_blueprint(commoncorpusmanagementModule)
 
     app.config['DEBUG'] = True
 

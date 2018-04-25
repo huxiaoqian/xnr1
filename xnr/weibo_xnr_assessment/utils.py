@@ -1666,7 +1666,6 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
             try:
                 get_result = es.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,\
                     id=_id)['_source']
-
             except:
                 get_result = {}
 

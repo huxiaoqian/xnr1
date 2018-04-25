@@ -258,7 +258,7 @@ def get_hot_recommend_tweets(xnr_user_no,topic_field,sort_item):
         current_time = time.time()
 
         if S_TYPE == 'test':
-            current_time = datetime2ts(S_DATE_FB)
+            current_time = datetime2ts('2017-10-25')
             
 
         fb_social_sensing_index_name = fb_social_sensing_index_name_pre + ts2datetime(current_time)

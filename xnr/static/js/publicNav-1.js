@@ -442,6 +442,25 @@ $('#choosePerson .sure_in').on('click',function () {
             localStorage.setItem('userFBName',encodeURI(id_or_name));
             $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
         }
+    } else if (loadingType=='twitter'){
+        var userID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userName=$('input:radio[name="ID"]:checked').attr('valueName');
+        var userType=$('input:radio[name="choose"]:checked').val();
+        if (!userID||!userName||!userType){
+            $('#pormpt p').text('请检查选择登陆的虚拟人显示模式。');
+            $('#pormpt').modal('show');
+        }else {
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userID;
+            }else {
+                id_or_name=userName;
+            }
+            localStorage.setItem('userTW',encodeURI(userID));
+            localStorage.setItem('userTWRelName',encodeURI(userName));
+            localStorage.setItem('userTWName',encodeURI(id_or_name));
+            $('#xnrName').text(id_or_name+'（'+userID+'）').attr('title',id_or_name+'（'+userID+'）');
+        }
     }
     location.reload();
 });

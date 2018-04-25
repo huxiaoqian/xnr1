@@ -273,8 +273,8 @@ function penetration(data) {
         $('#penetration').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
     }else {
         var time=[],fans_group=[];
-        for (var i in data['fans_group']){
-            fans_group.push(data['fans_group'][i]);
+        for (var i in data['friends_group']){
+            fans_group.push(data['friends_group'][i]);
             time.push(getLocalTime(i));
         };
         var feedback_total=publicData(data['feedback_total']);
@@ -288,7 +288,7 @@ function penetration(data) {
                 trigger: 'axis'
             },
             legend: {
-                data:['关注群体敏感度','粉丝群体敏感度','发布信息敏感度','社交反馈敏感度','预警上报敏感度'],
+                data:['好友群体敏感度','发布信息敏感度','社交反馈敏感度','预警上报敏感度'],
                 width: '600',
                 left:'center'
             },
@@ -318,23 +318,7 @@ function penetration(data) {
             },
             series: [
                 {
-                    name:'关注群体敏感度',
-                    type:'line',
-                    data:follow_group,
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-                {
-                    name:'粉丝群体敏感度',
+                    name:'好友群体敏感度',
                     type:'line',
                     data:fans_group,
                     markPoint: {

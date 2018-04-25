@@ -311,7 +311,7 @@ def addto_facebook_corpus(task_detail):
     try:
         corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
         task_detail['text']=corpus_result['text']
-        
+
         #查询三个指标字段
         fid_result=lookup_fid_attend_index(task_detail['fid'],task_detail['timestamp'],task_detail['timestamp'])
         if fid_result:
@@ -323,7 +323,7 @@ def addto_facebook_corpus(task_detail):
             task_detail['share']=0
             task_detail['favorite']=0 
             #查询用户昵称
-        task_detail['nick_name']=get_user_nickname(item['_source']['uid'])
+        task_detail['nick_name']=get_user_nickname(corpus_result['uid'])
         # task_detail['retweeted']=corpus_result['retweeted']
         # task_detail['comment']=corpus_result['comment']
         # task_detail['like']=corpus_result['like']

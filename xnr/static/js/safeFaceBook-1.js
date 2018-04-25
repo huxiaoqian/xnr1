@@ -264,8 +264,16 @@ $('#container .type_page #myTabs li').on('click',function () {
     if (mid.indexOf('&')==-1){
         public_ajax.call_request('get',defaultUrl,safe);
     }else {
+        var td=$('.choosetime input:radio[name="time1"]:checked').val();
+        var t1=getDaysBefore(td),t2=end_time;
+        if (td=='mize'){
+            var s=$('#start_1').val();
+            var d=$('#end_1').val();
+            t1 =(Date.parse(new Date(s))/1000);
+            t2 =(Date.parse(new Date(d))/1000);
+        }
         var midTwo=mid.split('&');
-        var readyChart_url='/facebook_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num;
+        var readyChart_url='/facebook_xnr_assessment/'+midTwo[0]+'/?xnr_user_no='+ID_Num+'&start_time='+t1+'&end_time='+t2;
         public_ajax.call_request('get',readyChart_url,radar);
         var topic;
         if (midTwo[1]=='safe_tweets_topic'){
@@ -274,7 +282,7 @@ $('#container .type_page #myTabs li').on('click',function () {
             topic=$('#userField input:radio[name="domain"]:checked').val();
         }
         var readyDoc_url='/facebook_xnr_assessment/'+midTwo[1]+'/?xnr_user_no='+ID_Num+'&topic='+topic+
-            '&sort_item=timestamp';
+            '&sort_item=timestamp&start_time='+t1+'&end_time='+t2;
         public_ajax.call_request('get',readyDoc_url,weiboData);
         t=$(this).attr('linktype');
         if (t=='area'){
@@ -445,11 +453,21 @@ $('.pc-4 input').on('click',function () {
         the=$(this).val();
         theSort=$('.center-2 input:radio[name="th"]:checked').val();
     }
+    var td=$('.choosetime input:radio[name="time1"]:checked').val();
+    var t1=getDaysBefore(td),t2=end_time;
+    if (td=='mize'){
+        var s=$('#start_1').val();
+        var d=$('#end_1').val();
+        t1 =(Date.parse(new Date(s))/1000);
+        t2 =(Date.parse(new Date(d))/1000);
+    }
     var the_url='';
     if (t=='area'){
-        the_url='/facebook_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/safe_tweets_topic/?xnr_user_no='+ID_Num+'&topic='+the+'&sort_item='+
+            theSort+'&start_time='+t1+'&end_time='+t2;
     }else {
-        the_url='/facebook_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+theSort;
+        the_url='/facebook_xnr_assessment/follow_group_tweets/?xnr_user_no='+ID_Num+'&domain='+the+'&sort_item='+
+            theSort+'&start_time='+t1+'&end_time='+t2;
     }
     public_ajax.call_request('get',the_url,weiboData)
 });
@@ -481,16 +499,11 @@ function weiboData(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var name,location,txt,txt2,all='',img;
+                    var name,txt,txt2,all='',img;
                     if (row.nick_name==''||row.nick_name=='null'||row.nick_name=='unknown'){
                         name=row.uid;
                     }else {
                         name=row.nick_name;
-                    };
-                    if (row.geo==''||row.geo=='null'||row.geo=='unknown'){
-                        location='未知';
-                    }else {
-                        location=row.geo.replace(/&/g,' ');
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
                         img='/static/images/unknown.png';
@@ -506,17 +519,17 @@ function weiboData(data) {
                                 txt=row.text.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
                             var rrr=row.text;
-                            if (rrr.length>=50){
-                                rrr=rrr.substring(0,50)+'...';
+                            if (rrr.length>=160){
+                                rrr=rrr.substring(0,160)+'...';
                                 all='inline-block';
                             }else {
                                 rrr=row.text;
                                 all='none';
                             }
                             for (var f of keyword_d){
-                                rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
+                                txt2=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
-                            txt2=rrr;
+                            // txt2=rrr;
                         }else {
                             txt=row.text;
                             if (txt.length>=160){
@@ -536,7 +549,7 @@ function weiboData(data) {
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>'+
                         '           <span class="time" style="font-weight:700;color:#f6a38e;display: inline-block;margin-left:5px;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+getLocalTime(row.timestamp)+'</span> '+
                         // '           <span class="location" style="font-weight:700;color:blanchedalmond;display: inline-block;margin-left:5px;"><i class="icon icon-screenshot"></i>&nbsp;&nbsp;'+location+'</span>  '+
-                        '           <i class="mid" style="display: none;">'+row.mid+'</i>'+
+                        '           <i class="mid" style="display: none;">'+row.fid+'</i>'+
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
@@ -544,7 +557,7 @@ function weiboData(data) {
                         '           <p class="allall2" style="display:none;">'+txt2+'</p>'+
                         '           <span class="center_2" style="text-align: left;">'+txt2+'</span>'+
                         '           <div class="center_3">'+
-                        '               <span class="cen3-1" onclick="retweet(this,\'行为评估\')" title="转发"><i class="icon icon-share"></i>&nbsp;&nbsp;转发（'+row.retweeted+'）</span>'+
+                        '               <span class="cen3-1" onclick="retweet(this,\'行为评估\')" title="转发"><i class="icon icon-share"></i>&nbsp;&nbsp;分享（'+row.share+'）</span>'+
                         '               <span class="cen3-2" onclick="showInput(this)" title="评论"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论（'+row.comment+'）</span>'+
                         '               <span class="cen3-3" onclick="thumbs(this)" title="赞"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
                         '               <span class="cen3-9" onclick="robot(this)" title="机器人回复"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
