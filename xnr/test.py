@@ -498,43 +498,46 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.update(index='weibo_xnr_count',doc_type='text',body={'doc':count_info},id='WXNR0044_2017-10-01')
 
 
-count_info = {
-"comment_day_num": 2,
-"at_total_num": 5,
-"comment_total_num": 12,
-"private_total_num": 49,
-"influence": 0.58,
-"like_growth_rate": 0.14,
-"private_growth_rate": 0.03,
-"like_total_num": 12,
-"fans_total_num": 1,
-"hot_follower_num": 3,
-"business_post_num": 3,
-"at_growth_rate": 0,
-"follow_group_sensitive_info": 0.52,
-"like_day_num": 3,
-"total_post_sum": 10,
-"warning_report_total_sensitive_info": 0.23,
-"user_fansnum": 8,
-"xnr_user_no": "WXNR0044",
-"timestamp": 1507131820,
-"safe": 1.21,
-"retweet_total_num": 26,
-"fans_group_sensitive_info": 0,
-"penetration": 1.93,
-"at_day_num": 2,
-"private_day_num": 3,
-"fans_growth_rate": 0,
-"fans_day_num": 0,
-"date_time": "2017-10-06",
-"retweet_growth_rate": 0.10,
-"daily_post_num": 1,
-"feedback_total_sensitive_info": 0,
-"comment_growth_rate": 0.03,
-"self_info_sensitive_info": 0,
-"trace_follow_tweet_num": 0,
-"retweet_day_num": 4
-}
+# count_info = {
+# "comment_day_num": 2,
+# "at_total_num": 5,
+# "comment_total_num": 12,
+# "private_total_num": 49,
+# "influence": 0.58,
+# "like_growth_rate": 0.14,
+# "private_growth_rate": 0.03,
+# "like_total_num": 12,
+# "fans_total_num": 1,
+# "hot_follower_num": 3,
+# "business_post_num": 3,
+# "at_growth_rate": 0,
+# "follow_group_sensitive_info": 0.52,
+# "like_day_num": 3,
+# "total_post_sum": 10,
+# "warning_report_total_sensitive_info": 0.23,
+# "user_fansnum": 8,
+# "xnr_user_no": "WXNR0044",
+# "timestamp": 1507131820,
+# "safe": 1.21,
+# "retweet_total_num": 26,
+# "fans_group_sensitive_info": 0,
+# "penetration": 1.93,
+# "at_day_num": 2,
+# "private_day_num": 3,
+# "fans_growth_rate": 0,
+# "fans_day_num": 0,
+# "date_time": "2017-10-06",
+# "retweet_growth_rate": 0.10,
+# "daily_post_num": 1,
+# "feedback_total_sensitive_info": 0,
+# "comment_growth_rate": 0.03,
+# "self_info_sensitive_info": 0,
+# "trace_follow_tweet_num": 0,
+# "retweet_day_num": 4
+# }
 
-es.index(index='weibo_xnr_count',doc_type='text',body=count_info,id='WXNR0044_2017-10-06')
+# es.index(index='weibo_xnr_count',doc_type='text',body=count_info,id='WXNR0044_2017-10-06')
 
+get_result = es.get(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_1')['_source']
+
+es.index(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_4',body=get_result)

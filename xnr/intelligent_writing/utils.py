@@ -190,12 +190,12 @@ def get_symbol_weibo(task_source, task_id,start_ts,end_ts,unit=MinInterval):  #�
     }
     
     
-    print query_body
+    #print query_body
     symbol = es_intel.search(index=topics_river_index_name,doc_type=topics_river_index_type,body=query_body)['hits']['hits']
-    print 'symbol..',symbol
+    #print 'symbol..',symbol
     symbol = es_intel.search(index=topics_river_index_name,doc_type=topics_river_index_type,body=query_body)['hits']['hits'][0]['_source']
     #symbol = es.search(index=topics_river_index_name,doc_type=topics_river_index_type,body=query_body)['hits']['hits']
-    print 'symbol:::',symbol
+    #print 'symbol:::',symbol
     features = json.loads(symbol['features'])
     symbol_weibos = json.loads(symbol['cluster_dump_dict'])
     #print symbol_weibos
@@ -211,7 +211,7 @@ def get_symbol_weibo(task_source, task_id,start_ts,end_ts,unit=MinInterval):  #�
             if title:
                 title = title[0]
 
-                print 'title::',title.encode('utf-8')
+                #print 'title::',title.encode('utf-8')
                 if ts >= start_ts and ts <= end_ts and title not in content:  #start_ts应该改成begin_ts，现在近15分钟没数据，所以用所有的
                     try:
                         weibos[features[clusterid][0]].append(i)
@@ -367,11 +367,19 @@ def get_show_opinion_corpus_content(task_detail):
 
     task_id = task_detail['task_id']
     corpus_name = task_detail['corpus_name']
-    get_result = es.get(index=opinion_corpus_results_index_name,doc_type=opinion_corpus_results_index_type)['result']
+    
+    try:
+        get_result = es.get(index=opinion_corpus_results_index_name,doc_type=opinion_corpus_results_index_type,id=task_id)['_source']
 
-    opinion_results = get_result['corpus_results']
+    except:
+        return ""
+    opinion_results = json.loads(get_result['corpus_results'])
 
-    return opinion_results[corpus_name]
+    try:
+        print 'opinion_results[corpus_name]..',opinion_results[corpus_name]
+        return opinion_results[corpus_name]
+    except:
+        return ""
 
 
 def get_one_click_evaluation(task_detail):
