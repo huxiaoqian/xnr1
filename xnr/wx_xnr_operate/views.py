@@ -21,7 +21,7 @@ def send_msg():
         res = utils_send_msg(wxbot_id=wxbot_id, puids=group_list, msg=msg)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
 
 @mod.route('/loadgroups/')
 def load_groups():
@@ -30,7 +30,7 @@ def load_groups():
         res = utils_load_groups(wxbot_id)
         if res:
             return json.dumps(res)
-    return None 
+    return json.dumps({}) 
 
 #默认加载最近*天的数据
 @mod.route('/searchbygrouppuid/')
@@ -45,4 +45,4 @@ def search_by_group_puid():
             res = utils_search_by_group_puid(wxbot_id, group_puid, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None
+    return json.dumps({}) 
