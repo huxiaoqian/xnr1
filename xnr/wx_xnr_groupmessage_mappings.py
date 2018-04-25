@@ -34,8 +34,12 @@ def wx_group_message_mappings(index_name):
                         'type':'string',
                         'index':'not_analyzed'
                     },
-                    'speaker_wx_puid':{
+                    'speaker_wx_puid':{     #不用这个了
                         'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    "speaker_id": {         #用这个
+                        "type": "string",
                         'index':'not_analyzed'
                     },
                     'speaker_wx_nickname':{

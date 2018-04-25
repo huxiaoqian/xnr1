@@ -21,6 +21,6 @@ def show_report_content():
             res = utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({}) 
 
 

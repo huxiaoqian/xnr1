@@ -116,6 +116,7 @@ def utils_show_sensitive_users(wxbot_id, period, startdate='', enddate=''):
                         }
         except Exception,e:
             pass
+            # print e
     for speaker_id,user_data in sensitive_users.items():
         temp_groups_list = user_data['groups_list']
         user_data['groups_list'] = ','.join(list(set(temp_groups_list)))

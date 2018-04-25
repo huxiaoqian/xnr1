@@ -22,7 +22,7 @@ def search():
             res = utils_search(wxbot_id, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({})  
 
 @mod.route('/show_sensitive_users/')
 def show_sensitive_users():
@@ -35,7 +35,7 @@ def show_sensitive_users():
             res = utils_show_sensitive_users(wxbot_id, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({}) 
 
 @mod.route('/report_warning_content/')
 def report_warning_content():
@@ -48,7 +48,7 @@ def report_warning_content():
         res = utils_report_warning_content(wxbot_id, report_type, report_time, speaker_id, wx_content_info_str)
         if res:
             return json.dumps(res)
-    return None
+    return json.dumps({}) 
     
     #test
     '''

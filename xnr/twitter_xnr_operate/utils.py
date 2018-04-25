@@ -938,16 +938,17 @@ def get_show_comment(task_detail):
         start_ts = datetime2ts(SYSTEM_START_DATE)
 
     index_name_pre = twitter_feedback_comment_index_name + '_'
-    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    index_name_list = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
     results_all = []
-    try:
-        es_results = es.search(index=index_name,doc_type=twitter_feedback_comment_index_type,\
-                            body=query_body)['hits']['hits']
-        if es_results:
-            for item in es_results:
-                results_all.append(item['_source'])
-    except Exception,e:
-        print e
+    for index_name in index_name_list:
+        try:
+            es_results = es.search(index=index_name,doc_type=twitter_feedback_comment_index_type,\
+                                body=query_body)['hits']['hits']
+            if es_results:
+                for item in es_results:
+                    results_all.append(item['_source'])
+        except Exception,e:
+            print e
     return results_all
 
 def get_show_retweet(task_detail):
@@ -975,16 +976,17 @@ def get_show_retweet(task_detail):
 
     index_name_pre = twitter_feedback_retweet_index_name + '_'
 
-    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    index_name_list = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
     results_all = []
-    try:
-        es_results = es.search(index=index_name,doc_type=twitter_feedback_retweet_index_type,\
-                            body=query_body)['hits']['hits']
-        if es_results:
-            for item in es_results:
-                results_all.append(item['_source'])
-    except Exception,e:
-        print e
+    for index_name in index_name_list:
+        try:
+            es_results = es.search(index=index_name,doc_type=twitter_feedback_retweet_index_type,\
+                                body=query_body)['hits']['hits']
+            if es_results:
+                for item in es_results:
+                    results_all.append(item['_source'])
+        except Exception,e:
+            print e
     return results_all
 
 def get_show_private(task_detail):
@@ -1012,16 +1014,17 @@ def get_show_private(task_detail):
         start_ts = datetime2ts(SYSTEM_START_DATE)
 
     index_name_pre = twitter_feedback_private_index_name + '_'
-    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    index_name_list = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
     results_all = []
-    try:
-        es_results = es.search(index=index_name,doc_type=twitter_feedback_private_index_type,\
-                            body=query_body)['hits']['hits']
-        if es_results:
-            for item in es_results:
-                results_all.append(item['_source'])
-    except Exception,e:
-        print e
+    for index_name in index_name_list:
+        try:
+            es_results = es.search(index=index_name,doc_type=twitter_feedback_private_index_type,\
+                                body=query_body)['hits']['hits']
+            if es_results:
+                for item in es_results:
+                    results_all.append(item['_source'])
+        except Exception,e:
+            print e
     return results_all
 
 def get_show_at(task_detail):
@@ -1049,16 +1052,17 @@ def get_show_at(task_detail):
 
     index_name_pre = twitter_feedback_at_index_name + '_'
 
-    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    index_name_list = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
     results_all = []
-    try:
-        es_results = es.search(index=index_name,doc_type=twitter_feedback_at_index_type,\
-                            body=query_body)['hits']['hits']
-        if es_results:
-            for item in es_results:
-                results_all.append(item['_source'])
-    except Exception,e:
-        print e
+    for index_name in index_name_list:
+        try:
+            es_results = es.search(index=index_name,doc_type=twitter_feedback_at_index_type,\
+                                body=query_body)['hits']['hits']
+            if es_results:
+                for item in es_results:
+                    results_all.append(item['_source'])
+        except Exception,e:
+            print e
     return results_all
 
 def get_show_fans(task_detail):
@@ -1148,16 +1152,17 @@ def get_show_like(task_detail):
 
     index_name_pre = twitter_feedback_like_index_name + '_'
 
-    index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
+    index_name_list = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
     results_all = []
-    try:
-        es_results = es.search(index=index_name,doc_type=twitter_feedback_like_index_type,\
-                            body=query_body)['hits']['hits']
-        if es_results:
-            for item in es_results:
-                results_all.append(item['_source'])
-    except Exception,e:
-        print e
+    for index_name in index_name_list:
+        try:
+            es_results = es.search(index=index_name,doc_type=twitter_feedback_like_index_type,\
+                                body=query_body)['hits']['hits']
+            if es_results:
+                for item in es_results:
+                    results_all.append(item['_source'])
+        except Exception,e:
+            print e
     return results_all
 
 # 主动社交-直接搜索
