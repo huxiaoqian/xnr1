@@ -4,8 +4,6 @@ import time
 import os
 import json
 from collections import Counter
-from new_facebook_xnr_flow_text_mappings import new_facebook_xnr_flow_text_mappings, new_xnr_flow_text_index_name_pre,\
-                                        new_xnr_flow_text_index_type
 import sys
 sys.path.append('../')
 from global_utils import es_xnr, facebook_flow_text_index_name_pre as flow_text_index_name_pre,\
@@ -56,6 +54,8 @@ def match_flow_text(current_date):
                 uid_list.append(result['uid'])
                 xnr_user_no_list.append(result['xnr_user_no'])
 
+        # print uid_list
+        # print xnr_user_no_list
         #filter_keywords = {uid1:{mid1:{k:v, ...}...}...}
         filter_keywords = get_filter_keywords_for_match_function([flow_text_index_name], uid_list)
         for uid, content in filter_keywords.items():
@@ -73,7 +73,7 @@ def match_flow_text(current_date):
             for mid, topic_dict in mid_topic_dict.items():
                 match_item = {
                     'topic_field_first': topic_en2ch_dict[mid_topic_list[mid][0]],
-                    'topic_field': '&'.join(topic_dict),
+                    'topic_field': '&'.join(mid_topic_list[mid]),
                     'xnr_user_no': xnr_user_no_list[uid_list.index(uid)],
                 }
                 action = {'update':{'_id':mid}}
@@ -88,9 +88,15 @@ def match_flow_text(current_date):
 
 
 if __name__ == '__main__':
+    '''
     if S_TYPE == 'test':
         current_date = S_DATE
     else:
         current_time = int(time.time())
         current_date = ts2datetime(current_time)
     print match_flow_text(current_date)
+    '''
+    #2017-10-15     2017-10-25
+    for i in range(15, 26, 1):
+        date = '2017-10-' + str(i)
+        match_flow_text(current_date=date)

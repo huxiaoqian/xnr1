@@ -10,33 +10,32 @@ import json
 import heapq
 import math
 import Levenshtein
-from config import cut_by_textrank,TopkHeap,K1,B,K3, CORPUS_ANSWER_PATH
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
+from config import cut_by_textrank,TopkHeap,K1,B,K3,global_utils_route
+sys.path.append(global_utils_route)
+from global_utils import qa_corpus_index_name,qa_corpus_index_type,es_xnr
 
 def load_question_dict():#加载question语料
-
+    
+    query_body = {'query':{'match_all':{}}}
     question_dict = dict()
-    lines = []
-    count = 0
-    reader = csv.reader(file(CORPUS_ANSWER_PATH, 'rb'))
-    for line in reader:
-##        if len(line) == 1:
-##            lines.append(line)
-##            count = count + 1
-##            continue
-        
-        if count == 0:
-            question = line[0].strip('\xef\xbb\xbf')
-        else:
-            question = line[0]
-        count = count + 1
-        question = question.strip()
-        answer = line[1]
+    s_re = scan(es_xnr, query=query_body, index=qa_corpus_index_name, doc_type=qa_corpus_index_type)
+    while True:
         try:
-            question_dict[question].add(answer)
-        except KeyError:
-            question_dict[question] = set([answer])
+            scan_re = s_re.next()['_source']
+            try:
+                text = scan_re['text'].encode('utf-8')
+                answer_list = scan_re['answer_list'].encode('utf-8').split('&')
+                question_dict[text] = set(answer_list)
+                
+            except:
+                continue
+        except StopIteration:
+            break
     
     return question_dict
+
 
 def get_related_score(text,keywords,keyword_count,avr_n,total_n):#获取文本的分数
 
@@ -72,7 +71,7 @@ def rank_text_list(text_list,keywords,keyword_count,avr_n,word_set):#对text文�
 def get_text_by_BM(text_list,keywords):#根据BM检索对应的文本
 
     if len(text_list) == 0:
-        return []
+        return [],[]
 
     keyword_count = dict()
     related_text = []
@@ -95,7 +94,8 @@ def get_text_by_BM(text_list,keywords):#根据BM检索对应的文本
             total_n = total_n + len(text)
 
     avr_n = total_n/float(len(text_list))
-
+    if len(keyword_count) == 0:#语料库里面没有该问题相匹配的
+    	return [],[]
     rank_text = rank_text_list(text_list,keywords,keyword_count,avr_n,word_set)
 
     result = []
@@ -119,14 +119,14 @@ def search_answer(text):#检索问题主函数
     if len(text) == 0:
         return '',[]
     keywords = cut_by_textrank(text)
+    
     question_dict = load_question_dict()
-    
+
     key_list =  question_dict.keys()
-    
     text_list,word_dict = get_text_by_BM(key_list,keywords)
 
     if len(text_list) == 0:
-        return []
+        return '',[]
     
     n = int(0.3*len(text_list))
     if n < 1:
@@ -137,19 +137,10 @@ def search_answer(text):#检索问题主函数
         r = Levenshtein.ratio(text_list[i], text)
         result_list.Push((r,text_list[i]))
         
-##    w_n = int(0.5*len(keywords))
-##    if w_n < 1:
-##        w_n = 1
-##
-##    for i in range(0,len(word_dict)):
-##        words = word_dict[i]
-##        len_n = len(words)
-##        if len_n >= w_n:
-##            result_list.Push((len_n,text_list[i]))
 
     result = result_list.TopK()
     if len(result) == 0:
-        return []
+        return '',[]
   
     text_question = result[0][1]
     answer = question_dict[text_question]
@@ -158,7 +149,7 @@ def search_answer(text):#检索问题主函数
 
 if __name__ == '__main__':
 
-    text_question,answer = search_answer('')
+    text_question,answer = search_answer('美国警方宣布')
 
     print text_question.decode('utf-8')
     for item in answer:

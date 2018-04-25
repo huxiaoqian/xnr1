@@ -47,7 +47,7 @@ from parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIM
                     FB_PORTRAIT_UID_LIST as PORTRAIT_UID_LIST,FB_PORTRAI_UID as PORTRAI_UID,\
                     FB_FANS_TODAY as FANS_TODAY
 from time_utils import get_timeset_indexset_list
-
+from facebook_count_mappings import facebook_xnr_count_info_mappings
 
 
 
@@ -109,7 +109,8 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     top_sensitive_uid_list = []
     for user in top_sensitive_users:
         user = user['_source']
-        top_sensitive_uid_list.append(user['uid'])
+        if user.has_key('uid'):
+            top_sensitive_uid_list.append(user['uid'])
 
 
     # print 'top_sensitive_uid_list'
@@ -149,7 +150,7 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet',current_time)['sensitive_info']
     feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)['sensitive_info']
 
-    pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg
+    pene_mark = float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/(3*sensitive_value_top_avg)
     pene_mark = round(pene_mark,2)
     return pene_mark
 
@@ -237,7 +238,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
     print active_mark, topic_mark, domain_mark
 
     safe_mark = float(active_mark+topic_mark+domain_mark)/3
-    safe_mark = round(safe_mark*100,2)
+    safe_mark = round(safe_mark,2)
     return safe_mark
 
 def get_tweets_distribute(xnr_user_no, current_time):
@@ -1480,6 +1481,7 @@ def cron_compute_mark(current_time):
 
         # 存es
         try:
+            facebook_xnr_count_info_mappings()
             es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
                 id=_id,body=xnr_user_detail)
             mark = True
@@ -1492,18 +1494,17 @@ def cron_compute_mark(current_time):
 
     
 if __name__ == '__main__':
-
+    '''
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE)
     else:
         current_time = int(time.time()-DAY)
     cron_compute_mark(current_time)
 
-'''
+    '''
     #2017-10-15  2017-10-30
     for i in range(15, 26, 1):
         date = '2017-10-' + str(i)
         print 'date', date
         current_time = datetime2ts(date)
-        cron_compute_mark(current_time)
-'''
+        cron_compute_mark(current_time) 

@@ -1366,7 +1366,6 @@ def get_tweets_distribute(xnr_user_no,start_time,end_time):
             continue
 
     topic_xnr_count = Counter(topic_string)
-    print 'topic_distribute_dict:::',topic_distribute_dict
     print 'topic_xnr_count:::',topic_xnr_count
     if topic_xnr_count:
         for topic, value in topic_list_followers_count.iteritems():
@@ -1405,7 +1404,6 @@ def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
     # index_name_list = get_new_xnr_flow_text_index_list(current_time)
     index_name_list = get_new_xnr_flow_text_index_list(end_time,days_num)
 
-    
     es_results_all = []
     for index_name_day in index_name_list:
         query_body = {
@@ -1425,9 +1423,8 @@ def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
             es_results_all.extend(es_results)
 
         except Exception,e:
-            print e
+            # print e
             continue
-
     
     results_all = []
     for result in es_results_all:
@@ -1460,6 +1457,8 @@ def get_follow_group_distribute(xnr_user_no):
         followers_list_today = json.loads(followers_results)
     else:
         followers_list_today = []
+        if S_TYPE == 'test':
+        	followers_list_today = ['121625551334730']
 
     # 所有关注者领域分布
     results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
@@ -1559,11 +1558,13 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     domain_search_results = es.search(index=portrait_index_name,\
         doc_type=portrait_index_type,body=domain_query_body)['hits']['hits']
 
-    domain_uid_list = []
-
+    domain_uid_list = []	
     for domain_result in domain_search_results:
         domain_result = domain_result['_source']
         domain_uid_list.append(domain_result['uid'])
+
+    print 'domain_uid_list'
+    print domain_uid_list
 
     results_all = []
 
@@ -1574,7 +1575,7 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
             'bool':{
                 'must':[
                     {'terms':{'uid':domain_uid_list}},
-                    {'terms':{'message_type':[1,3]}}
+                    # {'terms':{'message_type':[1,3]}}
                 ]
             }
         },
@@ -1585,6 +1586,9 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     flow_text_results = es_flow_text.search(index=index_name_list,doc_type=flow_text_index_type,\
                         body=query_body_flow_text)['hits']['hits']
 
+    # print 'flow_text_results'
+    # print flow_text_results
+    
     results_all = []
     for result in flow_text_results:
         result = result['_source']

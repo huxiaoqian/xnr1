@@ -157,7 +157,7 @@ def ajax_wxnr_timing_tasks_change():
 
 
 #撤销未发送的任务
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_timing_tasks_revoked/?task_id=FXNR0005_1522641703
+#http://219.224.134.213:9209/facebook_xnr_manage/wxnr_timing_tasks_revoked/?task_id=FXNR0005_1522641703
 @mod.route('/wxnr_timing_tasks_revoked/')
 def ajax_wxnr_timing_tasks_revoked():
 	task_id=request.args.get('task_id','') 
@@ -168,7 +168,7 @@ def ajax_wxnr_timing_tasks_revoked():
 
 
 #step 4.4: list of concerns
-#http://219.224.134.213:9209/weibo_xnr_manage/wxnr_list_concerns/?user_id=WXNR0004&order_type=influence
+#http://219.224.134.213:9209/facebook_xnr_manage/wxnr_list_concerns/?user_id=WXNR0004&order_type=influence
 @mod.route('/wxnr_list_friends/')
 def ajax_wxnr_list_friends(): 
 	user_id=request.args.get('user_id','')
@@ -180,7 +180,6 @@ def ajax_wxnr_list_friends():
 
 
 
-"""
 
 #step 4.3: history information
 #step 4.3.1:show history posting
@@ -244,11 +243,11 @@ def ajax_show_like_content():
 ############暂无公共函数可调用#########
 
 #查看对话
-#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_dialog/?mid=4142135114307228
+#http://219.224.134.213:9209/weibo_xnr_manage/show_comment_dialog/?fid=4142135114307228
 @mod.route('/show_comment_dialog/')
 def ajax_show_comment_dialog():
-	mid=request.args.get('mid','')
-	results=show_comment_dialog(mid)
+	fid=request.args.get('fid','')
+	results=show_comment_dialog(fid)
 	return json.dumps(results)
 
 #回复
@@ -295,4 +294,3 @@ def ajax_lookup_detail_weibouser():
 def ajax_delete_receive_like():
 	results=delete_receive_like()
 	return json.dumps(results)
-"""

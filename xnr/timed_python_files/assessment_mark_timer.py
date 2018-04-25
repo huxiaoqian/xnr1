@@ -19,6 +19,7 @@ from global_utils import es_flow_text,es_user_portrait,es_user_profile,weibo_fee
                         flow_text_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                         flow_text_index_name_pre,\
                         weibo_feedback_private_index_name_pre,weibo_feedback_private_index_type,\
+                        weibo_report_management_index_name,\
                         weibo_report_management_index_name_pre,weibo_report_management_index_type,\
                         portrait_index_name,portrait_index_type,\
                         weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
@@ -60,7 +61,7 @@ def compute_influence_num(xnr_user_no,current_time_old):
         bci_max = es_user_portrait.search(index=index_name,doc_type=weibo_bci_index_type,body=\
             {'query':{'match_all':{}},'sort':{'user_index':{'order':'desc'}}})['hits']['hits'][0]['_source']['user_index']
 
-        influence = float(bci_xnr)/bci_max*100
+        influence = float(bci_xnr)/bci_max
         influence = round(influence,2)  # 保留两位小数
     except:
         influence = 0
@@ -134,12 +135,13 @@ def compute_penetration_num(xnr_user_no,current_time_old):
         current_time = current_time_old
         current_date = ts2datetime(current_time)
         timestamp = datetime2ts(current_date)
+        print 'get_pene_feedback_sensitive....current_date...', current_date
 
     feedback_mark_at = get_pene_feedback_sensitive(xnr_user_no,'be_at',current_time)['sensitive_info']
     feedback_mark_retweet = get_pene_feedback_sensitive(xnr_user_no,'be_retweet',current_time)['sensitive_info']
     feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)['sensitive_info']
     
-    pene_mark = 100 * float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/sensitive_value_top_avg
+    pene_mark = float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/(3*sensitive_value_top_avg)
     pene_mark = round(pene_mark,2)
 
     return pene_mark
@@ -223,7 +225,7 @@ def compute_safe_num(xnr_user_no,current_time_old):
     domain_mark = domain_distribute_dict['mark']
 
     safe_mark = float(active_mark+topic_mark+domain_mark)/3
-    safe_mark = round(safe_mark*100,2)
+    safe_mark = round(safe_mark,2)
     return safe_mark
 
 def get_tweets_distribute(xnr_user_no):
@@ -527,6 +529,7 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     #     mark=xnr_user_detail
     # except:
     #     mark=dict()
+    print 'xnr_user_detail...count....', xnr_user_detail
     return xnr_user_detail
 
 ## 影响力评估各指标
@@ -1179,11 +1182,11 @@ def get_pene_feedback_sensitive(xnr_user_no,sort_item,current_time_old):
     
     uid = xnr_user_no2uid(xnr_user_no)
 
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE) #current_time_old
-    else:
-        current_time = current_time_old
-
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE) #current_time_old
+    # else:
+    #     current_time = current_time_old
+    current_time = current_time_old
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
     
@@ -1235,11 +1238,11 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 
     report_type_list = [u'人物',u'事件',u'言论']
     
-    if S_TYPE == 'test':
-        current_time = datetime2ts(S_DATE)
-    else:
-        current_time = current_time_old
-
+    # if S_TYPE == 'test':
+    #     current_time = datetime2ts(S_DATE)
+    # else:
+    #     current_time = current_time_old
+    current_time = current_time_old
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
@@ -1264,9 +1267,12 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
             'size':MAX_SEARCH_SIZE
             
         }
+        
         weibo_report_management_index_name = weibo_report_management_index_name_pre + current_date
+        
         es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
             body=query_body)['hits']['hits']
+
 
         if es_sensitive_result:    
             if report_type == u'事件':
@@ -1516,8 +1522,8 @@ if __name__ == '__main__':
 
 
     current_time=int(time.time()-DAY)
-    # current_time_now = int(time.time())
-    # for i in range(11,-1,-1):
+    # current_time_now = int(datetime2ts('2017-10-07'))
+    # for i in range(5,-1,-1):
 
     #     current_time = current_time_now - i*24*3600
     #     print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
