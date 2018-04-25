@@ -12,7 +12,8 @@ from global_utils import es_xnr as es,twitter_feedback_comment_index_name_pre,tw
                         twitter_feedback_at_index_name_pre,twitter_feedback_at_index_type,\
                         twitter_feedback_like_index_name_pre,twitter_feedback_like_index_type,\
                         twitter_feedback_fans_index_name,twitter_feedback_fans_index_type,\
-                        twitter_feedback_follow_index_name, twitter_feedback_follow_index_type
+                        twitter_feedback_follow_index_name, twitter_feedback_follow_index_type,\
+                        tw_xnr_flow_text_index_name_pre, tw_xnr_flow_text_index_type
 from time_utils import ts2datetime, datetime2ts
 from twitter_feedback_mappings_timer import twitter_feedback_like_mappings, twitter_feedback_retweet_mappings,\
                                             twitter_feedback_at_mappings, twitter_feedback_comment_mappings,\
@@ -20,11 +21,13 @@ from twitter_feedback_mappings_timer import twitter_feedback_like_mappings, twit
                                             twitter_feedback_follow_mappings
 sys.path.append('../facebook/sensitive')
 from get_sensitive import get_sensitive_info, get_sensitive_user
+from tw_xnr_flow_text_mappings import tw_xnr_flow_text_mappings
 
 
 root_uid = '747226658457927680'
 root_nick_name = u'韩梦成'
 root_user_name = 'feifanhanmc1'
+xnr_user_no = 'TXNR0003'
 
 def random_uid():
     return random.choice(["864789252629909504", "845341840618536960"])  
@@ -256,6 +259,54 @@ def sensitive_func(index_name, ts):
     if bulk_action:
         print es.bulk(bulk_action,index=index_name,doc_type='text',timeout=600)
 
+
+def daily_post():
+    data = {
+        'task_source': 'daily_post',
+        'message_type': 1,
+    }
+    return data
+
+def business_post():
+    data = {
+        'task_source': 'business_post',
+        'message_type': 2,
+    }
+    return data
+
+def host_post():
+    data = {
+        'task_source': 'host_post',
+        'message_type': 2,
+    }
+    return data
+
+def trace_follow_tweet():
+    data = {
+        'task_source': 'trace_follow_tweet',
+        'message_type': 3,
+    }
+    return data
+    
+def xnr_flow_text(date):
+    if date < '2017-10-18':
+        user_fansnum = 3
+    else:
+        user_fansnum = 5
+    index_name = tw_xnr_flow_text_index_name_pre + date
+    tw_xnr_flow_text_mappings(index_name)
+    for post in [daily_post, business_post, host_post, trace_follow_tweet]:
+        for i in range(random.randint(2,5)):
+            data = post()
+            _id = xnr_user_no + '_' + str(load_timestamp(date))
+            data['uid'] = root_uid
+            data['xnr_user_no'] = xnr_user_no
+            data['tid'] = ''
+            data['text'] = random_text()
+            data['user_fansnum'] = user_fansnum
+            print es.index(index=index_name, doc_type=tw_xnr_flow_text_index_type, body=data, id=_id)
+
+
 if __name__ == '__main__':
     '''
     #2017-10-15     2017-10-30
@@ -271,6 +322,9 @@ if __name__ == '__main__':
             fans(date)
             follow(date)
     '''
+
+
+    '''
     #update
     #2017-10-15     2017-10-30
     bulk_action = []
@@ -282,5 +336,12 @@ if __name__ == '__main__':
             sensitive_func(index_name, ts)
         sensitive_func('twitter_feedback_follow', ts)
         sensitive_func('twitter_feedback_fans', ts)
+    '''
 
+    #xnr_flow_text_
+    #2017-10-15     2017-10-30
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        xnr_flow_text(date)
+    
 

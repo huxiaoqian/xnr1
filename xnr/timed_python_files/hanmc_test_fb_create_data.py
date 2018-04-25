@@ -13,17 +13,21 @@ from global_utils import facebook_feedback_comment_index_name_pre,facebook_feedb
                         facebook_feedback_at_index_name_pre,facebook_feedback_at_index_type,\
                         facebook_feedback_like_index_name_pre,facebook_feedback_like_index_type,\
                         facebook_feedback_friends_index_name_pre,facebook_feedback_friends_index_type,\
-                        facebook_feedback_friends_index_name
+                        facebook_feedback_friends_index_name,fb_xnr_flow_text_index_name_pre,\
+                        fb_xnr_flow_text_index_type
 from time_utils import ts2datetime, datetime2ts
 from facebook_feedback_mappings_timer import facebook_feedback_like_mappings, facebook_feedback_retweet_mappings,\
                                             facebook_feedback_at_mappings, facebook_feedback_comment_mappings,\
                                             facebook_feedback_private_mappings, facebook_feedback_friends_mappings
 sys.path.append('../facebook/sensitive')
 from get_sensitive import get_sensitive_info, get_sensitive_user
+from fb_xnr_flow_text_mappings import fb_xnr_flow_text_mappings
+
 
 
 root_uid = '100018797745111'
 root_nick_name = u'韩梦成'
+xnr_user_no = 'FXNR0005'
 
 def random_uid():
     return random.choice(["100023849442394", "100023545574584"])  
@@ -33,9 +37,9 @@ def load_timestamp(date):
 
 def random_text():
     #普通版
-    # return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜","达赖","达赖太阳花"])
+    return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜","达赖","达赖太阳花"])
     #敏感版  
-    return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
+    # return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
 
 def random_mid():
     return random.choice(["4161285573158974", "4161391865302116", "4161391957367337"])  
@@ -220,6 +224,54 @@ def sensitive_func(index_name, ts):
     if bulk_action:
         print es.bulk(bulk_action,index=index_name,doc_type='text',timeout=600)
 
+def daily_post():
+    data = {
+        'task_source': 'daily_post',
+        'message_type': 1,
+    }
+    return data
+
+def business_post():
+    data = {
+        'task_source': 'business_post',
+        'message_type': 2,
+    }
+    return data
+
+def host_post():
+    data = {
+        'task_source': 'host_post',
+        'message_type': 2,
+    }
+    return data
+
+def trace_follow_tweet():
+    data = {
+        'task_source': 'trace_follow_tweet',
+        'message_type': 3,
+    }
+    return data
+    
+def xnr_flow_text(date):
+    if date < '2017-10-18':
+        user_friendsnum = 3
+    else:
+        user_friendsnum = 5
+    index_name = fb_xnr_flow_text_index_name_pre + date
+    fb_xnr_flow_text_mappings(index_name)
+    for post in [daily_post, business_post, host_post, trace_follow_tweet]:
+        for i in range(random.randint(2,5)):
+            data = post()
+            _id = xnr_user_no + '_' + str(load_timestamp(date))
+            data['uid'] = root_uid
+            data['xnr_user_no'] = xnr_user_no
+            data['fid'] = ''
+            data['text'] = random_text()
+            data['user_friendsnum'] = user_friendsnum
+            print es.index(index=index_name, doc_type=fb_xnr_flow_text_index_type, body=data, id=_id)
+
+
+
 if __name__ == '__main__':
     '''
     #create
@@ -236,9 +288,10 @@ if __name__ == '__main__':
             friends(date)
     
     '''
+
+    '''
     #update
     #2017-10-15     2017-10-30
-    
     bulk_action = []
     for i in range(15, 31, 1):
         date = '2017-10-' + str(i)
@@ -247,6 +300,14 @@ if __name__ == '__main__':
             index_name = index_name_pre + date
             sensitive_func(index_name, ts)
         sensitive_func('facebook_feedback_friends', ts)
+
+    '''
+
+    #xnr_flow_text_
+    #2017-10-15     2017-10-30
+    for i in range(15, 31, 1):
+        date = '2017-10-' + str(i)
+        xnr_flow_text(date)
     
         
 
