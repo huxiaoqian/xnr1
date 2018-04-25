@@ -240,7 +240,8 @@ function joinPolice(_this,type) {
 //加入语料库
 var wordUid,wordMid,wordTime;
 function joinlab(_this) {
-    wordMid = $(_this).parents('.center_rel').find('.mid').text();
+    wordMid = ($(_this).parents('.center_rel').find('.mid').text()||$(_this).parents('.center_rel').find('.fid').text()||
+        $(_this).parents('.center_rel').find('.tid').text());
     wordUid = $(_this).parents('.center_rel').find('.uid').text();
     wordTime = $(_this).parents('.center_rel').find('.timestamp').text();
     $('#wordcloud').modal('show');
@@ -259,7 +260,7 @@ function joinWord() {
     }else if(ft=='(FaceBook)'){
         first_url='/facebook_xnr_monitor/addto_facebook_corpus/';mftID='fid';
     }else if(ft=='(twitter)'){
-        first_url='/twitter_xnr_monitor/addto_facebook_corpus/';mftID='tid';
+        first_url='/twitter_xnr_monitor/addto_twitter_corpus/';mftID='tid';
     }
     var corpus_url= first_url+'?xnr_user_no='+ID_Num +
         '&corpus_type='+corpus_type+'&theme_daily_name='+theme_daily_name.join(',')+

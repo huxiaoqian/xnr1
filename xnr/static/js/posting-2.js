@@ -445,8 +445,8 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
     var viewThis_url;
     if (tableView=='view-5'){
         viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
-        // public_ajax.call_request('get',viewThis_url,intelligentCorpus);
-        // return false;
+        public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        return false;
     }else {
         var view_type=$(this).attr('view-type');
         viewThis_url='/intelligent_writing/opinions_all/?task_id='+task_id+'&intel_type='+view_type;
@@ -458,9 +458,9 @@ var viewButton={};
 function viewData(data) {
     if ('subopinion_tweets' in data){
         if (isEmptyObject(JSON.parse(data['subopinion_tweets']))){
-            $(boxView).html('<center>暂无内容</center>');
+            $(boxView).html('<center>暂无内容</center>');return false;
         }
-        return false;
+
     }else if (isEmptyObject(data)){
         $(boxView).html('<center>暂无内容</center>');
         return false;

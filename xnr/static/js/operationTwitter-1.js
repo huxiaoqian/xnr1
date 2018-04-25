@@ -21,7 +21,7 @@ $('.choosetime .demo-label input').on('click',function () {
                 _start=getDaysBefore(_val);
                 his_timing_task_url='/twitter_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+_start+'&end_time='+end_time;
             }
-        }else if (mid=='new_show_history_posting'){
+        }else if (mid=='show_history_posting'){
             var conTP=[];
             $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
                 conTP.push($(this).val());
@@ -60,7 +60,7 @@ $('.sureTime').on('click',function () {
         var his_timing_task_url='/twitter_xnr_manage/'+mid+'/?xnr_user_no='+ID_Num+'&start_time='+(Date.parse(new Date(s))/1000)+
             '&end_time='+(Date.parse(new Date(d))/1000);
         if (mid=='show_history_count'){his_timing_task_url+='&type='};
-        if (mid=='new_show_history_posting'){
+        if (mid=='show_history_posting'){
             var conTP=[];
             $(".li-3 .news #content .tab-pane.active input:checkbox:checked").each(function (index,item) {
                 conTP.push($(this).val());
@@ -614,7 +614,7 @@ function successfail(data) {
     $('#successfail').modal('show');
 }
 //------历史消息type分页-------
-var typeDown='new_show_history_posting',boxShoes='historyCenter',MID='message_type';
+var typeDown='show_history_posting',boxShoes='historyCenter',MID='message_type';
 $('#container .rightWindow .news #myTabs li').on('click',function () {
     boxShoes=$(this).attr('box');
     htp=[];
@@ -683,7 +683,7 @@ $('#container .rightWindow .oli .news #content input').on('click',function () {
     }
     public_ajax.call_request('get',againHistoryNews_url,historyNews);
 })
-var historyNews_url='/twitter_xnr_manage/new_show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
+var historyNews_url='/twitter_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&message_type=1'+
     '&start_time='+todayTimetamp()+'&end_time='+end_time;
 // var historyNews_url='/twitter_xnr_manage/show_history_posting/?xnr_user_no='+ID_Num+'&task_source=daily_post'+
 //     '&start_time='+todayTimetamp()+'&end_time='+end_time;
@@ -736,7 +736,7 @@ function historyNews(data) {
                     }else {
                         time=getLocalTime(row.timestamp);
                     };
-                    f (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
+                    if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'||!row.photo_url||!row.picture_url||
                         row.picture_url==''||row.picture_url=='null'||row.picture_url=='unknown'){
                         img='/static/images/unknown.png';
                     }else {

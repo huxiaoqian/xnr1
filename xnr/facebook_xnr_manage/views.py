@@ -12,7 +12,7 @@ from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get
 					 show_history_count, lookup_xnr_assess_info
 
 from utils import show_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
-                  wxnr_list_friends
+                  wxnr_list_friends,show_history_posting,show_at_content,show_comment_content,show_like_content
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
@@ -96,9 +96,9 @@ def ajax_show_history_count():
 	return json.dumps(results)
 
 
-'''
+
 #今日提醒
-#http://219.224.134.213:9209/facebook_xnr_manage/xnr_today_remind/?xnr_user_no=FXNR0004
+#http://219.224.134.213:9209/facebook_xnr_manage/xnr_today_remind/?xnr_user_no=FXNR0005
 @mod.route('/xnr_today_remind/')
 def ajax_xnr_today_remind():
 	now_time=int(time.time())
@@ -108,13 +108,13 @@ def ajax_xnr_today_remind():
 
 #继续创建和修改虚拟人——跳转至目标定制第二步，传送目前已有的信息至前端
 #input:xnr_user_no
-#http://219.224.134.213:9209/weibo_xnr_manage/change_continue_xnrinfo/?xnr_user_no=WXNR0003
+#http://219.224.134.213:9209/facebook_xnr_manage/change_continue_xnrinfo/?xnr_user_no=FXNR0005
 @mod.route('/change_continue_xnrinfo/')
 def ajax_change_continue_xnrinfo():
 	xnr_user_no=request.args.get('xnr_user_no','')
 	results=change_continue_xnrinfo(xnr_user_no)
 	return json.dumps(results)
-'''
+
 
 
 ############################by qxk
@@ -188,8 +188,8 @@ def ajax_wxnr_list_friends():
 def ajax_show_history_posting():
 	require_detail=dict()
 	require_detail['xnr_user_no']=request.args.get('xnr_user_no','')
-	# daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
-	require_detail['task_source']=request.args.get('task_source','').split(',')
+	# message_type:1 原创，2评论，3转发
+	require_detail['message_type']=request.args.get('message_type','').split(',') 
 	#require_detail['now_time']=int(time.time())    
 	require_detail['start_time']=int(request.args.get('start_time',''))
 	require_detail['end_time']=int(request.args.get('end_time',''))
