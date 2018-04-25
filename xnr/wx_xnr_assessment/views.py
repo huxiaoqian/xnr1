@@ -23,7 +23,7 @@ def get_influence():
             res = utils_get_influence(wxbot_id, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({}) 
 
 #渗透力，默认加载最近7天的数据
 @mod.route('/penetration/')
@@ -37,7 +37,7 @@ def get_penetration():
             res = utils_get_penetration(wxbot_id, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({}) 
 
 #安全性，默认加载最近7天的数据
 @mod.route('/safe/')
@@ -51,4 +51,4 @@ def get_safe():
             res = utils_get_safe(wxbot_id, period, startdate, enddate)
             if res:
                 return json.dumps(res)
-    return None 
+    return json.dumps({}) 

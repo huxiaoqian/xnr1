@@ -45,7 +45,15 @@ def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
         wx_report_management_mappings()
         es_result = es_xnr.search(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, body=query_body)['hits']['hits']
         if es_result:
-            result = [item['_source'] for item in es_result]
+        #     result = [item['_source'] for item in es_result]
+
+            for item in es_result:
+                data = item['_source']
+                report_content = item['_source']['report_content']
+                data['sensitive_value'] = report_content['sensitive_value']
+                data['sensitive_words_string'] = report_content['sensitive_words_string']
+                data.pop('report_content')
+            result.append(data)    
     except Exception,e:
         print e
     return result
