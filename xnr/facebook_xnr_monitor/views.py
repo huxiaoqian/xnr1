@@ -64,5 +64,6 @@ def ajax_addto_facebook_corpus():
     task_detail['create_type']=request.args.get('create_type','')
     task_detail['xnr_user_no']=request.args.get('xnr_user_no','')
     task_detail['create_time']=int(time.time())
+    print 'fid::',task_detail['fid']
     results=addto_facebook_corpus(task_detail)
     return json.dumps(results)

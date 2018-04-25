@@ -1,7 +1,37 @@
 // 预警详情 页js
+var time2=Date.parse(new Date())/1000;//1480176000
 var communityDetails_url='/weibo_xnr_community/get_community_warning/?xnr_user_no='+ID_Num+
-    '&community_id='+communityId+'&start_time=1521728241&end_time=1522333041';
+    '&community_id='+communityId+'&start_time='+getDaysBefore(7)+'&end_time='+time2;
 public_ajax.call_request('GET',communityDetails_url,communityDetailsFun);
+//=======时间选择=====
+$('.choosetime .demo-label input').on('click',function () {
+    var _val = $(this).val();
+    if (_val == 'mize') {
+        $(this).parents('.choosetime').find('#start').show();
+        $(this).parents('.choosetime').find('#end').show();
+        $(this).parents('.choosetime').find('#sure').css({display: 'inline-block'});
+    } else {
+        $(this).parents('.choosetime').find('#start').hide();
+        $(this).parents('.choosetime').find('#end').hide();
+        $(this).parents('.choosetime').find('#sure').hide();
+        var weiboUrl='/weibo_xnr_community/get_community_warning/?xnr_user_no='+ID_Num+
+            '&community_id='+communityId+'&start_time='+getDaysBefore(_val)+'&end_time='+time2;
+        public_ajax.call_request('GET',communityDetails_url,communityDetailsFun);
+    }
+});
+$('#sure').on('click',function () {
+    var s=$(this).parents('.choosetime').find('#start').val();
+    var d=$(this).parents('.choosetime').find('#end').val();
+    if (s==''||d==''){
+        $('#pormpt p').text('时间不能为空。');
+        $('#pormpt').modal('show');
+    }else {
+        var weiboUrl='/weibo_xnr_community/get_community_warning/?xnr_user_no='+ID_Num+'&community_id='+communityId+
+            '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+        public_ajax.call_request('GET',communityDetails_url,communityDetailsFun);
+    }
+});
+//==================
 var time;
 function communityDetailsFun(data) {
     $('.det1').text(data.community_name);
@@ -39,7 +69,7 @@ function chartNum(tit,ID,peopleData,flag){
         $('#'+ID).html('<h4 style="width:100%;text-align:center;margin-top:140px;">人数变化图暂无数据</h4>');
         return false;
     }
-    var myChart = echarts.init(document.getElementById(ID),'chalk');
+    var myChart = echarts.init(document.getElementById(ID),'dark');
     var option = {
         backgroundColor:'transparent',
         title: {

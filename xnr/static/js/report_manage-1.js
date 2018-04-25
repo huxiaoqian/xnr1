@@ -14,7 +14,7 @@ if(flagType == 1){//微博
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 3){
     weiboORqq('WX');
-    reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+    reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=0';
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if (flagType == 4){
     beginUrl='facebook_xnr_report_manage';
@@ -445,7 +445,7 @@ $('.choosetime .demo-label input').on('click',function () {
             weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
                 '&report_type='+valCH.join(',')+'&start_ts='+getDaysBefore(_val)+'&end_ts='+time2;
         }else if(flagType==3){
-            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
             public_ajax.call_request('get',newReport_url,WXreportDefaul);
             return false;
         }
@@ -474,7 +474,7 @@ $('#sure').on('click',function () {
                 '&report_type='+valCH.join(',')+'&start_ts='+(Date.parse(new Date(s))/1000)+
                 '&end_ts='+(Date.parse(new Date(d))/1000);
         }else if(flagType==3){
-            weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+            weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
             public_ajax.call_request('get',weiboUrl,WXreportDefaul);
             return false;
         }

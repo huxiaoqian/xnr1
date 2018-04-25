@@ -741,7 +741,7 @@ def show_history_posting(require_detail):
 
 
     xnr_user_no=require_detail['xnr_user_no']   
-    task_source=require_detail['task_source']
+    message_type=require_detail['message_type']
     try:
         es_result=es_xnr.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
         uid=es_result['uid']
@@ -767,7 +767,7 @@ def show_history_posting(require_detail):
                     'bool':{
                         'must':[
                             {'term':{'uid':uid}},
-                            {'terms':{'task_source':task_source}}
+                            {'terms':{'message_type':message_type}}
                         ]
                     }                   
                 }
@@ -1248,11 +1248,11 @@ def wxnr_list_concerns(user_id,order_type):
 
                 user_dict['photo_url']=item['_source']['photo_url']            
                 user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
+                # user_dict['sex']=item['_source']['sex']
                 #user_dict['user_birth']=item['_source']['user_birth']
                 #user_dict['create_at']=item['_source']['create_at']
                 user_dict['follow_source']=item['_source']['follow_source']  #微博推荐
-                #user_dict['user_location']=item['_source']['user_location']
+                user_dict['user_location']=item['_source']['location']
                 xnr_followers_result.append(user_dict)
             else:
                 pass

@@ -177,6 +177,7 @@ function safe_7day(data) {
         $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
         return false;
     }else {
+        $('#near_7_day').height('300px')
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
             nearData.push(item['safe'][0]);

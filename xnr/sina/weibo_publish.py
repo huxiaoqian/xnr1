@@ -19,10 +19,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 from BeautifulSoup import BeautifulSoup
 import random
 from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 display = Display(visible=0, size=(1024,768))
 display.start()
-driver = webdriver.Firefox()
+
+cap = DesiredCapabilities().FIREFOX
+cap["marionette"] = False
+driver = webdriver.Firefox(capabilities=cap)
 #driver = webdriver.Chrome()
 
 source_list = [
