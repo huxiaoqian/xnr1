@@ -92,7 +92,7 @@ function weibo(data){
                     '                <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                     '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
-                    '            <div class="centerdetails" style="padding-left:40px;">'+
+                    '            <div class="centerdetails">'+
                     '                <div class="event-1">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
                     '                    <div class="mainJoin">'+
@@ -158,7 +158,7 @@ function weibo(data){
                         '                <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                         '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                         '            </div>'+
-                        '            <div class="centerdetails" style="padding-left:40px;">'+
+                        '            <div class="centerdetails">'+
                         '                <div class="event-1">'+
                         '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
                         '                    <div class="mainJoin">'+
@@ -231,7 +231,7 @@ function weibo(data){
                     '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
-                    '            <div class="centerdetails" style="padding-left:40px;">'+
+                    '            <div class="centerdetails">'+
                     '                <div class="event-1">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
                     '                    <div class="mainJoin">'+
@@ -294,7 +294,7 @@ function weibo(data){
                     '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                     '            </div>'+
-                    '            <div class="centerdetails" style="padding-left:40px;">'+
+                    '            <div class="centerdetails">'+
                     '                <div class="event-1">'+
                     '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
                     '                    <div class="mainJoin">'+
@@ -364,7 +364,7 @@ function weibo(data){
                 '                <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                 '                <a class="report" onclick="oneUP(this,\'事件\')" style="margin-left: 50px;"><i class="icon icon-upload-alt"></i>  上报</a>'+
                 '            </div>'+
-                '            <div class="centerdetails" style="padding-left:40px;">'+
+                '            <div class="centerdetails">'+
                 '                <div class="event-1">'+
                 '                    <p style="font-size: 16px;color:#01b4ff;"><i class="icon icon-bookmark"></i> 主要参与用户</p>'+
                 '                    <div class="mainJoin">'+

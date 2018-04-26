@@ -482,7 +482,12 @@
             for (var h of at){
                 $(".other_basic input[type='checkbox'][value='"+h+"']").attr("checked",true);
             }
-            var postNUM=JSON.parse(basicData.day_post_average);
+            var postNUM;
+            try{
+            	postNUM=JSON.parse(basicData.day_post_average);
+            }catch(e){
+            	postNUM=eval(basicData.day_post_average);
+            }
             var $px=postNUM[0]+'-'+postNUM[1];
             if (postNUM[0]>5){
                 $('.customize').hide();

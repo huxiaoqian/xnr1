@@ -316,7 +316,7 @@ $('#z-1 .interval-1 input').on('click',function () {
 })
 function river(data) {
     if (isEmptyObject(data)){
-        $('#eventRiver-1').html('<center>暂无内容</center>');
+        $('#eventRiver-1').html('<center style="margin-top:20px;">暂无内容</center>');
     }else {
         var lenged=[],seriesData=[];
         for (var k in data){
@@ -402,7 +402,7 @@ $('#z-1 .interval-2 input').on('click',function () {
 });
 function timeEvent(data) {
     if (isEmptyObject(data)){
-        $('#eventSurvey .VivaTimeline').html('<center>暂无内容</center>');
+        $('#eventSurvey .VivaTimeline').html('<center style="margin-top:20px;">暂无内容</center>');
     }else{
         var str='<dl>',kIndex=0;
         for(var h in data){
@@ -458,11 +458,11 @@ var viewButton={};
 function viewData(data) {
     if ('subopinion_tweets' in data){
         if (isEmptyObject(JSON.parse(data['subopinion_tweets']))){
-            $(boxView).html('<center>暂无内容</center>');return false;
+            $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');return false;
         }
 
     }else if (isEmptyObject(data)){
-        $(boxView).html('<center>暂无内容</center>');
+        $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');
         return false;
     }
     var viewAllData;
@@ -499,16 +499,16 @@ function viewData(data) {
     $(boxView+' .view-1-button').html(butAry);
 }
 //
-$('.sureAddCorpus').on('click',function () {
-    var _val=$('.corpusVal').val();
-    if (_val){
-        var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
-        public_ajax.call_request('get',kus_url,addpostYES);
-    }else {
-        $('#pormpt p').text('请输入观点语料库名称，不能为空。');
-        $('#pormpt').modal('show');
-    }
-});
+// $('.sureAddCorpus').on('click',function () {
+//     var _val=$('.corpusVal').val();
+//     if (_val){
+//         var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
+//         public_ajax.call_request('get',kus_url,addpostYES);
+//     }else {
+//         $('#pormpt p').text('请输入观点语料库名称，不能为空。');
+//         $('#pormpt').modal('show');
+//     }
+// });
 function addpostYES(data) {
     var f='操作失败';
     if (data[0]||data){
@@ -556,7 +556,7 @@ function z_Content(_this) {
     $(_this).addClass('active');
     if (ThisData in viewButton){
         if (isEmptyObject(viewButton[ThisData])){
-            $(boxView+' .'+tableView).html('<center>暂无内容</center>');
+            $(boxView+' .'+tableView).html('<center style="margin-top:20px;">暂无内容</center>');
             return false;
         }else {
             thisButton_Content(viewButton[ThisData]);

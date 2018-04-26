@@ -251,6 +251,16 @@ function view(data) {
 
     });
 };
+$('.sureAddCorpus').on('click',function () {
+    var _val=$('.corpusVal').val();
+    if (_val){
+        var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
+        public_ajax.call_request('get',kus_url,sucfail);
+    }else {
+        $('#pormpt p').text('请输入观点语料库名称，不能为空。');
+        $('#pormpt').modal('show');
+    }
+});
 //=====编辑=====
 var id,corpus_type,mod_type,modNUM,_val_;
 function modify(_id,corpusType,create_type,theme_daily_name,num) {
@@ -288,7 +298,7 @@ function del(_id,num) {
 }
 function sucfail(data) {
     var f='';
-    if (data){
+    if (data||data[0]){
         f='操作成功';
         if (nowNUM||modNUM){
             var nowurl='',fun='';
