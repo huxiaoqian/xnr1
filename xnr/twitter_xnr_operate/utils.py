@@ -948,7 +948,8 @@ def get_show_comment(task_detail):
                 for item in es_results:
                     results_all.append(item['_source'])
         except Exception,e:
-            print e
+            # print e
+            pass
     return results_all
 
 def get_show_retweet(task_detail):
@@ -986,7 +987,8 @@ def get_show_retweet(task_detail):
                 for item in es_results:
                     results_all.append(item['_source'])
         except Exception,e:
-            print e
+            # print e
+            pass
     return results_all
 
 def get_show_private(task_detail):
@@ -1024,7 +1026,8 @@ def get_show_private(task_detail):
                 for item in es_results:
                     results_all.append(item['_source'])
         except Exception,e:
-            print e
+            # print e
+            pass
     return results_all
 
 def get_show_at(task_detail):
@@ -1062,7 +1065,8 @@ def get_show_at(task_detail):
                 for item in es_results:
                     results_all.append(item['_source'])
         except Exception,e:
-            print e
+            # print e
+            pass
     return results_all
 
 def get_show_fans(task_detail):
@@ -1078,22 +1082,28 @@ def get_show_fans(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    # {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
                 ]
             }
         },
-        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        # 'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'sort':[{sort_item:{'order':'desc'}},{'update_time':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
+    uid_list = []
     results_all = []
     try:
         es_results = es.search(index=twitter_feedback_fans_index_name,doc_type=twitter_feedback_fans_index_type,\
                             body=query_body)['hits']['hits']
         if es_results:
             for item in es_results:
-                results_all.append(item['_source'])
+                uid = item['_source']['uid']
+                if not uid in uid_list:
+                    uid_list.append(uid)
+                    results_all.append(item['_source'])
     except Exception,e:
-        print e
+        # print e
+        pass
     return results_all
 
 def get_show_follow(task_detail):
@@ -1109,22 +1119,28 @@ def get_show_follow(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    # {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
                 ]
             }
         },
-        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        # 'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'sort':[{sort_item:{'order':'desc'}},{'update_time':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
     results_all = []
+    uid_list = []
     try:
         es_results = es.search(index=twitter_feedback_follow_index_name,doc_type=twitter_feedback_follow_index_type,\
                             body=query_body)['hits']['hits']
         if es_results:
             for item in es_results:
-                results_all.append(item['_source'])
+                uid = item['_source']['uid']
+                if not uid in uid_list:
+                    uid_list.append(uid)
+                    results_all.append(item['_source'])
     except Exception,e:
-        print e
+        # print e
+        pass
     return results_all
     
 def get_show_like(task_detail):
@@ -1162,7 +1178,8 @@ def get_show_like(task_detail):
                 for item in es_results:
                     results_all.append(item['_source'])
         except Exception,e:
-            print e
+            # print e
+            pass
     return results_all
 
 # 主动社交-直接搜索

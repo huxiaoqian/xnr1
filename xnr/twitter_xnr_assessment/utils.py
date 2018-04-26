@@ -32,7 +32,9 @@ from xnr.global_utils import twitter_feedback_comment_index_name,twitter_feedbac
                         twitter_xnr_count_info_index_name,twitter_xnr_count_info_index_type,\
                         tw_xnr_flow_text_index_name_pre as xnr_flow_text_index_name_pre,\
                         twitter_feedback_at_index_name_pre, twitter_feedback_retweet_index_name_pre,\
-                        twitter_feedback_comment_index_name_pre
+                        twitter_feedback_comment_index_name_pre,\
+                        new_tw_xnr_flow_text_index_type as new_xnr_flow_text_index_type
+
 from xnr.time_utils import ts2datetime,datetime2ts,tw_get_flow_text_index_list as get_flow_text_index_list,\
                         get_tw_xnr_flow_text_index_list as get_xnr_flow_text_index_list,\
                         get_new_tw_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list
@@ -1255,7 +1257,7 @@ def get_tweets_distribute(xnr_user_no,start_time,end_time):
         }
         try:
             es_results = es.search(index=index_name_day,doc_type=new_xnr_flow_text_index_type,body=query_body)['hits']['hits']
-            print 'es_results::',es_results
+            # print 'es_results::',es_results
             for topic_result in es_results:
                 #print 'topic_result::',topic_result
                 topic_result = topic_result['_source']
@@ -1325,7 +1327,7 @@ def get_safe_tweets(xnr_user_no,topic,start_time, end_time, sort_item):
             es_results_all.extend(es_results)
 
         except Exception,e:
-            print e
+            # print e
             continue
 
     
