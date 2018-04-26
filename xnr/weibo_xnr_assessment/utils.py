@@ -1655,6 +1655,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
 
     for xnr_user_no in xnr_user_no_list:
         #xnr_user_no = 'WXNR0044'
+        print 'xnr_user_no...',xnr_user_no
         results_all['trend'][xnr_user_no] = {}
         
         table_result = {}
@@ -1701,6 +1702,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
                 else:
 
 
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['safe']
 
                     if timestamp == timestamp_list[-1]:    # 结束时间
 
@@ -1711,7 +1713,7 @@ def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
                             timestamp = datetime2ts(ts2datetime(int(time.time())))  # 为了和小主页总量保持一致
                         
                         history_result = get_safe_history_count(timestamp,timestamp_start,xnr_user_no)
-                        #print 'history_result..',history_result
+                        print 'history_result..',history_result
                         table_result['total_post_sum'] = history_result['total_post_sum']
                         table_result['daily_post_num'] = history_result['daily_post_num']
                         table_result['hot_follower_num'] = history_result['business_post_num']
@@ -1847,7 +1849,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
     #print 'weibo_xnr_count_info_index_name::',weibo_xnr_count_info_index_name
     #try:
     xnr_count_result=es.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
-    print 'xnr_count_result...',xnr_count_result
+    #print 'xnr_count_result...',xnr_count_result
     xnr_date_info=[]
     for item in xnr_count_result:
         xnr_date_info.append(item['_source'])
@@ -1863,7 +1865,7 @@ def get_safe_history_count(end_time,start_time,xnr_user_no):
         end_time=now_time
     if start_time < system_start_time:
         start_time=system_start_time
-    print 'condition_time:',ts2datetime(start_time),ts2datetime(end_time)
+    #print 'condition_time:',ts2datetime(start_time),ts2datetime(end_time)
     xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
     Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
 
