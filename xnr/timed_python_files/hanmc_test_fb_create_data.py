@@ -25,9 +25,13 @@ from fb_xnr_flow_text_mappings import fb_xnr_flow_text_mappings
 
 
 
-root_uid = '100018797745111'
-root_nick_name = u'韩梦成'
-xnr_user_no = 'FXNR0005'
+# root_uid = '100018797745111'
+# root_nick_name = u'韩梦成'
+# xnr_user_no = 'FXNR0005'
+
+root_uid = '100023849442394'
+root_nick_name = u'吕磊'
+xnr_user_no = 'FXNR0003'
 
 def random_uid():
     return random.choice(["100023849442394", "100023545574584"])  
@@ -286,8 +290,8 @@ if __name__ == '__main__':
             comment(date)
             private(date)
             friends(date)
-    
     '''
+    
 
     '''
     #update
@@ -300,14 +304,14 @@ if __name__ == '__main__':
             index_name = index_name_pre + date
             sensitive_func(index_name, ts)
         sensitive_func('facebook_feedback_friends', ts)
+	'''
 
-    '''
 
     #xnr_flow_text_
     #2017-10-15     2017-10-30
     for i in range(15, 31, 1):
         date = '2017-10-' + str(i)
         xnr_flow_text(date)
-    
+
         
 
