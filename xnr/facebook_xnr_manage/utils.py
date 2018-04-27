@@ -213,7 +213,8 @@ def count_today_comment_num(xnr_user_no,now_time):
         results=es_xnr.search(index=fb_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
             body=query_body)['aggregations']['today_post_num']['buckets']
         number=result[0]['doc_count']
-    except:
+    except Exception,e:
+        print e
         number=0
     return number
 
@@ -239,15 +240,15 @@ def count_history_comment_num(uid):
             }
         }
     }
-    try:
-        result=es_xnr.search(index=fb_feedback_comment_index_name_list,doc_type=fb_feedback_comment_index_type,\
-            body=query_body)['aggregations']['history_comment_num']['buckets']
-    #print result
-    # number=0
-        number=result[0]['doc_count']
-    except:
-        number=0
-    #print 'comment_number',number
+    number = 0
+    for index_name in fb_feedback_comment_index_name_list:
+        try:
+            result=es_xnr.search(index=index_name,doc_type=facebook_feedback_comment_index_type,\
+                body=query_body)['aggregations']['history_comment_num']['buckets']
+            number += result[0]['doc_count']
+        except Exception,e:
+            # print e
+            pass
     return number
 
 #step 2.2: show uncompleted weibo_xnr information 
@@ -291,13 +292,14 @@ def xnr_today_remind(xnr_user_no,now_time):
     #当前发帖量
     complete_num=count_today_comment_num(xnr_user_no,now_time)
     xnr_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
-    day_post_average_list=json.loads(xnr_result['day_post_average'])
-    #最小目标发帖量
-    if day_post_average_list[0].encode('utf-8'):
-        min_post_num=int(day_post_average_list[0].encode('utf-8'))
-    else:
-        min_post_num=0
-    #min_post_num=min(int(day_post_average_list[0].encode('utf-8')),int(day_post_average_list[-1].encode('utf-8')))
+    try:
+        li = xnr_result['day_post_average'].encode('utf8').split("'")
+        day_post_average_list = int(li[1]), int(li[3])
+        #最小目标发帖量
+        min_post_num = day_post_average_list[0]
+    except Exception,e:
+        print e
+        min_post_num = 0
     #目标发帖差额
     post_dvalue=min_post_num-complete_num
 
