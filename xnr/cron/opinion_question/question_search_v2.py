@@ -10,33 +10,32 @@ import json
 import heapq
 import math
 import Levenshtein
-from config import cut_by_textrank,TopkHeap,K1,B,K3, CORPUS_ANSWER_PATH
+from elasticsearch import Elasticsearch
+from elasticsearch.helpers import scan
+from config import cut_by_textrank,TopkHeap,K1,B,K3,global_utils_route
+sys.path.append(global_utils_route)
+from global_utils import qa_corpus_index_name,qa_corpus_index_type,es_xnr
 
 def load_question_dict():#加载question语料
-
+    
+    query_body = {'query':{'match_all':{}}}
     question_dict = dict()
-    lines = []
-    count = 0
-    reader = csv.reader(file(CORPUS_ANSWER_PATH, 'rb'))
-    for line in reader:
-##        if len(line) == 1:
-##            lines.append(line)
-##            count = count + 1
-##            continue
-        
-        if count == 0:
-            question = line[0].strip('\xef\xbb\xbf')
-        else:
-            question = line[0]
-        count = count + 1
-        question = question.strip()
-        answer = line[1]
+    s_re = scan(es_xnr, query=query_body, index=qa_corpus_index_name, doc_type=qa_corpus_index_type)
+    while True:
         try:
-            question_dict[question].add(answer)
-        except KeyError:
-            question_dict[question] = set([answer])
+            scan_re = s_re.next()['_source']
+            try:
+                text = scan_re['text'].encode('utf-8')
+                answer_list = scan_re['answer_list'].encode('utf-8').split('&')
+                question_dict[text] = set(answer_list)
+                
+            except:
+                continue
+        except StopIteration:
+            break
     
     return question_dict
+
 
 def get_related_score(text,keywords,keyword_count,avr_n,total_n):#获取文本的分数
 
@@ -117,7 +116,6 @@ def search_answer(text):#检索问题主函数
         text_question:字符串
         answer:列表，推荐的答案
     '''
-    print 'text...',text
     if len(text) == 0:
         return '',[]
     keywords = cut_by_textrank(text)

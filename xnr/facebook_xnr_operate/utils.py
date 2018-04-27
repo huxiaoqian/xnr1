@@ -30,8 +30,8 @@ from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HO
 sys.path.append(WRITING_PATH)
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
 from tuling_test import get_message_from_tuling
-#from question_search import search_answer
-from question_search_v2 import search_answer
+from question_search import search_answer
+#from question_search_v2 import search_answer
 
 def get_robot_reply(question):
     
