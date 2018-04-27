@@ -8,7 +8,7 @@ from multiprocessing import Process
 from MyBot import MyBot
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
-                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path
+                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, r as global_utils_r
 from xnr.parameter import MAX_VALUE, LOCALHOST_IP, DAY
 from xnr.wx_xnr_manage_mappings import wx_xnr_mappings
 from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
@@ -82,7 +82,9 @@ def change_wxxnr_redis_data(wxbot_id, xnr_data={}):
     for key,value in xnr_data.items():
         data[key] = value   #如果存在key则更改数据为value,不存在key则增加数据value
     return r.set(wxbot_id, data)
-        
+
+''' 
+#弃用，2018-4-27 12:11:40。使用get_wx_xnr_no()函数。    
 def load_user_no_current():
     #返回将要新创建的wxbot的user_no
     query_body = {
@@ -101,6 +103,20 @@ def load_user_no_current():
     else:
         user_no_current = 1 
     return user_no_current
+'''
+
+#返回将要新创建的wxbot的user_no
+def get_wx_xnr_no():
+    user_no_max = 0
+    if not global_utils_r.exists(wx_xnr_max_no): #如果当前redis没有记录，则去es数据库查找补上
+        es_results = es.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type,body={'query':{'match_all':{}},\
+                    'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
+        if es_results:
+            user_no_max = es_results[0]['_source']['user_no']
+    else:   #如果当前redis有记录，则取用
+        user_no_max = int(global_utils_r.get(wx_xnr_max_no))
+    return user_no_max
+
 
 def check_wx_xnr(wx_id):
     wx_xnr_mappings()   #创建wx_xnr表
@@ -149,7 +165,12 @@ def create_wx_xnr(xnr_info):
         qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, mail=mail, access_id=access_id, remark=remark)
     else:   #如果虚拟人还没有存在，那么就创建此虚拟人
         wxbot_port = find_port(get_all_ports())
-        user_no_current = load_user_no_current()
+
+        # user_no_current = load_user_no_current()
+        user_no_max = get_wx_xnr_no()
+        user_no_current = user_no_max + 1
+        global_utils_r.set(wx_xnr_max_no, user_no_current)
+
         wxbot_id = user_no2wxbot_id(user_no_current)
         qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, submitter=submitter, mail=mail, access_id=access_id, remark=remark, create_flag=1)
     return qr_path

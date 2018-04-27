@@ -24,10 +24,18 @@ from get_sensitive import get_sensitive_info, get_sensitive_user
 from tw_xnr_flow_text_mappings import tw_xnr_flow_text_mappings
 
 
-root_uid = '747226658457927680'
-root_nick_name = u'韩梦成'
-root_user_name = 'feifanhanmc1'
-xnr_user_no = 'TXNR0003'
+# root_uid = '747226658457927680'
+# root_nick_name = u'韩梦成'
+# root_user_name = 'feifanhanmc1'
+# xnr_user_no = 'TXNR0003'
+
+
+root_uid = '943290911039029250'
+root_nick_name = u'巨星大大'
+root_user_name = 'juxingdada'
+xnr_user_no = 'TXNR0001'
+
+
 
 def random_uid():
     return random.choice(["864789252629909504", "845341840618536960"])  
@@ -37,9 +45,9 @@ def load_timestamp(date):
 
 def random_text():
     #普通版
-    # return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜"])  
+    return random.choice(["转发", "aaaaaaaaa", "好无聊啊", "别看了，我瞎填的","Love you,baby.", "祝福~", "止水桑生死成谜","达赖","达赖太阳花"]) 
     #敏感版  
-    return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
+    # return random.choice(["止水桑生死成谜","达赖","达赖太阳花"])
 
 def random_mid():
     return random.choice(["919556871287054337", "919542838899097602", "919370711944359936"])  
@@ -337,6 +345,9 @@ if __name__ == '__main__':
         sensitive_func('twitter_feedback_follow', ts)
         sensitive_func('twitter_feedback_fans', ts)
     '''
+
+
+
 
     #xnr_flow_text_
     #2017-10-15     2017-10-30
