@@ -259,7 +259,7 @@ function not_yet(no_data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\',\'2\',\''+row.xnr_user_no+'\')" title="继续"><i class="icon icon-fire"></i></a>'+
+                    return '<a style="cursor: pointer;color: white;" onclick="go_on(\''+row.xnr_user_no+'\',\'2\',\''+row.nick_name+'\')" title="继续"><i class="icon icon-fire"></i></a>'+
                         '<a style="cursor: pointer;color: white;display:inline-block;margin-left:50px;" onclick="deluser(\''+row.xnr_user_no+'\',\'2\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },

@@ -211,14 +211,19 @@ function robotTxt(data) {
     $(robotThis).parents('.center_rel').find('.commentDown').children('input').val(txt);
     var robotType=$(robotThis).parents('.center_rel').find('.commentDown').children('span').attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
     var str='<div class="robotQuestion">';
+    var problem=data["own"][0]||'没有相关问题';
     var robot1='<p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关问题</p>' +
-        '<p style="text-indent:30px;margin:5px 0;">'+data["own"][0]+'</p>';
+        '<p style="text-indent:30px;margin:5px 0;">'+problem+'</p>';
     var robot2='<div><p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关评论</p>';
     var robot3='';
-    $.each(data['own'][1],function (index,item) {
-         robot3+='<div class="robotDown" class="r"><input type="text" class="robotIput" value="'+item+'">&nbsp;' +
-        '<span class="sureRobot" onclick="comMent(this,\''+robotType+'\')">回复</span></div>'
-    });
+    if (data['own'][1]){
+        $.each(data['own'][1],function (index,item) {
+            robot3+='<div class="robotDown" class="r"><input type="text" class="robotIput" value="'+item+'">&nbsp;' +
+                '<span class="sureRobot" onclick="comMent(this,\''+robotType+'\')">回复</span></div>'
+        });
+    }else {
+        robot3='没有相关评论';
+    }
     robot2+=robot3+'</div>';
     str+=robot1+robot2+'</div>';
     $(robotThis).parents('.center_rel').find('.commentDown').after(str);

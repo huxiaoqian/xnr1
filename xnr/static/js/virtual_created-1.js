@@ -239,7 +239,11 @@ function in_three(data) {
 }
 function modSecondSuccess(data) {
     if (data){
-        window.location.href='/personalCenter/individual/';
+        if(n==1){
+            window.location.href='/registered/socialAccounts/?flag='+flag;
+        }else {
+            window.location.href='/personalCenter/individual/';
+        }
     }else {
         $('#prompt p').text('修改内容失败，请稍后再试。');
         $('#prompt').modal('show');

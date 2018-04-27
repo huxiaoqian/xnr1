@@ -65,7 +65,7 @@ $('#container .type_page #myTabs a').on('click',function () {
         end=end_time;
     }
     if (start&&end){
-        var comURL='/facebook_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=timestamp' +
+        var comURL='/facebook_xnr_operate/'+mmarrow+'/?xnr_user_no='+xnrUser+'&sort_item=update_time' +
             '&start_ts='+start+'&end_ts='+end;
         public_ajax.call_request('get',comURL,com);
     }else {
@@ -93,7 +93,7 @@ $('#container .desc_index .demo-label input').on('click',function () {
     public_ajax.call_request('get',comURL,com);
 })
 //评论回复----转发回复
-var comURL='/facebook_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=timestamp'+
+var comURL='/facebook_xnr_operate/show_comment/?xnr_user_no='+xnrUser+'&sort_item=update_time'+
     '&start_ts='+todayTimetamp()+'&end_ts='+end_time;
 public_ajax.call_request('get',comURL,com);
 function com(data) {
@@ -144,10 +144,10 @@ function com(data) {
                         }else {
                             txt=row.text;
                         };
-                        if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                        if (row.update_time==''||row.update_time=='null'||row.update_time=='unknown'||!row.update_time){
                             time='未知';
                         }else {
-                            time=getLocalTime(row.timestamp);
+                            time=getLocalTime(row.update_time);
                         };
                         var star1='<img src="/static/images/level.png" alt="">',
                             star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
@@ -289,10 +289,10 @@ function letter(data) {
                         txt=row.text;
                         // console.log(row.text.split('\n'))
                     };
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                    if (row.update_time==''||row.update_time=='null'||row.update_time=='unknown'||!row.update_time){
                         time='未知';
                     }else {
-                        time=getLocalTime(row.timestamp);
+                        time=getLocalTime(row.update_time);
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
                         star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
@@ -394,10 +394,10 @@ function reply(data) {
                     }else {
                         img=row.photo_url;
                     };
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                    if (row.update_time==''||row.update_time=='null'||row.update_time=='unknown'||!row.update_time){
                         time='未知';
                     }else {
-                        time=getLocalTime(row.timestamp);
+                        time=getLocalTime(row.update_time);
                     };
                     if (row.text==''||row.text=='null'||row.text=='unknown'){
                         txt='暂无内容';
@@ -516,10 +516,10 @@ function focus(data) {
                     }else {
                         name=row.nick_name;
                     };
-                    if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'||!row.timestamp){
+                    if (row.update_time==''||row.update_time=='null'||row.update_time=='unknown'||!row.update_time){
                         time='未知';
                     }else {
-                        time=getLocalTime(row.timestamp);
+                        time=getLocalTime(row.update_time);
                     };
                     if (row.photo_url==''||row.photo_url=='null'||row.photo_url=='unknown'){
                         img='/static/images/unknown.png';
