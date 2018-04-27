@@ -10,13 +10,15 @@ from elasticsearch import Elasticsearch
 
 import re
 import random
-
-
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from datetime import datetime, timedelta
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 sys.path.append('../')
 from timed_python_files import new_facebook_xnr_flow_text_mappings as mapping
 
+# 虚拟窗口
 display = Display(visible=0, size=(1024,768))
 display.start()
 
@@ -38,22 +40,13 @@ for each in hits:
 		xnrData.append(each['_source'])
 
 for xnr in xnrData:
-<<<<<<< HEAD
-	account = xnr['fb_mail_account']
-	password = xnr['password']
-
-	# 登录
-	driver = webdriver.Firefox()
-	driver.get('https://www.facebook.com/')
-=======
-	xnr_user_no = xnr['xnr_user_no']
-	uid = xnr['uid']
-	account = xnr['fb_mail_account']
+	account = xnr['fb_mail_account'] if xnr['fb_mail_account'] else xnr['fb_phone_account']
 	password = xnr['password']
 	# 登录
-	driver = webdriver.Firefox()
+	cap = DesiredCapabilities().FIREFOX
+	cap["marionette"] = False
+	driver = webdriver.Firefox(capabilities=cap)
 	driver.get('https://www.facebook.com')
->>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 	driver.find_element_by_xpath('//input[@id="email"]').send_keys(account)
 	driver.find_element_by_xpath('//input[@id="pass"]').send_keys(password)
 	driver.find_element_by_xpath('//input[@data-testid="royal_login_button"]').click()
@@ -70,7 +63,6 @@ for xnr in xnrData:
 	except Exception as e:
 		pass
 	time.sleep(1)
-<<<<<<< HEAD
 	driver.find_element_by_xpath('//a[@title="个人主页"]').click()
 	time.sleep(1)
 	#加载更多
@@ -89,19 +81,25 @@ for xnr in xnrData:
 
 	for div in driver.find_elements_by_xpath('//div[@id="recent_capsule_container"]/ol/div'):
 		for post in div.find_elements_by_xpath('./div'):
-			xnr_user_no = xnr['xnr_user_no']
-			#xnr_user_no = "FXNR0005"
+			# xnr_user_no = xnr['xnr_user_no']
+			xnr_user_no = 'FXNR0003'
 			uid = xnr['uid']
-			#uid = "100018797745111"
+			uid = "100023849442394"
 			try:
-				text = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[2]/p').text
-				#text = random.choice([u"emmmm",u"今天风真大",u"哈哈哈哈哈",u"宿命是上帝为你写的剧本",u"教会你如何去爱去恨",u"天堂为每个人都打开了大门",u"善恶是门票不分身份",u"希望是指南针信仰是扬起的船帆",u"我听说这个时代好像需要信仰",u"那你信什么",u"上帝",u"金钱",u"因特网"])
+				# text = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[2]//p').text
+				text = random.choice([u"emmmm",u"今天风真大",u"哈哈哈哈哈",u"宿命是上帝为你写的剧本",u"教会你如何去爱去恨",u"天堂为每个人都打开了大门",u"善恶是门票不分身份",u"希望是指南针信仰是扬起的船帆",u"我听说这个时代好像需要信仰",u"那你信什么",u"上帝",u"金钱",u"因特网"])
 			except:
-				text = None
+				try:
+					text = post.find_element_by_xpath('./div/div[3]/div/div[2]/div[2]//p').text
+				except:
+					text = None
 			try:
 				picture_url = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[3]//img').get_attribute('src')
 			except:
-				picture_url = None
+				try:
+					picture_url = post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]//img').get_attribute('src')
+				except:
+					picture_url = None
 			vedio_url = None
 			user_friendsnum = driver.find_element_by_xpath('//a[@data-tab-key="friends"]/span[1]').text
 			user_followersum = None
@@ -109,10 +107,19 @@ for xnr in xnrData:
 			try:
 				fid = re.findall(re.compile('fbid=(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
 			except:
-				fid = re.findall(re.compile('posts/(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
+				try:
+					fid = re.findall(re.compile('posts/(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
+				except:
+					try:
+						fid = re.findall(re.compile('fbid=(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
+					except:
+						fid = re.findall(re.compile('posts/(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a').get_attribute('href'))[0]
 			ip = None
-			timestamp = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
-			#timestamp = int(time.mktime(time.strptime(random.choice(['2017-10-15','2017-10-16','2017-10-17','2017-10-18','2017-10-19','2017-10-20','2017-10-21','2017-10-22','2017-10-23','2017-10-24','2017-10-25']),"%Y-%m-%d")))
+			try:
+				# timestamp = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
+				timestamp = int(time.mktime(time.strptime(random.choice(['2017-10-15','2017-10-16','2017-10-17','2017-10-18','2017-10-19','2017-10-20','2017-10-21','2017-10-22','2017-10-23','2017-10-24','2017-10-25']),"%Y-%m-%d")))
+			except:
+				timestamp = post.find_element_by_xpath('./div/div[3]/div/div[2]/div[1]/div[1]/div/div[2]/div/div/div[2]/div/span[3]/span/a/abbr').get_attribute('data-utime')
 			for each in driver.find_elements_by_xpath('//div[@class="_50f3"]'):
 				if u'所在地' in each.text:
 					geo = each.find_element_by_xpath('./a').text
@@ -120,11 +127,17 @@ for xnr in xnrData:
 			try:
 				directed_uid = re.findall(re.compile('id=(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[3]/div[2]/div/div/div/span/span/a').get_attribute('data-hovercard'))[0]
 			except:
-				directed_uid = None
+				try:
+					directed_uid = re.findall(re.compile('id=(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/span/span/a').get_attribute('data-hovercard'))[0]
+				except:
+					directed_uid = None
 			try:
 				directed_uname = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[3]/div[2]/div/div/div/span/span/a').text
 			except:
-				directed_uname = None
+				try:
+					directed_uname = post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/span/span/a').text
+				except:
+					directed_uname = None
 			if directed_uid:
 				message_type = 2
 			else:
@@ -137,11 +150,21 @@ for xnr in xnrData:
 				if not root_mid:
 					root_mid = re.findall(re.compile(r'photos/(\d+)'),post.find_element_by_xpath('./div/div[2]/div/div[2]/div[3]/div[2]/div/div/div/div/span/span/a'))[0]
 			except:
-				root_mid = None
+				try:
+					root_mid = re.findall(re.compile(r'fbid=(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/div/span/span/a'))[0]
+					if not root_mid:
+						root_mid = re.findall(re.compile(r'posts/(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/div/span/span/a'))[0]
+					if not root_mid:
+						root_mid = re.findall(re.compile(r'photos/(\d+)'),post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/div/span/span/a'))[0]
+				except:
+					root_mid = None
 			try:
 				origin_text = post.find_element_by_xpath('./div/div[2]/div/div[2]/div[3]/div[2]/div/div/div/div[2]').text
 			except:
-				origin_text = None
+				try:
+					origin_text = post.find_element_by_xpath('./div/div[3]/div/div[2]/div[3]/div[2]/div/div/div/div[2]').text
+				except:
+					origin_text = None
 
 			dict = {"xnr_user_no":xnr_user_no, "uid":uid, "text":text,\
 					 "picture_url":picture_url, "vedio_url":vedio_url,\
@@ -159,8 +182,6 @@ for xnr in xnrData:
 
 	# 退出
 	driver.close()
-=======
->>>>>>> 8c15462c1341ac4b21c690562f79c749fedb5791
 
 
 
