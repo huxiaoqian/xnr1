@@ -4,7 +4,7 @@ import json
 
 from global_utils import es_xnr as es
 from global_utils import weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
-						all_opinion_corpus_index_name, all_opinion_corpus_index_type,\
+						all_opinion_corpus_index_name_test,all_opinion_corpus_index_name, all_opinion_corpus_index_type,\
 						qa_corpus_index_name, qa_corpus_index_type
 
 
@@ -98,8 +98,8 @@ def opinion_corpus_mappings():
 		}
 	}
 
-	if not es.indices.exists(index=all_opinion_corpus_index_name):
-		es.indices.create(index=all_opinion_corpus_index_name,body=index_info,ignore=400)
+	if not es.indices.exists(index=all_opinion_corpus_index_name_test):
+		es.indices.create(index=all_opinion_corpus_index_name_test,body=index_info,ignore=400)
 
 
 

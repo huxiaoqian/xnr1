@@ -299,7 +299,7 @@ function xnr_road(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    return '<span style="cursor:pointer;color:white;" onclick="addRoad(\'2\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                    return '<span style="cursor:pointer;color:white;" onclick="addRoad(\'2\',\''+row.id+'\')" title="编辑"><i class="icon icon-edit"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '<span style="cursor:pointer;color:white;" onclick="deleteRoadXnrInfo(\''+row.id+'\')" title="删除"><i class="icon icon-trash"></i></span>';
                 }
             },
@@ -307,11 +307,16 @@ function xnr_road(data) {
     });
 }
 //添加通道
-var add_or_mondify;
-function addRoad(num) {
-    add_or_mondify=num;
-    var add_road_url='/system_manage/control_add_xnr_map_relationship/?main_user='+admin;
-    public_ajax.call_request('get',add_road_url,roadXnrModify);
+var add_or_mondify,taskID;
+function addRoad(num,taskid) {
+    add_or_mondify=num,taskID=taskid;
+    if (num==2){
+        var modify_road_url='/system_manage/show_all_xnr/?main_user='+admin+'&task_id='+taskid;
+        public_ajax.call_request('get',modify_road_url,roadXnrModify);
+    }else {
+        var add_road_url='/system_manage/control_add_xnr_map_relationship/?main_user='+admin;
+        public_ajax.call_request('get',add_road_url,roadXnrModify);
+    }
 }
 // 编辑和添加通道
 function roadXnrModify(data) {
@@ -337,9 +342,11 @@ function everyRoad(roadArray,key) {
         $.each(roadArray,function (index,item) {
             var a=item.xnr_name;
             if(!a){a=item.xnr_user_no};
+            var chd='';
+            if (item.mark==1){chd='checked'}
             str+=
                 '<label class="demo-label" title="'+a+'">' +
-                '   <input class="demo-radio" type="radio" name="'+key+'" valueID="'+item.xnr_user_no+'" valueName="'+a+'">' +
+                '   <input class="demo-radio" type="radio" name="'+key+'" valueID="'+item.xnr_user_no+'" valueName="'+a+'" '+chd+'>' +
                 '   <span class="demo-checkbox demo-radioInput"></span> '+a+
                 '</label>';
         })
@@ -373,15 +380,14 @@ function sureAddModify() {
             '&weibo_xnr_name='+weiboName+'&qq_xnr_user_no='+qqID+'&qq_xnr_name='+qqName+'&weixin_xnr_user_no='+weixinID+
             '&weixin_xnr_name='+weixinName+'&facebook_xnr_user_no='+faceBookID+'&facebook_xnr_name='+faceBookName+
             '&twitter_xnr_user_no='+twitterID+'&twitter_xnr_name='+twitterName;
+        if (add_or_mondify==2){addModify_url+='&xnr_map_id='+taskID}
         public_ajax.call_request('get',addModify_url,sufa);
     }
 
 }
 //system_manage/change_xnr_platform/?origin_platform=weibo&origin_xnr_user_no=WXNR0001&new_platform=qq
 
-function checkUndefined(f) {
-    if (f){listIDname.push(f)};
-}
+function checkUndefined(f){if (f){listIDname.push(f)}}
 //删除通道
 var map_id;
 function deleteRoadXnrInfo(mapID) {

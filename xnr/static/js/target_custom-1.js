@@ -2,15 +2,15 @@
 var domainName='',roleName='';
 //渗透领域
 var WFT_url,firstStep,secondStep;
-if (flag==1){
+if ((flag==1)||(_gostart_USER.indexOf('W')==0)){
     WFT_url='/weibo_xnr_create';
     firstStep='WBfirstStep';
     secondStep='WBsecondStep';
-}else if (flag==4){
+}else if ((flag==4)||(_gostart_USER.indexOf('F')==0)){
     WFT_url='/facebook_xnr_create';
     firstStep='FBfirstStep';
     secondStep='FBsecondStep';
-}else if (flag==5){
+}else if ((flag==5)||(_gostart_USER.indexOf('T')==0)){
     WFT_url='/twitter_xnr_create';
     firstStep='TWfirstStep';
     secondStep='TWsecondStep';
@@ -48,15 +48,14 @@ if ($one){
     roleName=$one.role_name;
     inModalData($one);
 }
-// var goUSER=JSON.parse(localStorage.getItem('goONuser'));
-// if (goUSER){
-//     inModalData(goUSER);
-// }
+var goUSER=JSON.parse(localStorage.getItem('goONuser'));
+if (goUSER){
+    inModalData(goUSER);
+}
 //模板导入
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
     modalAllData=data;
-    console.log(data)
     var tt=data.domains||data.domain_name;
     domainName=tt;roleName=data.role_name||data.roleName;
     setTimeout(function () {
@@ -67,7 +66,7 @@ function inModalData(data) {
     var creat_url_2=WFT_url+'/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
     public_ajax.call_request('get',creat_url_2,creat_2);
     $$political_side=data.political_side;
-    if(data.psy_feature.indexOf('&')>0){
+    if(data.psy_feature.indexOf('&')>=0){
         $$psy_feature=data.psy_feature.split('&');
     }else {
         $$psy_feature=data.psy_feature.split(',');

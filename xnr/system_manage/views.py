@@ -10,7 +10,7 @@ from utils import create_log_list,show_log_list,delete_log_list,\
 				  delete_user_account,delete_user_xnraccount,change_user_account,\
 				  add_xnr_map_relationship,show_xnr_map_relationship,change_xnr_platform,\
 				  delete_xnr_map_relationship,update_xnr_map_relationship,control_add_xnr_map_relationship,\
-				  show_all_users_account,lookup_xnr_relation
+				  show_all_users_account,lookup_xnr_relation,show_all_xnr
 
 
 mod = Blueprint('system_manage', __name__, url_prefix='/system_manage')
@@ -196,6 +196,7 @@ def ajax_delete_xnr_map_relationship():
 	return json.dumps(results)
 
 #修改映射关系
+#
 @mod.route('/update_xnr_map_relationship/')
 def ajax_update_xnr_map_relationship():
 	xnr_map_detail=dict()
@@ -212,7 +213,18 @@ def ajax_update_xnr_map_relationship():
 	xnr_map_detail['facebook_xnr_name']=request.args.get('facebook_xnr_name')
 	xnr_map_detail['twitter_xnr_name']=request.args.get('twitter_xnr_name')
 	xnr_map_detail['timestamp']=int(time.time())
+	# print 'xnr_map_id:::',xnr_map_id,type(xnr_map_id),type(str(xnr_map_id)),type(xnr_map_detail['weibo_xnr_user_no'])
+	# print 'xnr_map_detail::',xnr_map_detail,type(xnr_map_detail)
 	results=update_xnr_map_relationship(xnr_map_detail,xnr_map_id)
+	return json.dumps(results)
+
+
+#显示所有虚拟人，用于修改
+@mod.route('/show_all_xnr/')
+def ajax_show_all_xnr():
+	main_user = request.args.get('main_user','')
+	task_id = request.args.get('task_id','')
+	results = show_all_xnr(main_user,task_id)
 	return json.dumps(results)
 
 

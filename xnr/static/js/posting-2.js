@@ -458,12 +458,10 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
 });
 var viewButton={};
 function viewData(data) {
-    console.log(data)
     if ('subopinion_tweets' in data){
         if (isEmptyObject(JSON.parse(data['subopinion_tweets']))){
             $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');return false;
         }
-
     }else if (isEmptyObject(data)){
         $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');
         return false;

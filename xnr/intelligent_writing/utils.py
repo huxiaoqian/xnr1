@@ -17,6 +17,9 @@ from xnr.parameter import MAX_SEARCH_SIZE, sensitive_score_dict
 from time_utils import ts2HourlyTime, ts2datetime, datetime2ts, full_datetime2ts
 from DFA_filter import createWordTree, searchWord
 
+from xnr.global_utils import R_OPINION as r_r
+from xnr.global_utils import opinion_expand_task_queue_name
+
 MinInterval = 15*60 #15min
 Day = 24*3600
 
@@ -319,8 +322,11 @@ def get_add_opinion_corpus(task_detail):
             es.index(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=item_dict,id=corpus_pinyin)
             mark = True
 
+            r_r.lpush(opinion_expand_task_queue_name,json.dumps(item_dict))
+
         except:
             pass
+
 
     return mark
 
