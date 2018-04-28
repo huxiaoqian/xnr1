@@ -35,6 +35,12 @@ from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS
                         fb_domain_en2ch_dict as domain_en2ch_dict, fb_domain_ch2en_dict as domain_ch2en_dict,\
                         FB_FLOW_TEXT_START_DATE as FLOW_TEXT_START_DATE
 from xnr.global_utils import r_fb_followers_uid_list_datetime_pre as r_followers_uid_list_datetime_pre
+from xnr.global_utils import r_fb_fans_uid_list_datetime_pre as r_fans_uid_list_datetime_pre,\
+                            r_fb_fans_count_datetime_xnr_pre as r_fans_count_datetime_xnr_pre,\
+                            r_fb_fans_search_xnr_pre as r_fans_search_xnr_pre,\
+                            r_fb_followers_count_datetime_xnr_pre as r_followers_count_datetime_xnr_pre,\
+                            r_fb_followers_search_xnr_pre as r_followers_search_xnr_pre
+
 
 
 
@@ -52,10 +58,6 @@ from xnr.global_utils import weibo_xnr_fans_followers_index_name,weibo_xnr_fans_
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
                         user_domain_index_name,user_domain_index_type,\
                         weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type
-                        
-                        
-from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_pre,r_fans_search_xnr_pre,\
-                r_followers_count_datetime_xnr_pre,r_followers_search_xnr_pre
 from xnr.parameter import PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
                         ACTIVE_UID
 
@@ -178,9 +180,7 @@ def get_influence_total_trend(xnr_user_no,start_time,end_time):
     return total_dict
 
 def get_influence_total_trend_today(xnr_user_no):
-
     current_time = int(time.time())
-
     fans_dict = get_influ_fans_num(xnr_user_no,current_time)
     retweet_dict = get_influ_retweeted_num(xnr_user_no,current_time)
     comment_dict = get_influ_commented_num(xnr_user_no,current_time)
@@ -243,7 +243,6 @@ def compute_growth_rate_total(day8_dict,total8_dict):
 # 影响力粉丝数
 def get_influ_fans_num(xnr_user_no,current_time):
     fans_dict = {}
-
     current_date = ts2datetime(current_time)
     current_time_new = datetime2ts(current_date)
 
