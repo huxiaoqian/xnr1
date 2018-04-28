@@ -14,7 +14,10 @@ from xnr.global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 						weibo_account_management_index_name,weibo_account_management_index_type,\
 						qq_xnr_index_name,qq_xnr_index_type,\
 						xnr_map_index_name,xnr_map_index_type,qq_xnr_index_name,qq_xnr_index_type,\
-						weibo_feedback_group_index_name,weibo_feedback_group_index_type
+						weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
+                        wx_xnr_index_name,wx_xnr_index_type,\
+                        fb_xnr_index_name,fb_xnr_index_type,\
+                        tw_xnr_index_name,tw_xnr_index_type
 from xnr.parameter import MAX_VALUE,USER_XNR_NUM
 
 ##############################################################
@@ -464,13 +467,26 @@ def control_add_xnr_map_relationship(main_user):
     xnr_dict['qq_xnr_list']=compare_list(qq_all_xnr_list,qq_maped_xnr_list)
 
     #weixin
-    xnr_dict['weixin_xnr_list']=[]
+    weixin_all_xnr_list=select_all_xnr(main_user,wx_xnr_index_name,wx_xnr_index_type)
+    weixin_platform_no='weixin_xnr_user_no'
+    weixin_platform_name='weixin_xnr_name'
+    weixin_maped_xnr_list=select_xnr_map_relationship(main_user,weixin_platform_no,weixin_platform_name)
+    xnr_dict['weixin_xnr_list']=compare_list(weixin_all_xnr_list,weixin_maped_xnr_list)
 
     #facebook
-    xnr_dict['facebook_xnr_list']=[]
+    facebook_all_xnr_list=select_all_weibo_xnr(main_user,fb_xnr_index_name,fb_xnr_index_type)
+    facebook_platform_no='facebook_xnr_user_no'
+    facebook_platform_name='facebook_xnr_name'
+    facebook_maped_xnr_list=select_xnr_map_relationship(main_user,facebook_platform_no,facebook_platform_name)
+    xnr_dict['facebook_xnr_list']=compare_list(facebook_all_xnr_list,facebook_maped_xnr_list)
+    
 
     #twitter
-    xnr_dict['twitter_xnr_list']=[]
+    twitter_all_xnr_list=select_all_weibo_xnr(main_user,tw_xnr_index_name,tw_xnr_index_type)
+    twitter_platform_no='twitter_xnr_user_no'
+    twitter_platform_name='twitter_xnr_name'
+    twitter_maped_xnr_list=select_xnr_map_relationship(main_user,twitter_platform_no,twitter_platform_name)
+    xnr_dict['twitter_xnr_list']=compare_list(twitter_all_xnr_list,twitter_maped_xnr_list)
 
     return xnr_dict
 

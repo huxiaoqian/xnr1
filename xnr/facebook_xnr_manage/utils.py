@@ -30,7 +30,8 @@ from xnr.time_utils import get_fb_xnr_feedback_index_listname as get_xnr_feedbac
 
 
 from xnr.facebook_publish_func import fb_retweet,fb_comment,fb_like,fb_unfollow,fb_follow
-from xnr.global_utils import new_fb_xnr_flow_text_index_name_pre,new_fb_xnr_flow_text_index_type
+from xnr.global_utils import new_fb_xnr_flow_text_index_name_pre,new_fb_xnr_flow_text_index_type,\
+                             facebook_xnr_save_like_index_name,facebook_xnr_save_like_index_type
 
 
 
@@ -986,7 +987,7 @@ def lookup_send_like(uid,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            {'term':{'root_uid':uid}},
+                            {'term':{'uid':uid}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -1002,7 +1003,7 @@ def lookup_send_like(uid,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
     try:
-        result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
+        result=es_xnr.search(index=facebook_xnr_save_like_index_name,doc_type=facebook_xnr_save_like_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in result:
             results.append(item['_source'])

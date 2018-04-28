@@ -18,6 +18,7 @@ from xnr.global_utils import es_xnr as es, tw_xnr_index_name,tw_xnr_index_type,\
                     tw_bci_index_name_pre, tw_bci_index_type,tw_xnr_fans_followers_index_name,\
                     tw_xnr_fans_followers_index_type, tw_be_retweet_index_name_pre, tw_be_retweet_index_type
 
+from xnr.global_utils import twitter_xnr_save_like_index_name,twitter_xnr_save_like_index_type
 
 from xnr.twitter_publish_func import tw_publish, tw_comment, tw_retweet, tw_follow, tw_unfollow, tw_like, tw_mention, tw_message
 from xnr.utils import tw_uid2nick_name_photo
@@ -1550,3 +1551,58 @@ def get_related_recommendation(task_detail):
                 item_else['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
             results_all.append(item_else)
     return results_all
+
+
+
+
+
+#查询虚拟人uid
+def lookup_xnr_uid(xnr_user_no):
+    try:
+        xnr_result=es.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_uid=xnr_result['uid']
+    except:
+        xnr_uid=''
+    return xnr_uid
+
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        user_result=es.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)['_source']
+        user_name=user_result['username']
+    except:
+        user_name=''
+    return user_name
+
+def save_oprate_like(task_detail):
+    like_id = task_detail['xnr_user_no'] + '_' + task_detail['r_tid']
+    like_detail=dict()
+    like_detail['update_time'] = int(time.time())
+    like_detail['root_tid'] = task_detail['r_tid']
+    like_detail['root_uid'] = task_detail['r_uid']
+    like_detail['tid'] = like_id
+
+    #查询xnr_user_no的uid
+    like_detail['uid'] = lookup_xnr_uid(task_detail['xnr_user_no'])
+    #根据mid查询
+    flow_text_index_name = twitter_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        flow_result = es.get(index=flow_text_index_name,doc_type=twitter_flow_text_index_type,id=task_detail['r_tid'])['_source']      
+        like_detail['nick_name'] = get_user_nickname(flow_result['uid'])
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = flow_result['timestamp']
+        like_detail['text'] = flow_result['text']
+        like_detail['twitter_type'] = ''
+    except:
+        like_detail['nick_name'] = ''
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = int(task_detail['timestamp'])
+        like_detail['text'] = ''
+        like_detail['twitter_type'] = ''
+
+    try:
+        es.index(index=twitter_xnr_save_like_index_name,doc_type=twitter_xnr_save_like_index_type,id=like_id,body=like_detail)
+        mark=True
+    except:
+        mark=False
+    return mark
