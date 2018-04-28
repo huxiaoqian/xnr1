@@ -132,16 +132,9 @@ def get_submit_tweet(task_detail):
 
     # 发布微博
     #account_name = 'weiboxnr03@126.com'
-    # print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
+    print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
-
-    # # 保存微博
-    # try:
-    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    # except:
-    #     print '保存微博过程遇到错误！'
-    #     save_mark = False
 
     return mark
 
@@ -1863,13 +1856,18 @@ def get_show_retweet_timing_list_future(xnr_user_no):
     return result_all
 
 def get_show_trace_followers(xnr_user_no):
-    
-    es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                    id=xnr_user_no)['_source']
-
-    trace_follow_list = es_get_result['trace_follow_list']
 
     weibo_user_info = []
+    
+    try:
+        es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+                        id=xnr_user_no)['_source']
+
+        trace_follow_list = es_get_result['trace_follow_list']
+    except:
+        return weibo_user_info
+
+    
 
     # query_body = {
     #     'query':{

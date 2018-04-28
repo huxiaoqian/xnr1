@@ -31,8 +31,8 @@ from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HO
 sys.path.append(WRITING_PATH)
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
 from tuling_test import get_message_from_tuling
-#from question_search import search_answer
-from question_search_v2 import search_answer
+from question_search import search_answer
+#from question_search_v2 import search_answer
 
 def get_robot_reply(question):
     
@@ -1201,22 +1201,28 @@ def get_show_friends(task_detail):
             'bool':{
                 'must':[
                     {'term':{'root_uid':uid}},
-                    {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
+                    # {'range':{'timestamp':{'gte':start_ts,'lt':end_ts}}}
                 ]
             }
         },
-        'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        # 'sort':[{sort_item:{'order':'desc'}},{'timestamp':{'order':'desc'}}],
+        'sort':[{sort_item:{'order':'desc'}},{'update_time':{'order':'desc'}}],
         'size':MAX_SEARCH_SIZE
     }
     results_all = []
+    uid_list = []
     try:
         es_results = es.search(index=facebook_feedback_friends_index_name,doc_type=facebook_feedback_friends_index_type,\
                             body=query_body)['hits']['hits']
         if es_results:
             for item in es_results:
-                results_all.append(item['_source'])
+                uid = item['_source']['uid']
+                if not uid in uid_list:
+                    uid_list.append(uid)
+                    results_all.append(item['_source'])
     except Exception,e:
         print e
+        pass
     return results_all
 
 def get_show_like(task_detail):

@@ -32,8 +32,12 @@ from xnr.time_utils import get_timeset_indexset_list, fb_get_flow_text_index_lis
                         get_new_fb_xnr_flow_text_index_list as get_new_xnr_flow_text_index_list
 from xnr.utils import fb_xnr_user_no2uid as xnr_user_no2uid, fb_uid2nick_name_photo as uid2nick_name_photo
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,TOP_ASSESSMENT_NUM,TOP_WEIBOS_LIMIT,\
-                        fb_domain_en2ch_dict as domain_en2ch_dict, fb_domain_ch2en_dict as domain_ch2en_dict
+                        fb_domain_en2ch_dict as domain_en2ch_dict, fb_domain_ch2en_dict as domain_ch2en_dict,\
+                        FB_FLOW_TEXT_START_DATE as FLOW_TEXT_START_DATE
 from xnr.global_utils import r_fb_followers_uid_list_datetime_pre as r_followers_uid_list_datetime_pre
+
+
+
 
 
 
@@ -1458,7 +1462,7 @@ def get_follow_group_distribute(xnr_user_no):
     else:
         followers_list_today = []
         if S_TYPE == 'test':
-        	followers_list_today = ['121625551334730']
+            followers_list_today = ['121625551334730']
 
     # 所有关注者领域分布
     results = es.mget(index=portrait_index_name,doc_type=portrait_index_type,\
@@ -1558,7 +1562,7 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
     domain_search_results = es.search(index=portrait_index_name,\
         doc_type=portrait_index_type,body=domain_query_body)['hits']['hits']
 
-    domain_uid_list = []	
+    domain_uid_list = []    
     for domain_result in domain_search_results:
         domain_result = domain_result['_source']
         domain_uid_list.append(domain_result['uid'])
@@ -1599,5 +1603,245 @@ def get_follow_group_tweets(xnr_user_no,domain,sort_item):
         results_all.append(result)
     return results_all
 
+def xnr_cumulative_statistics(xnr_date_info):
+    Cumulative_statistics_dict=dict()
+    Cumulative_statistics_dict['date_time']='累计统计'
+    if xnr_date_info:       
+        total_post_sum=0
+        daily_post_num=0
+        business_post_num=0
+        hot_follower_num=0
+        trace_follow_tweet_num=0
+        influence_sum=0
+        penetration_sum=0
+        safe_sum=0
+        number=len(xnr_date_info)
+        for i in xrange(0,len(xnr_date_info)):
+            daily_post_num=daily_post_num+xnr_date_info[i]['daily_post_num']
+            business_post_num=business_post_num+xnr_date_info[i]['business_post_num']
+            hot_follower_num=hot_follower_num+xnr_date_info[i]['hot_follower_num']
+            trace_follow_tweet_num=trace_follow_tweet_num+xnr_date_info[i]['trace_follow_tweet_num']
+
+        Cumulative_statistics_dict['total_post_sum']=daily_post_num+business_post_num+hot_follower_num+trace_follow_tweet_num
+        Cumulative_statistics_dict['daily_post_num']=daily_post_num
+        Cumulative_statistics_dict['business_post_num']=business_post_num
+        Cumulative_statistics_dict['hot_follower_num']=hot_follower_num
+        Cumulative_statistics_dict['trace_follow_tweet_num']=trace_follow_tweet_num
+    else:
+        Cumulative_statistics_dict['total_post_sum']=0
+        Cumulative_statistics_dict['daily_post_num']=0
+        Cumulative_statistics_dict['business_post_num']=0
+        Cumulative_statistics_dict['hot_follower_num']=0
+        Cumulative_statistics_dict['trace_follow_tweet_num']=0
+    return Cumulative_statistics_dict
 
 
+def show_condition_history_count(xnr_user_no,start_time,end_time):
+    query_body={
+        #'fields':['date_time','user_fansnum','total_post_sum','daily_post_num','hot_follower_num','business_post_num','influence','penetration','safe'],
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no}},
+                            {'range':{
+                                'timestamp':{
+                                    'gte':start_time,
+                                    'lt':end_time
+                                }
+                            }}
+                        ]
+                    }
+                }
+            }
+        },
+        'sort':{'timestamp':{'order':'asc'}} ,
+        'size':MAX_SEARCH_SIZE
+    }
+    xnr_count_result=es.search(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,body=query_body)['hits']['hits']
+    xnr_date_info=[]
+    for item in xnr_count_result:
+        xnr_date_info.append(item['_source'])
+    return xnr_date_info
+
+def get_safe_history_count(end_time,start_time,xnr_user_no):
+    now_time=int(time.time())
+    system_start_time=FLOW_TEXT_START_DATE
+    if end_time > now_time:
+        end_time=now_time
+    if start_time < system_start_time:
+        start_time=system_start_time
+    xnr_date_info=show_condition_history_count(xnr_user_no,start_time,end_time)
+    Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
+    return Cumulative_statistics_dict
+
+def get_compare_assessment(xnr_user_no_list, dim, start_time, end_time):
+    results_all = {}
+    results_all['trend'] = {}
+    results_all['table'] = []
+
+    xnr_user_no_list = xnr_user_no_list.split(',')
+    day_num = (end_time - start_time)/(24*3600)
+    timestamp_list = []
+
+    for i in range(day_num):
+        timestamp_list.append(start_time + i*24*3600)
+    for xnr_user_no in xnr_user_no_list:
+        results_all['trend'][xnr_user_no] = {}
+        table_result = {}
+        for timestamp in timestamp_list:
+            date = ts2datetime(timestamp)
+            _id = xnr_user_no + '_' + date
+            try:
+                get_result = es.get(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+                    id=_id)['_source']
+            except:
+                get_result = {}
+
+            if get_result:
+                if dim == 'influence':
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['influence']
+                    # 最新时间
+                    table_result['comment_total_num'] = get_result['comment_total_num']
+                    table_result['like_total_num'] = get_result['like_total_num']
+                    table_result['private_total_num'] = get_result['private_total_num']
+                    table_result['at_total_num'] = get_result['at_total_num']
+                    table_result['retweet_total_num'] = get_result['retweet_total_num']
+                    table_result['xnr'] = xnr_user_no
+                elif dim == 'penetration':
+                    results_all['trend'][xnr_user_no][timestamp] = get_result['penetration']
+                    table_result['follow_group_sensitive_info'] = get_result['follow_group_sensitive_info']
+                    table_result['fans_group_sensitive_info'] = get_result['fans_group_sensitive_info']
+                    table_result['self_info_sensitive_info'] = get_result['self_info_sensitive_info']
+                    table_result['feedback_total_sensitive_info'] = get_result['feedback_total_sensitive_info']
+                    table_result['warning_report_total_sensitive_info'] = get_result['warning_report_total_sensitive_info']
+                    table_result['xnr'] = xnr_user_no
+                else:
+                    if timestamp == timestamp_list[-1]:    # 结束时间
+                        timestamp_start = FLOW_TEXT_START_DATE  # 开始时间(统计表的开始时间就是系统开始时间)
+                        if S_TYPE == 'test':
+                            timestamp = datetime2ts(ts2datetime(int(time.time())))  # 为了和小主页总量保持一致
+                        history_result = get_safe_history_count(timestamp,timestamp_start,xnr_user_no)
+                        table_result['total_post_sum'] = history_result['total_post_sum']
+                        table_result['daily_post_num'] = history_result['daily_post_num']
+                        table_result['hot_follower_num'] = history_result['business_post_num']
+                        table_result['business_post_num'] = history_result['hot_follower_num']
+                        table_result['trace_follow_tweet_num'] = history_result['trace_follow_tweet_num']
+                        table_result['other'] = table_result['total_post_sum'] - table_result['daily_post_num'] - table_result['hot_follower_num'] - table_result['business_post_num'] - table_result['trace_follow_tweet_num']
+                        table_result['xnr'] = xnr_user_no
+            else:
+                if dim == 'influence':
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    table_result['comment_total_num'] = 0
+                    table_result['like_total_num'] = 0
+                    table_result['private_total_num'] = 0
+                    table_result['at_total_num'] = 0
+                    table_result['retweet_total_num'] = 0
+                    table_result['xnr'] = xnr_user_no
+                elif dim == 'penetration':
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    table_result['follow_group_sensitive_info'] = 0
+                    table_result['fans_group_sensitive_info'] = 0
+                    table_result['self_info_sensitive_info'] = 0
+                    table_result['feedback_total_sensitive_info'] = 0
+                    table_result['warning_report_total_sensitive_info'] = 0
+                    table_result['xnr'] = xnr_user_no
+                else:
+                    results_all['trend'][xnr_user_no][timestamp] = 0
+                    table_result = {}
+                    table_result['total_post_sum'] = 0
+                    table_result['daily_post_num'] = 0
+                    table_result['hot_follower_num'] = 0
+                    table_result['business_post_num'] = 0
+                    table_result['trace_follow_tweet_num'] = 0
+                    table_result['other'] = 0
+                    table_result['xnr'] = xnr_user_no
+        results_all['table'].append(table_result)
+    return results_all
+
+def get_compare_assessment_today(xnr_user_no_list, dim):
+    results_all = {}
+    results_all['trend'] = {}
+    results_all['table'] = []
+    timestamp = datetime2ts(ts2datetime(int(time.time())))
+    timestamp_start = FLOW_TEXT_START_DATE
+    xnr_user_no_list = xnr_user_no_list.split(',')
+    for xnr_user_no in xnr_user_no_list:
+        results_all['trend'][xnr_user_no] = {}
+        table_result = {}
+        if dim == 'influence':
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_influence_num(xnr_user_no)
+                result = get_influence_total_trend_today(xnr_user_no)
+                table_result['comment_total_num'] = list(result['total_trend']['comment'].values())[0]
+                table_result['like_total_num'] = list(result['total_trend']['like'].values())[0]
+                table_result['private_total_num'] = list(result['total_trend']['private'].values())[0]
+                table_result['at_total_num'] = list(result['total_trend']['at'].values())[0]
+                table_result['retweet_total_num'] = list(result['total_trend']['retweet'].values())[0]
+                table_result['xnr'] = xnr_user_no
+            except:
+                results_all['trend'][xnr_user_no][timestamp] = 0
+                table_result = {}
+                table_result['comment_total_num'] = 0
+                table_result['like_total_num'] = 0
+                table_result['private_total_num'] = 0
+                table_result['at_total_num'] = 0
+                table_result['retweet_total_num'] = 0
+                table_result['xnr'] = xnr_user_no
+        elif dim == 'penetration':
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_penetration_num(xnr_user_no)
+                result = penetration_total_today(xnr_user_no)
+                table_result['follow_group_sensitive_info'] = list(result['follow_group'].values())[0]
+                table_result['fans_group_sensitive_info'] = list(result['fans_group'].values())[0]
+                table_result['self_info_sensitive_info'] = list(result['self_info'].values())[0]
+                table_result['feedback_total_sensitive_info'] = list(result['feedback_total'].values())[0]
+                table_result['warning_report_total_sensitive_info'] = list(result['warning_report_total'].values())[0]
+                table_result['xnr'] = xnr_user_no
+            except:
+                results_all['trend'][xnr_user_no][timestamp] = 0
+                table_result['follow_group_sensitive_info'] = 0
+                table_result['fans_group_sensitive_info'] = 0
+                table_result['self_info_sensitive_info'] = 0
+                table_result['feedback_total_sensitive_info'] = 0
+                table_result['warning_report_total_sensitive_info'] = 0
+                table_result['xnr'] = xnr_user_no
+        else:
+            try:
+                results_all['trend'][xnr_user_no][timestamp] = compute_safe_num(xnr_user_no)           
+                result = get_safe_active_today(xnr_user_no)
+                xnr_result = create_xnr_history_info_count_today(xnr_user_no)
+                today_total = list(result.values())[0]
+                today_daily_post_num = xnr_result['daily_post_num']
+                today_hot_follower_num = xnr_result['hot_follower_num']
+                today_business_post_num = xnr_result['business_post_num']
+                today_trace_follow_tweet_num = xnr_result['trace_follow_tweet_num']
+
+                history_result = get_safe_history_count(timestamp,timestamp_start,xnr_user_no)
+                #print 'history_result..',history_result
+                history_total = history_result['total_post_sum']
+                history_daily_post_num = history_result['daily_post_num']
+                history_hot_follower_num = history_result['business_post_num']
+                history_business_post_num = history_result['hot_follower_num']
+                history_trace_follow_tweet_num = history_result['trace_follow_tweet_num']
+
+                table_result['total_post_sum'] = history_total + today_total
+                table_result['daily_post_num'] = history_daily_post_num + today_daily_post_num
+                table_result['hot_follower_num'] = history_hot_follower_num + today_hot_follower_num
+                table_result['business_post_num'] = history_business_post_num + today_business_post_num
+                table_result['trace_follow_tweet_num'] = history_trace_follow_tweet_num + today_trace_follow_tweet_num
+                table_result['other'] = table_result['total_post_sum'] - table_result['daily_post_num'] - table_result['hot_follower_num'] - table_result['business_post_num'] - xnr_result['trace_follow_tweet_num']
+                table_result['xnr'] = xnr_user_no
+
+            except:
+                results_all['trend'][xnr_user_no][timestamp] = 0
+                table_result['total_post_sum'] = 0
+                table_result['daily_post_num'] = 0
+                table_result['hot_follower_num'] = 0
+                table_result['business_post_num'] = 0
+                table_result['trace_follow_tweet_num'] = 0
+                table_result['other'] = 0
+                table_result['xnr'] = xnr_user_no
+        results_all['table'].append(table_result)
+    return results_all

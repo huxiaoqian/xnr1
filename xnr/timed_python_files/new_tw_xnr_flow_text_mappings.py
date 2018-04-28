@@ -178,7 +178,7 @@ def tw_daily_inerests_flow_text_mappings(index_name):
 # if __name__ == '__main__':
 
 #     new_tw_xnr_flow_text_mappings(index_name)
-if __name__=='__main__':
+# if __name__=='__main__':
 #     new_xnr_flow_text_index_list = ['new_tw_xnr_flow_text__2017-10-16','new_tw_xnr_flow_text__2017-10-17','new_tw_xnr_flow_text__2017-10-18',\
 # 'new_tw_xnr_flow_text__2017-10-19','new_tw_xnr_flow_text__2017-10-20','new_tw_xnr_flow_text__2017-10-21',\
 # 'new_tw_xnr_flow_text__2017-10-22','new_tw_xnr_flow_text__2017-10-23','new_tw_xnr_flow_text__2017-10-24',\

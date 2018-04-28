@@ -484,18 +484,15 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # es.index(index='weibo_xnr_count',doc_type='text',body=count_info,id='WXNR0044_2017-10-05')
 
 
-# count_info = {
+count_info = {
 
-# "safe": 8.02,
+"influence": 1.79,
 
-# "date_time": "2017-10-01",
-# "daily_post_num": 3,
-# "total_post_sum": 5,
-# "business_post_num": 2
+"date_time": "2017-10-06"
 
-# }
+}
 
-# es.update(index='weibo_xnr_count',doc_type='text',body={'doc':count_info},id='WXNR0044_2017-10-01')
+es.update(index='weibo_xnr_count',doc_type='text',body={'doc':count_info},id='WXNR0004_2017-10-06')
 
 
 # count_info = {
@@ -538,6 +535,6 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 # es.index(index='weibo_xnr_count',doc_type='text',body=count_info,id='WXNR0044_2017-10-06')
 
-get_result = es.get(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_1')['_source']
+# get_result = es.get(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_1')['_source']
 
-es.index(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_4',body=get_result)
+# es.index(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_4',body=get_result)
