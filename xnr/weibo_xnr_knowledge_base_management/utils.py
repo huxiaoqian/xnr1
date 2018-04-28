@@ -922,17 +922,20 @@ def show_all_opinion_corpus():
         'query':{
             'match_all':{}
         },
-        'size':MAX_VALUE,
+        'size':200,
         'sort':{'timestamp':{'order':'desc'}}
     }
     opinion_corpus_result = []
     try:
         result = es.search(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,body=query_body)['hits']['hits']
+        # print 'result',result
         for item in result:
             opinion_corpus_result.append(item['_source'])
     except:
         opinion_corpus_result = []
+    # print 'opinion_corpus_result',opinion_corpus_result
     return opinion_corpus_result
+    # return result
 
 
 def show_condition_opinion_corpus(theme_type):
@@ -1014,8 +1017,9 @@ def show_different_corpus(task_detail):
                     result['daily_corpus'] = show_corpus(daily_corpus)
             
             if task_detail['theme_type_3']:
-                label = get_label_name(task_detail['theme_type_3'])
-                result['opinion_corpus'] = show_condition_opinion_corpus(label)
+                # label = get_label_name(task_detail['theme_type_3'])
+                # result['opinion_corpus'] = show_condition_opinion_corpus(label)
+                result['opinion_corpus'] = show_condition_opinion_corpus(task_detail['theme_type_3'])
             else:
                 result['opinion_corpus'] = show_all_opinion_corpus()
 
@@ -1066,3 +1070,22 @@ def delete_corpus(corpus_id):
     except:
         result=False
     return result
+
+def text_list(text_content):
+    text = []
+    if text_content:
+        for item in text_content:
+            text.append(item['text'])
+    else:
+        pass
+
+    return text
+
+
+def show_opinion_corpus():
+    corpus_type = get_opnion_corpus_type()
+    corpus_dict = dict()
+    for item in corpus_type:
+        text_content = show_condition_opinion_corpus(item)
+        corpus_dict[item] = text_list(text_content)
+    return corpus_dict

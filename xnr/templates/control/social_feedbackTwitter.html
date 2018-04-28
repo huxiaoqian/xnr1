@@ -1,7 +1,7 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>社交反馈</title>{% endblock %}
 {% block my_css %}
-<link rel="stylesheet" href="/static/css/social_feedbackTwitter.css">
+<link rel="stylesheet" href="/static/css/social_feedback.css">
 <style>
     .bootstrap-table {
         margin: 0 auto;
@@ -25,7 +25,7 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner {padding: 0.00001px;}
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -39,17 +39,18 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
+    #focusReply .focus-1 .pull-left.pagination-detail {display: none;}
     /*.reply-1 .fixed-table-body {*/
     /*width: 126px!important;*/
     /*margin: 0 auto!important;*/
     /*}*/
 
     /**/
-    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}
-    .demo-radio{display:none!important;}
-    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    /*.demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}*/
+    /*.demo-radio{display:none!important;}*/
+    /*.demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}*/
+    /*.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}*/
+    /*.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}*/
     .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
     #container .type_page #myTabs a {
         color: white;
@@ -146,9 +147,9 @@
             <li role="presentation" flag="focus" tp="show_fans" idbox="focus-1">
                 <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;关注回粉</a>
             </li>
-            <li role="presentation" flag="" tp="" idbox="fansTable-1">
-                <a href="#fansTable" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;粉丝列表</a>
-            </li>
+            <!--<li role="presentation" flag="" tp="show_friends" idbox="fansTable-1">-->
+                <!--<a href="#fansTable" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;粉丝列表</a>-->
+            <!--</li>-->
         </ul>
         <div class="desc_index">
             <span>排序指标：</span>
@@ -193,19 +194,69 @@
                     <div id="reply-1"></div>
                 </div>
             </div>
-
+            <style>
+                #focusReply {
+                    width:100%;
+                    overflow: hidden;
+                }
+                #focusReply .friendRequest {
+                    width: 46%;
+                    float: left;
+                    position: relative;
+                    padding:5px 5px 5px 100px;
+                    border: 1px solid silver;
+                    border-radius: 5px;
+                    margin-left:2%;
+                    margin-bottom: 10px;
+                    text-align: left;
+                }
+                #focusReply .friendRequest .name {
+                    max-width: 40%;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                }
+                #focusReply .headImg {
+                    position: absolute;
+                    width: 50px;
+                    height: 50px;
+                    top: 10%;
+                    left:15px;
+                }
+                #focusReply .requestInfo {
+                    margin-left: 10px;
+                }
+                #focusReply .requestInfo .infor-2 {
+                    margin: 10px 0;
+                }
+                #focusReply .sureAdd,#focusReply .delAdd {
+                    font-size: 12px;
+                    display: inline-block;
+                    padding: 3px 7px;
+                    color: white;
+                    margin-left: 10px;
+                    background: rgba(75, 122, 248, 0.71);
+                    border-radius: 5px;
+                    cursor: pointer;
+                }
+                #focusReply .sureAdd:hover,#focusReply .delAdd:hover {
+                    background: rgba(26, 37, 248, 0.93);
+                }
+            </style>
             <div role="tabpanel" class="tab-pane" id="focusReply">
                 <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
                 <div class="focus-1">
                     <div id="focus-1"></div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="fansTable">
-                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
-                <div class="fansTable-1">
-                    <div id="fansTable-1"></div>
-                </div>
-            </div>
+            <!--<div role="tabpanel" class="tab-pane" id="fansTable">-->
+                <!--<p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>-->
+                <!--<div class="fansTable-1">-->
+                    <!--<div id="fansTable-1"></div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
 
     </div>

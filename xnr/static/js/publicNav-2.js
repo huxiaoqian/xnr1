@@ -187,7 +187,8 @@ function comMent(_this,type){
 //点赞  喜欢
 function thumbs(_this) {
     var MFT = $(_this).parents('.center_rel').find('.'+mft_id).text();
-    var likePost_url='/'+urlFirst_zpd+'/like_operate/?'+mft_id+'='+MFT+'&xnr_user_no='+ID_Num;
+    var time=$(_this).parents('.center_rel').find('.timestamp').text();
+    var likePost_url='/'+urlFirst_zpd+'/like_operate/?'+mft_id+'='+MFT+'&xnr_user_no='+ID_Num+'&timestamp='+time;
     if (loadingType=='faceBook'){
         var uid = $(_this).parents('.center_rel').find('.uid').text();
         likePost_url+='&uid='+uid;
@@ -209,7 +210,12 @@ function robotTxt(data) {
     var txt=data['tuling'];
     if (isEmptyObject(data)||!txt){txt='机器人无答复'};
     $(robotThis).parents('.center_rel').find('.commentDown').children('input').val(txt);
-    var robotType=$(robotThis).parents('.center_rel').find('.commentDown').children('span').attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
+    var robotType;
+    try{
+        robotType=$(robotThis).parents('.center_rel').find('.commentDown').children('span').attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
+    }catch (e){
+        robotType=$(robotThis).parents('.center_rel').find('.commentDown').find('span').eq(1).attr('onclick').replace(/\(|\)|\'/g,'').split(',')[1];
+    }
     var str='<div class="robotQuestion">';
     var problem=data["own"][0]||'没有相关问题';
     var robot1='<p style="font-weight: 900;color:#f6a38e;"><i class="icon icon-lightbulb"></i>&nbsp;相关问题</p>' +

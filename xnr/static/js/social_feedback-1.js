@@ -150,23 +150,19 @@ function com(data) {
                             time=getLocalTime(row.timestamp);
                         };
                         var star1='<img src="/static/images/level.png" alt="">',
-                            star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                            star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                         if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                             star=star2.repeat(5);
                         }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                            star+=star1;
-                            star+=star2.repeat(4);
+                            star=star1+star2.repeat(4);
                         }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                            star+=star1.repeat(2);
-                            star+=star2.repeat(3);
+                            star=star1.repeat(2)+star2.repeat(3);
                         }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                            star+=star1.repeat(3);
-                            star+=star2.repeat(2);
+                            star=star1.repeat(3)+star2.repeat(2);
                         }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                            star+=star1.repeat(4);
-                            star+=star2.repeat(1);
+                            star=star1.repeat(4)+star2.repeat(1);
                         }else if (row.sensitive_info>10){
-                            star+=star1.repeat(5);
+                            star=star1.repeat(5);
                         };
                         if (row.weibo_type=='follow'){
                             user='已关注用户';
@@ -187,6 +183,7 @@ function com(data) {
                             '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                             '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                             '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
+                            '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                             '            <div class="com-level">'+
                             '                <span style="display: inline-block;">敏感度：</span>'+
                             '                <div class="com-img" style="display: inline-block;">'+star+
@@ -218,7 +215,7 @@ function com(data) {
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                             '                </label>'+
-                            '                <a href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent_feed(this)">发送</a>'+
+                            '                <span href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent_feed(this,\'社交反馈\')">发送</a>'+
                             '            </div>'+
                             '        </div>'+
                             '    </div>'+
@@ -294,23 +291,19 @@ function letter(data) {
                         time=getLocalTime(row.timestamp);
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         user='已关注用户';
@@ -347,7 +340,7 @@ function letter(data) {
                         '    <div class="letterClone commentDown" style="text-align: center;">'+
                         '        <input type="text" class="clone-1" style="width:79%;"/>'+
                         '        <div class="clone-2">'+
-                        '            <a href="###" class="clone-2-4" midurl="reply_private" onclick="comMent_feed(this)">发送</a>'+
+                        '            <span href="###" class="clone-2-4" midurl="reply_private" onclick="comMent_feed(this,\'社交反馈\')">发送</span>'+
                         '        </div>'+
                         '    </div>'+
                         '</div>';
@@ -409,23 +402,19 @@ function reply(data) {
                     };
 
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         user='已关注用户';
@@ -442,6 +431,7 @@ function reply(data) {
                         '        <span style="display: none;" class="mid">'+row.mid+'</span>'+
                         '        <span style="display: none;" class="r_mid">'+row.root_mid+'</span>'+
                         '        <span style="display: none;" class="uid">'+row.uid+'</span>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '        <div class="rep rep-1">'+
                         '            <span class="com-2-name" style="display: none;">'+user+'</span>'+
                         '            <b class="rep-1-name">来自 '+user+'</b>&nbsp;&nbsp;'+
@@ -474,7 +464,7 @@ function reply(data) {
                         '                <input class="demo-radio clone-2-3" type="checkbox" name="desc4">'+
                         '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                         '            </label>'+
-                        '            <a href="###" class="clone-2-4" midurl="reply_at" onclick="comMent_feed(this)">发送</a>'+
+                        '            <span href="###" class="clone-2-4" midurl="reply_at" onclick="comMent_feed(this,\'社交反馈\')">发送</span>'+
                         '        </div>'+
                         '    </div>'+
                         '    </div>'+
@@ -546,23 +536,19 @@ function focus(data) {
                         geo=row.geo;
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         fol='已关注';user='已关注用户';

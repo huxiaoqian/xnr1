@@ -1,7 +1,7 @@
 {% extends "publicNav.html" %}
 {% block title %}<title>社交反馈</title>{% endblock %}
 {% block my_css %}
-<link rel="stylesheet" href="/static/css/social_feedbackTwitter.css">
+<link rel="stylesheet" href="/static/css/social_feedback.css">
 <style>
     .bootstrap-table {
         margin: 0 auto;
@@ -25,7 +25,7 @@
     .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
+    .fixed-table-container tbody td .th-inner, .fixed-table-container thead th .th-inner {padding: 0.00001px;}
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
     }
@@ -39,18 +39,19 @@
         padding: 4px 7px;
         background: rgba(8,23,44,0.35);
     }
+    #focusReply .focus-1 .pull-left.pagination-detail {display: none;}
     /*.reply-1 .fixed-table-body {*/
     /*width: 126px!important;*/
     /*margin: 0 auto!important;*/
     /*}*/
 
     /**/
-    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}
-    .demo-radio{display:none!important;}
-    .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
-    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
-    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    /*.demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}*/
+    /*.demo-radio{display:none!important;}*/
+    /*.demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}*/
+    /*.demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}*/
+    /*.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}*/
+    /*.buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}*/
     #container .type_page #myTabs a {
         color: white;
     }
@@ -146,7 +147,7 @@
             <!--<li role="presentation" flag="focus" tp="show_fans" idbox="focus-1">-->
                 <!--<a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;好友请求</a>-->
             <!--</li>-->
-            <li role="presentation" flag="focus" tp="show_fans" idbox="focus-1">
+            <li role="presentation" flag="focus" tp="show_friends" idbox="focus-1">
                 <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;好友列表</a>
             </li>
         </ul>
@@ -199,14 +200,15 @@
                     overflow: hidden;
                 }
                 #focusReply .friendRequest {
-                    min-width: 40%;
-                    max-width: 45%;
+                    width: 46%;
+                    float: left;
                     position: relative;
-                    padding:5px 5px 5px 60px;
+                    padding:5px 5px 5px 100px;
                     border: 1px solid silver;
                     border-radius: 5px;
-                    float: left;
-                    margin-left: 5%;
+                    margin-left:2%;
+                    margin-bottom: 10px;
+                    text-align: left;
                 }
                 #focusReply .friendRequest .name {
                     max-width: 40%;
@@ -221,7 +223,7 @@
                     width: 50px;
                     height: 50px;
                     top: 10%;
-                    left: 5px;
+                    left:15px;
                 }
                 #focusReply .requestInfo {
                     margin-left: 10px;
@@ -249,36 +251,22 @@
                     <div id="focus-1"></div>
                 </div>
                 <!--<span style="font-size: 16px;margin-bottom: 10px;"><b class="requestNum" style="color: #ff6d70;">5</b>个待回应请求</span>-->
-                <div class="friendRequest">
-                    <img src="/static/images/unknown.png" class="headImg">
-                    <div class="requestInfo">
-                        <div class="info-1">
-                            <p class="name" title="facebookTEST">facebookTEST</p>
-                            <span class="sureAdd">确认</span>
-                            <span class="delAdd">删除请求</span>
-                        </div>
-                        <div class="infor-2">XXXXXXXXXXNNNNNMMMM</div>
-                        <div class="infor-3">
-                            <span>共同好友：</span>
-                            <span class="friends">Google，baidu，微软</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="friendRequest">
-                    <img src="/static/images/unknown.png" class="headImg">
-                    <div class="requestInfo">
-                        <div class="info-1">
-                            <p class="name" title="facebookTEST">facebookTEST</p>
-                            <span class="sureAdd">确认</span>
-                            <span class="delAdd">删除请求</span>
-                        </div>
-                        <div class="infor-2">XXXXXXXXXXNNNNNMMMM</div>
-                        <div class="infor-3">
-                            <span>共同好友：</span>
-                            <span class="friends">Google，baidu，微软</span>
-                        </div>
-                    </div>
-                </div>
+
+                <!--<div class="friendRequest">-->
+                    <!--<img src="/static/images/unknown.png" class="headImg">-->
+                    <!--<div class="requestInfo">-->
+                        <!--<div class="info-1">-->
+                            <!--<p class="name" title="facebookTEST">facebookTEST</p>-->
+                            <!--<span class="sureAdd">确认</span>-->
+                            <!--<span class="delAdd">删除请求</span>-->
+                        <!--</div>-->
+                        <!--<div class="infor-2">XXXXXXXXXXNNNNNMMMM</div>-->
+                        <!--<div class="infor-3">-->
+                            <!--<span>共同好友：</span>-->
+                            <!--<span class="friends">Google，baidu，微软</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
 
