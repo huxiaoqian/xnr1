@@ -1322,15 +1322,19 @@ def get_related_recommendation(task_detail):
     monitor_keywords_list = monitor_keywords.split(',')
 
     nest_query_list = []
-    #print 'monitor_keywords_list::',monitor_keywords_list
+    print 'monitor_keywords_list::',monitor_keywords_list
     for monitor_keyword in monitor_keywords_list:
         #print 'monitor_keyword::::',monitor_keyword
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
     
     # else:
-    recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']['followers_list']
-    #recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=uid)['_source']['fans_list']
+    try:
+        recommend_list = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=xnr_user_no)['_source']['followers_list']
+    except:
+        recommend_list = []
+
     recommend_set_list = list(set(recommend_list))
+
     if S_TYPE == 'test':
         current_date = S_DATE
     else:
@@ -1361,7 +1365,7 @@ def get_related_recommendation(task_detail):
         }
 
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        
+        print 'es_rec_result///',es_rec_result
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)
@@ -1862,13 +1866,15 @@ def get_show_retweet_timing_list_future(xnr_user_no):
     return result_all
 
 def get_show_trace_followers(xnr_user_no):
-    
-    es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    weibo_user_info = []
+    try:
+        es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                     id=xnr_user_no)['_source']
 
-    trace_follow_list = es_get_result['trace_follow_list']
+        trace_follow_list = es_get_result['trace_follow_list']
 
-    weibo_user_info = []
+    except:
+        return weibo_user_info
 
     # query_body = {
     #     'query':{

@@ -5,7 +5,7 @@
 <!--<link rel="stylesheet" href="/static/css/jquery.sinaEmotion.css">-->
 <link rel="stylesheet" type="text/css" href="/static/css/LL_jquery.eeyellow.Timeline.css" />
 <style>
-    #intelligenceTabs .radyType {
+    #intelligenceTabs .radyType,#sameRoad .modActCC.cc4 {
         display: none;
     }
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
@@ -45,23 +45,21 @@
         border: none;
     }
     .table>tbody>tr>td {vertical-align: middle!important;}
-    .weiboTable .bootstrap-table thead,.weiboTable .fixed-table-pagination .page-list {
+    .weiboTable .fixed-table-pagination .page-list {
         display: none!important;
     }
-    .follow_forward.weiboTable .bootstrap-table thead {
-        display: table-header-group!important;
-    }
-
-    .follow_forward.weiboTable .fixed-table-container thead th .both {background-image: none!important;}
-    .weiboTable .fixed-table-body {
-        height: auto!important;
-        overflow-y: hidden;
-    }
+    /*.follow_forward.weiboTable .bootstrap-table thead {*/
+        /*display: table-header-group!important;*/
+    /*}*/
+    /*.follow_forward.weiboTable .fixed-table-container thead th .both {background-image: none!important;}*/
+    /*.weiboTable .fixed-table-body {*/
+        /*height: auto!important;*/
+        /*overflow-y: hidden;*/
+    /*}*/
     .weiboTable .bootstrap-table .table:not(.table-condensed),.weiboTable .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
     .weiboTable .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
     .focus_main .fixed-table-container,.eventList .fixed-table-container {top: 0;}
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
@@ -86,10 +84,7 @@
     }
     #addHeavyUser .heavy-3 {width: 300px;margin: 20px 0 0 10px;}
     #addHeavyUser .h-1 {display: inline-block;width:75px;text-align: right;}
-    .weiboTable .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
-    }
-    .follow_forward.weiboTable .table:not(.table-condensed)>tbody>tr>td {text-align: center!important;}
+    .weiboTable .fixed-table-container thead th .th-inner {padding: 0.0001px!important;}
     /**/
     .datetimepicker {color:black;}
     #user_recommend .user_example_list .more:hover,sureADD:hover {
@@ -640,9 +635,9 @@
                             <li role="presentation" class="radyType5 radyType">
                                 <a href="#z-5" table-view="view-4" role="tab" data-toggle="tab" view-type="sensitive" class="viewHave">高敏感度用户观点</a>
                             </li>
-                            <!-- <li role="presentation" class="radyType6 radyType">
+                            <li role="presentation" class="radyType6 radyType">
                                 <a href="#z-6" table-view="view-5" role="tab" data-toggle="tab" view-type="" class="viewHave">观点语料库</a>
-                            </li> -->
+                            </li>
                             <!--<li role="presentation" class="radyType7 radyType">-->
                                 <!--<a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>-->
                             <!--</li>-->
@@ -766,11 +761,11 @@
                                 </div>
                             </div>
                             <div role="tabpanel" class="weiboTable tab-pane" id="z-6">
-                                <div class="addCorpus" style="margin:20px 0;text-align: center;">
-                                    <input type="text" placeholder="请输入你想添加的观点语料库" class="corpusVal"
-                                           style="width:90%;background: transparent;border: 1px solid #eee;border-radius:5px;text-align:center;padding: 5px 10px;">
-                                    <button type="button" class="btn btn-primary sureAddCorpus">确定</button>
-                                </div>
+                                <!--<div class="addCorpus" style="margin:20px 0;text-align: center;">-->
+                                    <!--<input type="text" placeholder="请输入你想添加的观点语料库" class="corpusVal"-->
+                                           <!--style="width:90%;background: transparent;border: 1px solid #eee;border-radius:5px;text-align:center;padding: 5px 10px;">-->
+                                    <!--<button type="button" class="btn btn-primary sureAddCorpus">确定</button>-->
+                                <!--</div>-->
                                 <div class="z-Top">
                                     <div class="view-1-button" style="display: inline-block;"></div>
                                 </div>
