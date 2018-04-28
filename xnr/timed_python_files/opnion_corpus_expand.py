@@ -11,7 +11,7 @@ from global_utils import es_xnr,opinion_corpus_index_name,opinion_corpus_index_t
 from parameter import MAX_SEARCH_SIZE,WORD2VEC_PATH
 
 sys.path.append('../cron/opinion_question/')
-from opinion_corpus import get_weibo_text
+from opinion_corpus_v2 import get_weibo_text
 
 #step1
 def search_expand_task():
@@ -61,26 +61,32 @@ def update_opnion_corpus(corpus_id):
 
     return mark
 
+###redis
+def spcific_opinion_corpus_expand(task):
+    origin_keyword = task['corpus_name']
+    
+    #step2：对领域词进行词扩充
+    keywords_list = keywords_expand(origin_keyword)
+
+    #step3:根据师兄算法进行语料扩充与积累
+    #step4：将语料积累结果写入文件
+    task_mark = get_weibo_text(keywords_list,task['corpus_name'])
+    print 'task_mark:',task_mark
+    #step5:如果写入文件成功且，则更新状态为1
+    if task_mark == 1:
+        update_mark = update_opnion_corpus(task['corpus_pinyin'])
+    else:
+        update_mark = False
+    return update_mark    
+
 def opnionn_corpus_expand():
 #step1:查询未完成语料库扩充的领域、领域拼音（为存文件做准备）
     corpus_result = search_expand_task()
     update_mark_list = []
     if corpus_result:
         for task in corpus_result:
-            origin_keyword = task['corpus_name']
-            
-            #step2：对领域词进行词扩充
-            keywords_list = keywords_expand(origin_keyword)
-
-            #step3:根据师兄算法进行语料扩充与积累
-            #step4：将语料积累结果写入文件
-            task_mark = get_weibo_text(keywords_list,task['corpus_pinyin'])
-            print 'task_mark:',task_mark
-            #step5:如果写入文件成功且，则更新状态为1
-            if task_mark == 1:
-                update_mark = update_opnion_corpus(task['corpus_pinyin'])
-            else:
-                update_mark = False
+            print 'task::',task['corpus_name']
+            update_mark = spcific_opinion_corpus_expand(task)
 
             update_mark_list.append(update_mark)
 

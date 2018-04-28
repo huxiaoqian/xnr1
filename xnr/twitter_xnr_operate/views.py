@@ -297,7 +297,7 @@ def ajax_at_operate():
 def ajax_like_operate():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
-    task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
+    task_detail['r_tid'] = request.args.get('tid','') # 被转发帖子
     #task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
     
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
@@ -306,14 +306,15 @@ def ajax_like_operate():
 
     # mark = get_like_operate(task_detail)
 
+
     queue_dict = {}
     queue_dict['channel'] = 'twitter'
     queue_dict['operate_type'] = 'like'
     queue_dict['content'] = task_detail
     mark_a = add_operate2redis(queue_dict) 
-
+    # print mark_a
     mark = mark_a and mark_s   
-
+    
     return json.dumps(mark)
 
 # 关注

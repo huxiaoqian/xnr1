@@ -14,7 +14,7 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
                   get_show_domain_role_info,get_delete_domain,get_export_example_model,\
                   get_generate_example_model,get_show_example_model,\
-                  show_different_corpus
+                  show_different_corpus,show_opinion_corpus
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
@@ -411,6 +411,13 @@ def ajax_show_different_corpus():
     task_detail['theme_type_3'] = request.args.get('theme_type_3','').split(',')
     results = show_different_corpus(task_detail)
     return json.dumps(results)
+
+#显示观点语料库
+@mod.route('/show_opinion_corpus/')
+def ajax_show_opinion_corpus():
+    results = show_opinion_corpus()
+    return json.dumps(results)
+
 
 #修改语料
 #注：主题语料和日常语料都调用该函数模块

@@ -1242,7 +1242,7 @@ def wxnr_list_concerns(user_id,order_type):
                 #敏感度查询,话题领域
                 try:
                     temp_user_result=es_tw_user_portrait.get(index=tw_portrait_index_name,doc_type=tw_portrait_index_type,id=follower_uid)['_source']
-                    user_dict['sensitive']=temp_user_result['sensitive']
+                    user_dict['sensitive']=round(temp_user_result['sensitive'],2)
                     user_dict['topic_string']=temp_user_result['topic_string']
                 except:
                     user_dict['sensitive']=0
@@ -1280,15 +1280,15 @@ def count_weibouser_influence(uid):
             'match_all':{}
         },
         'size':1,
-        'sort':{'user_index':{'order':'desc'}}
+        'sort':{'influence':{'order':'desc'}}
     }
     try:
         max_result=es_tw_user_profile.search(index=index_name,doc_type=tw_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
-           max_user_index=item['_source']['user_index']
+           max_user_index=item['_source']['influence']
 
         user_result=es_tw_user_profile.get(index=index_name,doc_type=tw_bci_index_type,id=uid)['_source']
-        user_index=user_result['user_index']
+        user_index=user_result['influence']
         infulence_value=user_index/max_user_index*100
     except:
         infulence_value=0
@@ -1340,11 +1340,12 @@ def wxnr_list_fans(user_id,order_type):
 
                 user_dict['photo_url']=item['_source']['photo_url']            
                 user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
+                user_dict['twitter_type']=item['_source']['twitter_type']
+                # user_dict['sex']=item['_source']['sex']
                 #user_dict['user_birth']=item['_source']['user_birth']
                 #user_dict['create_at']=item['_source']['create_at']
-                user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
-                user_dict['user_location']=item['_source']['geo']
+                # user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
+                # user_dict['user_location']=item['_source']['geo']
                 xnr_fans_result.append(user_dict)
             else:
                 pass

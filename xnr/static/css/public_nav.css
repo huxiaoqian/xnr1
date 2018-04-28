@@ -100,9 +100,10 @@ a,a:link,a:hover,a:visited,a:active {
 /*<style> navigationMain.html页面内样式*/
 .demo-label{display:inline-block;cursor:pointer;font-weight: normal;margin: 5px 10px;}
 .demo-radio{display:none!important;}
-.demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+.demo-radioInput{cursor:pointer;background:#eee!important;display:inline-block!important;height:16px!important;padding: 0!important;
+    vertical-align:middle!important;width:16px!important;line-height:1!important;margin-top:-3px!important;}
 .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
-.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+.demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0!important}
 .modal-header {
     background: #09344e!important;
     color: white!important;

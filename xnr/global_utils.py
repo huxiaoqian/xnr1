@@ -356,7 +356,7 @@ weibo_xnr_corpus_index_name = 'weibo_corpus'
 weibo_xnr_corpus_index_type = 'text'
 
 # 语料库 -- 观点语料和问答语料
-
+all_opinion_corpus_index_name_test = 'all_opinion_corpus_test'
 all_opinion_corpus_index_name = 'all_opinion_corpus'
 all_opinion_corpus_index_type = 'text'
 
@@ -691,6 +691,9 @@ def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
 
 R_WRITING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
 writing_task_queue_name = 'intelligent_writing_task'
+
+R_OPINION = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
