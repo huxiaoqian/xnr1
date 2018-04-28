@@ -18,6 +18,7 @@ from xnr.global_utils import es_xnr as es, fb_xnr_index_name,fb_xnr_index_type,\
                     fb_bci_index_name_pre, fb_bci_index_type, fb_xnr_fans_followers_index_name, \
                     fb_xnr_fans_followers_index_type
 
+from xnr.global_utils import facebook_xnr_save_like_index_name,facebook_xnr_save_like_index_type
 
 from xnr.facebook_publish_func import fb_publish, fb_comment, fb_retweet, fb_follow, fb_unfollow, \
                                     fb_like, fb_mention, fb_message, fb_add_friend, fb_confirm, fb_delete_friend
@@ -30,8 +31,8 @@ from parameter import topic_ch2en_dict, TOP_WEIBOS_LIMIT, HOT_EVENT_TOP_USER, HO
 sys.path.append(WRITING_PATH)
 #from xnr.cron.opinion_question.tuling_test import get_message_from_tuling
 from tuling_test import get_message_from_tuling
-#from question_search import search_answer
-from question_search_v2 import search_answer
+from question_search import search_answer
+#from question_search_v2 import search_answer
 
 def get_robot_reply(question):
     
@@ -1690,3 +1691,60 @@ def get_related_recommendation(task_detail):
                 item_else['fansnum'] = avg_sort_uid_dict[uid]['sort_item_value']
             results_all.append(item_else)
     return results_all
+
+
+
+
+
+
+
+#查询虚拟人uid
+def lookup_xnr_uid(xnr_user_no):
+    try:
+        xnr_result=es.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_uid=xnr_result['uid']
+    except:
+        xnr_uid=''
+    return xnr_uid
+
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        user_result=es.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)['_source']
+        user_name=user_result['username']
+    except:
+        user_name=''
+    return user_name
+
+def save_oprate_like(task_detail):
+    like_id = task_detail['xnr_user_no'] + '_' + task_detail['r_fid']
+    like_detail=dict()
+    like_detail['update_time'] = int(time.time())
+    like_detail['root_fid'] = task_detail['r_fid']
+    like_detail['root_uid'] = task_detail['r_uid']
+    like_detail['fid'] = like_id
+
+    #查询xnr_user_no的uid
+    like_detail['uid'] = lookup_xnr_uid(task_detail['xnr_user_no'])
+    #根据mid查询
+    flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        flow_result = es.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['r_fid'])['_source']      
+        like_detail['nick_name'] = get_user_nickname(flow_result['uid'])
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = flow_result['timestamp']
+        like_detail['text'] = flow_result['text']
+        like_detail['facebook_type'] = ''
+    except:
+        like_detail['nick_name'] = ''
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = int(task_detail['timestamp'])
+        like_detail['text'] = ''
+        like_detail['facebook_type'] = ''
+
+    try:
+        es.index(index=facebook_xnr_save_like_index_name,doc_type=facebook_xnr_save_like_index_type,id=like_id,body=like_detail)
+        mark=True
+    except:
+        mark=False
+    return mark

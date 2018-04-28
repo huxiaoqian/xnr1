@@ -35,6 +35,7 @@ from xnr.global_utils import weibo_feedback_comment_index_name,weibo_feedback_co
                             weibo_private_white_uid_index_type,daily_interest_index_name_pre,\
                             daily_interest_index_type, be_retweet_index_name_pre, be_retweet_index_type, es_retweet
 
+from xnr.global_utils import weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type
 
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,\
                             get_timeset_indexset_list, get_db_num
@@ -131,16 +132,9 @@ def get_submit_tweet(task_detail):
 
     # 发布微博
     #account_name = 'weiboxnr03@126.com'
-    # print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
+    print '===',account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
-
-    # # 保存微博
-    # try:
-    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    # except:
-    #     print '保存微博过程遇到错误！'
-    #     save_mark = False
 
     return mark
 
@@ -1866,15 +1860,18 @@ def get_show_retweet_timing_list_future(xnr_user_no):
     return result_all
 
 def get_show_trace_followers(xnr_user_no):
+
     weibo_user_info = []
+    
     try:
         es_get_result = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
-                    id=xnr_user_no)['_source']
+                        id=xnr_user_no)['_source']
 
         trace_follow_list = es_get_result['trace_follow_list']
-
     except:
         return weibo_user_info
+
+    
 
     # query_body = {
     #     'query':{
@@ -1979,10 +1976,57 @@ def get_follower_opinion_wb(task_detail):
 
 
 
+#查询虚拟人uid
+def lookup_xnr_uid(xnr_user_no):
+    try:
+        xnr_result=es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_uid=xnr_result['uid']
+    except:
+        xnr_uid=''
+    return xnr_uid
 
+#查询用户昵称
+def get_user_nickname(uid):
+    try:
+        user_result=es_user_profile.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+        user_name=user_result['nick_name']
+    except:
+        user_name=''
+    return user_name
 
+def save_oprate_like(task_detail):
+    like_id = task_detail['xnr_user_no'] + '_' + task_detail['mid']
+    like_detail=dict()
+    like_detail['update_time'] = int(time.time())
+    like_detail['root_mid'] = task_detail['mid']
+    like_detail['mid'] = like_id
 
+    #查询xnr_user_no的uid
+    like_detail['uid'] = lookup_xnr_uid(task_detail['xnr_user_no'])
+    #根据mid查询
+    flow_text_index_name = flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
+    try:
+        flow_result = es_flow_text.get(index=flow_text_index_name,doc_type=flow_text_index_type,id=task_detail['mid'])['_source']
+        like_detail['root_uid'] = flow_result['uid']
+        like_detail['nick_name'] = get_user_nickname(flow_result['uid'])
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = flow_result['timestamp']
+        like_detail['text'] = flow_result['text']
+        like_detail['weibo_type'] = flow_result['message_type']
+    except:
+        like_detail['root_uid'] = ''
+        like_detail['nick_name'] = ''
+        like_detail['photo_url'] = ''
+        like_detail['timestamp'] = int(task_detail['timestamp'])
+        like_detail['text'] = ''
+        like_detail['weibo_type'] = ''
 
+    try:
+        es.index(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,id=like_id,body=like_detail)
+        mark=True
+    except:
+        mark=False
+    return mark
 
 
 

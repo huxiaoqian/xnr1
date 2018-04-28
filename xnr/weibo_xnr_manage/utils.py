@@ -1041,7 +1041,7 @@ def lookup_send_like(uid,start_time,end_time):
                 'filter':{
                 	'bool':{
                 		'must':[
-                			{'term':{'root_uid':uid}},
+                			{'term':{'uid':uid}},
                 			{'range':{
 								'timestamp':{
 									'gte':start_time,

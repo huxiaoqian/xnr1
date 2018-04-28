@@ -11,7 +11,7 @@ from global_utils import es_xnr,opinion_corpus_index_name,opinion_corpus_index_t
 from parameter import MAX_SEARCH_SIZE,WORD2VEC_PATH
 
 sys.path.append('../cron/opinion_question/')
-from opinion_corpus_v2 import get_weibo_text
+from opinion_corpus import get_weibo_text
 
 #step1
 def search_expand_task():

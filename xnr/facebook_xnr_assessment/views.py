@@ -7,7 +7,12 @@ from flask import Blueprint, url_for, render_template, request,\
 from utils import get_influence_total_trend, compute_influence_num, penetration_total,\
                     compute_penetration_num,compute_safe_num, get_safe_active,\
                     get_influence_total_trend_today, penetration_total_today, get_safe_active_today,\
-                    get_tweets_distribute, get_safe_tweets,get_follow_group_distribute,get_follow_group_tweets
+                    get_tweets_distribute, get_safe_tweets,get_follow_group_distribute,get_follow_group_tweets,\
+                    get_compare_assessment, get_compare_assessment_today
+from xnr.global_utils import es_xnr as es
+from xnr.global_config import S_TYPE, S_DATE_FB as S_DATE
+from xnr.time_utils import datetime2ts, ts2datetime
+from xnr.parameter import WEEK, DAY
 
 mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
 
@@ -149,6 +154,28 @@ def ajax_follow_group_tweets():
     return json.dumps(results)
 
 
+# 对比评估
+#http://219.224.134.213:6651/faceboo_xnr_assessment/compare_assessment/?xnr_user_no_list=FXNR0003,FXNR0005&dim=influence&start_time=1523980800&end_time=1524585599@mod.route('/compare_assessment/')
+def ajax_compare_assessment():
+    xnr_user_no_list = request.args.get('xnr_user_no_list','') # 多个虚拟人，用英文逗号 ‘,’ 分开 
+    dim = request.args.get('dim','') # 要对比的维度，用英文参数：influence -影响力，penetration - 渗透力 ，safe - 安全性
+    start_time = int(request.args.get('start_time','')) # 开始时间
+    end_time = int(request.args.get('end_time','')) # 终止时间
+
+    if S_TYPE == 'test':
+        start_time = datetime2ts(S_DATE)
+        end_time = start_time + WEEK*DAY
+    results = get_compare_assessment(xnr_user_no_list, dim, start_time, end_time)
+    return json.dumps(results)
+
+# 对比评估--今日
+# http://219.224.134.213:9998/weibo_xnr_assessment/compare_assessment_today/?xnr_user_no_list=WXNR0004,WXNR0005,WXNR0001&dim=influence
+@mod.route('/compare_assessment_today/')
+def ajax_compare_assessment_today():
+    xnr_user_no_list = request.args.get('xnr_user_no_list','') # 多个虚拟人，用英文逗号 ‘,’ 分开 
+    dim = request.args.get('dim','') # 要对比的维度，用英文参数：influence -影响力，penetration - 渗透力 ，safe - 安全性
+    results = get_compare_assessment_today(xnr_user_no_list, dim)
+    return json.dumps(results)
 
 """
 #2018-3-8 11:19:09

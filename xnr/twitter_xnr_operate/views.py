@@ -19,6 +19,7 @@ from utils import get_submit_tweet_tw, tw_save_to_tweet_timing_list, get_recomme
                 get_show_retweet_timing_list, get_show_retweet_timing_list_future
 
 from xnr.utils import add_operate2redis
+from utils import save_oprate_like
 
 mod = Blueprint('twitter_xnr_operate', __name__, url_prefix='/twitter_xnr_operate')
 
@@ -299,7 +300,9 @@ def ajax_like_operate():
     task_detail['r_fid'] = request.args.get('tid','') # 被转发帖子
     #task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
     
-    #task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
+    task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
+    task_detail['timestamp'] = int(request.args.get('timestamp',''))
+    mark_s = save_oprate_like(task_detail)    
 
     # mark = get_like_operate(task_detail)
 
@@ -307,7 +310,9 @@ def ajax_like_operate():
     queue_dict['channel'] = 'twitter'
     queue_dict['operate_type'] = 'like'
     queue_dict['content'] = task_detail
-    mark = add_operate2redis(queue_dict)    
+    mark_a = add_operate2redis(queue_dict) 
+
+    mark = mark_a and mark_s   
 
     return json.dumps(mark)
 

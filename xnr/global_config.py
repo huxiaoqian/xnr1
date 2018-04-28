@@ -55,17 +55,17 @@ ES_CLUSTER_HOST = ['219.224.134.213:9205', '219.224.134.214:9205',\
 ES_CLUSTER_PORT = '9205'
 #config flow text info
 ES_FLOW_TEXT_HOST = ['219.224.134.216:9201', \
-                          '219.224.134.218:9201']
+                          '219.224.134.214:9201']
 ES_FLOW_TEXT_PORT = '9201'
 
 # need three ES identification 
 USER_PROFILE_ES_HOST = ['219.224.134.216:9201', \
-                          '219.224.134.218:9201']
+                          '219.224.134.214:9201']
 USER_PROFILE_ES_PORT = '9201'
 
 #config user portrat
 ES_USER_PORTRAIT_HOST = ['219.224.134.216:9201', \
-                     '219.224.134.218:9201']
+                     '219.224.134.214:9201']
 ES_USER_PORTRAIT_PORT = '9201'
 
 #es_path
