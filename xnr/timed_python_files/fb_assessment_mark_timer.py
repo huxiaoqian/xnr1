@@ -75,8 +75,8 @@ def compute_influence_num(xnr_user_no,current_time_old):
 
         influence = float(bci_xnr)/bci_max*100
         influence = round(influence,2)  # 保留两位小数
-        print 'bci_xnr', bci_xnr
-        print 'bci_max', bci_max
+        # print 'bci_xnr', bci_xnr
+        # print 'bci_max', bci_max
 
     except Exception,e:
         print e
@@ -1411,7 +1411,7 @@ def cron_compute_mark(current_time):
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
-        xnr_results = [{'_source':{'xnr_user_no':'FXNR0005'}}]
+        xnr_results = [{'_source':{'xnr_user_no':'FXNR0005'}}, {'_source':{'xnr_user_no':'FXNR0003'}}]
     start_time = int(time.time())
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
@@ -1482,13 +1482,16 @@ def cron_compute_mark(current_time):
         # 存es
         try:
             facebook_xnr_count_info_mappings()
-            es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
-                id=_id,body=xnr_user_detail)
+            if es.exists(index=facebook_xnr_count_info_index_name, doc_type=facebook_xnr_count_info_index_type, id=_id):
+                es.update(index=facebook_xnr_count_info_index_name, doc_type=facebook_xnr_count_info_index_type, body={'doc': xnr_user_detail}, id=_id)
+            else:
+                es.index(index=facebook_xnr_count_info_index_name,doc_type=facebook_xnr_count_info_index_type,\
+                    id=_id,body=xnr_user_detail)
             mark = True
         except Exception,e:
             print e
             mark = False
-        return mark
+    return mark
 
 
 

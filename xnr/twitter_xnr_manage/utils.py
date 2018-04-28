@@ -1404,8 +1404,6 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
     }
     try:
         xnr_assess_result=es_xnr.search(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,body=query_body)['hits']['hits']
-        print 'xnr_assess_result'
-        print xnr_assess_result
         assess_result=[]
         for item in xnr_assess_result:
             assess_result.append(item['fields'])
