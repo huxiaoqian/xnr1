@@ -14,8 +14,9 @@ $('#intell_type .intel_1 input').on('click',function () {
     var _val1=$(this).val();
     if (_val1=='double'){
         $('#intell_type .intelDownType').hide();
-        $('#intell_type .intel_3').show();
-        var val3=$('#intell_type .intel_3 input[name="intel3"]:checked').val();
+        // $('#intell_type .intel_3').show();
+        // var val3=$('#intell_type .intel_3 input[name="intel3"]:checked').val();
+        var val3='although_positive';
         if (val3){
             var intelPostUrl='/intelligent_writing/model_text/?task_id='+chooseThisIntelID+
                 '&model_type='+_val1+'&text_type='+val3;
@@ -316,7 +317,7 @@ $('#z-1 .interval-1 input').on('click',function () {
 })
 function river(data) {
     if (isEmptyObject(data)){
-        $('#eventRiver-1').html('<center>暂无内容</center>');
+        $('#eventRiver-1').html('<center style="margin-top:20px;">暂无内容</center>');
     }else {
         var lenged=[],seriesData=[];
         for (var k in data){
@@ -402,7 +403,7 @@ $('#z-1 .interval-2 input').on('click',function () {
 });
 function timeEvent(data) {
     if (isEmptyObject(data)){
-        $('#eventSurvey .VivaTimeline').html('<center>暂无内容</center>');
+        $('#eventSurvey .VivaTimeline').html('<center style="margin-top:20px;">暂无内容</center>');
     }else{
         var str='<dl>',kIndex=0;
         for(var h in data){
@@ -445,8 +446,9 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
     var viewThis_url;
     if (tableView=='view-5'){
         viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
-        public_ajax.call_request('get',viewThis_url,intelligentCorpus);
-        return false;
+        // public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        // public_ajax.call_request('get',viewThis_url,viewData);
+        // return false;
     }else {
         var view_type=$(this).attr('view-type');
         viewThis_url='/intelligent_writing/opinions_all/?task_id='+task_id+'&intel_type='+view_type;
@@ -456,13 +458,14 @@ $('#intelligenceTabs a.viewHave').on('click',function () {
 });
 var viewButton={};
 function viewData(data) {
+    console.log(data)
     if ('subopinion_tweets' in data){
         if (isEmptyObject(JSON.parse(data['subopinion_tweets']))){
-            $(boxView).html('<center>暂无内容</center>');return false;
+            $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');return false;
         }
 
     }else if (isEmptyObject(data)){
-        $(boxView).html('<center>暂无内容</center>');
+        $(boxView).html('<center style="margin-top:20px;">暂无内容</center>');
         return false;
     }
     var viewAllData;
@@ -498,25 +501,15 @@ function viewData(data) {
     }
     $(boxView+' .view-1-button').html(butAry);
 }
-//
-$('.sureAddCorpus').on('click',function () {
-    var _val=$('.corpusVal').val();
-    if (_val){
-        var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
-        public_ajax.call_request('get',kus_url,addpostYES);
-    }else {
-        $('#pormpt p').text('请输入观点语料库名称，不能为空。');
-        $('#pormpt').modal('show');
-    }
-});
+
 function addpostYES(data) {
     var f='操作失败';
     if (data[0]||data){
         f='操作成功';
-        setTimeout(function () {
-            var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
-            public_ajax.call_request('get',viewThis_url,intelligentCorpus);
-        },700);
+        // setTimeout(function () {
+        //     var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
+        //     public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        // },700);
     };
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
@@ -536,10 +529,10 @@ function delpostYES(data) {
     if (data[0]||data){
         f='操作成功';
         $(ThisCorpus_this).parent().remove();
-        setTimeout(function () {
-            var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
-            public_ajax.call_request('get',viewThis_url,intelligentCorpus);
-        },700);
+        // setTimeout(function () {
+        //     var viewThis_url='/intelligent_writing/show_opinion_corpus_name/';
+        //     public_ajax.call_request('get',viewThis_url,intelligentCorpus);
+        // },700);
     };
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');
@@ -556,7 +549,7 @@ function z_Content(_this) {
     $(_this).addClass('active');
     if (ThisData in viewButton){
         if (isEmptyObject(viewButton[ThisData])){
-            $(boxView+' .'+tableView).html('<center>暂无内容</center>');
+            $(boxView+' .'+tableView).html('<center style="margin-top:20px;">暂无内容</center>');
             return false;
         }else {
             thisButton_Content(viewButton[ThisData]);
@@ -601,7 +594,7 @@ function thisButton_Content(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var str='<p>• '+value+'</p>';
+                    var str='<p style="text-align: left;">• '+value+'</p>';
                     return str;
                 }
             },

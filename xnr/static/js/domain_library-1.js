@@ -63,7 +63,6 @@ function successFail(data) {
     $('#pormpt').modal('show');
 }
 var libGroup_url=urlTotal+'/show_domain_group_summary/?submitter='+admin;
-console.log(libGroup_url)
 public_ajax.call_request('get',libGroup_url,group);
 function group(data) {
     var person=eval(data);
@@ -320,29 +319,45 @@ function words(data) {
             {
                 name: item[0],
                 value: item[1],
-                textStyle: createRandomItemStyle()
             }
         )
     })
-    var myChart = echarts.init(document.getElementById('gd-4'),'dark');
+    var myChart = echarts.init(document.getElementById('gd-4'));
     var option = {
         backgroundColor:'transparent',
         title: {
             text: '词汇偏好',
-            left:'right'
+            left:'right',
+            textStyle:{color:'#fff'}
         },
         tooltip: {
             show: true
         },
-        series: [{
-            name: '词汇',
+        series:[{
+            name:'',
             type: 'wordCloud',
             size: ['80%', '80%'],
-            textRotation : [0, 45, 90, -45],
+            textRotation : [0, 0, 0, 0],
             textPadding: 0,
             autoSize: {
                 enable: true,
                 minSize: 14
+            },
+            textStyle : {
+                normal : {
+                    fontFamily:'sans-serif',
+                    color : function() {
+                        return 'rgb('
+                            + [ Math.round(Math.random() * 128+127),
+                                Math.round(Math.random() * 128+127),
+                                Math.round(Math.random() * 128+127) ]
+                                .join(',') + ')';
+                    }
+                },
+                emphasis : {
+                    shadowBlur : 5,  //阴影距离
+                    shadowColor : '#333'  //阴影颜色
+                },
             },
             data: word
         }]

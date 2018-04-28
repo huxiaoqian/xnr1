@@ -30,6 +30,16 @@
             text-overflow: ellipsis;
             margin: 5px 10px;
         }
+        #sameRoad .modActCC .tt {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        #sameRoad .modActCC .list .nn {margin-left:13px; }
+        #sameRoad .modActCC .list {
+            display: block;
+            margin: 10px 0;
+            font-weight: 600;
+        }
     </style>
     {% endblock %}
     <!-- css结束 -->
@@ -354,6 +364,49 @@
     </div>
 </div>
 
+<!--相关通道-->
+<div class="modal fade" id="sameRoad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">同步到其他通道发帖</h4>
+            </div>
+            <div class="modal-body">
+                <div id="sameXnrRoad">
+                    <div class="modActCC cc3">
+                        <span class="tt"><i class="icon icon-pushpin"></i> 微博虚拟人：</span>
+                        <div class="wblist list">
+                            <div class="wbName nn"></div>
+                            <!--<span style="display: block;margin-left: 13px;">所在群组</span>-->
+                            <div class="wbGroup"></div>
+                        </div>
+                    </div>
+                    <div class="modActCC cc4">
+                        <span class="tt"><i class="icon icon-pushpin"></i> faceBook虚拟人：</span>
+                        <div class="fblist list">
+                            <div class="fbName nn"></div>
+                            <!--<span style="display: block;margin-left: 13px;">所在群组</span>-->
+                            <div class="fbGroup"></div>
+                        </div>
+                    </div>
+                    <div class="modActCC cc5">
+                        <span class="tt"><i class="icon icon-pushpin"></i> twitter虚拟人：</span>
+                        <div class="twlist list">
+                            <div class="twName nn"></div>
+                            <!--<span style="display: block;margin-left: 13px;">所在群组</span>-->
+                            <div class="twGroup"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="sure_postRel">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 <!-- 导航结束 -->
 

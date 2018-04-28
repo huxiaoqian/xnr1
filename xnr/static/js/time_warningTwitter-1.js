@@ -514,7 +514,7 @@ function weibo(idx,data,words) {
                 formatter: function (value, row, index) {
                     var item=row;
                     var str_new='';
-                    var txt,txt2,all='',img,time,name='';
+                    var text,text2,all='',img,time,name='';
                     if (item.nick_name==''||item.nick_name=='null'||item.nick_name=='unknown'||!item.nick_name){
                         name=item.uid;
                     }else {
@@ -531,15 +531,16 @@ function weibo(idx,data,words) {
                         time=getLocalTime(item.timestamp);
                     };
                     if (item.text==''||item.text=='null'||item.text=='unknown'||!item.text){
-                        txt='暂无内容';
+                        text='暂无内容';
                     }else {
-                        if (words){
-                            var keywords=words.split('，');
+                        if (item.sensitive_words_string||!isEmptyObject(item.sensitive_words_string)){
                             var s=item.text;
+                            var keywords=item.sensitive_words_string.split('&');
                             for (var f=0;f<keywords.length;f++){
                                 s=s.toString().replace(new RegExp(keywords[f],'g'),'<b style="color:#ef3e3e;">'+keywords[f]+'</b>');
                             }
-                            txt=s;
+                            text=s;
+
                             var rrr=item.text;
                             if (rrr.length>=160){
                                 rrr=rrr.substring(0,160)+'...';
@@ -551,14 +552,14 @@ function weibo(idx,data,words) {
                             for (var f of keywords){
                                 rrr=rrr.toString().replace(new RegExp(f,'g'),'<b style="color:#ef3e3e;">'+f+'</b>');
                             }
-                            txt2=rrr;
+                            text2=rrr;
                         }else {
-                            txt=item.text;
-                            if (txt.length>=160){
-                                txt2=text.substring(0,160)+'...';
+                            text=item.text;
+                            if (text.length>=160){
+                                text2=text.substring(0,160)+'...';
                                 all='inline-block';
                             }else {
-                                txt2=txt;
+                                text2=text;
                                 all='none';
                             }
                         };
@@ -576,9 +577,9 @@ function weibo(idx,data,words) {
                         '                <a class="sensitiveWords" style="display: none;">'+item.sensitive_words_string+'</a>'+
                         '                <span class="time" style="font-weight: 900;color:#f6a38e;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>  '+
                         '                <button data-all="0" style="display:'+all+'" type="button" class="btn btn-primary btn-xs allWord" onclick="allWord(this)">查看全文</button>'+
-                        '                <p class="allall1" style="display:none;">'+txt+'</p>'+
-                        '                <p class="allall2" style="display:none;">'+txt2+'</p>'+
-                        '                <span class="center_2">'+txt2+'</span>'+
+                        '                <p class="allall1" style="display:none;">'+text+'</p>'+
+                        '                <p class="allall2" style="display:none;">'+text2+'</p>'+
+                        '                <span class="center_2">'+text2+'</span>'+
                         '                <div class="_translate" style="display: none;"><b style="color: #f98077;">译文：</b><span class="tsWord"></span></div>'+
                         '                <div class="center_3">'+
                         '                    <span class="cen3-1" onclick="retweet(this,\''+operateType+'\')"><i class="icon icon-share"></i>&nbsp;&nbsp;转推（<b class="forwarding">'+item.share+'</b>）</span>'+

@@ -18,7 +18,7 @@ if (flag==1){
 var field_url=WFT_url+'/show_domain/';
 public_ajax.call_request('get',field_url,field);
 function field(data) {
-    if(isEmptyObject(data)||(data)){
+    if(isEmptyObject(data)||(!data)){
         $('.nextButton').addClass('disableCss');
         $('#pormpt p').text('抱歉，您没有可以推荐的领域，请先去创建领域。');
         $('#pormpt').modal('show');
@@ -56,6 +56,7 @@ if ($one){
 var modalAllData,$$political_side,$$psy_feature,$$daily_interests;
 function inModalData(data) {
     modalAllData=data;
+    console.log(data)
     var tt=data.domains||data.domain_name;
     domainName=tt;roleName=data.role_name||data.roleName;
     setTimeout(function () {

@@ -446,7 +446,7 @@ function addSuccess(data) {
 
 //=======正常发帖=============
 //
-var operateType='daily_post';
+var operateType='daily_post',actType;
 function obtain(t) {
     if (t == 'o'){
         operateType='daily_post';
@@ -457,21 +457,24 @@ function obtain(t) {
     }else if (t== 't'){
         operateType='intel_post';
     }
-    //actType=$('#myTabs li.active a').text().toString().trim();
+    actType=$('#myTabs li.active a').text().toString().trim();
 };
+var post1,post2,post_url_1;
 $('#sure_post').on('click',function () {
-    var txt=$('#post-2-content').text().toString().replace(/\s+/g, "");
+    obtain();
+    var txt=Check($('#post-2-content').text());
+    if (!txt){
+        $('#pormpt p').text('请输入发帖内容。（不能为空）');
+        $('#pormpt').modal('show');
+        return false;
+    }
     var middle_timing='submit_tweet';
     //if (flag=='公开'){rank=0}else if (flag=='好友圈'){rank=6}if (flag=='仅自己可见'){rank=1}if (flag=='群可见'){rank=7};
     if ($("input[name='demo']")[0].checked){middle_timing='submit_timing_post_task'};
-    //原创
-    if (!txt){
-        $('#pormpt p').text('请填写发帖内容');
-        $('#pormpt').modal('show');
-        return false;
-    };
-    var post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+
+    post_url_1='/facebook_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+
         '&xnr_user_no='+xnrUser+'&text='+Check(txt);
+    post1='/weibo_xnr_operate/'+middle_timing+'/?tweet_type='+actType+'&xnr_user_no='+xnrUser+'&text='+txt;
+    post2='/twitter_xnr_operate/'+middle_timing+'/?tweet_type='+operateType+'&text='+txt;
     // if (imgRoad.length!=0&&imgRoad.length==1){post_url_1+='&p_url='+Check(imgRoad[0]);}
     if ($("input[name='demo']")[0].checked){
         if ($('.start').val() && $('.end').val()){
@@ -480,13 +483,15 @@ $('#sure_post').on('click',function () {
             var c=$('#_timing3').val();
             //var timeMath=Math.random()*(b-a)+a;
             post_url_1+='&post_time_sts='+a+'&post_time_ets='+b+'&remark='+c;
+            post1+='&post_time_sts='+a+'&post_time_ets='+b+'&remark='+c;
+            post2+='&post_time_sts='+a+'&post_time_ets='+b+'&remark='+c;
         }else {
             $('#pormpt p').text('因为您是定时发送，所以请填写好您定制的时间。');
             $('#pormpt').modal('show');
         }
     }
     // if (rank==7){post_url_1+='&rankid='+rankidList.join(',')};
-    public_ajax.call_request('get',post_url_1,postYES)
+    // public_ajax.call_request('get',post_url_1,postYES)
 });
 //一键审核
 $("#oneClick").on('click',function () {
@@ -519,7 +524,82 @@ function oneJugement(data) {
 //         rankidList.push('1022:230491'+$(this).val());
 //     });
 // }
-
+var threeRoad=[],wb=0,tw=0;
+function postYES22(data) {
+    var f='发帖内容提交失败。';
+    threeRoad.push(data);
+    setTimeout(function () {
+        if(!threeRoad[0]){f+='facebook发帖失败。'}
+        if (wb==1&&tw==1){
+            if(!threeRoad[1]){f+='微博发帖失败。'}
+            if(!threeRoad[2]){f+='twitter发帖失败。'}
+        }else if (wb==1&&tw==0){
+            if(!threeRoad[1]){f+='微博发帖失败。'}
+        }else if (wb==0&&tw==1){
+            if(!threeRoad[1]){f+='twitter发帖失败。'}
+        }
+        if (threeRoad[0]&&threeRoad[1]&&threeRoad[2]){
+            f='';
+            f='3个通道发帖内容提交成功';
+        }
+        $('#pormpt p').text(f);
+        $('#pormpt').modal('show');
+        threeRoad=[],wb=0,tw=0;
+    },200);
+}
+//=====================相关通道========================
+//相关通道
+var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=facebook&origin_xnr_user_no='+xnrUser;
+public_ajax.call_request('get',roadInforurl,roadInfor);
+function roadInfor(data) {
+    var data=data[0];
+    //nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
+    //nameAndGroup(data['weixin_xnr_name'],data['weixin_xnr_user_no'],'#sameRoad .wxlist .weixinName',data['weixin_groups'],'#sameRoad .wxlist .weixinGroup')
+    nameAndGroup(data['weibo_xnr_name'],data['weibo_xnr_user_no'],'#sameRoad .wblist .wbName',data['weibo_groups'],'#sameRoad .wblist .fbGroup','one')
+    nameAndGroup(data['twitter_xnr_name'],data['twitter_xnr_user_no'],'#sameRoad .twlist .twName',data['twitter_groups'],'#sameRoad .twlist .twGroup','two')
+}
+var osia=0;
+function nameAndGroup(opt1,opt2,opt3,opt4,opt5,num) {
+    var name='',str='';
+    if (opt1){name=opt1}else {name=opt2}
+    if (opt2){name+='('+opt2+')'}
+    if (!opt1&&!opt2){$(opt3).html('暂无相同通道下虚拟人');return false;}
+    $(opt3).html(name).attr('sid',opt2);
+    if (opt4){
+        osia++;
+        $.each(opt4,function (index,item) {
+            var a='';
+            if (item.gname){a=item.gname}else {a=item.gid}
+            if (item.gid){a+='('+item.gid+')'}
+            str+=
+                '<label class="demo-label">'+
+                '   <input class="demo-radio" name="'+num+'" type="checkbox" value="'+item.gid+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+a+
+                '</label>';
+        });
+    }
+    $(opt5).html(str);
+}
+$('#sure_postRel').on('click',function () {
+    var id1=$('#sameRoad .wblist .wbGroup input[name="one"]:checked').val();
+    var id2=$('#sameRoad .twlist .twGroup input[name="two"]:checked').val();
+    public_ajax.call_request('get',post_url_1,postYES22);
+    if (id1){
+        wb=1;
+        post1+='&xnr_user_no='+id1;
+        setTimeout(function () {
+            public_ajax.call_request('get',post1,postYES22);
+        },200);
+    }
+    if (id2){
+        tw=1;
+        post2+='&xnr_user_no='+id2;
+        setTimeout(function () {
+            public_ajax.call_request('get',post2,postYES22);
+        },400);
+    }
+});
+//=====================相关通道=======完=================
 //语料推荐
 var defalutWeiboUrl='/weibo_xnr_operate/daily_recommend_tweets/?theme=旅游&sort_item=timestamp';
 public_ajax.call_request('get',defalutWeiboUrl,defalutWords);

@@ -76,53 +76,7 @@ function nameJudgment() {
     //判断昵称是否重复
     var nickName=$('#name').val();
     public_ajax.call_request('GET',WFT_url+'/nick_name_unique/?nick_name='+nickName,repeatNot);
-    // if (go_on==2){
-    //     var timelist=[];
-    //     $(".other_basic input[type=checkbox]:checkbox:checked").each(function (index,item) {
-    //         timelist.push($(this).val());
-    //     });
-    //     var actTime=Array.from(new Set(timelist)).join(',');
-    //     var postNum;
-    //     if ($('.postNUM').val()){
-    //         //patch('-',$('.postNUM').val().toString())==1
-    //         if($('.postNUM').val().toString().indexOf('-')!=-1){
-    //             postNum=$('.postNUM').val().toString().replace(/\s/g, "");
-    //         }else {
-    //             $('#prompt p').text('您输入的自定义发帖数有误，请重新输入（格式：6-8）。');
-    //             $('#prompt').modal('show');
-    //             return false;
-    //         }
-    //     }else {
-    //         $(".other_basic .other-2 input[type=radio]:radio:checked").each(function (index,item) {
-    //             postNum = $(this).val().toString();
-    //         });
-    //     };
-    //     var daily=$('#character6').text()
-    //     var keywords=$('#character7').text();
-    //     if (actTime&&postNum&&daily&&keywords){
-    //         var modXNR_url='/weibo_xnr_create/modify_base_info/?xnr_user_no='+$id+'&active_time'+actTime+'&day_post_average='+
-    //             postNum+'&daily_interests'+daily+'&monitor_keywords='+keywords;
-    //         public_ajax.call_request('get',modXNR_url,success);
-    //     }else {
-    //         $('#prompt p').text('请检查您输入的内容（不能为空）');
-    //         $('#prompt').modal('show');
-    //     }
-    // }
 }
-// function success(data) {
-//     if (!data){
-//         $('#prompt p').text('修改失败。');
-//         $('#prompt').modal('show');
-//     }else {
-//         if (n==0){
-//             window.open('/registered/targetCustom/');
-//         }else if (n==1){
-//             window.open('/registered/socialAccounts/');
-//         }else if (n==2){
-//             window.open('/personalCenter/individual/');
-//         }
-//     }
-// }
 function repeatNot(data) {
     if (data){
         values();
@@ -190,9 +144,6 @@ function values() {
     //     '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
     //     '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests+'&nick_name='+nickName+'&age='+age+'&sex='+sex+
     //     '&location='+location+'&career='+career+'&description='+description+'&active_time='+active_time+'&day_post_average='+day_post_average;
-    if (n==1){
-        public_ajax.call_request('get',saveSecond_url,in_three);
-    }
     second={
         'nick_name':nickName,
         'age':age,
@@ -214,7 +165,7 @@ function values() {
             'monitor_keywords':$('#character7').text(),
         };
         localStorage.setItem(firstStep,JSON.stringify(first));
-        public_ajax.call_request('get',saveSecond_url,modSecondSuccess);
+        // public_ajax.call_request('get',saveSecond_url,modSecondSuccess);
     }else if (go_on==1){
         var a=$('#name').val();
         var b=$('#age').val();
@@ -225,6 +176,9 @@ function values() {
         var modSecond_ur=WFT_url+'/modify_userinfo/?nick_name='+a+'&age='+b+'&gender='+c+
             '&location='+d+'&career='+ee+'&description='+f;
         public_ajax.call_request('get',modSecond_ur,modSecondSuccess);
+    }
+    if (n==1){
+        public_ajax.call_request('get',saveSecond_url,in_three);
     }
 }
 function in_three(data) {
@@ -239,7 +193,11 @@ function in_three(data) {
 }
 function modSecondSuccess(data) {
     if (data){
-        window.location.href='/personalCenter/individual/';
+        if(n==1){
+            window.location.href='/registered/socialAccounts/?flag='+flag;
+        }else {
+            window.location.href='/personalCenter/individual/';
+        }
     }else {
         $('#prompt p').text('修改内容失败，请稍后再试。');
         $('#prompt').modal('show');
