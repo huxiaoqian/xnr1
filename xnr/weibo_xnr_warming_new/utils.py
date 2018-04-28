@@ -923,7 +923,10 @@ def show_event_warming(xnr_user_no,start_time,end_time):
             new_main_user_info = []
             for uid in new_uids:
                 uid_info = [u for u in item['main_user_info'] if u['uid'] == uid]
-                new_main_user_info.append(uid_info[0])
+                if uid_info:
+                    new_main_user_info.append(uid_info[0])
+                else:
+                	pass
             old_event['main_user_info'].extend(new_main_user_info)
 
             old_main_weibo_info = [event['main_weibo_info'] for event in warming_list if event['event_name'] == event_name][0]

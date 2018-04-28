@@ -23,7 +23,8 @@ from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
                              twitter_feedback_follow_index_name,twitter_feedback_follow_index_type,\
                              es_tw_user_portrait,tw_portrait_index_name,tw_portrait_index_type,\
                              es_tw_user_profile,tw_bci_index_name_pre,tw_bci_index_type,\
-                             twitter_feedback_fans_index_name,twitter_feedback_fans_index_type
+                             twitter_feedback_fans_index_name,twitter_feedback_fans_index_type,\
+                             twitter_xnr_save_like_index_name,twitter_xnr_save_like_index_type
 es_user_profile = es_xnr                            
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
@@ -998,7 +999,7 @@ def lookup_send_like(uid,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            {'term':{'root_uid':uid}},
+                            {'term':{'uid':uid}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -1014,7 +1015,7 @@ def lookup_send_like(uid,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
     try:
-        result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
+        result=es_xnr.search(index=twitter_xnr_save_like_index_name,doc_type=twitter_xnr_save_like_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in result:
             results.append(item['_source'])

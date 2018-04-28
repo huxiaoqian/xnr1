@@ -21,7 +21,7 @@ from utils import push_keywords_task,get_submit_tweet,save_to_tweet_timing_list,
                 get_trace_follow_operate,get_un_trace_follow_operate,get_show_retweet_timing_list,\
                 get_show_trace_followers,get_image_path,get_reply_total,get_show_domain,\
                 get_show_retweet_timing_list_future
-
+from utils import save_oprate_like
 from xnr.utils import add_operate2redis
 
 mod = Blueprint('weibo_xnr_operate', __name__, url_prefix='/weibo_xnr_operate')
@@ -452,12 +452,16 @@ def ajax_like_operate():
     task_detail['mid'] = request.args.get('mid','')
 
     #mark = get_like_operate(task_detail)
+    task_detail['timestamp'] = int(request.args.get('timestamp',''))
+    mark_s = save_oprate_like(task_detail)
     
     queue_dict = {}
     queue_dict['channel'] = 'weibo'
     queue_dict['operate_type'] = 'like'
     queue_dict['content'] = task_detail
-    mark = add_operate2redis(queue_dict)
+    mark_a = add_operate2redis(queue_dict)
+    
+    mark = mark_a and mark_s
 
     return json.dumps(mark)
 

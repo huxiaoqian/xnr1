@@ -3,18 +3,18 @@ import os
 import json
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
-from global_utils import weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type
+from global_utils import facebook_xnr_save_like_index_name,facebook_xnr_save_like_index_type
 
-def weibo_xnr_save_like_mappings():
+def facebook_xnr_save_like_mappings():
 	index_info = {
 		'settings':{
 			'number_of_replicas':0,
 			'number_of_shards':5
 		},
 		'mappings':{
-			weibo_xnr_save_like_index_type:{
+			facebook_xnr_save_like_index_type:{
 				'properties':{
-					'uid':{         #操作虚拟人的uid
+					'uid':{   #操作虚拟人的uid
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -26,7 +26,7 @@ def weibo_xnr_save_like_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'mid':{               ## 设为空
+					'fid':{               ## 设为空
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -37,7 +37,7 @@ def weibo_xnr_save_like_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'root_mid':{ #点赞微博的mid
+					'root_fid':{ #点赞的fid
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -45,7 +45,7 @@ def weibo_xnr_save_like_mappings():
 						'type':'string',
 						'index':'not_analyzed'
 					},
-					'weibo_type':{   ## 点赞对象类型，follow(关注人的)  粉丝  好友  陌生人
+					'facebook_type':{   ## 点赞对象类型，follow(关注人的)  粉丝  好友  陌生人
 						'type':'string',
 						'index':'not_analyzed'
 					},
@@ -57,8 +57,8 @@ def weibo_xnr_save_like_mappings():
 		}
 	}
 
-	if not es.indices.exists(index=weibo_xnr_save_like_index_name):
-		es.indices.create(index=weibo_xnr_save_like_index_name,body=index_info,ignore=400)
+	if not es.indices.exists(index=facebook_xnr_save_like_index_name):
+		es.indices.create(index=facebook_xnr_save_like_index_name,body=index_info,ignore=400)
 
 if __name__ == '__main__':
-	weibo_xnr_save_like_mappings()
+	facebook_xnr_save_like_mappings()

@@ -19,7 +19,7 @@ from utils import get_submit_tweet_fb, fb_save_to_tweet_timing_list, get_recomme
                 get_un_trace_follow_operate, get_show_trace_followers,\
                 get_show_retweet_timing_list, get_show_retweet_timing_list_future, get_robot_reply
 from xnr.utils import add_operate2redis
-
+from utils import save_oprate_like
 mod = Blueprint('facebook_xnr_operate', __name__, url_prefix='/facebook_xnr_operate')
 
 '''
@@ -299,13 +299,16 @@ def ajax_like_operate():
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['r_fid'] = request.args.get('fid','') # 被转发帖子
     task_detail['r_uid'] = request.args.get('uid','') # 被转发帖子的用户
+
+    task_detail['timestamp'] = int(request.args.get('timestamp',''))
+    mark_s = save_oprate_like(task_detail)
     
     queue_dict = {}
     queue_dict['channel'] = 'facebook'
     queue_dict['operate_type'] = 'like'
     queue_dict['content'] = task_detail
-    mark = add_operate2redis(queue_dict)
-
+    mark_a = add_operate2redis(queue_dict)
+    mark = mark_a and mark_s
     # mark = get_like_operate_fb(task_detail)
 
     return json.dumps(mark)

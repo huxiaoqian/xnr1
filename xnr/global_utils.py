@@ -524,6 +524,7 @@ facebook_report_management_index_type = 'report'
 facebook_xnr_corpus_index_name = 'facebook_corpus'
 facebook_xnr_corpus_index_type = 'text'
 
+
 #预警库
 facebook_warning_corpus_index_name = 'facebook_warning_corpus'
 facebook_warning_corpus_index_type = 'text'
