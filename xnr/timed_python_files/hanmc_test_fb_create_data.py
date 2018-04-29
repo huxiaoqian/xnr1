@@ -242,9 +242,9 @@ def business_post():
     }
     return data
 
-def host_post():
+def hot_post():
     data = {
-        'task_source': 'host_post',
+        'task_source': 'hot_post',
         'message_type': 2,
     }
     return data
@@ -263,7 +263,7 @@ def xnr_flow_text(date):
         user_friendsnum = 5
     index_name = fb_xnr_flow_text_index_name_pre + date
     fb_xnr_flow_text_mappings(index_name)
-    for post in [daily_post, business_post, host_post, trace_follow_tweet]:
+    for post in [daily_post, business_post, hot_post, trace_follow_tweet]:
         for i in range(random.randint(2,5)):
             data = post()
             _id = xnr_user_no + '_' + str(load_timestamp(date))

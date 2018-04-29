@@ -15,11 +15,15 @@ from time_utils import datetime2ts, ts2datetime
 
 
 #FXNR0005
-fb_xnr_uid = '100018797745111'
+# fb_xnr_uid = '100018797745111'
+#FXNR0003
+fb_xnr_uid = '100023849442394'
+
+
 #TXNR0003
-tw_xnr_uid = '747226658457927680'
-
-
+# tw_xnr_uid = '747226658457927680'
+#TXNR0001
+tw_xnr_uid = '943290911039029250'
 
 
 
@@ -75,5 +79,5 @@ if __name__ == '__main__':
     for i in range(15, 26, 1):
         date = '2017-10-' + str(i)
         print date
-        # create_facebook_bci_data(fb_xnr_uid, date)
+        create_facebook_bci_data(fb_xnr_uid, date)
         create_twitter_bci_data(tw_xnr_uid, date)

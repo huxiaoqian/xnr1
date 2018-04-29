@@ -10,6 +10,7 @@ from xnr.global_utils import es_xnr,qq_xnr_index_name,\
         qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r, qq_xnr_max_no
 from xnr.global_utils import qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,\
                         group_message_index_name_pre,group_message_index_type
+from xnr.global_config import port_range
 from xnr.parameter import MAX_VALUE,LOCALHOST_IP
 from xnr.utils import user_no2qq_id
 from xnr.time_utils import ts2datetime,datetime2ts
@@ -52,6 +53,8 @@ def get_all_ports():
                 results.append(int(item['_source']['qqbot_port']))
     return results
 
+
+'''
 def find_port(exist_port_list):
     if exist_port_list != []:
         port = max(exist_port_list)
@@ -63,7 +66,15 @@ def find_port(exist_port_list):
             break
         port +=1
     return port
-
+'''
+def find_port(exist_port_list):
+    min_port = port_range[0]
+    max_port = port_range[1]
+    for port in range(min_port, max_port+1):
+        if not port in exist_port_list:
+            if IsOpen(LOCALHOST_IP,port):   #端口可用
+                return port
+    return False
 
 def get_qq_xnr_no():
     

@@ -1408,7 +1408,7 @@ def cron_compute_mark(current_time):
                 body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
-        xnr_results = [{'_source':{'xnr_user_no':'TXNR0003'}}]
+        xnr_results = [{'_source':{'xnr_user_no':'TXNR0003'}},{'_source':{'xnr_user_no':'TXNR0001'}}]
     start_time = int(time.time())
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
@@ -1477,13 +1477,16 @@ def cron_compute_mark(current_time):
 
         try:
             twitter_xnr_count_info_mappings()
-            es.index(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,\
-                id=_id,body=xnr_user_detail)
+            if es.exists(index=twitter_xnr_count_info_index_name, doc_type=twitter_xnr_count_info_index_type, id=_id):
+                es.update(index=twitter_xnr_count_info_index_name, doc_type=twitter_xnr_count_info_index_type, body={'doc': xnr_user_detail}, id=_id)
+            else:
+                es.index(index=twitter_xnr_count_info_index_name,doc_type=twitter_xnr_count_info_index_type,\
+                    id=_id,body=xnr_user_detail)
             mark = True
         except Exception,e:
             print e
             mark = False
-        return mark
+    return mark
 
 
 

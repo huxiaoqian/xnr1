@@ -8,7 +8,9 @@ from multiprocessing import Process
 from MyBot import MyBot
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
-                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, r as global_utils_r
+                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, r as global_utils_r, wx_xnr_max_no
+es = es_xnr
+from xnr.global_config import port_range
 from xnr.parameter import MAX_VALUE, LOCALHOST_IP, DAY
 from xnr.wx_xnr_manage_mappings import wx_xnr_mappings
 from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
@@ -45,16 +47,13 @@ def get_all_ports():
     return results
 
 def find_port(exist_port_list):
-    if exist_port_list != []:
-        port = max(exist_port_list)
-        port += 1
-    else:
-        port = 6661
-    while port<=65535:
-        if IsOpen(LOCALHOST_IP,port):
-            break
-        port +=1
-    return port
+    min_port = port_range[0]
+    max_port = port_range[1]
+    for port in range(min_port, max_port+1):
+        if not port in exist_port_list:
+            if IsOpen(LOCALHOST_IP,port):   #端口可用
+                return port
+    return False
 
 def load_wxxnr_redis_data(wxbot_id, items=[]):
     d = r.get(wxbot_id)
@@ -165,7 +164,7 @@ def create_wx_xnr(xnr_info):
         qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, mail=mail, access_id=access_id, remark=remark)
     else:   #如果虚拟人还没有存在，那么就创建此虚拟人
         wxbot_port = find_port(get_all_ports())
-
+        print 'wxbot_port', wxbot_port
         # user_no_current = load_user_no_current()
         user_no_max = get_wx_xnr_no()
         user_no_current = user_no_max + 1
