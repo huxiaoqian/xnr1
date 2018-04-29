@@ -174,11 +174,11 @@ function penetration_7day(data) {
         nearTime.push($_time);
         nearData.push(0);
     }else {
-    	$.each(data,function (index,item) {
+        $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
-            var hu=item['penetration']||item['influence']
+            var hu=item['penetration']||item['influence'];
             nearData.push(hu[0]);
-   	 })
+        })
     };
     var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
     var option = {

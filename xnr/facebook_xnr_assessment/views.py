@@ -4,25 +4,11 @@ import time
 import json
 from flask import Blueprint, url_for, render_template, request,\
         abort, flash, session, redirect
-
-
-mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
-
-"""
-#2018-3-8 11:19:09
-
-from xnr.global_utils import es as es_flow_text
-from utils import get_influ_fans_num,get_influ_retweeted_num,\
-                get_influ_commented_num,get_influ_like_num,get_influ_at_num,get_influ_private_num,\
-                compute_influence_num,get_pene_follow_group_sensitive,get_pene_fans_group_sensitive,\
-                get_pene_infor_sensitive,get_pene_feedback_sensitive,get_pene_warning_report_sensitive,\
-                compute_penetration_num,compute_safe_num,get_safe_active,get_tweets_distribute,\
-                get_follow_group_distribute,get_safe_tweets,get_follow_group_tweets,\
-                get_influence_total_trend,penetration_total,get_influence_total_trend_today,\
-                penetration_total_today,get_safe_active_today
+from utils import get_influence_total_trend, compute_influence_num, penetration_total,\
+                    compute_penetration_num,compute_safe_num, get_safe_active,\
+                    get_influence_total_trend_today, penetration_total_today, get_safe_active_today
 
 mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
-
 
 '''
 影响力评估
@@ -47,14 +33,98 @@ def ajax_influence_total_trend():
     return json.dumps(results)
 
 
+'''
+渗透力评估
+'''
+
+# 渗透力分数计算
+@mod.route('/penetration_mark/')
+def ajax_penetration_mark_compute():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = compute_penetration_num(xnr_user_no)
+
+    return json.dumps(results)
+
+# 渗透力各指标
+@mod.route('/penetration_total/')
+def ajax_penetration_total():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    start_time = request.args.get('start_time','')
+    end_time = request.args.get('end_time','')
+
+    results = penetration_total(xnr_user_no,start_time,end_time)
+
+    return json.dumps(results)
+
+
+
+'''
+安全性评估
+'''
+# 安全性分数计算
+@mod.route('/safe_mark/')
+def ajax_safe_mark_compute():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    results = compute_safe_num(xnr_user_no)
+
+    return json.dumps(results)
+
+# 活跃安全性
+@mod.route('/safe_active/')
+def ajax_safe_active():
+    xnr_user_no = request.args.get('xnr_user_no','')
+    start_time = request.args.get('start_time','')
+    end_time = request.args.get('end_time','')
+
+    results = get_safe_active(xnr_user_no,start_time,end_time)
+
+    return json.dumps(results)
+
 # 影响力各指标 -- 今日
 @mod.route('/influence_total_today/')
 def ajax_influence_total_trend_today():
     xnr_user_no = request.args.get('xnr_user_no','')
-
     results = get_influence_total_trend_today(xnr_user_no)
+    return json.dumps(results)
+
+
+# 渗透力各指标 -- 今日
+@mod.route('/penetration_total_today/')
+def ajax_penetration_total_today():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = penetration_total_today(xnr_user_no)
 
     return json.dumps(results)
+
+# 活跃安全性 -- 今日
+@mod.route('/safe_active_today/')
+def ajax_safe_active_today():
+    xnr_user_no = request.args.get('xnr_user_no','')
+
+    results = get_safe_active_today(xnr_user_no)
+
+    return json.dumps(results)
+
+
+
+"""
+#2018-3-8 11:19:09
+
+from xnr.global_utils import es as es_flow_text
+from utils import get_influ_fans_num,get_influ_retweeted_num,\
+                get_influ_commented_num,get_influ_like_num,get_influ_at_num,get_influ_private_num,\
+                compute_influence_num,get_pene_follow_group_sensitive,get_pene_fans_group_sensitive,\
+                get_pene_infor_sensitive,get_pene_feedback_sensitive,get_pene_warning_report_sensitive,\
+                compute_penetration_num,compute_safe_num,get_safe_active,get_tweets_distribute,\
+                get_follow_group_distribute,get_safe_tweets,get_follow_group_tweets,\
+                get_influence_total_trend,penetration_total,get_influence_total_trend_today,\
+                penetration_total_today,get_safe_active_today
+
+mod = Blueprint('facebook_xnr_assessment', __name__, url_prefix='/facebook_xnr_assessment')
+
+
+
 
 
 
@@ -126,37 +196,9 @@ def ajax_influence_total_trend_today():
 #   return json.dumps(results)
 
 
-'''
-渗透力评估
-'''
 
-# 渗透力分数计算
-@mod.route('/penetration_mark/')
-def ajax_penetration_mark_compute():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    results = compute_penetration_num(xnr_user_no)
 
-    return json.dumps(results)
 
-# 渗透力各指标
-@mod.route('/penetration_total/')
-def ajax_penetration_total():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    start_time = request.args.get('start_time','')
-    end_time = request.args.get('end_time','')
-
-    results = penetration_total(xnr_user_no,start_time,end_time)
-
-    return json.dumps(results)
-
-# 渗透力各指标 -- 今日
-@mod.route('/penetration_total_today/')
-def ajax_penetration_total_today():
-    xnr_user_no = request.args.get('xnr_user_no','')
-
-    results = penetration_total_today(xnr_user_no)
-
-    return json.dumps(results)
 
 # 关注群体敏感度
 @mod.route('/pene_follow_group_sensitive/')
@@ -199,36 +241,11 @@ def ajax_pene_warning_report_sensitive():
 
     return json.dumps(results)
 
-'''
-安全性评估
-'''
-# 安全性分数计算
-@mod.route('/safe_mark/')
-def ajax_safe_mark_compute():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    results = compute_safe_num(xnr_user_no)
 
-    return json.dumps(results)
 
-# 活跃安全性
-@mod.route('/safe_active/')
-def ajax_safe_active():
-    xnr_user_no = request.args.get('xnr_user_no','')
-    start_time = request.args.get('start_time','')
-    end_time = request.args.get('end_time','')
 
-    results = get_safe_active(xnr_user_no,start_time,end_time)
 
-    return json.dumps(results)
 
-# 活跃安全性 -- 今日
-@mod.route('/safe_active_today/')
-def ajax_safe_active_today():
-    xnr_user_no = request.args.get('xnr_user_no','')
-
-    results = get_safe_active_today(xnr_user_no)
-
-    return json.dumps(results)
 
 # 发帖内容分布
 @mod.route('/tweets_distribute/')

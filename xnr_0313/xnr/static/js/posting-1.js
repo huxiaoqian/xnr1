@@ -438,7 +438,6 @@ function postYES22(data) {
     $('#pormpt').modal('show');
 }
 //=====================相关通道========================
-//相关通道
 /*var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
 public_ajax.call_request('get',roadInforurl,roadInfor);
 function roadInfor(data) {
