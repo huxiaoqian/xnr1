@@ -22,7 +22,7 @@ def bulk_add_subbmitter(index_name,index_type):
         try:
             scan_re=s_re.next()
             _id=scan_re['_id']
-            source={'doc':{'status':1}}
+            source={'doc':{'status':0}}
             action={'update':{'_id':_id}}
             bulk_action.extend([action,source])
             count += 1

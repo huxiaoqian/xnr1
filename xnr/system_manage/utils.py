@@ -14,7 +14,10 @@ from xnr.global_utils import weibo_xnr_index_name,weibo_xnr_index_type,\
 						weibo_account_management_index_name,weibo_account_management_index_type,\
 						qq_xnr_index_name,qq_xnr_index_type,\
 						xnr_map_index_name,xnr_map_index_type,qq_xnr_index_name,qq_xnr_index_type,\
-						weibo_feedback_group_index_name,weibo_feedback_group_index_type
+						weibo_feedback_group_index_name,weibo_feedback_group_index_type,\
+                        wx_xnr_index_name,wx_xnr_index_type,\
+                        fb_xnr_index_name,fb_xnr_index_type,\
+                        tw_xnr_index_name,tw_xnr_index_type
 from xnr.parameter import MAX_VALUE,USER_XNR_NUM
 
 ##############################################################
@@ -464,15 +467,30 @@ def control_add_xnr_map_relationship(main_user):
     xnr_dict['qq_xnr_list']=compare_list(qq_all_xnr_list,qq_maped_xnr_list)
 
     #weixin
-    xnr_dict['weixin_xnr_list']=[]
+    weixin_all_xnr_list=select_all_xnr(main_user,wx_xnr_index_name,wx_xnr_index_type)
+    weixin_platform_no='weixin_xnr_user_no'
+    weixin_platform_name='weixin_xnr_name'
+    weixin_maped_xnr_list=select_xnr_map_relationship(main_user,weixin_platform_no,weixin_platform_name)
+    xnr_dict['weixin_xnr_list']=compare_list(weixin_all_xnr_list,weixin_maped_xnr_list)
 
     #facebook
-    xnr_dict['facebook_xnr_list']=[]
+    facebook_all_xnr_list=select_all_weibo_xnr(main_user,fb_xnr_index_name,fb_xnr_index_type)
+    facebook_platform_no='facebook_xnr_user_no'
+    facebook_platform_name='facebook_xnr_name'
+    facebook_maped_xnr_list=select_xnr_map_relationship(main_user,facebook_platform_no,facebook_platform_name)
+    xnr_dict['facebook_xnr_list']=compare_list(facebook_all_xnr_list,facebook_maped_xnr_list)
+    
 
     #twitter
-    xnr_dict['twitter_xnr_list']=[]
+    twitter_all_xnr_list=select_all_weibo_xnr(main_user,tw_xnr_index_name,tw_xnr_index_type)
+    twitter_platform_no='twitter_xnr_user_no'
+    twitter_platform_name='twitter_xnr_name'
+    twitter_maped_xnr_list=select_xnr_map_relationship(main_user,twitter_platform_no,twitter_platform_name)
+    xnr_dict['twitter_xnr_list']=compare_list(twitter_all_xnr_list,twitter_maped_xnr_list)
 
     return xnr_dict
+
+
 
     
 
@@ -547,7 +565,9 @@ def delete_xnr_map_relationship(xnr_map_id):
 #update
 def update_xnr_map_relationship(xnr_map_detail,xnr_map_id):    
     try:
-        es.update(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=xnr_map_detail,id=xnr_map_id)
+        es.delete(index=xnr_map_index_name,doc_type=xnr_map_index_type,id=xnr_map_id)
+        es.index(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=xnr_map_detail,id=xnr_map_id)
+        # es.update(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=xnr_map_detail,id=xnr_map_id)
         result=True
     except:
         result=False
@@ -661,3 +681,83 @@ def lookup_weiboxnr_group(xnr_user_no):
     except:
         group_list=[]
     return group_list
+
+
+
+def show_all_xnr(main_user,task_id):
+    xnr_dict=dict()
+    #weibo
+    weibo_all_xnr_list=select_all_weibo_xnr(main_user,weibo_xnr_index_name,weibo_xnr_index_type)
+    weibo_platform_no='weibo_xnr_user_no'
+    weibo_platform_name='weibo_xnr_name'
+    weibo_maped_xnr_list=select_xnr_map_relationship(main_user,weibo_platform_no,weibo_platform_name)
+    xnr_dict['weibo_xnr_list']=compare_list(weibo_all_xnr_list,weibo_maped_xnr_list)
+    #print weibo_all_xnr_list
+
+    #qq
+    qq_all_xnr_list=select_all_xnr(main_user,qq_xnr_index_name,qq_xnr_index_type)
+    qq_platform_no='qq_xnr_user_no'
+    qq_platform_name='qq_xnr_name'
+    qq_maped_xnr_list=select_xnr_map_relationship(main_user,qq_platform_no,qq_platform_name)
+    xnr_dict['qq_xnr_list']=compare_list(qq_all_xnr_list,qq_maped_xnr_list)
+
+    #weixin
+    weixin_all_xnr_list=select_all_xnr(main_user,wx_xnr_index_name,wx_xnr_index_type)
+    weixin_platform_no='weixin_xnr_user_no'
+    weixin_platform_name='weixin_xnr_name'
+    weixin_maped_xnr_list=select_xnr_map_relationship(main_user,weixin_platform_no,weixin_platform_name)
+    xnr_dict['weixin_xnr_list']=compare_list(weixin_all_xnr_list,weixin_maped_xnr_list)
+
+    #facebook
+    facebook_all_xnr_list=select_all_weibo_xnr(main_user,fb_xnr_index_name,fb_xnr_index_type)
+    facebook_platform_no='facebook_xnr_user_no'
+    facebook_platform_name='facebook_xnr_name'
+    facebook_maped_xnr_list=select_xnr_map_relationship(main_user,facebook_platform_no,facebook_platform_name)
+    xnr_dict['facebook_xnr_list']=compare_list(facebook_all_xnr_list,facebook_maped_xnr_list)
+    
+
+    #twitter
+    twitter_all_xnr_list=select_all_weibo_xnr(main_user,tw_xnr_index_name,tw_xnr_index_type)
+    twitter_platform_no='twitter_xnr_user_no'
+    twitter_platform_name='twitter_xnr_name'
+    twitter_maped_xnr_list=select_xnr_map_relationship(main_user,twitter_platform_no,twitter_platform_name)
+    xnr_dict['twitter_xnr_list']=compare_list(twitter_all_xnr_list,twitter_maped_xnr_list)
+
+
+    #当前映射的内容添加上
+    try:
+        result_es = es.get(index=xnr_map_index_name,doc_type=xnr_map_index_type,id=task_id)['_source']
+        if result_es['weibo_xnr_user_no']:
+            weibo_user_dict = dict()
+            weibo_user_dict['xnr_user_no'] = result_es['weibo_xnr_user_no']
+            weibo_user_dict['xnr_name'] = result_es['weibo_xnr_name']
+            weibo_user_dict['mark'] = 1
+            xnr_dict['weibo_xnr_list'].append(weibo_user_dict)
+        if result_es['qq_xnr_user_no']:
+            qq_user_dict = dict()
+            qq_user_dict['xnr_user_no'] = result_es['qq_xnr_user_no']
+            qq_user_dict['xnr_name'] = result_es['qq_xnr_name']
+            qq_user_dict['mark'] = 1
+            xnr_dict['qq_xnr_list'].append(qq_user_dict)
+        if result_es['weixin_xnr_user_no']:
+            weixin_user_dict = dict()
+            weixin_user_dict['xnr_user_no'] = result_es['weixin_xnr_user_no']
+            weixin_user_dict['xnr_name'] = result_es['weixin_xnr_name']
+            weixin_user_dict['mark'] = 1
+            xnr_dict['weixin_xnr_list'].append(weixin_user_dict)
+        if result_es['facebook_xnr_user_no']:
+            facebook_user_dict = dict()
+            facebook_user_dict['xnr_user_no'] = result_es['facebook_xnr_user_no']
+            facebook_user_dict['xnr_name'] = result_es['facebook_xnr_name']
+            facebook_user_dict['mark'] = 1
+            xnr_dict['facebook_xnr_list'].append(facebook_user_dict)
+        if result_es['twitter_xnr_user_no']:
+            twitter_user_dict = dict()
+            twitter_user_dict['xnr_user_no'] = result_es['twitter_xnr_user_no']
+            twitter_user_dict['xnr_name'] = result_es['twitter_xnr_name']
+            twitter_user_dict['mark'] = 1
+            xnr_dict['twitter_xnr_list'].append(twitter_user_dict)
+    except:
+        pass
+
+    return xnr_dict

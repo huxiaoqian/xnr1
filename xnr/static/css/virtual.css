@@ -65,7 +65,7 @@ body {
 }
 #modifyAndAddRoad .modActCC .tt i {color:coral;}
 #modifyAndAddRoad .modActCC .demo-label {
-    width: 80px;
+    width:110px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

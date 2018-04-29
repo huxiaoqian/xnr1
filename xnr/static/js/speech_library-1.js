@@ -4,8 +4,28 @@ var material_url='/'+urlTotal+'/show_different_corpus/?corpus_type=&corpus_statu
 public_ajax.call_request('get',material_url,material);
 function material(data) {
     console.log(data);
+    var str=''
+    $.each(data['opinion_corpus_type'],function (index,item) {
+        str+='<label class="demo-label" title="'+item+'">' +
+            '    <input class="demo-radio" type="checkbox" name="yuliao" value="'+item+'">' +
+            '    <span class="demo-checkbox demo-radioInput"></span> ' +item+
+            '</label>';
+    })
+    $('.yuliao').html(str);
+    $(".yuliao input[name='yuliao']").on('click',function () {
+        var t=$(".tit-2 input[name='mine']:checked").val();
+        if (!t){t=''};
+        var c=[];
+        $(".yuliao input[name='yuliao']:checkbox:checked").each(function (index,item) {
+            c.push($(this).val());
+        });
+        var yuliaoUrl='/'+urlTotal+'/show_different_corpus/?corpus_type='+t+'&corpus_status=1'+
+            '&request_type=one&theme_type_1=&theme_type_2=&theme_type_3='+c.join(',');
+        public_ajax.call_request('get',yuliaoUrl,day);
+    });
     themeWord(data['theme_corpus']);
     day(data['daily_corpus']);
+    view(data['opinion_corpus']);
 }
 $(".zhuti input[name='zhuti']").on('click',function () {
     var t=$(".tit-2 input[name='mine']:checked").val();
@@ -181,10 +201,9 @@ function day(data) {
     });
 };
 //观点语料库
-var view_url='/intelligent_writing/show_opinion_corpus_name/';
+//var view_url='/intelligent_writing/show_opinion_corpus_name/';
 // public_ajax.call_request('get',view_url,view);
 function view(data) {
-    console.log(data)
     $('#viewpoint').bootstrapTable('load', data);
     $('#viewpoint').bootstrapTable({
         data:data,
@@ -213,10 +232,10 @@ function view(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     var theme,time,img;
-                    if (row.theme_daily_name==''||row.theme_daily_name=='null'||row.theme_daily_name=='unknown'){
+                    if (row.label==''||row.label=='null'||row.label=='unknown'){
                         theme = '暂无';
                     }else {
-                        theme = row.theme_daily_name;
+                        theme = row.label;
                     }
                     if (row.timestamp==''||row.timestamp=='null'||row.timestamp=='unknown'){
                         time = '暂无';
@@ -251,6 +270,16 @@ function view(data) {
 
     });
 };
+$('.sureAddCorpus').on('click',function () {
+    var _val=$('.corpusVal').val();
+    if (_val){
+        var kus_url='/intelligent_writing/add_opinion_corpus/?corpus_name='+_val+'&submitter='+admin;
+        public_ajax.call_request('get',kus_url,sucfail);
+    }else {
+        $('#pormpt p').text('请输入观点语料库名称，不能为空。');
+        $('#pormpt').modal('show');
+    }
+});
 //=====编辑=====
 var id,corpus_type,mod_type,modNUM,_val_;
 function modify(_id,corpusType,create_type,theme_daily_name,num) {
@@ -288,7 +317,7 @@ function del(_id,num) {
 }
 function sucfail(data) {
     var f='';
-    if (data){
+    if (data||data[0]){
         f='操作成功';
         if (nowNUM||modNUM){
             var nowurl='',fun='';

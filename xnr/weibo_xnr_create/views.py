@@ -168,13 +168,14 @@ def ajax_show_xnr_info():
 @mod.route('/save_step_three_1/')
 def ajax_save_step_three_1():
     task_detail = dict()
-    task_detail['task_id'] = request.args.get('task_id') #WXNR0001
+    task_detail['task_id'] = request.args.get('task_id','') #WXNR0001
     #task_detail['nick_name'] = request.args.get('nick_name','') # 微博虚拟人编号，如：WXNR0001
     task_detail['weibo_mail_account'] = request.args.get('weibo_mail_account','') # 邮箱
     task_detail['weibo_phone_account'] = request.args.get('weibo_phone_account','') # 手机号
     task_detail['password'] = request.args.get('password','') # 密码
     task_detail['nick_name'] = request.args.get('nick_name','') # 用户昵称
     #print 'nick_name::',task_detail['nick_name']
+    print 'taskid!!',task_detail['task_id']
     #step2 info
     new_task_detail = get_add_other_info(task_detail)  #nick_name, location, gender, age--0, descripriton
 

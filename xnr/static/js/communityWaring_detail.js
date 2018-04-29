@@ -41,40 +41,44 @@ function communityDetailsFun(data) {
     $('.det3').text(b);
     time=data.trace_date;
     //人数===
-    chartNum('人数变化图','people-num',data.num,'');//折线图
+    chartNum('人数变化图','people-num',data.num,'',data.num_warning);//折线图
     descript('thisDEC_1',data.num_warning_descrp)//描述
     tablePic('table-1',data.num_warning_content)//表格
     //敏感度
     setTimeout(function () {
-        chartNum('敏感度变化折线图','sensitivity',data.mean_sensitive,data.max_sensitive);//折线图
+        chartNum('敏感度变化折线图','sensitivity',data.mean_sensitive,data.max_sensitive,data.sensitive_warning);//折线图
         descript('thisDEC_2',data.sensitive_warning_descrp)//描述
         tablePic('table-2',data.sensitive_warning_content)//文字
     },300);
     //影响力
     setTimeout(function () {
-        chartNum('影响力变化折线图','influence',data.mean_influence,data.max_influence);//折线图
+        chartNum('影响力变化折线图','influence',data.mean_influence,data.max_influence,data.influence_warning);//折线图
         descript('thisDEC_3',data.influence_warning_descrp)//描述
         tablePic('table-3',data.influence_warning_content)//文字
     },600);
     //聚集系数
     setTimeout(function () {
-        chartNum('聚集系数变化折线图','convergence',data.density,'');//折线图
+        chartNum('聚集系数变化折线图','convergence',data.density,'',data.density_warning);//折线图
         descript('thisDEC_4',data.density_warning_descrp)//描述
         tablePic('table-4',data.density_warning_content)//表格
     },800);
 }
 // 人数变化图
-function chartNum(tit,ID,peopleData,flag){
+function chartNum(tit,ID,peopleData,flag,starNum){
     if(!peopleData){
         $('#'+ID).html('<h4 style="width:100%;text-align:center;margin-top:140px;">人数变化图暂无数据</h4>');
         return false;
     }
+    var a='<i class="icon icon-star" style="color:#fa7d3c;"></i>  ';
+    var b='<i class="icon icon-star-empty" style="color:#fa7d3c;"></i>  ';
+    var str= a.repeat(starNum)+b.repeat(4-starNum);
     var myChart = echarts.init(document.getElementById(ID),'dark');
+    $('#'+ID).prev().html(tit+'&nbsp;&nbsp;'+str);
     var option = {
         backgroundColor:'transparent',
-        title: {
-            text: tit,
-        },
+        // title: {
+        //     text: tit+'&nbsp;&nbsp;'+str,
+        // },
         tooltip: {
             trigger: 'axis'
         },

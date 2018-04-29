@@ -150,23 +150,19 @@ function com(data) {
                             time=getLocalTime(row.timestamp);
                         };
                         var star1='<img src="/static/images/level.png" alt="">',
-                            star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                            star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                         if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                             star=star2.repeat(5);
                         }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                            star+=star1;
-                            star+=star2.repeat(4);
+                            star=star1+star2.repeat(4);
                         }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                            star+=star1.repeat(2);
-                            star+=star2.repeat(3);
+                            star=star1.repeat(2)+star2.repeat(3);
                         }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                            star+=star1.repeat(3);
-                            star+=star2.repeat(2);
+                            star=star1.repeat(3)+star2.repeat(2);
                         }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                            star+=star1.repeat(4);
-                            star+=star2.repeat(1);
+                            star=star1.repeat(4)+star2.repeat(1);
                         }else if (row.sensitive_info>10){
-                            star+=star1.repeat(5);
+                            star=star1.repeat(5);
                         };
                         if (row.weibo_type=='follow'){
                             user='已关注用户';
@@ -178,8 +174,8 @@ function com(data) {
                             user='用户自己（'+row.nick_name+'）';
                         }
                         var str=
-                            '<div class="commentAll infoAll" style="text-align: left;">'+
-                            '    <div class="commentEvery center_rel">'+
+                            '<div class="commentAll infoAll center_rel" style="text-align: left;">'+
+                            '    <div class="commentEvery">'+
                             '        <img src="'+img+'" alt="" class="com-head">'+
                             '        <div class="com com-1">'+
                             '            <b class="com-1-name">来自 '+user+'</b>&nbsp;&nbsp;&nbsp;'+
@@ -187,6 +183,7 @@ function com(data) {
                             '            <i class="mid" style="display: none;">'+row.mid+'</i>'+
                             '            <i class="uid" style="display: none;">'+row.uid+'</i>'+
                             '            <i class="r_mid" style="display: none;">'+row.root_mid+'</i>'+
+                            '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                             '            <div class="com-level">'+
                             '                <span style="display: inline-block;">敏感度：</span>'+
                             '                <div class="com-img" style="display: inline-block;">'+star+
@@ -195,7 +192,7 @@ function com(data) {
                             '        </div>'+
                             '        <div class="com com-2">'+
                             '            <b class="com-2-name" style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的'+repFor+'：'+
-                            '            <span class="com-2-tent">'+txt+'</span>'+
+                            '            <span class="com-2-tent center_2">'+txt+'</span>'+
                             '        </div>'+
                             // '        <div class="com com-3" style="overflow: hidden;">'+
                             // '            <a class="com-3-reply copyFinish" datatype="commentClone" onclick="showInput(this)" style="display:'+BN1+'">回复</a>'+
@@ -205,19 +202,20 @@ function com(data) {
                             '            <span class="_forwarding" onclick="showfor(this)" style="display:'+BN2+'"><i class="icon icon-share"></i>&nbsp;&nbsp;转发</span>'+
                             '            <span class="_comment" datatype="commentClone" onclick="showInput_feed(this)"  style="display:'+BN2+'"><i class="icon icon-comments-alt"></i>&nbsp;&nbsp;评论</span>'+
                             '            <span class="_like" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                            '            <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                             '        </div>'+
                             '        <div class="forwardingDown" style="width: 100%;display: none;">'+
                             '             <input type="text" class="forwardingIput" placeholder="转发内容"/>'+
                             '             <span class="sureCom" onclick="forwarding_feed(this)">转发</span>'+
                             '        </div>'+
-                            '        <div class="commentClone">'+
+                            '        <div class="commentClone commentDown">'+
                             '            <input type="text" class="clone-1" placeholder=""/>'+
                             '            <div class="clone-2">'+
                             '                <label class="demo-label">'+
                             '                    <input class="demo-radio clone-2-3" type="checkbox" name="desc2">'+
                             '                    <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                             '                </label>'+
-                            '                <a href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent_feed(this)">发送</a>'+
+                            '                <span href="###" class="clone-2-4" midurl="'+mid+'" onclick="comMent_feed(this,\'社交反馈\')">发送</a>'+
                             '            </div>'+
                             '        </div>'+
                             '    </div>'+
@@ -229,9 +227,8 @@ function com(data) {
         });
         $('.'+idbox).prev().slideUp(300);
         $('.'+idbox).show();
-        $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
-        if (idbox=='comment-1'){$('#container .type_page #content .commentEvery .socOper span').width('48%')}
-        else {$('#container .type_page #content .commentEvery .socOper span').width('30%')}
+        // if (idbox=='comment-1'){$('#container .type_page #content .commentEvery .socOper span').width('33%')}
+        // else {$('#container .type_page #content .commentEvery .socOper span').width('24%')}
     }else if (idbox=='letter-1'){
         letter(data);
     }else if (idbox=='reply-1'){
@@ -241,7 +238,6 @@ function com(data) {
     }
     $('.'+idbox).prev().slideUp(300);
     $('.'+idbox).show();
-    $('.'+idbox+' .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //====私信回复====
 function letter(data) {
@@ -295,23 +291,19 @@ function letter(data) {
                         time=getLocalTime(row.timestamp);
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         user='已关注用户';
@@ -321,7 +313,7 @@ function letter(data) {
                         user='未关注用户';
                     }
                     var str=
-                        '<div class="letterAll infoAll" style="background:rgba(8,23,44,0.35);text-align:left;">'+
+                        '<div class="letterAll infoAll center_rel" style="background:rgba(8,23,44,0.35);text-align:left;">'+
                         '    <div class="letterEvery">'+
                         '        <img src="'+img+'" alt="" class="let-head">'+
                         '        <div class="let let-1">'+
@@ -337,14 +329,18 @@ function letter(data) {
                         '            </div>'+
                         '        </div>'+
                         '        <div class="let let-2">'+
-                        '            <span class="let-2-content">'+txt+'</span>'+
-                        '            <a class="let-2-reply copyFinish" datatype="letterClone" onclick="showInput_feed(this)">回复</a>'+
+                        '            <span class="let-2-content center_2">'+txt+'</span>'+
+                        // '            <a class="let-2-reply copyFinish" datatype="letterClone" onclick="showInput_feed(this)">回复</a>'+
+                        '        </div>'+
+                        '        <div class="socOper">'+
+                        '            <span class="let-2-reply copyFinish" datatype="letterClone" onclick="showInput_feed(this)"><i class="icon icon-comment"></i>&nbsp;&nbsp;回复</span>'+
+                        '            <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '        </div>'+
                         '    </div>'+
-                        '    <div class="letterClone" style="text-align: center;">'+
+                        '    <div class="letterClone commentDown" style="text-align: center;">'+
                         '        <input type="text" class="clone-1" style="width:79%;"/>'+
                         '        <div class="clone-2">'+
-                        '            <a href="###" class="clone-2-4" midurl="reply_private" onclick="comMent_feed(this)">发送</a>'+
+                        '            <span href="###" class="clone-2-4" midurl="reply_private" onclick="comMent_feed(this,\'社交反馈\')">发送</span>'+
                         '        </div>'+
                         '    </div>'+
                         '</div>';
@@ -406,23 +402,19 @@ function reply(data) {
                     };
 
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         user='已关注用户';
@@ -433,12 +425,13 @@ function reply(data) {
                     }
 
                     var str=
-                        '<div class="replyAll infoAll" style="text-align:left;">'+
-                        '    <div class="replyEvery center_rel">'+
+                        '<div class="replyAll infoAll center_rel" style="text-align:left;">'+
+                        '    <div class="replyEvery">'+
                         '        <img src="'+img+'" alt="" class="rep-head">'+
                         '        <span style="display: none;" class="mid">'+row.mid+'</span>'+
                         '        <span style="display: none;" class="r_mid">'+row.root_mid+'</span>'+
                         '        <span style="display: none;" class="uid">'+row.uid+'</span>'+
+                        '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '        <div class="rep rep-1">'+
                         '            <span class="com-2-name" style="display: none;">'+user+'</span>'+
                         '            <b class="rep-1-name">来自 '+user+'</b>&nbsp;&nbsp;'+
@@ -451,7 +444,7 @@ function reply(data) {
                         '        </div>'+
                         '        <div class="rep rep-2">'+
                         '            <b style="color: #fa7d3c;cursor: pointer;">'+name+'</b>的回复：'+
-                        '            <span class="rep-2-tent">'+txt+'</span>'+
+                        '            <span class="rep-2-tent center_2">'+txt+'</span>'+
                         '        </div>'+
                         //'        <div class="rep rep-3">'+
                         // '            <img src="/static/images/demo.jpg" alt="" class="rep-3-img">'+
@@ -460,8 +453,9 @@ function reply(data) {
                         '        <div class="socOper">'+
                         '            <span class="com-3-reply copyFinish" datatype="replyClone" onclick="showInput_feed(this)"><i class="icon icon-comment"></i>&nbsp;&nbsp;回复</span>'+
                         '            <span class="_like" onclick="thumbs(this)"><i class="icon icon-thumbs-up"></i>&nbsp;&nbsp;赞</span>'+
+                        '            <span class="cen3-9" onclick="robot(this)"><i class="icon icon-github-alt"></i>&nbsp;&nbsp;机器人回复</span>'+
                         '        </div>'+
-                        '    <div class="replyClone">'+
+                        '    <div class="replyClone commentDown">'+
                         '        <input type="text" class="clone-1"/>'+
                         '        <div class="clone-2">'+
                         // '            <img src="/static/images/post-1.png" class="clone-2-1">'+
@@ -470,7 +464,7 @@ function reply(data) {
                         '                <input class="demo-radio clone-2-3" type="checkbox" name="desc4">'+
                         '                <span class="demo-checkbox demo-radioInput"></span> 同时转发到我的微博'+
                         '            </label>'+
-                        '            <a href="###" class="clone-2-4" midurl="reply_at" onclick="comMent_feed(this)">发送</a>'+
+                        '            <span href="###" class="clone-2-4" midurl="reply_at" onclick="comMent_feed(this,\'社交反馈\')">发送</span>'+
                         '        </div>'+
                         '    </div>'+
                         '    </div>'+
@@ -542,23 +536,19 @@ function focus(data) {
                         geo=row.geo;
                     };
                     var star1='<img src="/static/images/level.png" alt="">',
-                        star2='<img src="/static/images/level-e.png" alt="">',str='',user='';
+                        star2='<img src="/static/images/level-e.png" alt="">',star='',user='';
                     if (row.sensitive_info==''||row.sensitive_info=='null'||row.sensitive_info=='unknown'||row.sensitive_info<=0){
                         star=star2.repeat(5);
                     }else if (row.sensitive_info>0&&row.sensitive_info<=3){
-                        star+=star1;
-                        star+=star2.repeat(4);
+                        star=star1+star2.repeat(4);
                     }else if (row.sensitive_info>3&&row.sensitive_info<=5){
-                        star+=star1.repeat(2);
-                        star+=star2.repeat(3);
+                        star=star1.repeat(2)+star2.repeat(3);
                     }else if (row.sensitive_info>5&&row.sensitive_info<=7){
-                        star+=star1.repeat(3);
-                        star+=star2.repeat(2);
+                        star=star1.repeat(3)+star2.repeat(2);
                     }else if (row.sensitive_info>7&&row.sensitive_info<=10){
-                        star+=star1.repeat(4);
-                        star+=star2.repeat(1);
+                        star=star1.repeat(4)+star2.repeat(1);
                     }else if (row.sensitive_info>10){
-                        star+=star1.repeat(5);
+                        star=star1.repeat(5);
                     };
                     if (row.weibo_type=='follow'){
                         fol='已关注';user='已关注用户';
@@ -657,7 +647,7 @@ function forwarding_feed(_this) {
 //评论
 function showInput_feed(_this) {
     var f=$('#myTabs li.active').attr('tp');
-    if (f=='show_private'){$(_this).hide();}
+    // if (f=='show_private'){$(_this).hide();}
     var _name=$(_this).parents('.infoAll').find('.com-2-name').text();
     var _dataType=$(_this).attr('datatype');
     $(_this).parents('.infoAll').find('.'+_dataType+' .clone-1').attr('placeholder','回复'+_name);

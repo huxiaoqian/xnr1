@@ -8,6 +8,7 @@
     #intelligenceTabs .radyType {
         display: none;
     }
+    #sameRoad .modActCC.cc3{display: none;}
     .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;}
     #grouplist .demo-label{width: 95px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;margin-top: 10px;}
     #grouplist .demo-radioInput{margin-top: 0;}
@@ -45,23 +46,22 @@
         border: none;
     }
     .table>tbody>tr>td {vertical-align: middle!important;}
-    .weiboTable .bootstrap-table thead,.weiboTable .fixed-table-pagination .page-list {
+    .weiboTable .fixed-table-pagination .page-list {
         display: none!important;
     }
-    .follow_forward.weiboTable .bootstrap-table thead {
-        display: table-header-group!important;
-    }
+    /*.follow_forward.weiboTable .bootstrap-table thead {*/
+        /*display: table-header-group!important;*/
+    /*}*/
 
     .follow_forward.weiboTable .fixed-table-container thead th .both {background-image: none!important;}
-    .weiboTable .fixed-table-body {
-        height: auto!important;
-        overflow-y: hidden;
-    }
+    /*.weiboTable .fixed-table-body {*/
+        /*height: auto!important;*/
+        /*overflow-y: hidden;*/
+    /*}*/
     .weiboTable .bootstrap-table .table:not(.table-condensed),.weiboTable .bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
     .weiboTable .table>tbody>tr>td{
         padding: 0!important;
     }
-    .fixed-table-container {top: 15px;}
     .focus_main .fixed-table-container,.eventList .fixed-table-container {top: 0;}
     .table-hover>tbody>tr:hover {
         background-color: inherit!important;
@@ -86,10 +86,10 @@
     }
     #addHeavyUser .heavy-3 {width: 300px;margin: 20px 0 0 10px;}
     #addHeavyUser .h-1 {display: inline-block;width:75px;text-align: right;}
-    .weiboTable .table:not(.table-condensed)>tbody>tr>td {
-        text-align: left!important;
+    .weiboTable .fixed-table-container thead th .both {
+        background-image:none!important;
     }
-    .follow_forward.weiboTable .table:not(.table-condensed)>tbody>tr>td {text-align: center!important;}
+    .weiboTable .fixed-table-container thead th .th-inner {padding: 0.0001px!important;}
     /**/
     .datetimepicker {color:black;}
     #user_recommend .user_example_list .more:hover,sureADD:hover {
@@ -164,12 +164,12 @@
                             <span class="demo-checkbox demo-radioInput"></span> 单极性
                         </label>
                         <label class="demo-label disableCss">
-                            <input class="demo-radio" type="radio" name="intel1" value="double">
-                            <span class="demo-checkbox demo-radioInput"></span> 双极性
-                        </label>
-                        <label class="demo-label disableCss">
                             <input class="demo-radio" type="radio" name="intel1" value="news">
                             <span class="demo-checkbox demo-radioInput"></span> 事实陈述
+                        </label>
+                        <label class="demo-label disableCss">
+                            <input class="demo-radio" type="radio" name="intel1" value="double">
+                            <span class="demo-checkbox demo-radioInput"></span> 双极性
                         </label>
                     </div>
                     <div class="intel_2 intelDownType" style="display:none;">
@@ -182,16 +182,16 @@
                             <span class="demo-checkbox demo-radioInput"></span> 负向观点
                         </label>
                     </div>
-                    <div class="intel_3 intelDownType" style="display:none;">
-                        <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="intel3" value="although_positive">
-                            <span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点
-                        </label>
-                        <label class="demo-label">
-                            <input class="demo-radio" type="radio" name="intel3" value="although_negtive">
-                            <span class="demo-checkbox demo-radioInput"></span> 虽然负向观点，但是正向观点
-                        </label>
-                    </div>
+                    <!--<div class="intel_3 intelDownType" style="display:none;">-->
+                        <!--<label class="demo-label">-->
+                            <!--<input class="demo-radio" type="radio" name="intel3" value="although_positive">-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 虽然正向观点，但是负向观点-->
+                        <!--</label>-->
+                        <!--<label class="demo-label">-->
+                            <!--<input class="demo-radio" type="radio" name="intel3" value="although_negtive">-->
+                            <!--<span class="demo-checkbox demo-radioInput"></span> 虽然负向观点，但是正向观点-->
+                        <!--</label>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="post-2">
@@ -560,7 +560,6 @@
                     </div>
                 </div>
             </div>
-
 			<!-- 智能发帖 -->
             <div role="tabpanel" class="tab-pane " id="intelliGence">
                 <div class="intelliGence-1" style="margin: 20px 0;">
@@ -616,9 +615,9 @@
 				            <li role="presentation" class="radyType5 radyType">
 				                <a href="#z-5" table-view="view-4" role="tab" data-toggle="tab" view-type="sensitive" class="viewHave">高敏感度用户观点</a>
 				            </li>
-				            <!-- <li role="presentation" class="radyType6 radyType">
+				            <li role="presentation" class="radyType6 radyType">
 				                <a href="#z-6" table-view="view-5" role="tab" data-toggle="tab" view-type="" class="viewHave">观点语料库</a>
-				            </li> -->
+				            </li>
                             <!--<li role="presentation" class="radyType7 radyType">-->
                                 <!--<a href="#z-7" role="tab" data-toggle="tab">智能发帖</a>-->
                             <!--</li>-->
@@ -772,9 +771,7 @@
                 <h4 class="modal-title">温馨提示</h4>
             </div>
             <div class="modal-body">
-                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
-
-                </p>
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
             </div>
         </div>
     </div>
@@ -970,53 +967,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureIntelligentDEL()">确定</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--相关通道-->
-<style>
-    #sameRoad .modActCC .tt {
-        font-size: 18px;
-        font-weight: 700;
-    }
-    #sameRoad .modActCC .list .nn {margin-left:13px; }
-    #sameRoad .modActCC .list {
-        display: block;
-        margin: 10px 0;
-        font-weight: 600;
-    }
-</style>
-<div class="modal fade" id="sameRoad" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">同步到其他通道发帖</h4>
-            </div>
-            <div class="modal-body">
-                <div id="sameXnrRoad">
-                    <div class="modActCC cc4">
-                        <span class="tt"><i class="icon icon-pushpin"></i> faceBook虚拟人：</span>
-                        <div class="fblist list">
-                            <div class="fbName nn"></div>
-                            <!--<span style="display: block;margin-left: 13px;">所在群组</span>-->
-                            <div class="fbGroup"></div>
-                        </div>
-                    </div>
-                    <div class="modActCC cc5">
-                        <span class="tt"><i class="icon icon-pushpin"></i> twitter虚拟人：</span>
-                        <div class="twlist list">
-                            <div class="twName nn"></div>
-                            <!--<span style="display: block;margin-left: 13px;">所在群组</span>-->
-                            <div class="twGroup"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" id="sure_postRel">确定</button>
             </div>
         </div>
     </div>

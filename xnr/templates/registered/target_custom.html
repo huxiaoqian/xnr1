@@ -431,15 +431,16 @@
 {% block my_js %}
 <script>
     judgment('6');
-//    localStorage.removeItem('secondStep');
+//    localStorage.removeItem('secondStep');WXNR  FXNR TXNR
+    var _gostart_USER=localStorage.getItem('go_mod_user').toString();
     var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
-    if (flag==1){
+    if ((flag==1)||(_gostart_USER.indexOf('W')==0)){
         urlTotal='/weibo_xnr_knowledge_base_management';
         defalutDomain='维权群体';defalutRole='其他';
-    }else if (flag==4){
+    }else if (flag==4||(_gostart_USER.indexOf('F')==0)){
         urlTotal='/fb_xnr_knowledge_base_management';
         defalutDomain='脸书测试1';defalutRole='民间组织';
-    }else if (flag==5){
+    }else if (flag==5||(_gostart_USER.indexOf('T')==0)){
         urlTotal='/tw_xnr_knowledge_base_management';
         defalutDomain='推特测试1';defalutRole='商业人士';
     }
@@ -482,7 +483,7 @@
     }
 </script>
 <script src="/static/js/target_custom-1.js"></script>
-<script src="/static/js/worldcloud.min.js"></script>
+<script src="/static/echarts/wordcloud.min.js"></script>
 <script src="/static/js/dark.js"></script>
 <script src="/static/js/domain_library-1.js"></script>
 <script src="/static/js/character_library-1.js"></script>

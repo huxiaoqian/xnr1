@@ -663,13 +663,13 @@ def create_facebook_warning():
     for account in account_list:
         #xnr_list=get_user_xnr_list(account)
         #print xnr_list
-        xnr_list=['FXNR0001']
+        xnr_list=['FXNR0005']
         for xnr_user_no in xnr_list:
             print 'xnr_user_no:',xnr_user_no
             #人物行为预警
-            # personal_mark=create_personal_warning(xnr_user_no,today_datetime)
+            personal_mark=create_personal_warning(xnr_user_no,today_datetime)
             #言论内容预警
-            # speech_mark=create_speech_warning(xnr_user_no,today_datetime)
+            speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
             create_event_warning(xnr_user_no,today_datetime,write_mark=True)

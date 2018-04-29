@@ -1058,47 +1058,17 @@ function fans(data) {
                 }
             },
             {
-                title: "性别",//标题
-                field: "sex",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.sex==''||row.sex=='null'||row.sex=='unknown'){
-                        return '未知';
-                    }else {
-                        if (row.sex=='male'){return '男';}else if (row.sex=='female'){return '女'}else {return '未知'}
-                    };
-                }
-            },
-            {
                 title: "粉丝来源",//标题
-                field: "fan_source",//键名
+                field: "twitter_type",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.fan_source==''||row.fan_source=='null'||row.fan_source=='unknown'||!row.fan_source){
+                    if (row.twitter_type==''||row.twitter_type=='null'||row.twitter_type=='unknown'||!row.twitter_type){
                         return '未知';
                     }else {
-                        return row.fan_source;
-                    };
-                }
-            },
-            {
-                title: "所在地",//标题
-                field: "user_location",//键名
-                sortable: true,//是否可排序
-                order: "desc",//默认排序方式
-                align: "center",//水平
-                valign: "middle",//垂直
-                formatter: function (value, row, index) {
-                    if (row.user_location==''||row.user_location=='null'||row.user_location=='unknown'){
-                        return '未知';
-                    }else {
-                        return row.user_location;
+                        return row.twitter_type;
                     };
                 }
             },
@@ -1126,7 +1096,7 @@ function fans(data) {
                 valign: "middle",//垂直
             },
             {
-                title: "关注状态",//标题
+                title: "关注",//标题
                 field: "",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式

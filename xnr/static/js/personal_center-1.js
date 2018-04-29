@@ -150,7 +150,7 @@ function has_table(has_data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     return '<a style="cursor: pointer;color:white;" onclick="comeIn(\''+row.xnr_user_no+'\',\''+row.nick_name+'\')" title="进入"><i class="icon icon-link"></i></a>&nbsp;&nbsp;'+
-                        '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\',\'1\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
+                        '<a style="cursor: pointer;color:white;" onclick="go_on(\''+row.xnr_user_no+'\',\'1\',\''+row.xnr_user_no+'\')" title="修改"><i class="icon icon-edit"></i></a>&nbsp;&nbsp;'+
                         '<a style="cursor: pointer;color:white;" onclick="deluser(\''+row.xnr_user_no+'\',\'1\')" title="删除"><i class="icon icon-trash"></i></a>';
                 },
             },

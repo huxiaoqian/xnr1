@@ -13,7 +13,8 @@ from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_por
                             weibo_domain_index_name,weibo_domain_index_type,weibo_role_index_name,\
                             weibo_role_index_type,weibo_example_model_index_name,\
                             weibo_example_model_index_type,profile_index_name,profile_index_type,\
-                            opinion_corpus_index_name,opinion_corpus_index_type
+                            opinion_corpus_index_name,opinion_corpus_index_type,\
+                            all_opinion_corpus_index_name,all_opinion_corpus_index_type
 from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list
 from xnr.parameter import MAX_VALUE,MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,domain_en2ch_dict,\
                         EXAMPLE_MODEL_PATH,TOP_ACTIVE_TIME,TOP_PSY_FEATURE
@@ -883,6 +884,7 @@ def get_opnion_corpus_type():
         'size':MAX_VALUE
     }
     try:
+        result_type = []
         result = es.search(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=query_body)['hits']['hits']
         for item in result:
             result_type.append(item['_source']['corpus_name'])
@@ -890,17 +892,51 @@ def get_opnion_corpus_type():
         result_type = []
     return result_type
 
+
+def get_label_name(corpus_name):
+    query_body = {
+    'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':{'terms':{'corpus_name':corpus_name}}
+                    }
+                }
+            }
+
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        label_name = []
+        result = es.search(index=opinion_corpus_index_name,doc_type=opinion_corpus_index_type,body=query_body)['hits']['hits']
+        for item in result:
+            label_name.append(item['_source']['corpus_pinyin'])
+    except:
+        label_name = []
+    return label_name	
+
+
 def show_all_opinion_corpus():
     query_body={
         'query':{
             'match_all':{}
         },
-        'size':MAX_VALUE,
+        'size':200,
         'sort':{'timestamp':{'order':'desc'}}
     }
-    # try:
-    #     result = es.search(index=)
-    return True
+    opinion_corpus_result = []
+    try:
+        result = es.search(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,body=query_body)['hits']['hits']
+        # print 'result',result
+        for item in result:
+            opinion_corpus_result.append(item['_source'])
+    except:
+        opinion_corpus_result = []
+    # print 'opinion_corpus_result',opinion_corpus_result
+    return opinion_corpus_result
+    # return result
+
 
 def show_condition_opinion_corpus(theme_type):
     query_body = {
@@ -916,7 +952,14 @@ def show_condition_opinion_corpus(theme_type):
         },
         'size':MAX_VALUE
     }
-    return True
+    opinion_corpus_result = []
+    try:
+        result = es.search(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,body=query_body)['hits']['hits']
+        for item in result:
+            opinion_corpus_result.append(item['_source'])
+    except:
+        opinion_corpus_result = []
+    return opinion_corpus_result
 
 
 def show_different_corpus(task_detail):
@@ -974,6 +1017,8 @@ def show_different_corpus(task_detail):
                     result['daily_corpus'] = show_corpus(daily_corpus)
             
             if task_detail['theme_type_3']:
+                # label = get_label_name(task_detail['theme_type_3'])
+                # result['opinion_corpus'] = show_condition_opinion_corpus(label)
                 result['opinion_corpus'] = show_condition_opinion_corpus(task_detail['theme_type_3'])
             else:
                 result['opinion_corpus'] = show_all_opinion_corpus()
@@ -1025,3 +1070,22 @@ def delete_corpus(corpus_id):
     except:
         result=False
     return result
+
+def text_list(text_content):
+    text = []
+    if text_content:
+        for item in text_content:
+            text.append(item['text'])
+    else:
+        pass
+
+    return text
+
+
+def show_opinion_corpus():
+    corpus_type = get_opnion_corpus_type()
+    corpus_dict = dict()
+    for item in corpus_type:
+        text_content = show_condition_opinion_corpus(item)
+        corpus_dict[item] = text_list(text_content)
+    return corpus_dict

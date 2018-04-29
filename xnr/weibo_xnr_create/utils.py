@@ -600,10 +600,10 @@ def get_save_step_two(task_detail):
 
 
 def get_save_step_three_1(task_detail):
-    #task_id = task_detail['task_id']
-    #try:
-    #print 'task_detail:::',task_detail
-    # print 'nick_name:::',task_detail['nick_name']
+    print 'hhhhhh'
+    print 'task_detail...',task_detail
+    task_id = task_detail['task_id']
+    print 'task_id...',task_id
     nick_name = task_detail['nick_name'].encode('utf-8')
     operate = SinaOperateAPI()
     user_info = operate.getUserShow(screen_name=nick_name)
@@ -619,11 +619,7 @@ def get_save_step_three_1(task_detail):
     except:
         return '账户名或密码输入错误，请检查后输入！！'
     #uid = getUserShow(screen_name=nick_name)['data']['uid']
-    #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    query_body = {'query':{'match_all':{}},'sort':{'user_no':{'order':'desc'}}}
-    # print 'query_body:::',query_body
-    es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    task_id = es_result[0]['_source']['xnr_user_no']
+    print 'task_id2...',task_id
     item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     item_exist['uid'] = uid
     item_exist['nick_name'] = task_detail['nick_name']
@@ -644,18 +640,12 @@ def get_save_step_three_1(task_detail):
 def get_save_step_three_2(task_detail):
     task_id = task_detail['task_id']
     nick_name = task_detail['nick_name']
-    #query_body = {'query':{'term':{'nick_name':nick_name}},'sort':{'user_no':{'order':'desc'}}}
-    #es_result = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body=query_body)['hits']['hits']
-    #task_id = es_result[0]['_source']['xnr_user_no']
+
     #插入 weibo_xnr_fans_followers表
 
     try:
         item_fans_followers = dict()
-        #followers_nickname_list = task_detail['followers_nickname'].encode('utf-8').split('，')
-        #print 'followers_nickname_list::',followers_nickname_list
 
-        #followers_list = nickname2uid(followers_nickname_list)
-        #print 'followers_list::',followers_list
         followers_uids = list(set(task_detail['followers_uids'].split('，')))
         # print 'followers_uids::',followers_uids
         item_fans_followers['followers_list'] = followers_uids

@@ -23,7 +23,8 @@ from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
                              twitter_feedback_follow_index_name,twitter_feedback_follow_index_type,\
                              es_tw_user_portrait,tw_portrait_index_name,tw_portrait_index_type,\
                              es_tw_user_profile,tw_bci_index_name_pre,tw_bci_index_type,\
-                             twitter_feedback_fans_index_name,twitter_feedback_fans_index_type
+                             twitter_feedback_fans_index_name,twitter_feedback_fans_index_type,\
+                             twitter_xnr_save_like_index_name,twitter_xnr_save_like_index_type
 es_user_profile = es_xnr                            
 from xnr.parameter import HOT_WEIBO_NUM,MAX_VALUE,MAX_SEARCH_SIZE,DAY,FLOW_TEXT_START_DATE,REMIND_DAY
 from xnr.data_utils import num2str
@@ -998,7 +999,7 @@ def lookup_send_like(uid,start_time,end_time):
                 'filter':{
                     'bool':{
                         'must':[
-                            {'term':{'root_uid':uid}},
+                            {'term':{'uid':uid}},
                             {'range':{
                                 'timestamp':{
                                     'gte':start_time,
@@ -1014,7 +1015,7 @@ def lookup_send_like(uid,start_time,end_time):
         'size':MAX_SEARCH_SIZE
     }
     try:
-        result=es_xnr.search(index=weibo_xnr_save_like_index_name,doc_type=weibo_xnr_save_like_index_type,body=query_body)['hits']['hits']
+        result=es_xnr.search(index=twitter_xnr_save_like_index_name,doc_type=twitter_xnr_save_like_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in result:
             results.append(item['_source'])
@@ -1241,7 +1242,7 @@ def wxnr_list_concerns(user_id,order_type):
                 #敏感度查询,话题领域
                 try:
                     temp_user_result=es_tw_user_portrait.get(index=tw_portrait_index_name,doc_type=tw_portrait_index_type,id=follower_uid)['_source']
-                    user_dict['sensitive']=temp_user_result['sensitive']
+                    user_dict['sensitive']=round(temp_user_result['sensitive'],2)
                     user_dict['topic_string']=temp_user_result['topic_string']
                 except:
                     user_dict['sensitive']=0
@@ -1279,15 +1280,15 @@ def count_weibouser_influence(uid):
             'match_all':{}
         },
         'size':1,
-        'sort':{'user_index':{'order':'desc'}}
+        'sort':{'influence':{'order':'desc'}}
     }
     try:
         max_result=es_tw_user_profile.search(index=index_name,doc_type=tw_bci_index_type,body=query_body)['hits']['hits']
         for item in max_result:
-           max_user_index=item['_source']['user_index']
+           max_user_index=item['_source']['influence']
 
         user_result=es_tw_user_profile.get(index=index_name,doc_type=tw_bci_index_type,id=uid)['_source']
-        user_index=user_result['user_index']
+        user_index=user_result['influence']
         infulence_value=user_index/max_user_index*100
     except:
         infulence_value=0
@@ -1339,11 +1340,12 @@ def wxnr_list_fans(user_id,order_type):
 
                 user_dict['photo_url']=item['_source']['photo_url']            
                 user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
+                user_dict['twitter_type']=item['_source']['twitter_type']
+                # user_dict['sex']=item['_source']['sex']
                 #user_dict['user_birth']=item['_source']['user_birth']
                 #user_dict['create_at']=item['_source']['create_at']
-                user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
-                user_dict['user_location']=item['_source']['geo']
+                # user_dict['fan_source']=item['_source']['fan_source']  #微博推荐
+                # user_dict['user_location']=item['_source']['geo']
                 xnr_fans_result.append(user_dict)
             else:
                 pass
