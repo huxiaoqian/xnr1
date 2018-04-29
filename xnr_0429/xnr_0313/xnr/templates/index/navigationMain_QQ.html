@@ -1,0 +1,571 @@
+{% block title %}<title>网络虚拟人系统</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.fullPage.css">
+    <link rel="stylesheet" href="/static/css/navigationMainQQ.css">
+    <style>
+        .disableCss{
+            /*pointer-events:none;*/
+            color:#afafaf!important;
+            cursor:not-allowed!important;
+        }
+	    .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin: 5px 10px;}
+        .demo-radio{display:none!important;}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        <!---->
+        .modal-header {
+            background: #09344e!important;
+            color: white!important;
+        }
+        .modal-body,.modal-footer {
+            background: #041b29!important;
+            color: white!important;
+        }
+        .table-hover>tbody>tr:hover {
+            background-color: #2a556f!important;
+        }
+        .modal-header .close {
+            color:white!important;
+            opacity: 1!important;
+        }
+        .modal-footer .btn {
+            background-color: transparent;
+            border-color: silver;
+            color: white;
+        }
+        .modal-footer .btn:hover {
+            background-color: rgba(3, 8, 16, 0.61);
+            color: white;
+        }
+        #xnrName {
+            color:white;
+            max-width:237px;
+            min-width:237px;
+            display: inline-block;
+            vertical-align: middle;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            text-align: center;
+        }
+        <!---->
+        .weiboQQ {
+            position: absolute;
+            width: 554px;
+            left: 50%;
+            top: 24%;
+            margin: 0 0 0 -277px;
+            text-align: center;
+        }
+        .weiboQQ img {
+            margin:0 15px;
+            cursor: pointer;
+        }
+        #signOut {
+            position: fixed;
+            z-index: 99999;
+            right: 20px;
+            top: 20px;
+            padding: 5px 10px;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+        }
+        #signOut a {color: white;}
+        #signOut:hover {
+            background: #2a2b2c;
+        }
+        @media screen and (min-width:1370px) and (max-width:1920px) {
+            /*.bg13 .warning {*/
+                /*top: 700px!important;*/
+                /*left: 890px!important;*/
+            /*}*/
+            /*.xnr {*/
+                /*left:40% !important;*/
+            /*}*/
+            .xnr {
+                left:40% !important;
+            }
+        }
+    </style>
+{% endblock %}
+{% block main %}
+<div id="signOut">
+    <span><i class="icon icon-signout"></i>&nbsp;<a href="/logout/">退出登录</a></span>
+</div>
+<div class="section section1">
+
+    <div class="bg"><img src="/static/images/section1.jpg" alt=""></div>
+
+    <div class="bg11"></div>
+
+    <div class="bg12"></div>
+
+    <div class="bg13">
+        <div class="control" style="top: 240px;left:160px;">
+            <i class="icon icon-cogs"></i>
+            <div class="cover" id="control">
+                <em class="icon icon-plus-sign"></em>
+                <span>操作控制</span>
+            </div>
+        </div>
+        <div class="warning" style="top:47%;right:44%;">
+            <i class="icon icon-eye-open"></i>
+            <div class="cover" id="warning">
+                <em class="icon icon-plus-sign"></em>
+                <span>预警监控</span>
+            </div>
+        </div>
+        <div class="evaluation" style="top: 240px;right:160px;">
+            <i class="icon icon-sitemap"></i>
+            <div class="cover" id="evaluation">
+                <em class="icon icon-plus-sign"></em>
+                <span>行为评估</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="hgroup">
+
+        <h1><a href="###">个人中心</a></h1>
+
+        <h2>发生，不止所见。</h2>
+
+    </div>
+    <div class="xnr" style="cursor:pointer;position: absolute;left:39%;top: 18%;">
+        <img src="/static/images/changeXNR.png" data-toggle="modal" data-target="#choosePerson" title="切换虚拟人">
+        <b id="xnrName"></b>
+    </div>
+    <div class="weiboQQ">
+        <img src="/static/images/weiboload.png" title="微博登录" class="weibo">
+        <img src="/static/images/clickQQ.png" title="正在使用QQ登录中" class="qq">
+        <img src="/static/images/WXload.png" title="微信登录" class="wx disableCss">
+        <img src="/static/images/facebookload.png" title="faceBook登录" class="facebook disableCss">
+        <img src="/static/images/twitterload.png" title="twitter登录" class="twitter disableCss">
+    </div>
+
+    <p class="p11" style="font-size: 16px;text-align: center;">
+        虚拟人指挥管理系统通过微博、QQ群、微信群、facebook、twitter五个渠道，以虚拟人定制培养、统一管理、实时控制和联合指挥为目标，
+        实现了不同领域虚拟人身份画像定制、舆情信息实时监测浏览、网络社交行为半自动化辅助及模拟，使监管手段更具主动性和智能化。
+    </p>
+
+</div>
+<div class="section section5" style="text-align: center">
+
+    <div class="bg"><img src="/static/images/section5.jpg" alt=""></div>
+
+    <!--<strong>[ 功能·监控预警 ]</strong>-->
+
+    <!--<h3>全面监控，为你预警</h3>-->
+
+    <div class="bg51">
+
+        <h4>上报管理</h4>
+
+        <p>
+            支持对监测预警模块中上报记录的信息根据上报类型、关键词进行查看，文件导出。
+        </p>
+        <div class="bg51-top" id="reportedmange">
+            <i class="icon icon-share" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>上报管理</span>
+        </div>
+    </div>
+    <div class="bg55" style="margin: 0 150px;">
+
+        <h4>知识库管理</h4>
+
+        <p>
+            支持对虚拟人培养全过程中涉及到的领域、角色、业务及言论知识进行信息创建、查看、管理。
+        </p>
+        <div class="bg55-top" id="knowledgebase">
+            <i class="icon icon-key" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>知识库管理</span>
+        </div>
+    </div>
+    <div class="bg54">
+
+        <h4>系统管理</h4>
+
+        <p>支持系统管理员对系统用户的权限、操作日志以及用户虚拟人管理情况进行管理。</p>
+
+        <div class="bg54-top" id="system">
+            <i class="icon icon-inbox" style="display: block;margin:120px 0 20px 0;"></i>
+            <span>系统管理</span>
+        </div>
+    </div>
+
+</div>
+
+<!--选择虚拟人 模态框-->
+<div class="modal fade" id="choosePerson" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">系统提示</h4>
+            </div>
+            <div class="modal-body">
+                <div class="coverbody">
+                    <div class="option1">
+                        <span>一、请先选择要进入的QQ号昵称</span>
+                        <div class="identity" style="padding: 10px 25px;">
+
+                        </div>
+                    </div>
+                    <div class="option2">
+                        <span>二、请先选择QQ的显示模式</span>
+                        <div class="showType" style="padding: 10px 25px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='隐身'>
+                                <span class="demo-checkbox demo-radioInput"></span> 隐身
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="radio" name="choose" value='昵称可见' checked>
+                                <span class="demo-checkbox demo-radioInput"></span> 昵称可见
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sure_in" data-dismiss="modal">确认</button>
+                <button type="button" class="btn btn-primary cancel_in" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--提示-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--加载-->
+<style>
+    #loadingJump {margin-top: 130px;}
+    #loadingJump .modal-content {
+        box-shadow: none!important;
+        border: none!important;
+    }
+    .spinner {
+        margin: 100px auto;
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .spinner > div {
+        /*background-color: #67CF22;*/
+        background-color: #fff;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+        animation: stretchdelay 1.2s infinite ease-in-out;
+    }
+
+    .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+
+    .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+
+    .spinner .rect4 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    .spinner .rect5 {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+
+    @-webkit-keyframes stretchdelay {
+        0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+        20% { -webkit-transform: scaleY(1.0) }
+    }
+
+    @keyframes stretchdelay {
+        0%, 40%, 100% {
+            transform: scaleY(0.4);
+            -webkit-transform: scaleY(0.4);
+        }  20% {
+               transform: scaleY(1.0);
+               -webkit-transform: scaleY(1.0);
+           }
+    }
+</style>
+<div class="modal fade" id="loadingJump" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background: transparent;">
+            <!--<div class="modal-header">-->
+            <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+            <!--<h4 class="modal-title"></h4>-->
+            <!--</div>-->
+            <div class="modal-body" style="background: transparent!important;">
+                <div class="spinner">
+                    <div class="rect1"></div>
+                    <div class="rect2"></div>
+                    <div class="rect3"></div>
+                    <div class="rect4"></div>
+                    <div class="rect5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script src="/static/js/jquery-3.1.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js "></script>
+<script src="/static/js/jquery.fullPage.min.js"></script>
+<script>
+    //ajax请求
+    var public_ajax={
+        call_request:function(ajax_method,url,callback) {
+            $.ajax({
+                type:ajax_method,
+                url:url,
+                async:true,
+                //timeout:300,
+                //data:{"name":"xm"},//传参数
+                dataType:"json",
+                success:callback,
+                error:function (xhr,textStatus,errorThrown) {
+                    //请求失败执行的函数
+                    console.log("请求失败",textStatus,errorThrown);
+                    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。（刷新重试）';
+                    if (ISclear=='clear'){
+                        errorHtml='登录过期，请清除缓存，重新登录。';
+                        ISclear='againSet';
+                    }
+                    $('#errorInfor p').text(errorHtml);
+                    $('#errorInfor').modal('show');
+                },
+                global:false//是否触发全局请求,需要触发就是true,不需要false
+            });
+        },
+    };
+
+    $(function(){
+
+        $.fn.fullpage({
+
+            verticalCentered: false,
+
+            anchors: ['page1', 'page2'],
+
+            navigation: true,
+
+            navigationTooltips: ['', '']
+
+        });
+
+    });
+    $('.bg51').hover(function () {
+        $(".bg51-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg51-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg51-top").removeClass("effeckt-show");
+    });
+    $('.bg54').hover(function () {
+        $(".bg54-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg54-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg54-top").removeClass("effeckt-show");
+    });
+    $('.bg55').hover(function () {
+        $(".bg55-top").show().addClass("from-below");
+        setTimeout(function(){$(".bg55-top").addClass("effeckt-show");},2);
+    },function () {
+        $(".bg55-top").removeClass("effeckt-show");
+    });
+
+    //登录方式
+    $('.weibo').hover(function () {
+        $(this).attr('src','/static/images/clickweibo.png');
+    },function () {
+        $(this).attr('src','/static/images/weiboload.png');
+    }).on('click',function () {
+        var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weibo';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigation/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);
+
+    });
+    $('.qq').on('click',function () {
+        window.location.href='/index/navigationQQ/';
+    });
+    $('.wx').hover(function () {
+        $(this).attr('src','/static/images/clickWX.png');
+    },function () {
+        $(this).attr('src','/static/images/WXload.png');
+    }).on('click',function () {
+        /*var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=weixin';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationWX/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);*/
+    });
+    $('.facebook').hover(function () {
+        $(this).attr('src','/static/images/facebookclick.png');
+    },function () {
+        $(this).attr('src','/static/images/facebookload.png');
+    }).on('click',function () {
+        /*var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=facebook';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href='/index/navigationFaceBook/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);*/
+    });
+    $('.twitter').hover(function () {
+        $(this).attr('src','/static/images/twitterclick.png');
+    },function () {
+        $(this).attr('src','/static/images/twitterload.png');
+    }).on('click',function () {
+       /* var sameXnr_url='/system_manage/change_xnr_platform/?origin_platform=qq&origin_xnr_user_no='+sameID+'&new_platform=twitter';
+        public_ajax.call_request('GET',sameXnr_url,sameXnrPoint);
+        $.fn.fullpage.setAutoScrolling(false);
+        $('#loadingJump').modal('show');
+        setTimeout(function () {
+            window.location.href = '/index/navigationTwitter/';
+            $('#loadingJump').modal('hide');
+            $.fn.fullpage.setAutoScrolling(true);
+        },1000);*/
+    });
+    //页面跳转
+    $('#control').on('click',function () {
+        window.open('/personalCenter/individualQQ/');
+    });
+    $('#warning').on('click',function () {
+        window.open('/inforDetection/inforCheckingQQ/');
+    });
+    $('#evaluation').on('click',function () {
+        window.open('/behavioGauge/behaviorQQ/');
+    });
+    $('#reportedmange').on('click',function () {
+        window.open('/reportManage/management/?flag=2');
+    });
+    $('#knowledgebase').on('click',function () {
+        window.open('/knowledge/domainLibrary/?flag=2');
+    });
+    $('#system').on('click',function () {
+        window.open('/systemManage/daily/?flag=2');
+    });
+
+    //虚拟人列表
+    var oneTrue=1,sameID='';
+    $.ajax({
+        type: 'GET',
+        url: "/qq_xnr_manage/show_qq_xnr/",
+        async: true,
+        dataType: "json",
+        success: function (data) {
+            var str='';
+            var sameid=localStorage.getItem('sameXnr');
+            $.each(data,function (index,item) {
+                var name,isChecked='';
+                if (item.nickname==''||item.nickname=='unknown'||!item.nickname){
+                    name='无昵称';
+                }else {
+                    name=item.nickname;
+                }
+                if (sameid==item.xnr_user_no){
+                    isChecked='checked';
+                    sameID=item.xnr_user_no;
+                    $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
+                    localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
+                    localStorage.setItem('userQQRelName',encodeURI(name));
+                    localStorage.setItem('userQQnum',encodeURI(item.qq_number));
+                    localStorage.setItem('userQQName',encodeURI(name));
+                    localStorage.setItem('sameXnr',encodeURI(item.xnr_user_no));
+                }else if (oneTrue==1){
+                    isChecked='checked';
+                    sameID=item.xnr_user_no;
+                    $('#xnrName').text(name+'（'+item.qq_number+'）').attr('title',name+'（'+item.qq_number+'）');
+                    localStorage.setItem('userQQ',encodeURI(item.xnr_user_no));
+                    localStorage.setItem('userQQRelName',encodeURI(name));
+                    localStorage.setItem('userQQnum',encodeURI(item.qq_number));
+                    localStorage.setItem('userQQName',encodeURI(name));
+                    localStorage.setItem('sameXnr',encodeURI(item.xnr_user_no));
+                };
+                str+=
+                    '<label class="demo-label" title="'+name+'">'+
+                    '   <input class="demo-radio" type="radio" name="ID" valueNum="'+item.qq_number+'" valueID='+
+                    item.xnr_user_no+' valueName='+name+' '+isChecked+'>'+
+                    '   <span class="demo-checkbox demo-radioInput"></span> '+name+'（'+item.qq_number+'）'+
+                    '</label>';
+                oneTrue++;
+            });
+            $('#choosePerson .identity').html(str);
+        }
+    });
+    //选择虚拟人确定进入
+    $('.sure_in').on('click',function () {
+        var userQQID=$('input:radio[name="ID"]:checked').attr('valueID');
+        var userQQName=$('input:radio[name="ID"]:checked').attr('valueName');
+        var userQQnum=$('input:radio[name="ID"]:checked').attr('valueNum');
+        var userType=$('input:radio[name="choose"]:checked').val();
+        if (!userQQID||!userQQName||!userType){
+            $('#pormpt p').text('请检查选择登陆的QQ显示模式。');
+            $('#pormpt').modal('show');
+        }else {
+            var id_or_name='';
+            if (userType=='隐身'){
+                id_or_name=userQQID;
+            }else {
+                id_or_name=userQQName;
+            }
+            localStorage.setItem('userQQ',encodeURI(userQQID));
+            localStorage.setItem('userQQRelName',encodeURI(userQQName));
+            localStorage.setItem('userQQnum',encodeURI(userQQnum));
+            localStorage.setItem('userQQName',encodeURI(id_or_name));
+            sameID=userQQID;
+            $('#xnrName').text(id_or_name+'（'+userQQnum+'）').attr('title',id_or_name+'（'+userQQnum+'）');
+        }
+    });
+    function sameXnrPoint(data) {
+        for (var k in data[0]){
+            var sameID='';
+            if (data[0][k]){sameID=data[0][k];localStorage.setItem('sameXnr',sameID);};
+
+        }
+    }
+</script>
+{% endblock %}

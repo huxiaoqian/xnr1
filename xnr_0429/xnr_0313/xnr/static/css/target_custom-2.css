@@ -1,0 +1,118 @@
+/*#two {*/
+    /*width: 100%;*/
+    /*margin: 0 auto 50px;*/
+    /*height: 100%;*/
+    /*padding: 25px;*/
+    /*background: rgba(8,23,44,0.5);*/
+    /*position: relative;*/
+    /*top: 80px;*/
+/*}*/
+#two .title {
+    width: 100%;
+    position: relative;
+}
+#two .title .tit-1 b {
+    display: inline-block;
+    position: relative;
+    top: -3px;
+    margin-left: 15px;
+    font-size: 18px;
+    color: white;
+    font-weight: 900;
+}
+#two .title .account_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #fff;
+}
+#two .building {
+    width: 90%;
+    margin: 20px auto;
+}
+#two .building .b-1-2 .b-opt {
+    margin-top: 10px;
+}
+#two .building .build-1 .b-1-2 {
+    margin-top: 15px;
+    padding:10px 20px;
+    border: 1px solid silver;
+}
+#two .building .build-1 .b-1-2 span {
+    font-size: 14px;
+    color: white;
+    font-weight: 700;
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+    margin-right: 30px;
+}
+#two .building .build-1 input {
+    background: transparent;
+    border: 1px solid silver;
+    border-radius:5px;
+    text-align: center;
+    color: white;
+    transition: all linear 0.3s;
+    width: 500px;
+    margin: 10px 0;
+    padding: 4px 8px;
+}
+#two .building .build-1 input:focus {
+    background: rgba(255, 255, 255, 0.88);
+    color: black;
+}
+#two .building .b-1-2 .b-opt .addBuild {
+    width: 500px;
+    padding: 4px 8px;
+    /*margin: 0 auto;*/
+    border: 1px solid silver;
+    color: white;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+    transition: all linear 0.3s;
+}
+#two .building .b-1-2 .b-opt .addBuild p {
+    width: 220px;
+    display: inline-block;
+    text-align: center;
+}
+#two .building .b-1-2 .b-opt .addBuild:hover {
+    background: rgba(255, 255, 255, 0.88);
+    color: black;
+}
+#two .group {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.nav-tabs>li.active>a {
+    color: white!important;
+    background-color: rgba(6, 7, 8, 0.42)!important;
+}
+.nav>li>a {
+    color: white;
+    font-size: 16px;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: rgba(5, 23, 55, 0.45);
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color:rgba(7,26,55,0.2);
+}
+#two .grouplist .table>thead>tr>th {border-top: none!important;}
+#two a.disabled {
+    pointer-events: none;
+    filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+    -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+    opacity: 0.5; /*其他，透明度50%*/
+}
+#two .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
+#two .demo-radio{display:none}
+#two .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;
+    width:16px!important;line-height:1;margin-right: 5px!important;}
+#two .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+#two .demo-checkbox.demo-radioInput,#two .demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0!important;}
+#two .fixed-table-toolbar .search{width: 100%}
+#two .fixed-table-pagination .page-list {display: none!important;}
