@@ -9,6 +9,7 @@ import time
 import json
 import heapq
 import math
+import Levenshtein
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from config import cut_des,K1,B,K3,global_utils_route
@@ -136,6 +137,16 @@ def rank_text_list_by_word(text_list,keywords,word_set):#根据关键词匹配�
         
     return result
 
+def get_s(text_list,text):#判断文本的编辑距离
+    
+    max_ratio = 0
+    for t in text_list:
+        ratio = Levenshtein.ratio(t,text)
+        if ratio > max_ratio:
+            max_ratio = ratio
+
+    return max_ratio
+
 def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
 
     word_dict = dict()
@@ -167,7 +178,7 @@ def combine_rank_text(rank_text):#将排好序的文本拼接成一篇文档
             for item in list(union_set):
                 weight = weight + summary.count(item)
 
-            if weight > max_weight and weight >= 2:
+            if weight > max_weight:
                 r = get_s(summary_list,text)
                 if r >= 0.7:
                     continue
