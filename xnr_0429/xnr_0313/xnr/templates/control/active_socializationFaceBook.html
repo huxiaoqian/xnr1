@@ -1,0 +1,283 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>主动社交</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/active_socialization.css">
+<style>
+    .fixed-table-pagination .page-list {
+        display: none;
+    }
+    #container .suggestion #myTabs a {
+        color: white;
+    }
+    .influence .fixed-table-toolbar .search,.searchResult .fixed-table-toolbar .search {
+        width: 100%!important;
+    }
+    .searchResult {display: none;}
+    .bootstrap-table .table>thead>tr>th {width: 8%!important;}
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover,
+    .nav>li>a:focus, .nav>li>a:hover {
+        background: rgba(5, 23, 55, 0.45);
+    }
+    .chooseAdvanced {
+        display: none;
+        width: 90%;
+        margin: 0 auto;
+        border: 1px solid silver;
+    }
+    .chooseAdvanced .choose-1,.chooseAdvanced .choose-2,.chooseAdvanced .choose-3,.chooseAdvanced .choose-4 {
+        padding-left:80px;
+        position: relative;
+        border-bottom: 1px solid silver;
+    }
+    .chooseAdvanced .choose-1 .choose-1-left,.chooseAdvanced .choose-2 .choose-2-left,
+    .chooseAdvanced .choose-3 .choose-3-left,.chooseAdvanced .choose-4 .choose-4-left {
+        padding: 10px;
+        font-size: 14px;
+        position: absolute;
+        left: 0;
+        top:50%;
+        margin-top: -20px;
+        text-align: center;
+    }
+    .chooseAdvanced .choose-1 .choose-1-right,.chooseAdvanced .choose-2 .choose-2-right,
+    .chooseAdvanced .choose-3 .choose-3-right,.chooseAdvanced .choose-4 .choose-4-right {
+        border-left: 1px solid silver;
+        padding: 10px;
+    }
+    .chooseAdvanced-2 .advanced-2-right {
+        display: inline-block;
+        float: right;
+        padding: 5px 10px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+        font-size: 14px;
+        color: white;
+        cursor: pointer;
+    }
+    .chooseAdvanced-2 {
+        margin: 10px auto 30px;
+        width:90%;
+        text-align: right;
+        display: none;
+    }
+    .chooseAdvanced-2 .advanced-2-right:hover {
+        background: rgba(5, 23, 55, 0.45);
+    }
+    .chooseAdvanced .checkbox-inline {
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0;
+    }
+    .chooseAdvanced input,.chooseAdvanced select {
+        padding: 3px 7px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+        color: white;
+    }
+
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-headphones note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">主动社交</b>
+        </div>
+    </div>
+    <div class="active-1" style="margin-top: 20px;">
+        <img src="/static/images/icon.png">
+        <span style="display:inline-block;font-size: 18px;font-weight: 900;color: #fff">直接搜索</span>
+        <div class="actRight">
+            <input type="text" class="active-1-find" placeholder="请输入你想要关注的用户的id(多个请用逗号隔开)"/>
+            <span class="findSure" title="直接搜索"><i class="icon icon-search"></i></span>
+            <!--<span class="advanced_search">高级搜索</span>-->
+        </div>
+        <div class="searchResult">
+            <div id="searchResult"></div>
+        </div>
+        <!---->
+    </div>
+    <div class="active-2" style="margin-top: 20px;">
+        <img src="/static/images/icon.png" alt="">
+        <span style="display:inline-block;font-size: 18px;font-weight: 900;color: #fff">相关推荐</span>
+        <div class="suggestion" style="margin: 20px 0 30px;">
+            <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                <!-- <li role="presentation" class="active" tp="influence">
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-info-sign"></b>&nbsp;按粉丝数</a>
+                </li> -->
+                <li role="presentation" tp="sensitive" class="active">
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-dashboard"></b>&nbsp;按敏感度</a>
+                </li>
+                <!-- <li role="presentation" tp="friend">
+                    <a href="#influe" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;按朋友圈</a>
+                </li> -->
+            </ul>
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="influe">
+                    <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                    <div class="influence" style="display: none;">
+                        <div id="influence">
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div role="tabpanel" class="tab-pane" id="sensitive">-->
+                <!--<div class="Sensitivity">-->
+                <!--<div id="Sensitivity"></div>-->
+                <!--</div>-->
+                <!--</div>-->
+
+                <!--<div role="tabpanel" class="tab-pane" id="friends">-->
+                <!--<div class="friendsCircle">-->
+                <!--<div id="friendsCircle"></div>-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+
+        </div>
+    </div>
+    <!--<a style="cursor: pointer;" onclick="" data-toggle="modal" data-target="#details">查看详情</a>-->
+</div>
+<!--模态框-->
+<style>
+    .modal.in .modal-dialog {margin: 30px auto!important;}
+    #details h4 img,#details h4 p {
+        display: inline-block;
+    }
+    #details h4 p {
+        cursor: pointer;
+        font-size: 14px;
+        float: right;
+        padding: 5px 8px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+    }
+    #details h4 p:hover {
+        background: rgba(0, 0, 0, 0.14);
+    }
+    #details h4 span {
+        color: #fff;
+        display: inline-block;
+    }
+    #details .details-1,#details .details-2,#details .details-3 {
+        padding: 5px 10px;
+        border-bottom: 1px solid silver;
+        color: #fff;
+    }
+    #details .details-2,#details .details-3 {
+        margin-top: 15px;
+    }
+    #details .details-1 .det-1-info,#details .details-2 .det-2-info,#details .details-3 .det-3-info{
+        color: #fff;
+        font-size: 12px;
+    }
+    #details .details-1 .det-1-info span,#details .details-2 .det-2-info span{
+        display: inline-block;
+        width: 210px;
+        margin: 10px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #details .details-3 .det-3-info div {
+        margin: 10px 0;
+    }
+    #details .details-1 .det-1-info i,#details .details-2 .det-2-info i,
+    #details .details-3 .det-3-info i{
+        color: #03a9f4;
+    }
+    #details .details-1 .det-1-info {
+        position: relative;
+        padding-right:50px;
+    }
+    #details .details-1 .headImg {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        top:0;
+        right:10px;
+    }
+    #details .modal-footer {
+        border-top: none;
+    }
+
+</style>
+<div class="modal fade" id="details" tabindex="-1" role="dialog" style="top: 50px;">
+    <div class="modal-dialog" role="document" style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <h4 class="modal-title">
+                    <img src="/static/images/icon.png" alt="">
+                    <span class="details-name"></span>
+                    <i class="uid" style="display: none;"></i>
+                    <p class="addFOCUS" onclick="driectFocus('',this)">
+                        <span><i class="icon icon-plus" style="color:#03a9f4;"></i>&nbsp;<b></b></span>
+                    </p>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="details-1">
+                    <p>基本信息：</p>
+                    <div class="det-1-info">
+                        <img src="" alt="" class="headImg">
+                        <span><i class="icon icon-tint"></i>&nbsp;昵称：<b class="det-1-name det11"></b></span>
+                        <span><i class="icon icon-tint"></i>&nbsp;身份标签：<b class="det-1-name det22"></b></span>
+                        <span><i class="icon icon-tint"></i>&nbsp;所在地：<b class="det-1-name det33"></b></span>
+                        <span><i class="icon icon-tint"></i>&nbsp;性别：<b class="det-1-name det44"></b></span>
+                        <span><i class="icon icon-tint"></i>&nbsp;领域标签：<b class="det-1-name det55"></b></span>
+
+                    </div>
+                </div>
+                <div class="details-2">
+                    <p>影响力指标：</p>
+                    <div class="det-2-info">
+                        <span><i class="icon icon-tint"></i>&nbsp;影响力指标：<b class="det-2-num"></b></span>
+                    </div>
+                </div>
+                <div class="details-3">
+                    <p>代表微博：</p>
+                    <div class="det-3-info">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--提示性模态框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType='faceBook';
+    weiboORqq('faceBook');
+    $('.nav_type').text('(FaceBook)');
+    judgmentFaceBook('2');
+</script>
+<script src="/static/js/active_socializationFaceBook-1.js"></script>
+{% endblock %}

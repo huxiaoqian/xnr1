@@ -1,0 +1,489 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>虚拟人定制 - 目标定制</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/target_custom.css">
+<link rel="stylesheet" href="/static/css/target_custom-2.css">
+<link rel="stylesheet" href="/static/css/target_custom-3.css">
+<style>
+    /*<!---->*/
+    .xnrShowHide {display: none;}
+    #container .title #inPut {
+        display: inline-block;
+        color: white;
+        font-weight: 700;
+        margin-left: 30px;
+        cursor: pointer;
+        padding: 5px 10px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+    }
+    #container .title #inPut:hover {
+        background:rgba(3, 8, 16, 0.61);
+    }
+    /**/
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .demo-label{display:inline-block;margin-right: 10px;cursor:pointer;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <ul id="myTabs" class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#one" role="tab" data-toggle="tab"><b class="icon icon-user"></b>&nbsp;&nbsp;虚拟人定制</a>
+        </li>
+        <li role="presentation">
+            <a href="#two" role="tab" data-toggle="tab" id="domainYes"><b class="icon icon-globe"></b>&nbsp;&nbsp;领域定制</a>
+        </li>
+        <li role="presentation">
+            <a href="#three" role="tab" data-toggle="tab"><b class="icon icon-github"></b>&nbsp;&nbsp;角色定制</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="content">
+        <div role="tabpanel" class="weiboTable tab-pane active" id="one">
+            <div class="title" style="margin-top: 20px;">
+                <div class="tit-1">
+                    <img src="/static/images/target.png" class="icon">
+                    <b>第一步：目标定制</b>
+
+                    <input type='file' id='example_modal' onchange='showData()' style='display: none;margin-left: 30px;'/>
+                    <a id="inPut" onclick="importModal()">导入实例模板</a>
+
+                </div>
+                <div class="tit-2">
+                    <div style="margin: 15px 0;">
+                        <b>渗透领域：</b>
+                        <img src="/static/images/clock.png" alt="">
+                        <span class="buildNew">没有想要的？点我创建</span>
+                    </div>
+                    <div class="field"></div>
+                </div>
+
+            </div>
+            <div class="buildOption">
+                <div class="build-1">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>角色身份：</span>
+                    <div class="opt-1 opt">
+                        <p style="text-align: center;">请先选择渗透领域</p>
+                    </div>
+                </div>
+                <div class="build-2">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>政治倾向：</span>
+                    <div class="opt-2 opt">
+                        <p style="text-align: center;">请先选择角色身份</p>
+                    </div>
+                </div>
+                <div class="build-3">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>心理特征：</span>
+                    <div class="opt-3 opt">
+                        <p style="text-align: center;">请先选择角色身份</p>
+                    </div>
+                </div>
+                <div class="build-4">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>业务目标：</span>
+                    <div class="opt-4 opt" style="margin: 10px 0;">
+                        <label class="demo-label" title="扩大影响" style="margin-bottom: 0;">
+                            <input class="demo-radio" type="checkbox" name="demo66" value="扩大影响">
+                            <span class="demo-checkbox demo-radioInput"></span> 扩大影响
+                        </label>
+                        <label class="demo-label" title="渗透" style="margin-bottom: 0;">
+                            <input class="demo-radio" type="checkbox" name="demo66" value="渗透">
+                            <span class="demo-checkbox demo-radioInput"></span> 渗透
+                        </label>
+                    </div>
+                </div>
+                <div class="build-5">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>日常兴趣：</span>
+                    <div class="opt-5 opt">
+                        <label class="demo-label" title="旅游">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="旅游">
+                            <span class="demo-checkbox demo-radioInput"></span> 旅游
+                        </label>
+                        <label class="demo-label" title="美食">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="美食">
+                            <span class="demo-checkbox demo-radioInput"></span> 美食
+                        </label>
+                        <label class="demo-label" title="汽车">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="汽车">
+                            <span class="demo-checkbox demo-radioInput"></span> 汽车
+                        </label>
+                        <label class="demo-label" title="游戏">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="游戏">
+                            <span class="demo-checkbox demo-radioInput"></span> 游戏
+                        </label>
+                        <label class="demo-label" title="星座">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="星座">
+                            <span class="demo-checkbox demo-radioInput"></span> 星座
+                        </label>
+                        <label class="demo-label" title="音乐">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="音乐">
+                            <span class="demo-checkbox demo-radioInput"></span> 音乐
+                        </label>
+                        <label class="demo-label" title="影视">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="影视">
+                            <span class="demo-checkbox demo-radioInput"></span> 影视
+                        </label>
+                        <label class="demo-label" title="健身">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="健身">
+                            <span class="demo-checkbox demo-radioInput"></span> 健身
+                        </label>
+                        <label class="demo-label" title="养生">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="养生">
+                            <span class="demo-checkbox demo-radioInput"></span> 养生
+                        </label>
+                        <label class="demo-label" title="体育">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="体育">
+                            <span class="demo-checkbox demo-radioInput"></span> 体育
+                        </label>
+                        <label class="demo-label" title="萌宠">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="萌宠">
+                            <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                        </label>
+                        <label class="demo-label" title="动漫">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="动漫">
+                            <span class="demo-checkbox demo-radioInput"></span> 动漫
+                        </label>
+                        <label class="demo-label" title="时尚">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="时尚">
+                            <span class="demo-checkbox demo-radioInput"></span> 时尚
+                        </label>
+                        <label class="demo-label" title="鸡汤">
+                            <input class="demo-radio" type="checkbox" name="demo6" value="鸡汤">
+                            <span class="demo-checkbox demo-radioInput"></span> 鸡汤
+                        </label>
+                    </div>
+                </div>
+                <div class="build-6">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>检测关键词：</span>
+                    <div class="opt-6" style="margin:10px 0;">
+                        <input type="text" class="keywords" placeholder="请输入关键词（多个请用逗号分隔）"/>
+                    </div>
+                </div>
+            </div>
+            <div class="next">
+                <span class="nextButton">下一步</span>
+            </div>
+        </div>
+        <div role="tabpanel" class="weiboTable tab-pane" id="two">
+            <!--<div class="title">-->
+                <!--<div class="tit-1">-->
+                    <!--<span class="icon icon-globe account_icon"></span>-->
+                    <!--<b>领域知识库</b>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="building">
+                <div class="build-1">
+                    <div class="b-1-1">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="font-size: 18px;font-weight: 900;color: #fff;">渗透领域创建</span>
+                    </div>
+                    <div class="b-1-2">
+                        <div class="b-opt"><span>领域名称：</span><input type="text" class="name" placeholder="请输入领域名称"></div>
+                        <div class="b-opt"><span>领域描述：</span><input type="text" class="description" placeholder="请输入领域描述"></div>
+                        <div class="b-opt">
+                            <span>创建方式：</span>
+                            <div class="keyUser" style="display: inline-block;width: 500px;text-align: left;">
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="deadio" value="by_keywords&keywords_string" checked>
+                                    <span class="demo-radioInput"></span> 按关键词
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="deadio" value="by_seed_users&seed_users">
+                                    <span class="demo-radioInput"></span> 按种子用户
+                                </label>
+                                <label class="demo-label">
+                                    <input class="demo-radio" type="radio" name="deadio" value="by_all_users&all_users">
+                                    <span class="demo-radioInput"></span> 按所有用户
+                                </label>
+                            </div>
+                            <input type="text" class="way" style="margin-left:110px;">
+                            <input type="file" class="uidlist" style="margin-left:110px;display: none;"
+                                   placeholder="文件中的UID请用逗号分隔（请传txt文件）" multiple onchange="filelist(this.files)">
+                        </div>
+                        <div class="b-opt"><span>备注：</span><input type="text" class="remarks" placeholder="请输入备注信息"></div>
+                        <div class="b-opt" style="margin:20px 0 20px 110px;">
+                            <div class="addBuild"><p>创</p><p>建</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="group">
+                <div class="group-1">
+                    <div class="g-1-1">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="font-size: 18px;font-weight: 900;color: #fff;">渗透领域群体</span>
+                    </div>
+                </div>
+                <div class="group-2">
+                    <div id="group-2"></div>
+                </div>
+                <h2 class="titleMain" style="margin: 10px 0;width: 100%;text-align: center;color: white;"></h2>
+                <div class="type_page allGroup_div" style="display: none;">
+                    <ul id="myTabs2" class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#show-1" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;群体描述</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#show-2" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;群体详情列表</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="content2">
+                        <div role="tabpanel" class="tab-pane active" id="show-1">
+                            <div class="g_1_1" style="margin: 10px 0;">
+                                <img src="/static/images/icon.png" alt="">
+                                <span style="font-size: 18px;font-weight: 900;color: #fff;">群体详情列表&nbsp;<span id="_gd" style="color: antiquewhite;"></span></span>
+                            </div>
+                            <div class="grouplist">
+                                <div id="grouplist">
+                                    <p class="loadGO" style="width: 100%;text-align: center;color: white;
+        margin-top:40px;font-size: 18px;">正在拼命加载中...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="show-2">
+                            <div class="g_1_1" style="margin: 10px 0;">
+                                <img src="/static/images/icon.png" alt="">
+                                <span style="font-size: 18px;font-weight: 900;color: #fff;">群体描述</span>
+                            </div>
+                            <div class="groupDetails">
+                                <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                                <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                                <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="weiboTable tab-pane" id="three">
+            <div class="title">
+                <!--<div class="tit-1">-->
+                    <!--<span class="icon icon-github account_icon"></span>-->
+                    <!--<b>角色知识库</b>-->
+                    <!--<a id="buildModal">生成实例模板</a>-->
+                <!--</div>-->
+                <div class="tit-2" style="padding-left: 50px;margin: 15px 0 0;">
+                    <span style="color: white;font-size: 16px;font-weight: 700;">选择领域：</span>
+                    <a id="buildModal">生成实例模板</a>
+                    <div class="field-1" style="margin-top: 20px;">
+
+                    </div>
+                </div>
+                <div class="tit-3" style="padding-left: 50px;display: none;">
+                    <span style="color: white;font-size: 16px;font-weight: 700;">选择身份：</span>
+                    <div class="field-2" style="color: white;margin-top: 10px;">
+
+                    </div>
+                </div>
+            </div>
+            <div class="options">
+                <div class="options-2">
+                    <div class="op-2-down">
+                        <div class="opt-2-1">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff;">性格特征</span>
+                        </div>
+                        <div id="opt-2-2"></div>
+                    </div>
+                    <div class="op-2-down">
+                        <div class="opt-2-3">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff;">政治倾向</span>
+                        </div>
+                        <div id="opt-2-4"></div>
+                    </div>
+                </div>
+                <div class="options-3">
+                    <div class="opt-3-1">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="font-size: 18px;font-weight: 900;color: #fff;">地理位置</span>
+                    </div>
+                    <div id="opt-3-2"></div>
+                </div>
+                <div class="options-4">
+                    <div class="op-4-down">
+                        <div class="opt-4-1">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff;">活跃时间</span>
+                        </div>
+                        <div id="opt-4-2"></div>
+                    </div>
+                    <div class="op-4-down">
+                        <div class="opt-4-3">
+                            <img src="/static/images/icon.png" alt="">
+                            <span style="font-size: 18px;font-weight: 900;color: #fff;">日发帖量</span>
+                        </div>
+                        <div id="opt-4-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+
+<!--提示-->
+<div class="modal fade" id="prompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--模板-->
+<div class="modal fade" id="modalList" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">模板列表</h4>
+            </div>
+            <div class="modal-body" id="MList">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体更新-->
+<div class="modal fade" id="update" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体更新</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">是否进行群体的更新计算？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureResh()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体删除-->
+<div class="modal fade" id="delt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体删除</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除该群体吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delt()">确定</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--群体详情-->
+<div class="modal fade" id="allGroup" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体详情列表</h4>
+            </div>
+            <div class="modal-body">
+                <div class="$_grouplist">
+                    <div id="$_grouplist"></div>
+                </div>
+            </div>
+            <!--<div class="modal-footer">-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>-->
+            <!--<button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('6');
+//    localStorage.removeItem('secondStep');
+    var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
+    if (flag==1){
+        urlTotal='/weibo_xnr_knowledge_base_management';
+        defalutDomain='维权群体';defalutRole='其他';
+    }else if (flag==4){
+        urlTotal='/fb_xnr_knowledge_base_management';
+        defalutDomain='脸书测试1';defalutRole='民间组织';
+    }else if (flag==5){
+        urlTotal='/tw_xnr_knowledge_base_management';
+        defalutDomain='推特测试1';defalutRole='商业人士';
+    }
+    $('.buildNew').on('click',function () {
+        //window.open('/knowledge/domainLibrary/?flag='+flag);
+        var e =document.createEvent('MouseEvents');
+        e.initEvent('click',true,true);
+        document.getElementById('domainYes').dispatchEvent(e);
+    });
+    function importModal(){
+//        $("#example_modal").trigger("click");
+        var filesList=urlTotal+'/show_example_model/';
+        public_ajax.call_request('get',filesList,$file);
+    };
+    function $file(data) {
+        if (data.length==0){
+            $('#prompt p').text('抱歉，暂无模板可以用。');
+            $('#prompt').modal('show');
+        }else {
+            var str='';
+            $.each(data,function (index,item) {
+                str+='<div style="display: inline-block;margin:0 30px 10px;padding:4px 7px;background-color:#0a4c73;cursor:pointer;' +
+                    'color: white;" onclick="shutModal(this)">' +
+                    '<span>领域：</span><b class="m-1">'+item.domain_name+'</b><span>' +
+                    '&nbsp;&nbsp;身份：</span><b class="m-2">'+item.role_name+'</b></div>';
+            });
+            $('#MList').html(str);
+            $('#modalList').modal('show');
+        }
+    }
+
+    function shutModal(_this) {
+        var a=$(_this).find('.m-1').text();
+        var b=$(_this).find('.m-2').text();
+        domainName=a;roleName=b;
+        var showModal_url=urlTotal+'/export_example_model/?domain_name='+a+
+            '&role_name='+b+'&xnr_user_no='+ID_Num;
+        public_ajax.call_request('get',showModal_url,inModalData);
+        $('#modalList').modal('hide');
+    }
+</script>
+<script src="/static/js/target_custom-1.js"></script>
+<script src="/static/js/worldcloud.min.js"></script>
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/domain_library-1.js"></script>
+<script src="/static/js/character_library-1.js"></script>
+{% endblock %}

@@ -1,0 +1,259 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>系统管理 - 虚拟人管理</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/virtual.css">
+<style>
+    .fixed-table-toolbar .search {width: 100%;}
+    .virtualtable_2 .fixed-table-toolbar .search {width: 85%;}
+    #addVir .addVirContent .vir,#modifyAccount .modAct .modActCC,
+    #addAccountModal .addAccountContent .addCC {
+        margin-bottom: 15px;
+    }
+    #addVir .addVirContent .vir span,#modifyAccount .modAct .modActCC span,
+    #addAccountModal .addAccountContent .addCC span{
+        display: inline-block;
+        width: 90px;
+        margin: 0 10px;
+        text-align: right;
+    }
+    #addVir .addVirContent .vir input,#modifyAccount .modAct .modActCC input,
+    #addAccountModal .addAccountContent .addCC input {
+        display: inline-block;
+        width: 400px;
+        text-align: center;
+        padding: 3px 6px;
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    #modifyAccount .modAct .modActCC .everyXnr {
+        background: transparent;
+        border: 1px solid silver;
+        border-radius: 5px;
+        color: white;
+        padding: 4px 10px;
+        display: inline-block;
+        margin:0 20px 10px 0;
+    }
+    #modifyAccount .modAct .modActCC .nowXnr .everyXnr span {
+        text-align: center;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-user-md account_icon"></span>
+            <b>虚拟人管理</b>
+        </div>
+    </div>
+    <div class="virtualtable">
+        <!--<span class="addaccount" data-toggle="modal" data-target="#addAccountModal">添加账户</span>-->
+        <div id="virtualtable"></div>
+    </div>
+
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-road account_icon"></span>
+            <b>虚拟人通道管理</b>
+        </div>
+    </div>
+    <div class="virtualtable_2">
+        <span class="addaccount" onclick="addRoad('1')">添加通道</span>
+        <div id="virtualtable_2"></div>
+    </div>
+</div>
+<!--模态框-->
+<div class="modal fade" id="pormpt" tabindex="2" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;"></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加新的虚拟人-->
+<div class="modal fade" id="addVir" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加新的虚拟人</h4>
+            </div>
+            <div class="modal-body">
+                <div class="addVirContent">
+                    <div class="vir">
+                        <span>虚拟人ID：</span>
+                        <input type="text" class="virNum" placeholder="多个虚拟人账号请用逗号分隔"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addVirSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除提示-->
+<div class="modal fade" id="delPrompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delVirSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--添加账户-->
+<div class="modal fade" id="addAccountModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加账户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="addAccountContent">
+                    <div class="addCC">
+                        <span>账户ID：</span><input type="text" class="user_id" placeholder="输入账户的ID"/>
+                    </div>
+                    <div class="addCC">
+                        <span>账户用户名：</span><input type="text" class="user_name" placeholder="输入账户的用户名"/>
+                    </div>
+                    <div class="addCC">
+                        <span>账户虚拟人：</span><input type="text" class="my_xnrs" placeholder="输入此账户下的虚拟人（多个用逗号分隔）"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addAccountSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑账户-->
+<div class="modal fade" id="modifyAccount" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑账户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modAct">
+                    <div class="modActCC">
+                        <span>用户ID：</span><input type="text" class="userID"/>
+                    </div>
+                    <div class="modActCC">
+                        <span>用户名：</span><input type="text" class="userName"/>
+                    </div>
+                    <div class="modActCC">
+                        <span style="vertical-align: top;">虚拟人：</span>
+                        <div class="nowXnr" style="display: inline-block;width: 400px;position: relative;left: -4px;"></div>
+                        <div style="width:400px;margin-left:109px;">
+                            <input type="text" class="newXnrList" placeholder="添加新的虚拟人（多个虚拟人用逗号分隔）">
+                            <button class='addXnr' onclick="addVirSure()">添加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="modifyAccountSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--编辑通道和添加通道-->、
+<div class="modal fade" id="modifyAndAddRoad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title tit"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="modActCC">
+                    <span class="tt"><i class="icon icon-pushpin"></i> 微博虚拟人：</span>
+                    <div class="weibolist list"></div>
+                </div>
+                <div class="modActCC">
+                    <span class="tt"><i class="icon icon-pushpin"></i> QQ虚拟人：</span>
+                    <div class="QQlist list"></div>
+                </div>
+                <div class="modActCC">
+                    <span class="tt"><i class="icon icon-pushpin"></i> 微信虚拟人：</span>
+                    <div class="wxlist list"></div>
+                </div>
+                <div class="modActCC">
+                    <span class="tt"><i class="icon icon-pushpin"></i> faceBook虚拟人：</span>
+                    <div class="fblist list"></div>
+                </div>
+                <div class="modActCC">
+                    <span class="tt"><i class="icon icon-pushpin"></i> twitter虚拟人：</span>
+                    <div class="twlist list"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureAddModify()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除通道-->
+<div class="modal fade" id="delroad" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="deleteRoadXnr()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    judgment('9');
+    $(document).ready(function() {
+        // 通过该方法来为每次弹出的模态框设置最新的zIndex值，从而使最新的modal显示在最前面
+        $(document).on('show.bs.modal', '.modal', function() {
+            var zIndex = 1040 + (10 * $('.modal:visible').length);
+            $(this).css('z-index', zIndex);
+            setTimeout(function() {
+                $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+            }, 0);
+        });
+    });
+</script>
+<script src="/static/js/virtual.js"></script>
+{% endblock %}

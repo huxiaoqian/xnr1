@@ -1,0 +1,95 @@
+/*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    /*transform: scale(1);*/
+}
+#container {
+    width: 1100px;
+    height: 100%;
+    padding: 20px;
+    margin: 0 auto 30px;
+    background: rgba(8,23,44,0.8);
+    position: relative;
+    top: 80px;
+}
+#container .title .peo_icon {
+    width: 30px;
+    height: 30px;
+}
+#container .title b,#container .title span {
+    font-size: 14px;
+    color: #fff;
+}
+#container .title #weibo_QQ {
+    display: inline-block;
+    padding: 2px 3px;
+    color:white;
+    /*border: 1px solid #424547;*/
+    /*border-radius: 5px;*/
+}
+#container .has_person .has_list,#container .undone_person .undone_list,
+#container .has_person_QQ .has_list_QQ{
+    position: relative;
+}
+#container .has_person .has_list button,#container .undone_person .undone_list button{
+    /*background: #003366;*/
+    border-radius: 5px;
+    color: white;
+    position: absolute;
+}
+#container .has_person .has_list .hasAdd,
+#container .undone_person .undone_list .undoneAdd,
+#container .has_person_QQ .has_list_QQ .hasAddQQ,
+#container .has_person_QQ .QQoptions .opt input,
+#container .has_person_QQ .addQQperson .optSure span{
+    display: inline-block;
+    padding: 3px 7px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+}
+#container .has_person .has_list .hasAdd,
+#container .undone_person .undone_list .undoneAdd,
+#container .has_person_QQ .has_list_QQ .hasAddQQ{
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    padding: 6px 10px;
+    background:rgba(8,23,44,0.35);
+    transition: all linear 0.3s;
+}
+#container .has_person .has_list .hasAdd:hover,
+#container .undone_person .undone_list .undoneAdd:hover,
+#container .has_person_QQ .has_list_QQ .hasAddQQ:hover,
+#container .has_person_QQ .addQQperson .optSure span:hover,
+#container .has_person_QQ .QQoptions .opt input:focus{
+    background: rgba(3, 8, 16, 0.61);
+}
+#container .has_person_QQ .QQoptions .opt span{
+    display: inline-block;
+    width: 140px;
+    text-align: left;
+}
+#container .has_person_QQ .QQoptions .opt input{
+    color: white;
+    width: 400px;
+    text-align: center;
+    transition: all linear 0.3s;
+}
+#container .has_person_QQ .QQoptions .opt{
+    margin: 15px 0;
+    color: white;
+    font-size: 14px;
+}
+#container .has_person_QQ .addQQperson .optSure {
+    margin: 15px 0;
+    text-align: center;
+    padding-left: 150px;
+}
+#container .has_person_QQ .addQQperson .optSure span {
+    margin-left: 30px;
+}
