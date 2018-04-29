@@ -1,0 +1,205 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>知识库管理 - 领域知识库</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/domain_library.css">
+<style>
+    .nav-tabs>li.active>a {
+        color: white!important;
+        background-color: rgba(6, 7, 8, 0.42)!important;
+    }
+    .nav>li>a {
+        color: white;
+        font-size: 12px;
+    }
+    .nav>li>a:focus, .nav>li>a:hover {
+        background-color: rgba(5, 23, 55, 0.45);
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+        background-color:rgba(7,26,55,0.2);
+    }
+    .grouplist .table>thead>tr>th {border-top: none!important;}
+    a.disabled {
+        pointer-events: none;
+        filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+        -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+        opacity: 0.5; /*其他，透明度50%*/
+    }
+    .demo-label{display:inline-block;margin:15px 10px 0 0;cursor: pointer;color: white;}
+    .demo-radio{display:none}
+    .demo-radioInput{cursor:pointer;background-color:#eee;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-right: 5px!important;}
+    .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+    .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+    .fixed-table-toolbar .search{width: 100%}
+    .fixed-table-pagination .page-list {display: none!important;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <span class="icon icon-globe account_icon"></span>
+            <b>领域知识库</b>
+        </div>
+    </div>
+    <div class="building">
+        <div class="build-1">
+            <div class="b-1-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">渗透领域创建</span>
+            </div>
+            <div class="b-1-2">
+                <div class="b-opt"><span>领域名称：</span><input type="text" class="name" placeholder="请输入领域名称"></div>
+                <div class="b-opt"><span>领域描述：</span><input type="text" class="description" placeholder="请输入领域描述"></div>
+                <div class="b-opt">
+                    <span>创建方式：</span>
+                    <div class="keyUser" style="display: inline-block;width: 500px;text-align: left;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="deadio" value="by_keywords&keywords_string" checked>
+                            <span class="demo-radioInput"></span> 按关键词
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="deadio" value="by_seed_users&seed_users">
+                            <span class="demo-radioInput"></span> 按种子用户
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="deadio" value="by_all_users&all_users">
+                            <span class="demo-radioInput"></span> 按所有用户
+                        </label>
+                    </div>
+                    <input type="text" class="way" style="margin-left:110px;">
+                    <input type="file" class="uidlist" style="margin-left:110px;display: none;"
+                           placeholder="文件中的UID请用逗号分隔（请传txt文件）" multiple onchange="filelist(this.files)">
+                </div>
+                <div class="b-opt"><span>备注：</span><input type="text" class="remarks" placeholder="请输入备注信息"></div>
+                <div class="b-opt" style="margin:20px 0 20px 110px;">
+                    <div class="addBuild"><p>创</p><p>建</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="group">
+        <div class="group-1">
+            <div class="g-1-1">
+                <img src="/static/images/icon.png" alt="">
+                <span style="font-size: 18px;font-weight: 900;color: #fff;">渗透领域群体</span>
+            </div>
+        </div>
+        <div class="group-2">
+            <div id="group-2"></div>
+        </div>
+        <h2 class="titleMain" style="margin: 10px 0;width: 100%;text-align: center;color: white;"></h2>
+        <div class="type_page allGroup_div" style="display: none;">
+            <ul id="myTabs" class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#show-1" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;群体详情列表</a>
+                </li>
+                <li role="presentation">
+                    <a href="#show-2" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;群体描述</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="content">
+                <div role="tabpanel" class="tab-pane active" id="show-1">
+                    <div class="g_1_1" style="margin: 10px 0;">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="font-size: 18px;font-weight: 900;color: #fff;">群体详情列表&nbsp;<span id="_gd" style="color: antiquewhite;"></span></span>
+                    </div>
+                    <div class="grouplist">
+                        <div id="grouplist">
+                            <p class="loadGO" style="width: 100%;text-align: center;color: white;
+        margin-top:40px;font-size: 18px;">正在拼命加载中...</p>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="show-2">
+                    <div class="g_1_1" style="margin: 10px 0;">
+                        <img src="/static/images/icon.png" alt="">
+                        <span style="font-size: 18px;font-weight: 900;color: #fff;">群体描述</span>
+                    </div>
+                    <div class="groupDetails">
+                        <div id="gd-2" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                        <div id="gd-3" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                        <div id="gd-4" style="width: 800px;height: 300px;margin:10px auto 0;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+<!--提示弹框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体更新-->
+<div class="modal fade" id="update" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体更新</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">是否进行群体的更新计算？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureResh()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--群体删除-->
+<div class="modal fade" id="delt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">群体删除</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">您确定要删除该群体吗？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delt()">确定</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var flag='{{flag}}',urlTotal;
+    if (flag==1){
+        judgment('8');
+        urlTotal='/weibo_xnr_knowledge_base_management';
+    }else if (flag==4){
+        judgmentFaceBook('8');
+        urlTotal='/fb_xnr_knowledge_base_management';
+    }else if (flag==5){
+        judgmentTwitter('8');
+        urlTotal='/tw_xnr_knowledge_base_management';
+    }
+</script>
+<script src="/static/js/worldcloud.min.js"></script>
+<script src="/static/js/dark.js"></script>
+<script src="/static/js/domain_library-1.js"></script>
+
+{% endblock %}

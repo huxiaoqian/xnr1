@@ -1,0 +1,334 @@
+ /*内容样式*/
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.8);
+    position: relative;
+    top: 80px;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .type_page .desc_index {
+    padding: 20px 0;
+}
+/*-----------评论内容--------------*/
+#private_letter .infoAll {margin-top:10px;}
+#container .type_page #content .commentEvery,
+#container .type_page #content .forwardEvery,
+#container .type_page #content .letterEvery,
+#container .type_page #content .replyEvery,
+#container .type_page #content .focusEvery{
+    position: relative;
+    padding:10px 10px 10px 80px;
+    background:#06162d;
+    margin-bottom: 10px;
+    width: 950px;
+}
+#container .type_page #content .letterEvery {
+    background:transparent;
+}
+#container .type_page #content .focusEvery {
+    /*width: 100%;*/
+    /*height: 170px;*/
+    display: inline-block;
+}
+#container .type_page #content .commentEvery .com-head,
+#container .type_page #content .forwardEvery .for-head,
+#container .type_page #content .letterEvery .let-head,
+#container .type_page #content .replyEvery .rep-head,
+#container .type_page #content .focusEvery .foc-head {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+}
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join {
+    cursor: pointer;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid silver;
+    border-radius: 5px;
+    font-size: 10px;
+}
+#container .type_page #content .commentEvery .com-level,
+#container .type_page #content .forwardEvery .for-level,
+#container .type_page #content .letterEvery .let-level,
+#container .type_page #content .replyEvery .rep-level{
+    margin-left: 50px;
+}
+#container .type_page #content .focusEvery .foc-level {
+    margin-left: 10px;
+}
+#container .type_page #content .commentEvery .com-level,
+#container .type_page #content .commentEvery .com-1-name,
+#container .type_page #content .forwardEvery .for-level,
+#container .type_page #content .forwardEvery .for-1-name,
+#container .type_page #content .letterEvery .let-level,
+#container .type_page #content .letterEvery .let-1-name,
+#container .type_page #content .replyEvery .rep-level,
+#container .type_page #content .replyEvery .rep-1-name,
+#container .type_page #content .focusEvery .foc-level,
+#container .type_page #content .focusEvery .foc-1-name{
+    display: inline-block;
+}
+#container .type_page #content .replyEvery .rep-1-name,
+#container .type_page #content .focusEvery .foc-1-name {
+    /*font-size: 20px;*/
+    font-weight: 900;
+    color: #fa7d3c;
+}
+#container .type_page #content .replyEvery .rep-1-name{
+    font-size: 14px;
+}
+#container .type_page #content .focusEvery .foc-1 .foc-1-option {
+    margin: 10px 0;
+    color: silver;
+    font-size: 12px;
+}
+#container .type_page #content .focusEvery .foc-2 .foc-1-option {
+    color: silver;
+    font-size: 12px;
+}
+#container .type_page #content .focusEvery .foc-2 p{
+    font-size: 12px;
+    margin: 10px 0;
+}
+#container .type_page #content .focusEvery .foc-1 .foc-1-option b,
+#container .type_page #content .focusEvery .foc-2 .foc-1-option b {
+    color:#ec7a7a;
+}
+#container .type_page #content .replyEvery .rep-1-time {
+    font-size: 10px;
+    color: silver;
+    margin: 10px 0;
+}
+#container .type_page #content .commentEvery .com,
+#container .type_page #content .forwardEvery .for,
+#container .type_page #content .letterEvery .let,
+#container .type_page #content .replyEvery .rep{
+    padding:5px 10px;
+    overflow: hidden;
+}
+#container .type_page #content .letterEvery .let-1 .let-1-time {
+    display: inline-block;
+    float: right;
+    margin-right: 50px;
+}
+#container .type_page #content .letterEvery .let-2 .let-2-content {
+    /*display: inline-block;*/
+    /*width: 550px;*/
+    /*white-space: nowrap;*/
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    max-width: 730px;
+    width: 100%;
+    display: block;
+}
+#container .type_page #content .commentEvery .com-3 .com-3-reply,
+#container .type_page #content .forwardEvery .for-3 .for-3-reply,
+#container .type_page #content .letterEvery .let-2 .let-2-reply,
+#container .type_page #content .replyEvery .rep-3 .rep-3-reply{
+    color: white;
+    font-size: 10px;
+    float: right;
+    cursor: pointer;
+    margin-right: 50px;
+    padding:3px 8px;
+    display: inline-block;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: transparent;
+}
+#container .type_page #content .commentEvery .com-3 .com-3-reply:hover,
+#container .type_page #content .forwardEvery .for-3 .for-3-reply:hover,
+#container .type_page #content .letterEvery .let-2 .let-2-reply:hover,
+#container .type_page #content .replyEvery .rep-3 .rep-3-reply:hover,
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover{
+    background:rgba(5, 23, 55, 0.45);
+}
+#container .type_page #content .letterAll .socOper,
+#container .type_page #content .commentEvery .socOper,
+#container .type_page #content .replyEvery .socOper {
+    margin: 10px 0;
+    text-align:center;
+    border-top: 1px solid slategrey;
+    padding-top:5px;
+}
+#container .type_page #content .commentEvery .socOper span,
+#container .type_page #content .letterAll .socOper span,
+#container .type_page #content .replyEvery .socOper span {
+    display: inline-block;
+    width: 33%;
+    padding: 3px 7px;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+}
+#container .type_page #content .letterAll .socOper span {width: 49%}
+#container .type_page #content #forwarding-1 .socOper span {width: 24%;}
+#container .type_page #content .commentEvery .socOper span:hover,
+#container .type_page #content .letterAll .socOper span:hover,
+#container .type_page #content .replyEvery .socOper span:hover{
+    color:#eb7350;
+}
+#container .type_page #content .letterAll .socOper span:nth-child(2),
+#container .type_page #content .commentEvery .socOper span:nth-child(3){
+    border-left:1px solid slategrey;
+}
+#container .type_page #content .replyEvery .socOper span:nth-child(2),
+#container .type_page #content .commentEvery .socOper span:nth-child(4) {
+	border-left:1px solid slategrey;
+	border-right:1px solid slategrey;
+}
+#container .forwardingDown {
+    width: 100%;
+    padding: 5px;
+    margin: 10px 0;
+}
+#container .forwardingDown input {
+    width: 90%;
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    text-align: center;
+}
+#container .forwardingDown span {
+    color: white;
+    display: inline-block;
+    padding: 4px 8px;
+    background: rgba(8,23,44,0.25);
+    border: 1px solid silver;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#container .forwardingDown span:hover {
+    background: #333333;
+}
+/**/
+#container .type_page #content .focusEvery .foc-1 .foc-fm .foc-join:hover i,
+#container .type_page #content .focusEvery .foc-1 .foc-fm-2 .heavy-join:hover i {
+    color:#f77911;
+}
+#container .type_page #content .replyEvery .rep-3 {
+    position: relative;
+}
+/*#container .type_page #content .replyEvery .rep-3 .rep-3-reply {*/
+    /*position: absolute;*/
+    /*bottom:0;*/
+    /*right: 10px;*/
+/*}*/
+#container .type_page #content .replyEvery .rep-3 .rep-3-img {
+    width: 400px;
+    height: 200px;
+    vertical-align: bottom;
+}
+#container .type_page #content .commentClone,
+#container .type_page #content .forwardClone,
+#container .type_page #content .letterClone,
+#container .type_page #content .replyClone {
+    display: none;
+    /*margin: 15px 0;*/
+}
+#container .type_page #content .commentClone .clone-1,
+#container .type_page #content .commentClone .clone-2,
+#container .type_page #content .forwardClone .clone-1,
+#container .type_page #content .forwardClone .clone-2,
+#container .type_page #content .letterClone .let-1,
+#container .type_page #content .letterClone .let-2,
+#container .type_page #content .replyClone .rep-1,
+#container .type_page #content .replyClone .rep-2{
+    margin: 5px 0;
+    width: 93%;
+}
+#container .type_page #content .commentClone .clone-1,
+#container .type_page #content .forwardClone .clone-1,
+#container .type_page #content .letterClone .clone-1,
+#container .type_page #content .replyClone .clone-1{
+    width: 93%;
+    padding: 4px 7px;
+    color: white;
+    border: 1px solid silver;
+    border-radius: 5px;
+    background: rgba(5, 23, 55, 0.45);
+    transition: all linear 0.5s;
+}
+#container .type_page #content .replyClone .clone-1 {
+    width: 100%;
+}
+#container .type_page #content .commentClone .clone-1:focus,
+#container .type_page #content .forwardClone .clone-1:focus,
+#container .type_page #content .letterClone .clone-1:focus,
+#container .type_page #content .replyClone .clone-1:focus {
+    background: whitesmoke;
+    color: black;
+}
+#container .type_page #content .letterClone .clone-1 {
+    width: 80%;
+    /*margin: 10px 0;*/
+}
+#container .type_page #content .letterClone .clone-2 {
+    display: inline-block;
+    margin-left: 15px;
+    vertical-align: bottom;
+}
+#container .type_page #content .replyClone .clone-2 {
+    margin: 10px 0;
+}
+#container .type_page #content .commentClone .clone-2 img,
+#container .type_page #content .forwardClone .clone-2 img,
+#container .type_page #content .letterClone .clone-2 img,
+#container .type_page #content .replyClone .clone-2 img {
+    width: 20px;
+    height: 20px;
+    margin-right: 15px;
+    cursor: pointer;
+}
+#container .type_page #content .commentClone .clone-2 .clone-2-4,
+#container .type_page #content .forwardClone .clone-2 .clone-2-4,
+#container .type_page #content .letterClone .clone-2 .clone-2-4,
+#container .type_page #content .replyClone .clone-2 .clone-2-4 {
+    color: white;
+    font-size: 12px;
+    padding: 6px 8px;
+    border:1px solid silver;
+    border-radius: 5px;
+    float: right;
+    background: transparent;
+}
+#container .type_page #content .letterClone .clone-2 .clone-2-4 {
+    margin: 0;
+}
+#container .type_page #content .commentClone .clone-2 .clone-2-4:hover,
+#container .type_page #content .forwardClone .clone-2 .clone-2-4:hover,
+#container .type_page #content .letterClone .clone-2 .clone-2-4:hover,
+#container .type_page #content .replyClone .clone-2 .clone-2-4:hover {
+    background:rgba(5, 23, 55, 0.45);
+}
+/*------------------------------------------*/
+
+
+
+
