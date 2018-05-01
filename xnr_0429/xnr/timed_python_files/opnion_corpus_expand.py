@@ -66,7 +66,7 @@ def spcific_opinion_corpus_expand(task):
     origin_keyword = task['corpus_name']
     
     #step2：对领域词进行词扩充
-    keywords_list = keywords_expand(origin_keyword)
+    keywords_list = keywords_expand(origin_keyword,topn=5)
 
     #step3:根据师兄算法进行语料扩充与积累
     #step4：将语料积累结果写入文件
