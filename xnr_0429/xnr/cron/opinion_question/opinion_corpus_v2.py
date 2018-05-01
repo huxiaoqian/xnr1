@@ -16,6 +16,22 @@ from collections import Counter
 from config import cut_filter,global_utils_route
 sys.path.append(global_utils_route)
 from global_utils import all_opinion_corpus_index_name_test,all_opinion_corpus_index_name,all_opinion_corpus_index_type,es_xnr
+from global_utils import es_flow_text as es_text,es_user_profile,profile_index_name,profile_index_type,portrait_index_name as portrat_index_name,\
+                         portrait_index_type as portrat_index_type,flow_text_index_name_pre,flow_text_index_type
+from global_config import S_TYPE
+from parameter import DAY
+from time_utils import ts2datetime,datetime2ts
+##以下是es的配置文件
+if S_TYPE == 'test':
+    time_list = ['2016-11-18']
+else:
+    time_list = []
+    start_time = int(time.time())
+    for i in range(0,7):
+        start_date = ts2datetime(start_time - i*DAY)
+        time_list.append(start_date)
+
+
 
 class TopkHeap(object):
     def __init__(self, k):
@@ -33,23 +49,8 @@ class TopkHeap(object):
     def TopK(self):
         return [x for x in reversed([heapq.heappop(self.data) for x in xrange(len(self.data))])]
 
-##以下是es的配置文件
-user_profile_host = ["219.224.134.216:9201"]
-es_user_profile = Elasticsearch(user_profile_host, timeout=600)
-profile_index_name = "weibo_user"
-profile_index_type = "user"
-portrat_index_name = "user_portrait_1222"
-portrat_index_type = "user"
-flow_text_host = ["219.224.134.216:9201"]
-es_text = Elasticsearch(flow_text_host, timeout=600)
-flow_text_index_name_pre = 'flow_text_' # flow text: 'flow_text_2013-09-01'
-flow_text_index_type = 'text'
-time_list = ['2016-11-18']
-'''
-time_list = ['2016-11-11','2016-11-12','2016-11-13','2016-11-14','2016-11-15','2016-11-16',\
-             '2016-11-17','2016-11-18','2016-11-19','2016-11-20','2016-11-21','2016-11-22','2016-11-23','2016-11-24','2016-11-25','2016-11-26',\
-             '2016-11-27']
-'''   
+
+
 
 def save_user_results(bulk_action):
     print es_xnr.bulk(bulk_action, index=all_opinion_corpus_index_name_test, doc_type=all_opinion_corpus_index_type, timeout=600)
