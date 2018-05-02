@@ -1,0 +1,57 @@
+/*内容样式*/
+table.table-condensed {
+    color: black;
+}
+body {
+    /*padding: 30px 0 ;*/
+    background: url("/static/images/everybody_bg.jpg") no-repeat #0d3b6c;
+    /*background-size: 100% 100%;*/
+    color: #fff;
+}
+#container {
+    width: 1000px;
+    margin: 0 auto 50px;
+    height: 100%;
+    padding: 25px;
+    background: rgba(8,23,44,0.5);
+    position: relative;
+    top: 80px;
+}
+#container .title .note_icon {
+    display: inline-block;
+    font-size: 30px;
+    margin-right: 5px;
+    color: #003366;
+}
+#container .title b {
+    position: relative;
+    top: -4px;
+    color: #003366;
+    font-weight: 900;
+}
+#container .behavior {
+    position: relative;
+}
+#container #content #influence, #container #content #penetration, #container #content #safe {
+    width: 100%;
+}
+#container .behavior #content .caption span,
+#container .behavior #content .caption b {
+    font-size: 18px;
+    font-weight: 900;
+}
+#container .behavior #safe .safe-2 {
+    text-align: center;
+}
+#container .behavior #safe .safe-2 #safe-2-pic1,
+#container .behavior #safe .safe-2 #safe-2-pic2 {
+    width: 400px;
+    height: 400px;
+    display: inline-block;
+}
+.nav>li>a:focus, .nav>li>a:hover {
+    background-color: rgba(5, 23, 55, 0.45);
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    background-color:rgba(7,26,55,0.2);
+}
