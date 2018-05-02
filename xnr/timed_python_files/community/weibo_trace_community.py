@@ -87,8 +87,8 @@ def get_evaluate_max(index_name,index_type,field):
         max_evaluate = 1
     return max_evaluate
 
-#计算社区指标
-# def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
+# #计算社区指标
+# def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
 #     result = {}
 #     result['xnr_user_no'] = xnr_user_no
 #     result['nodes'] = nodes
@@ -100,9 +100,9 @@ def get_evaluate_max(index_name,index_type,field):
 #     result['cluster'] = nx.average_clustering(sub_g)
 #     result['transitivity'] = nx.transitivity(sub_g)
 
-# 	# for i in es_flow_text.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
-# 		# print i#['fields']['sensitive_week_ave']
-	
+#     # for i in es_flow_text.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
+#         # print i#['fields']['sensitive_week_ave']
+    
 #     influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in es_flow_text.mget(index=weibo_bci_history_index_name, doc_type=weibo_bci_history_index_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
 #     sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in es_flow_text.mget(index=weibo_sensitive_history_index_name, doc_type=weibo_sensitive_history_index_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
 
