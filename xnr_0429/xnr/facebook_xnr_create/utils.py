@@ -32,7 +32,7 @@ from xnr.utils import user_no2fb_id, add_operate2redis
 #trans_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
 
 sys.path.append(TRANS_PATH)
-from trans import trans, simplified2traditional
+from trans_v2 import trans, simplified2traditional
 
 #sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr/facebook/'))
 sys.path.append(FB_OP_PATH)

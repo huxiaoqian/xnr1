@@ -7,7 +7,7 @@ sys.path.append('../../')
 import gensim
 import numpy as np
 from collections import Counter
-from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM,TARGET_KEYWORD_NUM,WORD2VEC_PATH,MAX_DETECT_COUNT
+from parameter import DAY,MIN_TARGET_USER_NUM,COMMUNITY_TERM,TARGET_KEYWORD_NUM,WORD2VEC_PATH,MAX_DETECT_COUNT,TRANS_PATH
 from time_utils import ts2datetime,datetime2ts
 from global_config import S_TYPE,R_BEGIN_TIME,S_DATE,WEIBO_COMMUNITY_DATE
 
@@ -21,8 +21,9 @@ from global_utils import es_xnr,xnr_flow_text_index_name_pre,xnr_flow_text_index
 
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
-sys.path.append('../../cron/trans/')
-from trans import trans, simplified2traditional, traditional2simplified
+sys.path.append(TRANS_PATH)
+#print sys.path
+from trans_v2 import trans, simplified2traditional, traditional2simplified
 
 sys.path.append('../../timed_python_files/community/')
 from weibo_publicfunc import get_compelete_wbxnr
@@ -108,10 +109,13 @@ def detect_by_keywords(keywords,datetime_list):
     keywords_list = []
     model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
     for word in keywords:
-        simi_list = model.most_similar(word,topn=20)
-        for simi_word in simi_list:
-            keywords_list.append(simi_word[0])
-
+        try:
+            simi_list = model.most_similar(word,topn=6)
+            for simi_word in simi_list:
+                keywords_list.append(simi_word[0])
+        except:
+            keywords_list.append(word)
+    print 'keywords_list:::',keywords_list
     group_uid_list = set()
     if datetime_list == []:
         return []
@@ -167,6 +171,7 @@ def detect_by_keywords(keywords,datetime_list):
         uid = es_results[i]['key']
         group_uid_list.add(uid)
     group_uid_list = list(group_uid_list)
+    print 'keywords_user_len',len(group_uid_list)
     return group_uid_list
 
 
@@ -272,7 +277,7 @@ def get_expand_userid_list(xnr_keywords,xnr_relationer,datetime_list):
 
     # while uid_num <= MIN_TARGET_USER_NUM:
     if uid_num <= MIN_TARGET_USER_NUM:
-        for i in range(0,5):
+        for i in range(0,3):
             temp_uidlist = detect_by_seed_users(expand_userid_list)
             expand_userid_list.extend(temp_uidlist)
             expand_userid_list = list(set(expand_userid_list))

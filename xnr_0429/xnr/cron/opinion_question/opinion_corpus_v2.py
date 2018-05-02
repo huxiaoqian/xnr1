@@ -82,7 +82,7 @@ def save_data(data,label):
 def rank_text(text_result,data_result,key_list):
 
     total_n = len(text_result)
-    n = int(total_n*0.7)
+    n = int(total_n*0.6)
     result_list = TopkHeap(n)
 
     for i in range(0,len(text_result)):
