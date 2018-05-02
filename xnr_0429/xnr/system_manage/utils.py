@@ -4,7 +4,7 @@ use to manage the system
 '''
 import os
 import json
-import sqlite
+#import sqlite
 import sqlite3
 import string
 from xnr.global_utils import es_xnr as es
