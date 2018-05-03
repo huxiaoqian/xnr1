@@ -53,9 +53,9 @@ def getQRCode_v2(qq_number):
     #qqbot_port = '8199'
     #get login png
     port_dir = QRCODE_PATH+str(qqbot_port)+'/'
-    
+    print 'port_dir...',port_dir    
     filenames = os.listdir(port_dir)
-    
+    print 'filenames...',filenames
     fileitem = [[filename, os.stat(port_dir+filename).st_mtime] for filename in filenames]
     
     file_item_new = []

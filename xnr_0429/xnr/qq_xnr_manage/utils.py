@@ -118,9 +118,12 @@ def get_login_name(xnr_user_no):
             print 'kill_str::',kill_str
             p2 = subprocess.Popen(kill_str, \
                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
+            print '123=='
         p2 = subprocess.Popen(p_str1, \
                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print '222==='
+        for line in p2.stdout.readlines():
+	    print 'line!!!!---',line
 
         return True
 
