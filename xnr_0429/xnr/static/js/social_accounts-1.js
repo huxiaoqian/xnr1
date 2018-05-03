@@ -32,7 +32,10 @@ function bindSF(data) {
     $('#success_fail').modal('show');
 }
 function userLIST() {
-    var taskID=JSON.parse(localStorage.getItem('buildNewXnr'));
+   // var taskID=JSON.parse(localStorage.getItem('buildNewXnr'));
+    if (!taskID){
+        taskID=JSON.parse(localStorage.getItem('buildNewXnr'));
+    };
     var url1='weibo_mail_account',url2='weibo_phone_account'
     if(flag==4){
         url1='fb_mail_account',url2='fb_phone_account';

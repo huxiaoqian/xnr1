@@ -13,16 +13,16 @@ from comment_module import comments_calculation_v2
 sys.path.append('./fix/')
 from fix_config import emotions_vk_v1
 
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/text_greneration/')
+sys.path.append('/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/text_greneration/')
 from text_generation import text_generation_main
 
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/summary_produce/')
+sys.path.append('/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/summary_produce/')
 from process_summary import summary_main
 
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/sub_opinion_analysis/')
+sys.path.append('/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/sub_opinion_analysis/')
 from opinion_produce import opinion_main
 
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/intelligent_writing/opinion_question/')
+sys.path.append('/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/opinion_question/')
 from opinion_search import opinion_relevance
 
 sys.path.append('../../')
@@ -49,7 +49,7 @@ from trans import trans, simplified2traditional, traditional2simplified
 NEWS_LIMIT = 200
 default_cluster_eva_min_size = 5
 default_vsm = 'v1'
-LOG_FOLDER = '/home/ubuntu8/yuanhuiru/xnr/xnr1/log'
+LOG_FOLDER = '/home/xnr1/xnr_0429/log'
 
 ## 从redis队列中pop出任务，进行计算
 def rpop_compute_intelligent_writing():
@@ -162,9 +162,9 @@ def find_flow_texts(task_source,task_id,event_keywords):
         if S_TYPE == 'test':
             current_time = datetime2ts(S_DATE)
         else:
-            current_time = int(time.time())
+            current_time = int(time.time()+24*3600)
 
-        index_name_list = get_flow_text_index_list(current_time,days=5)
+        index_name_list = get_flow_text_index_list(current_time,days=2)
         es_name = es_flow_text
 
     elif task_source == 'facebook':
@@ -172,9 +172,9 @@ def find_flow_texts(task_source,task_id,event_keywords):
         if S_TYPE == 'test':
             current_time = datetime2ts(S_DATE_FB)
         else:
-            current_time = int(time.time())
+            current_time = int(time.time()+24*3600)
 
-        index_name_list = fb_get_flow_text_index_list(current_time,days=5)
+        index_name_list = fb_get_flow_text_index_list(current_time,days=2)
         es_name = es_xnr
 
     else:
@@ -182,8 +182,8 @@ def find_flow_texts(task_source,task_id,event_keywords):
         if S_TYPE == 'test':
             current_time = datetime2ts(S_DATE_TW)
         else:
-            current_time = int(time.time())
-        index_name_list = tw_get_flow_text_index_list(current_time,days=5)
+            current_time = int(time.time()+24*3600)
+        index_name_list = tw_get_flow_text_index_list(current_time,days=2)
         es_name = es_xnr
 
     query_body = {
@@ -196,9 +196,11 @@ def find_flow_texts(task_source,task_id,event_keywords):
         'sort':{sort_item:{'order':'desc'}},
         'size':100000
     }
-
+    print 'es_name...',es_name
+    print 'index_name_list..',index_name_list
+    
     search_results = es_name.search(index=index_name_list,doc_type='text',body=query_body)['hits']['hits']
-
+    print 'len..search_results..',len(search_results)
     save2topic_es(task_source,task_id,search_results)
 
 
@@ -405,7 +407,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
             }
 
         elif intel_type == 'influence':
-            date = ts2datetime(current_time)
+            date = ts2datetime(current_time-24*3600)
 
             if S_TYPE == 'test':
                 date = S_DATE_BCI

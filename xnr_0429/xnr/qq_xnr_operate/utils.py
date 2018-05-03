@@ -62,7 +62,7 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_name):
     enddate = current_date
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
-    print 'index_names::',index_names
+    #print 'index_names::',index_names
     index_names.reverse()
     results = {}
     for index_name in index_names:
@@ -119,7 +119,7 @@ def search_by_period(xnr_qq_number,startdate,enddate,group_qq_name):
 
     index_names = get_groupmessage_index_list(startdate,enddate)
     index_names.reverse()
-    print 'index_names::',index_names
+    #print 'index_names::',index_names
 
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index_name):
@@ -214,7 +214,7 @@ def search_by_keyword(keywords, date):
     for keywords_item in keywords_list:
         keyword_nest_body_list.append({"wildcard":{"text":{"wildcard": "*"+keywords_item+"*"}}})
     must_query_list.append({'bool':{'should': keyword_nest_body_list}})
-    print must_query_list
+    #print must_query_list
     query_body = {
         "query": {
            

@@ -132,6 +132,7 @@ def newest_time_func(uid):
 ## 发布微博
 def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no):
     
+    print 'account_name..',account_name,password,text,p_url
     mark = weibo_publish_main(account_name,password,text,p_url)
 
     '''
@@ -151,11 +152,11 @@ def publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,x
     
     # 保存微博
     if mark:
-        try:
-            save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-        except:
-            print '保存微博过程遇到错误！'
-            save_mark = False
+        #try:
+        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
+        #except:
+        #    print '保存微博过程遇到错误！'
+        #    save_mark = False
 
     return mark
 
@@ -174,6 +175,7 @@ def retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no):
         try:
             save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
         except:
+	    print 'retweet!!'
             print '保存微博过程遇到错误！'
             save_mark = False
     
@@ -208,6 +210,7 @@ def comment_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no):
         try:
             save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
         except:
+	    print 'comment!!'
             print '保存微博过程遇到错误！'
             save_mark = False
 

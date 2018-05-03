@@ -447,6 +447,40 @@ function postYES22(data) {
 }
 
 //=====================相关通道========================
+<<<<<<< HEAD
+/*var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
+public_ajax.call_request('get',roadInforurl,roadInfor);
+function roadInfor(data) {
+    var data=data[0];
+    //nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
+    //nameAndGroup(data['weixin_xnr_name'],data['weixin_xnr_user_no'],'#sameRoad .wxlist .weixinName',data['weixin_groups'],'#sameRoad .wxlist .weixinGroup')
+    nameAndGroup(data['facebook_xnr_name'],data['facebook_xnr_user_no'],'#sameRoad .fblist .fbName',data['facebook_groups'],'#sameRoad .fblist .fbGroup')
+    nameAndGroup(data['twitter_xnr_name'],data['twitter_xnr_user_no'],'#sameRoad .twlist .twName',data['twitter_groups'],'#sameRoad .twlist .twGroup')
+}
+var osia=0;
+function nameAndGroup(opt1,opt2,opt3,opt4,opt5) {
+    var name='',str='';
+    if (opt1){name=opt1}else {name=opt2}
+    if (opt2){name+='('+opt2+')'}
+    if (!opt1&&!opt2){$(opt3).html('暂无相同通道下虚拟人');return false;}
+    $(opt3).html(name).attr('sid',opt2);
+    if (opt4){
+        osia++;
+        $.each(opt4,function (index,item) {
+            var a='';
+            if (item.gname){a=item.gname}else {a=item.gid}
+            if (item.gid){a+='('+item.gid+')'}
+            str+=
+                '<label class="demo-label">'+
+                '   <input class="demo-radio" type="checkbox" value="'+item.gid+'">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+a+
+                '</label>';
+        });
+    }
+
+    $(opt5).html(str);
+}*/
+=======
 // var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
 // public_ajax.call_request('get',roadInforurl,roadInfor);
 // function roadInfor(data) {
@@ -487,6 +521,7 @@ function postYES22(data) {
 //     public_ajax.call_request('get',post1,postYES22);
 //     public_ajax.call_request('get',post2,postYES22);
 // });
+>>>>>>> 52f3c6301041dfb55e3a27ccde530c6038a3afec
 //=====================相关通道=======完=================
 //群可见的情况
 var rankidList=[];

@@ -27,7 +27,7 @@ from xnr.global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_
 
 from xnr.utils import xnr_user_no2uid,uid2nick_name_photo
 from xnr.global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
-from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list
+from xnr.time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_new_xnr_flow_text_index_list
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
                         TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
 
@@ -1269,7 +1269,7 @@ def get_tweets_distribute(xnr_user_no):
         current_time = int(time.time())
 
 
-    index_name_list = get_xnr_flow_text_index_list(current_time)
+    index_name_list = get_new_xnr_flow_text_index_list(current_time)
     topic_string = []
 
     for index_name_day in index_name_list:
@@ -1352,7 +1352,7 @@ def get_safe_tweets(xnr_user_no,topic,sort_item):
     else:
         current_time = int(time.time())
 
-    index_name_list = get_xnr_flow_text_index_list(current_time)
+    index_name_list = get_new_xnr_flow_text_index_list(current_time)
     es_results_all = []
     
     for index_name_day in index_name_list:

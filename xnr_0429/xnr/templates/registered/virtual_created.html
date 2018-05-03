@@ -394,6 +394,8 @@
 <script id="load_user">
     judgment('6');
     var flag='{{flag}}',go_on='{{continueUser}}',taskID='{{taskID}}',WFT_url,firstStep,secondStep;
+    var taskSource='new';
+    if(taskID){taskSource='not_new'};
     if (flag==1){
         WFT_url='/weibo_xnr_create';
         firstStep='WBfirstStep';

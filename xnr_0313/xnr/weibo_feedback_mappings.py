@@ -629,19 +629,20 @@ if __name__ == '__main__':
         
         '''   
 	end_ts = int(time.time())
-	start_ts = datetime2ts('2018-01-01')
+	start_ts = datetime2ts('2018-03-20')
 
 	num = (end_ts-start_ts)/(3600*24)+1
 	for i in range(num):
 	    time = start_ts + 24*3600*i
 	    datetime = ts2datetime(time)
-	    #print 'datetime///',datetime
+	    print 'datetime///',datetime
+	    
 	    weibo_feedback_retweet_mappings(datetime)
 	    weibo_feedback_comment_mappings(datetime)
 	    weibo_feedback_at_mappings(datetime)
 	    weibo_feedback_like_mappings(datetime)
 	    weibo_feedback_private_mappings(datetime)
-	'''
+	'''	    
 
 
 
