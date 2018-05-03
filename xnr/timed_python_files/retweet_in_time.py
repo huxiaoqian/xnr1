@@ -39,10 +39,12 @@ def read_tracing_followers_tweet():
     if results:
         for result in results:
             result = result['_source']
-            print ''
-            xnr_user_no = result['xnr_user_no']
-            trace_follow_list = result['trace_follow_list']
-            print 'trace_follow_list:::',trace_follow_list
+            try:
+                xnr_user_no = result['xnr_user_no']
+                trace_follow_list = result['trace_follow_list']
+                #print 'trace_follow_list:::',trace_follow_list
+            except:
+                continue
 
             if S_TYPE == 'test':
                 current_time = datetime2ts(S_DATE)
@@ -187,7 +189,7 @@ def publish_operate_timing():
             print timestamp_set
             if timestamp_set <= int(time.time()):
                 print '!!'
-                text = result['text'].encode('utf-8')
+                text = result['text'].decode('utf-8')
                 tweet_type = task_source_ch2en[result['task_source']]
                 xnr_user_no = result['xnr_user_no']
 
@@ -220,11 +222,9 @@ def publish_operate_timing():
 
                 mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
 
-                if mark[0]:
+                if mark:
                     #task_id = xnr_user_no + '_' + r_mid
                     task_id = _id
-                    # item_exist = es_xnr.get(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
-                 #        weibo_xnr_retweet_timing_list_index_type,id=task_id)['_source']
                     item_exist = {}
                     item_exist['task_status'] = 1
                     #item_exist['timstamp_post'] = int(time.time())
@@ -232,12 +232,6 @@ def publish_operate_timing():
                     es_xnr.update(index=weibo_xnr_timing_list_index_name,doc_type=\
                         weibo_xnr_timing_list_index_type,id=task_id,body={'doc':item_exist})
 
-                    # # 保存微博
-                    # try:
-                    #     save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-                    # except:
-                    #     print '保存微博过程遇到错误！'
-                    #     save_mark = False
             else:
                 continue
         #return mark
@@ -249,7 +243,7 @@ if __name__ == '__main__':
     publish_operate_timing()
 
     # 定时跟踪转发
-    #read_tracing_followers_tweet()
-    #retweet_operate_timing()
+    read_tracing_followers_tweet()
+    retweet_operate_timing()
 
 
