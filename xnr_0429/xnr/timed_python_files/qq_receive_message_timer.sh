@@ -1,0 +1,1 @@
+python /home/xnr1/xnr_0429/xnr/qq/receiveQQGroupMessage_v2.py &
