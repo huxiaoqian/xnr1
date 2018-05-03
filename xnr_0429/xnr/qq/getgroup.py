@@ -46,7 +46,7 @@ def getgroup_v2(qq_xnr):
     line_count = 0
     for line in p.stdout.readlines():
         line_count += 1
-        
+        print 'line.==========',line    
         if line_count >= 5 and line_count%2==1:
             item_line_list = line.split('|')
             

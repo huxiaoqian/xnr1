@@ -14,7 +14,8 @@ from elasticsearch import Elasticsearch
 #abs_path = '/home/ubuntu2/chenyz/user_portrait/cron/model_file'
 
 #BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-BASE_DIR = "/home/ubuntu8/yuanhuiru/diffusion/diffusion-prediction/diffusion_prediction/cron/event_analysis"
+#BASE_DIR = "/home/ubuntu8/yuanhuiru/diffusion/diffusion-prediction/diffusion_prediction/cron/event_analysis"
+BASE_DIR = '/home/xnr1/xnr_0429/xnr/cron/model_file/'
 #file_path = os.path.join(BASE_DIR,'domain/topic_dict','university.csv')
 
 
@@ -65,7 +66,7 @@ CHT_DICT_PATH = '/usr/local/scws/etc/dict_cht.utf8.xdb'
 IGNORE_PUNCTUATION = 1
 
 #ABSOLUTE_DICT_PATH = os.path.abspath(os.path.join(abs_path, './dict'))
-ABSOLUTE_DICT_PATH = os.path.abspath(os.path.join(BASE_DIR, './network/domain/dict'))
+ABSOLUTE_DICT_PATH = os.path.abspath(os.path.join(BASE_DIR, './domain/dict'))
 CUSTOM_DICT_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'userdic.txt')
 EXTRA_STOPWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'stopword.txt')
 #EXTRA_EMOTIONWORD_PATH = os.path.join(ABSOLUTE_DICT_PATH, 'emotionlist.txt')

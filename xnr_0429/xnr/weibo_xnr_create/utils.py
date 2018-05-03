@@ -552,24 +552,8 @@ def get_wb_xnr_no():
 
 def get_save_step_two(task_detail):
 
-    #task_id = task_detail['task_id']
-    # es_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,body={'query':{'match_all':{}},\
-    #                 'sort':{'user_no':{'order':'desc'}}})['hits']['hits']
-    # if es_results:
-    #     user_no_max = es_results[0]['_source']['user_no']
-    #     user_no_current = user_no_max + 1 
-    # else:
-    #     user_no_current = 1
-    user_no_current = get_wb_xnr_no()
-
-    task_detail['user_no'] = user_no_current
-    task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
-    #try:    
-    #item_exist = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id)['_source']
     item_exist = dict()
-    # print 'task_detail::',task_detail
     item_exist['submitter'] = task_detail['submitter']
-    item_exist['user_no'] = task_detail['user_no']
     item_exist['domain_name'] = task_detail['domain_name']
     item_exist['role_name'] = task_detail['role_name']
     item_exist['psy_feature'] = '&'.join(task_detail['psy_feature'].encode('utf-8').split('，'))
@@ -587,10 +571,17 @@ def get_save_step_two(task_detail):
     item_exist['active_time'] = '&'.join(task_detail['active_time'].split('-'))
     item_exist['day_post_average'] = json.dumps(task_detail['day_post_average'].split('-'))
     item_exist['create_status'] = 1 # 第二步完成
-    item_exist['xnr_user_no'] = task_id # 虚拟人编号
     item_exist['create_time'] = int(time.time())
 
-    es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
+    task_source = take_detail['task_source']
+
+    if task_source == 'new':
+
+        user_no_current = get_wb_xnr_no()
+        item_exist['user_no'] = user_no_current #task_detail['user_no']
+        task_id = user_no2_id(user_no_current)  #五位数 WXNR0001
+        item_exist['xnr_user_no'] = task_id # 虚拟人编号
+        es.index(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=task_id,body=item_exist)
 
     mark = True
     #except:        

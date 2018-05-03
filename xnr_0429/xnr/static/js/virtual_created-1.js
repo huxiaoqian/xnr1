@@ -131,7 +131,7 @@ function values() {
     var saveSecond_url;
     if (active_time||day_post_average){
         if(!taskID){taskID=''};
-        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+taskID+
+        saveSecond_url=WFT_url+'/save_step_two/?submitter='+admin+'&task_id='+taskID+'&task_source='+taskSource+
             '&domain_name='+basicData.domain_name+'&role_name='+basicData.role_name+
             '&psy_feature='+basicData.psy_feature+'&political_side='+basicData.political_side+'&business_goal='+basicData.business_goal+
             '&monitor_keywords='+basicData.monitor_keywords+'&daily_interests='+basicData.daily_interests;
@@ -184,8 +184,12 @@ function values() {
 function in_three(data) {
     if (data||data[0]){
         localStorage.setItem(secondStep,JSON.stringify(second));
-        localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
-        window.location.href='/registered/socialAccounts/?flag='+flag;
+        //localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
+        if (!taskID){
+            localStorage.setItem('buildNewXnr',JSON.stringify(data[1]));
+            taskID='';
+        }
+        window.location.href='/registered/socialAccounts/?flag='+flag+'&taskID='+taskID;
     }else {
         $('#prompt p').text('您输入的内容有误，请刷新页面重新输入。');
         $('#prompt').modal('show');
@@ -194,7 +198,7 @@ function in_three(data) {
 function modSecondSuccess(data) {
     if (data){
         if(n==1){
-            window.location.href='/registered/socialAccounts/?flag='+flag;
+            window.location.href='/registered/socialAccounts/?flag='+flag+'&taskID='+taskID;
         }else {
             window.location.href='/personalCenter/individual/';
         }

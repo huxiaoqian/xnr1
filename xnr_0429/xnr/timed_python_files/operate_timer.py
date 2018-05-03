@@ -155,6 +155,7 @@ def operate_out_of_redis():
 			if operate_type == 'publish':
 				try:
 				    mark = get_submit_tweet(task_detail)
+				    print 'weibo!!!!!!!'
 				except:
 					add_operate2redis(queue_dict)
 
