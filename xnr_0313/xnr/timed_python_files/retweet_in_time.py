@@ -37,12 +37,18 @@ def read_tracing_followers_tweet():
     results = es_xnr.search(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                 body=query_body)['hits']['hits']
     if results:
+	
         for result in results:
             result = result['_source']
-            print ''
-            xnr_user_no = result['xnr_user_no']
+            #print 'result..',result
+	    try:
+                xnr_user_no = result['xnr_user_no']
+	    except:
+		xnr_user_no = result['xnr_use_no']
+	    if not xnr_user_no:
+		continue
+	    print 'result...',result
             trace_follow_list = result['trace_follow_list']
-            print 'trace_follow_list:::',trace_follow_list
 
             if S_TYPE == 'test':
                 current_time = datetime2ts(S_DATE)
@@ -113,6 +119,7 @@ def retweet_operate_timing():
 
     results = es_xnr.search(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
                     weibo_xnr_retweet_timing_list_index_type,body=query_body)['hits']['hits']
+    print 'retweet..results...',results
     if results:
         for result in results:
             result = result['_source']

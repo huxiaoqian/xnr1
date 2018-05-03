@@ -17,7 +17,7 @@ import sys, getopt
 
 reload(sys)
 sys.path.append('../')
-sys.path.append('/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/')
+sys.path.append('/home/xnr1/xnr_0429/xnr/')
 #sys.path.append('../cron/qq_group_message/')
 
 # es = Elasticsearch("http://219.224.134.213:9205/")
@@ -37,7 +37,7 @@ def onQQMessage(bot, contact, member, content):
     # content : str 对象，消息内容
     INFO('test groups %s', bot.List('group'))
     INFO('bot.conf %s', bot.conf)
-
+    print 'contact.============.',contact
     if contact.ctype == 'group':
         INFO('群的 QQ.. %s', contact.qq)  # #NULL
         INFO('群的昵称.. %s', contact.nick) # 嘿哼哈
@@ -83,7 +83,7 @@ def onQQMessage(bot, contact, member, content):
                 'qq_group_nickname': contact.nick
             }
             qq_json = json.dumps(qq_item)
-            print 'qq_json:',qq_json
+            print 'qq_json=====:',qq_json
             # 判断该qq群是否在redis的群set中
             #qq_number  = qq_item['xnr_qq_number']
             #qq_group_number = qq_item['qq_group_number']
@@ -143,8 +143,8 @@ if __name__ == '__main__':
             qqbot_num = value
         elif op == '-m':
             qqbot_mailauth = value
-    print 'qqbot_port, qqbot_num. qqbot_mailauth:', qqbot_port
-    print 'qqbot_mailauth:', qqbot_mailauth
-    print 'qqbot_num:', qqbot_num
+    #print 'qqbot_port, qqbot_num. qqbot_mailauth:', qqbot_port
+    #print 'qqbot_mailauth:', qqbot_mailauth
+   # print 'qqbot_num:', qqbot_num
     execute_v2(qqbot_port, qqbot_num, qqbot_mailauth)
     #mailauthcode:sirtgdmgwiivbegf

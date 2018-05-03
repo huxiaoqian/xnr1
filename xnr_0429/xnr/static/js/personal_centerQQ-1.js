@@ -347,7 +347,7 @@ function enterIn(QQ_id,QQ_num,status,_this) {
     if (d=='在线'){
         window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
     }else {
-        $('#succee_fail #words').text('请先登录在进行其他操作。');
+        $('#succee_fail #words').text('请先登录再进行其他操作。');
         $('#succee_fail').modal('show');
     }
 }

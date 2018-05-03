@@ -3,7 +3,7 @@
 #  gathering snmp data
 from __future__ import division
 import re
-import opencc
+#import opencc
 import os
 import sys
 from gensim import corpora

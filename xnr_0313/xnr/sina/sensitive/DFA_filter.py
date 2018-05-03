@@ -1,11 +1,11 @@
-#encoding:UTF-8
+# -*-coding:utf-8-*-
 import sys
 import redis
 import json
 from time import time
-reload(sys)
-sys.path.append('../../')
-from global_utils import R_ADMIN as r
+# reload(sys)
+# sys.path.append('../../')
+# from global_utils import R_ADMIN as r
 '''
 @author: ahuaxuan 
 @date: 2009-02-20
@@ -17,6 +17,7 @@ nodeTree = [wordTree, 0]
 def readInputText():
     txt = ''
     for line in open('sensitive_words.txt', 'rb'):
+    # for line in open('sensitive_words.txt', 'rb'):
         txt = txt + line
     return txt
 
@@ -25,10 +26,10 @@ def createWordTree():
     wordTree.append(0)
     nodeTree = [wordTree, 0]
     awords = []
-    #for b in open('sensitive_words.txt', 'rb'):
-    #    awords.append(b.strip())
-    awords = r.hkeys('sensitive_words')    
-    print awords
+    for b in open('sensitive_words.txt', 'rb'):
+       awords.append(b.strip())
+    # awords = r.hkeys('sensitive_words')    
+    # print awords
     for word in awords:
         temp = wordTree
         for a in range(0,len(word)):
@@ -59,7 +60,7 @@ def searchWord(str, nodeTree):
             temp = nodeTree
             a = a - len(word)
             word = []
-        elif temp == 1 or temp[1] == 1:
+        elif temp == 1 or temp[1] == 1:         #该字为某个关键词的底部
             word.append(index)
             words.append(word)
             a = a - len(word) + 1 
@@ -80,9 +81,12 @@ def searchWord(str, nodeTree):
     return map_words
 
 if __name__ == '__main__':
-    #reload(sys)  
-    #sys.setdefaultencoding('GBK')  
+    # reload(sys)  
+    # sys.setdefaultencoding('GBK')  
     node = createWordTree();
 
-    list2 = searchWord("64和达赖太阳花", node)
+    list2 = searchWord("知道64和达赖太阳花北京军区", node)
     print list2
+    for key in list2.keys():
+        key.decode('utf-8')
+        print key

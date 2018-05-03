@@ -135,13 +135,6 @@ def get_submit_tweet(task_detail):
     mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
     #execute(account_name,password,text.encode('utf-8'))
 
-    # 保存微博
-    try:
-        save_mark = save_to_xnr_flow_text(tweet_type,xnr_user_no,text)
-    except:
-        print '保存微博过程遇到错误！'
-        save_mark = False
-
     return mark
 
 def save_to_tweet_timing_list(task_detail):

@@ -216,7 +216,7 @@ def get_daily_recommend_tweets(theme,sort_item):
     if S_TYPE == 'test':
         now_ts = datetime2ts(S_DATE)    
     else:
-        now_ts = int(time.time())
+        now_ts = int(time.time()-24*3600)
 
     datetime = ts2datetime(now_ts)
 
@@ -646,11 +646,14 @@ def get_show_comment(task_detail):
     
     if start_ts < datetime2ts(SYSTEM_START_DATE):
         start_ts = datetime2ts(SYSTEM_START_DATE)
-
+    print 'start_ts..',start_ts
+    print 'system_start..',datetime2ts(SYSTEM_START_DATE)
     index_name_pre = weibo_feedback_comment_index_name + '_'
 
     index_name = get_timeset_indexset_list(index_name_pre,ts2datetime(start_ts),ts2datetime(end_ts))
-
+    #index_name = get_timeset_indexset_list(index_name_pre,start_ts,end_ts)
+    print 'index_name...',index_name
+    print 'es..',es
     es_results = es.search(index=index_name,doc_type=weibo_feedback_comment_index_type,\
                             body=query_body)['hits']['hits']
 
@@ -770,15 +773,16 @@ def get_show_private(task_detail):
     end_ts = task_detail['end_ts']
     es_result = es.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
     uid = es_result['uid']
-    # white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
-    # white_uid_list = []
-    # with open(white_uid_path,'rb') as f:
-    # 	for line in f:
-    # 		line = line.strip('\n')
-    # 		white_uid_list.append(line[0])
+    white_uid_path = WHITE_UID_PATH + WHITE_UID_FILE_NAME
+    white_uid_list = []
 
-    # white_uid_list = list(set(white_uid_list))
-    # print 'white_uid_list:::',white_uid_list
+    with open(white_uid_path,'rb') as f:
+        for line in f:
+    	    line = line.strip('\n')
+    	    white_uid_list.append(line.strip())
+
+    white_uid_list = list(set(white_uid_list))
+    print 'white_uid_list:::',white_uid_list
     try:
     	es_get = es.get(index=weibo_private_white_uid_index_name,doc_type=weibo_private_white_uid_index_type,\
     				id=xnr_user_no)['_source']
@@ -1288,6 +1292,7 @@ def get_friends_list(recommend_set_list):
     now_date_ts = datetime2ts(ts2datetime(now_ts))
     #get redis db number
     db_number = get_db_num(now_date_ts)
+    print 'db_number...',db_number
     search_result = es_retweet.mget(index=be_retweet_index_name_pre+str(db_number), doc_type=be_retweet_index_type, body={"ids": recommend_set_list})["docs"]
     friend_list = []
     for item in search_result:
@@ -1316,7 +1321,7 @@ def get_related_recommendation(task_detail):
     monitor_keywords_list = monitor_keywords.split(',')
 
     nest_query_list = []
-    print 'monitor_keywords_list::',monitor_keywords_list
+    #print 'monitor_keywords_list::',monitor_keywords_list
     for monitor_keyword in monitor_keywords_list:
         #print 'monitor_keyword::::',monitor_keyword
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
@@ -1332,7 +1337,7 @@ def get_related_recommendation(task_detail):
     if S_TYPE == 'test':
         current_date = S_DATE
     else:
-        current_date = int(time.time()-24*3600)
+        current_date = ts2datetime(int(time.time()-24*3600))
     
     flow_text_index_name = flow_text_index_name_pre + current_date
 
@@ -1359,7 +1364,7 @@ def get_related_recommendation(task_detail):
         }
 
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        print 'es_rec_result///',es_rec_result
+        #print 'es_rec_result///',es_rec_result
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)

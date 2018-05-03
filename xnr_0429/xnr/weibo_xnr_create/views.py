@@ -129,6 +129,7 @@ def ajax_save_step_one():
 @mod.route('/save_step_two/')
 def ajax_save_step_two():
     task_detail = dict()
+    task_detail['task_source'] = request.args.get('task_source','') # new-表示从新建进入，not_new-表示从未完成进入
     task_detail['task_id'] = request.args.get('task_id', '') # 为空表示需要后台分配，如果有WXNR0001则更新
     task_detail['submitter'] = request.args.get('submitter','admin@qq.com') # 提交用户
     task_detail['domain_name'] = request.args.get('domain_name','') # 渗透领域
