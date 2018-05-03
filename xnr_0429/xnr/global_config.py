@@ -110,6 +110,13 @@ REDIS_PORT_SENSITIVE = '6379'
 REDIS_WX_PORT = '6667'
 REDIS_WX_HOST = '192.168.169.45'#'219.224.134.213'
 
+#flow3:retweet/be_retweet redis
+RETWEET_REDIS_HOST = '10.128.55.69'
+RETWEET_REDIS_PORT = '6379'
+#flow3:comment/be_comment redis
+COMMENT_REDIS_HOST = '10.128.55.70'
+COMMENT_REDIS_PORT = '6379'
+
 #使用七牛来存储捕获到的图片
 #2018-1-2 放弃使用七牛，改为存储到本地
 qiniu_access_key = "2QHQTgGYH8Ow3dy1jpuSKLAlTo-ZkRav1ty2Nok8"
