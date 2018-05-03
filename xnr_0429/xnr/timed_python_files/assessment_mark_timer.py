@@ -1527,7 +1527,7 @@ def cron_compute_mark(current_time):
     
 if __name__ == '__main__':
 
-    
+    ''' 
     current_time=int(time.time()-DAY)
     # current_time_now = int(datetime2ts('2017-10-07'))
     # for i in range(5,-1,-1):
@@ -1540,11 +1540,11 @@ if __name__ == '__main__':
     '''
 
     current_time=int(time.time()-DAY)
-    start_time = datetime2ts('2018-04-16')
+    start_time = datetime2ts('2018-04-05')
     
     num_day = (current_time-start_time)/(24*3600)
     for i in range(num_day):
 	timestamp = start_time + i*24*3600
 	print 'time......',time.strftime('%Y-%m-%d',time.localtime(timestamp))
         cron_compute_mark(timestamp)
-    '''
+    

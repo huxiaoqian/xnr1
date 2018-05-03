@@ -266,7 +266,7 @@ def create_qq_xnr(xnr_info):
 def login_status(xnr_user_no):
 
     group_dict = getgroup_v2(xnr_user_no)
-
+    print 'group_dict======',group_dict
     if group_dict:
         login_status = True
     else:
