@@ -696,6 +696,13 @@ R_OPINION = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
+
+# 存储qq端口、授权码等消息,用于后台主进程调用
+r_qq_receive_message = 'r_qq_receive_message'
+
+# 存储qq监测群
+r_qq_group_set_pre = 'qq_group_set_'
+
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 
@@ -765,8 +772,6 @@ R_CLUSTER_FLOW2 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CL
 R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)
 R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)
 
-# 存储qq监测群
-r_qq_group_set_pre = 'qq_group_set_'
 
 # facebook&twitter uname_id
 R_UNAME2ID_FT = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=1)
