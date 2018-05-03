@@ -3,7 +3,7 @@ import base64
 import os
 import json
 import time
-import sqlite
+#import sqlite
 import sqlite3
 import flask_security
 from flask_login import current_user
