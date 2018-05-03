@@ -6,6 +6,7 @@ import time
 import requests
 import json
 from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class Launcher():
 	def __init__(self, username, password):
@@ -14,7 +15,12 @@ class Launcher():
 		#模拟窗口
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
-		self.driver = webdriver.Firefox()
+		try:
+			self.driver = webdriver.Firefox()
+		except:
+			cap = DesiredCapabilities().FIREFOX
+			cap["marionette"] = False
+			self.driver = webdriver.Firefox(capabilities=cap)
 		self.req = requests.Session()
 
 	def login(self):
