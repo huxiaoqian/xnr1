@@ -11,7 +11,11 @@ import socket
 import shutil
 import threading
 import subprocess
+import sys
+sys.path.append(os.getcwd())
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
+
+
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, wx_xnr_data_path, wx_xnr_qrcode_path, wx_sent_group_message_index_name_pre
@@ -58,6 +62,11 @@ class MyBot(Bot):
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
             self.change_wxxnr_redis_data({'qr_path':self.qr_path})
+            
+
+            print 'qr_path', self.qr_path
+
+
             self.qr_callback = self.my_qr_callback
         if self.if_login_callback:
             self.login_callback = self.my_login_callback
