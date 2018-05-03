@@ -6,6 +6,8 @@ import json
 import subprocess
 from multiprocessing import Process
 from MyBot import MyBot
+import sys
+sys.path.append(os.getcwd())
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, wx_xnr_max_no,\
