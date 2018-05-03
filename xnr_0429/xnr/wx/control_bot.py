@@ -248,7 +248,11 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
                     return qr_path
                 if ('.png' in qr_path) and (os.path.isfile(qr_path)):
                     #发送二维码图片至邮箱
-                    #send_qrcode2mail(wxbot_id, qr_path)
+                    print 'start send mail ...'
+                    if send_qrcode2mail(wxbot_id, qr_path):
+                        print 'send mail SUCCESS'
+                    else:
+                        print 'send mail FAIL'
                     return qr_path
             except Exception,e:
                 print e
@@ -423,6 +427,7 @@ def send_msg(wxbot_id, puids, msg):
     command = {'opt': 'sendmsgbypuid', 'wxbot_id': wxbot_id, 'puids':puids, 'msg':msg}
     return send_command(command)
 
+#目前仅支持qq邮箱
 def send_qrcode2mail(wxbot_id, qr_path):
     xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['wx_id','nickname','mail','access_id'])
     wx_id = xnr_data['wx_id']
@@ -430,18 +435,18 @@ def send_qrcode2mail(wxbot_id, qr_path):
     mail = xnr_data['mail']
     password = xnr_data['access_id'] 
     content = {
-    'subject': '扫描二维码以登陆微信虚拟人',
+    'subject': u'扫描二维码以登陆微信虚拟人',
     'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
     'files_path': qr_path,   #支持多个，以逗号隔开
     }
     from_user = {
-        'name': '虚拟人项目（微信）',
+        'name': u'虚拟人项目（微信）',
         'addr': mail,
-        'password': password,
-        'smtp_server': 'smtp.163.com'   
+        'password': password,   #其实应该是授权码
+        'smtp_server': 'smtp.qq.com'   
     }
     to_user = {
-        'name': '管理员',
+        'name': u'管理员',
         'addr': mail  #支持多个，以逗号隔开
     }
     return send_mail(from_user=from_user, to_user=to_user, content=content)
