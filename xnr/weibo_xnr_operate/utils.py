@@ -6,6 +6,7 @@ import sys
 import random
 import base64
 import re
+import gensim
 
 #reload(sys)
 #sys.path.append('../../')
@@ -46,7 +47,7 @@ from xnr.parameter import DAILY_INTEREST_TOP_USER,DAILY_AT_RECOMMEND_USER_TOP,TO
                         HOT_AT_RECOMMEND_USER_TOP,HOT_EVENT_TOP_USER,BCI_USER_NUMBER,USER_POETRAIT_NUMBER,\
                         MAX_SEARCH_SIZE,domain_ch2en_dict,topic_en2ch_dict,topic_ch2en_dict,FRIEND_LIST,\
                         FOLLOWERS_LIST,IMAGE_PATH,WHITE_UID_PATH,WHITE_UID_FILE_NAME,TOP_WEIBOS_LIMIT_DAILY,\
-                        daily_ch2en,TOP_ACTIVE_SOCIAL,task_source_ch2en
+                        daily_ch2en,TOP_ACTIVE_SOCIAL,task_source_ch2en, WORD2VEC_PATH
 from save_to_weibo_xnr_flow_text import save_to_xnr_flow_text
 from xnr.utils import uid2nick_name_photo,xnr_user_no2uid,judge_follow_type,judge_sensing_sensor,\
                         get_influence_relative
@@ -218,7 +219,7 @@ def get_daily_recommend_tweets(theme,sort_item):
     else:
         now_ts = int(time.time())
 
-    datetime = ts2datetime(now_ts)
+    datetime = ts2datetime(now_ts-24*3600)
 
     index_name = daily_interest_index_name_pre +'_'+ datetime
 
@@ -555,6 +556,9 @@ def get_bussiness_recomment_tweets(xnr_user_no,sort_item):
     
     monitor_keywords = get_results['monitor_keywords']
     monitor_keywords_list = monitor_keywords.split(',')
+
+    #expand_monitor_keywords_list = keywords_expand(monitor_keywords_list)
+
     
     if sort_item == 'timestamp':
         sort_item_new = 'timestamp'
@@ -1301,6 +1305,15 @@ def get_friends_list(recommend_set_list):
 
     return friend_list[:500]
 
+def keywords_expand(keywords):
+    keywords_list = []
+    model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
+    for word in keywords:
+        simi_list = model.most_similar(word,topn=20)
+        for simi_word in simi_list:
+            keywords_list.append(simi_word[0])
+    return keywords_list
+
 ## 主动社交- 相关推荐
 def get_related_recommendation(task_detail):
     
@@ -1314,9 +1327,14 @@ def get_related_recommendation(task_detail):
     monitor_keywords = es_result['monitor_keywords']
     
     monitor_keywords_list = monitor_keywords.split(',')
+    print 'monitor_keywords_list...',monitor_keywords_list
+    
+    #expand_monitor_keywords_list = keywords_expand(monitor_keywords_list)
 
     nest_query_list = []
-    print 'monitor_keywords_list::',monitor_keywords_list
+    #print 'expand_monitor_keywords_list::',expand_monitor_keywords_list
+    
+
     for monitor_keyword in monitor_keywords_list:
         #print 'monitor_keyword::::',monitor_keyword
         nest_query_list.append({'wildcard':{'keywords_string':'*'+monitor_keyword+'*'}})
@@ -1359,7 +1377,7 @@ def get_related_recommendation(task_detail):
         }
 
         es_rec_result = es_flow_text.search(index=flow_text_index_name,doc_type='text',body=query_body_rec)['aggregations']['uid_list']['buckets']
-        print 'es_rec_result///',es_rec_result
+        #print 'es_rec_result///',es_rec_result
         for item in es_rec_result:
             uid = item['key']
             uid_list.append(uid)
@@ -1370,6 +1388,15 @@ def get_related_recommendation(task_detail):
                 avg_sort_uid_dict[uid]['sort_item_value'] = int(item['avg_sort']['value'])
             else:
                 avg_sort_uid_dict[uid]['sort_item_value'] = round(item['avg_sort']['value'],2)
+
+        #with open("recommend_uid.txt","wb") as f:
+        # ftxt = open('recommend_uid.txt','w')  
+
+        # for uid in uid_list:
+        #     ftxt.write(uid+"\n")
+
+        #print 'uid_list...',uid_list
+
 
     else:
         if S_TYPE == 'test':
