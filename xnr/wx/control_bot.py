@@ -8,7 +8,9 @@ from multiprocessing import Process
 from MyBot import MyBot
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
-                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, r as global_utils_r, wx_xnr_max_no
+                        r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, wx_xnr_max_no,\
+                        r as global_utils_r
+global_utils_r = r #本来这个应该用默认的redis而不是微信的redis，但是默认的redis出现了点问题，先用微信的redis替代                      
 es = es_xnr
 from xnr.global_config import port_range
 from xnr.parameter import MAX_VALUE, LOCALHOST_IP, DAY
@@ -121,6 +123,7 @@ def check_wx_xnr(wx_id):
     wx_xnr_mappings()   #创建wx_xnr表
     query_body_wx_exist={'query':{'term':{'wx_id':wx_id}}}
     search_result = es_xnr.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type, body=query_body_wx_exist)['hits']['hits']
+    
     if search_result:
         wxxnr_data = search_result[0]['_source']
         wxbot_id = wxxnr_data['xnr_user_no']
@@ -138,6 +141,7 @@ def login_wx_xnr(wxbot_id):
     try:
         wx_id = eval(r.get(wxbot_id))['wx_id']
         check_result = check_wx_xnr(wx_id)
+        
         if check_result:
             wxbot_id = check_result['wxbot_id']
             wxbot_port = check_result['wxbot_port']
@@ -145,7 +149,7 @@ def login_wx_xnr(wxbot_id):
             qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list)
             return qr_path
     except Exception,e:
-        print e
+        print 'login_wx_xnr Exception: ',str(e)
         return 0
 
 def create_wx_xnr(xnr_info):
@@ -164,7 +168,7 @@ def create_wx_xnr(xnr_info):
         qr_path = start_bot(wx_id=wx_id, wxbot_id=wxbot_id, wxbot_port=wxbot_port, init_groups_list=groups_list, submitter=submitter, mail=mail, access_id=access_id, remark=remark)
     else:   #如果虚拟人还没有存在，那么就创建此虚拟人
         wxbot_port = find_port(get_all_ports())
-        print 'wxbot_port', wxbot_port
+        
         # user_no_current = load_user_no_current()
         user_no_max = get_wx_xnr_no()
         user_no_current = user_no_max + 1
@@ -177,6 +181,18 @@ def create_wx_xnr(xnr_info):
 def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=None, remark=None, init_groups_list='', create_flag=0):
     #在logout完善之前，在登录之前先手动把status数据更改成logout，并执行logout
     change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout','qr_path':'', 'wx_id':wx_id, 'wxbot_port':wxbot_port})
+
+    #测试一下端口是否可用，不可用的话就更换端口
+    if IsOpen(LOCALHOST_IP,wxbot_port):   #端口可用
+        print 'wxbot_port ok', wxbot_port
+        pass
+    else:
+        wxbot_port = find_port(get_all_ports())
+        change_wxxnr_redis_data(wxbot_id, xnr_data={'wxbot_port':wxbot_port})
+        data = {'wxbot_port':wxbot_port}
+        es.update(index=wx_xnr_index_name, doc_type=wx_xnr_index_type, body={'doc': data}, id=wxbot_id)
+        print 'new wxbot_port:', wxbot_port
+
     if submitter != None:
         change_wxxnr_redis_data(wxbot_id, xnr_data={'submitter':submitter})
     if mail != None:
@@ -192,13 +208,17 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         print u'登录前登出成功'
     else:
         print u'登录前登出失败'
+
     #login
     wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
     if init_groups_list:
         base_str = 'python '+ wxxnr_login_path + ' -i '+ wxbot_id + ' -p ' + str(wxbot_port) +  ' -g ' + init_groups_list
     else:
         base_str = 'python '+ wxxnr_login_path + ' -i '+ wxbot_id + ' -p ' + str(wxbot_port)
+   
     p_str1 = base_str + ' >> wxxnr_login'+ str(wxbot_port) + '.txt'
+    #p_str1 = base_str
+   
     command_str = base_str
     p_str2 = 'pgrep -f ' + '"' + command_str + '"'
     process_ids = subprocess.Popen(p_str2, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -206,16 +226,21 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
     for process_id in process_id_list:
         process_id = process_id.strip()
         kill_str = 'kill -9 ' + process_id
-        print 'kill_str::',kill_str
         p2 = subprocess.Popen(kill_str, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p2 = subprocess.Popen(p_str1, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    '''
+    #如果确定没错误，就注释掉这个
+    for line in p2.stdout.readlines():
+        print 'line: ', line
+    '''
     #检测登陆状态，返回登陆所需二维码路径或者返回缓存登录成功的标志：loginedwithcache
     while True:
         d = r.get(wxbot_id)
         if d:
             try:
                 qr_path = eval(d)['qr_path']
-                # print 'qr_path', qr_path
+                if qr_path:
+                    print 'qr_path', qr_path
                 #使用缓存登陆时，qr_path对应的二维码文件不存在
                 if qr_path == 'loginedwithcache':
                     return qr_path
@@ -260,7 +285,7 @@ def send_command_without_recv(command):
         client.send(json.dumps(command))
         result = 1
     except Exception,e:
-        print e
+        print 'send_command_without_recv Exception: ', str(e)
         result = 0
     finally:
         client.close()
@@ -279,6 +304,8 @@ def xnr_logout(wxbot_id):
     #无论监听群消息的端口开着与否都要保证执行完logout后是关闭状态
     command = {'opt': 'logout', 'wxbot_id': wxbot_id}
     result = send_command_without_recv(command)
+    print 'xnr_logout test_send_resutl:'
+    print result
     start_time = time.time()
     if not result:  #说明端口没有打开，只需要更改状态就行了
         if change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout'}):
