@@ -1,0 +1,141 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>预警监控 - 社区预警</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/time_warning.css">
+<style>
+    /* 跟踪社区列表  新增社区列表  边框*/
+    #track-community ,#new-track-community {
+        border-bottom:none;
+    }
+    #track-community thead th ,#new-track-community thead th {
+        border-top:none;
+    }
+    /* 搜索框 */
+    .fixed-table-toolbar .search{
+        width: 100%;
+    }
+    /* 表格样式 */
+    .bootstrap-table .table>thead>tr>th{
+        width: 9%;
+    }
+    .fixed-table-container tbody .selected td {
+        background-color: #2a556f!important;
+    }
+    /* 核心人物列表、关键词、影响力 */
+    .person-list .fixed-table-pagination .pagination-detail,
+    .person-list .fixed-table-toolbar .search{display: none;}
+    /* 关键词 */
+    #keyword {
+        height: 300px;
+        width: 750px;
+        margin:0 auto;
+    }
+    /* 核心人物列表 关键词 --标题*/
+    .detailed-content-title{
+        font-size:18px;
+        font-weight:600;
+        margin-bottom:18px;
+    }
+
+    .modal.in .modal-dialog {width: 800px;margin: 100px auto 20px;}
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-calendar note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">社区监测</b>
+        </div>
+    </div>
+    <!-- 社区列表 -->
+    <div class="community-list">
+        <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i> 跟踪社区列表</p>
+        <div id="track-community">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+        <p style="font-size: 16px;color:#01b4ff;margin-top:18px;"><i class="icon icon-bookmark"></i> 新发现社区列表</p>
+        <div id="new-track-community">
+            <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+        </div>
+    </div>
+</div>
+
+<!--社区简介-->
+<div class="modal fade" id="introduction" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">社区简介</h4>
+            </div>
+            <div class="modal-body">
+                <div class="detailed-content">
+                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 核心人物列表</span></h3>
+                    <!-- 核心人物列表 -->
+                    <div class="person-list"><div id="person-list"></div></div>
+                    <!-- 关键词 -->
+                    <h3 class="detailed-content-title"><i class="icon icon-circle" style="color:#01b4ff;margin-right:10px;"></i><span> 关键词云</span></h3>
+                    <div id="keyword"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--模态框-->
+
+<!--是否强制、取消-->
+<div class="modal fade" id="trackModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">跟踪操作</h4>
+            </div>
+            <div class="modal-body">
+                <h5 style="margin:15px 0 15px 10px;"></h5>
+                <label class="demo-label" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='-1'>
+                    <span class="demo-checkbox demo-radioInput"></span> 放弃跟踪
+                </label>
+                <label class="demo-label tk1" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='1'>
+                    <span class="demo-checkbox demo-radioInput"></span> 普通跟踪
+                </label>
+                <label class="demo-label tk2" style="margin-bottom:0;">
+                    <input class="demo-radio" type="radio" name="trackIS" value='-2'>
+                    <span class="demo-checkbox demo-radioInput"></span> 强制跟踪
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureTrackModal()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script>
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('4');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start').on('changeDate', function(ev){
+        $('#end').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end').on('changeDate', function(ev){
+        $('#start').datetimepicker('setEndDate',ev.date);
+    });
+</script>
+<script src="/static/js/chalk.js"></script>
+<script src="/static/echarts/wordcloud.min.js"></script>
+<script src="/static/js/community_warning.js"></script>
+{% endblock %}

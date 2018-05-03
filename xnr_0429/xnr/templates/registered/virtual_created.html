@@ -1,0 +1,524 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>角色生成（创建中）</title>{% endblock %}
+{% block my_css %}
+    <link rel="stylesheet" href="/static/css/virtual_created.css">
+    <style>
+        .xnrShowHide {display: none;}
+        .datetimepicker thead tr:first-child th {visibility: hidden;}
+        .demo-label{display:inline-block;margin:0 12px 0 16px;cursor:pointer;width: 95px;color: white;}
+        .demo-radio{display:none}
+        .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px!important;line-height:1;margin-top:-3px;}
+        .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}
+        .demo-checkbox.demo-radioInput,.demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}
+        .task_time .demo-label {width: 130px;margin: 5px 13px;}
+        .other-3 .demo-label {width:auto;margin: 5px 13px;}
+    </style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div class="tit-1">
+            <img src="/static/images/created.png" class="peo_icon"/>
+            <b>第二步：角色生成</b>
+        </div>
+        <div class="tit-2" style="margin: 20px 0;position: relative;">
+            <b>角色定位：</b>
+            <div id="character">
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    渗透领域：<span id="character1"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    角色身份：<span id="character2"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    心理特征：<span id="character3"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    政治倾向：<span id="character4"></span>
+                </div>
+                <div class="define">
+                    <img src="/static/images/icon.png" alt="">
+                    业务目标：<span id="character5"></span>
+                </div>
+                <div class="define" style="position: relative;">
+                    <img src="/static/images/icon.png" alt="">
+                    日常兴趣：<img src="/static/images/what.png" title="点击编辑日常兴趣" class="MWhat" data-toggle="modal" data-target="#promptXNR"
+                              style="display: none;position: absolute;top:-6px;left: 87px;"><span id="character6"></span>
+                </div>
+                <div class="define" style="position: relative;width:90%;">
+                    <img src="/static/images/icon.png" alt="">
+                    检测关键词：<img src="/static/images/what.png" title="点击关键词可编辑" class="MWhat"
+                               style="display: none;position: absolute;top:-6px;left:104px;"><span id="character7" style="width:80%;"></span>
+                </div>
+                <div id="role_example" style="margin-top: 20px;">
+                    <p style="text-align: center;color:white;padding: 5px;border-bottom: 1px solid #656e7b;">角色示例</p>
+                    <ul class="role_example_list" style="padding: 10px 20px;">
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="account" style="margin: 20px 0;">
+        <b style="font-size: 18px;">账户创建信息：</b>
+        <div style="padding: 10px 15px;border: 1px solid silver;margin-top: 20px;">
+            <div class="account-1">
+                <div class="options name">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>昵称：</span>
+                    <input type="text" id="name" placeholder="昵称" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+                <div class="options age">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>年龄：</span>
+                    <input type="text" id="age" placeholder="年龄" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+                <div class="options gender">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>性别：</span>
+                    <div id="gender">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="男" disabled>
+                            <span class="demo-checkbox demo-radioInput"></span> 男
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="女" disabled>
+                            <span class="demo-checkbox demo-radioInput"></span> 女
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" name="demo" value="未知" disabled>
+                            <span class="demo-checkbox demo-radioInput"></span> 未知
+                        </label>
+                    </div>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+                <div class="options place">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>所在地：</span>
+                    <input type="text" id="place" placeholder="（省份，城市）如：广东，广州" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+                <div class="options career">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>职业：</span>
+                    <input type="text" id="career" placeholder="职业" readonly/>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+                <div class="options description">
+                    <div style="display: inline-block;position: relative;top: -55px;">
+                        <img src="/static/images/icon.png" alt="">
+                        <span>个人描述：</span>
+                    </div>
+
+                    <textarea id="description" rows="3" disabled style="resize: none;"></textarea>
+                    <!--<a class="recommend" href="###">查看推荐</a>-->
+                </div>
+            </div>
+            <!--<div class="account-2" style="margin: 20px 0;">-->
+                <!--<p class="account-2-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
+                <!--<ul class="account-2-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <div class="other_basic">
+        <b style="font-size: 18px;">其他基础信息：</b>
+        <div style="padding: 20px 15px;border: 1px solid silver;margin-top: 20px;">
+            <div class="other-1">
+                <div class="time others">
+                    <img src="/static/images/icon.png" style="vertical-align: top;">
+                    <span class="_in" style="vertical-align: top;">活跃时间：</span>
+                    <div class="task_time" style="display: inline-block;">
+                        <div style="margin-right:34px;width:650px;">
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="0" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 0:00 - 0:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="1" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 1:00 - 1:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="2" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 2:00 - 2:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="3" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 3:00 - 3:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="4" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 4:00 - 4:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="5" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 5:00 - 5:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="6" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 6:00 - 6:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="7" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 7:00 - 7:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="8" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 8:00 - 8:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="9" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 9:00 - 9:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="10" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 10:00 - 10:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="11" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 11:00 - 11:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="12" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 12:00 - 12:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="13" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 13:00 - 13:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="14" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 14:00 - 14:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="15" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 15:00 - 15:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="16" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 16:00 - 16:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="17" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 17:00 - 17:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="18" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 18:00 - 18:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="19" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 19:00 - 19:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="20" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 20:00 - 20:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="21" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 21:00 - 21:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="22" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 22:00 - 22:59
+                            </label>
+                            <label class="demo-label">
+                                <input class="demo-radio" type="checkbox" value="23" name="timetampe">
+                                <span class="demo-checkbox demo-radioInput"></span> 23:00 - 23:59
+                            </label>
+                        </div>
+                    </div>
+                    <!--<a class="other_recommend activeTime" href="###" style="display: inline-block;">查看推荐</a>-->
+                    <!--<div class="hadChoose" style="color: white;display: none;">-->
+                        <!--<span>选择的活跃时间段：</span>-->
+                        <!--<div class="timeRange" style="display: inline-block;"></div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="other-2">
+                <div class="choose others">
+                    <img src="/static/images/icon.png" alt="">
+                    <span>日发帖量：</span>
+                    <div style="display: inline-block;margin-right:37px;width:650px;">
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" value="0-0" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 从不
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" value="1-2" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 1-2条
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" value="3-5" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 3-5条
+                        </label>
+                        <label class="demo-label">
+                            <input class="demo-radio" type="radio" value="5-max" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 5条以上
+                        </label>
+                        <label class="demo-label customize">
+                            <input class="demo-radio" type="radio" name="Posting">
+                            <span class="demo-checkbox demo-radioInput"></span> 自定义
+                        </label>
+                        <input type="text" class="postNUM" name="pos" placeholder="如：6-8" style="display: none;"/>
+                    </div>
+                    <!--<a class="other_recommend dayPost" href="###">查看推荐</a>-->
+                </div>
+            </div>
+            <!--<div class="other-3" style="margin: 15px 0;">-->
+                <!--<p class="other-3-example" style="text-align: center;padding: 5px;border-bottom: 1px solid #656e7b;">-->
+                    <!--<span style="padding: 3px 6px;color: white;"></span>-->
+                    <!--<b class="close icon icon-remove" style="float: right;font-size: 16px;color: white;opacity: 1;"></b>-->
+                <!--</p>-->
+
+                <!--<ul class="other-3-list" style="padding: 10px 20px;">-->
+
+                <!--</ul>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="page">
+        <span class="previous">上一步</span>
+        <span class="next" style="margin-left: 50px;">下一步</span>
+        <span class="save_return" style="float: right;margin-right: 20px;">保存返回</span>
+    </div>
+</div>
+
+<!--模态框-->
+<!--提示-->
+<div class="modal fade" id="prompt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--编辑虚拟人-->
+<div class="modal fade" id="promptXNR" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">选择日常兴趣</h4>
+            </div>
+            <div class="modal-body">
+                <div class="dailyLIST">
+                    <label class="demo-label" title="旅游">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="旅游">
+                        <span class="demo-checkbox demo-radioInput"></span> 旅游
+                    </label>
+                    <label class="demo-label" title="美食">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="美食">
+                        <span class="demo-checkbox demo-radioInput"></span> 美食
+                    </label>
+                    <label class="demo-label" title="汽车">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="汽车">
+                        <span class="demo-checkbox demo-radioInput"></span> 汽车
+                    </label>
+                    <label class="demo-label" title="游戏">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="游戏">
+                        <span class="demo-checkbox demo-radioInput"></span> 游戏
+                    </label>
+                    <label class="demo-label" title="星座">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="星座">
+                        <span class="demo-checkbox demo-radioInput"></span> 星座
+                    </label>
+                    <label class="demo-label" title="音乐">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="音乐">
+                        <span class="demo-checkbox demo-radioInput"></span> 音乐
+                    </label>
+                    <label class="demo-label" title="影视">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="影视">
+                        <span class="demo-checkbox demo-radioInput"></span> 影视
+                    </label>
+                    <label class="demo-label" title="健身">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="健身">
+                        <span class="demo-checkbox demo-radioInput"></span> 健身
+                    </label>
+                    <label class="demo-label" title="养生">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="养生">
+                        <span class="demo-checkbox demo-radioInput"></span> 养生
+                    </label>
+                    <label class="demo-label" title="体育">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="体育">
+                        <span class="demo-checkbox demo-radioInput"></span> 体育
+                    </label>
+                    <label class="demo-label" title="萌宠">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="萌宠">
+                        <span class="demo-checkbox demo-radioInput"></span> 萌宠
+                    </label>
+                    <label class="demo-label" title="动漫">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="动漫">
+                        <span class="demo-checkbox demo-radioInput"></span> 动漫
+                    </label>
+                    <label class="demo-label" title="时尚">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="时尚">
+                        <span class="demo-checkbox demo-radioInput"></span> 时尚
+                    </label>
+                    <label class="demo-label" title="鸡汤">
+                        <input class="demo-radio" type="checkbox" name="dayDAY" value="鸡汤">
+                        <span class="demo-checkbox demo-radioInput"></span> 鸡汤
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="sureMOday()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+<script id="load_user">
+    judgment('6');
+    var flag='{{flag}}',go_on='{{continueUser}}',taskID='{{taskID}}',WFT_url,firstStep,secondStep;
+    if (flag==1){
+        WFT_url='/weibo_xnr_create';
+        firstStep='WBfirstStep';
+        secondStep='WBsecondStep';
+    }else if (flag==4){
+        WFT_url='/facebook_xnr_create';
+        firstStep='FBfirstStep';
+        secondStep='FBsecondStep';
+    }else if (flag==5){
+        WFT_url='/twitter_xnr_create';
+        firstStep='TWfirstStep';
+        secondStep='TWsecondStep';
+    };
+    if (go_on=='1'){
+        $('#name').removeAttr('readonly');
+        $('#age').removeAttr('readonly');
+        $('#place').removeAttr('readonly');
+        $('#career').removeAttr('readonly');
+        $('#description').removeAttr('disabled');
+        $('#gender input').removeAttr('disabled');
+        $('.page .previous').hide();
+        $('.page .next').hide();
+    }
+    var $id=localStorage.getItem('go_mod_user');
+    var basicData;
+    if (go_on){
+        var go_url;
+        if (flag==1){
+            go_url ='/weibo_xnr_create/get_xnr_info/?xnr_user_no='+$id;
+        }else if (flag==4){
+            go_url ='/facebook_xnr_manage/get_xnr_detail/?xnr_user_no='+$id;
+        }else if (flag==5){
+            go_url ='/twitter_xnr_manage/get_xnr_detail/?xnr_user_no='+$id;
+        }
+        public_ajax.call_request('GET',go_url,continueData);
+    }else {
+        basicData=JSON.parse(localStorage.getItem(firstStep));
+        filling();
+    }
+    function continueData(data) {
+        basicData=data;
+        filling();
+    }
+    //
+    var $two=JSON.parse(localStorage.getItem(secondStep));
+    if ($two){
+        $('#name').val($two.nick_name);
+        $('#age').val($two.age);
+        $(".gender input[type='radio'][value='"+$two.sex+"']").attr("checked",true);
+        $('#place').val($two.location);
+        $('#career').val($two.career);
+        $('#description').val($two.description);
+        for (var t of $two.active_time){
+            $(".task_time input[name='timetampe'][type='checkbox'][value='"+t+"']").attr("checked",true);
+        }
+        //var posyNum = ($two.day_post_average.toString().split('-')[0])||$two.day_post_average||$two.day_post_num||($two.day_post_num.toString().split('-')[0]);
+        var posyNum = ($two.day_post_average)||($two.day_post_num);
+        if (posyNum>5){
+            $('.other-2 .customize').hide();
+            $('.other-2 .postNUM').show().val('0-'+parseInt(Number(posyNum)));
+        }else if (posyNum==0){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='0-0']").attr("checked",true);
+        }else if (posyNum>0&&posyNum<3){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='1-2']").attr("checked",true);
+        }else if (posyNum>=3&&posyNum<=5){
+            $(".other-2 input[name='Posting'][type='checkbox'][value='3-5']").attr("checked",true);
+        }
+    }
+    //
+    function filling() {
+        $('#character1').attr('title',basicData.domain_name).text(basicData.domain_name);
+        $('#character2').attr('title',basicData.role_name).text(basicData.role_name);
+        $('#character3').attr('title',basicData.psy_feature).text(basicData.psy_feature);
+        $('#character4').attr('title',basicData.political_side).text(basicData.political_side);
+        $('#character5').attr('title',basicData.business_goal).text(basicData.business_goal);
+        $('#character6').attr('title',basicData.daily_interests).text(basicData.daily_interests);
+        $('#character7').attr('title',basicData.monitor_keywords.replace(/&/g,',')).text(basicData.monitor_keywords.replace(/&/g,','));
+        if (go_on){
+            $('#name').val(basicData.nick_name);
+            $('#age').val(basicData.age);
+            $(".gender input[type='radio'][value='"+basicData.sex+"']").attr("checked",true);
+            $('#place').val(basicData.location);
+            $('#career').val(basicData.career);
+            $('#description').val(basicData.description);
+            var at=basicData.active_time.split(',');
+            for (var h of at){
+                $(".other_basic input[type='checkbox'][value='"+h+"']").attr("checked",true);
+            }
+            var postNUM;
+            try{
+            	postNUM=JSON.parse(basicData.day_post_average);
+            }catch(e){
+            	postNUM=eval(basicData.day_post_average);
+            }
+            var $px=postNUM[0]+'-'+postNUM[1];
+            if (postNUM[0]>5){
+                $('.customize').hide();
+                $('.postNUM').show().val($px);
+            }else {
+                $(".other_basic .other-2 input[type='radio'][value='"+$px+"']").attr("checked",true);
+            }
+        }
+    }
+    if (go_on==1){
+        $('#character7').attr('contentEditable','true');
+        $('.MWhat').show();
+    }
+//    $('.timeRange').append(
+//        '<span style="display: inline-block;margin: 0 10px;padding:3px 7px;background: slategrey;"><span>'+
+//        txt+'</span>  <i class="icon icon-remove delTime" style="cursor: pointer;" onclick="del(this)"></i></span>'
+//    );
+    $('.customize').on('click',function () {
+        $(this).hide();
+        $('.postNUM').show();
+    });
+    
+    function sureMOday() {
+        var dailyInterests=[];
+        $("#promptXNR .dailyLIST input[type=checkbox]:checkbox:checked").each(function (index,item) {
+            dailyInterests.push($(this).val());
+        });
+        if (dailyInterests.length!=0){
+            $('#character6').text(dailyInterests.join(','));
+        }
+    }
+</script>
+<script src="/static/js/virtual_created-1.js"></script>
+{% endblock %}

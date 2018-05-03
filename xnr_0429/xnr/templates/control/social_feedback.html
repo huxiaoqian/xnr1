@@ -1,0 +1,299 @@
+{% extends "publicNav.html" %}
+{% block title %}<title>社交反馈</title>{% endblock %}
+{% block my_css %}
+<link rel="stylesheet" href="/static/css/social_feedback.css">
+<style>
+    .bootstrap-table {
+        margin: 0 auto;
+        height: auto!important;
+    }
+    .table-no-bordered,.table>tbody>tr>td,.fixed-table-container,
+    .bootstrap-table .table>thead>tr>th,.bootstrap-table .table,.table>tbody>tr>td{
+        border: none;
+    }
+    .fixed-table-pagination .page-list {
+        display: none!important;
+    }
+    .fixed-table-container thead th .both {
+        background-image: none!important;
+    }
+    .fixed-table-body {
+        height: auto!important;
+        overflow-y: hidden;
+    }
+    .bootstrap-table .table:not(.table-condensed),.bootstrap-table .table:not(.table-condensed)>tbody>tr>td,
+    .table>tbody>tr>td{
+        padding: 0!important;
+    }
+    .fixed-table-container {top: 15px;}
+    .table-hover>tbody>tr:hover {
+        background-color: inherit!important;
+    }
+    .fixed-table-toolbar .search {width: 100%;}
+    .form-control {
+        text-align: center;
+        font-size: 14px;
+        color: white;
+        border: 1px solid silver;
+        border-radius: 5px;
+        padding: 4px 7px;
+        background: rgba(8,23,44,0.35);
+    }
+    .fixed-table-container thead th .sortable,
+    .fixed-table-container thead th .th-inner{padding: 0.00001px 0 0 0!important;}
+    /*.reply-1 .fixed-table-body {*/
+        /*width: 126px!important;*/
+        /*margin: 0 auto!important;*/
+    /*}*/
+
+    /**/
+
+    /*#container .type_page #content .demo-label{display:inline-block;cursor:pointer;font-size: 12px;font-weight: normal;margin-right: 10px;}*/
+    /*#container .type_page #content .demo-radio{display:none!important;}*/
+    /*#container .type_page #content .demo-radioInput{cursor:pointer;background-color:#eee;border-radius:100%;display:inline-block;height:16px;vertical-align:middle;width:16px;line-height:1;margin-top:-3px;}*/
+    /*#container .type_page #content .demo-radio:checked + .demo-radioInput:after{background-color:#57ad68;border-radius:100%;content:"";display:inline-block;height:12px;margin:2px;width:12px}*/
+    /*#container .type_page #content .demo-checkbox.demo-radioInput,#container .type_page #content .demo-radio:checked + .demo-checkbox.demo-radioInput:after{border-radius:0}*/
+    .buildOption .demo-label {width:90px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
+    #container .type_page #myTabs a {
+        color: white;
+    }
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover,
+    .nav>li>a:focus, .nav>li>a:hover {
+        background: rgba(5, 23, 55, 0.45);
+    }
+    .btn-group.open .dropdown-toggle {
+        box-shadow: none!important;
+    }
+    .friends button b{
+        position: relative;
+        top: 2px;
+        font-weight: normal;
+        font-size: 12px;
+        display: inline-block;
+        width: 40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .sureTime {
+        padding: 1px 6px;
+        color: white;
+        font-size: 12px;
+        border: 1px solid silver;
+        border-radius: 5px;
+        background: transparent;
+        cursor: pointer;
+        display: none;
+    }
+    .sureTime:hover {
+        background:rgba(8,23,44,0.65);
+    }
+    .table-condensed>tbody>tr>td, .table-condensed>tbody>tr>th,
+    .table-condensed>tfoot>tr>td, .table-condensed>tfoot>tr>th,
+    .table-condensed>thead>tr>td, .table-condensed>thead>tr>th{
+        color: black;
+    }
+</style>
+{% endblock %}
+{% block main %}
+<div id="container">
+    <div class="title">
+        <div style="display: inline-block;">
+            <span class="icon icon-random note_icon" style="color: #fff;"></span>
+            <b style="font-size: 20px;color: #fff;">社交反馈</b>
+        </div>
+    </div>
+    <div class="choosetime" style="margin: 10px 0;">
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='0' checked>
+            <span class="demo-checkbox demo-radioInput"></span> 今天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='1'>
+            <span class="demo-checkbox demo-radioInput"></span> 昨天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='7'>
+            <span class="demo-checkbox demo-radioInput"></span> 7天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='30'>
+            <span class="demo-checkbox demo-radioInput"></span> 30天
+        </label>
+        <label class="demo-label">
+            <input class="demo-radio" type="radio" name="time1" value='mize'>
+            <span class="demo-checkbox demo-radioInput"></span> 自定义
+        </label>
+        <input type="text" size="16" id="start_1" class="form_datetime" placeholder="开始时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;display: none;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <input type="text" size="16" id="end_1" class="form_datetime" placeholder="结束时间"
+               style="height: 20px;font-size: 10px;color: white;text-align: center;display: none;
+                        padding:2px 4px;border: 1px solid silver;background: rgba(8,23,44,0.25);">
+        <span id="sureChoose" class="sureTime">确定</span>
+    </div>
+    <div class="type_page" style="margin: 20px 0 30px;">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active" flag="comment" tp="show_comment" idbox="comment-1">
+                <a href="#comment" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;评论回复</a>
+            </li>
+            <li role="presentation" flag="retweed" tp="show_retweet" idbox="forwarding-1">
+                <a href="#forwarding" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;转发回复</a>
+            </li>
+            <li role="presentation" flag="personal" tp="show_private" idbox="letter-1">
+                <a href="#private_letter" role="tab" data-toggle="tab"><b class="icon icon-file-alt"></b>&nbsp;私信回复</a>
+            </li>
+            <li role="presentation" flag="@back" tp="show_at" idbox="reply-1">
+                <a href="#reply" role="tab" data-toggle="tab"><b class="icon  icon-comments"></b>&nbsp;@回复</a>
+            </li>
+            <li role="presentation" flag="focus" tp="show_fans" idbox="focus-1">
+                <a href="#focusReply" role="tab" data-toggle="tab"><b class="icon icon-certificate"></b>&nbsp;关注回粉</a>
+            </li>
+        </ul>
+        <div class="desc_index">
+            <span>排序指标：</span>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc" value="timestamp" checked>
+                <span class="demo-checkbox demo-radioInput"></span> 按时间
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_info">
+                <span class="demo-checkbox demo-radioInput"></span> 按内容敏感度
+            </label>
+            <label class="demo-label">
+                <input class="demo-radio" type="radio" name="desc" value="sensitive_user">
+                <span class="demo-checkbox demo-radioInput"></span> 按人物敏感度
+            </label>
+        </div>
+        <div class="tab-content" id="content">
+            <div role="tabpanel" class="tab-pane active" id="comment">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                <div class="comment-1">
+                    <div id="comment-1"></div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="forwarding">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                <div class="forwarding-1">
+                    <div id="forwarding-1"></div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="private_letter">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                <div class="letter-1">
+                    <div id="letter-1"></div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="reply">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                <div class="reply-1">
+                    <div id="reply-1"></div>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="focusReply">
+                <p style="width: 100%;text-align: center;margin-top: 40px;color: white;">正在拼命加载中...</p>
+                <div class="focus-1">
+                    <div id="focus-1"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--提示性模态框-->
+<div class="modal fade" id="pormpt" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="focusSure" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!--关注-->
+<div class="modal fade" id="focus_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">关注用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class='focusOPT' style="margin: 10px 0;">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="focusUserSure()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--取消关注-->
+<div class="modal fade" id="del_focus_modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">取消关注用户</h4>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center;font-size: 18px;color: #fff;font-weight: 900;">你确定取消关注该用户吗？
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delFocus()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block my_js %}
+
+<script>
+    var loadingType = 'weibo';
+    weiboORqq('weibo');
+    $('.nav_type').text('(微博)');
+    judgment('2');
+    $(".form_datetime").datetimepicker({
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        pickerPosition: "bottom-left"
+    });
+    $('#start_1').on('changeDate', function(ev){
+        $('#end_1').datetimepicker('setStartDate',ev.date);
+    });
+    $('#end_1').on('changeDate', function(ev){
+        $('#start_1').datetimepicker('setEndDate',ev.date);
+    });
+
+</script>
+<script src="/static/js/social_feedback-1.js"></script>
+{% endblock %}
