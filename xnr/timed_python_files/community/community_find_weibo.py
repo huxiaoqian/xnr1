@@ -98,6 +98,7 @@ def find_from_uid_list(xnr_user_no,nodes=None,path=PATH,file_name=FILE_NAME,com_
         G = get_users(xnr_user_no,nodes)
     else:
         G = G.subgraph(nodes,xnr_user_no)
+        
 
 
     node_clus = nx.clustering(G) #50w

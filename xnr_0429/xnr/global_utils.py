@@ -8,9 +8,9 @@ from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, ES_INTELLIGENT_PORT, \
                           ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,USER_PROFILE_ES_HOST,\
-                          REDIS_HOST, REDIS_PORT,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
+                          REDIS_HOST_46, REDIS_PORT_46,REDIS_HOST_45, REDIS_PORT_45,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
                           REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
-                          REDIS_WX_HOST, REDIS_WX_PORT, \
+                          REDIS_WX_HOST, REDIS_WX_PORT, REDIS_HOST_NEW, REDIS_PORT_NEW,\
                           qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
 
 #module1.1:init es
@@ -686,16 +686,16 @@ tw_hot_subopinion_results_index_type = 'subopinion'
 
 
 #module2.1: init redis
-def _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=0):
+def _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
     return redis.StrictRedis(host, port)
 
-R_WRITING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+R_WRITING = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 writing_task_queue_name = 'intelligent_writing_task'
 
-R_OPINION = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+R_OPINION = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 opinion_expand_task_queue_name = 'opinion_expand_task'
 
-r = _default_redis(host=REDIS_HOST, port=REDIS_PORT)
+r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 
@@ -706,17 +706,17 @@ tw_target_domain_detect_queue_name = 'twitter_target_domain_detect_task'
 tw_target_domain_analysis_queue_name = 'twitter_target_domain_analysis_task'
 
 # social sensing redis
-R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+R_SOCIAL_SENSING = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=3)
 weibo_social_sensing_task_queue_name = 'weibo_social_sensing_task'
 
 # content recommendation sub opinion TASK
-R_RECOMMEND_SUBOPINION_KEYWORD_TASK = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+R_RECOMMEND_SUBOPINION_KEYWORD_TASK = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=3)
 weibo_recommend_subopinion_keywords_task_queue_name = 'recommend_subopnion_keywords_task_queue'
 fb_recommend_subopinion_keywords_task_queue_name = 'fb_recommend_subopnion_keywords_task_queue'
 tw_recommend_subopinion_keywords_task_queue_name = 'tw_recommend_subopnion_keywords_task_queue'
 
 # use to save follower every day
-R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_fans_uid_list_datetime_pre = 'fans_uid_list_'  # fans_uid_list_2017-08-30
 r_fans_count_datetime_xnr_pre = 'fans_count_'    # fans_count_2017-08-30_6337917209
 r_fans_search_xnr_pre = 'fans_search_'    # fans_search_6337917209
@@ -728,7 +728,7 @@ r_followers_search_xnr_pre = 'followers_search_'    # followers_search_633791720
 
 
 ## use to save follower every day    facebook
-R_FACEBOOK_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+R_FACEBOOK_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_fb_fans_uid_list_datetime_pre = 'fb_fans_uid_list_'  # fb_fans_uid_list_2017-08-30
 r_fb_fans_count_datetime_xnr_pre = 'fb_fans_count_'    # fb_fans_count_2017-08-30_6337917209
 r_fb_fans_search_xnr_pre = 'fb_fans_search_'    # fb_fans_search_6337917209
@@ -741,7 +741,7 @@ r_fb_followers_search_xnr_pre = 'fb_followers_search_'    # fb_followers_search_
 
 
 ## use to save follower every day    twitter
-R_TWITTER_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST,port=REDIS_PORT,db=1)
+R_TWITTER_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_tw_fans_uid_list_datetime_pre = 'tw_fans_uid_list_'  # fb_fans_uid_list_2017-08-30
 r_tw_fans_count_datetime_xnr_pre = 'tw_fans_count_'    # fb_fans_count_2017-08-30_6337917209
 r_tw_fans_search_xnr_pre = 'tw_fans_search_'    # fb_fans_search_6337917209
@@ -769,19 +769,19 @@ R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, d
 r_qq_group_set_pre = 'qq_group_set_'
 
 # facebook&twitter uname_id
-R_UNAME2ID_FT = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=1)
+R_UNAME2ID_FT = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=1)
 fb_uname2id = 'fb_user'
 tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
 redis_host_list = [1,2]
-R_retweet = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=2)
+R_retweet = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
 
-fb_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=3)
-fb_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=4)
+fb_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
+fb_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
 
-tw_retweet_1 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=5)
-tw_retweet_2 = _default_redis(host=REDIS_HOST, port=REDIS_PORT, db=6)
+tw_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
+tw_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
 
 fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
@@ -792,7 +792,8 @@ tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)
 qiniu = Auth(qiniu_access_key, qiniu_secret_key)
 
-R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2, db=3)
+#R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CLUSTER_PORT_FLOW2, db=3)
+R_OPERATE_QUEUE = redis.StrictRedis(host=REDIS_HOST_45, port=REDIS_PORT_45, db=3)
 operate_queue_name = 'operate'
 
 

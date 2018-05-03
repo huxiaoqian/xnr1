@@ -20,11 +20,14 @@ from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace
                          es_comment,comment_index_name_pre,comment_index_type,\
                          be_comment_index_name_pre,be_comment_index_type,\
                          weibo_bci_history_index_name,weibo_bci_history_index_type,\
-                         weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
+                         weibo_sensitive_history_index_name,weibo_sensitive_history_index_type,\
+                         es_user_portrait,weibo_bci_index_name_pre,weibo_bci_index_type
+
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
 from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
+#from global_utils import retweet_redis_dict,comment_redis_dict
 
 
 #计算当前日期周期内的community index
@@ -88,33 +91,128 @@ def get_evaluate_max(index_name,index_type,field):
     return max_evaluate
 
 #计算社区指标
-# def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
-#     result = {}
-#     result['xnr_user_no'] = xnr_user_no
-#     result['nodes'] = nodes
-#     result['num'] = len(nodes)
-
-#     sub_g = G.subgraph(nodes)
-
-#     result['density'] = nx.density(sub_g)
-#     result['cluster'] = nx.average_clustering(sub_g)
-#     result['transitivity'] = nx.transitivity(sub_g)
-
-# 	# for i in es_flow_text.mget(index=sensitive_index, doc_type=sensitive_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']:
-# 		# print i#['fields']['sensitive_week_ave']
-	
-#     influence_result = [float(i['fields']['bci_week_ave'][0]) if i['found'] else 0  for i in es_flow_text.mget(index=weibo_bci_history_index_name, doc_type=weibo_bci_history_index_type,body={'ids':nodes}, fields=['bci_week_ave'],_source=False)['docs']]
-#     sensitive_result = [float(i['fields']['sensitive_week_ave'][0]) if i['found'] else 0 for i in es_flow_text.mget(index=weibo_sensitive_history_index_name, doc_type=weibo_sensitive_history_index_type,body={'ids':nodes}, fields=['sensitive_week_ave'],_source=False)['docs']]
+def get_db_num(timestamp):
+    date = ts2datetime(timestamp)
+    date_ts = datetime2ts(date)
+    db_number = ((date_ts - r_beigin_ts) / (DAY*7)) % 2 + 1
+    #run_type
+    if S_TYPE == 'test':
+        db_number = 1
+    return db_number
 
 
-#     result['max_influence'] = max(influence_result)/float(all_influence)
-#     result['mean_influence'] = (sum(influence_result)/len(influence_result))/float(all_influence)
+def get_sensitive_value(date_time,field_name,uid_list):
+    flow_text_index_name = flow_text_index_name_pre + ts2datetime(date_time)
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[{'terms':{'uid':uid_list}}]
+                    }
+                }
+            }
+        },
+        'aggs':{
+            'index_field_sum':{
+                'terms':{
+                    'field':field_name
+                }
+            }
+        }
+    }
 
-#     result['max_sensitive'] = max(sensitive_result)/float(all_sensitive)
-#     result['mean_sensitive'] = (sum(sensitive_result)/len(sensitive_result))/float(all_sensitive)
+    try:
+        result=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+            body=query_body)['aggregations']['index_field_sum']['buckets']
+        index_value_list = []
+        for item in result:
+            index_value_list.append(item['doc_count'])
+    except Exception,e:
+        print '敏感度查询错误：：',e
+        index_value_list = []
+    return index_value_list
 
 
-#     return result
+def get_influence_value(date_time,field_name,uid_list):
+    datename = ts2datetime(date_time)
+    new_datetime = datename[0:4]+datename[5:7]+datename[8:10]
+    bci_index_name = weibo_bci_index_name_pre + new_datetime
+    index_value_list = []
+    try:
+        result = es_user_portrait.mget(index=bci_index_name,doc_type=weibo_bci_index_type,body={'ids':uid_list},_source=True)['docs']
+        for item in result:
+        	index_value_list.append(item['_source']['user_index'])
+    except Exception,e:
+        print '影响力查询错误：：',e
+    return index_value_list
+
+
+def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time,G=None):
+    result = {}
+    result['xnr_user_no'] = xnr_user_no
+    result['nodes'] = nodes
+    result['num'] = len(nodes)
+
+    #从redis中获取社区转发网络
+    count = 0
+    scan_cursor = 0
+    now_ts = time.time()
+    now_date_ts = datetime2ts(ts2datetime(now_ts))
+    #get redis db number
+    db_number = get_db_num(now_date_ts)
+    #get redis db
+    retweet_redis = retweet_redis_dict[str(db_number)]
+    comment_redis = comment_redis_dict[str(db_number)]
+
+    print 'retweet_redis::',retweet_redis
+    print 'comment_redis::',comment_redis
+
+    retweet_result = retweet_redis.hegtall(nodes)
+    comment_result = comment_redis.hegtall(nodes)
+
+    print 'retweet_result:::',retweet_result
+    print 'comment_result:::',comment_result
+
+    G_i = nx.Graph()
+    for i in retweet_result:
+        # print 'i:',i
+        if not i['found']:
+            continue
+        uid_retweet = json.loads(i['_source']['uid_retweet'])
+        max_count = max([int(n) for n in uid_retweet.values()])
+        G_i.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+    for i in comment_result:
+        # print 'comment_i:',i
+        if not i['found']:
+            continue
+        uid_comment = json.loads(i['_source']['uid_comment'])
+        max_count = max([int(n) for n in uid_comment.values()])
+        G_i.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+
+
+    sub_g = G_i.subgraph(nodes)
+
+    result['density'] = round(nx.density(sub_g),4)
+    result['cluster'] = round(nx.average_clustering(sub_g),4)
+    result['transitivity'] = round(nx.transitivity(sub_g),4)
+
+
+##将结果换成当天的计算结果
+    influence_field = 'user_index'
+    sensitive_field = 'sensitive'
+    influence_result = get_influence_value(date_time,influence_field,nodes)
+    sensitive_result = get_sensitive_value(date_time,sensitive_field,nodes)
+
+
+    result['max_influence'] = round((max(influence_result)/float(all_influence))*100,4)
+    result['mean_influence'] = round(((sum(influence_result)/len(influence_result))/float(all_influence))*100,4)
+
+    result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*100000,4)
+    result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*100000,4)
+
+
+    return result
 
 
 #更新社区的预警等级
@@ -493,7 +591,8 @@ def trace_xnr_community(trace_datetime): #传的是ts
         community_detail['num'] = community['num']
         community_detail['nodes'] = community['nodes']
 
-        trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
+        #trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
+        trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
         community_detail['density'] = trace_index_result['density']
         community_detail['cluster'] = trace_index_result['cluster']
         community_detail['max_influence'] = trace_index_result['max_influence']

@@ -95,8 +95,8 @@ def weibo_keyword_count_mappings():
 
 
 if __name__=='__main__':
-	#weibo_xnr_count_info_mappings()
-    #weibo_keyword_count_mappings()
+    weibo_xnr_count_info_mappings()
+    weibo_keyword_count_mappings()
     
     es.indices.put_mapping(index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type, \
             body={'properties':{'fans_total_num': {'type': 'long'},'fans_day_num': {'type': 'long'},'fans_growth_rate': {'type': 'long'},\
