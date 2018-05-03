@@ -1027,7 +1027,7 @@ from xnr.utils import judge_fb_follow_type, judge_fb_sensing_sensor
 from xnr.parameter import TOP_ACTIVE_SOCIAL,DAY
 trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 sys.path.append(trans_path)
-from trans import trans, simplified2traditional
+from trans_v2 import trans, simplified2traditional
 
 def get_show_comment(task_detail):
     xnr_user_no = task_detail['xnr_user_no']

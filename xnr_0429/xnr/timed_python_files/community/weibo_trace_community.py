@@ -27,7 +27,7 @@ from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
 from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
-from global_utils import retweet_redis_dict,comment_redis_dict
+#from global_utils import retweet_redis_dict,comment_redis_dict
 
 
 #计算当前日期周期内的community index
@@ -591,8 +591,8 @@ def trace_xnr_community(trace_datetime): #传的是ts
         community_detail['num'] = community['num']
         community_detail['nodes'] = community['nodes']
 
-        trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
-        # trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
+        #trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
+        trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
         community_detail['density'] = trace_index_result['density']
         community_detail['cluster'] = trace_index_result['cluster']
         community_detail['max_influence'] = trace_index_result['max_influence']
