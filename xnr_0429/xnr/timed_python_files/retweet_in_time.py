@@ -36,14 +36,18 @@ def read_tracing_followers_tweet():
 
     results = es_xnr.search(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                 body=query_body)['hits']['hits']
+    print '...results...',results 
     if results:
         for result in results:
             result = result['_source']
-            print ''
-            xnr_user_no = result['xnr_user_no']
-            trace_follow_list = result['trace_follow_list']
-            print 'trace_follow_list:::',trace_follow_list
-
+	    
+            try:
+                xnr_user_no = result['xnr_user_no']
+                trace_follow_list = result['trace_follow_list']
+            
+            except:
+	    	continue
+	    print 'trace_follow_list...',trace_follow_list
             if S_TYPE == 'test':
                 current_time = datetime2ts(S_DATE)
                 #trace_follow_list = TRACE_FOLLOW_LIST
@@ -64,10 +68,10 @@ def read_tracing_followers_tweet():
                 },
                 'size':MAX_SEARCH_SIZE
             }
-
+	
             results_flow = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                             body=query_body_flow)['hits']['hits']
-
+	    print 'results_flow..',results_flow
             if results_flow:
                 for result_flow in results_flow:
                     
@@ -94,8 +98,9 @@ def read_tracing_followers_tweet():
                         task_detail['timestamp'] = result_flow['timestamp']
                         task_detail['timestamp_set'] = result_flow['timestamp'] + random.randint(RETWEET_START_TS,RETWEET_END_TS)
                         task_detail['compute_status'] = 0
-
-                        es_xnr.index(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
+			print 'insert new!!!!'
+			print 'es_xnr...',es_xnr
+                        print es_xnr.index(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
                             weibo_xnr_retweet_timing_list_index_type,body=task_detail,id=task_id)
 
 # 扫描定时转发列表
@@ -139,7 +144,7 @@ def retweet_operate_timing():
                     return False
                 print 'text::',text
                 print 'r_mid:::',r_mid
-                mark = retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
+                mark = retweet_tweet_func(account_name,password,r_mid,tweet_type,xnr_user_no)
                 print 'mark::',mark[0]
                 if mark[0]:
                     task_id = xnr_user_no + '_' + r_mid
@@ -187,7 +192,9 @@ def publish_operate_timing():
             print timestamp_set
             if timestamp_set <= int(time.time()):
                 print '!!'
-                text = result['text'].encode('utf-8')
+                text = result['text'].decode('utf-8')
+		#print result['task_source'].decode('utf-8')
+		#print 'task_source_ch2en..',task_source_ch2en
                 tweet_type = task_source_ch2en[result['task_source']]
                 xnr_user_no = result['xnr_user_no']
 
@@ -219,8 +226,8 @@ def publish_operate_timing():
                     return False
 
                 mark = publish_tweet_func(account_name,password,text,p_url,rank,rankid,tweet_type,xnr_user_no)
-
-                if mark[0]:
+		print 'mark...',mark
+                if mark:
                     #task_id = xnr_user_no + '_' + r_mid
                     task_id = _id
                     # item_exist = es_xnr.get(index=weibo_xnr_retweet_timing_list_index_name,doc_type=\
@@ -249,7 +256,7 @@ if __name__ == '__main__':
     publish_operate_timing()
 
     # 定时跟踪转发
-    #read_tracing_followers_tweet()
-    #retweet_operate_timing()
+    read_tracing_followers_tweet()
+    retweet_operate_timing()
 
 

@@ -395,6 +395,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 
 #es.delete(index='facebook_flow_text_2017-10-25',doc_type='text',id='6679197029855974713')
 
+
 # query_sensitive = {
 #                     'query':{
 #                         'match_all':{}
@@ -483,7 +484,7 @@ from weibo_xnr_flow_text_mappings import weibo_xnr_flow_text_mappings
 # }
 # es.index(index='weibo_xnr_count',doc_type='text',body=count_info,id='WXNR0044_2017-10-05')
 
-
+'''
 count_info = {
 
 "influence": 1.79,
@@ -493,7 +494,7 @@ count_info = {
 }
 
 es.update(index='weibo_xnr_count',doc_type='text',body={'doc':count_info},id='WXNR0004_2017-10-06')
-
+'''
 
 # count_info = {
 # "comment_day_num": 2,
@@ -538,3 +539,5 @@ es.update(index='weibo_xnr_count',doc_type='text',body={'doc':count_info},id='WX
 # get_result = es.get(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_1')['_source']
 
 # es.index(index='opinion_corpus_results',doc_type='text',id='weibo_wxnr0004_wei_bo_ce_shi_ren_wu_4',body=get_result)
+print es.get(index='weibo_xnr_fans_followers',doc_type='uids',id='WXNR0010')
+es.update(index='weibo_xnr_fans_followers',doc_type='uids',body={'doc':{'xnr_user_no':'WXNR0010'}},id='WXNR0010')

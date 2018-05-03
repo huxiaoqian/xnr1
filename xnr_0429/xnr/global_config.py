@@ -6,7 +6,7 @@ import os
 import time
 
 # xnr system start date
-SYSTEM_START_DATE = '2017-10-01'
+SYSTEM_START_DATE = '2018-01-01'
 
 #use to mark type:  run or test
 S_TYPE = 'run'   #test/run
@@ -46,12 +46,12 @@ PATH_ROOT = os.path.dirname(os.path.abspath(__file__))
 #config es
 #config xnr user info
 
-ES_INTELLIGENT_HOST = ['192.168.169.45:9205','192.168.169.46:9205','192.168.169.47:9205']
+ES_INTELLIGENT_HOST = ['192.168.169.46:9205','192.168.169.47:9205']
 #['219.224.134.213:9205', '219.224.134.214:9205',\
 #                   '219.224.134.215:9205']
 ES_INTELLIGENT_PORT = '9205'
 
-ES_CLUSTER_HOST = ['192.168.169.45:9205','192.168.169.46:9205','192.168.169.47:9205']
+ES_CLUSTER_HOST = ['192.168.169.46:9205','192.168.169.47:9205']
 #['219.224.134.213:9205', '219.224.134.214:9205',\
 #                   '219.224.134.215:9205']
 ES_CLUSTER_PORT = '9205'

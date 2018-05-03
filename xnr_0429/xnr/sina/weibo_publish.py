@@ -95,7 +95,7 @@ def weibo_publish_with_picture(username,password,text,file):
 
 
 def weibo_publish_main(username,password,text,file):
-
+    
     try:
     
         if file:

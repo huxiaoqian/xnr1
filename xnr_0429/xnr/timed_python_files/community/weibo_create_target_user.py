@@ -115,6 +115,7 @@ def detect_by_keywords(keywords,datetime_list):
                 keywords_list.append(simi_word[0])
         except:
             keywords_list.append(word)
+    print 'keywords::',keywords
     print 'keywords_list:::',keywords_list
     group_uid_list = set()
     if datetime_list == []:

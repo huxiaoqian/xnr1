@@ -10,7 +10,7 @@ from community_shuaijian_gailv import find_community
 import json,os,time,community
 
 sys.path.append('../../')
-from global_utils import es_flow_text,retweet_index_name_pre,retweet_index_type,\
+from global_utils import es_user_portrait,retweet_index_name_pre,retweet_index_type,\
                          comment_index_name_pre,comment_index_type,\
                          weibo_bci_history_index_name,weibo_bci_history_index_type,\
                          weibo_sensitive_history_index_name,weibo_sensitive_history_index_type
@@ -33,7 +33,7 @@ PATH = ''
 FILE_NAME = 'graph_edges1.txt'
 
 
-user_es = es_flow_text
+user_es = es_user_portrait
 
 def get_db_num(timestamp):
     date = ts2datetime(timestamp)
@@ -59,7 +59,7 @@ sensitive_type = weibo_sensitive_history_index_type #sensitive_week_ave
 
 
 def get_users(xnr_user_no,nodes=None):
-
+    print 'xnr_user_no:::',xnr_user_no
     if not nodes:
         print 'get xnr es...'
         # result = xnr_es.search(index=save_index,doc_type=save_type,body={'query':{'match_all':{}},'size':999999})
@@ -71,10 +71,10 @@ def get_users(xnr_user_no,nodes=None):
         uids = nodes
     retweet_result = user_es.mget(index=retweet_index, doc_type=retweet_type,body={'ids':uids}, _source=True)['docs']
     comment_result = user_es.mget(index=comment_index, doc_type=comment_type,body={'ids':uids}, _source=True)['docs']
-	
+    print 'retweet_index::',retweet_index	
     G = nx.Graph()
     for i in retweet_result:
-        # print 'i:',i
+       # print 'i:',i
         if not i['found']:
             continue
         uid_retweet = json.loads(i['_source']['uid_retweet'])
