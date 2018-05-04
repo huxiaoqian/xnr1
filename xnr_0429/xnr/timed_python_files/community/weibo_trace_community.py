@@ -169,7 +169,7 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
 
     print 'retweet_redis::',retweet_redis
     print 'comment_redis::',comment_redis
-    print 'redis_test::',retweet_result.scan(0,1)
+    print 'redis_test::',retweet_redis.scan(0,1)
     retweet_result = retweet_redis.hgetall(nodes)
     comment_result = comment_redis.hgetall(nodes)
 
