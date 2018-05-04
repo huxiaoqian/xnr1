@@ -55,6 +55,13 @@ function WXgroup(data) {
     }
 }
 
+// 字符串截取（获取指定字符后面的所有字符内容
+function getCaption(obj){
+    var objArr = [];
+    objArr = obj.split('/xnr');
+    // console.log(objArr);
+    return objArr[objArr.length-1];
+}
 // =======群消息历史==========
 function personEarly(personEarly_QQ) {
     var QQperson=eval(personEarly_QQ);
@@ -98,13 +105,17 @@ function personEarly(personEarly_QQ) {
                     if(row._source.msg_type == 'Text'){//----文本信息
                         chatContent = '<span class="chat-content">' + row._source.text +'</span>'+ '<button type="button" class="btn btn-default btn-xs btn-fanyi" title="翻译" style="float: right;" onclick="transLate(\''+row._source.text+'\',event)">文本翻译</button>';
                     }else if(row._source.msg_type == 'Picture'){//------图片信息
-                        chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
+                        // chatContent ='<img onclick="showThis(event)" src="'+row._source.text.slice(28)+'" alt="" style="width:60px;cursor:pointer;" />';
+                        chatContent ='<img onclick="showThis(event)" src="'+getCaption(row._source.text)+'" alt="" style="width:60px;cursor:pointer;" />';
                     }else if(row._source.msg_type == 'Recording'){//------语音信息
                         chatContent = '<span class="chat-content">' +
                         '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
-                          '<source src="'+row._source.text.slice(28)+'"/>'+
-                          '<source src="'+row._source.text.slice(28)+'"/>'+
-                          '<source src="'+row._source.text.slice(28)+'"/>'+
+                          // '<source src="'+row._source.text.slice(28)+'"/>'+
+                          // '<source src="'+row._source.text.slice(28)+'"/>'+
+                          // '<source src="'+row._source.text.slice(28)+'"/>'+
+                          '<source src="'+getCaption(row._source.text)+'"/>'+
+                          '<source src="'+getCaption(row._source.text)+'"/>'+
+                          '<source src="'+getCaption(row._source.text)+'"/>'+
                           '抱歉，你的浏览器版本过低，请更新！'+
                         '</audio>'+
                         '</span>'+
@@ -181,9 +192,13 @@ function transLatevoice(txt,e){
         public_ajax.call_request('get',transLate_voice_url,trans_Late_voice);
     }else if($(this_targ_voice).text() == '返回原文'){
         var str = '<audio style="cursor:pointer;vertical-align:middle;"  controls>'+
-                          '<source src="'+txt.slice(28)+'"/>'+
-                          '<source src="'+txt.slice(28)+'"/>'+
-                          '<source src="'+txt.slice(28)+'"/>'+
+                          // '<source src="'+txt.slice(28)+'"/>'+
+                          // '<source src="'+txt.slice(28)+'"/>'+
+                          // '<source src="'+txt.slice(28)+'"/>'+
+
+                          '<source src="'+getCaption(txt)+'"/>'+
+                          '<source src="'+getCaption(txt)+'"/>'+
+                          '<source src="'+getCaption(txt)+'"/>'+
                           '抱歉，你的浏览器版本过低，请更新！'+
                         '</audio>'
         $(this_targ_voice).prev('.chat-content').html(str);

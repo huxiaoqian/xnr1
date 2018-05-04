@@ -110,6 +110,13 @@ REDIS_PORT_SENSITIVE = '6379'
 REDIS_WX_PORT = '6667'
 REDIS_WX_HOST = '192.168.169.45'#'219.224.134.213'
 
+#flow3:retweet/be_retweet redis
+RETWEET_REDIS_HOST = '10.128.55.69'
+RETWEET_REDIS_PORT = '6379'
+#flow3:comment/be_comment redis
+COMMENT_REDIS_HOST = '10.128.55.70'
+COMMENT_REDIS_PORT = '6379'
+
 #使用七牛来存储捕获到的图片
 #2018-1-2 放弃使用七牛，改为存储到本地
 qiniu_access_key = "2QHQTgGYH8Ow3dy1jpuSKLAlTo-ZkRav1ty2Nok8"
@@ -118,8 +125,8 @@ qiniu_bucket_name = "publicbucket"
 qiniu_bucket_domain = "ovorc2c4c.bkt.clouddn.com"
 
 #微信多媒体数据存放地址
-WX_IMAGE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/image'
-WX_VOICE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice'
+WX_IMAGE_ABS_PATH = '/home/xnr1/xnr_0429/xnr/static/WX/image'
+WX_VOICE_ABS_PATH = '/home/xnr1/xnr_0429/xnr/static/WX/voice'
 
 #wx
 WX_S_DATE = '2017-10-25'
