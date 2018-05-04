@@ -45,7 +45,7 @@ def keywords_expand(keywords):
     keywords_list = []
     model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
     for word in keywords:
-        simi_list = model.most_similar(word,topn=20)
+        simi_list = model.most_similar(word,topn=5)
         for simi_word in simi_list:
             keywords_list.append(simi_word[0])
     return keywords_list
@@ -66,7 +66,7 @@ def spcific_opinion_corpus_expand(task):
     origin_keyword = task['corpus_name']
     
     #step2：对领域词进行词扩充
-    keywords_list = keywords_expand(origin_keyword,topn=5)
+    keywords_list = keywords_expand(origin_keyword)
 
     #step3:根据师兄算法进行语料扩充与积累
     #step4：将语料积累结果写入文件

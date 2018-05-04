@@ -368,12 +368,18 @@ $('.hasAddQQ').on('click',function () {
     }
 })
 $('.optClear').on('click',function () {
+    clearVal()
+});
+function clearVal() {
     $('.QQoptions .QQnumber').val('');
     $('.QQoptions .QQgroup').val('');
     $('.QQoptions .QQname').val('');
     $('.QQoptions .QQtime').val('');
     $('.QQoptions .QQpower').val('');
-});
+    $('.QQoptions .QQgroupName').val('');
+    $('.QQoptions .QQgroupbeizhu').val('');
+    $('.QQoptions .QQxnrBEIZHU').val('');
+}
 $('.optSureadd').on('click',function () {
     var qnum=$('.QQoptions .QQnumber').val();
     var qgp=$('.QQoptions .QQgroup').val().toString().replace(/,/g,'，');
@@ -397,9 +403,7 @@ function addOR(data) {
         Iadd='添加成功。';
         if (data[1].length!=0){Iadd+='<br/>重复添加的QQ群：'+data[1].join('，')}
         var a=TTqgp.split('，'),b=TTqgpName.split('，');
-        $('#modGroup .QQgroup').val('');
-        $('#modGroup .QQgroupName').val('');
-        $('#modGroup .QQgroupbeizhu').val('');
+	clearVal()      
         $.each(a,function (index,item) {
             $('#modGroup .nowGroup').append('<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+b[index]+'('+item+')'+
                 '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>');

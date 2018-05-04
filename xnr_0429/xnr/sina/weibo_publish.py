@@ -97,7 +97,6 @@ def weibo_publish_with_picture(username,password,text,file):
     publish_by_source_with_picture(text, file)
     driver.quit()
 
-
 def weibo_publish_main(username,password,text,file):
     
     try:
