@@ -18,7 +18,6 @@ class Comment():
 	def get_comment(self):
 		try:
 			for url in self.comment_list:
-				print(url)
 				self.driver.get(url)
 				time.sleep(1)
 				# 退出通知弹窗进入页面
@@ -71,7 +70,7 @@ class Comment():
 					self.list.append({'uid':author_id, 'photo_url':pic_url, 'nick_name':author_name, 'mid':root_mid, 'timestamp':ti, 'text':content,\
 										 'update_time':self.update_time, 'root_text':root_text, 'root_mid':root_mid})
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self,indexName,typeName,list):

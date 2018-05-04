@@ -44,7 +44,7 @@ class Like():
 					}
 					self.list.append(item)
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self,indexName,typeName,list):

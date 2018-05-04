@@ -66,7 +66,7 @@ class Like():
 					item = {'uid':author_id, 'photo_url':pic_url, 'nick_name':author_name, 'timestamp':timestamp, 'text':text, 'update_time':self.update_time, 'root_text':text, 'root_mid':mid}
 					self.list.append(item)
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self, indexName, typeName, list):

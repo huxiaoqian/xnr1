@@ -81,7 +81,7 @@ class Message():
 							root_text = 'None'
 				self.list.append({'uid':sx['author_id'], 'photo_url':sx['pic'], 'nick_name':sx['name'], 'timestamp':messageTime, 'update_time':self.update_time, 'text':text, 'root_text':root_text, 'private_type':private_type})
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self, indexName, typeName, list):
