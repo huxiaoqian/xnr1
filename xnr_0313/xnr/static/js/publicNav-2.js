@@ -14,7 +14,7 @@ function getDaysBefore($time) {
     var b=Date.parse(a)/1000;
     return b;
 }
-//=====================
+//================
 var localTime=new Date();
 Y= localTime.getFullYear()+'-';
 M=(localTime.getMonth()+1<10?'0'+(localTime.getMonth()+1):localTime.getMonth()+1)+'-';

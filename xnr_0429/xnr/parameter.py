@@ -224,7 +224,7 @@ domain_en2ch_dict = {'university':u'高校', 'homeadmin':u'境内机构', 'abroa
                      'lawyer':u'法律机构及人士', 'politician':u'政府机构及人士', 'mediaworker':u'媒体人士',\
                      'activer':u'活跃人士', 'grassroot':u'草根', 'other':u'其他', 'business':u'商业人士'}   
 
-task_source_ch2en = {u'日常发帖':'daily_post',u'热门发帖':'hot_post',u'业务发帖':'business_post',\
+task_source_ch2en = {u'日常发帖':'daily_post',u'热点跟随':'hot_post',u'业务发帖':'business_post',\
                     u'跟随转发':'trace_post',u'智能发帖':'intel_post'}
 
 #facebook

@@ -54,7 +54,7 @@ def send_mail(from_user, to_user, content):
     msg.attach(MIMEText(html, 'html', 'utf-8'))
 
     try:
-        server = smtplib.SMTP(from_user['smtp_server'], 25)
+        server = smtplib.SMTP_SSL(from_user['smtp_server'], 465)
         server.login(from_user['addr'], from_user['password'])
         server.sendmail(from_user['addr'], to_user_addr, msg.as_string())
         server.quit()
@@ -67,16 +67,16 @@ if __name__ == '__main__':
     content = {
         'subject': '扫描二维码以登陆微信虚拟人',
         'text': '当前微信虚拟人【duolahanbao】【已掉线】，请管理员及时扫码进行登陆，以免影响业务谢谢。',
-        'files_path': '',   #支持多个，以逗号隔开
+        'files_path': '/home/ubuntu8/hanmc/666/xnr1/xnr/static/WX/WXXNR0006_c090d97d406a16b461889d6526235d58_qrcode.png',	#支持多个，以逗号隔开
         }
     from_user = {
         'name': '虚拟人项目（微信）',
-        'addr': 'feifanhanmc@163.com',
-        'password': 'han8528520258',
-        'smtp_server': 'smtp.163.com'   
+        'addr': '929673096@qq.com',
+        'password': 'czlasoaiehchbega',
+        'smtp_server': 'smtp.qq.com'   
     }
     to_user = {
         'name': '管理员',
-        'addr': '929673096@qq.com,hanmc@buaa.edu.cn'  #支持多个，以逗号隔开
+        'addr': '929673096@qq.com'  #支持多个，以逗号隔开
     }
     print send_mail(from_user=from_user, to_user=to_user, content=content)

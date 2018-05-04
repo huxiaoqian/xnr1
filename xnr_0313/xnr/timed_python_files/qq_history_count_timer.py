@@ -272,12 +272,13 @@ def cron_compute_mark_qq(current_time):
     current_time_new = datetime2ts(current_date)
 
     xnr_results = es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
-                body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
+                body={'query':{'match_all':{}},'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
         xnr_results = [{'_source':{'xnr_user_no':'QXNR0007','qq_number':'1039598173'}}]
 
     for result in xnr_results:
+	print 'result....',result
         xnr_user_no = result['_source']['xnr_user_no']
         qq_number = result['_source']['qq_number']
         #xnr_user_no = 'WXNR0004'

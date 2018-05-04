@@ -266,8 +266,8 @@ def ajax_show_comment():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
 
     if S_TYPE == 'test':
         task_detail['start_ts'] = datetime2ts('2017-10-01')
@@ -301,8 +301,8 @@ def ajax_show_retweet():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
 
     if S_TYPE == 'test':
         task_detail['start_ts'] = datetime2ts('2017-10-01')
@@ -335,8 +335,8 @@ def ajax_show_private():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
 
     if S_TYPE == 'test':
         task_detail['start_ts'] = datetime2ts('2017-10-01')
@@ -370,8 +370,8 @@ def ajax_show_at():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
 
     if S_TYPE == 'test':
         task_detail['start_ts'] = datetime2ts('2017-10-01')
@@ -395,8 +395,8 @@ def ajax_show_fans():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
     results = get_show_fans(task_detail)
     return json.dumps(results)
 
@@ -405,8 +405,8 @@ def ajax_show_follow():
     task_detail = dict()
     task_detail['xnr_user_no'] = request.args.get('xnr_user_no','')
     task_detail['sort_item'] = request.args.get('sort_item','')
-    task_detail['start_ts'] = request.args.get('start_ts','')
-    task_detail['end_ts'] = request.args.get('end_ts','')
+    task_detail['start_ts'] = int(request.args.get('start_ts',''))
+    task_detail['end_ts'] = int(request.args.get('end_ts',''))
 
     results = get_show_follow(task_detail)
 
@@ -524,8 +524,8 @@ def ajax_create_group():
 @mod.route('/show_retweet_timing_list/')
 def ajax_show_retweet_timing_list():
     xnr_user_no = request.args.get('xnr_user_no','')
-    start_ts = request.args.get('start_ts','')
-    end_ts = request.args.get('end_ts','')
+    start_ts = int(request.args.get('start_ts',''))
+    end_ts = int(request.args.get('end_ts',''))
 
     results = get_show_retweet_timing_list(xnr_user_no,start_ts,end_ts)
 

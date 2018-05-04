@@ -62,10 +62,10 @@ def compute_influence_num(xnr_user_no,current_time_old):
             {'query':{'match_all':{}},'sort':{'user_index':{'order':'desc'}}})['hits']['hits'][0]['_source']['user_index']
 
         influence = float(bci_xnr)/bci_max
-        influence = round(influence,2)  # 保留两位小数
+        influence = round(influence,4)  # 保留两位小数
     except:
-        influence = 0
-
+        influence = 0.0
+    print 'influence_mark..',influence
     return influence
 
 # 渗透力分数
@@ -142,8 +142,8 @@ def compute_penetration_num(xnr_user_no,current_time_old):
     feedback_mark_comment = get_pene_feedback_sensitive(xnr_user_no,'be_comment',current_time)['sensitive_info']
     
     pene_mark = float(feedback_mark_at+feedback_mark_retweet+feedback_mark_comment)/(3*sensitive_value_top_avg)
-    pene_mark = round(pene_mark,2)
-
+    pene_mark = round(pene_mark,4)
+    print 'pene_mark...',pene_mark
     return pene_mark
 
 
@@ -225,7 +225,8 @@ def compute_safe_num(xnr_user_no,current_time_old):
     domain_mark = domain_distribute_dict['mark']
 
     safe_mark = float(active_mark+topic_mark+domain_mark)/3
-    safe_mark = round(safe_mark,2)
+    safe_mark = round(safe_mark,4)
+    print 'safe_mark..',safe_mark
     return safe_mark
 
 def get_tweets_distribute(xnr_user_no):
@@ -326,7 +327,10 @@ def get_follow_group_distribute(xnr_user_no):
         current_date = ts2datetime(current_time)
         r_uid_list_datetime_index_name = r_followers_uid_list_datetime_pre + current_date
         followers_results = r_fans_followers.hget(r_uid_list_datetime_index_name,xnr_user_no)
-        followers_list_today = json.loads(followers_results)
+	if followers_results != None:
+            followers_list_today = json.loads(followers_results)
+        else:
+	    followers_list_today = []
 
     # 所有关注者领域分布
 
@@ -617,7 +621,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
     fans_dict['day_num'] = datetime_count
     fans_dict['total_num'] = fans_total_num_last + datetime_count
 
-    fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,2)
+    fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,4)
 
     #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
 
@@ -688,7 +692,7 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
 
     retweet_dict['day_num'] = es_day_count
     retweet_dict['total_num'] = retweet_total_num_last + es_day_count
-    retweet_dict['growth_rate'] = round(float(es_day_count)/retweet_total_num_last,2)
+    retweet_dict['growth_rate'] = round(float(es_day_count)/retweet_total_num_last,4)
 
     
     return retweet_dict
@@ -764,7 +768,7 @@ def get_influ_commented_num(xnr_user_no,current_time):
     comment_dict['day_num'] = es_day_count
     comment_dict['total_num'] = comment_total_num_last + es_day_count
 
-    comment_dict['growth_rate'] = round(float(es_day_count)/comment_total_num_last,2)
+    comment_dict['growth_rate'] = round(float(es_day_count)/comment_total_num_last,4)
 
     return comment_dict
 
@@ -827,7 +831,7 @@ def get_influ_like_num(xnr_user_no,current_time):
 
     like_dict['day_num'] = es_day_count
     like_dict['total_num'] = like_total_num_last + es_day_count
-    like_dict['growth_rate'] = round(float(es_day_count)/like_total_num_last,2)
+    like_dict['growth_rate'] = round(float(es_day_count)/like_total_num_last,4)
 
     return like_dict
 
@@ -900,7 +904,7 @@ def get_influ_at_num(xnr_user_no,current_time):
 
     at_dict['day_num'] = es_day_count
     at_dict['total_num'] = at_total_num_last + es_day_count
-    at_dict['growth_rate'] = round(float(es_day_count)/at_total_num_last,2)
+    at_dict['growth_rate'] = round(float(es_day_count)/at_total_num_last,4)
 
 
     return at_dict
@@ -976,7 +980,7 @@ def get_influ_private_num(xnr_user_no,current_time):
 
     private_dict['day_num'] = es_day_count
     private_dict['total_num'] = private_total_num_last + es_day_count
-    private_dict['growth_rate'] = round(float(es_day_count)/private_total_num_last,2)
+    private_dict['growth_rate'] = round(float(es_day_count)/private_total_num_last,4)
 
     return private_dict
 
@@ -1010,7 +1014,7 @@ def penetration_total(xnr_user_no,current_time):
     warning_report = get_pene_warning_report_sensitive(xnr_user_no,current_time)
 
     warning_report_total = round(float(warning_report['event']+ \
-        warning_report['user'] + warning_report['tweet'])/3,2)
+        warning_report['user'] + warning_report['tweet'])/3,4)
 
     # total_dict['follow_group'] = round(follow_group['sensitive_info'],2)
     # total_dict['fans_group'] = round(fans_group['sensitive_info'],2)
@@ -1074,7 +1078,7 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
     }
     es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
-    sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],2)
+    sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],4)
 
     if sensitive_value == None:
         sensitive_value = 0.0
@@ -1270,8 +1274,11 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
         
         weibo_report_management_index_name = weibo_report_management_index_name_pre + current_date
         
-        es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
+	try: 
+            es_sensitive_result = es.search(index=weibo_report_management_index_name,doc_type=weibo_report_management_index_type,\
             body=query_body)['hits']['hits']
+        except:
+	    es_sensitive_result = []
 
 
         if es_sensitive_result:    
@@ -1383,9 +1390,9 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
         tweet_sensitive_avg = 0.0
 
     if S_TYPE == 'test':
-        event_sensitive_avg = round(random.random(),2)
-        user_sensitive_avg = round(random.random(),2)
-        tweet_sensitive_avg = round(random.random(),2)
+        event_sensitive_avg = round(random.random(),4)
+        user_sensitive_avg = round(random.random(),4)
+        tweet_sensitive_avg = round(random.random(),4)
 
     sensitive_report_dict['event'] = event_sensitive_avg
     sensitive_report_dict['user'] = user_sensitive_avg
@@ -1520,7 +1527,7 @@ def cron_compute_mark(current_time):
     
 if __name__ == '__main__':
 
-
+    ''' 
     current_time=int(time.time()-DAY)
     # current_time_now = int(datetime2ts('2017-10-07'))
     # for i in range(5,-1,-1):
@@ -1530,4 +1537,14 @@ if __name__ == '__main__':
 
     cron_compute_mark(current_time)
     # get_tweets_distribute(xnr_user_no='WXNR0004')
+    '''
 
+    current_time=int(time.time()-DAY)
+    start_time = datetime2ts('2018-04-05')
+    
+    num_day = (current_time-start_time)/(24*3600)
+    for i in range(num_day):
+	timestamp = start_time + i*24*3600
+	print 'time......',time.strftime('%Y-%m-%d',time.localtime(timestamp))
+        cron_compute_mark(timestamp)
+    

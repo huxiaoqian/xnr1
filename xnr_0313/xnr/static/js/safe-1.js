@@ -178,8 +178,8 @@ function safe_7day(data) {
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
             nearData.push(item['safe'][0]);
-        })
-    };
+        });
+    }
     var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
     var option = {
         backgroundColor:'transparent',

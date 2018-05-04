@@ -33,7 +33,7 @@ from global_utils import r_fans_uid_list_datetime_pre,r_fans_count_datetime_xnr_
 #from utils import xnr_user_no2uid,uid2nick_name_photo
 from global_config import S_TYPE,S_DATE,S_UID,S_DATE_BCI
 from time_utils import ts2datetime,datetime2ts,get_flow_text_index_list,get_xnr_flow_text_index_list,\
-                        get_timeset_indexset_list
+                        get_timeset_indexset_list,get_new_xnr_flow_text_index_list
 from parameter import WEEK,DAY,MAX_SEARCH_SIZE,PORTRAIT_UID_LIST,PORTRAI_UID,FOLLOWERS_TODAY,\
                         TOP_ASSESSMENT_NUM,ACTIVE_UID,TOP_WEIBOS_LIMIT
 
@@ -263,6 +263,7 @@ def get_tweets_distribute(xnr_user_no):
     topic_list_followers_count = Counter(topic_list_followers)
 
     # 虚拟人topic分布
+    '''
     try:
         xnr_results = es_user_portrait.get(index=portrait_index_name,doc_type=portrait_index_type,\
             id=uid)['_source']
@@ -273,6 +274,39 @@ def get_tweets_distribute(xnr_user_no):
     except:
         topic_xnr_count = {}
         #topic_distribute_dict['topic_xnr'] = topic_xnr_count
+    '''
+    index_name_list = get_new_xnr_flow_text_index_list(time.time()-24*3600)
+    topic_string = []
+
+    for index_name_day in index_name_list:
+
+        query_body = {
+            'query':{
+                'bool':{
+                    'must':[
+                        
+                        {'term':{'xnr_user_no':xnr_user_no}}
+                    ]
+                }
+            },
+            'size':TOP_WEIBOS_LIMIT,
+            'sort':{'timestamp':{'order':'desc'}}
+        }
+        try:
+            #print 'index_name_day:::',index_name_day
+
+            es_results = es.search(index=index_name_day,doc_type=xnr_flow_text_index_type,body=query_body)['hits']['hits']
+            #print 'es_results::',es_results
+            for topic_result in es_results:
+                #print 'topic_result::',topic_result
+                topic_result = topic_result['_source']
+                topic_field = topic_result['topic_field_first'][:3]
+            topic_string.append(topic_field)
+
+        except:
+            continue
+
+    topic_xnr_count = Counter(topic_string)
 
     # 整理雷达图数据
     # if topic_xnr_count:
@@ -1546,14 +1580,14 @@ def cron_compute_mark(current_time):
 if __name__ == '__main__':
 
 
-    current_time=int(time.time()-DAY)
-    cron_compute_mark(current_time)
-    '''
-    current_time_now = int(time.time())
-    for i in range(2,-1,-1):
+    #current_time=int(time.time()-DAY)
+    #cron_compute_mark(current_time)
+    
+    current_time_now = int(time.time()-DAY)
+    for i in range(3,-1,-1):
 
         current_time = current_time_now - i*24*3600
         print 'time......',time.strftime('%Y-%m-%d',time.localtime(current_time))
 
         cron_compute_mark(current_time)
-     '''
+     

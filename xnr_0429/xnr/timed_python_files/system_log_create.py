@@ -28,7 +28,10 @@ from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                          weibo_log_management_index_name,weibo_log_management_index_type,\
                          qq_xnr_index_name,qq_xnr_index_type,\
                          qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,\
-                         qq_report_management_index_name,qq_report_management_index_type
+                         qq_report_management_index_name,qq_report_management_index_type,\
+                         wx_xnr_index_name,wx_xnr_index_type,\
+                         wx_xnr_history_count_index_name,wx_xnr_history_count_index_type,\
+                         wx_report_management_index_name,wx_report_management_index_type
 
 
 #连接数据库,获取账户列表
@@ -497,6 +500,108 @@ def count_qq_report_number(start_time,end_time,xnr_user_no_list):
     return number
 
 
+#微信虚拟人创建
+def create_weixinxnr_number(user_account,start_time,end_time):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'submitter':user_account}},
+                            {'range':{'create_ts':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es_xnr.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    number=len(xnr_user_no_list)
+    return number	
+
+
+#微信虚拟人列表
+def get_user_weixinxnr_list(user_account):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'submitter':user_account}
+                }
+            }
+        },
+        'size':USER_XNR_NUM
+    }
+    try:
+        user_result=es_xnr.search(index=wx_xnr_index_name,doc_type=wx_xnr_index_type,body=query_body)['hits']['hits']
+        xnr_user_no_list=[]
+        for item in user_result:
+            xnr_user_no_list.append(item['_source']['xnr_user_no'])
+    except:
+        xnr_user_no_list=[]
+    return xnr_user_no_list
+
+
+#微信发言量
+def count_weixinxnr_daily_post(date_time,xnr_user_no_list):
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'xnr_user_no':xnr_user_no_list}},
+                            {'term':{'date_time':date_time}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    # qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + date_time
+    try:
+        user_result=es_xnr.search(index=wx_xnr_history_count_index_name,doc_type=wx_xnr_history_count_index_type,body=query_body)['hits']['hits']
+        number=0
+        for item in user_result:
+            number=number+item['_source']['daily_post_num']
+    except:
+        number=0
+    return number 
+
+#微信上报
+def count_weixin_report_number(start_time,end_time,xnr_user_no_list)
+    query_body={
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'terms':{'xnr_user_no':xnr_user_no_list}},
+                            {'range':{'report_time':{'gte':start_time,'lt':end_time}}}
+                        ]
+                    }
+                }
+            }
+        },
+        'size':MAX_VALUE
+    }
+    try:
+        es_result=es_xnr.search(index=wx_report_management_index_name,doc_type=wx_report_management_index_type,body=query_body)['hits']['hits']
+        number=len(es_result)
+    except:
+        number=0
+    return number
+
+
 #日志生成文件组织
 def create_user_log():
     now_time=int(time.time())
@@ -683,7 +788,33 @@ def create_user_log():
             log_content_dict[u'QQ-上报']=qq_report_number
         else:
             pass
-            
+      
+
+###########################################################################
+#微信部分日志
+###########################################################################
+        #账户是否创建QQ虚拟人
+        weixin_xnr_number=create_weixinxnr_number(user_account,start_time,end_time)
+        if weixin_xnr_number > 0:
+            log_content_dict[u'创建微信虚拟人']=weixin_xnr_number
+        else:
+            pass
+
+        weixin_xnr_user_no_list=get_user_weixinxnr_list(user_account)
+
+        #今日发帖量
+        weixinxnr_daily_post = count_weixinxnr_daily_post(operate_date,weixin_xnr_user_no_list) 
+        if weixinxnr_daily_post > 0:
+            log_content_dict[u'微信-发言']=weixinxnr_daily_post
+        else:
+            pass
+
+        #上报数量
+        weixin_report_number=count_weixin_report_number(start_time,end_time,weixin_xnr_user_no_list)
+        if weixin_report_number > 0:
+            log_content_dict[u'微信-上报']=weixin_report_number
+        else:
+            pass
 
         log_content=json.dumps(log_content_dict)
 
