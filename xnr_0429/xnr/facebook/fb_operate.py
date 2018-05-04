@@ -55,7 +55,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.close()
+			self.driver.quit()
 
 	def mention(self, username, text):
 		try:
@@ -90,7 +90,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.close()
+			self.driver.quit()
 
 	def follow(self, uid):
 		try:
@@ -110,7 +110,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 	def not_follow(self, uid):
 		try:
@@ -152,7 +152,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 # 私信(未关注)
 	def send_message(self, uid, text):
@@ -175,7 +175,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 # 私信(已关注)
 	# def send_message2(self, uid, text):
@@ -189,7 +189,7 @@ class Operation():
 	# 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(text)
 	# 		driver.find_element_by_xpath('//div[@class="_1mf _1mj"]').send_keys(Keys.ENTER)
 	# 	finally:
-	# 		driver.close()
+	# 		driver.quit()
 
 
 # 点赞
@@ -237,7 +237,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.close()
+			self.driver.quit()
 
 # 评论
 	def comment(self, uid, fid, text):
@@ -290,7 +290,7 @@ class Operation():
 			return [False, e]
 		finally:
 			time.sleep(3)
-			self.driver.close()
+			self.driver.quit()
 
 # 分享
 	def share(self, uid, fid, text):
@@ -360,7 +360,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.close()
+			self.driver.quit()
 
 #添加好友
 	def add_friend(self, uid):
@@ -372,7 +372,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 #确认好友请求
 	def confirm(self, uid):
@@ -387,7 +387,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 #删除好友
 	def delete_friend(self, uid):
@@ -402,7 +402,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 if __name__ == '__main__':
 	operation = Operation('13041233988','han8528520258')

@@ -27,7 +27,7 @@ class Online():
 			dict = dict({name,status} for name,status in z)
 			print(dict)
 		finally:
-			self.driver.close()
+			self.driver.quit()
 
 if __name__ == '__main__':
 	online = Online('8617078448226','xnr123456')
