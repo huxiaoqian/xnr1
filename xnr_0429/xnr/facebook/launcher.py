@@ -15,14 +15,14 @@ class Launcher():
 		#模拟窗口
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
-		# 213环境使用########
-		cap = DesiredCapabilities().FIREFOX
-		cap["marionette"] = False
-		self.driver = webdriver.Firefox(capabilities=cap)
-		###############
-		# 安管中心环境使用####
-		# self.driver = webdriver.Firefox()
-		###############
+		try:
+			# 安管中心环境使用####
+			self.driver = webdriver.Firefox()
+		except:
+			# 213环境使用########
+			cap = DesiredCapabilities().FIREFOX
+			cap["marionette"] = False
+			self.driver = webdriver.Firefox(capabilities=cap)
 		self.req = requests.Session()
 
 	def login(self):

@@ -19,14 +19,14 @@ class Screen():
 		self.display.start()
 
 	def login(self):
-		# 213环境使用########
-		cap = DesiredCapabilities().FIREFOX
-		cap["marionette"] = False
-		driver = webdriver.Firefox(capabilities=cap)
-		###############
-		# 安管中心环境使用####
-		# driver = webdriver.Firefox()
-		###############
+		try:
+			# 安管中心环境使用####
+			driver = webdriver.Firefox()
+		except:
+			# 213环境使用########
+			cap = DesiredCapabilities().FIREFOX
+			cap["marionette"] = False
+			driver = webdriver.Firefox(capabilities=cap)
 		driver.get(self.login_url)
 		time.sleep(1)
 		driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(self.username)

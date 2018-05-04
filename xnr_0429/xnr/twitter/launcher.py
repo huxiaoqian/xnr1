@@ -21,14 +21,15 @@ class Launcher():
 		self.display.start()
 	def login(self):
 
-		# 213环境使用########
-		cap = DesiredCapabilities().FIREFOX
-		cap["marionette"] = False
-		driver = webdriver.Firefox(capabilities=cap)
-		###############
-		# 安管中心环境使用####
-		# driver = webdriver.Firefox()
-		###############
+		# 登录
+		try:
+			# 安管中心环境使用####
+			driver = webdriver.Firefox()
+		except:
+			# 213环境使用########
+			cap = DesiredCapabilities().FIREFOX
+			cap["marionette"] = False
+			driver = webdriver.Firefox(capabilities=cap)
 		driver.get('https://twitter.com/login')
 		time.sleep(3)
 		driver.find_element_by_xpath('//input[@class="js-username-field email-input js-initial-focus"]').send_keys(self.username)

@@ -7,7 +7,6 @@ import time
 from pyvirtualdisplay import Display
 from launcher import Launcher
 from elasticsearch import Elasticsearch
-
 import re
 import random
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -43,9 +42,14 @@ for xnr in xnrData:
 	account = xnr['fb_mail_account'] if xnr['fb_mail_account'] else xnr['fb_phone_account']
 	password = xnr['password']
 	# 登录
-	cap = DesiredCapabilities().FIREFOX
-	cap["marionette"] = False
-	driver = webdriver.Firefox(capabilities=cap)
+	try:
+		# 安管中心环境使用####
+		driver = webdriver.Firefox()
+	except:
+		# 213环境使用########
+		cap = DesiredCapabilities().FIREFOX
+		cap["marionette"] = False
+		driver = webdriver.Firefox(capabilities=cap)
 	driver.get('https://www.facebook.com')
 	driver.find_element_by_xpath('//input[@id="email"]').send_keys(account)
 	driver.find_element_by_xpath('//input[@id="pass"]').send_keys(password)

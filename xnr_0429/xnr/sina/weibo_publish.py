@@ -24,14 +24,14 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 display = Display(visible=0, size=(1024,768))
 display.start()
 
-# 213环境使用########
-cap = DesiredCapabilities().FIREFOX
-cap["marionette"] = False
-driver = webdriver.Firefox(capabilities=cap)
-###############
-# 安管中心环境使用####
-# driver = webdriver.Firefox()
-###############
+try:
+    # 安管中心环境使用####
+    driver = webdriver.Firefox()
+except:
+    # 213环境使用########
+    cap = DesiredCapabilities().FIREFOX
+    cap["marionette"] = False
+    driver = webdriver.Firefox(capabilities=cap)
 
 source_list = [
 "http://widget.weibo.com/dialog/PublishWeb.php?refer=y&app_src=3o33sO&button=pubilish", # 发布窗
