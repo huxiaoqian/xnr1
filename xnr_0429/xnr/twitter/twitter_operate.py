@@ -103,7 +103,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 	def do_favourite(self, tid):
 		try:
@@ -132,7 +132,7 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			driver.close()
+			driver.quit()
 
 
 

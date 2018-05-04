@@ -19,16 +19,17 @@ from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace
                          be_retweet_index_name_pre,be_retweet_index_type,\
                          es_comment,comment_index_name_pre,comment_index_type,\
                          be_comment_index_name_pre,be_comment_index_type,\
-                         weibo_bci_history_index_name,weibo_bci_history_index_type,\
+                         es_user_profile,weibo_bci_history_index_name,weibo_bci_history_index_type,\
                          weibo_sensitive_history_index_name,weibo_sensitive_history_index_type,\
                          es_user_portrait,weibo_bci_index_name_pre,weibo_bci_index_type
 
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
-from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
-#from global_utils import retweet_redis_dict,comment_redis_dict
+from global_config import S_TYPE,WEIBO_COMMUNITY_DATE,R_BEGIN_TIME
+from global_utils import retweet_redis_dict,comment_redis_dict
 
+r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
 #计算当前日期周期内的community index
 def get_community_index(date_time):
@@ -83,7 +84,7 @@ def get_evaluate_max(index_name,index_type,field):
         'sort':[{field: {'order': 'desc'}}]
         }
     try:
-        result = es_flow_text.search(index=index_name, doc_type=index_type, body=query_body)['hits']['hits']
+        result = es_user_profile.search(index=index_name, doc_type=index_type, body=query_body)['hits']['hits']
         max_evaluate = result[0]['_source'][field]
     except Exception, e:
         raise e
@@ -142,7 +143,8 @@ def get_influence_value(date_time,field_name,uid_list):
     try:
         result = es_user_portrait.mget(index=bci_index_name,doc_type=weibo_bci_index_type,body={'ids':uid_list},_source=True)['docs']
         for item in result:
-        	index_value_list.append(item['_source']['user_index'])
+            if result['found'] == True:
+                index_value_list.append(item['_source']['user_index'])
     except Exception,e:
         print '影响力查询错误：：',e
     return index_value_list
@@ -167,9 +169,9 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
 
     print 'retweet_redis::',retweet_redis
     print 'comment_redis::',comment_redis
-
-    retweet_result = retweet_redis.hegtall(nodes)
-    comment_result = comment_redis.hegtall(nodes)
+    print 'redis_test::',retweet_redis.scan(0,1)
+    retweet_result = retweet_redis.hgetall(nodes)
+    comment_result = comment_redis.hgetall(nodes)
 
     print 'retweet_result:::',retweet_result
     print 'comment_result:::',comment_result
@@ -194,7 +196,11 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
     sub_g = G_i.subgraph(nodes)
 
     result['density'] = round(nx.density(sub_g),4)
-    result['cluster'] = round(nx.average_clustering(sub_g),4)
+    #print 'ave_cluster::',nx.average_clustering(sub_g)
+    try:
+        result['cluster'] = round(nx.average_clustering(sub_g),4)
+    except:
+        result['cluster'] = 0
     result['transitivity'] = round(nx.transitivity(sub_g),4)
 
 

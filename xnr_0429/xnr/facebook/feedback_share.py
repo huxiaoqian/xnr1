@@ -62,7 +62,7 @@ class Share():
 								 'text':content, 'update_time':self.update_time, 'root_text':content, 'root_mid':root_mid}
 						self.list.append(item)
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 		
 	def save(self, indexName, typeName, list):

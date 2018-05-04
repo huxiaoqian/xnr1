@@ -58,7 +58,7 @@ class Friend():
 					pass
 				self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url, 'update_time':self.update_time})
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self, indexName, typeName, list):

@@ -56,7 +56,8 @@ function QQgroup(data) {
 }
 function personEarly(personEarly_QQ) {
     var QQperson=eval(personEarly_QQ);
-    var sourcePER=QQperson.hits.hits;
+    var sourcePER;
+    try{sourcePER=QQperson.hits.hits}catch(e){sourcePER=[]};
     $('#historyNews').bootstrapTable('load', sourcePER);
     $('#historyNews').bootstrapTable({
         data:sourcePER,
@@ -149,7 +150,7 @@ $('#sure_post').on('click',function () {
         group.push($(item).parent().attr('title'));
     });
     if (value==''||group.length==0){
-        $('#pormpt p').text('请检查消息内容，不能为空。');
+        $('#pormpt p').text('请检查消息内容（不能为空）和QQ群（要选择群组）');
         $('#pormpt').modal('show');
     }else {
         var post_news_url='/qq_xnr_operate/send_qq_group_message/?text='+Check(value)+'&group='+group.join('，')+
