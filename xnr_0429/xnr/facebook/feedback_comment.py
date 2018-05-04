@@ -71,6 +71,7 @@ class Comment():
 										 'update_time':self.update_time, 'root_text':root_text, 'root_mid':root_mid})
 		finally:
 			self.driver.quit()
+			self.launcher.display.stop()
 		return self.list
 
 	def save(self,indexName,typeName,list):
