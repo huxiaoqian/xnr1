@@ -51,17 +51,18 @@ function has_table_QQ(has_data_QQ) {
             },
             {
                 title: "QQ群",//标题
-                field: "qq_groups",//键名
+                field: "group_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.qq_groups == '' || row.qq_groups == 'null' || row.qq_groups == 'unknown'||!row.qq_groups||row.qq_groups.length==0) {
-                        return '未知';
+                   if (row.group_info == '' || row.group_info == 'null' || row.group_info == 'unknown'
+                        ||!row.group_info||isEmptyObject(row.group_info)) {
+                        return '暂无';
                     } else {
-                        // return row.qq_groups.join('\n');
-                        return row.qq_groups.join('<br/>');
+         		var h=Object.keys(JSON.parse(row.group_info));
+                        return h.join('<br/>');
                     };
                 }
             },

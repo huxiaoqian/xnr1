@@ -80,10 +80,12 @@ class MyBot(Bot):
         #登陆
         print 'starting %s ...' % self.wxbot_id
         print 'before login'
-        print self.cache_path
-        print self.console_qr
+        #print self.cache_path
+        #print self.console_qr
         print self.qr_path
+        print u'#如果下面没有SUCCESS打印出来，多半是该账号网页版被封了……还可能是因为certifi==2015.04.28被替换掉了'
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
+        print 'SUCCESS'
         print 'after login' #如果此条没有打印出来，多半是该账号网页版被封了……
         #还可能是因为certifi==2015.04.28被替换掉了
 
@@ -116,11 +118,11 @@ class MyBot(Bot):
         self.setGroupMembersRN()
 
     def my_qr_callback(self, **kwargs):
-        print 'trying to save qrcode picture'
+        #print 'trying to save qrcode picture'
         with open(self.qr_path, 'wb') as fp:
             fp.write(kwargs['qrcode'])
         #可以将二维码图片发送到邮箱之类的, 但是登陆也可能会使用缓存登陆，不一定会产生新的二维码图片
-        print 'save qrcode picture'
+        #print 'save qrcode picture'
     
     def my_login_callback(self, **kwargs):
         d = r.get(self.wxbot_id)
