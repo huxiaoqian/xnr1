@@ -444,6 +444,7 @@
 	var k=1;
 	$('.hasAddQQ').on('click',function () {
 		if (k==1){
+            $('.hasAddQQ').html('<b class="icon icon-minus"></b>&nbsp;收起');
 			$('.addQQperson').slideDown(30,function(){
 				k=0;
 				// 滚动到底部
@@ -452,6 +453,7 @@
 				$('html, body, #containe').animate({scrollTop: $(document).height()},'slow');
 			});
 		}else {
+            $('.hasAddQQ').html('<b class="icon icon-plus"></b>&nbsp;添加');
 			$('.addQQperson').slideUp(20);
 			k=1;
 		}
@@ -471,10 +473,20 @@
 		var wxPower=$('.QQoptions .wxPower').val();
 		var wxremark=$('.QQoptions .wxRemark').val();
 		var email=$('.QQoptions .email').val();
-		if (!(wx_id||wxPower)){
+
+        // 判断是否为QQ邮箱
+
+        // if (!(wx_id||wxPower)){
+		if (wx_id == '' || wxPower == '' || email=='' ){
 			$('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
 			$('#succee_fail').modal('show');
-		}else if(wxremark){
+            return false;  //停止注册
+        // }else if(wxremark){
+		}else if(email.substr(email.length-7) != '@qq.com'){
+            $('#succee_fail #words').text('请检查您填写的邮箱格式。（只能为qq邮箱）');
+            $('#succee_fail').modal('show');
+            return false;  //停止注册
+        }else if(wxremark !=''){
 			// 有备注时
 			var wxAdd_url='/wx_xnr_manage/create/?wx_id='+wx_id+'&submitter='+admin+'&mail='+email+'&access_id='+wxPower+'&remark='+wxremark;
 			// console.log(wxAdd_url)
