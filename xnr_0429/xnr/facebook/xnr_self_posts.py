@@ -181,7 +181,7 @@ for xnr in xnrData:
 			es.index(index=index_name, doc_type=mapping.new_xnr_flow_text_index_type, id=dict['fid'], body=dict)
 
 	# 退出
-	driver.close()
+	driver.quit()
 
 
 

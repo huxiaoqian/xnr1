@@ -61,7 +61,7 @@ class Share():
 				except:
 					pass
 		finally:
-			self.driver.close()
+			self.driver.quit()
 		return self.list
 
 	def save(self,indexName,typeName,list):

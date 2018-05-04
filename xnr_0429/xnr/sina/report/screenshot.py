@@ -4,6 +4,7 @@
 from selenium import webdriver
 import time
 from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -18,7 +19,14 @@ class Screen():
 		self.display.start()
 
 	def login(self):
-		driver = webdriver.Firefox()
+		# 213环境使用########
+		cap = DesiredCapabilities().FIREFOX
+		cap["marionette"] = False
+		driver = webdriver.Firefox(capabilities=cap)
+		###############
+		# 安管中心环境使用####
+		# driver = webdriver.Firefox()
+		###############
 		driver.get(self.login_url)
 		time.sleep(1)
 		driver.find_element_by_xpath('//input[@id="loginName"]').send_keys(self.username)

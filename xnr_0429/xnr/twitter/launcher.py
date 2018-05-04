@@ -7,6 +7,7 @@ from tweepy import OAuthHandler
 import requests
 import time
 from pyvirtualdisplay import Display
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 class Launcher():
 	def __init__(self, username, password, consumer_key, consumer_secret, access_token, access_secret):
@@ -19,8 +20,15 @@ class Launcher():
 		self.display = Display(visible=0,size=(1024,768))
 		self.display.start()
 	def login(self):
-		driver = webdriver.Firefox()
-		#driver = webdriver.Chrome()
+
+		# 213环境使用########
+		cap = DesiredCapabilities().FIREFOX
+		cap["marionette"] = False
+		driver = webdriver.Firefox(capabilities=cap)
+		###############
+		# 安管中心环境使用####
+		# driver = webdriver.Firefox()
+		###############
 		driver.get('https://twitter.com/login')
 		time.sleep(3)
 		driver.find_element_by_xpath('//input[@class="js-username-field email-input js-initial-focus"]').send_keys(self.username)

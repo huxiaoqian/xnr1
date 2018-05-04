@@ -35,7 +35,7 @@ class Userinfo:
 		description = driver.find_element_by_xpath('//div[@id="pagelet_bio"]/div/ul/li').text
 
 		dict = {'id':id,'career':career,'location':location,'age':age,'description':description}
-		print(dict)
+		driver.quit()
 		return dict
 
 if __name__ == '__main__':
