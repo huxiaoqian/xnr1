@@ -312,10 +312,11 @@ def get_safe_qq_today(xnr_user_no):
     '''
 
     current_date = ts2datetime(int(time.time()))
-    r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
+
+    r_qq_speak_num = r_qq_speak_num_pre + current_date
 
     try:
-        today_count = int(r.hget(r_qq_speak_num))
+        today_count = int(r.hget(r_qq_speak_num, qq_number))
     except:
         today_count = 0
 

@@ -146,13 +146,13 @@ def send_message(xnr_qq_number,group,content):
         # result = sendfromweb(xnr_qq_number,g,content)
         result = sendfromweb_v2(xnr_qq_number,g,content)        #多端口方法
 
-        # redis计数 ： qq_speak_num_1039598173_2018-05-04  - 1
-        r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
+        # redis计数 ： qq_speak_num_2018-05-04  - 1
+        r_qq_speak_num = r_qq_speak_num_pre + current_date
         try:
-            speak_num = r.hget(r_qq_speak_num)
+            speak_num = r.hget(r_qq_speak_num,xnr_qq_number)
         except:
             speak_num = 0
-        r.hset(r_qq_speak_num,speak_num+1)
+        r.hset(r_qq_speak_num,xnr_qq_number,speak_num+1)
 
 
     # print result
