@@ -10,7 +10,7 @@ from global_config import S_TYPE,QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT, QQ_S_DA
 from global_utils import qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,es_xnr as es,\
                 group_message_index_name_pre,group_message_index_type,qq_xnr_index_name,\
                 qq_xnr_index_type,qq_xnr_history_be_at_index_type,qq_xnr_history_sensitive_index_type,\
-                weibo_xnr_index_name,weibo_xnr_index_type,es_xnr
+                weibo_xnr_index_name,weibo_xnr_index_type,es_xnr, r_qq_speak_num_pre, r
 from qq_xnr_manage_mappings import qq_xnr_history_count_mappings
 from time_utils import ts2datetime,datetime2ts,get_groupmessage_index_list
 from parameter import DAY,MAX_VALUE,MAX_SEARCH_SIZE
@@ -27,6 +27,7 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
     group_message_index_name = group_message_index_name_pre + current_date
     qq_xnr_history_count_index_name = qq_xnr_history_count_index_name_pre + last_date
 
+    '''
     # 得到当天发帖数量
     query_body = {
         'query':{
@@ -46,7 +47,14 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
     else:
         print 'es index rank error'
         today_count = 0
+    '''
+    current_date = ts2datetime(int(time.time()))
+    r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
 
+    try:
+        today_count = int(r.hget(r_qq_speak_num))
+    except:
+        today_count = 0
 
     # 得到历史发言总数
     try:
@@ -59,6 +67,7 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
         total_count_history = 0
 
     total_count_totay = total_count_history + today_count
+    
 
     item_dict = dict()
     item_dict['total_post_num'] = total_count_totay
@@ -75,7 +84,7 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
         },
         'aggs':{
             'all_speakers':{
-                'terms':{'field':'speaker_qq_number',"order" : { "_count" : "desc" }}
+                'terms':{'field':'speaker_nickname',"order" : { "_count" : "desc" }}
             }
         }
     }
@@ -272,12 +281,13 @@ def cron_compute_mark_qq(current_time):
     current_time_new = datetime2ts(current_date)
 
     xnr_results = es.search(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,\
-                body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
+                body={'query':{'match_all':{}},'_source':['xnr_user_no','qq_number'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
         xnr_results = [{'_source':{'xnr_user_no':'QXNR0007','qq_number':'1039598173'}}]
 
     for result in xnr_results:
+	#print result
         xnr_user_no = result['_source']['xnr_user_no']
         qq_number = result['_source']['qq_number']
         #xnr_user_no = 'WXNR0004'

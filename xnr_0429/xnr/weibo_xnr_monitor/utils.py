@@ -14,7 +14,7 @@ from xnr.global_utils import es_flow_text,flow_text_index_name_pre,flow_text_ind
                              weibo_xnr_corpus_index_name,weibo_xnr_corpus_index_type,\
                              weibo_xnr_index_name,weibo_xnr_index_type,\
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
-                             weibo_bci_index_name_pre,weibo_bci_index_type,\
+                             es_user_portrait,weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_keyword_count_index_name,weibo_keyword_count_index_type
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,follow_tweet_func                             
 from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN
@@ -422,6 +422,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     now_time = time.time()
     test_time_gap = datetime2ts(ts2datetime(now_time)) - datetime2ts(S_DATE_BCI)
     #print 'from, to:', ts2date(start_time), ts2date(end_time)
+    today_date_time = end_time - DAY
     if S_TYPE == 'test':
         today_date_time = datetime2ts(S_DATE_BCI)
         start_time = start_time - test_time_gap
@@ -431,10 +432,10 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     to_date_ts=datetime2ts(ts2datetime(end_time))
     #print 's_date_bci:', S_DATE_BCI
     #print 'from_date_ts, to_date_ts:', ts2date(from_date_ts), ts2date(to_date_ts)
-    
+     
     bci_index_name = weibo_bci_index_name_pre + ''.join(ts2datetime(today_date_time).split('-'))
-    #print 'bci_index_name:', bci_index_name
-    #print 'end_time:', ts2date(end_time)
+    print 'bci_index_name:', bci_index_name
+    print 'end_time:', ts2date(end_time)
 
     #step1: users condition
     #make sure the users range by classify choice
@@ -449,7 +450,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
     print userlist,classify_id,condition_list
 
     #step 2:lookup users 
-    user_max_index=count_maxweibouser_influence(end_time)
+    user_max_index=count_maxweibouser_influence(end_time - DAY)
     results = []
     for item in condition_list:
         query_body={
@@ -460,7 +461,7 @@ def lookup_active_weibouser(classify_id,weiboxnr_id,start_time,end_time):
             }
         try:
             #print 'query_body:', query_body
-            flow_text_exist=es_flow_text.search(index=bci_index_name,\
+            flow_text_exist=es_user_portrait.search(index=bci_index_name,\
                     doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
             search_uid_list = [item['_source']['user'] for item in flow_text_exist]
             weibo_user_exist = es_user_profile.search(index=profile_index_name,\

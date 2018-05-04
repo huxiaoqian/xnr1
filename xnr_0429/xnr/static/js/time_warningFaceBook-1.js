@@ -114,7 +114,7 @@ function calendar(data){
                     '<div class="post_perfect">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                    '       <div class="center_rel">'+
+                    '       <div class="">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
                     '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
@@ -196,7 +196,7 @@ function calendar(data){
                         '<div class="post_perfect" style="margin:10px auto;">'+
                         '   <div class="post_center-hot">'+
                         '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                        '       <div class="center_rel">'+
+                        '       <div class="">'+
                         '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
                         '           <a class="_id" style="display: none;">'+dataArray[i]._id+'</a>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
@@ -285,7 +285,7 @@ function calendar(data){
                     '<div class="post_perfect" style="margin:10px auto;">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                    '       <div class="center_rel">'+
+                    '       <div class="">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
                     '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
@@ -364,7 +364,7 @@ function calendar(data){
                     '<div class="post_perfect" style="margin:10px auto;">'+
                     '   <div class="post_center-hot">'+
                     '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                    '       <div class="center_rel">'+
+                    '       <div class="">'+
                     '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
                     '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                     '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+
@@ -449,7 +449,7 @@ function calendar(data){
                 '<div class="post_perfect" style="margin:10px auto;">'+
                 '   <div class="post_center-hot">'+
                 '       <img src="/static/images/post-6.png" alt="" class="center_icon">'+
-                '       <div class="center_rel">'+
+                '       <div class="">'+
                 '           <a class="center_1" href="###" style="color: #f98077;">'+name+'</a>&nbsp;'+
                 '           <a class="_id" style="display: none;">'+dataArray[i+a]._id+'</a>'+
                 '           <span class="time" style="font-weight: 900;color:blanchedalmond;" title="日期"><i class="icon icon-lightbulb"></i>&nbsp;&nbsp;时间节点：'+time_2+'</span> &nbsp;&nbsp;'+

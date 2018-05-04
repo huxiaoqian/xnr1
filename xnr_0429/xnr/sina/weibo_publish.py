@@ -19,15 +19,19 @@ from selenium.webdriver.common.action_chains import ActionChains
 from BeautifulSoup import BeautifulSoup
 import random
 from pyvirtualdisplay import Display
-#from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 display = Display(visible=0, size=(1024,768))
 display.start()
 
-#cap = DesiredCapabilities().FIREFOX
-#cap["marionette"] = False
-#driver = webdriver.Firefox(capabilities=cap)
-driver = webdriver.Firefox()
+try:
+    # 安管中心环境使用####
+    driver = webdriver.Firefox()
+except:
+    # 213环境使用########
+    cap = DesiredCapabilities().FIREFOX
+    cap["marionette"] = False
+    driver = webdriver.Firefox(capabilities=cap)
 
 source_list = [
 "http://widget.weibo.com/dialog/PublishWeb.php?refer=y&app_src=3o33sO&button=pubilish", # 发布窗
@@ -87,12 +91,13 @@ def weibo_publish(username,password,text):
     login_m_weibo_cn(username, password)
     publish_by_source(text)
     driver.quit()
+    display.stop()
 
 def weibo_publish_with_picture(username,password,text,file):
     login_m_weibo_cn(username, password)
     publish_by_source_with_picture(text, file)
     driver.quit()
-
+    display.stop()
 
 def weibo_publish_main(username,password,text,file):
     

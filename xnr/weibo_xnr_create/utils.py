@@ -573,8 +573,8 @@ def get_save_step_two(task_detail):
     item_exist['create_status'] = 1 # 第二步完成
     item_exist['create_time'] = int(time.time())
 
-    task_source = take_detail['task_source']
-
+    task_source = task_detail['task_source']
+    task_id = ''
     if task_source == 'new':
 
         user_no_current = get_wb_xnr_no()
