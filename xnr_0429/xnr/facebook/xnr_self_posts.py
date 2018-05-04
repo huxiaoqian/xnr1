@@ -188,7 +188,7 @@ for xnr in xnrData:
 	driver.quit()
 
 
-
+display.stop()
 
 
 

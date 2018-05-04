@@ -699,6 +699,9 @@ opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
 
+# 记录qq用户每天发言数
+r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_1039598173_2018-05-04
+
 # 存储qq端口、授权码等消息,用于后台主进程调用
 r_qq_receive_message = 'r_qq_receive_message'
 
