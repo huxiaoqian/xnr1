@@ -51,7 +51,7 @@ wx_xnr_index_name = 'wx_xnr'
 wx_xnr_index_type = 'user'
 
 #use to save xnr_mapping info
-xnr_map_index_name='xnr_mapping'
+xnr_map_index_name='xnr_map_relationship'
 xnr_map_index_type='user'
 
 ## qq上报管理
