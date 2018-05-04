@@ -36,8 +36,8 @@ from global_utils import es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
 
 #连接数据库,获取账户列表
 def get_user_account_list():     
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
-    # cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db") 
+    #cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr1/xnr_0429/xnr/flask-admin.db") 
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
@@ -578,7 +578,7 @@ def count_weixinxnr_daily_post(date_time,xnr_user_no_list):
     return number 
 
 #微信上报
-def count_weixin_report_number(start_time,end_time,xnr_user_no_list)
+def count_weixin_report_number(start_time,end_time,xnr_user_no_list):
     query_body={
         'query':{
             'filtered':{
