@@ -163,8 +163,8 @@ def add_user_xnraccount(account_id,xnr_accountid):
 #show all users account
 #连接数据库,获取账户列表
 def get_user_account_list():
-    # cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db") 
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr1/xnr_0429/xnr/flask-admin.db") 
+    #cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()
@@ -511,14 +511,14 @@ def show_xnr_map_relationship(main_user):
         },
         'size':MAX_VALUE
     }
-    try:
-        es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
-        result=[]
-        for item in es_result:
-            item['_source']['id']=item['_id']
-            result.append(item['_source'])
-    except:
-        result=''
+    #try:
+    es_result=es.search(index=xnr_map_index_name,doc_type=xnr_map_index_type,body=query_body)['hits']['hits']
+    result=[]
+    for item in es_result:
+        item['_source']['id']=item['_id']
+        result.append(item['_source'])
+   # except:
+    #    result=''
     return result  
 
 #change platform

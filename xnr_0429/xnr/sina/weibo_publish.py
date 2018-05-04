@@ -99,7 +99,6 @@ def weibo_publish_with_picture(username,password,text,file):
     driver.quit()
     display.stop()
 
-
 def weibo_publish_main(username,password,text,file):
     
     try:
