@@ -143,7 +143,8 @@ def get_influence_value(date_time,field_name,uid_list):
     try:
         result = es_user_portrait.mget(index=bci_index_name,doc_type=weibo_bci_index_type,body={'ids':uid_list},_source=True)['docs']
         for item in result:
-        	index_value_list.append(item['_source']['user_index'])
+            if result['found'] == True:
+                index_value_list.append(item['_source']['user_index'])
     except Exception,e:
         print '影响力查询错误：：',e
     return index_value_list
@@ -168,7 +169,7 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
 
     print 'retweet_redis::',retweet_redis
     print 'comment_redis::',comment_redis
-
+    print 'redis_test::',retweet_result.scan(0,1)
     retweet_result = retweet_redis.hgetall(nodes)
     comment_result = comment_redis.hgetall(nodes)
 

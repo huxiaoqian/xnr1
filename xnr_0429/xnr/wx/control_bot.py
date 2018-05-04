@@ -241,8 +241,8 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         if d:
             try:
                 qr_path = eval(d)['qr_path']
-                if qr_path:
-                    print 'qr_path', qr_path
+                #if qr_path:
+                #    print 'qr_path', qr_path
                 #使用缓存登陆时，qr_path对应的二维码文件不存在
                 if qr_path == 'loginedwithcache':
                     return qr_path
@@ -429,27 +429,31 @@ def send_msg(wxbot_id, puids, msg):
 
 #目前仅支持qq邮箱
 def send_qrcode2mail(wxbot_id, qr_path):
-    xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['wx_id','nickname','mail','access_id'])
-    wx_id = xnr_data['wx_id']
-    nickname = xnr_data['nickname']
-    mail = xnr_data['mail']
-    password = xnr_data['access_id'] 
-    content = {
-    'subject': u'扫描二维码以登陆微信虚拟人',
-    'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
-    'files_path': qr_path,   #支持多个，以逗号隔开
-    }
-    from_user = {
-        'name': u'虚拟人项目（微信）',
-        'addr': mail,
-        'password': password,   #其实应该是授权码
-        'smtp_server': 'smtp.qq.com'   
-    }
-    to_user = {
-        'name': u'管理员',
-        'addr': mail  #支持多个，以逗号隔开
-    }
-    return send_mail(from_user=from_user, to_user=to_user, content=content)
+    try:
+    	xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['wx_id','nickname','mail','access_id'])
+    	wx_id = xnr_data['wx_id']
+    	nickname = xnr_data['nickname']
+    	mail = xnr_data['mail']
+    	password = xnr_data['access_id'] 
+    	content = {
+    	'subject': u'扫描二维码以登陆微信虚拟人',
+    	'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
+    	'files_path': qr_path,   #支持多个，以逗号隔开
+    	}
+    	from_user = {
+            'name': u'虚拟人项目（微信）',
+            'addr': mail,
+            'password': password,   #其实应该是授权码
+            'smtp_server': 'smtp.qq.com'   
+    	}
+    	to_user = {
+            'name': u'管理员',
+            'addr': mail  #支持多个，以逗号隔开
+    	}	
+        return send_mail(from_user=from_user, to_user=to_user, content=content)
+    except Exception,e:
+        print 'send_qrcode2mail Exception: ', str(e)
+        return 0
 
 
 

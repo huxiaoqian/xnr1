@@ -125,8 +125,8 @@ qiniu_bucket_name = "publicbucket"
 qiniu_bucket_domain = "ovorc2c4c.bkt.clouddn.com"
 
 #微信多媒体数据存放地址
-WX_IMAGE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/image'
-WX_VOICE_ABS_PATH = '/home/ubuntu8/Lvlei/xnr1/xnr/static/WX/voice'
+WX_IMAGE_ABS_PATH = '/home/xnr1/xnr_0429/xnr/static/WX/image'
+WX_VOICE_ABS_PATH = '/home/xnr1/xnr_0429/xnr/static/WX/voice'
 
 #wx
 WX_S_DATE = '2017-10-25'
