@@ -36,6 +36,7 @@ class Userinfo:
 
 		dict = {'id':id,'career':career,'location':location,'age':age,'description':description}
 		driver.quit()
+		display.stop()
 		return dict
 
 if __name__ == '__main__':

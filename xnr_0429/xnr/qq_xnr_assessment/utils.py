@@ -6,7 +6,7 @@ from xnr.global_config import S_TYPE,QQ_S_DATE_NEW,QQ_GROUP_MESSAGE_START_DATE,Q
                     QQ_GROUP_MESSAGE_START_DATE_ASSESSMENT
 from xnr.global_utils import es_xnr,group_message_index_name_pre,group_message_index_type,\
                     qq_xnr_index_name,qq_xnr_index_type,qq_xnr_history_count_index_name_pre,\
-                    qq_xnr_history_count_index_type
+                    qq_xnr_history_count_index_type,r, r_qq_speak_num_pre
 from xnr.time_utils import datetime2ts,ts2datetime,get_groupmessage_index_list, get_timeset_indexset_list
 from xnr.parameter import WEEK,DAY,MAX_SEARCH_SIZE
 
@@ -290,6 +290,7 @@ def get_safe_qq_today(xnr_user_no):
     
     group_message_index_name = group_message_index_name_pre + current_date
 
+    '''
     query_body = {
         'query':{
             'bool':{
@@ -307,6 +308,15 @@ def get_safe_qq_today(xnr_user_no):
         today_count = count_result['count']
     else:
         print 'es index rank error'
+        today_count = 0
+    '''
+
+    current_date = ts2datetime(int(time.time()))
+    r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
+
+    try:
+        today_count = int(r.hget(r_qq_speak_num))
+    except:
         today_count = 0
 
     last_date = ts2datetime(current_time-DAY)
