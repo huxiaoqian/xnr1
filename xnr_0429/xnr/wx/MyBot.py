@@ -316,7 +316,8 @@ class MyBot(Bot):
                 data['text'] = text
                 try:
                     sen_value, sen_words = sensitive_check(text.encode('utf8')) 
-                    if sen_value !=0:
+                    
+		    if sen_value !=0:
                         sen_flag = 1    #该条信息是敏感信息
                     else:
                         sen_flag = 0

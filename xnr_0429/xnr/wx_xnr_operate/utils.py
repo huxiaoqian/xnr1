@@ -36,6 +36,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
+	    end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 #查看监听到的一个指定群组的群消息，可指定起始、终止时间。

@@ -25,6 +25,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
+	    end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 def load_timestamp_list(start_ts, end_ts):
@@ -149,9 +150,6 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
         xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid','groups_list'])
         puid = xnr_data['puid']
         group_list = xnr_data['groups_list']
-	#group_list = str(xnr_data['groups_list']).split(',')
-        print 'group_list'
-	print group_list
 
  
         #查询1
@@ -220,11 +218,6 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
             max_sensitive = max_results[0]['_source']['sensitive_value']
         except Exception,e:
 	    print 'max_sensitive Exception: ', str(e)
-
-
-        print 'sensitive_value', sensitive_value
-        print 'max_sensitive', max_sensitive
-
 
         #统计
         follow_group_sensitive = {'sensitive_info': {current_time: sensitive_value}}
@@ -350,9 +343,7 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
 	    print 'speaker_max Exception: ', str(e)
             speaker_max = today_count
 	
-	print 'today_count', today_count
-	print 'total_cout', total_count
-	print 'speaker_max', speaker_max
+
         #整合
         speak_dict = dict()
         speak_dict['speak_today'] = {}

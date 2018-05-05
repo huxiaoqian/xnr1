@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
 import json
+import sys
+sys.path.append(os.getcwd())
 from xnr.global_utils import sensitive_words_path
 
 wordTree = [None for x in range(256)]
