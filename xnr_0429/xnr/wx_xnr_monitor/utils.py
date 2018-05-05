@@ -141,7 +141,9 @@ def utils_report_warning_content(wxbot_id, report_type, report_time, speaker_id,
     mark = 0
     try:
         wx_report_management_mappings()
-        es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
+        print 'report_dict'
+        print report_dict
+        print es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
         mark = 1
     except Exception,e:
         print e
