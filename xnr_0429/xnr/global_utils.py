@@ -691,6 +691,9 @@ tw_hot_subopinion_results_index_type = 'subopinion'
 def _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
     return redis.StrictRedis(host, port)
 
+def _default_redis_v2(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
+    return redis.StrictRedis(host, port,db)
+
 R_WRITING = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 writing_task_queue_name = 'intelligent_writing_task'
 
@@ -785,24 +788,24 @@ tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
 redis_host_list = [1,2]
-R_retweet = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
+R_retweet = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
 
-fb_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
-fb_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
+fb_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
+fb_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
 
-tw_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
-tw_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
+tw_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
+tw_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
 
 fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
 #use to save retweet/be_retweet
-retweet_r_1 = _default_redis(host=RETWEET_REDIS_HOST,port=RETWEET_REDIS_PORT, db=1)
-retweet_r_2 = _default_redis(host=RETWEET_REDIS_HOST, port=RETWEET_REDIS_PORT, db=2)
+retweet_r_1 = _default_redis_v2(host=RETWEET_REDIS_HOST,port=RETWEET_REDIS_PORT, db=1)
+retweet_r_2 = _default_redis_v2(host=RETWEET_REDIS_HOST, port=RETWEET_REDIS_PORT, db=2)
 retweet_redis_dict = {'1':retweet_r_1, '2':retweet_r_2}
 #use to save comment/be_comment
-comment_r_1 = _default_redis(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=1)
-comment_r_2 = _default_redis(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=2)
+comment_r_1 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=1)
+comment_r_2 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=2)
 comment_redis_dict = {'1':comment_r_1, '2':comment_r_2}
 
 #微信虚拟人相关
