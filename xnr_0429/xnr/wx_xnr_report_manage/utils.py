@@ -11,8 +11,11 @@ from xnr.wx.control_bot import load_wxxnr_redis_data
 def dump_date(period, startdate, enddate):
     if period == '':
         period = -1 #flag
-        start_ts = datetime2ts(startdate)
-        end_ts = datetime2ts(enddate)
+	#改传时间戳
+        #start_ts = datetime2ts(startdate)
+        #end_ts = datetime2ts(enddate)
+	start_ts = startdate
+	end_ts = enddate
     else:
         period = int(period)
         if period == 0:
@@ -46,16 +49,17 @@ def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
         wx_report_management_mappings()
         es_result = es_xnr.search(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, body=query_body)['hits']['hits']
         if es_result:
-	    try:
-                for item in es_result:
+            for item in es_result:
+		try:
                     data = item['_source']
                     report_content = eval(item['_source']['report_content'])
                     data['sensitive_value'] = report_content['sensitive_value']
+		    data['text'] = report_content['text']
                     data['sensitive_words_string'] = report_content['sensitive_words_string'].decode('utf8')
                     data.pop('report_content')
                     result.append(data)
-	    except:
-		pass 
+		except:
+		    pass
     except Exception,e:
         print 'wx_report_management Exception: ', str(e)
     return result

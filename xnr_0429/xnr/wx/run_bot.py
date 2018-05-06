@@ -4,8 +4,21 @@ import sys
 import os
 import getopt
 sys.path.append(os.getcwd())
-#from MyBot import Mybot
-from xnr.wx.MyBot import MyBot
+path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
+sys.path.append(path1)
+sys.path.append(os.path.join(path1, 'wx'))
+print sys.path
+print os.path.join(path1, 'wx')
+print 'path1: ', path1
+from MyWXBot import remove_wx_media_old_files
+print remove_wx_media_old_files
+sys.path.append('..')
+from wx import MyWXBot
+print MyWXBot.__file__
+#MyWXBot.Mybot
+#from MyWXBot import Mybot
+sys.path.append('../../../')
+from xnr.wx.MyWXBot import MyBot
 
 def run_bot(wxbot_id, wxbot_port, groups_list):
     try :

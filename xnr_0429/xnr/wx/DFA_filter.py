@@ -3,7 +3,10 @@ import os
 import json
 import sys
 sys.path.append(os.getcwd())
-from xnr.global_utils import sensitive_words_path
+path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
+sys.path.append(path1)
+
+from global_utils import sensitive_words_path
 
 wordTree = [None for x in range(256)]
 wordTree.append(0)
