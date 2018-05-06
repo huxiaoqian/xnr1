@@ -430,7 +430,7 @@ def show_trace_community(xnr_user_no,now_time):
     }
     weibo_community_index_name = get_community_index(now_time)
 
-    # print 'weibo_community_index_name:',weibo_community_index_name
+    #print 'weibo_community_index_name:',weibo_community_index_name
     try:
         community_result = es_xnr.search(index = weibo_community_index_name,doc_type = weibo_community_index_type,body = query_body)['hits']['hits']
         community_list = []
@@ -440,6 +440,7 @@ def show_trace_community(xnr_user_no,now_time):
                 item['_source']['trace_message'] = u'该社区已经连续3周未出现预警，请选择放弃跟踪或强制跟踪！'
             else:
                 item['_source']['trace_message'] = u''
+            print 'community_id::',item['_id']
             community_list.append(item['_source'])
         community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)
     except:

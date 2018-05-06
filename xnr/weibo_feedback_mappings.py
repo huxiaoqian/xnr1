@@ -1,6 +1,7 @@
 #-*-coding:utf-8-*-
 import os
 import json
+import time
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import weibo_feedback_comment_index_name_pre,weibo_feedback_comment_index_type,\
@@ -621,7 +622,7 @@ if __name__ == '__main__':
 	weibo_feedback_like_mappings(datetime)
 	weibo_feedback_private_mappings(datetime)
 
-	#weibo_feedback_follow_mappings()
-	#weibo_feedback_fans_mappings()
-	#weibo_create_group_mappings()
-	#weibo_private_white_uid_mappings()
+	weibo_feedback_follow_mappings()
+	weibo_feedback_fans_mappings()
+	weibo_create_group_mappings()
+	weibo_private_white_uid_mappings()

@@ -5,7 +5,7 @@ use to save function---about deal database
 import sys
 import json
 from xnr.global_utils import es_xnr,qq_xnr_index_name,qq_xnr_index_type,\
-                             group_message_index_name_pre, group_message_index_type
+                             group_message_index_name_pre, group_message_index_type, r, r_qq_speak_num_pre
 from xnr.parameter import MAX_VALUE, DAY, group_message_windowsize
 from xnr.time_utils import get_groupmessage_index_list, ts2datetime, datetime2ts
 
@@ -62,7 +62,7 @@ def search_by_xnr_number(xnr_qq_number, current_date,group_qq_name):
     enddate = current_date
     startdate = ts2datetime(datetime2ts(enddate)-group_message_windowsize*DAY)
     index_names = get_groupmessage_index_list(startdate,enddate)
-    print 'index_names::',index_names
+    #print 'index_names::',index_names
     index_names.reverse()
     results = {}
     for index_name in index_names:
@@ -119,7 +119,7 @@ def search_by_period(xnr_qq_number,startdate,enddate,group_qq_name):
 
     index_names = get_groupmessage_index_list(startdate,enddate)
     index_names.reverse()
-    print 'index_names::',index_names
+    #print 'index_names::',index_names
 
     for index_name in index_names:
         # if not es_xnr.indices.exsits(index_name):
@@ -138,10 +138,23 @@ def search_by_period(xnr_qq_number,startdate,enddate,group_qq_name):
 
 
 def send_message(xnr_qq_number,group,content):
+    
+    current_date = ts2datetime(int(time.time()))
     group_list = group.split(',')           #发送多个群消息
+
     for g in group_list:
         # result = sendfromweb(xnr_qq_number,g,content)
         result = sendfromweb_v2(xnr_qq_number,g,content)        #多端口方法
+
+        # redis计数 ： qq_speak_num_1039598173_2018-05-04  - 1
+        r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
+        try:
+            speak_num = r.hget(r_qq_speak_num)
+        except:
+            speak_num = 0
+        r.hset(r_qq_speak_num,speak_num+1)
+
+
     # print result
     return result
     
@@ -214,7 +227,7 @@ def search_by_keyword(keywords, date):
     for keywords_item in keywords_list:
         keyword_nest_body_list.append({"wildcard":{"text":{"wildcard": "*"+keywords_item+"*"}}})
     must_query_list.append({'bool':{'should': keyword_nest_body_list}})
-    print must_query_list
+    #print must_query_list
     query_body = {
         "query": {
            

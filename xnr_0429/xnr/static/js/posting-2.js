@@ -67,10 +67,14 @@ $('#create').on('click',function () {
 });
 function reshIntelligent(data) {
     var f='操作失败。';
-    if (data=='true'){
+    if (data){
         f='操作成功。';
-    }else if (data== 'exists'){
-        f='请更换一个事件名称。';
+        if (data== 'exists'){
+            f='请更换一个事件名称。';
+        }
+        setTimeout(function () {
+            public_ajax.call_request('get',intelligent_writing_url,intelligentList);
+        },300)
     }
     $('#pormpt p').text(f);
     $('#pormpt').modal('show');

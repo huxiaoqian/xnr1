@@ -79,7 +79,7 @@ def get_first_select_result(create_communitylist):
         else:
             mean_influence_mark = False
 
-        if num_mark and cluster_density_mark and mean_sensitive_mark and mean_influence_mark:
+        if num_mark and cluster_density_mark and (mean_sensitive_mark or mean_influence_mark):
             first_select_community.append(community)
         else:
             pass
@@ -829,7 +829,7 @@ def get_final_community(xnr_user_no,date_time):
     # 若旧社区不为空，则对新旧社区进行对比
     # 若对比不相似则存储旧社区，对旧社区进行一些判断与更新；
     # 若对比相似，则要进行新旧社区融合处理
-    
+    result_mark_list = []    
     if old_communitylist:
         newid_list = []
         for new_community in create_communitylist:
@@ -866,18 +866,19 @@ def get_final_community(xnr_user_no,date_time):
             	result_mark = save_community_detail(new_community,date_time)
 
         for old_community in old_communitylist:
-        	if old_community['community_id'] in newid_list:
-        		print 'old_community::::',old_community['community_name']
-        	else:
-        		result_mark = save_community_detail(old_community,date_time)
+            if old_community['community_id'] in newid_list:
+                print 'old_community::::',old_community['community_name']
+            else:
+                result_mark = save_community_detail(old_community,date_time)
+                result_mark_list.append(result_mark)
 
     else:
     	print 'newnew!!!'
         for new_community in create_communitylist:
-        	new_community['community_status'] = 1
-        	result_mark = save_community_detail(new_community,date_time)
-    
-    return result_mark
+            new_community['community_status'] = 1
+            result_mark = save_community_detail(new_community,date_time)
+            result_mark_list.append(result_mark)        
+    return result_mark_list
 
 
 if __name__ == '__main__':

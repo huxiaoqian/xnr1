@@ -7,7 +7,7 @@ import sys
 import json
 import subprocess
 from xnr.global_utils import es_xnr,qq_xnr_index_name,\
-        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r, qq_xnr_max_no
+        qq_xnr_index_type, ABS_LOGIN_PATH,QRCODE_PATH,r_qq_group_set_pre,r, qq_xnr_max_no, r_qq_receive_message
 from xnr.global_utils import qq_xnr_history_count_index_name_pre,qq_xnr_history_count_index_type,\
                         group_message_index_name_pre,group_message_index_type
 from xnr.global_config import port_range
@@ -121,7 +121,14 @@ def get_login_name(xnr_user_no):
 
         p2 = subprocess.Popen(p_str1, \
                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
+        
+        # # 存储qq端口、授权码等消息,用于后台主进程调用
+        qq_info = dict()
+        qq_info['qq_num'] = qqbot_num
+        qq_info['qq_port'] = qqbot_port
+        qq_info['access_id'] = qqbot_mc
+        r.lpush(r_qq_receive_message,json.dumps(qq_info))
+	    
         return True
 
     except:
@@ -266,7 +273,7 @@ def create_qq_xnr(xnr_info):
 def login_status(xnr_user_no):
 
     group_dict = getgroup_v2(xnr_user_no)
-
+    print 'group_dict======',group_dict
     if group_dict:
         login_status = True
     else:

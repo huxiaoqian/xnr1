@@ -77,5 +77,5 @@ def re_cut(w_text):#根据一些规则把无关内容过滤掉
 ##微博文本预处理结束
 
 #以下是设置cluto的路径
-INPUT_FOLDER = "/home/ubuntu8/yuanshi/verified_user/cluto"
-VCLUTO = "/home/ubuntu8/yuanshi/verified_user/cluto-2.1.2/Linux-i686/vcluster"
+INPUT_FOLDER = "/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/public/cluto"
+VCLUTO = "/home/xnr1/xnr_0429/xnr/cron/intelligent_writing/public/cluto-2.1.2/Linux-i686/vcluster"

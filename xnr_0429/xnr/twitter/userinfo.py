@@ -45,7 +45,7 @@ class Userinfo():
 		else:
 			age = None
 		dict = {'uid':uid,'desccription':description,'location':location,'age':age}
-		print(dict)
+		driver.quit()
 		return dict
 		
 if __name__ == '__main__':

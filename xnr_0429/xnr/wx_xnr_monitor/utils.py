@@ -22,6 +22,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
+	    end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 #查看虚拟人监听到的所有群组的敏感群消息，可指定起始、终止时间。{'msg_type':'Text'}
@@ -141,7 +142,7 @@ def utils_report_warning_content(wxbot_id, report_type, report_time, speaker_id,
     mark = 0
     try:
         wx_report_management_mappings()
-        es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
+        print es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
         mark = 1
     except Exception,e:
         print e

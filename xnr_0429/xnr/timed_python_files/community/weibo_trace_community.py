@@ -7,6 +7,7 @@ import networkx as nx
 import json,os,time,community
 import numpy as np
 import math
+import redis
 from community_find_weibo import group_evaluate
 from weibo_select_community import get_community_coreuser_socail
 sys.path.append('../../')
@@ -19,16 +20,17 @@ from global_utils import es_xnr,weibo_trace_community_index_name_pre,weibo_trace
                          be_retweet_index_name_pre,be_retweet_index_type,\
                          es_comment,comment_index_name_pre,comment_index_type,\
                          be_comment_index_name_pre,be_comment_index_type,\
-                         weibo_bci_history_index_name,weibo_bci_history_index_type,\
+                         es_user_profile,weibo_bci_history_index_name,weibo_bci_history_index_type,\
                          weibo_sensitive_history_index_name,weibo_sensitive_history_index_type,\
                          es_user_portrait,weibo_bci_index_name_pre,weibo_bci_index_type
 
 
 from time_utils import ts2datetime,datetime2ts
 from parameter import DAY
-from global_config import S_TYPE,WEIBO_COMMUNITY_DATE
-#from global_utils import retweet_redis_dict,comment_redis_dict
+from global_config import S_TYPE,WEIBO_COMMUNITY_DATE,R_BEGIN_TIME
+from global_utils import retweet_redis_dict,comment_redis_dict
 
+r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
 #计算当前日期周期内的community index
 def get_community_index(date_time):
@@ -83,7 +85,7 @@ def get_evaluate_max(index_name,index_type,field):
         'sort':[{field: {'order': 'desc'}}]
         }
     try:
-        result = es_flow_text.search(index=index_name, doc_type=index_type, body=query_body)['hits']['hits']
+        result = es_user_profile.search(index=index_name, doc_type=index_type, body=query_body)['hits']['hits']
         max_evaluate = result[0]['_source'][field]
     except Exception, e:
         raise e
@@ -94,7 +96,7 @@ def get_evaluate_max(index_name,index_type,field):
 def get_db_num(timestamp):
     date = ts2datetime(timestamp)
     date_ts = datetime2ts(date)
-    db_number = ((date_ts - r_beigin_ts) / (DAY*7)) % 2 + 1
+    db_number = 2 - (((date_ts - r_beigin_ts) / (DAY * 7))) % 2
     #run_type
     if S_TYPE == 'test':
         db_number = 1
@@ -135,14 +137,17 @@ def get_sensitive_value(date_time,field_name,uid_list):
 
 
 def get_influence_value(date_time,field_name,uid_list):
-    datename = ts2datetime(date_time)
+    datename = ts2datetime(date_time - DAY)
     new_datetime = datename[0:4]+datename[5:7]+datename[8:10]
     bci_index_name = weibo_bci_index_name_pre + new_datetime
     index_value_list = []
     try:
         result = es_user_portrait.mget(index=bci_index_name,doc_type=weibo_bci_index_type,body={'ids':uid_list},_source=True)['docs']
         for item in result:
-        	index_value_list.append(item['_source']['user_index'])
+           # print 'item_influence::',item
+           # print 'item_type::',type(item)
+            if item['found']:
+                index_value_list.append(item['_source']['user_index'])
     except Exception,e:
         print '影响力查询错误：：',e
     return index_value_list
@@ -156,32 +161,56 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
 
     #从redis中获取社区转发网络
     count = 0
-    scan_cursor = 0
+    scan_cursor = 1
     now_ts = time.time()
     now_date_ts = datetime2ts(ts2datetime(now_ts))
     #get redis db number
     db_number = get_db_num(now_date_ts)
+    print 'db_number:',str(db_number)
     #get redis db
+    print 'retweet_dict::',retweet_redis_dict
     retweet_redis = retweet_redis_dict[str(db_number)]
     comment_redis = comment_redis_dict[str(db_number)]
 
-    print 'retweet_redis::',retweet_redis
-    print 'comment_redis::',comment_redis
+    retweet_result = []
+    for uid in nodes:
+        item_1 = str('retweet_' + uid)
+       # print 'item_lookup::',item_1,type(item_1)
+        re_result = retweet_redis.hgetall(item_1)
+        if re_result:
+            save_dict = dict()
+            save_dict['uid'] = uid
+            save_dict['uid_retweet'] = re_result
+            retweet_result.append(save_dict)
+   # print 'test_result::',retweet_result
+   # print 'aaa:::', retweet_redis.hgetall('retweet_'+str(nodes[-1]))
 
-    retweet_result = retweet_redis.hegtall(nodes)
-    comment_result = comment_redis.hegtall(nodes)
-
-    print 'retweet_result:::',retweet_result
-    print 'comment_result:::',comment_result
+    #print 'retweet_redis::',retweet_redis
+    #print 'comment_redis::',comment_redis
+    ''' 
+    re_scan = retweet_redis.scan(scan_cursor,count=10)
+    for item in re_scan[1]:
+       # item_list = item.split('_')
+        print 'item::',item,type(item)
+        item_result = retweet_redis.hgetall(item)
+        print 'item_result::',item_result
+   # print 'hlen::',retweet_redis.hlen()
+   # print 'hgetall::',retweet_redis.hgetall()
+    retweet_result = retweet_redis.hgetall(nodes)
+    comment_result = comment_redis.hgetall(nodes)
+    '''
+   # print 'retweet_result:::',retweet_result
+    #print 'comment_result:::',comment_result
 
     G_i = nx.Graph()
     for i in retweet_result:
         # print 'i:',i
-        if not i['found']:
-            continue
-        uid_retweet = json.loads(i['_source']['uid_retweet'])
+       # if not i['found']:
+       #     continue
+        uid_retweet = i['uid_retweet']
         max_count = max([int(n) for n in uid_retweet.values()])
-        G_i.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+        G_i.add_weighted_edges_from([(i['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['uid'] and j and i['uid']])
+    '''
     for i in comment_result:
         # print 'comment_i:',i
         if not i['found']:
@@ -189,12 +218,16 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
         uid_comment = json.loads(i['_source']['uid_comment'])
         max_count = max([int(n) for n in uid_comment.values()])
         G_i.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
-
+    '''
 
     sub_g = G_i.subgraph(nodes)
 
     result['density'] = round(nx.density(sub_g),4)
-    result['cluster'] = round(nx.average_clustering(sub_g),4)
+    #print 'ave_cluster::',nx.average_clustering(sub_g)
+    try:
+        result['cluster'] = round(nx.average_clustering(sub_g),4)
+    except:
+        result['cluster'] = 0
     result['transitivity'] = round(nx.transitivity(sub_g),4)
 
 
@@ -647,4 +680,5 @@ if __name__ == '__main__':
     trace_xnr_community(now_time)
     end_time = int(time.time())
     print 'cost_tiime',end_time - start_time
+    print 'dict',retweet_redis_dict
     

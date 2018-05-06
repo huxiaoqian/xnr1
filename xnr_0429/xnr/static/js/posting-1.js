@@ -469,8 +469,8 @@ function oneJugement(data) {
 var threeRoad=[],fb=0,tw=0;
 function postYES22(data) {
     var f='发帖内容提交失败。';
-    threeRoad.push(data);
-    setTimeout(function () {
+   /* threeRoad.push(data);
+   setTimeout(function () {
         if(!threeRoad[0]){f+='微博发帖失败。'}
         if (fb==1&&tw==1){
             if(!threeRoad[1]){f+='facebook发帖失败。'}
@@ -487,13 +487,21 @@ function postYES22(data) {
         $('#pormpt p').text(f);
         $('#pormpt').modal('show');
         threeRoad=[],fb=0,tw=0;;
-    },200);
+    },200);*/
+    if(data){f='发帖内容提交成功'}
+    $('#pormpt p').text(f);
+    $('#pormpt').modal('show');
 }
 //=====================相关通道========================
 //相关通道
 var roadInforurl='/system_manage/lookup_xnr_relation/?origin_platform=weibo&origin_xnr_user_no='+xnrUser;
 public_ajax.call_request('get',roadInforurl,roadInfor);
 function roadInfor(data) {
+    if(data==''){
+        $('#sameRoad .fblist .fbName').html('暂无相同通道下虚拟人');
+        $('#sameRoad .twlist .twName').html('暂无相同通道下虚拟人');
+        return false;
+    }
     var data=data[0];
     //nameAndGroup(data['qq_xnr_name'],data['qq_xnr_user_no'],'#sameRoad .QQlist .qqName',data['qq_groups'],'#sameRoad .QQlist .qqGroup')
     //nameAndGroup(data['weixin_xnr_name'],data['weixin_xnr_user_no'],'#sameRoad .wxlist .weixinName',data['weixin_groups'],'#sameRoad .wxlist .weixinGroup')

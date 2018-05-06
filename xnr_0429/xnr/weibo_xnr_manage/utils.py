@@ -507,7 +507,7 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
         count_id=xnr_user_no+'_'+yesterday_date
         try:
             xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-            xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
+            xnr_user_detail['user_fansnum']=xnr_count_result['fans_total_num']
         except:
             xnr_user_detail['user_fansnum']=0
     else:
@@ -557,6 +557,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         xnr_count_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
         xnr_date_info=[]
         for item in xnr_count_result:
+            item['_source']['user_fansnum']=item['_source']['fans_total_num']
             xnr_date_info.append(item['_source'])
     except:
         xnr_date_info=[]

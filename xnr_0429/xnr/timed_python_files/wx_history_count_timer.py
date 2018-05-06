@@ -6,19 +6,21 @@ import os
 import sys
 from elasticsearch.helpers import scan
 sys.path.append('../../')
-from xnr.wx_xnr.global_config import WX_GROUP_MESSAGE_START_DATE_ASSESSMENT
-from xnr.wx_xnr.time_utils import ts2datetime, datetime2ts, get_wx_groupmessage_index_list
-from xnr.wx_xnr.parameter import DAY, MAX_VALUE, MAX_SEARCH_SIZE
-from xnr.wx_xnr.wx.control_bot import load_wxxnr_redis_data
-from xnr.wx_xnr.global_utils import wx_xnr_history_count_index_name, wx_xnr_history_count_index_type, es_xnr,\
+sys.path.append(os.getcwd())
+from xnr.global_config import WX_GROUP_MESSAGE_START_DATE_ASSESSMENT
+from xnr.time_utils import ts2datetime, datetime2ts, get_wx_groupmessage_index_list
+from xnr.parameter import DAY, MAX_VALUE, MAX_SEARCH_SIZE
+from xnr.wx.control_bot import load_wxxnr_redis_data
+from xnr.global_utils import wx_xnr_history_count_index_name, wx_xnr_history_count_index_type, es_xnr,\
                 wx_group_message_index_name_pre, wx_group_message_index_type, wx_xnr_index_name,\
                 wx_xnr_index_type, wx_xnr_history_be_at_index_type, wx_xnr_history_sensitive_index_type
-from xnr.wx_xnr.wx_xnr_manage_mappings import wx_xnr_history_count_mappings
+from xnr.wx_xnr_manage_mappings import wx_xnr_history_count_mappings
 
 def wx_history_count(xnr_user_no, xnr_puid, current_time):
     current_date = ts2datetime(current_time)
     last_date = ts2datetime(current_time-DAY)
     #获取今日发言总数
+    today_count = 0
     query_body = {
         'query':{
             'bool':{
@@ -30,13 +32,16 @@ def wx_history_count(xnr_user_no, xnr_puid, current_time):
         }
     }
     today_index_name = wx_group_message_index_name_pre + current_date
-    today_count_result = es_xnr.count(index=today_index_name,doc_type=wx_group_message_index_type,body=query_body)
-    if today_count_result['_shards']['successful'] != 0:
-        today_count = today_count_result['count']
-    else:
-        print 'es index rank error'
-        today_count = 0
-    #获取历史发言总数
+    try:
+        today_count_result = es_xnr.count(index=today_index_name,doc_type=wx_group_message_index_type,body=query_body)
+        if today_count_result['_shards']['successful'] != 0:
+            today_count = today_count_result['count']
+    except Exception,e:
+        print 'today_count Exception: ', str(e)
+
+
+    #获取xnr历史发言总数
+    total_count = 0
     total_query_body = {
         'query':{
             'bool':{
@@ -54,11 +59,13 @@ def wx_history_count(xnr_user_no, xnr_puid, current_time):
         if total_count_result['_shards']['successful'] != 0:
             total_count = total_count_result['hits']['hits'][0]['_source']['total_post_num']
     except Exception,e:
-        print e
-        total_count = 0
+        print 'total_count Exception:', str(e)
+
+
     #包括今天在内的发言总数
     total_count_totay = total_count + today_count
     #发言次数最大值
+    wx_group_message_index_name = wx_group_message_index_name_pre + current_date
     query_body_total_day = {
         'query':{
             'filtered':{
@@ -77,8 +84,11 @@ def wx_history_count(xnr_user_no, xnr_puid, current_time):
         results_total_day = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,\
                     body=query_body_total_day)['aggregations']['all_speakers']['buckets']
         speaker_max = results_total_day[0]['doc_count']
-    except:
+    except Exception,e:
+	print 'speaker_max Exception: ', str(e)
         speaker_max = today_count
+
+
     #整合
     item_dict = dict()
     item_dict['total_post_num'] = total_count_totay
@@ -105,24 +115,30 @@ def get_influence_at_num(puid):
         }
     }
     #虚拟人今天被@数量
+    at_num_xnr = 0
     wx_group_message_index_name = wx_group_message_index_name_pre + current_date
     try:
         results_xnr = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_at_num)
         if results_xnr['_shards']['successful'] != 0:
            at_num_xnr = results_xnr['count']
-        else:
-            print 'es index rank error'
-            at_num_xnr = 0
-    except:
-        at_num_xnr = 0
+    except Exception,e:
+        print 'at_num_xnr Exception: ', str(e)
+
+
     # 截止目前所有被@总数
-    wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
     at_num_total = 0
+    wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
     for index_name in wx_group_message_index_list:
-        r = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_at_num)
-        if r['_shards']['successful'] != 0:
-            at_num_total += r['count']
+	try:
+            r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
+            if r['_shards']['successful'] != 0:
+                at_num_total += r['count']
+        except Exception,e:
+	    pass
+
+
     #查询所有人被@的次数
+    at_num_total_day = 0
     query_body_total_day = {
         'query':{
             'bool':{
@@ -136,12 +152,11 @@ def get_influence_at_num(puid):
     try:
         results_total_day = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_body_total_day)
         if results_total_day['_shards']['successful'] != 0:
-           at_num_total_day = results_total_day['count']
-        else:
-            print 'es index rank error'
-            at_num_total_day = 0
-    except:
-        at_num_total_day = 0
+            at_num_total_day = results_total_day['count']
+    except Exception,e:
+        print 'at_num_total_day Exception: ', str(e)
+
+
     #统计
     item_dict = {}
     item_dict['daily_be_at_num'] = at_num_xnr
@@ -163,47 +178,73 @@ def get_penetration_num(xnr_user_no):
     group_list = xnr_data['groups_list']
     
     #查询1
+    sensitive_value = 0
     wx_group_message_index_name = wx_group_message_index_name_pre + current_date
     query_body_info = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'group_id':group_list}
+            'query':{
+                'filtered':{
+                    'filter':{
+			'bool':{
+			    'must':[{'terms': {'group_id': group_list}},
+			    {
+			    'range':{
+				'sensitive_value':{
+				'gte': -1
+				}
+			    }
+			    }
+			    ]
+			}
+                    }
+                }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive_value'
+                    }
                 }
             }
-        },
-        'aggs':{
-            'avg_sensitive':{
-                'avg':{
-                    'field':'sensitive_value'
-                }
-            }
-        }
     }
     try:
         es_sensitive_result = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_body_info)['aggregations']
         sensitive_value = es_sensitive_result['avg_sensitive']['value']
         if sensitive_value == None:
             sensitive_value = 0
-    except:
-        sensitive_value = 0
+    except Exception,e:
+	print 'sensitive_value Exception: ', str(e)
+
+
     #查询2
+    max_sensitive = 0
     query_body_max = {
-        'query':{
-            'filtered':{
-                'filter':{
-                    'terms':{'group_id':group_list}
+          "query": {
+            "filtered": {
+              "filter": {
+                "bool": {
+                  "must": [{'terms': {'group_id': group_list}},
+                    {
+                      "range": {
+                        "sensitive_value": {    #不会写exists语句，就用这个代替吧
+                          "gte": -1
+                        }
+                      }
+                    }
+                  ]
                 }
+              }
             }
-        },
-        'sort':{'sensitive_value':{'order':'desc'}}
+          },
+          'sort':{'sensitive_value':{'order':'desc'}}
     }
     try:
-        max_results = es_xnr.search(index=group_message_index_name,doc_type=group_message_index_type,\
+        max_results = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,\
                         body=query_body_max)['hits']['hits']
         max_sensitive = max_results[0]['_source']['sensitive_value']
-    except:
-        max_sensitive = 0
+    except Exception,e:
+	print 'max_sensitive Exception: ', str(e)
+
+
     #统计
     follow_group_sensitive = {'sensitive_info': sensitive_value}
     penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))*100
@@ -245,11 +286,14 @@ def cron_compute_mark_wx():
         #并存储
         wx_xnr_history_count_mappings() #先确保数据库存在
         try:
-            es_xnr.index(index=wx_xnr_history_count_index_name,doc_type=wx_xnr_history_count_index_type,\
-                id=_id,body=xnr_user_detail)
+	    if es_xnr.exists(index=wx_xnr_history_count_index_name, doc_type=wx_xnr_history_count_index_type, id=_id):
+	        msg = es_xnr.update(index=wx_xnr_history_count_index_name, doc_type=wx_xnr_history_count_index_type, body={'doc': xnr_user_detail}, id=_id)
+	    else:
+		msg = es_xnr.index(index=wx_xnr_history_count_index_name,doc_type=wx_xnr_history_count_index_type,id=_id,body=xnr_user_detail)
             flag = True
+	    print msg
         except Exception,e:
-            print e
+            print 'cron_compute_mark_wx Exception: ', str(e)
             return False
     return flag
 

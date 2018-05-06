@@ -51,17 +51,18 @@ function has_table_QQ(has_data_QQ) {
             },
             {
                 title: "QQ群",//标题
-                field: "qq_groups",//键名
+                field: "group_info",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    if (row.qq_groups == '' || row.qq_groups == 'null' || row.qq_groups == 'unknown'||!row.qq_groups||row.qq_groups.length==0) {
-                        return '未知';
+                   if (row.group_info == '' || row.group_info == 'null' || row.group_info == 'unknown'
+                        ||!row.group_info||isEmptyObject(row.group_info)) {
+                        return '暂无';
                     } else {
-                        // return row.qq_groups.join('\n');
-                        return row.qq_groups.join('<br/>');
+         		var h=Object.keys(JSON.parse(row.group_info));
+                        return h.join('<br/>');
                     };
                 }
             },
@@ -347,7 +348,7 @@ function enterIn(QQ_id,QQ_num,status,_this) {
     if (d=='在线'){
         window.open('/control/postingQQ/?QQ_id='+QQ_id+'&QQ_num='+QQ_num);
     }else {
-        $('#succee_fail #words').text('请先登录在进行其他操作。');
+        $('#succee_fail #words').text('请先登录再进行其他操作。');
         $('#succee_fail').modal('show');
     }
 }
@@ -367,12 +368,18 @@ $('.hasAddQQ').on('click',function () {
     }
 })
 $('.optClear').on('click',function () {
+    clearVal()
+});
+function clearVal() {
     $('.QQoptions .QQnumber').val('');
     $('.QQoptions .QQgroup').val('');
     $('.QQoptions .QQname').val('');
     $('.QQoptions .QQtime').val('');
     $('.QQoptions .QQpower').val('');
-});
+    $('.QQoptions .QQgroupName').val('');
+    $('.QQoptions .QQgroupbeizhu').val('');
+    $('.QQoptions .QQxnrBEIZHU').val('');
+}
 $('.optSureadd').on('click',function () {
     var qnum=$('.QQoptions .QQnumber').val();
     var qgp=$('.QQoptions .QQgroup').val().toString().replace(/,/g,'，');
@@ -396,9 +403,7 @@ function addOR(data) {
         Iadd='添加成功。';
         if (data[1].length!=0){Iadd+='<br/>重复添加的QQ群：'+data[1].join('，')}
         var a=TTqgp.split('，'),b=TTqgpName.split('，');
-        $('#modGroup .QQgroup').val('');
-        $('#modGroup .QQgroupName').val('');
-        $('#modGroup .QQgroupbeizhu').val('');
+	clearVal()      
         $.each(a,function (index,item) {
             $('#modGroup .nowGroup').append('<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+b[index]+'('+item+')'+
                 '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>');

@@ -13,6 +13,8 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, 
                           REDIS_WX_HOST, REDIS_WX_PORT, REDIS_HOST_NEW, REDIS_PORT_NEW,\
                           qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
 
+from global_config import RETWEET_REDIS_HOST, RETWEET_REDIS_PORT
+from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
@@ -49,7 +51,7 @@ wx_xnr_index_name = 'wx_xnr'
 wx_xnr_index_type = 'user'
 
 #use to save xnr_mapping info
-xnr_map_index_name='xnr_mapping'
+xnr_map_index_name='xnr_map_relationship'
 xnr_map_index_type='user'
 
 ## qq上报管理
@@ -117,8 +119,8 @@ update_userinfo_queue_name = 'update_userinfo'
 
 #use to identify the qq login png save file
 #QRCODE_PATH = '/root/.qqbot-tmp/'
-QRCODE_PATH = '/home/ubuntu8/yumingming/xnr1/xnr/static/images/QQ/'
-ABS_LOGIN_PATH = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/qq/receiveQQGroupMessage.py'
+QRCODE_PATH = '/home/xnr1/xnr_0429/xnr/static/images/QQ/'
+ABS_LOGIN_PATH = '/home/xnr1/xnr_0429/xnr/qq/receiveQQGroupMessage.py'
 
 #wxxnr的一些数据的存放地址
 wx_xnr_data_path = 'xnr/wx/data'
@@ -689,6 +691,9 @@ tw_hot_subopinion_results_index_type = 'subopinion'
 def _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
     return redis.StrictRedis(host, port)
 
+def _default_redis_v2(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
+    return redis.StrictRedis(host, port,db)
+
 R_WRITING = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 writing_task_queue_name = 'intelligent_writing_task'
 
@@ -696,6 +701,16 @@ R_OPINION = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
+
+# 记录qq用户每天发言数
+r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_1039598173_2018-05-04
+
+# 存储qq端口、授权码等消息,用于后台主进程调用
+r_qq_receive_message = 'r_qq_receive_message'
+
+# 存储qq监测群
+r_qq_group_set_pre = 'qq_group_set_'
+
 weibo_target_domain_detect_queue_name = 'weibo_target_domain_detect_task'
 weibo_target_domain_analysis_queue_name = 'weibo_target_domain_analysis_task'
 
@@ -765,8 +780,6 @@ R_CLUSTER_FLOW2 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CL
 R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)
 R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)
 
-# 存储qq监测群
-r_qq_group_set_pre = 'qq_group_set_'
 
 # facebook&twitter uname_id
 R_UNAME2ID_FT = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=1)
@@ -775,18 +788,25 @@ tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
 redis_host_list = [1,2]
-R_retweet = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
+R_retweet = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
 
-fb_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
-fb_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
+fb_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
+fb_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
 
-tw_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
-tw_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
+tw_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
+tw_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
 
 fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
-
+#use to save retweet/be_retweet
+retweet_r_1 = _default_redis_v2(host=RETWEET_REDIS_HOST,port=RETWEET_REDIS_PORT, db=1)
+retweet_r_2 = _default_redis_v2(host=RETWEET_REDIS_HOST, port=RETWEET_REDIS_PORT, db=2)
+retweet_redis_dict = {'1':retweet_r_1, '2':retweet_r_2}
+#use to save comment/be_comment
+comment_r_1 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=1)
+comment_r_2 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=2)
+comment_redis_dict = {'1':comment_r_1, '2':comment_r_2}
 
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)

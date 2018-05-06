@@ -46,14 +46,14 @@ def getgroup_v2(qq_xnr):
     line_count = 0
     for line in p.stdout.readlines():
         line_count += 1
-        
+        #print 'line.==========',line    
         if line_count >= 5 and line_count%2==1:
             item_line_list = line.split('|')
             
             try:
                 #qq_group_number = str(int(item_line_list[2]))
                 qq_uin_number = str(int(item_line_list[7]))
-                print 'qq_uin_number..',qq_uin_number
+                #print 'qq_uin_number..',qq_uin_number
                 qq_group_name = item_line_list[4]
                 qq_mark_name = item_line_list[5]
                 # group_dict[qq_group_number] = qq_group_name
@@ -75,7 +75,8 @@ def getgroup_v2(qq_xnr):
     group_info = json.dumps(group_info)
     es.update(index=qq_xnr_index_name,doc_type=qq_xnr_index_type,id=qq_xnr,body={'doc':{'group_info':group_info}})
     
-    print 'group_dict::',group_dict
+    print 'group_dict::len..',len(group_dict)
+
 
     return group_dict
 

@@ -11,7 +11,11 @@ import socket
 import shutil
 import threading
 import subprocess
+import sys
+sys.path.append(os.getcwd())
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
+
+
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, wx_xnr_data_path, wx_xnr_qrcode_path, wx_sent_group_message_index_name_pre
@@ -58,6 +62,11 @@ class MyBot(Bot):
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
             self.change_wxxnr_redis_data({'qr_path':self.qr_path})
+            
+
+            print 'qr_path', self.qr_path
+
+
             self.qr_callback = self.my_qr_callback
         if self.if_login_callback:
             self.login_callback = self.my_login_callback
@@ -71,10 +80,12 @@ class MyBot(Bot):
         #登陆
         print 'starting %s ...' % self.wxbot_id
         print 'before login'
-        print self.cache_path
-        print self.console_qr
+        #print self.cache_path
+        #print self.console_qr
         print self.qr_path
+        print u'#如果下面没有SUCCESS打印出来，多半是该账号网页版被封了……还可能是因为certifi==2015.04.28被替换掉了'
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
+        print 'SUCCESS'
         print 'after login' #如果此条没有打印出来，多半是该账号网页版被封了……
         #还可能是因为certifi==2015.04.28被替换掉了
 
@@ -107,11 +118,11 @@ class MyBot(Bot):
         self.setGroupMembersRN()
 
     def my_qr_callback(self, **kwargs):
-        print 'trying to save qrcode picture'
+        #print 'trying to save qrcode picture'
         with open(self.qr_path, 'wb') as fp:
             fp.write(kwargs['qrcode'])
         #可以将二维码图片发送到邮箱之类的, 但是登陆也可能会使用缓存登陆，不一定会产生新的二维码图片
-        print 'save qrcode picture'
+        #print 'save qrcode picture'
     
     def my_login_callback(self, **kwargs):
         d = r.get(self.wxbot_id)
@@ -305,7 +316,8 @@ class MyBot(Bot):
                 data['text'] = text
                 try:
                     sen_value, sen_words = sensitive_check(text.encode('utf8')) 
-                    if sen_value !=0:
+                    
+		    if sen_value !=0:
                         sen_flag = 1    #该条信息是敏感信息
                     else:
                         sen_flag = 0

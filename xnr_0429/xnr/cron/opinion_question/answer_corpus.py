@@ -15,6 +15,7 @@ import heapq
 from collections import Counter
 from config import re_cut,global_utils_route
 sys.path.append(global_utils_route)
+print 'ss:',sys.path
 from global_utils import qa_corpus_index_name,qa_corpus_index_type,es_xnr
 
 class TopkHeap(object):
@@ -44,7 +45,7 @@ flow_text_host = ["219.224.134.216:9201"]
 es_text = Elasticsearch(flow_text_host, timeout=600)
 flow_text_index_name_pre = 'flow_text_' # flow text: 'flow_text_2013-09-01'
 flow_text_index_type = 'text'
-time_list = ['2016-11-18']
+time_list = ['2018-05-01']
 '''
 time_list = ['2016-11-15','2016-11-16',\
              '2016-11-17','2016-11-18','2016-11-19','2016-11-20','2016-11-21','2016-11-22','2016-11-23','2016-11-24','2016-11-25','2016-11-26',\

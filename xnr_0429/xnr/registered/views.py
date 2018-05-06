@@ -22,5 +22,6 @@ def virtualCreated():
 @mod.route('/socialAccounts/')
 def socialAccounts():
     flag = request.args.get('flag','')
-    return render_template('registered/social_accounts.html',flag=flag)
+    taskID = request.args.get('taskID','')
+    return render_template('registered/social_accounts.html',flag=flag,taskID=taskID)
 
