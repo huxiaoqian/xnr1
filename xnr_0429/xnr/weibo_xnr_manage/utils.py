@@ -406,7 +406,28 @@ def xnr_cumulative_statistics(xnr_date_info):
 
     return Cumulative_statistics_dict
 
-#从流数据中对今日信息进行统计
+##从流数据中对今日信息进行统计
+
+#查询虚拟人粉丝数
+def get_today_xnr_fans(xnr_user_no):
+    xnr_uid = xnr_user_no2uid(xnr_user_no)
+    query_body = {
+       'query':{
+            'filtered':{
+                'filter':{
+                    'term':{'root_uid':xnr_uid}
+                }
+            }
+        },
+        'size':MAX_SEARCH_SIZE
+    }
+    try:
+        search_result = es_xnr.search(index = weibo_feedback_fans_index_name,doc_type = weibo_feedback_fans_index_type,body = query_body)['hits']['hits']
+        fans_num = len(search_result)
+    except:
+        fans_num = 0
+    return fans_num
+
 def show_today_history_count(xnr_user_no,start_time,end_time):
     xnr_date_info=[]
     date_time=ts2datetime(end_time)
@@ -446,8 +467,10 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
         xnr_result=es_xnr.search(index=index_name,doc_type=xnr_flow_text_index_type,body=query_body)
         print 'xnr_result:::',xnr_result
         #今日总粉丝数
+        xnr_user_detail['user_fansnum']=get_today_xnr_fans(xnr_user_no)
+
         if not xnr_result['hits']['hits']:
-            xnr_user_detail['user_fansnum']=0
+            # xnr_user_detail['user_fansnum']=0
             xnr_user_detail['daily_post_num']=0
             xnr_user_detail['business_post_num']=0
             xnr_user_detail['hot_follower_num']=0
@@ -455,8 +478,8 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
             xnr_user_detail['trace_follow_tweet_num']=0
         else:
 
-            for item in xnr_result['hits']['hits']:
-                xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
+            # for item in xnr_result['hits']['hits']:            
+                # xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
             # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
             for item in xnr_result['aggregations']['all_task_source']['buckets']:
                 if item['key'] == 'daily_post':
@@ -507,7 +530,10 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
         count_id=xnr_user_no+'_'+yesterday_date
         try:
             xnr_count_result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=count_id)['_source']
-            xnr_user_detail['user_fansnum']=xnr_count_result['fans_total_num']
+            if xnr_count_result['user_fansnum'] == 0:
+                xnr_user_detail['user_fansnum']=xnr_count_result['fans_total_num']
+            else:
+                xnr_user_detail['user_fansnum']=xnr_count_result['user_fansnum']
         except:
             xnr_user_detail['user_fansnum']=0
     else:
@@ -557,7 +583,10 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
         xnr_count_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
         xnr_date_info=[]
         for item in xnr_count_result:
-            item['_source']['user_fansnum']=item['_source']['fans_total_num']
+            if item['_source']['user_fansnum'] == 0:
+                item['_source']['user_fansnum']=item['_source']['fans_total_num']
+            else:
+                pass
             xnr_date_info.append(item['_source'])
     except:
         xnr_date_info=[]
