@@ -65,9 +65,12 @@ function communityDetailsFun(data) {
 }
 // 人数变化图
 function chartNum(tit,ID,peopleData,flag,starNum){
+    var relData=[];
     if(!peopleData){
         $('#'+ID).html('<h4 style="width:100%;text-align:center;margin-top:140px;">人数变化图暂无数据</h4>');
         return false;
+    }else {
+        $.each(peopleData,function (index,item){if (item<0){relData.push(0)}else {relData.push(item)}})
     }
     var a='<i class="icon icon-star" style="color:#fa7d3c;"></i>  ';
     var b='<i class="icon icon-star-empty" style="color:#fa7d3c;"></i>  ';
@@ -95,6 +98,8 @@ function chartNum(tit,ID,peopleData,flag,starNum){
             }
         },
         xAxis:  {
+	    axisLine:{lineStyle: {color:'#fff'}},
+            axisLabel: {color:'#fff'},
             type: 'category',
             boundaryGap: false,
             data: time
@@ -103,14 +108,16 @@ function chartNum(tit,ID,peopleData,flag,starNum){
             type: 'value',
             axisLabel: {
                 // formatter: '{value} °C'
-                formatter: '{value}'
-            }
+                formatter: '{value}',
+		color:'#fff'
+            },
+	    axisLine:{lineStyle: {color:'#fff'}},
         },
         series: [
             {
                 name:'',
                 type:'line',
-                data:peopleData,
+                data:relData,
                 markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
@@ -407,7 +414,7 @@ function tablePic(id,_data) {
                 }
             },
             {
-                title: "转发数",//标题
+                title: "交互次数",//标题
                 field: "count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式

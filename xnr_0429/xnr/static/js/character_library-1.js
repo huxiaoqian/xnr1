@@ -9,16 +9,25 @@ if (flag==1){
 public_ajax.call_request('get',field_user_url,field_user);
 var domainName='';
 function field_user(data) {
-    var str='';
+    var str='',hadCD=0;
     for (var k in data){
+        var c='';
+        if (data[k]==defalutDomain){c='checked';hadCD=1}
         str+=
             '<label class="demo-label" title="'+data[k]+'">'+
-            '   <input class="demo-radio" type="radio" name="chara" id="'+k+'" value="'+data[k]+'" onclick="$domain(this)">'+
+            '   <input class="demo-radio" type="radio" name="chara" id="'+k+'" value="'+data[k]+'" onclick="$domain(this)" '+c+'>'+
             '   <span class="demo-checkbox demo-radioInput"></span> '+data[k]+
             '</label>';
     }
+    if(hadCD==0){
+        str+=
+            '<label class="demo-label" title="'+defalutDomain+'">'+
+            '   <input class="demo-radio" type="radio" name="chara" id="'+k+'" value="'+defalutDomain+'" onclick="$domain(this)" checked>'+
+            '   <span class="demo-checkbox demo-radioInput"></span> '+defalutDomain+
+            '</label>';
+    }
     $('#container .tit-2 .field-1').html(str);
-    $('#container .tit-2 .field-1 input[value="'+defalutDomain+'"]').attr('checked','true');
+    //$('#container .tit-2 .field-1 input[value="'+defalutDomain+'"]').attr('checked','true');
     $domain(defalutDomain);
 }
 function $domain(_this) {
@@ -29,7 +38,12 @@ function $domain(_this) {
 function domain(data) {
     var str='';
     if (data.length==0){
-        str='暂无数据';
+       // str='暂无数据';
+	str+=
+                '<label class="demo-label" title="'+defalutRole+'">'+
+                '   <input class="demo-radio" value="'+defalutRole+'" type="radio" name="chararcter_two" onclick="allDataFun(this)">'+
+                '   <span class="demo-checkbox demo-radioInput"></span> '+defalutRole+
+                '</label>';
     }else {
         for(var i=0;i<data.length;i++){
             str+=
@@ -53,11 +67,30 @@ var default_allData_url=urlTotal+'/show_domain_role_info/?domain_name='+defalutD
 public_ajax.call_request('get',default_allData_url,allDataChart);
 //=======
 function allDataChart(data) {
-    character_tendency(data['psy_feature'],'opt-2-2','性格特征');
-    character_tendency(data['political_side'],'opt-2-4','政治倾向');
-    locationplace(data['geo'],'opt-3-2','地理位置');
-    active_daily(data['active_time'],'opt-4-2','活跃数量');
-    active_daily(data['day_post_num'],'opt-4-4','日发帖量');
+    if(data['psy_feature']){
+        character_tendency(data['psy_feature'],'opt-2-2','性格特征');
+    }else{$("#opt-2-2").text('暂无数据').css({textAlign:'center',lineHeight:'300px',color:'white'})};
+
+    if(data['political_side']){
+        character_tendency(data['political_side'],'opt-2-4','性格特征');
+    }else{$("#opt-2-4").text('暂无数据').css({textAlign:'center',lineHeight:'300px',color:'white'})};
+
+    if(data['geo']){
+        locationplace(data['geo'],'opt-3-2','地理位置');
+    }else{$("#opt-3-2").text('暂无数据').css({textAlign:'center',lineHeight:'300px',color:'white'})};
+
+    if(data['active_time']){
+        active_daily(data['active_time'],'opt-4-2','活跃数量');
+    }else{$("#opt-4-2").text('暂无数据').css({textAlign:'center',lineHeight:'300px',color:'white'})};
+
+    if(data['day_post_num']){
+        active_daily(data['day_post_num'],'opt-4-4','日发帖量');
+    }else{$("#opt-4-4").text('暂无数据').css({textAlign:'center',lineHeight:'300px',color:'white'})};
+    //character_tendency(data['psy_feature'],'opt-2-2','性格特征');
+    //character_tendency(data['political_side'],'opt-2-4','政治倾向');
+    //locationplace(data['geo'],'opt-3-2','地理位置');
+    //active_daily(data['active_time'],'opt-4-2','活跃数量');
+    //active_daily(data['day_post_num'],'opt-4-4','日发帖量');
 
 }
 // ----性格特征-------政治倾向---

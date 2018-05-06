@@ -1,12 +1,15 @@
 # -*-coding:utf-8-*-
 import sys
 import json
+import time
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import scan
 from global_utils import es_xnr as es
 from global_utils import group_message_index_name_pre, group_message_index_type
 
 from global_config import QQ_S_DATE
+from time_utils import ts2datetime, datetime2ts
+from parameter import DAY
 
 def group_message_mappings(qq_number, date):
     index_name = group_message_index_name_pre + str(date)
@@ -81,6 +84,19 @@ def group_message_mappings(qq_number, date):
 
 if __name__ == '__main__':
     qq_number = 123456
-    date = '2018-03-07'
+    #date = '2018-03-07'
     # date = QQ_S_DATE
+    current_time=int(time.time()+DAY)
+    date = ts2datetime(current_time)
     group_message_mappings(qq_number, date)
+    
+    '''
+    current_time=int(time.time())
+    start_time = datetime2ts('2018-05-01')
+    
+    num_day = (current_time-start_time)/(24*3600)
+    for i in range(num_day):
+        timestamp = start_time + i*24*3600
+        date = ts2datetime(timestamp)
+        group_message_mappings(qq_number, date)
+    '''

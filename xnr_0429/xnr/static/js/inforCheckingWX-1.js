@@ -12,7 +12,7 @@ console.log('===微信预警监控页面js===')
 var senNews_url='/wx_xnr_monitor/search/?wxbot_id='+wxbot_id+'&period=7';//默认请求7天的数据
 public_ajax.call_request('get',senNews_url,senNews);
 function senNews(data) {
-    console.log(data)
+    //console.log(data)
     // var news=data.hits.hits;
     var news=data;
     $('#content-1-word').bootstrapTable('load', news);
@@ -67,7 +67,7 @@ function senNews(data) {
                         // '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.group_id+'</b><span>）</span>' +
                         '               <b class="name">'+name+'</b>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
-                        '               <span class="joinWord" onclick="joinWord(this)" tp="content" speaker_id='+row._source.speaker_id+' sensitive_value='+row._source.sensitive_value+' sensitive_words_string='+row._source.sensitive_words_string+
+                        '               <span class="joinWord" onclick="joinWord(this)" tp="言论" speaker_id='+row._source.speaker_id+' sensitive_value='+row._source.sensitive_value+' sensitive_words_string='+row._source.sensitive_words_string+
                         ' text="'+row._source.text+'" speaker_nickname='+row._source.speaker_name+' timestamp='+row._source.timestamp+' group_puid='+row._source.group_id+'>上报</span>'+
                         '           </a>'+
                         '           <div class="center_2" style="margin-top: 10px;"><b style="color:#ff5722;font-weight: 700;">摘要内容：</b><span>'+txt+'</span></div>'+
@@ -88,7 +88,7 @@ function senNews(data) {
 var senUserurl='/wx_xnr_monitor/show_sensitive_users/?wxbot_id='+wxbot_id+'&period=7';
 public_ajax.call_request('get',senUserurl,senUser);
 function senUser(data) {
-    console.log(data)
+    //console.log(data)
     $('#hot-2').bootstrapTable('load', data);
     $('#hot-2').bootstrapTable({
         data:data,
@@ -200,6 +200,7 @@ function senUser(data) {
                 }
             },
         ],
+	//这个应该是没用的。QQ那边已经把上报用户放进操作列了。(微信通道暂无)
         onClickRow: function (row, $element) {
             $('#QQgroup_weibo .QW-1').text(row.qq_number);
             var txt=row.text,str='';
@@ -259,11 +260,11 @@ $('.choosetime .demo-label input').on('click',function () {
         urlLast='&period='+_val;
         // 敏感消息
         var senNews_url='/wx_xnr_monitor/'+midurl_1+'/?wxbot_id='+wxbot_id+urlLast;
-        console.log(senNews_url)
+        //console.log(senNews_url)
         public_ajax.call_request('get',senNews_url,senNews);
         // 敏感用户
         var senUserurl='/wx_xnr_monitor/'+midurl_2+'/?wxbot_id='+wxbot_id+urlLast;
-        console.log(senUserurl)
+        //console.log(senUserurl)
         public_ajax.call_request('get',senUserurl,senUser);
     }
 });
@@ -277,7 +278,7 @@ $('.sureTime').on('click',function () {
     }else {
         // ===============敏感消息完成=================
         var search_news_url='/wx_xnr_monitor/search/?wxbot_id='+wxbot_id+'&startdate='+s+'&enddate='+d;
-        console.log(search_news_url)
+        //console.log(search_news_url)
         public_ajax.call_request('get',search_news_url,senNews);
 
         // ===============敏感用户完成=================
@@ -315,7 +316,10 @@ function joinWord(_this) {
     // var uploadData={'report_type':reportType, "xnr_user_no": ID_Num,"qq_number": qq_1, "report_content": qq_2};
     // var uploadData={'report_type':reportType, "wxbot_id": wxbot_id,"speaker_id": qq_1, "report_content": qq_2};
     // uploadData=JSON.stringify(uploadData);
-    public_ajax.call_request('get',upload_mange_url,postYES);
+    
+    //暂改为 POST请求了。
+    //public_ajax.call_request('get',upload_mange_url,postYES);
+
     // $.ajax({
     //     type:'get',
     //     // url:'/qq_xnr_monitor/report_warming_content/',
@@ -336,12 +340,36 @@ function joinWord(_this) {
     //         $('#errorInfor').modal('show');
     //     },
     // });
+
+    var uploadData = {
+	'wxbot_id':wxbot_id,
+	'report_type':reportType,
+	'speaker_id':speaker_id,
+	'report_content':reportContent
+    }
+    uploadData=JSON.stringify(uploadData);
+    //console.log(uploadData)
+    $.ajax({
+ 	type:'POST',
+	url:'/wx_xnr_monitor/report_warning_content_new/',
+	contentType:"application/json",
+	data: uploadData,
+        dataType: "json",
+	success:postYES,
+	error:function (xhr,textStatus,errorThrown) {
+	    var errorHtml='请求失败！！可能是因为服务器速度太慢或者网络原因导致。';
+	    $('#errorInfor p').text(errorHtml);
+	    $('#errorInfor').modal('show');
+	},
+    });
+
 }
 
 //===============确定加入===============
+
 //===============操作返回结果===============
 function postYES(data) {
-    console.log(data)
+    //console.log(data)
     var f='';
     if (data){f='操作成功'}else {f='操作失败'};
     $('#pormpt p').text(f);

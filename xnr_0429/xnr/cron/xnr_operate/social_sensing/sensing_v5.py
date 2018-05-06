@@ -697,7 +697,7 @@ def social_sensing(task_detail):
 
         iter_dict.update(all_text_dict[mid])
         count += 1
-        print 'iter_dict:::',iter_dict
+        #print 'iter_dict:::',iter_dict
         # _id = xnr_user_no + '_' + mid
         _id = mid
         bulk_action.extend([{"index":{"_id": _id}}, iter_dict])

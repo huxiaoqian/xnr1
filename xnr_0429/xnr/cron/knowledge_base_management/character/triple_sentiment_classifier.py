@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-import opencc
+#import opencc
 import os
 import sys
 import time
@@ -22,7 +22,7 @@ cut_str = load_scws()
 # cc = opencc.OpenCC('s2t', opencc_path='/usr/bin/opencc')
 #sys.path.append('../../trans/')
 sys.path.append(TRANS_PATH)
-from trans import trans, simplified2traditional, traditional2simplified
+from trans_v3 import trans, simplified2traditional, traditional2simplified
 
 
 

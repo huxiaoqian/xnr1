@@ -211,8 +211,8 @@ function intelligentList(data) {
                     }else {
                         var t=row.compute_status;
                         if (t==0){status='尚未计算'}else
-                        if (t==1){status='正在计算'}else
-                        if (t==2){status='计算完成'}else
+                        if (t==1||t==2||t==3){status='正在计算'}else
+                        if (t==4){status='计算完成'}else
                         {status='未知';}
                     };
                     return status;

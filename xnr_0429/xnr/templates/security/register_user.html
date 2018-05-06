@@ -134,7 +134,7 @@
     $('#submit').parent().parent('div').css('padding-right','10%');
     var li = $('#email').parent('p').siblings('ul').children('li');
     li.css({'color':'#fff','margin-bottom':'5px'})
-    li.html('账号、密码不能为空');
+    li.html('账号、密码不能为空<br/>（且注册的用户名中必须包含@符号）');
     //登录
     $('form').append('<a href="/login" style="display:block;margin-top:10px;"><input id="login" name="submit" type="submit" value="登      录"></a>')
     // 输入框

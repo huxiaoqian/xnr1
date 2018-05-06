@@ -1,0 +1,875 @@
+[2018-05-03 21:29:12] [INFO] QQBot-v2.3.10
+[2018-05-03 21:29:12] [INFO] Python 2.7.12
+[2018-05-03 21:29:12] [INFO] 工作目录：/home/xnr1/xnr_0429/xnr/static/images/QQ/1026
+[2018-05-03 21:29:12] [INFO] 配置文件：/home/xnr1/xnr_0429/xnr/static/images/QQ/1026/v2.3.conf
+[2018-05-03 21:29:12] [INFO] 用户名：无
+[2018-05-03 21:29:12] [INFO] 登录方式：自动（qq=1039598173）
+[2018-05-03 21:29:12] [INFO] 命令行服务器端口号：1026
+[2018-05-03 21:29:12] [INFO] 二维码服务器 ip ：无
+[2018-05-03 21:29:12] [INFO] 二维码服务器端口号：无
+[2018-05-03 21:29:12] [INFO] 用于接收二维码的邮箱账号：1039598173@qq.com
+[2018-05-03 21:29:12] [INFO] 邮箱服务授权码：******
+[2018-05-03 21:29:12] [INFO] 以文本模式显示二维码：否
+[2018-05-03 21:29:12] [INFO] 调试模式：关闭
+[2018-05-03 21:29:12] [INFO] 掉线后自动重启：是
+[2018-05-03 21:29:12] [INFO] 后台模式（daemon 模式）：是
+[2018-05-03 21:29:12] [INFO] 启动方式：快速启动（登录成功后立即启动）
+[2018-05-03 21:29:12] [INFO] 插件目录1：/home/xnr1/xnr_0429/xnr/static/images/QQ/1026/plugins
+[2018-05-03 21:29:12] [INFO] 启动时需要加载的插件：['qqbot.plugins.sampleslots', 'qqbot.plugins.schedrestart']
+[2018-05-03 21:29:12] [INFO] 成功：加载插件 qqbot.plugins.sampleslots（回调函数['onUpdate', 'onPlug', 'onInterval', 'onStartupComplete', 'onQrcode', 'onUnplug', 'onInit', 'onQQMessage', 'onExit']、定时任务[]）
+[2018-05-03 21:29:12] [INFO] 成功：加载插件 qqbot.plugins.schedrestart（回调函数['onPlug', 'onUnplug']、定时任务[]）
+[2018-05-03 21:29:12] [INFO] 开始自动登录...
+[2018-05-03 21:29:12] [INFO] 成功从文件 "/home/xnr1/xnr_0429/xnr/static/images/QQ/1026/v2.3-py2-1039598173.pickle" 中恢复登录信息
+[2018-05-03 21:29:12] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:29:12] [INFO] 联系人数据库文件：/home/xnr1/xnr_0429/xnr/static/images/QQ/1026/2018-05-03-18-38-54-1039598173-contact.db
+[2018-05-03 21:29:12] [INFO] 成功：加载插件 receiveQQGroupMessage（回调函数['onQQMessage']、定时任务[]）
+[2018-05-03 21:29:12] [INFO] 已创建计划任务：每天 8:00 重启（需要手工扫码）
+[2018-05-03 21:29:12] [ERROR] 无法开启 QQBot-Term 服务器 ， [Errno 98] Address already in use
+[2018-05-03 21:29:12] [ERROR] qq 命令和 HTTP-API 接口将无法使用
+[2018-05-03 21:29:27] [INFO] 来自 群“寄生虫百度排名”[成员“推广大使”] 的消息: "   您还在找不到专业推广而发愁吗？？？        别担心了各位老板！！   在这里 ，我们有最专业的推广团队！给您带来高成效的推广效果，让您在推广路上少走弯路！    推广找请我 多种渠道 多种方式 欢迎广告主 中介 渠道合作。{高返点}可推：CP，BC，SSC,棋牌，保健，股票，网赚等等...效果明显，高转化【诚信互拉】"
+[2018-05-03 21:29:27] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:29:27] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 21:29:27] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:29:27] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 21:29:27] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:29:27] [INFO] 成员的昵称.. 推广大使
+[2018-05-03 21:29:27] [INFO] 最后发言时间.. -1
+[2018-05-03 21:29:27] [INFO] 消息..    您还在找不到专业推广而发愁吗？？？        别担心了各位老板！！   在这里 ，我们有最专业的推广团队！给您带来高成效的推广效果，让您在推广路上少走弯路！    推广找请我 多种渠道 多种方式 欢迎广告主 中介 渠道合作。{高返点}可推：CP，BC，SSC,棋牌，保健，股票，网赚等等...效果明显，高转化【诚信互拉】
+last_speak_time.. 1525354167
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "   \u60a8\u8fd8\u5728\u627e\u4e0d\u5230\u4e13\u4e1a\u63a8\u5e7f\u800c\u53d1\u6101\u5417\uff1f\uff1f\uff1f        \u522b\u62c5\u5fc3\u4e86\u5404\u4f4d\u8001\u677f\uff01\uff01   \u5728\u8fd9\u91cc \uff0c\u6211\u4eec\u6709\u6700\u4e13\u4e1a\u7684\u63a8\u5e7f\u56e2\u961f\uff01\u7ed9\u60a8\u5e26\u6765\u9ad8\u6210\u6548\u7684\u63a8\u5e7f\u6548\u679c\uff0c\u8ba9\u60a8\u5728\u63a8\u5e7f\u8def\u4e0a\u5c11\u8d70\u5f2f\u8def\uff01    \u63a8\u5e7f\u627e\u8bf7\u6211 \u591a\u79cd\u6e20\u9053 \u591a\u79cd\u65b9\u5f0f \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9}\u53ef\u63a8\uff1aCP\uff0cBC\uff0cSSC,\u68cb\u724c\uff0c\u4fdd\u5065\uff0c\u80a1\u7968\uff0c\u7f51\u8d5a\u7b49\u7b49...\u6548\u679c\u660e\u663e\uff0c\u9ad8\u8f6c\u5316\u3010\u8bda\u4fe1\u4e92\u62c9\u3011", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u63a8\u5e7f\u5927\u4f7f", "timestamp": 1525354167, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '   \xe6\x82\xa8\xe8\xbf\x98\xe5\x9c\xa8\xe6\x89\xbe\xe4\xb8\x8d\xe5\x88\xb0\xe4\xb8\x93\xe4\xb8\x9a\xe6\x8e\xa8\xe5\xb9\xbf\xe8\x80\x8c\xe5\x8f\x91\xe6\x84\x81\xe5\x90\x97\xef\xbc\x9f\xef\xbc\x9f\xef\xbc\x9f        \xe5\x88\xab\xe6\x8b\x85\xe5\xbf\x83\xe4\xba\x86\xe5\x90\x84\xe4\xbd\x8d\xe8\x80\x81\xe6\x9d\xbf\xef\xbc\x81\xef\xbc\x81   \xe5\x9c\xa8\xe8\xbf\x99\xe9\x87\x8c \xef\xbc\x8c\xe6\x88\x91\xe4\xbb\xac\xe6\x9c\x89\xe6\x9c\x80\xe4\xb8\x93\xe4\xb8\x9a\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe5\x9b\xa2\xe9\x98\x9f\xef\xbc\x81\xe7\xbb\x99\xe6\x82\xa8\xe5\xb8\xa6\xe6\x9d\xa5\xe9\xab\x98\xe6\x88\x90\xe6\x95\x88\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x95\x88\xe6\x9e\x9c\xef\xbc\x8c\xe8\xae\xa9\xe6\x82\xa8\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe5\xb0\x91\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xef\xbc\x81    \xe6\x8e\xa8\xe5\xb9\xbf\xe6\x89\xbe\xe8\xaf\xb7\xe6\x88\x91 \xe5\xa4\x9a\xe7\xa7\x8d\xe6\xb8\xa0\xe9\x81\x93 \xe5\xa4\x9a\xe7\xa7\x8d\xe6\x96\xb9\xe5\xbc\x8f \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9}\xe5\x8f\xaf\xe6\x8e\xa8\xef\xbc\x9aCP\xef\xbc\x8cBC\xef\xbc\x8cSSC,\xe6\xa3\x8b\xe7\x89\x8c\xef\xbc\x8c\xe4\xbf\x9d\xe5\x81\xa5\xef\xbc\x8c\xe8\x82\xa1\xe7\xa5\xa8\xef\xbc\x8c\xe7\xbd\x91\xe8\xb5\x9a\xe7\xad\x89\xe7\xad\x89...\xe6\x95\x88\xe6\x9e\x9c\xe6\x98\x8e\xe6\x98\xbe\xef\xbc\x8c\xe9\xab\x98\xe8\xbd\xac\xe5\x8c\x96\xe3\x80\x90\xe8\xaf\x9a\xe4\xbf\xa1\xe4\xba\x92\xe6\x8b\x89\xe3\x80\x91', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe6\x8e\xa8\xe5\xb9\xbf\xe5\xa4\xa7\xe4\xbd\xbf', 'timestamp': 1525354167, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmMX2jvGRZ3Tcz9ZZ9', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:30:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:30:27] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:30:27] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:31:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:31:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:31:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:32:28] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:32:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:32:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:32:35] [INFO] 来自 群“我的群”[成员“hxq”] 的消息: "aaaaaaaa"
+[2018-05-03 21:32:35] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:32:35] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“我的群”
+[2018-05-03 21:32:35] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:32:35] [INFO] 群的昵称.. 嘿哼哈
+[2018-05-03 21:32:35] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:32:35] [INFO] 成员的昵称.. hxq
+[2018-05-03 21:32:35] [INFO] 最后发言时间.. -1
+[2018-05-03 21:32:35] [INFO] 消息.. aaaaaaaa
+last_speak_time.. 1525354355
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "aaaaaaaa", "qq_group_nickname": "\u563f\u54fc\u54c8", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "hxq", "timestamp": 1525354355, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': 'aaaaaaaa', 'qq_group_nickname': '\xe5\x98\xbf\xe5\x93\xbc\xe5\x93\x88', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': 'hxq', 'timestamp': 1525354355, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmNFwgvGRZ3Tcz9ZZ_', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:32:38] [INFO] 来自 群“寄生虫百度排名”[成员“等你 。”] 的消息: "诚信推广，CPA/CPC/模式可上棋牌，捕鱼，bc，网赚，男科，征婚，减肥，金融，保健品等 全行业可上  诚信合作 拒绝套路 "
+[2018-05-03 21:32:38] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:32:38] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 21:32:38] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:32:38] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 21:32:38] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:32:38] [INFO] 成员的昵称.. 等你 。
+[2018-05-03 21:32:38] [INFO] 最后发言时间.. -1
+[2018-05-03 21:32:38] [INFO] 消息.. 诚信推广，CPA/CPC/模式可上棋牌，捕鱼，bc，网赚，男科，征婚，减肥，金融，保健品等 全行业可上  诚信合作 拒绝套路 
+last_speak_time.. 1525354358
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8bda\u4fe1\u63a8\u5e7f\uff0cCPA/CPC/\u6a21\u5f0f\u53ef\u4e0a\u68cb\u724c\uff0c\u6355\u9c7c\uff0cbc\uff0c\u7f51\u8d5a\uff0c\u7537\u79d1\uff0c\u5f81\u5a5a\uff0c\u51cf\u80a5\uff0c\u91d1\u878d\uff0c\u4fdd\u5065\u54c1\u7b49 \u5168\u884c\u4e1a\u53ef\u4e0a  \u8bda\u4fe1\u5408\u4f5c \u62d2\u7edd\u5957\u8def ", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7b49\u4f60 \u3002", "timestamp": 1525354358, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe8\xaf\x9a\xe4\xbf\xa1\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8cCPA/CPC/\xe6\xa8\xa1\xe5\xbc\x8f\xe5\x8f\xaf\xe4\xb8\x8a\xe6\xa3\x8b\xe7\x89\x8c\xef\xbc\x8c\xe6\x8d\x95\xe9\xb1\xbc\xef\xbc\x8cbc\xef\xbc\x8c\xe7\xbd\x91\xe8\xb5\x9a\xef\xbc\x8c\xe7\x94\xb7\xe7\xa7\x91\xef\xbc\x8c\xe5\xbe\x81\xe5\xa9\x9a\xef\xbc\x8c\xe5\x87\x8f\xe8\x82\xa5\xef\xbc\x8c\xe9\x87\x91\xe8\x9e\x8d\xef\xbc\x8c\xe4\xbf\x9d\xe5\x81\xa5\xe5\x93\x81\xe7\xad\x89 \xe5\x85\xa8\xe8\xa1\x8c\xe4\xb8\x9a\xe5\x8f\xaf\xe4\xb8\x8a  \xe8\xaf\x9a\xe4\xbf\xa1\xe5\x90\x88\xe4\xbd\x9c \xe6\x8b\x92\xe7\xbb\x9d\xe5\xa5\x97\xe8\xb7\xaf ', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xad\x89\xe4\xbd\xa0 \xe3\x80\x82', 'timestamp': 1525354358, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmNGbavGRZ3Tcz9ZaA', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:32:42] [INFO] 来自 群“我的群”[成员“hxq”] 的消息: "111111111111111111111111111111111111111111"
+[2018-05-03 21:32:42] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:32:42] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“我的群”
+[2018-05-03 21:32:42] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:32:42] [INFO] 群的昵称.. 嘿哼哈
+[2018-05-03 21:32:42] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:32:42] [INFO] 成员的昵称.. hxq
+[2018-05-03 21:32:42] [INFO] 最后发言时间.. -1
+[2018-05-03 21:32:42] [INFO] 消息.. 111111111111111111111111111111111111111111
+last_speak_time.. 1525354362
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "111111111111111111111111111111111111111111", "qq_group_nickname": "\u563f\u54fc\u54c8", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "hxq", "timestamp": 1525354362, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '111111111111111111111111111111111111111111', 'qq_group_nickname': '\xe5\x98\xbf\xe5\x93\xbc\xe5\x93\x88', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': 'hxq', 'timestamp': 1525354362, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmNHUPvGRZ3Tcz9ZaB', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:33:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:33:42] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:33:42] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:34:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:34:42] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:34:42] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:35:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:35:42] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:35:42] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:36:43] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:36:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:36:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:37:43] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:37:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:37:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:38:43] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:38:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:38:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:39:43] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:39:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:39:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:40:23] [INFO] 来自 群“做网站优化百度排名群”[成员“年华”] 的消息: "你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 "
+[2018-05-03 21:40:23] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:40:23] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 21:40:23] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:40:23] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 21:40:23] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:40:23] [INFO] 成员的昵称.. 年华
+[2018-05-03 21:40:23] [INFO] 最后发言时间.. -1
+[2018-05-03 21:40:23] [INFO] 消息.. 你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 
+last_speak_time.. 1525354823
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u7684\u7f51\u7ad9\u6b63\u5728\u88ab\u8df3\u8f6c\uff01\uff01\uff01\u4f60\u77e5\u9053\u5417\uff1f\u4f60\u4e0d\u63a8\u5e7f\uff0c\u522b\u4eba\u5728\u63a8\u5e7f\uff01\u6307\u5b9a\u4efb\u610f\u7f51\u7ad9\u548c\u5173\u952e\u8bcd\uff0c\u8df3\u8f6c\u81f3\u4f60\u7684\u7f51\u7ad9\uff0c\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u6d41\u91cf\uff01 /\u8868\u60c5 \u8981\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u7684\u6d41\u91cf\u3002\u63a8\u5e7f\u8def\u4e0a\u62d2\u7edd\u8d70\u5f2f\u8def\u3002 /\u5f3a \u6211\u4eec\u4f1a\u6839\u636e\u60a8\u7684\u4ea7\u54c1\u4e3a\u4e86\u5b9a\u5236\u5c5e\u4e8e\u81ea\u5df1\u7684\u63a8\u5e7f\u65b9\u6848\u3002 /\u8868\u60c5 \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9} /\u73ab\u7470 \u6709\u9700\u8981\u63a8\u5e7f\u7684\u8001\u677f\u4eec\u79c1\u804a\u3002 /\u63e1\u624b ", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5e74\u534e", "timestamp": 1525354823, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xe6\xad\xa3\xe5\x9c\xa8\xe8\xa2\xab\xe8\xb7\xb3\xe8\xbd\xac\xef\xbc\x81\xef\xbc\x81\xef\xbc\x81\xe4\xbd\xa0\xe7\x9f\xa5\xe9\x81\x93\xe5\x90\x97\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb8\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8c\xe5\x88\xab\xe4\xba\xba\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x81\xe6\x8c\x87\xe5\xae\x9a\xe4\xbb\xbb\xe6\x84\x8f\xe7\xbd\x91\xe7\xab\x99\xe5\x92\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe8\xb7\xb3\xe8\xbd\xac\xe8\x87\xb3\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8c\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe6\xb5\x81\xe9\x87\x8f\xef\xbc\x81 /\xe8\xa1\xa8\xe6\x83\x85 \xe8\xa6\x81\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe7\x9a\x84\xe6\xb5\x81\xe9\x87\x8f\xe3\x80\x82\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe6\x8b\x92\xe7\xbb\x9d\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xe3\x80\x82 /\xe5\xbc\xba \xe6\x88\x91\xe4\xbb\xac\xe4\xbc\x9a\xe6\xa0\xb9\xe6\x8d\xae\xe6\x82\xa8\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe4\xb8\xba\xe4\xba\x86\xe5\xae\x9a\xe5\x88\xb6\xe5\xb1\x9e\xe4\xba\x8e\xe8\x87\xaa\xe5\xb7\xb1\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe6\xa1\x88\xe3\x80\x82 /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x8e\xab\xe7\x91\xb0 \xe6\x9c\x89\xe9\x9c\x80\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe7\x9a\x84\xe8\x80\x81\xe6\x9d\xbf\xe4\xbb\xac\xe7\xa7\x81\xe8\x81\x8a\xe3\x80\x82 /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\xb9\xb4\xe5\x8d\x8e', 'timestamp': 1525354823, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmO4AyvGRZ3Tcz9ZaC', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:41:23] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:41:23] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:41:23] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:42:23] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:42:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:42:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:43:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:43:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:43:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:44:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:44:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:44:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:45:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:45:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:45:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:46:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:46:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:46:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:47:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:47:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:47:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:48:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:48:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:48:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:49:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:49:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:49:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:50:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:50:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:50:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:51:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:51:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:51:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:51:48] [INFO] 来自 群“做网站优化百度排名群”[成员“A花海”] 的消息: "微信专业精准引流 出各行业精准粉微转，视频裂变精准自然流量 CPC/CPA 预付合作模式 全行业可上独立后台实时监控，效果稳定量大质优欢迎实力渠道来撩!欢迎实力渠道来撩!!详情+V:zk69088"
+[2018-05-03 21:51:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:51:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 21:51:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:51:48] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 21:51:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:51:48] [INFO] 成员的昵称.. A花海
+[2018-05-03 21:51:48] [INFO] 最后发言时间.. -1
+[2018-05-03 21:51:48] [INFO] 消息.. 微信专业精准引流 出各行业精准粉微转，视频裂变精准自然流量 CPC/CPA 预付合作模式 全行业可上独立后台实时监控，效果稳定量大质优欢迎实力渠道来撩!欢迎实力渠道来撩!!详情+V:zk69088
+last_speak_time.. 1525355508
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5fae\u4fe1\u4e13\u4e1a\u7cbe\u51c6\u5f15\u6d41 \u51fa\u5404\u884c\u4e1a\u7cbe\u51c6\u7c89\u5fae\u8f6c\uff0c\u89c6\u9891\u88c2\u53d8\u7cbe\u51c6\u81ea\u7136\u6d41\u91cf CPC/CPA \u9884\u4ed8\u5408\u4f5c\u6a21\u5f0f \u5168\u884c\u4e1a\u53ef\u4e0a\u72ec\u7acb\u540e\u53f0\u5b9e\u65f6\u76d1\u63a7\uff0c\u6548\u679c\u7a33\u5b9a\u91cf\u5927\u8d28\u4f18\u6b22\u8fce\u5b9e\u529b\u6e20\u9053\u6765\u64a9!\u6b22\u8fce\u5b9e\u529b\u6e20\u9053\u6765\u64a9!!\u8be6\u60c5+V:zk69088", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "A\u82b1\u6d77", "timestamp": 1525355508, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\xbe\xae\xe4\xbf\xa1\xe4\xb8\x93\xe4\xb8\x9a\xe7\xb2\xbe\xe5\x87\x86\xe5\xbc\x95\xe6\xb5\x81 \xe5\x87\xba\xe5\x90\x84\xe8\xa1\x8c\xe4\xb8\x9a\xe7\xb2\xbe\xe5\x87\x86\xe7\xb2\x89\xe5\xbe\xae\xe8\xbd\xac\xef\xbc\x8c\xe8\xa7\x86\xe9\xa2\x91\xe8\xa3\x82\xe5\x8f\x98\xe7\xb2\xbe\xe5\x87\x86\xe8\x87\xaa\xe7\x84\xb6\xe6\xb5\x81\xe9\x87\x8f CPC/CPA \xe9\xa2\x84\xe4\xbb\x98\xe5\x90\x88\xe4\xbd\x9c\xe6\xa8\xa1\xe5\xbc\x8f \xe5\x85\xa8\xe8\xa1\x8c\xe4\xb8\x9a\xe5\x8f\xaf\xe4\xb8\x8a\xe7\x8b\xac\xe7\xab\x8b\xe5\x90\x8e\xe5\x8f\xb0\xe5\xae\x9e\xe6\x97\xb6\xe7\x9b\x91\xe6\x8e\xa7\xef\xbc\x8c\xe6\x95\x88\xe6\x9e\x9c\xe7\xa8\xb3\xe5\xae\x9a\xe9\x87\x8f\xe5\xa4\xa7\xe8\xb4\xa8\xe4\xbc\x98\xe6\xac\xa2\xe8\xbf\x8e\xe5\xae\x9e\xe5\x8a\x9b\xe6\xb8\xa0\xe9\x81\x93\xe6\x9d\xa5\xe6\x92\xa9!\xe6\xac\xa2\xe8\xbf\x8e\xe5\xae\x9e\xe5\x8a\x9b\xe6\xb8\xa0\xe9\x81\x93\xe6\x9d\xa5\xe6\x92\xa9!!\xe8\xaf\xa6\xe6\x83\x85+V:zk69088', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': 'A\xe8\x8a\xb1\xe6\xb5\xb7', 'timestamp': 1525355508, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmRfLTvGRZ3Tcz9ZaG', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:52:05] [INFO] 来自 群“寄生虫百度排名”[成员“推广大使”] 的消息: "   您还在找不到专业推广而发愁吗？？？        别担心了各位老板！！   在这里 ，我们有最专业的推广团队！给您带来高成效的推广效果，让您在推广路上少走弯路！    推广找请我 多种渠道 多种方式 欢迎广告主 中介 渠道合作。{高返点}可推：CP，BC，SSC,棋牌，保健，股票，网赚等等...效果明显，高转化【诚信互拉】"
+[2018-05-03 21:52:05] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:52:05] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 21:52:05] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:52:05] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 21:52:05] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:52:05] [INFO] 成员的昵称.. 推广大使
+[2018-05-03 21:52:05] [INFO] 最后发言时间.. -1
+[2018-05-03 21:52:05] [INFO] 消息..    您还在找不到专业推广而发愁吗？？？        别担心了各位老板！！   在这里 ，我们有最专业的推广团队！给您带来高成效的推广效果，让您在推广路上少走弯路！    推广找请我 多种渠道 多种方式 欢迎广告主 中介 渠道合作。{高返点}可推：CP，BC，SSC,棋牌，保健，股票，网赚等等...效果明显，高转化【诚信互拉】
+last_speak_time.. 1525355525
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "   \u60a8\u8fd8\u5728\u627e\u4e0d\u5230\u4e13\u4e1a\u63a8\u5e7f\u800c\u53d1\u6101\u5417\uff1f\uff1f\uff1f        \u522b\u62c5\u5fc3\u4e86\u5404\u4f4d\u8001\u677f\uff01\uff01   \u5728\u8fd9\u91cc \uff0c\u6211\u4eec\u6709\u6700\u4e13\u4e1a\u7684\u63a8\u5e7f\u56e2\u961f\uff01\u7ed9\u60a8\u5e26\u6765\u9ad8\u6210\u6548\u7684\u63a8\u5e7f\u6548\u679c\uff0c\u8ba9\u60a8\u5728\u63a8\u5e7f\u8def\u4e0a\u5c11\u8d70\u5f2f\u8def\uff01    \u63a8\u5e7f\u627e\u8bf7\u6211 \u591a\u79cd\u6e20\u9053 \u591a\u79cd\u65b9\u5f0f \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9}\u53ef\u63a8\uff1aCP\uff0cBC\uff0cSSC,\u68cb\u724c\uff0c\u4fdd\u5065\uff0c\u80a1\u7968\uff0c\u7f51\u8d5a\u7b49\u7b49...\u6548\u679c\u660e\u663e\uff0c\u9ad8\u8f6c\u5316\u3010\u8bda\u4fe1\u4e92\u62c9\u3011", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u63a8\u5e7f\u5927\u4f7f", "timestamp": 1525355525, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '   \xe6\x82\xa8\xe8\xbf\x98\xe5\x9c\xa8\xe6\x89\xbe\xe4\xb8\x8d\xe5\x88\xb0\xe4\xb8\x93\xe4\xb8\x9a\xe6\x8e\xa8\xe5\xb9\xbf\xe8\x80\x8c\xe5\x8f\x91\xe6\x84\x81\xe5\x90\x97\xef\xbc\x9f\xef\xbc\x9f\xef\xbc\x9f        \xe5\x88\xab\xe6\x8b\x85\xe5\xbf\x83\xe4\xba\x86\xe5\x90\x84\xe4\xbd\x8d\xe8\x80\x81\xe6\x9d\xbf\xef\xbc\x81\xef\xbc\x81   \xe5\x9c\xa8\xe8\xbf\x99\xe9\x87\x8c \xef\xbc\x8c\xe6\x88\x91\xe4\xbb\xac\xe6\x9c\x89\xe6\x9c\x80\xe4\xb8\x93\xe4\xb8\x9a\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe5\x9b\xa2\xe9\x98\x9f\xef\xbc\x81\xe7\xbb\x99\xe6\x82\xa8\xe5\xb8\xa6\xe6\x9d\xa5\xe9\xab\x98\xe6\x88\x90\xe6\x95\x88\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x95\x88\xe6\x9e\x9c\xef\xbc\x8c\xe8\xae\xa9\xe6\x82\xa8\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe5\xb0\x91\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xef\xbc\x81    \xe6\x8e\xa8\xe5\xb9\xbf\xe6\x89\xbe\xe8\xaf\xb7\xe6\x88\x91 \xe5\xa4\x9a\xe7\xa7\x8d\xe6\xb8\xa0\xe9\x81\x93 \xe5\xa4\x9a\xe7\xa7\x8d\xe6\x96\xb9\xe5\xbc\x8f \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9}\xe5\x8f\xaf\xe6\x8e\xa8\xef\xbc\x9aCP\xef\xbc\x8cBC\xef\xbc\x8cSSC,\xe6\xa3\x8b\xe7\x89\x8c\xef\xbc\x8c\xe4\xbf\x9d\xe5\x81\xa5\xef\xbc\x8c\xe8\x82\xa1\xe7\xa5\xa8\xef\xbc\x8c\xe7\xbd\x91\xe8\xb5\x9a\xe7\xad\x89\xe7\xad\x89...\xe6\x95\x88\xe6\x9e\x9c\xe6\x98\x8e\xe6\x98\xbe\xef\xbc\x8c\xe9\xab\x98\xe8\xbd\xac\xe5\x8c\x96\xe3\x80\x90\xe8\xaf\x9a\xe4\xbf\xa1\xe4\xba\x92\xe6\x8b\x89\xe3\x80\x91', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe6\x8e\xa8\xe5\xb9\xbf\xe5\xa4\xa7\xe4\xbd\xbf', 'timestamp': 1525355525, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmRjWevGRZ3Tcz9ZaH', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:53:05] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:53:05] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:53:05] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:54:05] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:54:05] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:54:05] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:55:06] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:55:06] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:55:06] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:56:06] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:56:06] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:56:06] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:57:06] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:57:06] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:57:06] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:57:18] [INFO] 来自 群“做网站优化百度排名群”[成员“勿忘初心”] 的消息: "喜迎六月世界杯，专业运营商渠道。BC彩票黑五类，关键词链接跳转。玩家有效转化高，客户精准流量大。百度搜狗360，运营团队专业化。淘宝京东和天猫，欢迎广告主来撩。VX：huashao0910"
+[2018-05-03 21:57:18] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:57:18] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 21:57:18] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:57:18] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 21:57:18] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:57:18] [INFO] 成员的昵称.. 勿忘初心
+[2018-05-03 21:57:18] [INFO] 最后发言时间.. -1
+[2018-05-03 21:57:18] [INFO] 消息.. 喜迎六月世界杯，专业运营商渠道。BC彩票黑五类，关键词链接跳转。玩家有效转化高，客户精准流量大。百度搜狗360，运营团队专业化。淘宝京东和天猫，欢迎广告主来撩。VX：huashao0910
+last_speak_time.. 1525355838
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u559c\u8fce\u516d\u6708\u4e16\u754c\u676f\uff0c\u4e13\u4e1a\u8fd0\u8425\u5546\u6e20\u9053\u3002BC\u5f69\u7968\u9ed1\u4e94\u7c7b\uff0c\u5173\u952e\u8bcd\u94fe\u63a5\u8df3\u8f6c\u3002\u73a9\u5bb6\u6709\u6548\u8f6c\u5316\u9ad8\uff0c\u5ba2\u6237\u7cbe\u51c6\u6d41\u91cf\u5927\u3002\u767e\u5ea6\u641c\u72d7360\uff0c\u8fd0\u8425\u56e2\u961f\u4e13\u4e1a\u5316\u3002\u6dd8\u5b9d\u4eac\u4e1c\u548c\u5929\u732b\uff0c\u6b22\u8fce\u5e7f\u544a\u4e3b\u6765\u64a9\u3002VX\uff1ahuashao0910", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u52ff\u5fd8\u521d\u5fc3", "timestamp": 1525355838, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\x96\x9c\xe8\xbf\x8e\xe5\x85\xad\xe6\x9c\x88\xe4\xb8\x96\xe7\x95\x8c\xe6\x9d\xaf\xef\xbc\x8c\xe4\xb8\x93\xe4\xb8\x9a\xe8\xbf\x90\xe8\x90\xa5\xe5\x95\x86\xe6\xb8\xa0\xe9\x81\x93\xe3\x80\x82BC\xe5\xbd\xa9\xe7\xa5\xa8\xe9\xbb\x91\xe4\xba\x94\xe7\xb1\xbb\xef\xbc\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xe9\x93\xbe\xe6\x8e\xa5\xe8\xb7\xb3\xe8\xbd\xac\xe3\x80\x82\xe7\x8e\xa9\xe5\xae\xb6\xe6\x9c\x89\xe6\x95\x88\xe8\xbd\xac\xe5\x8c\x96\xe9\xab\x98\xef\xbc\x8c\xe5\xae\xa2\xe6\x88\xb7\xe7\xb2\xbe\xe5\x87\x86\xe6\xb5\x81\xe9\x87\x8f\xe5\xa4\xa7\xe3\x80\x82\xe7\x99\xbe\xe5\xba\xa6\xe6\x90\x9c\xe7\x8b\x97360\xef\xbc\x8c\xe8\xbf\x90\xe8\x90\xa5\xe5\x9b\xa2\xe9\x98\x9f\xe4\xb8\x93\xe4\xb8\x9a\xe5\x8c\x96\xe3\x80\x82\xe6\xb7\x98\xe5\xae\x9d\xe4\xba\xac\xe4\xb8\x9c\xe5\x92\x8c\xe5\xa4\xa9\xe7\x8c\xab\xef\xbc\x8c\xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb\xe6\x9d\xa5\xe6\x92\xa9\xe3\x80\x82VX\xef\xbc\x9ahuashao0910', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\x8b\xbf\xe5\xbf\x98\xe5\x88\x9d\xe5\xbf\x83', 'timestamp': 1525355838, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmSv2xvGRZ3Tcz9ZaI', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 21:58:18] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:58:19] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:58:19] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:59:19] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 21:59:19] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 21:59:19] [INFO] 登录 cookie 尚未过期
+[2018-05-03 21:59:47] [INFO] 来自 群“百度排名优化交流群”[成员“惠头条App官方”] 的消息: "              惠头条App
+          定向精准     效果稳定
+             所有行业均可上
+          超高返点  即冲即返                                  新用户  新流量
+               日活500W
+           代理、渠道、直客  
+               欢迎合作！"
+[2018-05-03 21:59:47] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 21:59:47] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度排名优化交流群”
+[2018-05-03 21:59:47] [INFO] 群的 QQ.. #NULL
+[2018-05-03 21:59:47] [INFO] 群的昵称.. 百度排名优化交流群
+[2018-05-03 21:59:47] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 21:59:47] [INFO] 成员的昵称.. 惠头条App官方
+[2018-05-03 21:59:47] [INFO] 最后发言时间.. -1
+[2018-05-03 21:59:47] [INFO] 消息..               惠头条App
+          定向精准     效果稳定
+             所有行业均可上
+          超高返点  即冲即返                                  新用户  新流量
+               日活500W
+           代理、渠道、直客  
+               欢迎合作！
+last_speak_time.. 1525355987
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "              \u60e0\u5934\u6761App\n          \u5b9a\u5411\u7cbe\u51c6     \u6548\u679c\u7a33\u5b9a\n             \u6240\u6709\u884c\u4e1a\u5747\u53ef\u4e0a\n          \u8d85\u9ad8\u8fd4\u70b9  \u5373\u51b2\u5373\u8fd4                                  \u65b0\u7528\u6237  \u65b0\u6d41\u91cf\n               \u65e5\u6d3b500W\n           \u4ee3\u7406\u3001\u6e20\u9053\u3001\u76f4\u5ba2  \n               \u6b22\u8fce\u5408\u4f5c\uff01", "qq_group_nickname": "\u767e\u5ea6\u6392\u540d\u4f18\u5316\u4ea4\u6d41\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u60e0\u5934\u6761App\u5b98\u65b9", "timestamp": 1525355987, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '              \xe6\x83\xa0\xe5\xa4\xb4\xe6\x9d\xa1App\n          \xe5\xae\x9a\xe5\x90\x91\xe7\xb2\xbe\xe5\x87\x86     \xe6\x95\x88\xe6\x9e\x9c\xe7\xa8\xb3\xe5\xae\x9a\n             \xe6\x89\x80\xe6\x9c\x89\xe8\xa1\x8c\xe4\xb8\x9a\xe5\x9d\x87\xe5\x8f\xaf\xe4\xb8\x8a\n          \xe8\xb6\x85\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9  \xe5\x8d\xb3\xe5\x86\xb2\xe5\x8d\xb3\xe8\xbf\x94                                  \xe6\x96\xb0\xe7\x94\xa8\xe6\x88\xb7  \xe6\x96\xb0\xe6\xb5\x81\xe9\x87\x8f\n               \xe6\x97\xa5\xe6\xb4\xbb500W\n           \xe4\xbb\xa3\xe7\x90\x86\xe3\x80\x81\xe6\xb8\xa0\xe9\x81\x93\xe3\x80\x81\xe7\x9b\xb4\xe5\xae\xa2  \n               \xe6\xac\xa2\xe8\xbf\x8e\xe5\x90\x88\xe4\xbd\x9c\xef\xbc\x81', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe4\xbc\x98\xe5\x8c\x96\xe4\xba\xa4\xe6\xb5\x81\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe6\x83\xa0\xe5\xa4\xb4\xe6\x9d\xa1App\xe5\xae\x98\xe6\x96\xb9', 'timestamp': 1525355987, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmTUFtvGRZ3Tcz9ZaJ', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:00:47] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:00:47] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:00:47] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:00:48] [INFO] 来自 群“寄生虫百度排名”[成员“逆流”] 的消息: "【美国站群服务器】：全新IP，大带宽E3-1230/16G/1T/1G带宽/258IP.E3-1230/16G/1T/1G带宽/237IP.(8C)E3-1230/16G/1T/1G带宽/511IP.E3-1230/16G/1T/1G带宽/1017IP.【香港服务器】【高防服务器】销售QQ：790050780 特价优惠  欢迎咨询"
+[2018-05-03 22:00:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:00:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 22:00:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:00:48] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 22:00:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:00:48] [INFO] 成员的昵称.. 逆流
+[2018-05-03 22:00:48] [INFO] 最后发言时间.. -1
+[2018-05-03 22:00:48] [INFO] 消息.. 【美国站群服务器】：全新IP，大带宽E3-1230/16G/1T/1G带宽/258IP.E3-1230/16G/1T/1G带宽/237IP.(8C)E3-1230/16G/1T/1G带宽/511IP.E3-1230/16G/1T/1G带宽/1017IP.【香港服务器】【高防服务器】销售QQ：790050780 特价优惠  欢迎咨询
+last_speak_time.. 1525356048
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u3010\u7f8e\u56fd\u7ad9\u7fa4\u670d\u52a1\u5668\u3011\uff1a\u5168\u65b0IP\uff0c\u5927\u5e26\u5bbdE3-1230/16G/1T/1G\u5e26\u5bbd/258IP.E3-1230/16G/1T/1G\u5e26\u5bbd/237IP.(8C)E3-1230/16G/1T/1G\u5e26\u5bbd/511IP.E3-1230/16G/1T/1G\u5e26\u5bbd/1017IP.\u3010\u9999\u6e2f\u670d\u52a1\u5668\u3011\u3010\u9ad8\u9632\u670d\u52a1\u5668\u3011\u9500\u552eQQ\uff1a790050780 \u7279\u4ef7\u4f18\u60e0  \u6b22\u8fce\u54a8\u8be2", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u9006\u6d41", "timestamp": 1525356048, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe3\x80\x90\xe7\xbe\x8e\xe5\x9b\xbd\xe7\xab\x99\xe7\xbe\xa4\xe6\x9c\x8d\xe5\x8a\xa1\xe5\x99\xa8\xe3\x80\x91\xef\xbc\x9a\xe5\x85\xa8\xe6\x96\xb0IP\xef\xbc\x8c\xe5\xa4\xa7\xe5\xb8\xa6\xe5\xae\xbdE3-1230/16G/1T/1G\xe5\xb8\xa6\xe5\xae\xbd/258IP.E3-1230/16G/1T/1G\xe5\xb8\xa6\xe5\xae\xbd/237IP.(8C)E3-1230/16G/1T/1G\xe5\xb8\xa6\xe5\xae\xbd/511IP.E3-1230/16G/1T/1G\xe5\xb8\xa6\xe5\xae\xbd/1017IP.\xe3\x80\x90\xe9\xa6\x99\xe6\xb8\xaf\xe6\x9c\x8d\xe5\x8a\xa1\xe5\x99\xa8\xe3\x80\x91\xe3\x80\x90\xe9\xab\x98\xe9\x98\xb2\xe6\x9c\x8d\xe5\x8a\xa1\xe5\x99\xa8\xe3\x80\x91\xe9\x94\x80\xe5\x94\xaeQQ\xef\xbc\x9a790050780 \xe7\x89\xb9\xe4\xbb\xb7\xe4\xbc\x98\xe6\x83\xa0  \xe6\xac\xa2\xe8\xbf\x8e\xe5\x92\xa8\xe8\xaf\xa2', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe9\x80\x86\xe6\xb5\x81', 'timestamp': 1525356048, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmTi_AvGRZ3Tcz9ZaK', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:01:48] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:01:48] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:01:48] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:02:48] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:02:48] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:02:48] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:03:48] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:03:48] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:03:48] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:04:31] [INFO] 来自 群“做网站优化百度排名群”[成员“雨花石”] 的消息: "你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 "
+[2018-05-03 22:04:31] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:04:31] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 22:04:31] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:04:31] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 22:04:31] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:04:31] [INFO] 成员的昵称.. 雨花石
+[2018-05-03 22:04:31] [INFO] 最后发言时间.. -1
+[2018-05-03 22:04:31] [INFO] 消息.. 你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 
+last_speak_time.. 1525356271
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u7684\u7f51\u7ad9\u6b63\u5728\u88ab\u8df3\u8f6c\uff01\uff01\uff01\u4f60\u77e5\u9053\u5417\uff1f\u4f60\u4e0d\u63a8\u5e7f\uff0c\u522b\u4eba\u5728\u63a8\u5e7f\uff01\u6307\u5b9a\u4efb\u610f\u7f51\u7ad9\u548c\u5173\u952e\u8bcd\uff0c\u8df3\u8f6c\u81f3\u4f60\u7684\u7f51\u7ad9\uff0c\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u6d41\u91cf\uff01 /\u8868\u60c5 \u8981\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u7684\u6d41\u91cf\u3002\u63a8\u5e7f\u8def\u4e0a\u62d2\u7edd\u8d70\u5f2f\u8def\u3002 /\u5f3a \u6211\u4eec\u4f1a\u6839\u636e\u60a8\u7684\u4ea7\u54c1\u4e3a\u4e86\u5b9a\u5236\u5c5e\u4e8e\u81ea\u5df1\u7684\u63a8\u5e7f\u65b9\u6848\u3002 /\u8868\u60c5 \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9} /\u73ab\u7470 \u6709\u9700\u8981\u63a8\u5e7f\u7684\u8001\u677f\u4eec\u79c1\u804a\u3002 /\u63e1\u624b ", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u96e8\u82b1\u77f3", "timestamp": 1525356271, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xe6\xad\xa3\xe5\x9c\xa8\xe8\xa2\xab\xe8\xb7\xb3\xe8\xbd\xac\xef\xbc\x81\xef\xbc\x81\xef\xbc\x81\xe4\xbd\xa0\xe7\x9f\xa5\xe9\x81\x93\xe5\x90\x97\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb8\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8c\xe5\x88\xab\xe4\xba\xba\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x81\xe6\x8c\x87\xe5\xae\x9a\xe4\xbb\xbb\xe6\x84\x8f\xe7\xbd\x91\xe7\xab\x99\xe5\x92\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe8\xb7\xb3\xe8\xbd\xac\xe8\x87\xb3\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8c\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe6\xb5\x81\xe9\x87\x8f\xef\xbc\x81 /\xe8\xa1\xa8\xe6\x83\x85 \xe8\xa6\x81\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe7\x9a\x84\xe6\xb5\x81\xe9\x87\x8f\xe3\x80\x82\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe6\x8b\x92\xe7\xbb\x9d\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xe3\x80\x82 /\xe5\xbc\xba \xe6\x88\x91\xe4\xbb\xac\xe4\xbc\x9a\xe6\xa0\xb9\xe6\x8d\xae\xe6\x82\xa8\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe4\xb8\xba\xe4\xba\x86\xe5\xae\x9a\xe5\x88\xb6\xe5\xb1\x9e\xe4\xba\x8e\xe8\x87\xaa\xe5\xb7\xb1\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe6\xa1\x88\xe3\x80\x82 /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x8e\xab\xe7\x91\xb0 \xe6\x9c\x89\xe9\x9c\x80\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe7\x9a\x84\xe8\x80\x81\xe6\x9d\xbf\xe4\xbb\xac\xe7\xa7\x81\xe8\x81\x8a\xe3\x80\x82 /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe9\x9b\xa8\xe8\x8a\xb1\xe7\x9f\xb3', 'timestamp': 1525356271, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmUZlMvGRZ3Tcz9ZaL', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:05:31] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:05:32] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:05:32] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:06:32] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:06:32] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:06:32] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:07:32] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:07:32] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:07:32] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:08:32] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:08:32] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:08:32] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:08:36] [INFO] 来自 群“网络营销百度排名”[成员“百度快速排名”] 的消息: "【百度，手机，360，UC，搜狗等】专业SEO技术，90%上词率。其它词霸气上.【百度霸屏排名，保证上千到上万个词在首页 】 排名超级稳。 联系电话：13823994250 微信号chen198820101987"
+[2018-05-03 22:08:36] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:08:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“网络营销百度排名”
+[2018-05-03 22:08:36] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:08:36] [INFO] 群的昵称.. 网络营销百度排名
+[2018-05-03 22:08:36] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:08:36] [INFO] 成员的昵称.. 百度快速排名
+[2018-05-03 22:08:36] [INFO] 最后发言时间.. -1
+[2018-05-03 22:08:36] [INFO] 消息.. 【百度，手机，360，UC，搜狗等】专业SEO技术，90%上词率。其它词霸气上.【百度霸屏排名，保证上千到上万个词在首页 】 排名超级稳。 联系电话：13823994250 微信号chen198820101987
+last_speak_time.. 1525356516
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u3010\u767e\u5ea6\uff0c\u624b\u673a\uff0c360\uff0cUC\uff0c\u641c\u72d7\u7b49\u3011\u4e13\u4e1aSEO\u6280\u672f\uff0c90%\u4e0a\u8bcd\u7387\u3002\u5176\u5b83\u8bcd\u9738\u6c14\u4e0a.\u3010\u767e\u5ea6\u9738\u5c4f\u6392\u540d\uff0c\u4fdd\u8bc1\u4e0a\u5343\u5230\u4e0a\u4e07\u4e2a\u8bcd\u5728\u9996\u9875 \u3011 \u6392\u540d\u8d85\u7ea7\u7a33\u3002 \u8054\u7cfb\u7535\u8bdd\uff1a13823994250 \u5fae\u4fe1\u53f7chen198820101987", "qq_group_nickname": "\u7f51\u7edc\u8425\u9500\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u767e\u5ea6\u5feb\u901f\u6392\u540d", "timestamp": 1525356516, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe3\x80\x90\xe7\x99\xbe\xe5\xba\xa6\xef\xbc\x8c\xe6\x89\x8b\xe6\x9c\xba\xef\xbc\x8c360\xef\xbc\x8cUC\xef\xbc\x8c\xe6\x90\x9c\xe7\x8b\x97\xe7\xad\x89\xe3\x80\x91\xe4\xb8\x93\xe4\xb8\x9aSEO\xe6\x8a\x80\xe6\x9c\xaf\xef\xbc\x8c90%\xe4\xb8\x8a\xe8\xaf\x8d\xe7\x8e\x87\xe3\x80\x82\xe5\x85\xb6\xe5\xae\x83\xe8\xaf\x8d\xe9\x9c\xb8\xe6\xb0\x94\xe4\xb8\x8a.\xe3\x80\x90\xe7\x99\xbe\xe5\xba\xa6\xe9\x9c\xb8\xe5\xb1\x8f\xe6\x8e\x92\xe5\x90\x8d\xef\xbc\x8c\xe4\xbf\x9d\xe8\xaf\x81\xe4\xb8\x8a\xe5\x8d\x83\xe5\x88\xb0\xe4\xb8\x8a\xe4\xb8\x87\xe4\xb8\xaa\xe8\xaf\x8d\xe5\x9c\xa8\xe9\xa6\x96\xe9\xa1\xb5 \xe3\x80\x91 \xe6\x8e\x92\xe5\x90\x8d\xe8\xb6\x85\xe7\xba\xa7\xe7\xa8\xb3\xe3\x80\x82 \xe8\x81\x94\xe7\xb3\xbb\xe7\x94\xb5\xe8\xaf\x9d\xef\xbc\x9a13823994250 \xe5\xbe\xae\xe4\xbf\xa1\xe5\x8f\xb7chen198820101987', 'qq_group_nickname': '\xe7\xbd\x91\xe7\xbb\x9c\xe8\x90\xa5\xe9\x94\x80\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe5\xbf\xab\xe9\x80\x9f\xe6\x8e\x92\xe5\x90\x8d', 'timestamp': 1525356516, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmVVUQvGRZ3Tcz9ZaM', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:09:36] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:09:36] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:09:36] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:09:42] [INFO] 来自 群“做网站优化百度排名群”[成员“年华”] 的消息: "你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 "
+[2018-05-03 22:09:42] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:09:42] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 22:09:42] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:09:42] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 22:09:42] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:09:42] [INFO] 成员的昵称.. 年华
+[2018-05-03 22:09:42] [INFO] 最后发言时间.. -1
+[2018-05-03 22:09:42] [INFO] 消息.. 你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 
+last_speak_time.. 1525356582
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u7684\u7f51\u7ad9\u6b63\u5728\u88ab\u8df3\u8f6c\uff01\uff01\uff01\u4f60\u77e5\u9053\u5417\uff1f\u4f60\u4e0d\u63a8\u5e7f\uff0c\u522b\u4eba\u5728\u63a8\u5e7f\uff01\u6307\u5b9a\u4efb\u610f\u7f51\u7ad9\u548c\u5173\u952e\u8bcd\uff0c\u8df3\u8f6c\u81f3\u4f60\u7684\u7f51\u7ad9\uff0c\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u6d41\u91cf\uff01 /\u8868\u60c5 \u8981\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u7684\u6d41\u91cf\u3002\u63a8\u5e7f\u8def\u4e0a\u62d2\u7edd\u8d70\u5f2f\u8def\u3002 /\u5f3a \u6211\u4eec\u4f1a\u6839\u636e\u60a8\u7684\u4ea7\u54c1\u4e3a\u4e86\u5b9a\u5236\u5c5e\u4e8e\u81ea\u5df1\u7684\u63a8\u5e7f\u65b9\u6848\u3002 /\u8868\u60c5 \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9} /\u73ab\u7470 \u6709\u9700\u8981\u63a8\u5e7f\u7684\u8001\u677f\u4eec\u79c1\u804a\u3002 /\u63e1\u624b ", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5e74\u534e", "timestamp": 1525356582, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xe6\xad\xa3\xe5\x9c\xa8\xe8\xa2\xab\xe8\xb7\xb3\xe8\xbd\xac\xef\xbc\x81\xef\xbc\x81\xef\xbc\x81\xe4\xbd\xa0\xe7\x9f\xa5\xe9\x81\x93\xe5\x90\x97\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb8\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8c\xe5\x88\xab\xe4\xba\xba\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x81\xe6\x8c\x87\xe5\xae\x9a\xe4\xbb\xbb\xe6\x84\x8f\xe7\xbd\x91\xe7\xab\x99\xe5\x92\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe8\xb7\xb3\xe8\xbd\xac\xe8\x87\xb3\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8c\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe6\xb5\x81\xe9\x87\x8f\xef\xbc\x81 /\xe8\xa1\xa8\xe6\x83\x85 \xe8\xa6\x81\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe7\x9a\x84\xe6\xb5\x81\xe9\x87\x8f\xe3\x80\x82\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe6\x8b\x92\xe7\xbb\x9d\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xe3\x80\x82 /\xe5\xbc\xba \xe6\x88\x91\xe4\xbb\xac\xe4\xbc\x9a\xe6\xa0\xb9\xe6\x8d\xae\xe6\x82\xa8\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe4\xb8\xba\xe4\xba\x86\xe5\xae\x9a\xe5\x88\xb6\xe5\xb1\x9e\xe4\xba\x8e\xe8\x87\xaa\xe5\xb7\xb1\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe6\xa1\x88\xe3\x80\x82 /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x8e\xab\xe7\x91\xb0 \xe6\x9c\x89\xe9\x9c\x80\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe7\x9a\x84\xe8\x80\x81\xe6\x9d\xbf\xe4\xbb\xac\xe7\xa7\x81\xe8\x81\x8a\xe3\x80\x82 /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\xb9\xb4\xe5\x8d\x8e', 'timestamp': 1525356582, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmVlWtvGRZ3Tcz9ZaN', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:10:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:10:42] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:10:42] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:11:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:11:42] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:11:42] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:12:42] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:12:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:12:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:13:43] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:13:43] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:13:43] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:13:53] [INFO] 来自 群“百度优化推广网站排名”[成员“茉莉baby”] 的消息: ""
+[2018-05-03 22:13:53] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:13:53] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:13:53] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:13:53] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:13:53] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:13:53] [INFO] 成员的昵称.. 茉莉baby
+[2018-05-03 22:13:53] [INFO] 最后发言时间.. -1
+[2018-05-03 22:13:53] [INFO] 消息.. 
+last_speak_time.. 1525356833
+[2018-05-03 22:13:53] [INFO] 您发了一张图片或假消息... 
+[2018-05-03 22:13:53] [INFO] 来自 群“百度优化推广网站排名”[成员“茉莉baby”] 的消息: ""
+[2018-05-03 22:13:53] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:13:53] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:13:53] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:13:53] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:13:53] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:13:53] [INFO] 成员的昵称.. 茉莉baby
+[2018-05-03 22:13:53] [INFO] 最后发言时间.. -1
+[2018-05-03 22:13:53] [INFO] 消息.. 
+last_speak_time.. 1525356833
+[2018-05-03 22:13:53] [INFO] 您发了一张图片或假消息... 
+[2018-05-03 22:14:54] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:14:54] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:14:54] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:15:54] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:15:54] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:15:54] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:16:54] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:16:54] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:16:54] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:17:06] [INFO] 来自 群“百度排名优化交流群”[成员“麻卖批”] 的消息: "工作室推广技术源 支持测试量欢迎各公司、渠道个人、中介、运营负责人、广告主长期合作 互利共赢 量足价优带上你的产品推广链接 开通接入数据统计后台 安排好推广预算即可联系方式：QQ1319478050 635020516 V：SQ-TYP Jfangll69 TEL：13124537865"
+[2018-05-03 22:17:06] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:17:06] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度排名优化交流群”
+[2018-05-03 22:17:06] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:17:06] [INFO] 群的昵称.. 百度排名优化交流群
+[2018-05-03 22:17:06] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:17:06] [INFO] 成员的昵称.. 麻卖批
+[2018-05-03 22:17:06] [INFO] 最后发言时间.. -1
+[2018-05-03 22:17:06] [INFO] 消息.. 工作室推广技术源 支持测试量欢迎各公司、渠道个人、中介、运营负责人、广告主长期合作 互利共赢 量足价优带上你的产品推广链接 开通接入数据统计后台 安排好推广预算即可联系方式：QQ1319478050 635020516 V：SQ-TYP Jfangll69 TEL：13124537865
+last_speak_time.. 1525357026
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5de5\u4f5c\u5ba4\u63a8\u5e7f\u6280\u672f\u6e90 \u652f\u6301\u6d4b\u8bd5\u91cf\u6b22\u8fce\u5404\u516c\u53f8\u3001\u6e20\u9053\u4e2a\u4eba\u3001\u4e2d\u4ecb\u3001\u8fd0\u8425\u8d1f\u8d23\u4eba\u3001\u5e7f\u544a\u4e3b\u957f\u671f\u5408\u4f5c \u4e92\u5229\u5171\u8d62 \u91cf\u8db3\u4ef7\u4f18\u5e26\u4e0a\u4f60\u7684\u4ea7\u54c1\u63a8\u5e7f\u94fe\u63a5 \u5f00\u901a\u63a5\u5165\u6570\u636e\u7edf\u8ba1\u540e\u53f0 \u5b89\u6392\u597d\u63a8\u5e7f\u9884\u7b97\u5373\u53ef\u8054\u7cfb\u65b9\u5f0f\uff1aQQ1319478050 635020516 V\uff1aSQ-TYP Jfangll69 TEL\uff1a13124537865", "qq_group_nickname": "\u767e\u5ea6\u6392\u540d\u4f18\u5316\u4ea4\u6d41\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u9ebb\u5356\u6279", "timestamp": 1525357026, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\xb7\xa5\xe4\xbd\x9c\xe5\xae\xa4\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x8a\x80\xe6\x9c\xaf\xe6\xba\x90 \xe6\x94\xaf\xe6\x8c\x81\xe6\xb5\x8b\xe8\xaf\x95\xe9\x87\x8f\xe6\xac\xa2\xe8\xbf\x8e\xe5\x90\x84\xe5\x85\xac\xe5\x8f\xb8\xe3\x80\x81\xe6\xb8\xa0\xe9\x81\x93\xe4\xb8\xaa\xe4\xba\xba\xe3\x80\x81\xe4\xb8\xad\xe4\xbb\x8b\xe3\x80\x81\xe8\xbf\x90\xe8\x90\xa5\xe8\xb4\x9f\xe8\xb4\xa3\xe4\xba\xba\xe3\x80\x81\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb\xe9\x95\xbf\xe6\x9c\x9f\xe5\x90\x88\xe4\xbd\x9c \xe4\xba\x92\xe5\x88\xa9\xe5\x85\xb1\xe8\xb5\xa2 \xe9\x87\x8f\xe8\xb6\xb3\xe4\xbb\xb7\xe4\xbc\x98\xe5\xb8\xa6\xe4\xb8\x8a\xe4\xbd\xa0\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe9\x93\xbe\xe6\x8e\xa5 \xe5\xbc\x80\xe9\x80\x9a\xe6\x8e\xa5\xe5\x85\xa5\xe6\x95\xb0\xe6\x8d\xae\xe7\xbb\x9f\xe8\xae\xa1\xe5\x90\x8e\xe5\x8f\xb0 \xe5\xae\x89\xe6\x8e\x92\xe5\xa5\xbd\xe6\x8e\xa8\xe5\xb9\xbf\xe9\xa2\x84\xe7\xae\x97\xe5\x8d\xb3\xe5\x8f\xaf\xe8\x81\x94\xe7\xb3\xbb\xe6\x96\xb9\xe5\xbc\x8f\xef\xbc\x9aQQ1319478050 635020516 V\xef\xbc\x9aSQ-TYP Jfangll69 TEL\xef\xbc\x9a13124537865', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe4\xbc\x98\xe5\x8c\x96\xe4\xba\xa4\xe6\xb5\x81\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe9\xba\xbb\xe5\x8d\x96\xe6\x89\xb9', 'timestamp': 1525357026, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmXR4yvGRZ3Tcz9ZaP', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:17:24] [INFO] 来自 群“寄生虫百度排名”[成员“出售银行卡4件”] 的消息: "                 /足球                  /足球  /足球  /足球                  /足球  /足球  /足球  /足球  /足球  /足球  /足球                  /足球  /足球                  /足球         /足球                  /足球 "
+[2018-05-03 22:17:24] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:17:24] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 22:17:24] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:17:24] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 22:17:24] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:17:24] [INFO] 成员的昵称.. 孤叶秋风
+[2018-05-03 22:17:24] [INFO] 最后发言时间.. -1
+[2018-05-03 22:17:24] [INFO] 消息..                  /足球                  /足球  /足球  /足球                  /足球  /足球  /足球  /足球  /足球  /足球  /足球                  /足球  /足球                  /足球         /足球                  /足球 
+last_speak_time.. 1525357044
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "                 /\u8db3\u7403                  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403                  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403  /\u8db3\u7403                  /\u8db3\u7403  /\u8db3\u7403                  /\u8db3\u7403         /\u8db3\u7403                  /\u8db3\u7403 ", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5b64\u53f6\u79cb\u98ce", "timestamp": 1525357044, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '                 /\xe8\xb6\xb3\xe7\x90\x83                  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83                  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83                  /\xe8\xb6\xb3\xe7\x90\x83  /\xe8\xb6\xb3\xe7\x90\x83                  /\xe8\xb6\xb3\xe7\x90\x83         /\xe8\xb6\xb3\xe7\x90\x83                  /\xe8\xb6\xb3\xe7\x90\x83 ', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\xad\xa4\xe5\x8f\xb6\xe7\xa7\x8b\xe9\xa3\x8e', 'timestamp': 1525357044, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmXWRQvGRZ3Tcz9ZaQ', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:18:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:18:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:18:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:19:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:19:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:19:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:20:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:20:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:20:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:21:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:21:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:21:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:22:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:22:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:22:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:23:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:23:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:23:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:24:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:24:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:24:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:25:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:25:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:25:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:26:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:26:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:26:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:27:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:27:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:27:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:28:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:28:27] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:28:27] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:29:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:29:27] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:29:27] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:30:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:30:27] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:30:27] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:31:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:31:27] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:31:27] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:32:27] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:32:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:32:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:33:28] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:33:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:33:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:34:28] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:34:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:34:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:35:28] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:35:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:35:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:36:28] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:36:28] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:36:28] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:37:29] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:37:29] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:37:29] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:38:29] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:38:29] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:38:29] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:39:29] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:39:29] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:39:29] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:40:29] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:40:29] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:40:29] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:41:29] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:41:30] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:41:30] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:42:30] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:42:30] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:42:30] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:43:30] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:43:30] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:43:30] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:44:30] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:44:30] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:44:30] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:44:36] [INFO] 来自 群“寄生虫百度排名”[成员“全行业推广”] 的消息: "你有产品要推吗 /疑问 我有流量供你。你要转化效果吗 /疑问 我能让你满意。你要流量  /表情 我量充足 /握手 你要推广 加我试试 /握手 大量换群  /表情  /表情 "
+[2018-05-03 22:44:36] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:44:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 22:44:36] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:44:36] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 22:44:36] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:44:36] [INFO] 成员的昵称.. 全行业推广
+[2018-05-03 22:44:36] [INFO] 最后发言时间.. -1
+[2018-05-03 22:44:36] [INFO] 消息.. 你有产品要推吗 /疑问 我有流量供你。你要转化效果吗 /疑问 我能让你满意。你要流量  /表情 我量充足 /握手 你要推广 加我试试 /握手 大量换群  /表情  /表情 
+last_speak_time.. 1525358676
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u6709\u4ea7\u54c1\u8981\u63a8\u5417 /\u7591\u95ee \u6211\u6709\u6d41\u91cf\u4f9b\u4f60\u3002\u4f60\u8981\u8f6c\u5316\u6548\u679c\u5417 /\u7591\u95ee \u6211\u80fd\u8ba9\u4f60\u6ee1\u610f\u3002\u4f60\u8981\u6d41\u91cf  /\u8868\u60c5 \u6211\u91cf\u5145\u8db3 /\u63e1\u624b \u4f60\u8981\u63a8\u5e7f \u52a0\u6211\u8bd5\u8bd5 /\u63e1\u624b \u5927\u91cf\u6362\u7fa4  /\u8868\u60c5  /\u8868\u60c5 ", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5168\u884c\u4e1a\u63a8\u5e7f", "timestamp": 1525358676, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe6\x9c\x89\xe4\xba\xa7\xe5\x93\x81\xe8\xa6\x81\xe6\x8e\xa8\xe5\x90\x97 /\xe7\x96\x91\xe9\x97\xae \xe6\x88\x91\xe6\x9c\x89\xe6\xb5\x81\xe9\x87\x8f\xe4\xbe\x9b\xe4\xbd\xa0\xe3\x80\x82\xe4\xbd\xa0\xe8\xa6\x81\xe8\xbd\xac\xe5\x8c\x96\xe6\x95\x88\xe6\x9e\x9c\xe5\x90\x97 /\xe7\x96\x91\xe9\x97\xae \xe6\x88\x91\xe8\x83\xbd\xe8\xae\xa9\xe4\xbd\xa0\xe6\xbb\xa1\xe6\x84\x8f\xe3\x80\x82\xe4\xbd\xa0\xe8\xa6\x81\xe6\xb5\x81\xe9\x87\x8f  /\xe8\xa1\xa8\xe6\x83\x85 \xe6\x88\x91\xe9\x87\x8f\xe5\x85\x85\xe8\xb6\xb3 /\xe6\x8f\xa1\xe6\x89\x8b \xe4\xbd\xa0\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf \xe5\x8a\xa0\xe6\x88\x91\xe8\xaf\x95\xe8\xaf\x95 /\xe6\x8f\xa1\xe6\x89\x8b \xe5\xa4\xa7\xe9\x87\x8f\xe6\x8d\xa2\xe7\xbe\xa4  /\xe8\xa1\xa8\xe6\x83\x85  /\xe8\xa1\xa8\xe6\x83\x85 ', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\x85\xa8\xe8\xa1\x8c\xe4\xb8\x9a\xe6\x8e\xa8\xe5\xb9\xbf', 'timestamp': 1525358676, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmdkn_vGRZ3Tcz9ZaU', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:45:10] [INFO] 来自 群“做网站优化百度排名群”[成员“锐锐”] 的消息: "指定关键词，网站，APP，投放定向强制推送给目标人群现户白户欢迎广告主  渠道咨询合作 纯自然量引流精准客流，高转化，有兴趣私聊"
+[2018-05-03 22:45:10] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:45:10] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 22:45:10] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:45:10] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 22:45:10] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:45:10] [INFO] 成员的昵称.. 锐锐
+[2018-05-03 22:45:10] [INFO] 最后发言时间.. -1
+[2018-05-03 22:45:10] [INFO] 消息.. 指定关键词，网站，APP，投放定向强制推送给目标人群现户白户欢迎广告主  渠道咨询合作 纯自然量引流精准客流，高转化，有兴趣私聊
+last_speak_time.. 1525358710
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6307\u5b9a\u5173\u952e\u8bcd\uff0c\u7f51\u7ad9\uff0cAPP\uff0c\u6295\u653e\u5b9a\u5411\u5f3a\u5236\u63a8\u9001\u7ed9\u76ee\u6807\u4eba\u7fa4\u73b0\u6237\u767d\u6237\u6b22\u8fce\u5e7f\u544a\u4e3b  \u6e20\u9053\u54a8\u8be2\u5408\u4f5c \u7eaf\u81ea\u7136\u91cf\u5f15\u6d41\u7cbe\u51c6\u5ba2\u6d41\uff0c\u9ad8\u8f6c\u5316\uff0c\u6709\u5174\u8da3\u79c1\u804a", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u9510\u9510", "timestamp": 1525358710, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe6\x8c\x87\xe5\xae\x9a\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8cAPP\xef\xbc\x8c\xe6\x8a\x95\xe6\x94\xbe\xe5\xae\x9a\xe5\x90\x91\xe5\xbc\xba\xe5\x88\xb6\xe6\x8e\xa8\xe9\x80\x81\xe7\xbb\x99\xe7\x9b\xae\xe6\xa0\x87\xe4\xba\xba\xe7\xbe\xa4\xe7\x8e\xb0\xe6\x88\xb7\xe7\x99\xbd\xe6\x88\xb7\xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb  \xe6\xb8\xa0\xe9\x81\x93\xe5\x92\xa8\xe8\xaf\xa2\xe5\x90\x88\xe4\xbd\x9c \xe7\xba\xaf\xe8\x87\xaa\xe7\x84\xb6\xe9\x87\x8f\xe5\xbc\x95\xe6\xb5\x81\xe7\xb2\xbe\xe5\x87\x86\xe5\xae\xa2\xe6\xb5\x81\xef\xbc\x8c\xe9\xab\x98\xe8\xbd\xac\xe5\x8c\x96\xef\xbc\x8c\xe6\x9c\x89\xe5\x85\xb4\xe8\xb6\xa3\xe7\xa7\x81\xe8\x81\x8a', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe9\x94\x90\xe9\x94\x90', 'timestamp': 1525358710, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmdtBlvGRZ3Tcz9ZaV', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:46:10] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:46:11] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:46:11] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:47:11] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:47:11] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:47:11] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:47:24] [INFO] 来自 群“网络营销百度排名”[成员“斑马斑马”] 的消息: "全新渠道！返点高APP开屏  指定关键人群投放黑五类 全行业可上！专业Bc，彩票，网赚，捕鱼，棋牌，软文加粉推广找我，绝对给你满意效果！长期合作，诚信互拉，诚信换群！"
+[2018-05-03 22:47:24] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:47:24] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“网络营销百度排名”
+[2018-05-03 22:47:24] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:47:24] [INFO] 群的昵称.. 网络营销百度排名
+[2018-05-03 22:47:24] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:47:24] [INFO] 成员的昵称.. 斑马斑马
+[2018-05-03 22:47:24] [INFO] 最后发言时间.. -1
+[2018-05-03 22:47:24] [INFO] 消息.. 全新渠道！返点高APP开屏  指定关键人群投放黑五类 全行业可上！专业Bc，彩票，网赚，捕鱼，棋牌，软文加粉推广找我，绝对给你满意效果！长期合作，诚信互拉，诚信换群！
+last_speak_time.. 1525358844
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u5168\u65b0\u6e20\u9053\uff01\u8fd4\u70b9\u9ad8APP\u5f00\u5c4f  \u6307\u5b9a\u5173\u952e\u4eba\u7fa4\u6295\u653e\u9ed1\u4e94\u7c7b \u5168\u884c\u4e1a\u53ef\u4e0a\uff01\u4e13\u4e1aBc\uff0c\u5f69\u7968\uff0c\u7f51\u8d5a\uff0c\u6355\u9c7c\uff0c\u68cb\u724c\uff0c\u8f6f\u6587\u52a0\u7c89\u63a8\u5e7f\u627e\u6211\uff0c\u7edd\u5bf9\u7ed9\u4f60\u6ee1\u610f\u6548\u679c\uff01\u957f\u671f\u5408\u4f5c\uff0c\u8bda\u4fe1\u4e92\u62c9\uff0c\u8bda\u4fe1\u6362\u7fa4\uff01", "qq_group_nickname": "\u7f51\u7edc\u8425\u9500\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u6591\u9a6c\u6591\u9a6c", "timestamp": 1525358844, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\x85\xa8\xe6\x96\xb0\xe6\xb8\xa0\xe9\x81\x93\xef\xbc\x81\xe8\xbf\x94\xe7\x82\xb9\xe9\xab\x98APP\xe5\xbc\x80\xe5\xb1\x8f  \xe6\x8c\x87\xe5\xae\x9a\xe5\x85\xb3\xe9\x94\xae\xe4\xba\xba\xe7\xbe\xa4\xe6\x8a\x95\xe6\x94\xbe\xe9\xbb\x91\xe4\xba\x94\xe7\xb1\xbb \xe5\x85\xa8\xe8\xa1\x8c\xe4\xb8\x9a\xe5\x8f\xaf\xe4\xb8\x8a\xef\xbc\x81\xe4\xb8\x93\xe4\xb8\x9aBc\xef\xbc\x8c\xe5\xbd\xa9\xe7\xa5\xa8\xef\xbc\x8c\xe7\xbd\x91\xe8\xb5\x9a\xef\xbc\x8c\xe6\x8d\x95\xe9\xb1\xbc\xef\xbc\x8c\xe6\xa3\x8b\xe7\x89\x8c\xef\xbc\x8c\xe8\xbd\xaf\xe6\x96\x87\xe5\x8a\xa0\xe7\xb2\x89\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x89\xbe\xe6\x88\x91\xef\xbc\x8c\xe7\xbb\x9d\xe5\xaf\xb9\xe7\xbb\x99\xe4\xbd\xa0\xe6\xbb\xa1\xe6\x84\x8f\xe6\x95\x88\xe6\x9e\x9c\xef\xbc\x81\xe9\x95\xbf\xe6\x9c\x9f\xe5\x90\x88\xe4\xbd\x9c\xef\xbc\x8c\xe8\xaf\x9a\xe4\xbf\xa1\xe4\xba\x92\xe6\x8b\x89\xef\xbc\x8c\xe8\xaf\x9a\xe4\xbf\xa1\xe6\x8d\xa2\xe7\xbe\xa4\xef\xbc\x81', 'qq_group_nickname': '\xe7\xbd\x91\xe7\xbb\x9c\xe8\x90\xa5\xe9\x94\x80\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe6\x96\x91\xe9\xa9\xac\xe6\x96\x91\xe9\xa9\xac', 'timestamp': 1525358844, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmeNs4vGRZ3Tcz9ZaY', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:48:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:48:24] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:48:24] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:49:24] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:49:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:49:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:50:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:50:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:50:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:51:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:51:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:51:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:52:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:52:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:52:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:53:25] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:53:25] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:53:25] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:54:26] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:54:26] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:54:26] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:54:31] [INFO] 来自 群“寄生虫百度排名”[成员“朝花夕拾”] 的消息: "你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /强 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 "
+[2018-05-03 22:54:31] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:54:31] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 22:54:31] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:54:31] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 22:54:31] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:54:31] [INFO] 成员的昵称.. 朝花夕拾
+[2018-05-03 22:54:31] [INFO] 最后发言时间.. -1
+[2018-05-03 22:54:31] [INFO] 消息.. 你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /强 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 
+last_speak_time.. 1525359271
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u7684\u7f51\u7ad9\u6b63\u5728\u88ab\u8df3\u8f6c\uff01\uff01\uff01\u4f60\u77e5\u9053\u5417\uff1f\u4f60\u4e0d\u63a8\u5e7f\uff0c\u522b\u4eba\u5728\u63a8\u5e7f\uff01\u6307\u5b9a\u4efb\u610f\u7f51\u7ad9\u548c\u5173\u952e\u8bcd\uff0c\u8df3\u8f6c\u81f3\u4f60\u7684\u7f51\u7ad9\uff0c\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u6d41\u91cf\uff01 /\u5f3a \u8981\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u7684\u6d41\u91cf\u3002\u63a8\u5e7f\u8def\u4e0a\u62d2\u7edd\u8d70\u5f2f\u8def\u3002 /\u5f3a \u6211\u4eec\u4f1a\u6839\u636e\u60a8\u7684\u4ea7\u54c1\u4e3a\u4e86\u5b9a\u5236\u5c5e\u4e8e\u81ea\u5df1\u7684\u63a8\u5e7f\u65b9\u6848\u3002 /\u8868\u60c5 \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9} /\u73ab\u7470 \u6709\u9700\u8981\u63a8\u5e7f\u7684\u8001\u677f\u4eec\u79c1\u804a\u3002 /\u63e1\u624b ", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u671d\u82b1\u5915\u62fe", "timestamp": 1525359271, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xe6\xad\xa3\xe5\x9c\xa8\xe8\xa2\xab\xe8\xb7\xb3\xe8\xbd\xac\xef\xbc\x81\xef\xbc\x81\xef\xbc\x81\xe4\xbd\xa0\xe7\x9f\xa5\xe9\x81\x93\xe5\x90\x97\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb8\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8c\xe5\x88\xab\xe4\xba\xba\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x81\xe6\x8c\x87\xe5\xae\x9a\xe4\xbb\xbb\xe6\x84\x8f\xe7\xbd\x91\xe7\xab\x99\xe5\x92\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe8\xb7\xb3\xe8\xbd\xac\xe8\x87\xb3\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8c\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe6\xb5\x81\xe9\x87\x8f\xef\xbc\x81 /\xe5\xbc\xba \xe8\xa6\x81\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe7\x9a\x84\xe6\xb5\x81\xe9\x87\x8f\xe3\x80\x82\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe6\x8b\x92\xe7\xbb\x9d\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xe3\x80\x82 /\xe5\xbc\xba \xe6\x88\x91\xe4\xbb\xac\xe4\xbc\x9a\xe6\xa0\xb9\xe6\x8d\xae\xe6\x82\xa8\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe4\xb8\xba\xe4\xba\x86\xe5\xae\x9a\xe5\x88\xb6\xe5\xb1\x9e\xe4\xba\x8e\xe8\x87\xaa\xe5\xb7\xb1\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe6\xa1\x88\xe3\x80\x82 /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x8e\xab\xe7\x91\xb0 \xe6\x9c\x89\xe9\x9c\x80\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe7\x9a\x84\xe8\x80\x81\xe6\x9d\xbf\xe4\xbb\xac\xe7\xa7\x81\xe8\x81\x8a\xe3\x80\x82 /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe6\x9c\x9d\xe8\x8a\xb1\xe5\xa4\x95\xe6\x8b\xbe', 'timestamp': 1525359271, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmf14nvGRZ3Tcz9Zad', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:55:31] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:55:31] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:55:31] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:55:42] [INFO] 来自 群“百度优化推广网站排名”[成员“L”] 的消息: "网站在线支付系统"
+[2018-05-03 22:55:42] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:55:42] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:55:42] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:55:42] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:55:42] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:55:42] [INFO] 成员的昵称.. L
+[2018-05-03 22:55:42] [INFO] 最后发言时间.. -1
+[2018-05-03 22:55:42] [INFO] 消息.. 网站在线支付系统
+last_speak_time.. 1525359342
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u7f51\u7ad9\u5728\u7ebf\u652f\u4ed8\u7cfb\u7edf", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "L", "timestamp": 1525359342, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe7\xbd\x91\xe7\xab\x99\xe5\x9c\xa8\xe7\xba\xbf\xe6\x94\xaf\xe4\xbb\x98\xe7\xb3\xbb\xe7\xbb\x9f', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': 'L', 'timestamp': 1525359342, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmgHINvGRZ3Tcz9Zae', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:56:00] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: " /表情 "
+[2018-05-03 22:56:00] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:56:00] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:56:00] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:56:00] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:56:00] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:56:00] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 22:56:00] [INFO] 最后发言时间.. -1
+[2018-05-03 22:56:00] [INFO] 消息..  /表情 
+last_speak_time.. 1525359360
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359360, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\xa1\xa8\xe6\x83\x85 ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359360, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmgLqlvGRZ3Tcz9Zaf', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:56:15] [INFO] 来自 群“百度优化推广网站排名”[成员“DK丶如梦”] 的消息: " /表情 "
+[2018-05-03 22:56:15] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:56:15] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:56:15] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:56:15] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:56:15] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:56:15] [INFO] 成员的昵称.. DK丶如梦
+[2018-05-03 22:56:15] [INFO] 最后发言时间.. -1
+[2018-05-03 22:56:15] [INFO] 消息..  /表情 
+last_speak_time.. 1525359375
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "DK\u4e36\u5982\u68a6", "timestamp": 1525359375, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\xa1\xa8\xe6\x83\x85 ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': 'DK\xe4\xb8\xb6\xe5\xa6\x82\xe6\xa2\xa6', 'timestamp': 1525359375, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmgPUSvGRZ3Tcz9Zag', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:57:15] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:57:15] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:57:15] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:58:15] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 22:58:16] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 22:58:16] [INFO] 登录 cookie 尚未过期
+[2018-05-03 22:58:36] [INFO] 来自 群“百度优化推广网站排名”[成员“深圳，空中飞人”] 的消息: " /表情 说的这样"
+[2018-05-03 22:58:36] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:58:36] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:58:36] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:58:36] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:58:36] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:58:36] [INFO] 成员的昵称.. 空中飞人
+[2018-05-03 22:58:36] [INFO] 最后发言时间.. -1
+[2018-05-03 22:58:36] [INFO] 消息..  /表情 说的这样
+last_speak_time.. 1525359516
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 \u8bf4\u7684\u8fd9\u6837", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7a7a\u4e2d\u98de\u4eba", "timestamp": 1525359516, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\xa1\xa8\xe6\x83\x85 \xe8\xaf\xb4\xe7\x9a\x84\xe8\xbf\x99\xe6\xa0\xb7', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xa9\xba\xe4\xb8\xad\xe9\xa3\x9e\xe4\xba\xba', 'timestamp': 1525359516, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmgxnovGRZ3Tcz9Zah', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:58:44] [INFO] 来自 群“百度优化推广网站排名”[成员“深圳，空中飞人”] 的消息: "好逗啊"
+[2018-05-03 22:58:44] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 22:58:44] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 22:58:44] [INFO] 群的 QQ.. #NULL
+[2018-05-03 22:58:44] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 22:58:44] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 22:58:44] [INFO] 成员的昵称.. 空中飞人
+[2018-05-03 22:58:44] [INFO] 最后发言时间.. -1
+[2018-05-03 22:58:44] [INFO] 消息.. 好逗啊
+last_speak_time.. 1525359524
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u597d\u9017\u554a", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7a7a\u4e2d\u98de\u4eba", "timestamp": 1525359524, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\xa5\xbd\xe9\x80\x97\xe5\x95\x8a', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xa9\xba\xe4\xb8\xad\xe9\xa3\x9e\xe4\xba\xba', 'timestamp': 1525359524, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmgzrevGRZ3Tcz9Zai', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 22:58:54] [INFO] 正在获取 群“百度优化推广网站排名”的成员列表 ...
+[2018-05-03 23:00:01] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:00:01] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:00:01] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:01:04] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:01:04] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:01:04] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:02:48] [ERROR] 第9次请求“http://s.web2.qq.com/api/get_group_info_ext2”时出现 网络错误 HTTPConnectionPool(host='s.web2.qq.com', port=80): Read timed out. (read timeout=30), html=''
+[2018-05-03 23:02:48] [ERROR] 获取 群“百度优化推广网站排名”的成员列表 失败
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“uin1054643930”] 的消息: "有谁知道现在怎么做排名啊？有好的软件推荐吗"
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. #NULL
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 有谁知道现在怎么做排名啊？有好的软件推荐吗
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6709\u8c01\u77e5\u9053\u73b0\u5728\u600e\u4e48\u505a\u6392\u540d\u554a\uff1f\u6709\u597d\u7684\u8f6f\u4ef6\u63a8\u8350\u5417", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "#NULL", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe6\x9c\x89\xe8\xb0\x81\xe7\x9f\xa5\xe9\x81\x93\xe7\x8e\xb0\xe5\x9c\xa8\xe6\x80\x8e\xe4\xb9\x88\xe5\x81\x9a\xe6\x8e\x92\xe5\x90\x8d\xe5\x95\x8a\xef\xbc\x9f\xe6\x9c\x89\xe5\xa5\xbd\xe7\x9a\x84\xe8\xbd\xaf\xe4\xbb\xb6\xe6\x8e\xa8\xe8\x8d\x90\xe5\x90\x97', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '#NULL', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvNNvGRZ3Tcz9Zaj', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“寄生虫百度排名”[成员“忧郁梦想家”] 的消息: "             推广找我  全新渠道  多种渠道      自然量 纯度高 转化好 效果明显 PC移动端全覆盖        可推：彩票 菠菜 保健 股票 网赚 手游等。。。                多种推广方式 多种渠道   欢迎中介  {高返点} /爱心                   推广找我  不在为找好渠道而烦恼 合作共赢 长期合作 /握手 "
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“寄生虫百度排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 寄生虫百度排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. 忧郁梦想家
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息..              推广找我  全新渠道  多种渠道      自然量 纯度高 转化好 效果明显 PC移动端全覆盖        可推：彩票 菠菜 保健 股票 网赚 手游等。。。                多种推广方式 多种渠道   欢迎中介  {高返点} /爱心                   推广找我  不在为找好渠道而烦恼 合作共赢 长期合作 /握手 
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "             \u63a8\u5e7f\u627e\u6211  \u5168\u65b0\u6e20\u9053  \u591a\u79cd\u6e20\u9053      \u81ea\u7136\u91cf \u7eaf\u5ea6\u9ad8 \u8f6c\u5316\u597d \u6548\u679c\u660e\u663e PC\u79fb\u52a8\u7aef\u5168\u8986\u76d6        \u53ef\u63a8\uff1a\u5f69\u7968 \u83e0\u83dc \u4fdd\u5065 \u80a1\u7968 \u7f51\u8d5a \u624b\u6e38\u7b49\u3002\u3002\u3002                \u591a\u79cd\u63a8\u5e7f\u65b9\u5f0f \u591a\u79cd\u6e20\u9053   \u6b22\u8fce\u4e2d\u4ecb  {\u9ad8\u8fd4\u70b9} /\u7231\u5fc3                   \u63a8\u5e7f\u627e\u6211  \u4e0d\u5728\u4e3a\u627e\u597d\u6e20\u9053\u800c\u70e6\u607c \u5408\u4f5c\u5171\u8d62 \u957f\u671f\u5408\u4f5c /\u63e1\u624b ", "qq_group_nickname": "\u5bc4\u751f\u866b\u767e\u5ea6\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5fe7\u90c1\u68a6\u60f3\u5bb6", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '             \xe6\x8e\xa8\xe5\xb9\xbf\xe6\x89\xbe\xe6\x88\x91  \xe5\x85\xa8\xe6\x96\xb0\xe6\xb8\xa0\xe9\x81\x93  \xe5\xa4\x9a\xe7\xa7\x8d\xe6\xb8\xa0\xe9\x81\x93      \xe8\x87\xaa\xe7\x84\xb6\xe9\x87\x8f \xe7\xba\xaf\xe5\xba\xa6\xe9\xab\x98 \xe8\xbd\xac\xe5\x8c\x96\xe5\xa5\xbd \xe6\x95\x88\xe6\x9e\x9c\xe6\x98\x8e\xe6\x98\xbe PC\xe7\xa7\xbb\xe5\x8a\xa8\xe7\xab\xaf\xe5\x85\xa8\xe8\xa6\x86\xe7\x9b\x96        \xe5\x8f\xaf\xe6\x8e\xa8\xef\xbc\x9a\xe5\xbd\xa9\xe7\xa5\xa8 \xe8\x8f\xa0\xe8\x8f\x9c \xe4\xbf\x9d\xe5\x81\xa5 \xe8\x82\xa1\xe7\xa5\xa8 \xe7\xbd\x91\xe8\xb5\x9a \xe6\x89\x8b\xe6\xb8\xb8\xe7\xad\x89\xe3\x80\x82\xe3\x80\x82\xe3\x80\x82                \xe5\xa4\x9a\xe7\xa7\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe5\xbc\x8f \xe5\xa4\x9a\xe7\xa7\x8d\xe6\xb8\xa0\xe9\x81\x93   \xe6\xac\xa2\xe8\xbf\x8e\xe4\xb8\xad\xe4\xbb\x8b  {\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x88\xb1\xe5\xbf\x83                   \xe6\x8e\xa8\xe5\xb9\xbf\xe6\x89\xbe\xe6\x88\x91  \xe4\xb8\x8d\xe5\x9c\xa8\xe4\xb8\xba\xe6\x89\xbe\xe5\xa5\xbd\xe6\xb8\xa0\xe9\x81\x93\xe8\x80\x8c\xe7\x83\xa6\xe6\x81\xbc \xe5\x90\x88\xe4\xbd\x9c\xe5\x85\xb1\xe8\xb5\xa2 \xe9\x95\xbf\xe6\x9c\x9f\xe5\x90\x88\xe4\xbd\x9c /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\xaf\x84\xe7\x94\x9f\xe8\x99\xab\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\xbf\xa7\xe9\x83\x81\xe6\xa2\xa6\xe6\x83\xb3\xe5\xae\xb6', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvObvGRZ3Tcz9Zak', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“向阳~”] 的消息: "有广西的朋友吗"
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. 向阳~
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 有广西的朋友吗
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u6709\u5e7f\u897f\u7684\u670b\u53cb\u5417", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5411\u9633~", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe6\x9c\x89\xe5\xb9\xbf\xe8\xa5\xbf\xe7\x9a\x84\xe6\x9c\x8b\xe5\x8f\x8b\xe5\x90\x97', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\x90\x91\xe9\x98\xb3~', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvPNvGRZ3Tcz9Zal', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: "你不会弄 空格啊"
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 你不会弄 空格啊
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u4e0d\u4f1a\u5f04 \u7a7a\u683c\u554a", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe4\xb8\x8d\xe4\xbc\x9a\xe5\xbc\x84 \xe7\xa9\xba\xe6\xa0\xbc\xe5\x95\x8a', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvP9vGRZ3Tcz9Zam', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“深圳，空中飞人”] 的消息: "说的也是"
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. 空中飞人
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 说的也是
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8bf4\u7684\u4e5f\u662f", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7a7a\u4e2d\u98de\u4eba", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe8\xaf\xb4\xe7\x9a\x84\xe4\xb9\x9f\xe6\x98\xaf', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xa9\xba\xe4\xb8\xad\xe9\xa3\x9e\xe4\xba\xba', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvQsvGRZ3Tcz9Zan', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: "高速你个 诀窍 "
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 高速你个 诀窍 
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u9ad8\u901f\u4f60\u4e2a \u8bc0\u7a8d ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe9\xab\x98\xe9\x80\x9f\xe4\xbd\xa0\xe4\xb8\xaa \xe8\xaf\x80\xe7\xaa\x8d ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvRWvGRZ3Tcz9Zao', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: "你拿不准的时候 去看看 百度 排第一的那 怎么写的 "
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 你拿不准的时候 去看看 百度 排第一的那 怎么写的 
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u62ff\u4e0d\u51c6\u7684\u65f6\u5019 \u53bb\u770b\u770b \u767e\u5ea6 \u6392\u7b2c\u4e00\u7684\u90a3 \u600e\u4e48\u5199\u7684 ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe6\x8b\xbf\xe4\xb8\x8d\xe5\x87\x86\xe7\x9a\x84\xe6\x97\xb6\xe5\x80\x99 \xe5\x8e\xbb\xe7\x9c\x8b\xe7\x9c\x8b \xe7\x99\xbe\xe5\xba\xa6 \xe6\x8e\x92\xe7\xac\xac\xe4\xb8\x80\xe7\x9a\x84\xe9\x82\xa3 \xe6\x80\x8e\xe4\xb9\x88\xe5\x86\x99\xe7\x9a\x84 ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvSIvGRZ3Tcz9Zap', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: "他怎么写 你就怎么写"
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息.. 他怎么写 你就怎么写
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4ed6\u600e\u4e48\u5199 \u4f60\u5c31\u600e\u4e48\u5199", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbb\x96\xe6\x80\x8e\xe4\xb9\x88\xe5\x86\x99 \xe4\xbd\xa0\xe5\xb0\xb1\xe6\x80\x8e\xe4\xb9\x88\xe5\x86\x99', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvS4vGRZ3Tcz9Zaq', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: " /表情 "
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息..  /表情 
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\xa1\xa8\xe6\x83\x85 ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvTkvGRZ3Tcz9Zar', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [INFO] 来自 群“百度优化推广网站排名”[成员“深圳，空中飞人”] 的消息: " /胜利 "
+[2018-05-03 23:02:48] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:48] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:48] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:48] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:48] [INFO] 成员的昵称.. 空中飞人
+[2018-05-03 23:02:48] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:48] [INFO] 消息..  /胜利 
+last_speak_time.. 1525359768
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u80dc\u5229 ", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7a7a\u4e2d\u98de\u4eba", "timestamp": 1525359768, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\x83\x9c\xe5\x88\xa9 ', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xa9\xba\xe4\xb8\xad\xe9\xa3\x9e\xe4\xba\xba', 'timestamp': 1525359768, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhvUSvGRZ3Tcz9Zas', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:02:48] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:02:49] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:02:49] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:02:52] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: "赶紧做吧  做好 换友情连接啊"
+[2018-05-03 23:02:52] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:02:52] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:02:52] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:02:52] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:02:52] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:02:52] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:02:52] [INFO] 最后发言时间.. -1
+[2018-05-03 23:02:52] [INFO] 消息.. 赶紧做吧  做好 换友情连接啊
+last_speak_time.. 1525359772
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u8d76\u7d27\u505a\u5427  \u505a\u597d \u6362\u53cb\u60c5\u8fde\u63a5\u554a", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525359772, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe8\xb5\xb6\xe7\xb4\xa7\xe5\x81\x9a\xe5\x90\xa7  \xe5\x81\x9a\xe5\xa5\xbd \xe6\x8d\xa2\xe5\x8f\x8b\xe6\x83\x85\xe8\xbf\x9e\xe6\x8e\xa5\xe5\x95\x8a', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525359772, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmhwV-vGRZ3Tcz9Zat', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:03:53] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:03:53] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:03:53] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:04:53] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:04:53] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:04:53] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:05:53] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:05:53] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:05:53] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:06:53] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:06:53] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:06:53] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:06:55] [INFO] 来自 群“百度优化推广网站排名”[成员“深圳，空中飞人”] 的消息: "加班的节奏"
+[2018-05-03 23:06:55] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:06:55] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:06:55] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:06:55] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:06:55] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:06:55] [INFO] 成员的昵称.. 空中飞人
+[2018-05-03 23:06:55] [INFO] 最后发言时间.. -1
+[2018-05-03 23:06:55] [INFO] 消息.. 加班的节奏
+last_speak_time.. 1525360015
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u52a0\u73ed\u7684\u8282\u594f", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u7a7a\u4e2d\u98de\u4eba", "timestamp": 1525360015, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe5\x8a\xa0\xe7\x8f\xad\xe7\x9a\x84\xe8\x8a\x82\xe5\xa5\x8f', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe7\xa9\xba\xe4\xb8\xad\xe9\xa3\x9e\xe4\xba\xba', 'timestamp': 1525360015, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmiri2vGRZ3Tcz9Zau', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:07:15] [INFO] 来自 群“做网站优化百度排名群”[成员“年华”] 的消息: "你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 "
+[2018-05-03 23:07:15] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:07:15] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“做网站优化百度排名群”
+[2018-05-03 23:07:15] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:07:15] [INFO] 群的昵称.. 做网站优化百度排名群
+[2018-05-03 23:07:15] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:07:15] [INFO] 成员的昵称.. 年华
+[2018-05-03 23:07:15] [INFO] 最后发言时间.. -1
+[2018-05-03 23:07:15] [INFO] 消息.. 你的网站正在被跳转！！！你知道吗？你不推广，别人在推广！指定任意网站和关键词，跳转至你的网站，获取精准有效流量！ /表情 要获取精准有效的流量。推广路上拒绝走弯路。 /强 我们会根据您的产品为了定制属于自己的推广方案。 /表情 欢迎广告主 中介 渠道合作。{高返点} /玫瑰 有需要推广的老板们私聊。 /握手 
+last_speak_time.. 1525360035
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": "\u4f60\u7684\u7f51\u7ad9\u6b63\u5728\u88ab\u8df3\u8f6c\uff01\uff01\uff01\u4f60\u77e5\u9053\u5417\uff1f\u4f60\u4e0d\u63a8\u5e7f\uff0c\u522b\u4eba\u5728\u63a8\u5e7f\uff01\u6307\u5b9a\u4efb\u610f\u7f51\u7ad9\u548c\u5173\u952e\u8bcd\uff0c\u8df3\u8f6c\u81f3\u4f60\u7684\u7f51\u7ad9\uff0c\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u6d41\u91cf\uff01 /\u8868\u60c5 \u8981\u83b7\u53d6\u7cbe\u51c6\u6709\u6548\u7684\u6d41\u91cf\u3002\u63a8\u5e7f\u8def\u4e0a\u62d2\u7edd\u8d70\u5f2f\u8def\u3002 /\u5f3a \u6211\u4eec\u4f1a\u6839\u636e\u60a8\u7684\u4ea7\u54c1\u4e3a\u4e86\u5b9a\u5236\u5c5e\u4e8e\u81ea\u5df1\u7684\u63a8\u5e7f\u65b9\u6848\u3002 /\u8868\u60c5 \u6b22\u8fce\u5e7f\u544a\u4e3b \u4e2d\u4ecb \u6e20\u9053\u5408\u4f5c\u3002{\u9ad8\u8fd4\u70b9} /\u73ab\u7470 \u6709\u9700\u8981\u63a8\u5e7f\u7684\u8001\u677f\u4eec\u79c1\u804a\u3002 /\u63e1\u624b ", "qq_group_nickname": "\u505a\u7f51\u7ad9\u4f18\u5316\u767e\u5ea6\u6392\u540d\u7fa4", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "\u5e74\u534e", "timestamp": 1525360035, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': '\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xe6\xad\xa3\xe5\x9c\xa8\xe8\xa2\xab\xe8\xb7\xb3\xe8\xbd\xac\xef\xbc\x81\xef\xbc\x81\xef\xbc\x81\xe4\xbd\xa0\xe7\x9f\xa5\xe9\x81\x93\xe5\x90\x97\xef\xbc\x9f\xe4\xbd\xa0\xe4\xb8\x8d\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x8c\xe5\x88\xab\xe4\xba\xba\xe5\x9c\xa8\xe6\x8e\xa8\xe5\xb9\xbf\xef\xbc\x81\xe6\x8c\x87\xe5\xae\x9a\xe4\xbb\xbb\xe6\x84\x8f\xe7\xbd\x91\xe7\xab\x99\xe5\x92\x8c\xe5\x85\xb3\xe9\x94\xae\xe8\xaf\x8d\xef\xbc\x8c\xe8\xb7\xb3\xe8\xbd\xac\xe8\x87\xb3\xe4\xbd\xa0\xe7\x9a\x84\xe7\xbd\x91\xe7\xab\x99\xef\xbc\x8c\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe6\xb5\x81\xe9\x87\x8f\xef\xbc\x81 /\xe8\xa1\xa8\xe6\x83\x85 \xe8\xa6\x81\xe8\x8e\xb7\xe5\x8f\x96\xe7\xb2\xbe\xe5\x87\x86\xe6\x9c\x89\xe6\x95\x88\xe7\x9a\x84\xe6\xb5\x81\xe9\x87\x8f\xe3\x80\x82\xe6\x8e\xa8\xe5\xb9\xbf\xe8\xb7\xaf\xe4\xb8\x8a\xe6\x8b\x92\xe7\xbb\x9d\xe8\xb5\xb0\xe5\xbc\xaf\xe8\xb7\xaf\xe3\x80\x82 /\xe5\xbc\xba \xe6\x88\x91\xe4\xbb\xac\xe4\xbc\x9a\xe6\xa0\xb9\xe6\x8d\xae\xe6\x82\xa8\xe7\x9a\x84\xe4\xba\xa7\xe5\x93\x81\xe4\xb8\xba\xe4\xba\x86\xe5\xae\x9a\xe5\x88\xb6\xe5\xb1\x9e\xe4\xba\x8e\xe8\x87\xaa\xe5\xb7\xb1\xe7\x9a\x84\xe6\x8e\xa8\xe5\xb9\xbf\xe6\x96\xb9\xe6\xa1\x88\xe3\x80\x82 /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xac\xa2\xe8\xbf\x8e\xe5\xb9\xbf\xe5\x91\x8a\xe4\xb8\xbb \xe4\xb8\xad\xe4\xbb\x8b \xe6\xb8\xa0\xe9\x81\x93\xe5\x90\x88\xe4\xbd\x9c\xe3\x80\x82{\xe9\xab\x98\xe8\xbf\x94\xe7\x82\xb9} /\xe7\x8e\xab\xe7\x91\xb0 \xe6\x9c\x89\xe9\x9c\x80\xe8\xa6\x81\xe6\x8e\xa8\xe5\xb9\xbf\xe7\x9a\x84\xe8\x80\x81\xe6\x9d\xbf\xe4\xbb\xac\xe7\xa7\x81\xe8\x81\x8a\xe3\x80\x82 /\xe6\x8f\xa1\xe6\x89\x8b ', 'qq_group_nickname': '\xe5\x81\x9a\xe7\xbd\x91\xe7\xab\x99\xe4\xbc\x98\xe5\x8c\x96\xe7\x99\xbe\xe5\xba\xa6\xe6\x8e\x92\xe5\x90\x8d\xe7\xbe\xa4', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '\xe5\xb9\xb4\xe5\x8d\x8e', 'timestamp': 1525360035, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmiwY8vGRZ3Tcz9Zav', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:08:15] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:08:15] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:08:15] [INFO] 登录 cookie 尚未过期
+[2018-05-03 23:08:38] [INFO] 来自 群“百度优化推广网站排名”[成员“北京-正神-天道”] 的消息: " /表情 每天都一两点"
+[2018-05-03 23:08:38] [INFO] test groups [群“一中285班讨论组”, 群“百度排名点击”, 群“百度算法小组（黑帽）”, 群“网络营销百度排名”, 群“站群/百度排名/SEO优化”, 群“做网站优化百度排名群”, 群“謎ヾ壹般的孩子”, 群“百度排名seo优化”, 群“百度排名点击”, 群“QQ测试群111”, 群“房屋群”, 群“寄生虫百度排名”, 群“我的群”, 群“百度优化推广网站排名”, 群“软文营销百度排名”, 群“百度排名优化交流群”]
+[2018-05-03 23:08:38] [INFO] bot.conf <qqbot.qconf.QConf object at 0x7fa3af248510>
+contact.============. 群“百度优化推广网站排名”
+[2018-05-03 23:08:38] [INFO] 群的 QQ.. #NULL
+[2018-05-03 23:08:38] [INFO] 群的昵称.. 百度优化推广网站排名
+[2018-05-03 23:08:38] [INFO] 成员的 QQ.. #NULL
+[2018-05-03 23:08:38] [INFO] 成员的昵称.. /aiq一阵风 刮呀 刮呀 刮a
+[2018-05-03 23:08:38] [INFO] 最后发言时间.. -1
+[2018-05-03 23:08:38] [INFO] 消息..  /表情 每天都一两点
+last_speak_time.. 1525360118
+qq_json=====: {"speaker_qq_number": "", "sensitive_flag": 0, "sensitive_words_string": "", "text": " /\u8868\u60c5 \u6bcf\u5929\u90fd\u4e00\u4e24\u70b9", "qq_group_nickname": "\u767e\u5ea6\u4f18\u5316\u63a8\u5e7f\u7f51\u7ad9\u6392\u540d", "sensitive_value": 0, "xnr_qq_number": "1039598173", "xnr_nickname": "\\/\u77f3\u6cab\u6cab", "speaker_nickname": "/aiq\u4e00\u9635\u98ce \u522e\u5440 \u522e\u5440 \u522ea", "timestamp": 1525360118, "qq_group_number": ""}
+qq_item..... {'speaker_qq_number': '', 'sensitive_flag': 0, 'sensitive_words_string': '', 'text': ' /\xe8\xa1\xa8\xe6\x83\x85 \xe6\xaf\x8f\xe5\xa4\xa9\xe9\x83\xbd\xe4\xb8\x80\xe4\xb8\xa4\xe7\x82\xb9', 'qq_group_nickname': '\xe7\x99\xbe\xe5\xba\xa6\xe4\xbc\x98\xe5\x8c\x96\xe6\x8e\xa8\xe5\xb9\xbf\xe7\xbd\x91\xe7\xab\x99\xe6\x8e\x92\xe5\x90\x8d', 'sensitive_value': 0, 'xnr_qq_number': '1039598173', 'xnr_nickname': '\\/\xe7\x9f\xb3\xe6\xb2\xab\xe6\xb2\xab', 'speaker_nickname': '/aiq\xe4\xb8\x80\xe9\x98\xb5\xe9\xa3\x8e \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xae\xe5\x91\x80 \xe5\x88\xaea', 'timestamp': 1525360118, 'qq_group_number': ''}
+{u'_type': u'record', u'_id': u'AWMmjEvbvGRZ3Tcz9Zaw', u'created': True, u'_version': 1, u'_index': u'group_message_2018-05-03'}
+[2018-05-03 23:09:38] [ERROR] 接收消息出错，开始测试登录 cookie 是否过期...
+[2018-05-03 23:09:38] [INFO] 登录成功。登录账号：\/石沫沫(1039598173)
+[2018-05-03 23:09:38] [INFO] 登录 cookie 尚未过期

@@ -66,14 +66,15 @@ def spcific_opinion_corpus_expand(task):
     origin_keyword = task['corpus_name']
     
     #step2：对领域词进行词扩充
-    keywords_list = keywords_expand(origin_keyword)
+   # keywords_list = keywords_expand(origin_keyword)
 
     #step3:根据师兄算法进行语料扩充与积累
     #step4：将语料积累结果写入文件
-    task_mark = get_weibo_text(keywords_list,task['corpus_name'])
+    task_mark = get_weibo_text(origin_keyword,task['corpus_name'])
+    #task_mark = get_weibo_text(keywords_list,task['corpus_name'])
     print 'task_mark:',task_mark
     #step5:如果写入文件成功且，则更新状态为1
-    if task_mark == 1:
+    if task_mark == 'True':
         update_mark = update_opnion_corpus(task['corpus_pinyin'])
     else:
         update_mark = False
