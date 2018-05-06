@@ -82,7 +82,7 @@ def save_data(data,label):
 def rank_text(text_result,data_result,key_list):
 
     total_n = len(text_result)
-    n = int(total_n*0.015)
+    n = int(total_n*0.001)
     result_list = TopkHeap(n)
 
     for i in range(0,len(text_result)):
@@ -140,18 +140,21 @@ def get_weibo_text(key_list,name):
                     text_result.extend(text_set)
                     data_result.extend(data_list)
 
+                if count > 5000:    
+
+                    result_list = rank_text(text_result,data_result,key_list)#对结果进行排序
+
+                    status = save_data(result_list,name)#将数据存入es
+
+                    break
+                else:
+                    continue
+
             except StopIteration:
                 print "all done"
                 break
 
-        result_list = rank_text(text_result,data_result,key_list)#对结果进行排序
-        # with open('./text_data/opinion/text_%s_%s.csv' % (name,t_name), 'wb') as f:
-        # # with open('./corpus/text_%s.csv' % name, 'wb') as f:
-        #     writer = csv.writer(f)
-        #     for i in range(0,len(text_result)):
-        #         writer.writerow(text_result[i])
 
-        status = save_data(result_list,name)#将数据存入es
 
     return status
 
