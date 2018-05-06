@@ -5,20 +5,23 @@ import socket
 import json
 import subprocess
 from multiprocessing import Process
-from MyBot import MyBot
+from MyWXBot import MyBot
 import sys
 sys.path.append(os.getcwd())
-from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
+path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
+sys.path.append(path1)
+
+from global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, wx_xnr_max_no,\
                         r as global_utils_r
 global_utils_r = r #本来这个应该用默认的redis而不是微信的redis，但是默认的redis出现了点问题，先用微信的redis替代                      
 es = es_xnr
-from xnr.global_config import port_range
-from xnr.parameter import MAX_VALUE, LOCALHOST_IP, DAY
-from xnr.wx_xnr_manage_mappings import wx_xnr_mappings
-from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
-from xnr.time_utils import ts2datetime, datetime2ts
+from global_config import port_range
+from parameter import MAX_VALUE, LOCALHOST_IP, DAY
+from wx_xnr_manage_mappings import wx_xnr_mappings
+from utils import user_no2wxbot_id, wxbot_id2user_no
+from time_utils import ts2datetime, datetime2ts
 from send_mail import send_mail
 
 def IsOpen(ip,port):
@@ -212,7 +215,9 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         print u'登录前登出失败'
 
     #login
-    wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
+    path2 = os.path.dirname(path1)
+    wxxnr_login_path = os.path.join(path2, WX_LOGIN_PATH)
+    print 'wxxnr_login_path: ', wxxnr_login_path
     if init_groups_list:
         base_str = 'python '+ wxxnr_login_path + ' -i '+ wxbot_id + ' -p ' + str(wxbot_port) +  ' -g ' + init_groups_list
     else:
@@ -220,7 +225,10 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
    
     p_str1 = base_str + ' >> wxxnr_login'+ str(wxbot_port) + '.txt'
     #p_str1 = base_str
-   
+    
+    print 'p_str1', p_str1
+
+
     command_str = base_str
     p_str2 = 'pgrep -f ' + '"' + command_str + '"'
     process_ids = subprocess.Popen(p_str2, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -230,19 +238,21 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         kill_str = 'kill -9 ' + process_id
         p2 = subprocess.Popen(kill_str, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     p2 = subprocess.Popen(p_str1, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print 11111111
     '''
     #如果确定没错误，就注释掉这个
     for line in p2.stdout.readlines():
         print 'line: ', line
-    '''
+    ''' 
+    print 222
     #检测登陆状态，返回登陆所需二维码路径或者返回缓存登录成功的标志：loginedwithcache
     while True:
         d = r.get(wxbot_id)
         if d:
             try:
                 qr_path = eval(d)['qr_path']
-                #if qr_path:
-                #    print 'qr_path', qr_path
+                if qr_path:
+                    print 'qr_path', qr_path
                 #使用缓存登陆时，qr_path对应的二维码文件不存在
                 if qr_path == 'loginedwithcache':
                     return qr_path

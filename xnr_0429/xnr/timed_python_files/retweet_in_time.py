@@ -144,7 +144,8 @@ def retweet_operate_timing():
                     return False
                 print 'text::',text
                 print 'r_mid:::',r_mid
-                mark = retweet_tweet_func(account_name,password,r_mid,tweet_type,xnr_user_no)
+                text = '' # 空转发
+                mark = retweet_tweet_func(account_name,password,text,r_mid,tweet_type,xnr_user_no)
                 print 'mark::',mark[0]
                 if mark[0]:
                     task_id = xnr_user_no + '_' + r_mid

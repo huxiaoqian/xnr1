@@ -262,9 +262,9 @@ def get_safe_qq(xnr_user_no,start_ts,end_ts):
 
             timestamp = get_result['timestamp']
 
-            speak_dict['speak_day'][timestamp] = result['daily_post_num']
-            speak_dict['speak_total'][timestamp] = result['total_post_num']
-            speak_dict['mark'] = result['safe']
+            speak_dict['speak_day'][timestamp] = get_result['daily_post_num']
+            speak_dict['speak_total'][timestamp] = get_result['total_post_num']
+            speak_dict['mark'] = get_result['safe']
 
         except:
 
@@ -312,10 +312,10 @@ def get_safe_qq_today(xnr_user_no):
     '''
 
     current_date = ts2datetime(int(time.time()))
-    r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
+    r_qq_speak_num = r_qq_speak_num_pre + current_date
 
     try:
-        today_count = int(r.hget(r_qq_speak_num))
+        today_count = int(r.hget(r_qq_speak_num, qq_number))
     except:
         today_count = 0
 

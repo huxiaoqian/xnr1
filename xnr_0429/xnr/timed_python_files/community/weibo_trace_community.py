@@ -493,14 +493,14 @@ def get_influence_warning(community,trace_datetime):
     old_mean_influence,mean_influence_diff = get_index_olddiff(community['community_id'],mean_influence_type,community['mean_influence'],community['xnr_user_no'])
 
     if mean_influence_diff > 0:
-        mean_influence_desp = u'社区平均敏感度上升了' + str(mean_influence_diff) + u'，由'+ str(old_mean_influence) + u'上升至' + str(community['mean_influence']) +u'；'
+        mean_influence_desp = u'社区平均影响力上升了' + str(mean_influence_diff) + u'，由'+ str(old_mean_influence) + u'上升至' + str(community['mean_influence']) +u'；'
     else:
-        mean_influence_desp = u'社区平均敏感度下降了' + str(abs(mean_influence_diff)) + u'，由'+ str(old_mean_influence) + u'下降至' + str(community['mean_influence']) +u'；'
+        mean_influence_desp = u'社区平均影响力下降了' + str(abs(mean_influence_diff)) + u'，由'+ str(old_mean_influence) + u'下降至' + str(community['mean_influence']) +u'；'
 
     if max_influence_diff > 0:
-        max_influence_desp = u'社区最大敏感度上升了' + str(max_influence_diff) + u'，由'+ str(old_max_influence) + u'上升至' + str(community['max_influence']) +u'。'
+        max_influence_desp = u'社区最大影响力上升了' + str(max_influence_diff) + u'，由'+ str(old_max_influence) + u'上升至' + str(community['max_influence']) +u'。'
     else:
-        max_influence_desp = u'社区最大敏感度下降了' + str(abs(max_influence_diff)) + u'，由'+ str(old_max_influence) + u'下降至' + str(community['max_influence']) +u'。'
+        max_influence_desp = u'社区最大影响力下降了' + str(abs(max_influence_diff)) + u'，由'+ str(old_max_influence) + u'下降至' + str(community['max_influence']) +u'。'
 
     warning_descp = mean_influence_desp + max_influence_desp
 
@@ -661,7 +661,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
                     community_detail['num_warning_descrp'],\
                     community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'])
                 elif item == '影响力剧增预警':
-                	community_detail['influence_warning'] = 1
+                    community_detail['influence_warning'] = 1
                     community_detail['influence_warning_descrp'],\
                     community_detail['influence_warning_content'] = get_influence_warning(community,trace_datetime)
                 elif item == '敏感度剧增预警':
@@ -727,6 +727,7 @@ if __name__ == '__main__':
         #     i = i+1
     else:
         now_time = int(time.time())
+       # now_time = datetime2ts('2018-05-05')
     start_time = int(time.time())
     trace_xnr_community(now_time)
     end_time = int(time.time())

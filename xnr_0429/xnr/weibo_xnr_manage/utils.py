@@ -423,6 +423,7 @@ def get_today_xnr_fans(xnr_user_no):
     }
     try:
         search_result = es_xnr.search(index = weibo_feedback_fans_index_name,doc_type = weibo_feedback_fans_index_type,body = query_body)['hits']['hits']
+       # print "search_fans_result::",search_result
         fans_num = len(search_result)
     except:
         fans_num = 0
@@ -463,12 +464,20 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
             }
         }
     }
+
+
+    lookup_type='fans_list'
+    #今日总粉丝数
+    fans_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
+    xnr_user_detail['user_fansnum']= len(fans_list)   
     try:
         xnr_result=es_xnr.search(index=index_name,doc_type=xnr_flow_text_index_type,body=query_body)
         print 'xnr_result:::',xnr_result
         #今日总粉丝数
-        xnr_user_detail['user_fansnum']=get_today_xnr_fans(xnr_user_no)
-
+        #fans_list=lookup_xnr_fans_followers(user_id,lookup_type)
+        #xnr_user_detail['user_fansnum']= len(fans_list)
+        #xnr_user_detail['user_fansnum']=get_today_xnr_fans(xnr_user_no)
+        #print "search_fans_result::",search_result
         if not xnr_result['hits']['hits']:
             # xnr_user_detail['user_fansnum']=0
             xnr_user_detail['daily_post_num']=0
@@ -590,6 +599,7 @@ def show_condition_history_count(xnr_user_no,start_time,end_time):
             xnr_date_info.append(item['_source'])
     except:
         xnr_date_info=[]
+    print 'xnr_date_info::',xnr_date_info
     return xnr_date_info
 
 #历史统计表查询组织
@@ -1415,52 +1425,7 @@ def count_weibouser_influence(uid):
     return infulence_value
 
 
-#step 4.5: list of fans
-'''
-def wxnr_list_fans(user_id,order_type):
-    try:
-        result=es_xnr.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)
-        fans_list=result['_source']['fans_list']
-    except:
-        fans_list=[]
-
-    if fans_list:
-        fans_result=es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':fans_list})['docs']
-        user_result=[]
-        for item in fans_result:
-            user_dict=dict()
-            uid=item['_id']
-            user_dict['uid']=item['_id']
-            #计算影响力
-            user_dict['influence']=count_weibouser_influence(uid)
-            #敏感度查询
-            try:
-                temp_user_result=es_user_profile.get(index=portrait_index_name,doc_type=portrait_index_type,id=uid)['_source']
-                user_dict['sensitive']=temp_user_result['sensitive']
-            except:
-                user_dict['sensitive']=0
-
-            if item['found']:
-                user_dict['photo_url']=item['_source']['photo_url']            
-                user_dict['nick_name']=item['_source']['nick_name']
-                user_dict['sex']=item['_source']['sex']
-                user_dict['user_birth']=item['_source']['user_birth']
-                user_dict['create_at']=item['_source']['create_at']
-                user_dict['user_location']=item['_source']['user_location']
-            else:
-                user_dict['photo_url']=''            
-                user_dict['nick_name']=''
-                user_dict['sex']=''
-                user_dict['user_birth']=''
-                user_dict['create_at']=''
-                user_dict['user_location']=''
-            user_result.append(user_dict)
-    else:
-        user_result=[]
-    #对结果按要求排序
-    user_result.sort(key=lambda k:(k.get(order_type,0)),reverse=True)
-    return user_result
-'''
+#step 4.5: list of fans  
 def wxnr_list_fans(user_id,order_type):
     try:
         xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=user_id)['_source']

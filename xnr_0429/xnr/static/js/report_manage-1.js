@@ -2,23 +2,37 @@ var reportDefaul_url,beginUrl;
 var time2=Date.parse(new Date())/1000;
 if(flagType == 1){//微博
     beginUrl='weibo_xnr_report_manage';
+    $("input[type='checkbox'][value='人物']").prop('checked', true);
+    $("input[type='checkbox'][value='言论']").prop('checked', true);
+    $("input[type='checkbox'][value='事件']").prop('checked', true);
+    $("input[type='checkbox'][value='时间']").prop('checked', true);
     weiboORqq('weibo');
     reportDefaul_url='/weibo_xnr_report_manage/show_reportcontent_new/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+time2;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 2){//QQ
     weiboORqq('QQ');
     $('.qqHide').hide();
+    $("input[type='checkbox'][value='人物']").prop('checked', true);
+    $("input[type='checkbox'][value='言论']").prop('checked', true);
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+'&report_type=人物,言论&start_ts='+start_ts+'&end_ts='+end_ts;
     public_ajax.call_request('get',reportDefaul_url,reportDefaul);
 }else if(flagType == 3){
     weiboORqq('WX');
-    reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=0';
+    $('.qqHide').hide();
+    $("input[type='checkbox'][value='人物']").parents('label').hide();//暂只上报言论的。
+    //$("input[type='checkbox'][value='人物']").prop('checked', true);
+    $("input[type='checkbox'][value='言论']").prop('checked', true);
+    reportDefaul_url ='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=言论&period=0';
     public_ajax.call_request('get',reportDefaul_url,WXreportDefaul);
 }else if (flagType == 4){
     beginUrl='facebook_xnr_report_manage';
     weiboORqq('faceBook');
+    $("input[type='checkbox'][value='人物']").prop('checked', true);
+    $("input[type='checkbox'][value='言论']").prop('checked', true);
+    $("input[type='checkbox'][value='事件']").prop('checked', true);
+    $("input[type='checkbox'][value='时间']").prop('checked', true);
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/facebook_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
@@ -26,6 +40,10 @@ if(flagType == 1){//微博
 }else if (flagType == 5){
     beginUrl='twitter_xnr_report_manage';
     weiboORqq('twitter');
+    $("input[type='checkbox'][value='人物']").prop('checked', true);
+    $("input[type='checkbox'][value='言论']").prop('checked', true);
+    $("input[type='checkbox'][value='事件']").prop('checked', true);
+    $("input[type='checkbox'][value='时间']").prop('checked', true);
     var start_ts=getDaysBefore(7);
     var end_ts= todayTimetamp();
     reportDefaul_url='/twitter_xnr_report_manage/show_report_content/?report_type=人物,言论,事件,时间&start_time='+todayTimetamp()+'&end_time='+end_ts;
@@ -283,10 +301,17 @@ function WXreportDefaul(data) {
                 align: "center",//水平
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
-                    var text = row.report_content;
+                    //var text = row.report_content;
+		    var txt = '';
+	            var keyword=row.sensitive_words_string.split('&');
+	 	    var s=row.text;
+	 	    for (var f=0;f<keyword.length;f++){
+			    s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+		    }
+		    txt=s;
                     var str =
                         '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
-                        '   <span class="center_2">'+text+'</span>'+
+                        '   <span class="center_2">'+txt+'</span>'+
                         '</div>';
 
                     var nameuid,time,report_type,xnr;
@@ -316,7 +341,7 @@ function WXreportDefaul(data) {
                         '                </label>'+
                         '                <img src="/static/images/post-6.png" class="center_icon">'+
                         '                <a class="ID" style="display: none;">'+row.report_time+'</a>'+
-                        '                <a class="center_1">上报名称：'+nameuid+'</a>&nbsp;&nbsp;'+
+                        //暂隐藏上报名称'                <a class="center_1">上报名称：'+nameuid+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">上报时间：'+time+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">上报类型：'+report_type+'</a>&nbsp;&nbsp;'+
                         '                <a class="center_1">虚拟人：'+xnr+'</a>'+
@@ -410,15 +435,16 @@ $('.type2 .demo-label').on('click',function () {
     if (flagType==1||flagType==4||flagType==5){
         newReport_url='/'+beginUrl+'/show_reportcontent_new/?report_type='+types.join(',')+
             '&start_time='+time1+'&end_time='+time2;
-    }else if(flagType==2){
+        public_ajax.call_request('get',newReport_url,reportDefaul);
+     }else if(flagType==2){
         newReport_url='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
             '&report_type='+types.join(',')+'&start_ts='+time1+'&end_ts='+time2;
+        public_ajax.call_request('get',newReport_url,reportDefaul);
     }else if(flagType==3){
-        newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period=7';
+        newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type='+types.join(',')+'&period='+time;
         public_ajax.call_request('get',newReport_url,WXreportDefaul);
-        return false;
     }
-    public_ajax.call_request('get',newReport_url,reportDefaul);
+    //public_ajax.call_request('get',newReport_url,reportDefaul);
 });
 //时间选择
 $('.choosetime .demo-label input').on('click',function () {
@@ -441,15 +467,17 @@ $('.choosetime .demo-label input').on('click',function () {
         if (flagType==1||flagType==4||flagType==5){
             weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
                 '&start_time='+getDaysBefore(_val)+'&end_time='+time2;
-        }else if(flagType==2){
+ 	    public_ajax.call_request('get',weiboUrl,reportDefaul); 
+       }else if(flagType==2){
             weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
                 '&report_type='+valCH.join(',')+'&start_ts='+getDaysBefore(_val)+'&end_ts='+time2;
+	    public_ajax.call_request('get',weiboUrl,reportDefaul);
         }else if(flagType==3){
-            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
+            newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type='+valCH.join(',')+'&period='+_val;
             public_ajax.call_request('get',newReport_url,WXreportDefaul);
-            return false;
+            //return false;
         }
-        public_ajax.call_request('get',weiboUrl,reportDefaul);
+//        public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
 });
 $('#sure').on('click',function () {
@@ -469,16 +497,20 @@ $('#sure').on('click',function () {
         if (flagType==1||flagType==4||flagType==5){
             weiboUrl='/'+beginUrl+'/show_reportcontent_new/?report_type='+valCH.join(',')+
                 '&start_time='+(Date.parse(new Date(s))/1000)+'&end_time='+(Date.parse(new Date(d))/1000);
+            public_ajax.call_request('get',weiboUrl,reportDefaul);
         }else if(flagType==2){
             weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
                 '&report_type='+valCH.join(',')+'&start_ts='+(Date.parse(new Date(s))/1000)+
                 '&end_ts='+(Date.parse(new Date(d))/1000);
+ 	   public_ajax.call_request('get',weiboUrl,reportDefaul);
         }else if(flagType==3){
-            weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=content&period='+_val;
+            //weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=='+valCH.join(',')+'&period='+_val;
+	    //该传时间戳
+	    weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=='+valCH.join(',')+'&startdate='+(Date.parse(new Date(s))/1000)+'&enddate='+(Date.parse(new Date(d))/1000);
             public_ajax.call_request('get',weiboUrl,WXreportDefaul);
-            return false;
+           // return false;
         }
-        public_ajax.call_request('get',weiboUrl,reportDefaul);
+        // public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
 });
 

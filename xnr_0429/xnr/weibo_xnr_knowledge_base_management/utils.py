@@ -1,11 +1,12 @@
 #!/usr/bin/python
 #-*- coding:utf-8 -*-
+import time
 import json
 import pinyin
 import numpy as np
 from xnr.global_config import S_TYPE,S_DATE
 from xnr.global_utils import es_xnr as es
-from xnr.global_utils import es_user_portrait,es_flow_text,flow_text_index_name_pre,flow_text_index_type
+from xnr.global_utils import es_user_portrait,es_user_profile,es_flow_text,flow_text_index_name_pre,flow_text_index_type
 from xnr.global_utils import r,weibo_target_domain_detect_queue_name,es_user_portrait,portrait_index_name,portrait_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                             weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
                             weibo_hidden_expression_index_name,weibo_hidden_expression_index_type,\
@@ -53,7 +54,7 @@ def get_generate_example_model(domain_name,role_name):
 
     es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
     item = es_result
-    print 'es_result:::',es_result
+    #print 'es_result:::',es_result
     # 政治倾向
     political_side = json.loads(item['political_side'])[0][0]
 
@@ -140,22 +141,23 @@ def get_generate_example_model(domain_name,role_name):
 
     item['monitor_keywords'] = ','.join(monitor_keywords_list)
 
-    mget_results_user = es_user_portrait.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
+    mget_results_user = es_user_profile.mget(index=profile_index_name,doc_type=profile_index_type,body={'ids':role_group_uids})['docs']
     item['nick_name'] = []
-    for mget_item in mget_results_user:
-        #print 'mget_item:::',mget_item
-        if mget_item['found']:
-            item['nick_name'] = mget_item['_source']['nick_name']
-            item['location'] = mget_item['_source']['user_location']
-            item['gender'] = mget_item['_source']['sex']
-            uid = mget_item['_source']['uid']
-            try:
-                profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
-                if profile_results['description']:
-                    item['description'] = profile_results['description']
-                    break
-            except:
-                pass
+    if mget_results_user:
+        for mget_item in mget_results_user:
+            #print 'mget_item:::',mget_item
+            if mget_item['found']:
+                item['nick_name'] = mget_item['_source']['nick_name']
+                item['location'] = mget_item['_source']['user_location']
+                item['gender'] = mget_item['_source']['sex']
+                uid = mget_item['_source']['uid']
+                try:
+                    profile_results = es_user_portrait.get(index=profile_index_name,doc_type=profile_index_type,id=uid)['_source']
+                    if profile_results['description']:
+                        item['description'] = profile_results['description']
+                        break
+                except:
+                    pass
 
 
     item['business_goal'] = u'渗透'
@@ -468,8 +470,10 @@ def get_show_domain_role_info(domain_name,role_name):
     role_en = domain_ch2en_dict[role_name]
 
     task_id = domain_pinyin + '_' + role_en
-
-    es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
+    try:
+        es_result = es.get(index=weibo_role_index_name,doc_type=weibo_role_index_type,id=task_id)['_source']
+    except:
+	es_result = {}
 
     return es_result
 
@@ -930,6 +934,7 @@ def show_all_opinion_corpus():
         result = es.search(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,body=query_body)['hits']['hits']
         # print 'result',result
         for item in result:
+            item['_source']['_id'] = item['_id']
             opinion_corpus_result.append(item['_source'])
     except:
         opinion_corpus_result = []
@@ -956,6 +961,7 @@ def show_condition_opinion_corpus(theme_type):
     try:
         result = es.search(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,body=query_body)['hits']['hits']
         for item in result:
+            item['_source']['_id'] = item['_id']
             opinion_corpus_result.append(item['_source'])
     except:
         opinion_corpus_result = []
@@ -1066,6 +1072,14 @@ def change_select_corpus(corpus_id,corpus_type,theme_daily_name,create_type):
 def delete_corpus(corpus_id):
     try:
         es.delete(index=weibo_xnr_corpus_index_name,doc_type=weibo_xnr_corpus_index_type,id=corpus_id)
+        result=True
+    except:
+        result=False
+    return result
+
+def delete_opinion_corpus(corpus_id):
+    try:
+        es.delete(index=all_opinion_corpus_index_name,doc_type=all_opinion_corpus_index_type,id=corpus_id)
         result=True
     except:
         result=False

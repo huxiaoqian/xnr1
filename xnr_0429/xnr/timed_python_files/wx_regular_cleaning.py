@@ -6,13 +6,13 @@ sys.path.append('../')
 from time_utils import ts2datetime, datetime2ts
 from global_config import WX_IMAGE_ABS_PATH, WX_VOICE_ABS_PATH
 from parameter import DAY
-
+import shutil 
 
 #清理wx群组消息保存下来的图片、语音文件
 def clean_wx_group_media_files():
     remove_wx_media_old_files(WX_IMAGE_ABS_PATH)
     remove_wx_media_old_files(WX_VOICE_ABS_PATH)
-    imageslim(WX_IMAGE_ABS_PATH)
+    #imageslim(WX_IMAGE_ABS_PATH)
 
 def load_legal_filepath_suf_list(period):
     legal_filepath_suf_list = []

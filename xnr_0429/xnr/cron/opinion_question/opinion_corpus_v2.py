@@ -82,7 +82,9 @@ def save_data(data,label):
 def rank_text(text_result,data_result,key_list):
 
     total_n = len(text_result)
-    n = int(total_n*0.001)
+
+    n = int(total_n*0.05)
+
     result_list = TopkHeap(n)
 
     for i in range(0,len(text_result)):
@@ -140,7 +142,7 @@ def get_weibo_text(key_list,name):
                     text_result.extend(text_set)
                     data_result.extend(data_list)
 
-                if count > 5000:    
+                if count > 2000:    
 
                     result_list = rank_text(text_result,data_result,key_list)#对结果进行排序
 

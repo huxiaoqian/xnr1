@@ -16,7 +16,7 @@ AB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data')
 cut_str = load_scws()
 
 sys.path.append('../trans/')
-from trans import trans, simplified2traditional, traditional2simplified
+from trans_v3 import trans, simplified2traditional, traditional2simplified
 
 #cc = opencc.OpenCC('s2t', opencc_path='/usr/bin/opencc')
 emotions_words = load_emotion_words()

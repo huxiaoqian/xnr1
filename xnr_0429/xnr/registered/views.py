@@ -10,7 +10,8 @@ mod = Blueprint('registered', __name__, url_prefix='/registered')
 @mod.route('/targetCustom/')
 def targetCustom():
     flag = request.args.get('flag','')
-    return render_template('registered/target_custom.html',flag=flag)
+    notNew = request.args.get('notNew','')
+    return render_template('registered/target_custom.html',flag=flag,notNew=notNew)
 
 @mod.route('/virtualCreated/')
 def virtualCreated():
