@@ -356,7 +356,7 @@ weibo_xnr_corpus_index_name = 'weibo_corpus'
 weibo_xnr_corpus_index_type = 'text'
 
 # 语料库 -- 观点语料和问答语料
-all_opinion_corpus_index_name_test = 'all_opinion_corpus_test'
+all_opinion_corpus_index_name_test = 'all_opinion_corpus'
 all_opinion_corpus_index_name = 'all_opinion_corpus'
 all_opinion_corpus_index_type = 'text'
 
@@ -689,6 +689,9 @@ tw_hot_subopinion_results_index_type = 'subopinion'
 def _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
     return redis.StrictRedis(host, port)
 
+def _default_redis_v2(host=REDIS_HOST_46, port=REDIS_PORT_46, db=0):
+    return redis.StrictRedis(host, port,db)
+
 R_WRITING = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 writing_task_queue_name = 'intelligent_writing_task'
 
@@ -726,7 +729,7 @@ fb_recommend_subopinion_keywords_task_queue_name = 'fb_recommend_subopnion_keywo
 tw_recommend_subopinion_keywords_task_queue_name = 'tw_recommend_subopnion_keywords_task_queue'
 
 # use to save follower every day
-R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
+R_WEIBO_XNR_FANS_FOLLOWERS = _default_redis_v2(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_fans_uid_list_datetime_pre = 'fans_uid_list_'  # fans_uid_list_2017-08-30
 r_fans_count_datetime_xnr_pre = 'fans_count_'    # fans_count_2017-08-30_6337917209
 r_fans_search_xnr_pre = 'fans_search_'    # fans_search_6337917209
@@ -738,7 +741,7 @@ r_followers_search_xnr_pre = 'followers_search_'    # followers_search_633791720
 
 
 ## use to save follower every day    facebook
-R_FACEBOOK_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
+R_FACEBOOK_XNR_FANS_FOLLOWERS = _default_redis_v2(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_fb_fans_uid_list_datetime_pre = 'fb_fans_uid_list_'  # fb_fans_uid_list_2017-08-30
 r_fb_fans_count_datetime_xnr_pre = 'fb_fans_count_'    # fb_fans_count_2017-08-30_6337917209
 r_fb_fans_search_xnr_pre = 'fb_fans_search_'    # fb_fans_search_6337917209
@@ -751,7 +754,7 @@ r_fb_followers_search_xnr_pre = 'fb_followers_search_'    # fb_followers_search_
 
 
 ## use to save follower every day    twitter
-R_TWITTER_XNR_FANS_FOLLOWERS = _default_redis(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
+R_TWITTER_XNR_FANS_FOLLOWERS = _default_redis_v2(host=REDIS_HOST_45,port=REDIS_PORT_45,db=1)
 r_tw_fans_uid_list_datetime_pre = 'tw_fans_uid_list_'  # fb_fans_uid_list_2017-08-30
 r_tw_fans_count_datetime_xnr_pre = 'tw_fans_count_'    # fb_fans_count_2017-08-30_6337917209
 r_tw_fans_search_xnr_pre = 'tw_fans_search_'    # fb_fans_search_6337917209
@@ -773,27 +776,35 @@ R_CLUSTER_FLOW2 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW2, port=REDIS_CL
 
 # sensitive user
 R_CLUSTER_FLOW3 = redis.StrictRedis(host=REDIS_CLUSTER_HOST_FLOW3, port=REDIS_CLUSTER_PORT_FLOW3)
-R_ADMIN = _default_redis(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)
+R_ADMIN = _default_redis_v2(host=REDIS_HOST_SENSITIVE, port=REDIS_PORT_SENSITIVE, db=15)
 
 
 # facebook&twitter uname_id
-R_UNAME2ID_FT = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=1)
+R_UNAME2ID_FT = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=1)
 fb_uname2id = 'fb_user'
 tw_uname2id = 'tw_user'
 
 # r_retweet 转发网络
 redis_host_list = [1,2]
-R_retweet = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
+R_retweet = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=2)
 
-fb_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
-fb_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
+fb_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=3)
+fb_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=4)
 
-tw_retweet_1 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
-tw_retweet_2 = _default_redis(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
+tw_retweet_1 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=5)
+tw_retweet_2 = _default_redis_v2(host=REDIS_HOST_NEW, port=REDIS_PORT_NEW, db=6)
 
 fb_retweet_dict = {'1':fb_retweet_1,'2':fb_retweet_2}
 tw_retweet_dict = {'1':tw_retweet_1,'2':tw_retweet_2}
 
+#use to save retweet/be_retweet
+retweet_r_1 = _default_redis_v2(host=RETWEET_REDIS_HOST,port=RETWEET_REDIS_PORT, db=1)
+retweet_r_2 = _default_redis_v2(host=RETWEET_REDIS_HOST, port=RETWEET_REDIS_PORT, db=2)
+retweet_redis_dict = {'1':retweet_r_1, '2':retweet_r_2}
+#use to save comment/be_comment
+comment_r_1 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=1)
+comment_r_2 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=2)
+comment_redis_dict = {'1':comment_r_1, '2':comment_r_2}
 
 
 #微信虚拟人相关

@@ -66,11 +66,23 @@ function inModalData(data) {
     var creat_url_2=WFT_url+'/role2feature_info/?domain_name='+(data.domains||data.domain_name)+'&role_name='+(data.role_name||data.roleName);
     public_ajax.call_request('get',creat_url_2,creat_2);
     $$political_side=data.political_side;
-    if(data.psy_feature.indexOf('&')>=0){
+    try {
+        if(data.psy_feature.indexOf('&')>=0){
+            $$psy_feature=data.psy_feature.split('&');
+        }else {
+            $$psy_feature=data.psy_feature.split(',');
+        }
+    }catch (e){
+        $$psy_feature=[];
+        $.each(data.psy_feature,function (index,item) {
+            $$psy_feature.push(item[0]);
+        })
+    }
+    /*if(data.psy_feature.indexOf('&')>=0){
         $$psy_feature=data.psy_feature.split('&');
     }else {
         $$psy_feature=data.psy_feature.split(',');
-    }
+    }*/
 
     var bus=data.business_goal.toString().indexOf('&')==-1?data.business_goal.split(',|，'):data.business_goal.split('&');
     for (var f of bus){

@@ -62,7 +62,7 @@ $('.previous').on('click',function () {
         }
         localStorage.setItem('goONuser',JSON.stringify(goUSER));
     }
-    window.open('/registered/targetCustom/');
+    window.open('/registered/targetCustom/?notNew=yes');
 });
 $('.next').on('click',function () {
     n=1;

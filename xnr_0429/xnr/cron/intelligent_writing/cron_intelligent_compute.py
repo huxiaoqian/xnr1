@@ -44,7 +44,7 @@ from timed_python_files.twitter_mappings import twitter_flow_text_mappings
 from time_utils import datetime2ts,ts2datetime,ts2datetime_full ,get_flow_text_index_list, fb_get_flow_text_index_list, tw_get_flow_text_index_list
 from parameter import MAX_SEARCH_SIZE, SUB_OPINION_WEIBO_LIMIT, SENTIMENT_POS, SENTIMENT_NEG
 sys.path.append('../trans/')
-from trans import trans, simplified2traditional, traditional2simplified
+from trans_v2 import trans, simplified2traditional, traditional2simplified
 
 NEWS_LIMIT = 200
 default_cluster_eva_min_size = 5
@@ -78,8 +78,9 @@ def news_content(task_source,task_id,news_limit = NEWS_LIMIT):
     if task_source == 'weibo':
         query_body ={'query':{
                         'bool':{
-                            'must':[
-                                {'wildcard':{'text':'*【*】*'}}
+                            'should':[
+                                {'wildcard':{'text':'*【*】*'}},
+                                {'wildcard':{'text':'*#*#*'}}
                                 ]
                         }
                     },
@@ -89,8 +90,9 @@ def news_content(task_source,task_id,news_limit = NEWS_LIMIT):
         query_body = {
             'query':{
                 'bool':{
-                    'must':[
-                        {'wildcard':{'text':'*【*】*'}}
+                    'should':[
+                        {'wildcard':{'text':'*【*】*'}},
+                        {'wildcard':{'text':'*#*'}}
                         ]
                 }
             },
@@ -461,7 +463,7 @@ def get_opinions(task_source,task_id,xnr_user_no,opinion_keywords_list,opinion_t
                         }
                     }
                 },
-                'size':500
+                'size':500000
             }
 
             es_sensitive_result = es_flow_text.search(index=index_name_list,doc_type='text',\
@@ -900,7 +902,7 @@ def compute_intelligent_recommend(task_detail):
     task_source = task_detail['task_source']
     event_keywords = task_detail['event_keywords']
     create_time = task_detail['create_time']
-
+    print 'event_keywords...',event_keywords
     # 根据对应主题把事件相关帖子都找出来，并一个事件存为一个index,不同渠道用task_source做为index_type
     print 'find flow text...'
     get_topic_tweets(task_id, task_source, event_keywords, create_time)

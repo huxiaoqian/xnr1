@@ -282,10 +282,10 @@ def login_status(xnr_user_no):
     return login_status
 
 
-def show_qq_xnr(MAX_VALUE):
+def show_qq_xnr(MAX_VALUE,submitter):
     query_body = {
         'query':{
-            'match_all':{}
+            'term':{'submitter':submitter}
         },
         'size':MAX_VALUE
     }

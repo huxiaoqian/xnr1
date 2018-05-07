@@ -51,24 +51,31 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
             }
         }
         #虚拟人今天被@数量
+        at_num_xnr = 0
         wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         try:
             results_xnr = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_at_num)
             if results_xnr['_shards']['successful'] != 0:
-               at_num_xnr = results_xnr['count']
-            else:
-                print 'es index rank error'
-                at_num_xnr = 0
-        except:
-            at_num_xnr = 0
-        # 截止目前所有被@总数
-        wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
+               at_num_xnr = results_xnr['count']               
+        except Exception,e:
+            print 'at_num_xnr Exception: ', str(e)
+
+
+        # 截止目前xnr被@总数
         at_num_total = 0
+        wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))       
         for index_name in wx_group_message_index_list:
-            r = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_at_num)
-            if r['_shards']['successful'] != 0:
-                at_num_total += r['count']
+            try:
+                r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
+                if r['_shards']['successful'] != 0:
+                    at_num_total += r['count']
+            except Exception,e:
+                pass
+                # print 'at_num_total Exception: ', str(e)
+
+
         #查询所有人被@的次数
+        at_num_total_day = 0
         query_body_total_day = {
             'query':{
                 'bool':{
@@ -83,18 +90,17 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
             results_total_day = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_body_total_day)
             if results_total_day['_shards']['successful'] != 0:
                at_num_total_day = results_total_day['count']
-            else:
-                print 'es index rank error'
-                at_num_total_day = 0
-        except:
-            at_num_total_day = 0
+        except Exception,e:
+            print 'at_num_total_day Exception: ', str(e)
+
         #统计
         at_dict = {}
         at_dict['at_day'] = {}
         at_dict['at_total'] = {}
         at_dict['at_day'][current_time] = at_num_xnr
         at_dict['at_total'][current_time] = at_num_total
-        influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
+        # influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
+        influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))
         influence = round(influence,2)  # 保留两位小数
         at_dict['mark'] = influence
         return at_dict
@@ -141,56 +147,84 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
     current_date = ts2datetime(current_timestamp)
     if period == 0 :    #获取今天的数据
         current_time = datetime2ts(current_date)
-
         xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid','groups_list'])
         puid = xnr_data['puid']
-        group_list = xnr_data['groups_list']
+        group_list = str(xnr_data['groups_list']).split(',')
         
         #查询1
+        sensitive_value = 0
         wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_info = {
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'terms':{'group_id':group_list}
+          "query": {
+            "filtered": {
+              "filter": {
+                "bool": {
+                  "must": [{'terms': {'group_id': group_list}},
+                    {
+                      "range": {
+                        "sensitive_value": {    #不会写exists语句，就用这个代替吧
+                          "gte": -1
+                        }
+                      }
                     }
+                  ]
                 }
-            },
-            'aggs':{
-                'avg_sensitive':{
-                    'avg':{
-                        'field':'sensitive_value'
-                    }
-                }
+              }
             }
+          },
+          'aggs': {
+            'avg_sensitive': {
+              'avg': {
+                'field': 'sensitive_value'
+              }
+            }
+          }
         }
         try:
-            es_sensitive_result = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_body_info)['aggregations']
+            es_sensitive_result = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_name,body=query_body_info)['aggregations']
             sensitive_value = es_sensitive_result['avg_sensitive']['value']
             if sensitive_value == None:
                 sensitive_value = 0
-        except:
-            sensitive_value = 0
+        except Exception,e:
+            print 'sensitive_value Exception: ', str(e)
+
+
         #查询2
+        max_sensitive = 0
         query_body_max = {
-            'query':{
-                'filtered':{
-                    'filter':{
-                        'terms':{'group_id':group_list}
+          "query": {
+            "filtered": {
+              "filter": {
+                "bool": {
+                  "must": [{'terms': {'group_id': group_list}},
+                    {
+                      "range": {
+                        "sensitive_value": {    #不会写exists语句，就用这个代替吧
+                          "gte": -1
+                        }
+                      }
                     }
+                  ]
                 }
-            },
-            'sort':{'sensitive_value':{'order':'desc'}}
+              }
+            }
+          },
+          'sort':{'sensitive_value':{'order':'desc'}}
         }
         try:
-            max_results = es_xnr.search(index=group_message_index_name,doc_type=group_message_index_type,\
+            max_results = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_name,\
                             body=query_body_max)['hits']['hits']
             max_sensitive = max_results[0]['_source']['sensitive_value']
-        except:
-            max_sensitive = 0
+        except Exception,e:
+            print 'max_sensitive Exception: ', str(e)
+
+
+        print 'sensitive_value', sensitive_value
+        print 'max_sensitive', max_sensitive
         #统计
         follow_group_sensitive = {'sensitive_info': {current_time: sensitive_value}}
-        penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))*100
+        # penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))*100
+        penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))
         penetration = round(penetration,2)
         follow_group_sensitive['mark'] = penetration
         return follow_group_sensitive

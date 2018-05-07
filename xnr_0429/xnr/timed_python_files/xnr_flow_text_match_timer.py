@@ -33,7 +33,7 @@ def match_flow_text():
 
     query_body = {
         'query':{
-            'match_all':{}
+            'term':{'create_status':2}
         },
         'size':MAX_VALUE
     }
@@ -46,22 +46,23 @@ def match_flow_text():
         count = 0
 
         for result in search_results:
-
+            result = result['_source']
             uid = result['uid']
             xnr_user_no = result['xnr_user_no']
 
             match_query_body = {
+		'query':{
                 'bool':{
                     'must':[
                         {'term':{'uid':uid}}
                     ]
-                },
+                }},
                 'size':MAX_VALUE
             }
 
             match_results = es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
                                     body=match_query_body)['hits']['hits']
-
+	    #print 'match_results..',match_results
             for match_item in match_results:
 
                 match_item = match_item['_source']
@@ -85,7 +86,7 @@ def match_flow_text():
                                 
                     mid_value[k]=v
 
-                match_item["topic_field_first"] = topic_en2ch_dict(mid_value[mid][0])
+                match_item["topic_field_first"] = topic_en2ch_dict[mid_value[mid][0]]
                 match_item["topic_field"] = '&'.join(mid_value[mid])
                 match_item['xnr_user_no'] = xnr_user_no
 
@@ -95,13 +96,13 @@ def match_flow_text():
 
                 count += 1
                 if count%1000 == 0:
-                    es_xnr.bulk(bulk_action,index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,timeout=600)
+                    es_xnr.bulk(bulk_action,index=new_xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,timeout=600)
 
             if bulk_action:
-                es_xnr.bulk(bulk_action,index=xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,timeout=600)
+                es_xnr.bulk(bulk_action,index=new_xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,timeout=600)
 
-    except:
-        return 'no tweets to update today'
+    #except:
+    #    return 'no tweets to update today'
 
 
 if __name__ == '__main__':

@@ -42,7 +42,7 @@ $(".richang input[name='richang']").on('click',function () {
     var t=$(".tit-2 input[name='mine']:checked").val();
     if (!t){t=''};
     var a=[];
-    $(".zhuti input[name='richang']:checkbox:checked").each(function (index,item) {
+    $(".richang input[name='richang']:checkbox:checked").each(function (index,item) {
         a.push($(this).val());
     });
     var zhutiUrl='/'+urlTotal+'/show_different_corpus/?corpus_type='+t+'&corpus_status=1'+
@@ -257,7 +257,7 @@ function view(data) {
                         '           <i class="uid" style="display: none;">'+row.uid+'</i>'+
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '           <span class="centerDel" style="cursor: pointer;" onclick="del(\''+row.id+'\',\''+11+'\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
+                        '           <span class="centerDel" style="cursor: pointer;" onclick="del(\''+row._id+'\',\''+11+'\',\'true\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '           <span class="centerEdit" style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+'\')"><i title="修改" class="icon icon-edit"></i></span>'+
                         '           <div class="center_2" style="text-align: left;margin: 10px 0;"><b style="color:#f98077;">摘要内容：</b>'+txt+'</div>'+
                         '       </div>'+
@@ -310,22 +310,27 @@ function suretheme() {
 }
 //====删除=========
 var nowNUM;
-function del(_id,num) {
+function del(_id,num,word) {
     nowNUM=num;
-    var deltUrl='/'+urlTotal+'/delete_corpus/?corpus_id='+_id;
+    var mid='delete_corpus';
+    if(word){mid='delete_opinion_corpus'}
+    var deltUrl='/'+urlTotal+'/'+mid+'/?corpus_id='+_id;
     public_ajax.call_request('get',deltUrl,sucfail);
 }
 function sucfail(data) {
     var f='';
     if (data||data[0]){
         f='操作成功';
-        if (nowNUM||modNUM){
+        /*if (nowNUM||modNUM){
             var nowurl='',fun='';
             if (Number(nowNUM)==11||Number(modNUM)==33){nowurl=theme_url;fun=themeWord}else {nowurl=day_url;fun=day;};
             setTimeout(function () {
                 public_ajax.call_request('get',nowurl,fun);
             },1000)
-        };
+        };*/
+	setTimeout(function () {
+            public_ajax.call_request('get',material_url,material);
+        },800)
     }else {
         f='操作失败';
     }

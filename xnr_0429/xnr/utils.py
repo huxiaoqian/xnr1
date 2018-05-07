@@ -1,7 +1,7 @@
 #-*-coding:utf-8-*-
 import json
 import time
-from global_utils import es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
+from global_utils import es_user_portrait, es_flow_text,es_user_profile,profile_index_name,profile_index_type,\
                         es_xnr,weibo_xnr_index_name,weibo_xnr_index_type,\
                         weibo_xnr_fans_followers_index_name,weibo_xnr_fans_followers_index_type,\
                         index_sensing,type_sensing,weibo_bci_index_name_pre,weibo_bci_index_type,\
@@ -335,7 +335,7 @@ def get_influence_relative(uid,influence):
         },
         'sort':{'user_index':{'order':'desc'}}
     }
-    results = es_flow_text.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
+    results = es_user_portrait.search(index=weibo_bci_index_name,doc_type=weibo_bci_index_type,body=query_body)['hits']['hits']
 
     user_index_max = results[0]['_source']['user_index']
 

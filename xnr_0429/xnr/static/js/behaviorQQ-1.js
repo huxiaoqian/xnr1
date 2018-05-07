@@ -1,4 +1,5 @@
-var end_time=Date.parse(new Date())/1000;
+//var end_time=Date.parse(new Date())/1000;
+var end_time=yesterday();
 $('.choosetime .demo-label input').on('click',function () {
     var _val=$(this).val();
     if (_val=='mize'){

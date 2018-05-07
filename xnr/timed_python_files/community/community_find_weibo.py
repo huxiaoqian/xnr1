@@ -87,7 +87,7 @@ def get_users(xnr_user_no,nodes=None):
         uid_comment = json.loads(i['_source']['uid_comment'])
         max_count = max([int(n) for n in uid_comment.values()])
         G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
-    
+
     return G 
 
 

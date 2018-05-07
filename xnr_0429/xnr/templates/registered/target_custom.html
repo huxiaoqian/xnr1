@@ -234,10 +234,10 @@
                 <div class="type_page allGroup_div" style="display: none;">
                     <ul id="myTabs2" class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#show-1" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;群体描述</a>
+                            <a href="#show-1" role="tab" data-toggle="tab"><b class="icon icon-tags"></b>&nbsp;群体详情列表</a>
                         </li>
                         <li role="presentation">
-                            <a href="#show-2" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;群体详情列表</a>
+                            <a href="#show-2" role="tab" data-toggle="tab"><b class="icon icon-fire"></b>&nbsp;群体描述</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="content2">
@@ -432,7 +432,11 @@
 <script>
     judgment('6');
 //    localStorage.removeItem('secondStep');WXNR  FXNR TXNR
-    var _gostart_USER=localStorage.getItem('go_mod_user').toString();
+    var notNewBuild='{{notNew}}',_gostart_USER;
+    if(notNewBuild=='yes'){
+        _gostart_USER=localStorage.getItem('go_mod_user').toString();
+    }else {_gostart_USER=''}
+//    var _gostart_USER=localStorage.getItem('go_mod_user').toString();
     var flag='{{flag}}',urlTotal,defalutDomain,defalutRole;
     if ((flag==1)||(_gostart_USER.indexOf('W')==0)){
         urlTotal='/weibo_xnr_knowledge_base_management';

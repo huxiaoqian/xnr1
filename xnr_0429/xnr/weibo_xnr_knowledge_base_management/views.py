@@ -14,7 +14,7 @@ from utils import get_create_sensitive_words,show_sensitive_words_default,show_s
                   get_show_domain_group_detail_portrait,get_show_domain_description,\
                   get_show_domain_role_info,get_delete_domain,get_export_example_model,\
                   get_generate_example_model,get_show_example_model,\
-                  show_different_corpus,show_opinion_corpus
+                  show_different_corpus,show_opinion_corpus,delete_opinion_corpus
 
 mod = Blueprint('weibo_xnr_knowledge_base_management', __name__, url_prefix='/weibo_xnr_knowledge_base_management')
 
@@ -447,3 +447,10 @@ def ajax_delete_corpus():
     corpus_id=request.args.get('corpus_id','')
     results=delete_corpus(corpus_id)
     return json.dumps(results)
+
+@mod.route('/delete_opinion_corpus/')
+def ajax_delete_opinion_corpus():
+    corpus_id=request.args.get('corpus_id','')
+    results=delete_opinion_corpus(corpus_id)
+    return json.dumps(results)
+

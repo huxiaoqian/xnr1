@@ -221,10 +221,10 @@ def get_warning_orgnize(result):
     else:
     	num_content = []
 
-    if result[-1]['density_warning_content']:
-        density_content = json.loads(result[-1]['density_warning_content'])
-    else:
-    	density_content = []
+    #if result[-1]['density_warning_content']:
+    #    density_content = json.loads(result[-1]['density_warning_content'])
+    #else:
+    #	density_content = []
 
     warning_type = []
      
@@ -252,11 +252,16 @@ def get_warning_orgnize(result):
         if trace_result['sensitive_warning_content']:
             sensitive_content.extend(json.loads(trace_result['sensitive_warning_content']))
         else:
-        	pass
+            pass
         if trace_result['influence_warning_content']:
             influence_content.extend(json.loads(trace_result['influence_warning_content']))
         else:
-        	pass
+            pass
+
+        if result['density_warning_content']:
+            density_content = json.loads(result[-1]['density_warning_content'])
+        else:
+    	    density_content = []
 
         warning_type.extend(trace_result['warning_type'])
    
@@ -275,10 +280,10 @@ def get_warning_orgnize(result):
     warning_result['mean_sensitive'] = mean_sensitive_list
     warning_result['warning_rank'] = num_warning + sensitive_warning + influence_warning + density_warning
 
-    warning_result['num_warning'] = num_warning
-    warning_result['sensitive_warning'] = sensitive_warning
-    warning_result['density_warning'] = density_warning
-    warning_result['influence_warning'] = influence_warning
+    warning_result['num_warning'] = abs(num_warning)
+    warning_result['sensitive_warning'] = abs(sensitive_warning)
+    warning_result['density_warning'] = abs(density_warning)
+    warning_result['influence_warning'] = abs(influence_warning)
 
     warning_result['num_warning_descrp'] = num_desp
     warning_result['sensitive_warning_descrp'] = sensitive_desp
@@ -431,20 +436,20 @@ def show_trace_community(xnr_user_no,now_time):
     weibo_community_index_name = get_community_index(now_time)
 
     #print 'weibo_community_index_name:',weibo_community_index_name
-    #try:
-    community_result = es_xnr.search(index = weibo_community_index_name,doc_type = weibo_community_index_type,body = query_body)['hits']['hits']
-    community_list = []
-    for item in community_result:
+    try:
+        community_result = es_xnr.search(index = weibo_community_index_name,doc_type = weibo_community_index_type,body = query_body)['hits']['hits']
+        community_list = []
+        for item in community_result:
             #跟踪判断提示
-        if item['_source']['warning_remind'] >= 3:
-            item['_source']['trace_message'] = u'该社区已经连续3周未出现预警，请选择放弃跟踪或强制跟踪！'
-        else:
-            item['_source']['trace_message'] = u''
-        print 'community_id::',item['_id']
-        community_list.append(item['_source'])
-    community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)
- #   except:
-  #      community_list = []
+            if item['_source']['warning_remind'] >= 3:
+                item['_source']['trace_message'] = u'该社区已经连续3周未出现预警，请选择放弃跟踪或强制跟踪！'
+            else:
+                item['_source']['trace_message'] = u''
+            print 'community_id::',item['_id']
+            community_list.append(item['_source'])
+        community_list.sort(key=lambda k:(k.get('warning_rank',0)),reverse=True)
+    except:
+        community_list = []
     return community_list
 
 
