@@ -436,18 +436,18 @@ def get_today_xnr_fans(xnr_user_no):
         },
         'size':MAX_SEARCH_SIZE
     }
-   # try:
-    search_result = es.search(index = weibo_feedback_fans_index_name,doc_type = weibo_feedback_fans_index_type,body = query_body)['hits']['hits']
-    print 'serc_r::',search_result
-    fans_num = len(search_result)
-   # except:
-   #     fans_num = 0
+    try:
+        search_result = es.search(index = weibo_feedback_fans_index_name,doc_type = weibo_feedback_fans_index_type,body = query_body)['hits']['hits']
+    #print 'serc_r::',search_result
+        fans_num = len(search_result)
+    except:
+        fans_num = 0
     return fans_num
 
 def lookup_xnr_fans_followers(user_id,lookup_type):
     try:
         xnr_result=es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,id=user_id)['_source']
-        print xnr_result
+       # print xnr_result
         lookup_list=xnr_result[lookup_type]
     except:
         lookup_list=[]
@@ -482,55 +482,55 @@ def create_xnr_history_info_count(xnr_user_no,current_date):
     lookup_type='fans_list'
     fans_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
     xnr_user_detail['user_fansnum'] = len(fans_list)
-    #try:
-    xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
+    try:
+        xnr_result=es.search(index=weibo_xnr_flow_text_name,doc_type=xnr_flow_text_index_type,body=query_body)
         #今日总粉丝数
         #lookup_type='fans_list'
         #fans_list=lookup_xnr_fans_followers(xnr_user_no,lookup_type)
         #xnr_user_detail['user_fansnum'] = len(fans_list)
-    xnr_user_detail['user_fansnum'] = get_today_xnr_fans(xnr_user_no)
+        xnr_user_detail['user_fansnum'] = get_today_xnr_fans(xnr_user_no)
         # for item in xnr_result['hits']['hits']:
             # xnr_user_detail['user_fansnum']=item['_source']['user_fansnum']
         # daily_post-日常发帖,hot_post-热点跟随,business_post-业务发帖
-    for item in xnr_result['aggregations']['all_task_source']['buckets']:
-        if item['key'] == 'daily_post':
-            xnr_user_detail['daily_post_num']=item['doc_count']
-        elif item['key'] == 'business_post':
-            xnr_user_detail['business_post_num']=item['doc_count']
-        elif item['key'] == 'hot_post':
-            xnr_user_detail['hot_follower_num']=item['doc_count']
-        elif item['key'] =='trace_follow_tweet':
-            xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
+        for item in xnr_result['aggregations']['all_task_source']['buckets']:
+            if item['key'] == 'daily_post':
+                xnr_user_detail['daily_post_num']=item['doc_count']
+            elif item['key'] == 'business_post':
+                xnr_user_detail['business_post_num']=item['doc_count']
+            elif item['key'] == 'hot_post':
+                xnr_user_detail['hot_follower_num']=item['doc_count']
+            elif item['key'] =='trace_follow_tweet':
+                xnr_user_detail['trace_follow_tweet_num']=item['doc_count']
         #总发帖量
-    if xnr_user_detail.has_key('daily_post_num'):
-        pass
-    else:
-        xnr_user_detail['daily_post_num']=0
+        if xnr_user_detail.has_key('daily_post_num'):
+            pass
+        else:
+            xnr_user_detail['daily_post_num']=0
         
-    if xnr_user_detail.has_key('business_post_num'):
-        pass
-    else:
+        if xnr_user_detail.has_key('business_post_num'):
+            pass
+        else:
+            xnr_user_detail['business_post_num']=0
+
+        if xnr_user_detail.has_key('hot_follower_num'):
+            pass
+        else:
+            xnr_user_detail['hot_follower_num']=0
+
+        if xnr_user_detail.has_key('trace_follow_tweet_num'):
+            pass
+        else:
+            xnr_user_detail['trace_follow_tweet_num']=0
+
+        xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
+    except:
+        print 'except1!'
+        xnr_user_detail['user_fansnum']=0
+        xnr_user_detail['daily_post_num']=0
         xnr_user_detail['business_post_num']=0
-
-    if xnr_user_detail.has_key('hot_follower_num'):
-        pass
-    else:
         xnr_user_detail['hot_follower_num']=0
-
-    if xnr_user_detail.has_key('trace_follow_tweet_num'):
-        pass
-    else:
+        xnr_user_detail['total_post_sum']=0
         xnr_user_detail['trace_follow_tweet_num']=0
-
-    xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
-   # except:
-    #    print 'except1!'
-     #   xnr_user_detail['user_fansnum']=0
-      #  xnr_user_detail['daily_post_num']=0
-       # xnr_user_detail['business_post_num']=0
-        #xnr_user_detail['hot_follower_num']=0
-       # xnr_user_detail['total_post_sum']=0
-       # xnr_user_detail['trace_follow_tweet_num']=0
 
     if xnr_user_detail['user_fansnum'] == 0:
         yesterday_date=ts2datetime(datetime2ts(current_date)-DAY)

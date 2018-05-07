@@ -630,7 +630,7 @@ def get_community_keyword(uid_list,date_time):
             word_dict_new[keyword] = 1
 
     keyword_dict = sorted(word_dict_new.items(),key = lambda d:d[1],reverse = True)
-    print 'keyword_dict',keyword_dict,keyword_dict[0],type(keyword_dict[0])
+    #print 'keyword_dict',keyword_dict,keyword_dict[0],type(keyword_dict[0])
     keyword_name = keyword_dict[0][0] + '_' + keyword_dict[1][0]
     return json.dumps(keyword_dict),keyword_name
 
@@ -897,10 +897,11 @@ if __name__ == '__main__':
     	datetime = datetime2ts(WEIBO_COMMUNITY_DATE)
     	xnr_user_no_list = ['WXNR0004']
     else:
-    	datetime = int(time.time())
+    	datetime = int(time.time())-DAY
     	xnr_user_no_list = get_compelete_wbxnr()
     start_time = int(time.time())
     for xnr_user_no in xnr_user_no_list:
+        print 'xnr_user_no::',xnr_user_no
         get_final_community(xnr_user_no,datetime)
     end_time = int(time.time())
     print 'cost_time::',end_time - start_time
