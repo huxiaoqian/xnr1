@@ -63,6 +63,7 @@ class Share():
 						self.list.append(item)
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 		return self.list
 		
 	def save(self, indexName, typeName, list):

@@ -31,6 +31,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 
 	#API.update_with_media(filename[, status][, in_reply_to_status_id][, auto_populate_reply_metadata][, lat][, long][, source][, place_id][, file])
@@ -41,6 +43,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def mention(self, text):
 		#text = '@lvleilei1 test'
@@ -50,6 +54,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def message(self, uid, text):
 		try:
@@ -58,6 +64,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def follow(self, uid):
 		try:
@@ -66,6 +74,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def destroy_friendship(self, uid):
 		try:
@@ -74,6 +84,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def do_retweet(self, tid):
 		try:
@@ -82,6 +94,9 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
+
 
 	def do_retweet_text(self, uid, tid, text):
 		try:
@@ -104,6 +119,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 	def do_favourite(self, tid):
 		try:
@@ -112,6 +128,8 @@ class Operation():
 			return [True, ' ']
 		except Exception as e:
 			return [False, e]
+		finally:
+			self.launcher.display.popen.kill()
 
 	def do_comment(self, uid, tid, text):
 		try:
@@ -133,7 +151,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-
+			self.launcher.display.popen.kill()
 
 
 if __name__ == '__main__':
