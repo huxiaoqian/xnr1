@@ -346,9 +346,9 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
 
         #整合
         speak_dict = dict()
-        speak_dict['speak_today'] = {}
+        speak_dict['speak_day'] = {}
         speak_dict['speak_total'] = {}
-        speak_dict['speak_today'][current_time] = today_count
+        speak_dict['speak_day'][current_time] = today_count
         speak_dict['speak_total'][current_time] = total_count_totay
         safe_active = (float(math.log(today_count+1))/(math.log(speaker_max+1)+1))*100
         safe_active = round(safe_active,2)  # 保留两位小数
