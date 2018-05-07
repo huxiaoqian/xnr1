@@ -17,7 +17,10 @@ from global_utils import es_xnr,xnr_flow_text_index_name_pre,xnr_flow_text_index
                          be_retweet_index_name_pre,be_retweet_index_type,\
                          retweet_index_name_pre,retweet_index_type,\
                          comment_index_name_pre,comment_index_type,\
-                         be_comment_index_name_pre,be_comment_index_type
+                         be_comment_index_name_pre,be_comment_index_type,\
+                         new_xnr_flow_text_index_name_pre,new_xnr_flow_text_index_type,\
+                         weibo_sensitive_words_index_name,weibo_sensitive_words_index_type,\
+                         weibo_xnr_index_name,weibo_xnr_index_type
 
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
@@ -58,7 +61,7 @@ def get_xnr_keywords(xnr_user_no,datetime_list):
 
     xnr_flow_text_index_name_list = []
     for date_name in datetime_list:
-        xnr_flow_text_index_name = xnr_flow_text_index_name_pre + date_name
+        xnr_flow_text_index_name = new_xnr_flow_text_index_name_pre + date_name
         if es_xnr.indices.exists(index=xnr_flow_text_index_name):
             xnr_flow_text_index_name_list.append(xnr_flow_text_index_name)
         else:
@@ -74,10 +77,47 @@ def get_xnr_keywords(xnr_user_no,datetime_list):
                 keywords_list.extend(keywords_string.split('&'))
             else:
                 pass
+            sensitive_string = item['_source']['sensitive_words_string']
+            if sensitive_string:
+                keywords_list.extend(sensitive_string.split('&'))
+            else:
+                pass
     except:
         keywords_list=[]
+    xnr_set_words = get_xnr_sensitive(xnr_user_no)
+    keywords_list.extend(xnr_set_words)
     return keywords_list
 
+def get_xnr_sensitive(xnr_user_no):
+    xnr_sensitive_word = []
+    try:
+        xnr_result=es_xnr.get(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,id=xnr_user_no)['_source']
+        submitter=xnr_result['submitter']
+    except:
+        submitter=''
+    sxnr_type = 'my_xnrs'
+    query_body = {
+        'query':{
+            'filtered':{
+                'filter':{
+                    'bool':{
+                        'must':[
+                            {'term':{'create_type':sxnr_type}},
+                            {'term':{'submitter':submitter}}
+                        ]
+                    }
+                }
+            }
+        }
+    }
+    if submitter:
+        try:
+        	sensitive_result = es_xnr.search(index=weibo_sensitive_words_index_name,doc_type=weibo_sensitive_words_index_type,body=query_body)['hits']['hits']
+        	for item in sensitive_result:
+        		xnr_sensitive_word.append(item['_source']['sensitive_words'])
+        except:
+            print 'except!!!-sensitive_words'
+    return xnr_sensitive_word
 
 #查找虚拟人的关注用户或好友
 def get_xnr_relationer(xnr_user_no):
