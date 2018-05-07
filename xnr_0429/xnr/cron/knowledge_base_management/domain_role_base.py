@@ -237,7 +237,10 @@ def detect_by_keywords(keywords,datetime_list):
     model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
     
     for word in keywords:
-        simi_list = model.most_similar(word,topn=20)
+	try:
+            simi_list = model.most_similar(word,topn=20)
+	except:
+	    continue
         for simi_word in simi_list:
             keyword_list.append(simi_word[0])
 
@@ -894,7 +897,7 @@ def compute_domain_base():
                 detect_results = detect_by_keywords(keywords,datetime_list)
             elif create_type['by_seed_users']:
                 seed_users = create_type['by_seed_users']
-                detect_results = detect_by_seed_users(seed_users,datetime_list)
+                detect_results = detect_by_seed_users(seed_users)
             elif create_type['by_all_users']:
                 all_users = create_type['by_all_users']
                 detect_results = detect_by_all_users(all_users)

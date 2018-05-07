@@ -8,8 +8,10 @@ import os
 from aip import AipSpeech
 import sys
 sys.path.append('../../')
+sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.path.abspath(os.getcwd()), 'xnr'))
-from global_config import BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY
+
+from xnr.global_config import BAIDU_APP_ID, BAIDU_API_KEY, BAIDU_SECRET_KEY
 
 '''
 q为待翻译的语句组成的列表

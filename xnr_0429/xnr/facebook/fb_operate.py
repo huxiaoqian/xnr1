@@ -56,6 +56,7 @@ class Operation():
 			return [False, e]
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 	def mention(self, username, text):
 		try:
@@ -91,6 +92,7 @@ class Operation():
 			return [False, e]
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 	def follow(self, uid):
 		try:
@@ -111,6 +113,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 	def not_follow(self, uid):
 		try:
@@ -153,6 +156,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 # 私信(未关注)
 	def send_message(self, uid, text):
@@ -176,6 +180,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 # 私信(已关注)
 	# def send_message2(self, uid, text):
@@ -238,6 +243,7 @@ class Operation():
 			return [False, e]
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 # 评论
 	def comment(self, uid, fid, text):
@@ -291,6 +297,7 @@ class Operation():
 		finally:
 			time.sleep(3)
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 # 分享
 	def share(self, uid, fid, text):
@@ -361,6 +368,7 @@ class Operation():
 			return [False, e]
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 #添加好友
 	def add_friend(self, uid):
@@ -373,6 +381,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 #确认好友请求
 	def confirm(self, uid):
@@ -388,6 +397,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 #删除好友
 	def delete_friend(self, uid):
@@ -403,6 +413,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
+			self.launcher.display.popen.kill()
 
 if __name__ == '__main__':
 	operation = Operation('13041233988','han8528520258')

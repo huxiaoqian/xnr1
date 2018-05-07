@@ -93,7 +93,8 @@ def ajax_delete_qq_xnr():
 @mod.route('/show_qq_xnr/')
 def ajax_show_qq_xnr():
     results = {}
-    results = show_qq_xnr(MAX_VALUE)
+    submitter = request.args.get('submitter','admin@qq.com')
+    results = show_qq_xnr(MAX_VALUE,submitter)
     return json.dumps(results) 
 
 @mod.route('/login_status/')

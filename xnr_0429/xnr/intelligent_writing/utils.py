@@ -378,14 +378,16 @@ def get_show_opinion_corpus_content(task_detail):
         get_result = es.get(index=opinion_corpus_results_index_name,doc_type=opinion_corpus_results_index_type,id=task_id)['_source']
 
     except:
-        return ""
+        return []
     opinion_results = json.loads(get_result['corpus_results'])
 
     try:
-        print 'opinion_results[corpus_name]..',opinion_results[corpus_name]
-        return opinion_results[corpus_name]
+	if opinion_results[corpus_name]:
+            return [opinion_results[corpus_name]]
+        else:
+	    return []
     except:
-        return ""
+        return []
 
 
 def get_one_click_evaluation(task_detail):
@@ -394,15 +396,16 @@ def get_one_click_evaluation(task_detail):
     text = task_detail['text'].encode('utf-8')
 
     node = createWordTree();
-    print 'text...',text
+    #print 'text...',text
     sensitive_words_dict = searchWord(text, node)
-    print 'sensitive_words_dict..',sensitive_words_dict
+    #print 'sensitive_words_dict..',sensitive_words_dict
     if sensitive_words_dict:
         score = 0
         sensitive_words_list = []
 
         for k,v in sensitive_words_dict.iteritems():
             tmp_stage = r_sensitive.hget("sensitive_words", k)
+	    #print 'tmp_stage..',tmp_stage
             if tmp_stage:
                 score += v*sensitive_score_dict[str(tmp_stage)]
             sensitive_words_list.append(k.decode('utf-8'))

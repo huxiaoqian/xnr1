@@ -65,6 +65,7 @@ class Screen():
 				time.sleep(3)
 				self.driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
 				self.driver.quit()
+				self.display.popen.kill()
 				break
 			except:
 				continue

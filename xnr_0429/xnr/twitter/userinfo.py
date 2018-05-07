@@ -46,6 +46,7 @@ class Userinfo():
 			age = None
 		dict = {'uid':uid,'desccription':description,'location':location,'age':age}
 		driver.quit()
+		self.launcher.display.popen.kill()
 		return dict
 		
 if __name__ == '__main__':

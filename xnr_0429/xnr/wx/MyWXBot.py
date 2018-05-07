@@ -13,17 +13,19 @@ import threading
 import subprocess
 import sys
 sys.path.append(os.getcwd())
+path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
+sys.path.append(path1)
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 
 
-from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
+from global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, wx_xnr_data_path, wx_xnr_qrcode_path, wx_sent_group_message_index_name_pre
-from xnr.global_config import qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain, WX_IMAGE_ABS_PATH, WX_VOICE_ABS_PATH
-from xnr.parameter import LOCALHOST_IP, DAY
-from xnr.utils import user_no2wxbot_id, wxbot_id2user_no
-from xnr.time_utils import ts2datetime, datetime2ts
-from xnr.wx_xnr_groupmessage_mappings import wx_group_message_mappings
+from global_config import qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain, WX_IMAGE_ABS_PATH, WX_VOICE_ABS_PATH
+from parameter import LOCALHOST_IP, DAY
+from utils import user_no2wxbot_id, wxbot_id2user_no
+from time_utils import ts2datetime, datetime2ts
+from wx_xnr_groupmessage_mappings import wx_group_message_mappings
 from sensitive_compute import sensitive_check
 
 class MyBot(Bot):
@@ -58,7 +60,11 @@ class MyBot(Bot):
             self.console_qr = True
         else:   
             #使用二维码图片登陆
-            self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
+	    path2 = os.path.dirname(path1)
+    	    qr_path = os.path.join(path2, wx_xnr_qrcode_path)
+	    print 'new qr_path: ', qr_path
+	    self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
+            #self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
             self.change_wxxnr_redis_data({'qr_path':self.qr_path})
@@ -510,3 +516,6 @@ def remove_wx_media_old_files(filepath_pre, period=30):
             if not filepath_suf in legal_filepath_suf_list:
                 shutil.rmtree(filepath)
     print 'remove ok'
+
+if __name__ == "__main__":
+    pass

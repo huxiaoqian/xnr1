@@ -48,14 +48,15 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
         print 'es index rank error'
         today_count = 0
     '''
-    current_date = ts2datetime(int(time.time()))
-    r_qq_speak_num = r_qq_speak_num_pre + xnr_qq_number + '_' + current_date
 
-    try:
-        today_count = int(r.hget(r_qq_speak_num))
-    except:
+    r_qq_speak_num = r_qq_speak_num_pre + current_date
+
+    today_count = r.hget(r_qq_speak_num, qq_number)
+    if today_count == None:
         today_count = 0
-
+    else:
+	      today_count = int(today_count)
+    print 'today_count..',today_count
     # 得到历史发言总数
     try:
         get_result = es.get(index=qq_xnr_history_count_index_name,doc_type=qq_xnr_history_count_index_type,\
@@ -360,15 +361,22 @@ def cron_compute_mark_qq(current_time):
 if __name__ == '__main__':
 
 
-
+    
     #main_qq_count()
     # 每天凌晨统计前一天
     current_time = int(time.time()-DAY)
     cron_compute_mark_qq(current_time)
     #bulk_add()
+    '''
+    current_time=int(time.time())
+    start_time = datetime2ts('2018-01-01')
 
-
-
+    num_day = (current_time-start_time)/(24*3600)
+    for i in range(num_day):
+        timestamp = start_time + i*24*3600
+        print 'time......',time.strftime('%Y-%m-%d',time.localtime(timestamp))
+        cron_compute_mark_qq(timestamp)
+    '''
 
 
 

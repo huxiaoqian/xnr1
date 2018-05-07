@@ -83,16 +83,20 @@ def get_users(xnr_user_no,nodes=None):
         uid_retweet = json.loads(i['_source']['uid_retweet'])
         max_count = max([int(n) for n in uid_retweet.values()])
         G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_retweet[j])/max_count) for j in uid_retweet.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
-   # for i in comment_result:
-    	# print 'comment_i:',i
-    #    if not i['found']:
-     #       continue
-      #  uid_comment = json.loads(i['_source']['uid_comment'])
-       # max_count = max([int(n) for n in uid_comment.values()])
-      #  G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+
+    # for i in comment_result:
+    #     print 'comment_i:',i
+        # if not i['found']:
+        #     continue
+        # uid_comment = json.loads(i['_source']['uid_comment'])
+        # max_count = max([int(n) for n in uid_comment.values()])
+        # G.add_weighted_edges_from([(i['_source']['uid'],j,float(uid_comment[j])/max_count) for j in uid_comment.keys() if j != i['_source']['uid'] and j and i['_source']['uid']])
+       
+
     print 'GGG:::',G.number_of_nodes(),G.number_of_edges()
    # print 'G_nodes::',G.neighbors(2)
     print 'G has compelete!'    
+
     return G 
 
 

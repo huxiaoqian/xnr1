@@ -2,7 +2,7 @@
 var localTime=new Date();
 Y= localTime.getFullYear()+'-';
 M=(localTime.getMonth()+1<10?'0'+(localTime.getMonth()+1):localTime.getMonth()+1)+'-';
-D=(localTime.getDate()-1<10?'0'+(localTime.getDate()-2):localTime.getDate()-1);
+D=(localTime.getDate()<10?'0'+(localTime.getDate()):localTime.getDate());
 var time=Y+M+D;
 var QQgroup_url='/qq_xnr_operate/show_all_groups/?xnr_user_no='+qqID;
 public_ajax.call_request('get',QQgroup_url,QQgroup);
@@ -97,7 +97,7 @@ function personEarly(personEarly_QQ) {
                         '       <div class="center_rel">'+
                         '           <img src="/static/images/post-6.png" class="center_icon">'+
                         '           <a class="center_1" href="###" style="color:blanchedalmond;font-weight: 700;">'+
-                        '               <b class="name">'+name+'</b> <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
+                        '               <b class="name">'+name+'</b>'+// <span>（</span><b class="QQnum">'+row._source.qq_group_number+'</b><span>）</span>' +
                         '               <b class="time" style="display: inline-block;margin-left: 30px;""><i class="icon icon-time"></i>&nbsp;'+getLocalTime(row._source.timestamp)+'</b>  '+
                         '               <b class="speaker" style="display: inline-block;margin-left: 30px;""><i class="icon icon-bullhorn"></i>&nbsp;发言人：'+row._source.speaker_nickname+'</b>  '+
                         '           </a>'+
