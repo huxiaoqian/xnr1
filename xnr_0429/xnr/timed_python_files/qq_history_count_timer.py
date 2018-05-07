@@ -48,16 +48,14 @@ def qq_history_count(xnr_user_no,qq_number,current_time):
         print 'es index rank error'
         today_count = 0
     '''
-    #current_date_today = ts2datetime(int(time.time()))
+
     r_qq_speak_num = r_qq_speak_num_pre + current_date
 
-    print 'r_qq_speak_num..',r_qq_speak_num 
     today_count = r.hget(r_qq_speak_num, qq_number)
-    print 'today_count...',today_count
     if today_count == None:
         today_count = 0
     else:
-	today_count = int(today_count)
+	      today_count = int(today_count)
     print 'today_count..',today_count
     # 得到历史发言总数
     try:

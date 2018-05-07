@@ -311,7 +311,6 @@ def get_safe_qq_today(xnr_user_no):
         today_count = 0
     '''
 
-    current_date = ts2datetime(int(time.time()))
     r_qq_speak_num = r_qq_speak_num_pre + current_date
 
     try:

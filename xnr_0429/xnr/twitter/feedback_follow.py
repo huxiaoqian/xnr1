@@ -49,6 +49,7 @@ class Follower():
                     'update_time':self.update_time,
                 }
                 self.list.append(item)
+        self.launcher.display.popen.kill()
         return self.list
 
     def save(self, indexName, typeName, list):

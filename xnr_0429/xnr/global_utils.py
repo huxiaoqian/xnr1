@@ -13,8 +13,6 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, 
                           REDIS_WX_HOST, REDIS_WX_PORT, REDIS_HOST_NEW, REDIS_PORT_NEW,\
                           qiniu_access_key, qiniu_secret_key, qiniu_bucket_name, qiniu_bucket_domain
 
-from global_config import RETWEET_REDIS_HOST, RETWEET_REDIS_PORT
-from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
@@ -51,7 +49,7 @@ wx_xnr_index_name = 'wx_xnr'
 wx_xnr_index_type = 'user'
 
 #use to save xnr_mapping info
-xnr_map_index_name='xnr_map_relationship'
+xnr_map_index_name='xnr_mapping'
 xnr_map_index_type='user'
 
 ## qq上报管理
@@ -703,7 +701,7 @@ opinion_expand_task_queue_name = 'opinion_expand_task'
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
 
 # 记录qq用户每天发言数
-r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_1039598173_2018-05-04
+r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_2018-05-04
 
 # 存储qq端口、授权码等消息,用于后台主进程调用
 r_qq_receive_message = 'r_qq_receive_message'
@@ -807,6 +805,7 @@ retweet_redis_dict = {'1':retweet_r_1, '2':retweet_r_2}
 comment_r_1 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=1)
 comment_r_2 = _default_redis_v2(host=COMMENT_REDIS_HOST, port=COMMENT_REDIS_PORT, db=2)
 comment_redis_dict = {'1':comment_r_1, '2':comment_r_2}
+
 
 #微信虚拟人相关
 r_wx = _default_redis(host=REDIS_WX_HOST, port=REDIS_WX_PORT)

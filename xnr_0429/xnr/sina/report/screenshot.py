@@ -72,7 +72,7 @@ class Screen():
 		driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
 		time.sleep(1)
 		driver.quit()
-		display.stop()
+		self.display.stop()
 
 
 
