@@ -16,7 +16,6 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, 
 from global_config import RETWEET_REDIS_HOST, RETWEET_REDIS_PORT
 from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
 
-
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
 es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
