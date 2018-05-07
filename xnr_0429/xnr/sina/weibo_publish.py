@@ -97,7 +97,8 @@ def weibo_publish_with_picture(username,password,text,file):
     login_m_weibo_cn(username, password)
     publish_by_source_with_picture(text, file)
     driver.quit()
-    display.stop()
+    #display.stop()
+    display.popen.kill()
 
 def weibo_publish_main(username,password,text,file):
     
