@@ -30,7 +30,7 @@ from xnr.time_utils import get_xnr_feedback_index_listname,get_timeset_indexset_
                            ts2datetime,datetime2ts,ts2datetimestr,ts2yeartime
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
-from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
+from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE,R_BEGIN_TIME
 
 ##获取索引
 def get_xnr_set_index_listname(index_name_pre,date_range_start_ts,date_range_end_ts):
@@ -99,7 +99,8 @@ def show_completed_weiboxnr(account_no,now_time):
         history_post_num=count_history_post_num(xnr_user_no,now_time)
         #print 'history_post_num_time:',time.time()
         #历史评论数
-        history_comment_num=count_history_comment_num(uid)
+        history_comment_num = count_xnr_comment(xnr_user_no,now_time,uid)
+        #history_comment_num=count_history_comment_num(uid)
         #print 'history_comment_num：',time.time()
         #今日发帖量
         today_comment_num=count_today_comment_num(xnr_user_no,now_time)
@@ -174,66 +175,64 @@ def count_today_comment_num(xnr_user_no,now_time):
     date_time=ts2datetime(now_time)
     weibo_xnr_flow_text_listname=xnr_flow_text_index_name_pre+date_time
     star_time=datetime2ts(date_time)
+    print ts2datetime(star_time),ts2datetime(now_time)
     #定义检索规则
     query_body={
         'query':{
             'filtered':{
                 'filter':{
-                    'term':{'xnr_user_no':xnr_user_no},
-                    'range':{
-                        'timestamp':{
-                            'gte':star_time,
-                            'lte':now_time
-                        }
-                    }
-                }
+                'bool':{
+                'must':[
+                    {'term':{'xnr_user_no':xnr_user_no}}
+                ]}}
             }
         },
-        'aggs':{
-            'today_post_num':{
-                'terms':{
-                    'field':'xnr_user_no'
-                }
-            }
-        }
+        'size':MAX_VALUE
     }
     try:
         results=es_xnr.search(index=weibo_xnr_flow_text_listname,doc_type=xnr_flow_text_index_type,\
-            body=query_body)['aggregations']['today_post_num']['buckets']
-        number=result[0]['doc_count']
+            body=query_body)['hits']['hits']
+        number=len(results)
     except:
+        print  'except-today_post!'
         number=0
     return number
 
 #计算历史评论数
+def count_xnr_comment(xnr_user_no,todaytime,uid):
+    task_id = xnr_user_no+'_'+ts2datetime(todaytime - DAY)
+    try:
+        result=es_xnr.get(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,id=task_id)['_source']
+        result_num = result['comment_total_num']
+    except:
+        result_num = 0
+    number = result_num + count_history_comment_num(uid)
+    return number
+
 def count_history_comment_num(uid):
-    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,datetime2ts(S_WEIBO_TEST_DATE),XNR_CENTER_DATE_TIME)
+    weibo_feedback_comment_index_name_list = get_xnr_set_index_listname(weibo_feedback_comment_index_name_pre,datetime2ts(ts2datetime(XNR_CENTER_DATE_TIME)),XNR_CENTER_DATE_TIME)
     #定义检索规则
+   # print weibo_feedback_comment_index_name_list
+    type_s = 'make'
     query_body={
         'query':{
             'filtered':{
                 'filter':{
                     'bool':{
-                        'must':[{'term':{'uid':uid}},{'term':{'comment_type':'make'}}]
+                        'must':[{'term':{'uid':uid}},{'term':{'comment_type':type_s}}]
                     }
-                }
-            }
-        },
-        'aggs':{
-            'history_comment_num':{
-                'terms':{
-                    'field':'uid'
                 }
             }
         }
     }
+    #query_body_1 = {'query':{'match_all':{}}}
     try:
-        result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,\
-    		body=query_body)['aggregations']['history_comment_num']['buckets']
+        result=es_xnr.search(index=weibo_feedback_comment_index_name_list,doc_type=weibo_feedback_comment_index_type,body=query_body)['hits']['hits']
     #print result
     # number=0
-        number=result[0]['doc_count']
+        number=len(result)
     except:
+        print 'comment-except!'
     	number=0
     #print 'comment_number',number
     return number
@@ -355,12 +354,13 @@ def show_date_count(today_time):
 #step 4.1：history count
 
 #累计统计
-def xnr_cumulative_statistics(xnr_date_info):
+def xnr_cumulative_statistics(xnr_date_info,xnr_user_no):
     Cumulative_statistics_dict=dict()
     Cumulative_statistics_dict['date_time']='累计统计'
     if xnr_date_info: 
         #print xnr_date_info[0]
-        Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
+        Cumulative_statistics_dict['user_fansnum']=count_fans_num(xnr_user_no) 
+        #Cumulative_statistics_dict['user_fansnum']=xnr_date_info[-1]['user_fansnum']
         total_post_sum=0
         daily_post_num=0
         business_post_num=0
@@ -522,8 +522,9 @@ def show_today_history_count(xnr_user_no,start_time,end_time):
 
             xnr_user_detail['total_post_sum']=xnr_user_detail['daily_post_num']+xnr_user_detail['business_post_num']+xnr_user_detail['hot_follower_num']+xnr_user_detail['trace_follow_tweet_num']
 
-    except:
-    	xnr_user_detail['user_fansnum']=0
+    except Exception,e:
+        print 'e1!:',e
+    	#xnr_user_detail['user_fansnum']=0
     	xnr_user_detail['daily_post_num']=0
     	xnr_user_detail['business_post_num']=0
     	xnr_user_detail['hot_follower_num']=0
@@ -637,7 +638,7 @@ def show_history_count(xnr_user_no,date_range):
         
     #xnr_date_info.sorted(key=lambda k:k['date_time'],reverse=True)
     #print 'xnr_date_info',xnr_date_info
-    Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info)
+    Cumulative_statistics_dict=xnr_cumulative_statistics(xnr_date_info,xnr_user_no)
 
 
     return Cumulative_statistics_dict,xnr_date_info
@@ -1535,6 +1536,7 @@ def lookup_xnr_assess_info(xnr_user_no,start_time,end_time,assess_type):
         xnr_assess_result=es_xnr.search(index=weibo_xnr_count_info_index_name,doc_type=weibo_xnr_count_info_index_type,body=query_body)['hits']['hits']
         assess_result=[]
         for item in xnr_assess_result:
+           # print 'item::',item
             assess_result.append(item['fields'])
     except:
         assess_result=[]

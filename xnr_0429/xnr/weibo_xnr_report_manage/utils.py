@@ -135,11 +135,15 @@ def output_excel_word(id_list,out_type,report_timelist):
     index_name_list = []
     for item in report_timelist:
         index_name = weibo_report_management_index_name_pre + ts2datetime(int(item))
-        if index_name not in index_name_list:
+        if index_name not in index_name_list and es_xnr.indices.exists(index = index_name):
             index_name_list.append(index_name)
         else:
             pass
 
+    print(id_list)
+    print(SCREEN_WEIBO_USERNAME)
+    print(SCREEN_WEIBO_PASSWORD)
+    print(index_name_list)
     report_condition = Report(id_list,SCREEN_WEIBO_USERNAME,SCREEN_WEIBO_PASSWORD,index_name_list)
     if out_type == 'word':
         mark=report_condition.save_word()

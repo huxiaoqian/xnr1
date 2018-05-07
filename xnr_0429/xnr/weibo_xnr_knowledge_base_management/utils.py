@@ -955,7 +955,7 @@ def show_condition_opinion_corpus(theme_type):
             }
 
         },
-        'size':MAX_VALUE
+        'size':200
     }
     opinion_corpus_result = []
     try:
@@ -973,6 +973,9 @@ def show_different_corpus(task_detail):
     theme_corpus = '主题语料'
     daily_corpus = '日常语料' 
     opinion_corpus = '观点语料'
+    corpus_condition = []
+    theme_corpus_condition = []
+    daily_corpus_condition = []
     result['opinion_corpus_type'] = get_opnion_corpus_type()
     if task_detail['corpus_status'] == 0:        
         result['theme_corpus'] = show_corpus(theme_corpus)
@@ -996,8 +999,8 @@ def show_different_corpus(task_detail):
             if task_detail['create_type']:
                 corpus_condition.append({'term':{'create_type':task_detail['create_type']}})
             else:
-                pass
-
+                corpus_condition = []
+           # print 'corpus::',corpus_condition
             theme_corpus_condition = corpus_condition
             if task_detail['theme_type_1']:
                 theme_corpus_condition.append({'terms':{'theme_daily_name':task_detail['theme_type_1']}})
@@ -1009,12 +1012,16 @@ def show_different_corpus(task_detail):
                     result['theme_corpus'] = show_corpus_class(task_detail['create_type'],theme_corpus)
                 else:
                     result['theme_corpus'] = show_corpus(theme_corpus)
-
-            daily_corpus_condition = corpus_condition
+           # print 'theme::',theme_corpus_condition
+            daily_corpus_condition = []
             if task_detail['theme_type_2']:
+                if task_detail['create_type']:
+                    daily_corpus_condition.append({'term':{'create_type':task_detail['create_type']}})
+                else:
+                    pass
                 daily_corpus_condition.append({'terms':{'theme_daily_name':task_detail['theme_type_2']}})
                 daily_corpus_condition.append({'term':{'corpus_type':daily_corpus}})
-                
+               # print 'daily::',daily_corpus_condition
                 result['daily_corpus'] = show_condition_corpus(daily_corpus_condition)
             else:
                 if task_detail['create_type']:

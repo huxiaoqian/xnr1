@@ -248,7 +248,7 @@ def get_warning_orgnize(result):
         sensitive_warning = sensitive_warning + trace_result['sensitive_warning']
         density_warning = density_warning + trace_result['density_warning']
         influence_warning = influence_warning + trace_result['influence_warning']
-
+        print 'sensitive',trace_result['sensitive_warning_content']
         if trace_result['sensitive_warning_content']:
             sensitive_content.extend(json.loads(trace_result['sensitive_warning_content']))
         else:
@@ -258,11 +258,11 @@ def get_warning_orgnize(result):
         else:
             pass
 
-        if result['density_warning_content']:
-            density_content = json.loads(result[-1]['density_warning_content'])
+        if trace_result['density_warning_content']:
+            density_content = json.loads(trace_result['density_warning_content'])
         else:
-    	    density_content = []
-
+    	    #density_content = []
+            pass
         warning_type.extend(trace_result['warning_type'])
    
     # print 'warning_type:::',type(warning_type)
