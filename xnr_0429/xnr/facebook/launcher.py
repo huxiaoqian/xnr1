@@ -12,11 +12,11 @@ class Launcher():
 	def __init__(self, username, password):
 		self.username = username
 		self.password = password
+		#模拟窗口
+		self.display = Display(visible=0,size=(1024,768))
+		self.display.start()
 
 	def login(self):
-		#模拟窗口
-		display = Display(visible=0,size=(1024,768))
-		display.start()
 		try:
 			# 安管中心环境使用####
 			driver = webdriver.Firefox()

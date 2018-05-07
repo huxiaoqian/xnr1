@@ -28,6 +28,7 @@ class Online():
 			print(dict)
 		finally:
 			self.driver.quit()
+			self.launcher.display.popen.kill()
 
 if __name__ == '__main__':
 	online = Online('8617078448226','xnr123456')
