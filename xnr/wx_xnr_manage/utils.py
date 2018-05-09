@@ -7,7 +7,7 @@ from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xn
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type
 from xnr.parameter import MAX_VALUE, LOCALHOST_IP
 from xnr.utils import user_no2wxbot_id
-from xnr.wx.MyBot import MyBot
+from xnr.wx.MyWXBot import MyBot
 from xnr.wx.control_bot import create_wx_xnr, load_all_groups, set_groups, check_status, xnr_logout, \
                                login_wx_xnr, show_wx_xnr, delete_wx_xnr, show_wx_xnr_listening_groups
 

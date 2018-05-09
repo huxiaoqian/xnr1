@@ -7,7 +7,7 @@ from flask import Blueprint, url_for, render_template, request,\
 from xnr.parameter import MAX_VALUE
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,date2ts
 from utils import utils_search, utils_show_sensitive_users, utils_report_warning_content,\
-		utils_report_warning_content_new
+        utils_report_warning_content_new
 
 mod = Blueprint('wx_xnr_monitor', __name__, url_prefix='/wx_xnr_monitor')
 
@@ -29,7 +29,7 @@ def search():
 def show_sensitive_users():
     wxbot_id = request.args.get('wxbot_id', '')
     period = request.args.get('period', '')
-    startdate = request.args.get('startdate', '')	#str 2017-10-15
+    startdate = request.args.get('startdate', '')   #str 2017-10-15
     enddate = request.args.get('enddate', '')
     if wxbot_id:
         if period or (startdate and enddate):
@@ -62,15 +62,15 @@ def report_warning_content():
 @mod.route('/report_warning_content_new/', methods=['POST'])
 def report_warning_content_new():
     if request.method == 'POST':
-	data = request.form
-	if not data:
-	    data = json.loads(request.data)
-	report_time = int(time.time())
+        data = request.form
+        if not data:
+            data = json.loads(request.data)
+        report_time = int(time.time())
         wxbot_id = data['wxbot_id']
         report_type = data['report_type'] #人物/言论
-    	speaker_id = data['speaker_id']# sensitive speaker puid
-    	wx_content_info_str = data['report_content']
-    	if wxbot_id and report_type and speaker_id and wx_content_info_str:
+        speaker_id = data['speaker_id']# sensitive speaker puid
+        wx_content_info_str = data['report_content']
+        if wxbot_id and report_type and speaker_id and wx_content_info_str:
             res = utils_report_warning_content(wxbot_id, report_type, report_time, speaker_id, wx_content_info_str)
             if res:
                 return json.dumps(res)
