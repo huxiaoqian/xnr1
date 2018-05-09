@@ -60,17 +60,14 @@ class MyBot(Bot):
             self.console_qr = True
         else:   
             #使用二维码图片登陆
-	    path2 = os.path.dirname(path1)
-    	    qr_path = os.path.join(path2, wx_xnr_qrcode_path)
-	    # print 'new qr_path: ', qr_path
-	    self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
+            path2 = os.path.dirname(path1)
+            qr_path = os.path.join(path2, wx_xnr_qrcode_path)
+            self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             #self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
             self.change_wxxnr_redis_data({'qr_path':self.qr_path})
             print 'qr_path', self.qr_path
-
-
             self.qr_callback = self.my_qr_callback
         if self.if_login_callback:
             self.login_callback = self.my_login_callback
@@ -321,7 +318,7 @@ class MyBot(Bot):
                 try:
                     sen_value, sen_words = sensitive_check(text.encode('utf8')) 
                     
-		    if sen_value !=0:
+            if sen_value !=0:
                         sen_flag = 1    #该条信息是敏感信息
                     else:
                         sen_flag = 0
