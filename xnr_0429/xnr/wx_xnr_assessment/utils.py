@@ -70,12 +70,12 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
                 r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
                 if r['_shards']['successful'] != 0:
                     at_num_total += r['count']
-        except Exception,e:
-        pass
+            except Exception,e:
+                pass
 
 
         #查询所有人被@的次数
-    at_num_total_day = 0
+        at_num_total_day = 0
         query_body_total_day = {
             'query':{
                 'bool':{
@@ -91,7 +91,7 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
             if results_total_day['_shards']['successful'] != 0:
                at_num_total_day = results_total_day['count']
         except Exception,e:
-        print 'at_num_total_day Exception: ', str(e)
+            print 'at_num_total_day Exception: ', str(e)
 
         #统计
         at_dict = {}
@@ -153,23 +153,23 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
 
  
         #查询1
-    sensitive_value = 0
+        sensitive_value = 0
         wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_info = {
             'query':{
                 'filtered':{
                     'filter':{
-            'bool':{
-                'must':[{'terms': {'group_id': group_list}},
-                {
-                'range':{
-                'sensitive_value':{
-                'gte': -1
-                }
-                }
-                }
-                ]
-            }
+                        'bool':{
+                            'must':[{'terms': {'group_id': group_list}},
+                            {
+                                'range':{
+                                    'sensitive_value':{
+                                        'gte': -1
+                                    }
+                                }
+                            }
+                            ]
+                        }
                     }
                 }
             },
@@ -191,7 +191,7 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
           
 
         #查询2
-    max_sensitive = 0
+        max_sensitive = 0
         query_body_max = {
           "query": {
             "filtered": {
