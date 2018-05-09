@@ -25,6 +25,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
+        end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 def load_timestamp_list(start_ts, end_ts):
@@ -56,14 +57,14 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
         try:
             results_xnr = es_xnr.count(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_at_num)
             if results_xnr['_shards']['successful'] != 0:
-               at_num_xnr = results_xnr['count']               
+               at_num_xnr = results_xnr['count']
         except Exception,e:
             print 'at_num_xnr Exception: ', str(e)
 
 
-        # 截止目前xnr被@总数
+        # 截止目前所有被@总数
         at_num_total = 0
-        wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))       
+        wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
         for index_name in wx_group_message_index_list:
             try:
                 r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
@@ -71,7 +72,6 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
                     at_num_total += r['count']
             except Exception,e:
                 pass
-                # print 'at_num_total Exception: ', str(e)
 
 
         #查询所有人被@的次数
@@ -99,8 +99,8 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
         at_dict['at_total'] = {}
         at_dict['at_day'][current_time] = at_num_xnr
         at_dict['at_total'][current_time] = at_num_total
-        # influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
-        influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))
+        influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
+        #influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))
         influence = round(influence,2)  # 保留两位小数
         at_dict['mark'] = influence
         return at_dict
@@ -149,45 +149,46 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
         current_time = datetime2ts(current_date)
         xnr_data = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid','groups_list'])
         puid = xnr_data['puid']
-        group_list = str(xnr_data['groups_list']).split(',')
-        
+        group_list = xnr_data['groups_list']
+
+ 
         #查询1
         sensitive_value = 0
         wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_info = {
-          "query": {
-            "filtered": {
-              "filter": {
-                "bool": {
-                  "must": [{'terms': {'group_id': group_list}},
-                    {
-                      "range": {
-                        "sensitive_value": {    #不会写exists语句，就用这个代替吧
-                          "gte": -1
+            'query':{
+                'filtered':{
+                    'filter':{
+                        'bool':{
+                            'must':[{'terms': {'group_id': group_list}},
+                            {
+                                'range':{
+                                    'sensitive_value':{
+                                        'gte': -1
+                                    }
+                                }
+                            }
+                            ]
                         }
-                      }
                     }
-                  ]
                 }
-              }
+            },
+            'aggs':{
+                'avg_sensitive':{
+                    'avg':{
+                        'field':'sensitive_value'
+                    }
+                }
             }
-          },
-          'aggs': {
-            'avg_sensitive': {
-              'avg': {
-                'field': 'sensitive_value'
-              }
-            }
-          }
         }
         try:
-            es_sensitive_result = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_name,body=query_body_info)['aggregations']
+            es_sensitive_result = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,body=query_body_info)['aggregations']
             sensitive_value = es_sensitive_result['avg_sensitive']['value']
             if sensitive_value == None:
                 sensitive_value = 0
         except Exception,e:
             print 'sensitive_value Exception: ', str(e)
-
+          
 
         #查询2
         max_sensitive = 0
@@ -212,19 +213,15 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
           'sort':{'sensitive_value':{'order':'desc'}}
         }
         try:
-            max_results = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_name,\
+            max_results = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,\
                             body=query_body_max)['hits']['hits']
             max_sensitive = max_results[0]['_source']['sensitive_value']
         except Exception,e:
             print 'max_sensitive Exception: ', str(e)
 
-
-        print 'sensitive_value', sensitive_value
-        print 'max_sensitive', max_sensitive
         #统计
         follow_group_sensitive = {'sensitive_info': {current_time: sensitive_value}}
-        # penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))*100
-        penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))
+        penetration = (math.log(sensitive_value+1)/(math.log(max_sensitive+1)+1))*100
         penetration = round(penetration,2)
         follow_group_sensitive['mark'] = penetration
         return follow_group_sensitive
@@ -275,7 +272,8 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
         speak_dict['speak_total'] = {}
         xnr_puid = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid'])['puid']
 
-        #获取今日发言总数
+        #获取xnr今日发言总数
+        today_count = 0
         query_body = {
             'query':{
                 'bool':{
@@ -287,13 +285,17 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
             }
         } 
         today_index_name = wx_group_message_index_name_pre + current_date
-        today_count_result = es_xnr.count(index=today_index_name,doc_type=wx_group_message_index_type,body=query_body)
-        if today_count_result['_shards']['successful'] != 0:
-            today_count = today_count_result['count']
-        else:
-            print 'es index rank error'
-            today_count = 0
-        #获取历史发言总数
+        try:
+            today_count_result = es_xnr.count(index=today_index_name,doc_type=wx_group_message_index_type,body=query_body)
+            if today_count_result['_shards']['successful'] != 0:
+                today_count = today_count_result['count']
+        except Exception,e:
+            print 'today_count Exception: ', str(e)
+
+
+
+        #获取xnr历史发言总数
+        total_count = 0
         total_query_body = {
             'query':{
                 'bool':{
@@ -311,11 +313,14 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
             if total_count_result['_shards']['successful'] != 0:
                 total_count = total_count_result['hits']['hits'][0]['_source']['total_post_num']
         except Exception,e:
-            print e
-            total_count = 0
+            print 'total_count Exception:', str(e)
+
+
+
         #包括今天在内的发言总数
         total_count_totay = total_count + today_count
         #发言次数最大值
+        wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_total_day = {
             'query':{
                 'filtered':{
@@ -334,13 +339,16 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
             results_total_day = es_xnr.search(index=wx_group_message_index_name,doc_type=wx_group_message_index_type,\
                         body=query_body_total_day)['aggregations']['all_speakers']['buckets']
             speaker_max = results_total_day[0]['doc_count']
-        except:
+        except Exception,e:
+            print 'speaker_max Exception: ', str(e)
             speaker_max = today_count
+        
+
         #整合
         speak_dict = dict()
-        speak_dict['speak_today'] = {}
+        speak_dict['speak_day'] = {}
         speak_dict['speak_total'] = {}
-        speak_dict['speak_today'][current_time] = today_count
+        speak_dict['speak_day'][current_time] = today_count
         speak_dict['speak_total'][current_time] = total_count_totay
         safe_active = (float(math.log(today_count+1))/(math.log(speaker_max+1)+1))*100
         safe_active = round(safe_active,2)  # 保留两位小数

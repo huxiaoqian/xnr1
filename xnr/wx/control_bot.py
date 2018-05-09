@@ -8,6 +8,8 @@ from multiprocessing import Process
 from MyBot import MyBot
 import sys
 sys.path.append(os.getcwd())
+path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
+sys.path.append(path1)
 from xnr.global_utils import es_xnr, wx_xnr_index_name, wx_xnr_index_type, wx_xnr_history_count_index_name, \
                         wx_xnr_history_count_index_type, wx_group_message_index_name_pre, wx_group_message_index_type, \
                         r_wx as r, WX_LOGIN_PATH, wx_xnr_data_path, wx_xnr_max_no,\
@@ -212,7 +214,9 @@ def start_bot(wx_id, wxbot_id, wxbot_port, submitter=None, mail=None, access_id=
         print u'登录前登出失败'
 
     #login
-    wxxnr_login_path = os.path.join(os.getcwd(), WX_LOGIN_PATH)
+    path2 = os.path.dirname(path1)
+    wxxnr_login_path = os.path.join(path2, WX_LOGIN_PATH)
+    #print 'wxxnr_login_path: ', wxxnr_login_path
     if init_groups_list:
         base_str = 'python '+ wxxnr_login_path + ' -i '+ wxbot_id + ' -p ' + str(wxbot_port) +  ' -g ' + init_groups_list
     else:
@@ -291,7 +295,8 @@ def send_command_without_recv(command):
         client.send(json.dumps(command))
         result = 1
     except Exception,e:
-        print 'send_command_without_recv Exception: ', str(e)
+        #print 'send_command_without_recv Exception: ', str(e)
+		pass
         result = 0
     finally:
         client.close()
@@ -310,8 +315,8 @@ def xnr_logout(wxbot_id):
     #无论监听群消息的端口开着与否都要保证执行完logout后是关闭状态
     command = {'opt': 'logout', 'wxbot_id': wxbot_id}
     result = send_command_without_recv(command)
-    print 'xnr_logout test_send_resutl:'
-    print result
+    #print 'xnr_logout test_send_resutl:'
+    #print result
     start_time = time.time()
     if not result:  #说明端口没有打开，只需要更改状态就行了
         if change_wxxnr_redis_data(wxbot_id, xnr_data={'status': 'logout'}):
@@ -440,16 +445,19 @@ def send_qrcode2mail(wxbot_id, qr_path):
         'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
         'files_path': qr_path,   #支持多个，以逗号隔开
         }
+		
         from_user = {
             'name': u'虚拟人项目（微信）',
             'addr': mail,
             'password': password,   #其实应该是授权码
             'smtp_server': 'smtp.qq.com'   
         }
+		
         to_user = {
             'name': u'管理员',
             'addr': mail  #支持多个，以逗号隔开
         }
+		
         return send_mail(from_user=from_user, to_user=to_user, content=content)
     except Exception,e:
         print 'send_qrcode2mail Exception: ', str(e)

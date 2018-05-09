@@ -22,3 +22,4 @@ if __name__ == '__main__':
     count,item = sensitive_check(text.encode('utf8'))
     print count
     print item
+
