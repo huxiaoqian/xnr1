@@ -62,14 +62,12 @@ class MyBot(Bot):
             #使用二维码图片登陆
 	    path2 = os.path.dirname(path1)
     	    qr_path = os.path.join(path2, wx_xnr_qrcode_path)
-	    print 'new qr_path: ', qr_path
+	    # print 'new qr_path: ', qr_path
 	    self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             #self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
             self.change_wxxnr_redis_data({'qr_path':self.qr_path})
-            
-
             print 'qr_path', self.qr_path
 
 
@@ -88,8 +86,8 @@ class MyBot(Bot):
         print 'before login'
         #print self.cache_path
         #print self.console_qr
-        print self.qr_path
-        print u'#如果下面没有SUCCESS打印出来，多半是该账号网页版被封了……还可能是因为certifi==2015.04.28被替换掉了'
+        # print self.qr_path
+        # print u'#如果下面没有SUCCESS打印出来，多半是该账号网页版被封了……还可能是因为certifi==2015.04.28被替换掉了'
         Bot.__init__(self, self.cache_path, self.console_qr, self.qr_path, self.qr_callback, self.login_callback, self.if_logout_callback)
         print 'SUCCESS'
         print 'after login' #如果此条没有打印出来，多半是该账号网页版被封了……

@@ -11,11 +11,11 @@ from xnr.wx.control_bot import load_wxxnr_redis_data
 def dump_date(period, startdate, enddate):
     if period == '':
         period = -1 #flag
-	#改传时间戳
+        #改传时间戳
         #start_ts = datetime2ts(startdate)
         #end_ts = datetime2ts(enddate)
-	start_ts = startdate
-	end_ts = enddate
+        start_ts = startdate
+        end_ts = enddate
     else:
         period = int(period)
         if period == 0:
@@ -24,7 +24,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
-	    end_ts = end_ts + DAY - 1
+        end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate):
@@ -32,34 +32,34 @@ def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
     xnr_puid = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid'])['puid']
     result = []
     query_body = {
-            'query':{
-                'bool':{
-                    'must':[
-                        {'term':{'report_type': report_type}},
-                        {'range':{'report_time':{'gte':start_ts, 'lte':end_ts}}},
-                        {'term':{'xnr_user_no': wxbot_id}},
-                        {'term':{'xnr_puid': xnr_puid}}
-                        ]
-                    }
-                },
-            'size': MAX_SEARCH_SIZE,
-            'sort': [{'report_time':{'order':'desc'}}]
+        'query':{
+            'bool':{
+                'must':[
+                    {'term':{'report_type': report_type}},
+                    {'range':{'report_time':{'gte':start_ts, 'lte':end_ts}}},
+                    {'term':{'xnr_user_no': wxbot_id}},
+                    {'term':{'xnr_puid': xnr_puid}}
+                    ]
+                }
+            },
+        'size': MAX_SEARCH_SIZE,
+        'sort': [{'report_time':{'order':'desc'}}]
     }
     try:
         wx_report_management_mappings()
         es_result = es_xnr.search(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, body=query_body)['hits']['hits']
         if es_result:
             for item in es_result:
-		try:
+                try:
                     data = item['_source']
                     report_content = eval(item['_source']['report_content'])
                     data['sensitive_value'] = report_content['sensitive_value']
-		    data['text'] = report_content['text']
+                    data['text'] = report_content['text']
                     data['sensitive_words_string'] = report_content['sensitive_words_string'].decode('utf8')
                     data.pop('report_content')
                     result.append(data)
-		except:
-		    pass
+                except:
+                    pass
     except Exception,e:
         print 'wx_report_management Exception: ', str(e)
     return result

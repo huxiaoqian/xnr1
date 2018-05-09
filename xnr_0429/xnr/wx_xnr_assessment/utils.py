@@ -25,7 +25,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
-	    end_ts = end_ts + DAY - 1
+        end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 def load_timestamp_list(start_ts, end_ts):
@@ -67,15 +67,15 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
         wx_group_message_index_list = get_wx_groupmessage_index_list(WX_GROUP_MESSAGE_START_DATE_ASSESSMENT,ts2datetime(current_time))
         for index_name in wx_group_message_index_list:
             try:
-            	r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
-            	if r['_shards']['successful'] != 0:
+                r = es_xnr.count(index=index_name,doc_type=wx_group_message_index_type,body=query_at_num)
+                if r['_shards']['successful'] != 0:
                     at_num_total += r['count']
-	    except Exception,e:
-		pass
+        except Exception,e:
+        pass
 
 
         #查询所有人被@的次数
-	at_num_total_day = 0
+    at_num_total_day = 0
         query_body_total_day = {
             'query':{
                 'bool':{
@@ -91,7 +91,7 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
             if results_total_day['_shards']['successful'] != 0:
                at_num_total_day = results_total_day['count']
         except Exception,e:
-	    print 'at_num_total_day Exception: ', str(e)
+        print 'at_num_total_day Exception: ', str(e)
 
         #统计
         at_dict = {}
@@ -101,7 +101,7 @@ def utils_get_influence(wxbot_id, period, startdate, enddate):
         at_dict['at_total'][current_time] = at_num_total
         influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))*100
         #influence = (float(math.log(at_num_xnr+1))/(math.log(at_num_total_day+1)+1))
-	influence = round(influence,2)  # 保留两位小数
+        influence = round(influence,2)  # 保留两位小数
         at_dict['mark'] = influence
         return at_dict
     else:
@@ -153,23 +153,23 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
 
  
         #查询1
-	sensitive_value = 0
+    sensitive_value = 0
         wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_info = {
             'query':{
                 'filtered':{
                     'filter':{
-			'bool':{
-			    'must':[{'terms': {'group_id': group_list}},
-			    {
-			    'range':{
-				'sensitive_value':{
-				'gte': -1
-				}
-			    }
-			    }
-			    ]
-			}
+            'bool':{
+                'must':[{'terms': {'group_id': group_list}},
+                {
+                'range':{
+                'sensitive_value':{
+                'gte': -1
+                }
+                }
+                }
+                ]
+            }
                     }
                 }
             },
@@ -187,11 +187,11 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
             if sensitive_value == None:
                 sensitive_value = 0
         except Exception,e:
-	    print 'sensitive_value Exception: ', str(e)
+            print 'sensitive_value Exception: ', str(e)
           
 
         #查询2
-	max_sensitive = 0
+    max_sensitive = 0
         query_body_max = {
           "query": {
             "filtered": {
@@ -217,7 +217,7 @@ def utils_get_penetration(wxbot_id, period, startdate, enddate):
                             body=query_body_max)['hits']['hits']
             max_sensitive = max_results[0]['_source']['sensitive_value']
         except Exception,e:
-	    print 'max_sensitive Exception: ', str(e)
+            print 'max_sensitive Exception: ', str(e)
 
         #统计
         follow_group_sensitive = {'sensitive_info': {current_time: sensitive_value}}
@@ -273,7 +273,7 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
         xnr_puid = load_wxxnr_redis_data(wxbot_id=wxbot_id, items=['puid'])['puid']
 
         #获取xnr今日发言总数
-	today_count = 0
+        today_count = 0
         query_body = {
             'query':{
                 'bool':{
@@ -285,17 +285,17 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
             }
         } 
         today_index_name = wx_group_message_index_name_pre + current_date
-	try:
+        try:
             today_count_result = es_xnr.count(index=today_index_name,doc_type=wx_group_message_index_type,body=query_body)
             if today_count_result['_shards']['successful'] != 0:
                 today_count = today_count_result['count']
-	except Exception,e:
-	    print 'today_count Exception: ', str(e)
+        except Exception,e:
+            print 'today_count Exception: ', str(e)
 
 
 
         #获取xnr历史发言总数
-	total_count = 0
+        total_count = 0
         total_query_body = {
             'query':{
                 'bool':{
@@ -314,13 +314,13 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
                 total_count = total_count_result['hits']['hits'][0]['_source']['total_post_num']
         except Exception,e:
             print 'total_count Exception:', str(e)
- 
+
 
 
         #包括今天在内的发言总数
         total_count_totay = total_count + today_count
         #发言次数最大值
-	wx_group_message_index_name = wx_group_message_index_name_pre + current_date
+        wx_group_message_index_name = wx_group_message_index_name_pre + current_date
         query_body_total_day = {
             'query':{
                 'filtered':{
@@ -340,9 +340,9 @@ def utils_get_safe(wxbot_id, period, startdate, enddate):
                         body=query_body_total_day)['aggregations']['all_speakers']['buckets']
             speaker_max = results_total_day[0]['doc_count']
         except Exception,e:
-	    print 'speaker_max Exception: ', str(e)
+            print 'speaker_max Exception: ', str(e)
             speaker_max = today_count
-	
+        
 
         #整合
         speak_dict = dict()
