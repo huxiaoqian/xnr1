@@ -403,7 +403,7 @@ def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
             }
         },
         'size':1,
-        'sort':{'trace_time':{'order':'asc'}}
+        'sort':{'trace_time':{'order':'desc'}}
     }  
     old_index = 0
     try:
@@ -477,8 +477,8 @@ def get_sensitive_warning(community,trace_datetime):
     #step 2:获取敏感内容
     content_type = 'sensitive'
     warning_content = get_warning_content(community['nodes'],content_type,trace_datetime)
-    # print 'sensitive_warning_descrp::',warning_descp
-    # print 'sensitive_warning_content::',warning_content
+    print 'sensitive_warning_descrp::',warning_descp
+    print 'sensitive_warning_content::',warning_content
 
     return warning_descp,json.dumps(warning_content)
 
@@ -555,7 +555,7 @@ def get_warning_reslut(community,trace_datetime):
     max_sensitive_lower_bound,max_sensitive_upper_bound = get_bound_uplowerlist(community['community_id'],community['xnr_user_no'],max_sensitive,community['max_sensitive'])
     mean_sensitive_mark = get_warning_judge(community['mean_sensitive'],mean_sensitive_lower_bound,mean_sensitive_upper_bound)
     max_sensitive_mark = get_warning_judge(community['max_sensitive'],max_sensitive_lower_bound,max_sensitive_upper_bound)
-    if mean_sensitive_mark == 1 or max_sensitive_mark == 1:
+    if abs(mean_sensitive_mark) == 1 or abs(max_sensitive_mark) == 1:
         warning_result['sensitive_warning'] = 1
         warning_result['sensitive_warning_descrp'],\
         warning_result['sensitive_warning_content'] = get_sensitive_warning(community,trace_datetime)
@@ -572,7 +572,7 @@ def get_warning_reslut(community,trace_datetime):
     max_influence_lower_bound,max_influence_upper_bound = get_bound_uplowerlist(community['community_id'],community['xnr_user_no'],max_influence,community['max_influence'])
     mean_influence_mark = get_warning_judge(community['mean_influence'],mean_influence_lower_bound,mean_influence_upper_bound)
     max_influence_mark = get_warning_judge(community['max_influence'],max_influence_lower_bound,max_influence_upper_bound)
-    if mean_influence_mark == 1 or max_influence_mark == 1:
+    if abs(mean_influence_mark) == 1 or abs(max_influence_mark) == 1:
         warning_result['influence_warning'] = 1
         warning_result['influence_warning_descrp'],\
         warning_result['influence_warning_content'] = get_influence_warning(community,trace_datetime)
@@ -629,6 +629,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
         create_date = ts2datetime(community['create_time'])
         trace_date = ts2datetime(trace_datetime)
         if create_date == trace_date:
+            print '新社区！'
             community_detail['density'] = community['density']
             community_detail['cluster'] = community['cluster']
             community_detail['max_influence'] = community['max_influence']
@@ -674,7 +675,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
                     community_detail['density_warning_content'] = get_density_warning(community,trace_datetime)         
 
         else:
-
+            print '旧社区！'
             #trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
             trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
             community_detail['density'] = trace_index_result['density']
@@ -726,11 +727,18 @@ if __name__ == '__main__':
         #     trace_xnr_community(test_time)
         #     i = i+1
     else:
-        now_time = int(time.time())
-       # now_time = datetime2ts('2018-05-05')
+        now_time = int(time.time())-2*DAY
+        #now_time = datetime2ts('2018-05-06')
     start_time = int(time.time())
-    trace_xnr_community(now_time)
+    #trace_xnr_community(now_time)
     end_time = int(time.time())
     print 'cost_tiime',end_time - start_time
     print 'dict',retweet_redis_dict
     
+    test_date = '2018-04-29'
+    now_time = datetime2ts(test_date)
+    for i in range(0,7):
+        test_time = now_time + i*DAY
+        trace_xnr_community(test_time)
+        i = i+1
+        print ts2datetime(test_time) 

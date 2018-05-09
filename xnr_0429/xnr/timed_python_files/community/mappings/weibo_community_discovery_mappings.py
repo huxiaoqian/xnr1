@@ -135,7 +135,7 @@ if __name__ == '__main__':
      if S_TYPE == 'test':
           date_name = WEIBO_COMMUNITY_DATE
      else:
-          now_time = int(time.time()) 
+          now_time = int(time.time())-DAY 
           date_name = ts2datetime(now_time)
 
      weibo_community_mappings(date_name)
