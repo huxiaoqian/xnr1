@@ -22,6 +22,7 @@ def dump_date(period, startdate, enddate):
         else:
             end_ts = datetime2ts(ts2datetime(int(time.time()))) - DAY
             start_ts = end_ts - (period - 1) * DAY
+	    end_ts = end_ts + DAY - 1
     return start_ts, end_ts, period
 
 #查看虚拟人监听到的所有群组的敏感群消息，可指定起始、终止时间。{'msg_type':'Text'}
@@ -92,15 +93,18 @@ def utils_show_sensitive_users(wxbot_id, period, startdate='', enddate=''):
                 docs = search_result['hits']['hits']
                 for r in res:
                     groups_list = []
+		    group_puid = []
                     speaker_id = r['key']
                     count = r['doc_count']
                     for doc in docs:
                         if doc['_source']['speaker_id'] == speaker_id:
                             groups_list.append(doc['_source']['group_name'])
+			    group_puid.append(doc['_source']['group_id'])
                     if speaker_id in sensitive_users:
                         #update: groups&count。因为是倒序查询，所以last_speak_ts在最初创建的时候就是最终的值，不需要更新。
                         sensitive_users[speaker_id]['count'] += count
                         sensitive_users[speaker_id]['groups_list'].extend(groups_list)
+			sensitive_users[speaker_id]['group_puid'].extend(group_puid)
                     else:
                         #匹配第一条即可
                         for doc in docs:
@@ -112,7 +116,8 @@ def utils_show_sensitive_users(wxbot_id, period, startdate='', enddate=''):
                             'nickname': nickname,
                             'count': count,
                             'last_speak_ts': last_speak_ts,
-                            'groups_list': groups_list
+                            'groups_list': groups_list,
+			    'group_puid': group_puid,
                         }
         except Exception,e:
             pass
@@ -120,6 +125,8 @@ def utils_show_sensitive_users(wxbot_id, period, startdate='', enddate=''):
     for speaker_id,user_data in sensitive_users.items():
         temp_groups_list = user_data['groups_list']
         user_data['groups_list'] = ','.join(list(set(temp_groups_list)))
+	temp_group_puid = user_data['group_puid']
+        user_data['group_puid'] = ','.join(list(set(temp_group_puid)))
     #转换成数组嵌套字典类型的数据，方便前台使用
     res = []
     for speaker_id,user_data in sensitive_users.items():
@@ -141,8 +148,13 @@ def utils_report_warning_content(wxbot_id, report_type, report_time, speaker_id,
     mark = 0
     try:
         wx_report_management_mappings()
-        es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
+        print es_xnr.index(index=wx_report_management_index_name, doc_type=wx_report_management_index_type, id=report_id,body=report_dict)
         mark = 1
     except Exception,e:
         print e
+    return 1
+
+
+
+def utils_report_warning_content_new():
     return 1
