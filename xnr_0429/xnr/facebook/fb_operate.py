@@ -22,85 +22,85 @@ class Operation():
 		print '11'
 		self.launcher = Launcher(username, password)
 		print '22'
-		self.driver = self.launcher.login()
-		print '33'
 
 	def publish(self, text):
+		driver,display = self.launcher.login()
 		try:
 			# 退出通知弹窗进入页面
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+				driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 			except:
 				pass
 			try:
-				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
-				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
+				driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
+				driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
 			except:
 				try:
-					self.driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').click()
-					self.driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').send_keys(text)
+					driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').click()
+					driver.find_element_by_xpath('//textarea[@class="_3en1 _480e navigationFocus"]').send_keys(text)
 				except:
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
 			try:
-				self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
+				driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
 			except:
 				try:
-					self.driver.find_element_by_xpath('//button[@class="_42ft _4jy0 _ej1 _4jy3 _4jy1 selected _51sy"]').click()
+					driver.find_element_by_xpath('//button[@class="_42ft _4jy0 _ej1 _4jy3 _4jy1 selected _51sy"]').click()
 				except:
-					self.driver.find_element_by_xpath('//button[@data-testid="react-composer-post-button"]').click()
+					driver.find_element_by_xpath('//button[@data-testid="react-composer-post-button"]').click()
 			time.sleep(5)
 			return [True, '']
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.quit()
-			self.launcher.display.popen.kill()
+			driver.quit()
+			display.popen.kill()
 
 	def mention(self, username, text):
+		driver,display = self.launcher.login()
 		try:
 			# 退出通知弹窗进入页面
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+				driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 			except:
 				pass
 
 			try:
-				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
-				self.driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
+				driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').click()
+				driver.find_element_by_xpath('//textarea[@title="分享新鲜事"]').send_keys(text)
 			except:
-				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
-				self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
+				driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').click()
+				driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395 _1mwq _4c_p _5bu_ _34nd _21mu _5yk1"]').send_keys(text)
 			time.sleep(2)
 			try:
-				self.driver.find_element_by_xpath('//table[@class="uiGrid _51mz _5f0n"]/tbody/tr[3]/td[1]//a/div').click()
+				driver.find_element_by_xpath('//table[@class="uiGrid _51mz _5f0n"]/tbody/tr[3]/td[1]//a/div').click()
 			except:
-				self.driver.find_element_by_xpath('//table[@class="uiGrid _51mz _5f0n"]/tbody/tr[2]/td[2]//a/div').click()
+				driver.find_element_by_xpath('//table[@class="uiGrid _51mz _5f0n"]/tbody/tr[2]/td[2]//a/div').click()
 			time.sleep(1)
-			self.driver.find_element_by_xpath('//input[@aria-label="你和谁一起？"]').send_keys(username)
-			self.driver.find_element_by_xpath('//input[@aria-label="你和谁一起？"]').send_keys(Keys.ENTER)
+			driver.find_element_by_xpath('//input[@aria-label="你和谁一起？"]').send_keys(username)
+			driver.find_element_by_xpath('//input[@aria-label="你和谁一起？"]').send_keys(Keys.ENTER)
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
+				driver.find_element_by_xpath('//button[@class="_1mf7 _4jy0 _4jy3 _4jy1 _51sy selected _42ft"]').click()
 			except:
-				self.driver.find_element_by_xpath('//button[@data-testid="react-composer-post-button"]').click()
+				driver.find_element_by_xpath('//button[@data-testid="react-composer-post-button"]').click()
 			time.sleep(5)
 			return [True, '']
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.quit()
-			self.launcher.display.popen.kill()
+			driver.quit()
+			display.popen.kill()
 
 	def follow(self, uid):
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			# 退出通知弹窗进入页面
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+				driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 			except:
 				pass
 			try:
@@ -113,15 +113,15 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 	def not_follow(self, uid):
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			# 退出通知弹窗进入页面
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+				driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 			except:
 				pass
 			chain = ActionChains(driver)
@@ -156,20 +156,20 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 # 私信(未关注)
 	def send_message(self, uid, text):
 		#发送给未关注的用户
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			message_url = 'https://www.facebook.com/messages/t/' + uid
 			driver.get(message_url)
 			time.sleep(5)
 			# 退出通知弹窗进入页面
 			time.sleep(1)
 			try:
-				self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+				driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 			except:
 				pass
 			driver.find_element_by_xpath('//div[@aria-label="输入消息..."]').send_keys(text)
@@ -180,7 +180,7 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 # 私信(已关注)
 	# def send_message2(self, uid, text):
@@ -199,28 +199,29 @@ class Operation():
 
 # 点赞
 	def like(self, uid, fid):
+		driver,display = self.launcher.login()
 		try:
 			post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
 			video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
-			self.driver.get(post_url)
+			driver.get(post_url)
 			time.sleep(3)
 			try:
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
-				self.driver.get(video_url)
+				driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+				driver.get(video_url)
 				time.sleep(2)
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				for each in self.driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
+				for each in driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
 					try:
 						each.click()
 					except:
@@ -229,10 +230,10 @@ class Operation():
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				for each in self.driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
+				for each in driver.find_elements_by_xpath('//a[@data-testid="fb-ufi-likelink"]'):
 					try:
 						each.click()
 					except:
@@ -242,138 +243,140 @@ class Operation():
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.quit()
-			self.launcher.display.popen.kill()
+			driver.quit()
+			display.popen.kill()
 
 # 评论
 	def comment(self, uid, fid, text):
+		driver,display = self.launcher.login()
 		try:
 			post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
 			video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
-			self.driver.get(post_url)
+			driver.get(post_url)
 			time.sleep(3)
 			try:
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
-				self.driver.get(video_url)
+				driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+				driver.get(video_url)
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
 				time.sleep(3)
-				self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
+				driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(keys.ENTER)
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(keys.ENTER)
 			except:
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
 				time.sleep(3)
-				self.driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
+				driver.find_element_by_xpath('//div[@class="UFICommentContainer"]/div/div').click()
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
 				time.sleep(1)
-				self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(keys.ENTER)
+				driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(keys.ENTER)
 			time.sleep(5)
 			return [True, '']
 		except Exception as e:
 			return [False, e]
 		finally:
 			time.sleep(3)
-			self.driver.quit()
-			self.launcher.display.popen.kill()
+			driver.quit()
+			display.popen.kill()
 
 # 分享
 	def share(self, uid, fid, text):
+		driver,display = self.launcher.login()
 		try:
 			print 'uid, fid, text...',uid, fid, text
 			post_url = 'https://www.facebook.com/' + uid + '/posts/' + fid
 			video_url = 'https://www.facebook.com/' + uid + '/videos/' + fid
-			self.driver.get(post_url)
+			driver.get(post_url)
 			time.sleep(3)
 			try:
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				self.driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
-				self.driver.get(video_url)
+				driver.find_element_by_xpath('//div[@aria-label="Facebook 照片剧场模式"]')
+				driver.get(video_url)
 				time.sleep(1)
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
-				self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+				driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+				driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
 				time.sleep(3)
-				self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
+				driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
 				time.sleep(3)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+					driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
 					time.sleep(1)
-					self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+					driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
 					time.sleep(1)
 				except:
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
 					time.sleep(1)
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
 					time.sleep(1)
-				self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
+				driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
 			except:
 				# 退出通知弹窗进入页面
 				time.sleep(1)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
+					driver.find_element_by_xpath('//div[@class="_n8 _3qx uiLayer _3qw"]').click()
 				except:
 					pass
-				self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
-				self.driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+				driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
+				driver.find_element_by_xpath('//a[@title="发送给好友或发布到你的时间线上。"]').click()
 				time.sleep(5)
-				self.driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
+				driver.find_element_by_xpath('//ul[@class="_54nf"]/li[2]').click()
 				time.sleep(5)
 				try:
-					self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
+					driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').click()
 					time.sleep(1)
-					self.driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
+					driver.find_element_by_xpath('//div[@class="notranslate _5rpu"]').send_keys(text)
 					time.sleep(1)
 				except:
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').click()
 					time.sleep(1)
-					self.driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
+					driver.find_element_by_xpath('//div[@class="_1mwp navigationFocus _395  _21mu _5yk1"]/div').send_keys(text)
 					time.sleep(1)
-				self.driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
+				driver.find_element_by_xpath('//button[@data-testid="react_share_dialog_post_button"]').click()
 			time.sleep(5)
 			return [True, '']
 		except Exception as e:
 			return [False, e]
 		finally:
-			self.driver.quit()
-			self.launcher.display.popen.kill()
+			driver.quit()
+			display.popen.kill()
 
 #添加好友
 	def add_friend(self, uid):
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			driver.find_element_by_xpath('//button[@class="_42ft _4jy0 FriendRequestAdd addButton _4jy4 _517h _9c6"]').click()
 			time.sleep(5)
 			return [True, '']
@@ -381,12 +384,12 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 #确认好友请求
 	def confirm(self, uid):
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			time.sleep(5)
 			driver.find_element_by_xpath('//div[@class="incomingButton"]/button').click()
 			time.sleep(1)
@@ -397,12 +400,12 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 #删除好友
 	def delete_friend(self, uid):
 		try:
-			driver = self.launcher.target_page(uid)
+			driver,display = self.launcher.target_page(uid)
 			time.sleep(1)
 			driver.find_element_by_xpath('//div[@id="pagelet_timeline_profile_actions"]/div/a').click()
 			time.sleep(2)
@@ -413,10 +416,11 @@ class Operation():
 			return [False, e]
 		finally:
 			driver.quit()
-			self.launcher.display.popen.kill()
+			display.popen.kill()
 
 if __name__ == '__main__':
-	operation = Operation('13041233988','han8528520258')
+	operation = Operation('13041233988','Hanmc0322*')
+	#operation = Operation('8618348831412','Z1290605918')
 	time.sleep(1)
 	list = operation.publish(u'四月十日')
 	print(list)

@@ -211,4 +211,6 @@ def get_user():
     return json.dumps(user_info)
 
 # app run
-app.run(host='0.0.0.0', port=options.port)
+if __name__ == '__main__':
+    app.dubug = True
+    app.run(host='0.0.0.0', port=options.port)

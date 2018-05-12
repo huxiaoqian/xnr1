@@ -6,7 +6,7 @@ import redis
 from elasticsearch import Elasticsearch
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, ES_INTELLIGENT_PORT, \
-                          ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
+                          ES_CLUSTER_HOST_2,ES_CLUSTER_PORT_2,ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,USER_PROFILE_ES_HOST,\
                           REDIS_HOST_46, REDIS_PORT_46,REDIS_HOST_45, REDIS_PORT_45,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
                           REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
@@ -18,7 +18,9 @@ from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
 
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+es_xnr_2 = Elasticsearch(ES_CLUSTER_HOST_2, timeout=600)
 es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
+
 #module1.2:config es table---index_name, doc_type
 
 # week retweet/be_retweet relation es

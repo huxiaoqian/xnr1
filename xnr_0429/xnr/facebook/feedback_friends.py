@@ -10,7 +10,7 @@ import json
 class Friend():
 	def __init__(self, username, password):
 		self.launcher = Launcher(username, password)
-		self.driver = self.launcher.login()
+		self.driver,self.display = self.launcher.login()
 		time.sleep(2)
 		# 退出通知弹窗进入页面
 		try:
@@ -59,7 +59,7 @@ class Friend():
 				self.list.append({'uid':user_id, 'photo_url':pic_url, 'nick_name':name, 'friends':friends, 'profile_url':profile_url, 'update_time':self.update_time})
 		finally:
 			self.driver.quit()
-			self.launcher.display.popen.kill()
+			self.display.popen.kill()
 		return self.list
 
 	def save(self, indexName, typeName, list):

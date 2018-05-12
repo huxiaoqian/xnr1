@@ -703,12 +703,15 @@ def compute_influence_num(xnr_user_no):
 '''
 
 # 渗透力分数
-def compute_penetration_num(xnr_user_no):
+def compute_penetration_num(xnr_user_no,type="yesterday"):
 
     if S_TYPE == 'test':
         current_time = datetime2ts('2017-10-07')
     else:
         current_time = int(time.time()-DAY)
+
+    if type != "yesterday":
+        current_time = int(time.time())
     
     current_date = ts2datetime(current_time)
 
@@ -1204,12 +1207,15 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
     return sensitive_report_dict 
 
 
-def compute_safe_num(xnr_user_no):
+def compute_safe_num(xnr_user_no,type="yesterday"):
     
     if S_TYPE == 'test':
         current_time = datetime2ts('2017-10-07')
     else:
         current_time = int(time.time()-DAY)
+
+    if type != 'yesterday':
+        current_time = int(time.time())
     
     current_date = ts2datetime(current_time)
 
@@ -1953,7 +1959,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
             try:
                 results_all['trend'][xnr_user_no][timestamp] = compute_influence_num(xnr_user_no)
         
-                result = get_influence_total_trend_today(xnr_user_no)
+                result = get_influence_total_trend_today(xnr_user_no,type="today")
                 
 
                 table_result['comment_total_num'] = list(result['total_trend']['comment'].values())[0]
@@ -1979,7 +1985,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
         elif dim == 'penetration':
 
             try:
-                results_all['trend'][xnr_user_no][timestamp] = compute_penetration_num(xnr_user_no)
+                results_all['trend'][xnr_user_no][timestamp] = compute_penetration_num(xnr_user_no,type="today")
                 
 
                 result = penetration_total_today(xnr_user_no)
@@ -2006,7 +2012,7 @@ def get_compare_assessment_today(xnr_user_no_list, dim):
         else:
 
             try:
-                results_all['trend'][xnr_user_no][timestamp] = compute_safe_num(xnr_user_no)
+                results_all['trend'][xnr_user_no][timestamp] = compute_safe_num(xnr_user_no,type="today")
                 
                 result = get_safe_active_today(xnr_user_no)
                 xnr_result = create_xnr_history_info_count_today(xnr_user_no)

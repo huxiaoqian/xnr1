@@ -613,30 +613,37 @@ def weibo_private_white_uid_mappings():
 
 
 if __name__ == '__main__':
-        
-	current_time = int(time.time())
+   
+    current_time = int(time.time()) 
+    datetime = ts2datetime(current_time)
+    weibo_feedback_retweet_mappings(datetime)
+    weibo_feedback_comment_mappings(datetime)
+    weibo_feedback_at_mappings(datetime)
+    weibo_feedback_like_mappings(datetime)
+    weibo_feedback_private_mappings(datetime)
+    ''' 
+	current_time = int(time.time()) 
 	datetime = ts2datetime(current_time)
-        print 'datetime..',datetime	
 	weibo_feedback_retweet_mappings(datetime)
-	weibo_feedback_comment_mappings(datetime)
-	weibo_feedback_at_mappings(datetime)
-	weibo_feedback_like_mappings(datetime)
-	weibo_feedback_private_mappings(datetime)
+    weibo_feedback_comment_mappings(datetime)
+    weibo_feedback_at_mappings(datetime)
+    weibo_feedback_like_mappings(datetime)
+    weibo_feedback_private_mappings(datetime)
 
 	weibo_feedback_follow_mappings()
 	weibo_feedback_fans_mappings()
 	weibo_create_group_mappings()
 	weibo_private_white_uid_mappings()
-        '''
-	current_time = int(time.time())
-	start_time = datetime2ts('2018-01-01')
-	num_day = (current_time-start_time)/(24*3600)+1
-	for i in range(num_day):
-	    datetime = ts2datetime(start_time + i*24*3600)
-            print 'datetime..',datetime	
-	    weibo_feedback_retweet_mappings(datetime)
-	    weibo_feedback_comment_mappings(datetime)
-	    weibo_feedback_at_mappings(datetime)
-	    weibo_feedback_like_mappings(datetime)
-	    weibo_feedback_private_mappings(datetime)
-        '''
+    '''
+    #current_time = int(time.time())
+    #start_time = datetime2ts('2018-05-05')
+    #num_day = (current_time-start_time)/(24*3600)+1
+    #for i in range(num_day):
+	    #datetime = ts2datetime(start_time + i*24*3600)
+        #    print 'datetime..',datetime	
+    #weibo_feedback_retweet_mappings(datetime)
+	#weibo_feedback_comment_mappings(datetime)
+	#weibo_feedback_at_mappings(datetime)
+	#weibo_feedback_like_mappings(datetime)
+	#weibo_feedback_private_mappings(datetime)
+     
