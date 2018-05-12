@@ -9,8 +9,7 @@ import re
 class Like():
 	def __init__(self, username, password):
 		self.launcher = Launcher(username, password)
-		self.driver = self.launcher.login()
-		self.like_list = self.launcher.get_like_list()
+		self.like_list,self.driver,self.display = self.launcher.get_like_list()
 		self.es = Es_fb()
 		self.list = []
 		self.update_time = int(time.time())
@@ -67,7 +66,7 @@ class Like():
 					self.list.append(item)
 		finally:
 			self.driver.quit()
-			self.launcher.display.popen.kill()
+			self.display.popen.kill()
 		return self.list
 
 	def save(self, indexName, typeName, list):

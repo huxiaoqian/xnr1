@@ -305,7 +305,7 @@ def create_weibo_community():
         today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
         xnr_user_no_list = ['WXNR0004']
     else:
-        today_time = time.time()-DAY
+        today_time = time.time()-0*DAY
         xnr_user_no_list = get_compelete_wbxnr()
 
     # xnr_user_no_list = ['WXNR0004']

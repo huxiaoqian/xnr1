@@ -332,6 +332,7 @@ def get_warning_judge(warning_value,lower_bound,upper_bound):
 #人物信息
 def get_user_info(uid_list):
     user_list = []
+    print 'user_list::',user_list
     user_result = es_user_profile.mget(index = profile_index_name,doc_type = profile_index_type,body = {'ids':uid_list})['docs']
     core_user = []
     for item in user_result:
@@ -357,7 +358,7 @@ def get_user_info(uid_list):
     return json.loads(user_list)
 
 #人物预警
-def get_person_warning(community_id,new_nodes):
+def get_person_warning(community_id,new_nodes,xnr_user_no):
     query_body = {
         'query':{
             'filtered':{
@@ -382,7 +383,10 @@ def get_person_warning(community_id,new_nodes):
         old_nodes = []
 
     add_nodes = list(set(new_nodes) - set(new_nodes)&set(old_nodes))
-    warning_content = get_user_info(add_nodes)
+    if add_nodes:
+        warning_content = get_user_info(add_nodes)
+    else:
+        warning_content = ''
     warning_descp = u'人物突增预警：社区人数由'+str(len(old_nodes))+u'人上升至'+str(len(new_nodes)) +u'人！'
 
     return warning_descp,warning_content
@@ -542,7 +546,7 @@ def get_warning_reslut(community,trace_datetime):
     warning_result['num_warning'] = get_warning_judge(community['num'],num_lower_bound,num_upper_bound)
     if warning_result['num_warning'] == 1:
         warning_result['num_warning_descrp'],\
-        warning_result['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'])
+        warning_result['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
         num_warning = '人物突增预警'
         warning_type_list.append(num_warning)
     else:
@@ -555,7 +559,7 @@ def get_warning_reslut(community,trace_datetime):
     max_sensitive_lower_bound,max_sensitive_upper_bound = get_bound_uplowerlist(community['community_id'],community['xnr_user_no'],max_sensitive,community['max_sensitive'])
     mean_sensitive_mark = get_warning_judge(community['mean_sensitive'],mean_sensitive_lower_bound,mean_sensitive_upper_bound)
     max_sensitive_mark = get_warning_judge(community['max_sensitive'],max_sensitive_lower_bound,max_sensitive_upper_bound)
-    if abs(mean_sensitive_mark) == 1 or abs(max_sensitive_mark) == 1:
+    if mean_sensitive_mark == 1 or max_sensitive_mark == 1:
         warning_result['sensitive_warning'] = 1
         warning_result['sensitive_warning_descrp'],\
         warning_result['sensitive_warning_content'] = get_sensitive_warning(community,trace_datetime)
@@ -572,7 +576,7 @@ def get_warning_reslut(community,trace_datetime):
     max_influence_lower_bound,max_influence_upper_bound = get_bound_uplowerlist(community['community_id'],community['xnr_user_no'],max_influence,community['max_influence'])
     mean_influence_mark = get_warning_judge(community['mean_influence'],mean_influence_lower_bound,mean_influence_upper_bound)
     max_influence_mark = get_warning_judge(community['max_influence'],max_influence_lower_bound,max_influence_upper_bound)
-    if abs(mean_influence_mark) == 1 or abs(max_influence_mark) == 1:
+    if mean_influence_mark == 1 or max_influence_mark == 1:
         warning_result['influence_warning'] = 1
         warning_result['influence_warning_descrp'],\
         warning_result['influence_warning_content'] = get_influence_warning(community,trace_datetime)
@@ -660,7 +664,7 @@ def trace_xnr_community(trace_datetime): #传的是ts
                 if item == '人物突增预警':
                     community_detail['num_warning'] = 1
                     community_detail['num_warning_descrp'],\
-                    community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'])
+                    community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
                 elif item == '影响力剧增预警':
                     community_detail['influence_warning'] = 1
                     community_detail['influence_warning_descrp'],\
@@ -727,18 +731,18 @@ if __name__ == '__main__':
         #     trace_xnr_community(test_time)
         #     i = i+1
     else:
-        now_time = int(time.time())-2*DAY
-        #now_time = datetime2ts('2018-05-06')
+       # now_time = int(time.time())-DAY
+        now_time = datetime2ts('2018-05-07')
     start_time = int(time.time())
-    #trace_xnr_community(now_time)
+    trace_xnr_community(now_time)
     end_time = int(time.time())
     print 'cost_tiime',end_time - start_time
     print 'dict',retweet_redis_dict
     
-    test_date = '2018-04-29'
-    now_time = datetime2ts(test_date)
-    for i in range(0,7):
-        test_time = now_time + i*DAY
-        trace_xnr_community(test_time)
-        i = i+1
-        print ts2datetime(test_time) 
+    #test_date = '2018-04-29'
+    #now_time = datetime2ts(test_date)
+    #for i in range(0,7):
+    #    test_time = now_time + i*DAY
+    #    trace_xnr_community(test_time)
+    #    i = i+1
+    #    print ts2datetime(test_time) 
