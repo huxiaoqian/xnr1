@@ -877,8 +877,11 @@ def get_final_community(xnr_user_no,date_time):
         for new_community in create_communitylist:
             new_community['community_status'] = 1
             result_mark = save_community_detail(new_community,date_time)
-            result_mark_list.append(result_mark)        
-    return result_mark_list
+            result_mark_list.append(result_mark)  
+
+    result_final = True      
+    # return result_mark_list
+    return result_final
 
 
 if __name__ == '__main__':

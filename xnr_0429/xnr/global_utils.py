@@ -279,6 +279,10 @@ weibo_trace_community_index_type = 'trace_warning'
 weibo_community_index_name_pre = 'weibo_community_'
 weibo_community_index_type = 'community'
 
+#use to save community_status
+weibo_community_status_index_name = 'weibo_community_status'
+weibo_community_status_index_type = 'community_status'
+
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
 xnr_flow_text_index_type = 'text'
@@ -704,6 +708,11 @@ R_OPINION = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
+
+R_WEIBO_COMMUNITY_CREATE = _default_redis_v2(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
+weibo_community_find_task_queue_name = 'weibo_community_find_task'
+weibo_community_select_task_queue_name = 'weibo_community_select_task'
+weibo_community_trace_task_queue_name = 'weibo_trace_community_task'
 
 # 记录qq用户每天发言数
 r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_2018-05-04

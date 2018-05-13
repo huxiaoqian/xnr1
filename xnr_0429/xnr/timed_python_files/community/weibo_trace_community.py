@@ -609,119 +609,145 @@ def get_warning_reslut(community,trace_datetime):
 
     
 #跟踪社区
-def trace_xnr_community(trace_datetime): #传的是ts
+def trace_xnr_community(community,trace_datetime): #传的是ts
     #step1:获取跟踪社区list
-    community_list = get_trace_community(trace_datetime)
+    # community_list = get_trace_community(trace_datetime)
 
     #针对每个社区进行处理
     all_influence = get_evaluate_max(weibo_bci_history_index_name,weibo_bci_history_index_type,'bci_week_ave')
     all_sensitive = get_evaluate_max(weibo_sensitive_history_index_name,weibo_sensitive_history_index_type,'sensitive_week_ave')
     result_mark = []
-    for community in community_list:
-        community_detail = dict()
-        community_detail['xnr_user_no'] = community['xnr_user_no']
-        community_detail['community_id'] = community['community_id']
-        community_detail['community_name'] = community['community_name']
-        community_detail['create_time'] = community['create_time']
-        community_detail['trace_time'] = trace_datetime
-        community_detail['trace_date'] = ts2datetime(trace_datetime)
-        community_detail['num'] = community['num']
-        community_detail['nodes'] = community['nodes']
+    # for community in community_list:
+    community_detail = dict()
+    community_detail['xnr_user_no'] = community['xnr_user_no']
+    community_detail['community_id'] = community['community_id']
+    community_detail['community_name'] = community['community_name']
+    community_detail['create_time'] = community['create_time']
+    community_detail['trace_time'] = trace_datetime
+    community_detail['trace_date'] = ts2datetime(trace_datetime)
+    community_detail['num'] = community['num']
+    community_detail['nodes'] = community['nodes']
 
 
-        #判断一下，对于刚生成社区的预警，指标值取生成的
-        create_date = ts2datetime(community['create_time'])
-        trace_date = ts2datetime(trace_datetime)
-        if create_date == trace_date:
-            print '新社区！'
-            community_detail['density'] = community['density']
-            community_detail['cluster'] = community['cluster']
-            community_detail['max_influence'] = community['max_influence']
-            community_detail['mean_influence'] = community['mean_influence']
-            community_detail['max_sensitive'] = community['max_sensitive']
-            community_detail['mean_sensitive'] = community['mean_sensitive']
+    #判断一下，对于刚生成社区的预警，指标值取生成的
+    create_date = ts2datetime(community['create_time'])
+    trace_date = ts2datetime(trace_datetime)
+    if create_date == trace_date:
+        print '新社区！'
+        community_detail['density'] = community['density']
+        community_detail['cluster'] = community['cluster']
+        community_detail['max_influence'] = community['max_influence']
+        community_detail['mean_influence'] = community['mean_influence']
+        community_detail['max_sensitive'] = community['max_sensitive']
+        community_detail['mean_sensitive'] = community['mean_sensitive']
 
-            community_detail['warning_type'] = community['warning_type']
+        community_detail['warning_type'] = community['warning_type']
 
-            community_detail['num_warning'] = 0
-            community_detail['num_warning_descrp'] = ""
-            community_detail['num_warning_content'] = ""
+        community_detail['num_warning'] = 0
+        community_detail['num_warning_descrp'] = ""
+        community_detail['num_warning_content'] = ""
 
-            community_detail['sensitive_warning'] = 0
-            community_detail['sensitive_warning_descrp'] = ""
-            community_detail['sensitive_warning_content'] = ""
+        community_detail['sensitive_warning'] = 0
+        community_detail['sensitive_warning_descrp'] = ""
+        community_detail['sensitive_warning_content'] = ""
 
-            community_detail['influence_warning'] = 0
-            community_detail['influence_warning_descrp'] = ""
-            community_detail['influence_warning_content'] = ""
+        community_detail['influence_warning'] = 0
+        community_detail['influence_warning_descrp'] = ""
+        community_detail['influence_warning_content'] = ""
 
-            community_detail['density_warning'] = 0
-            community_detail['density_warning_descrp'] = ""
-            community_detail['density_warning_content'] = ""  
+        community_detail['density_warning'] = 0
+        community_detail['density_warning_descrp'] = ""
+        community_detail['density_warning_content'] = ""  
 
 
-            for item in community['warning_type']:
-                if item == '人物突增预警':
-                    community_detail['num_warning'] = 1
-                    community_detail['num_warning_descrp'],\
-                    community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
-                elif item == '影响力剧增预警':
-                    community_detail['influence_warning'] = 1
-                    community_detail['influence_warning_descrp'],\
-                    community_detail['influence_warning_content'] = get_influence_warning(community,trace_datetime)
-                elif item == '敏感度剧增预警':
-                    community_detail['sensitive_warning'] = 1
-                    community_detail['sensitive_warning_descrp'],\
-                    community_detail['sensitive_warning_content'] = get_sensitive_warning(community,trace_datetime)
-                elif item == '社区聚集预警':
-                    community_detail['density_warning'] = 1
-                    community_detail['density_warning_descrp'],\
-                    community_detail['density_warning_content'] = get_density_warning(community,trace_datetime)         
+        for item in community['warning_type']:
+            if item == '人物突增预警':
+                community_detail['num_warning'] = 1
+                community_detail['num_warning_descrp'],\
+                community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
+            elif item == '影响力剧增预警':
+                community_detail['influence_warning'] = 1
+                community_detail['influence_warning_descrp'],\
+                community_detail['influence_warning_content'] = get_influence_warning(community,trace_datetime)
+            elif item == '敏感度剧增预警':
+                community_detail['sensitive_warning'] = 1
+                community_detail['sensitive_warning_descrp'],\
+                community_detail['sensitive_warning_content'] = get_sensitive_warning(community,trace_datetime)
+            elif item == '社区聚集预警':
+                community_detail['density_warning'] = 1
+                community_detail['density_warning_descrp'],\
+                community_detail['density_warning_content'] = get_density_warning(community,trace_datetime)         
 
-        else:
-            print '旧社区！'
-            #trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
-            trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
-            community_detail['density'] = trace_index_result['density']
-            community_detail['cluster'] = trace_index_result['cluster']
-            community_detail['max_influence'] = trace_index_result['max_influence']
-            community_detail['mean_influence'] = trace_index_result['mean_influence']
-            community_detail['max_sensitive'] = trace_index_result['max_sensitive']
-            community_detail['mean_sensitive'] = trace_index_result['mean_sensitive']
+    else:
+        print '旧社区！'
+        #trace_index_result = group_evaluate(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive)
+        trace_index_result = group_evaluate_trace(community['xnr_user_no'],community['nodes'],all_influence,all_sensitive,trace_datetime,G=None)
+        community_detail['density'] = trace_index_result['density']
+        community_detail['cluster'] = trace_index_result['cluster']
+        community_detail['max_influence'] = trace_index_result['max_influence']
+        community_detail['mean_influence'] = trace_index_result['mean_influence']
+        community_detail['max_sensitive'] = trace_index_result['max_sensitive']
+        community_detail['mean_sensitive'] = trace_index_result['mean_sensitive']
 
-            #预警处理
-            warning_result = get_warning_reslut(community_detail,trace_datetime)
-            community_detail['warning_type'] = warning_result['warning_type']
+        #预警处理
+        warning_result = get_warning_reslut(community_detail,trace_datetime)
+        community_detail['warning_type'] = warning_result['warning_type']
 
-            community_detail['num_warning'] = warning_result['num_warning']
-            community_detail['num_warning_descrp'] = warning_result['num_warning_descrp']
-            community_detail['num_warning_content'] = warning_result['num_warning_content']
+        community_detail['num_warning'] = warning_result['num_warning']
+        community_detail['num_warning_descrp'] = warning_result['num_warning_descrp']
+        community_detail['num_warning_content'] = warning_result['num_warning_content']
 
-            community_detail['sensitive_warning'] = warning_result['sensitive_warning']
-            community_detail['sensitive_warning_descrp'] = warning_result['sensitive_warning_descrp']
-            community_detail['sensitive_warning_content'] = warning_result['sensitive_warning_content']
+        community_detail['sensitive_warning'] = warning_result['sensitive_warning']
+        community_detail['sensitive_warning_descrp'] = warning_result['sensitive_warning_descrp']
+        community_detail['sensitive_warning_content'] = warning_result['sensitive_warning_content']
 
-            community_detail['influence_warning'] = warning_result['influence_warning']
-            community_detail['influence_warning_descrp'] = warning_result['influence_warning_descrp']
-            community_detail['influence_warning_content'] = warning_result['influence_warning_content']
+        community_detail['influence_warning'] = warning_result['influence_warning']
+        community_detail['influence_warning_descrp'] = warning_result['influence_warning_descrp']
+        community_detail['influence_warning_content'] = warning_result['influence_warning_content']
 
-            community_detail['density_warning'] = warning_result['density_warning']
-            community_detail['density_warning_descrp'] = warning_result['density_warning_descrp']
-            community_detail['density_warning_content'] = warning_result['density_warning_content']
+        community_detail['density_warning'] = warning_result['density_warning']
+        community_detail['density_warning_descrp'] = warning_result['density_warning_descrp']
+        community_detail['density_warning_content'] = warning_result['density_warning_content']
 
-            community_detail['warning_rank'] = warning_result['num_warning'] + warning_result['sensitive_warning'] + warning_result['influence_warning'] + warning_result['density_warning']
-            #更新显示
-            update_warningrank_mark = update_warning_rank(community_detail,trace_datetime)
+        community_detail['warning_rank'] = warning_result['num_warning'] + warning_result['sensitive_warning'] + warning_result['influence_warning'] + warning_result['density_warning']
+        #更新显示
+        update_warningrank_mark = update_warning_rank(community_detail,trace_datetime)
 
-        #存储至数据库
-        save_community_mark = save_community_detail(community_detail,community['xnr_user_no'])
+    #存储至数据库
+    save_community_mark = save_community_detail(community_detail,community['xnr_user_no'])
 
-        result_mark.append(save_community_mark)
+    result_mark.append(save_community_mark)
 
     return result_mark
 
 
 if __name__ == '__main__':
+    # if S_TYPE == 'test':
+    #     # test_date = WEIBO_COMMUNITY_DATE
+    #     test_date = '2016-11-27'
+    #     now_time = datetime2ts(test_date)
+    #     # for i in range(0,7):
+    #     #     test_time = now_time + i*DAY
+    #     #     trace_xnr_community(test_time)
+    #     #     i = i+1
+    # else:
+    #    # now_time = int(time.time())-DAY
+    #     now_time = datetime2ts('2018-05-07')
+    # start_time = int(time.time())
+    # trace_xnr_community(now_time)
+    # end_time = int(time.time())
+    # print 'cost_tiime',end_time - start_time
+    # print 'dict',retweet_redis_dict
+    
+    #test_date = '2018-04-29'
+    #now_time = datetime2ts(test_date)
+    #for i in range(0,7):
+    #    test_time = now_time + i*DAY
+    #    trace_xnr_community(test_time)
+    #    i = i+1
+    #    print ts2datetime(test_time) 
+
+
     if S_TYPE == 'test':
         # test_date = WEIBO_COMMUNITY_DATE
         test_date = '2016-11-27'
@@ -731,18 +757,8 @@ if __name__ == '__main__':
         #     trace_xnr_community(test_time)
         #     i = i+1
     else:
-       # now_time = int(time.time())-DAY
-        now_time = datetime2ts('2018-05-07')
-    start_time = int(time.time())
-    trace_xnr_community(now_time)
-    end_time = int(time.time())
-    print 'cost_tiime',end_time - start_time
-    print 'dict',retweet_redis_dict
-    
-    #test_date = '2018-04-29'
-    #now_time = datetime2ts(test_date)
-    #for i in range(0,7):
-    #    test_time = now_time + i*DAY
-    #    trace_xnr_community(test_time)
-    #    i = i+1
-    #    print ts2datetime(test_time) 
+        now_time = int(time.time())-DAY
+        # now_time = datetime2ts('2018-05-07')
+    community_list = get_trace_community(trace_datetime)
+    for community in community_list:
+        trace_xnr_community(community,now_time)
