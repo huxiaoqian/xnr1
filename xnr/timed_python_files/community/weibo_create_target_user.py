@@ -22,7 +22,12 @@ from global_utils import es_xnr,xnr_flow_text_index_name_pre,xnr_flow_text_index
 r_beigin_ts = datetime2ts(R_BEGIN_TIME)
 
 sys.path.append('../../cron/trans/')
-from trans import trans, simplified2traditional, traditional2simplified
+from trans import trans#, simplified2traditional, traditional2simplified
+
+def simplified2traditional(q):
+    pass
+def traditional2simplified(q):
+    pass
 
 sys.path.append('../../timed_python_files/community/')
 from weibo_publicfunc import get_compelete_wbxnr

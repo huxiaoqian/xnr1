@@ -60,9 +60,9 @@ class MyBot(Bot):
             self.console_qr = True
         else:   
             #使用二维码图片登陆
-			path2 = os.path.dirname(path1)
-    	    qr_path = os.path.join(path2, wx_xnr_qrcode_path)
-			self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
+            path2 = os.path.dirname(path1)
+            qr_path = os.path.join(path2, wx_xnr_qrcode_path)
+            self.qr_path = os.path.join(qr_path, self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             #self.qr_path = os.path.join(os.path.join(os.getcwd(), wx_xnr_qrcode_path), self.wxbot_id + '_' + hashlib.md5(str(int(time.time()))).hexdigest() + '_qrcode.png')
             if os.path.isfile(self.qr_path):    #确保上次登录使用的二维码图片被清除掉
                 os.remove(self.qr_path)
@@ -514,4 +514,4 @@ def remove_wx_media_old_files(filepath_pre, period=30):
 if __name__ == "__main__":
     pass
 
-	
+    
