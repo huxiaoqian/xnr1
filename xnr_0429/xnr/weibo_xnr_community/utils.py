@@ -227,7 +227,7 @@ def get_warning_orgnize(result):
     #	density_content = []
 
     warning_type = []
-     
+    density_content = [] 
     for trace_result in result:
         trace_time_list.append(trace_result['trace_time'])
         trace_date_list.append(trace_result['trace_date'])
@@ -280,10 +280,10 @@ def get_warning_orgnize(result):
     warning_result['mean_sensitive'] = mean_sensitive_list
     warning_result['warning_rank'] = num_warning + sensitive_warning + influence_warning + density_warning
 
-    warning_result['num_warning'] = abs(num_warning)
-    warning_result['sensitive_warning'] = abs(sensitive_warning)
-    warning_result['density_warning'] = abs(density_warning)
-    warning_result['influence_warning'] = abs(influence_warning)
+    warning_result['num_warning'] = num_warning
+    warning_result['sensitive_warning'] = sensitive_warning
+    warning_result['density_warning'] = density_warning
+    warning_result['influence_warning'] = influence_warning
 
     warning_result['num_warning_descrp'] = num_desp
     warning_result['sensitive_warning_descrp'] = sensitive_desp

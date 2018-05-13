@@ -6,7 +6,7 @@ import redis
 from elasticsearch import Elasticsearch
 from qiniu import Auth, put_file, etag, urlsafe_base64_encode
 from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, ES_INTELLIGENT_PORT, \
-                          ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
+                          ES_CLUSTER_HOST_2,ES_CLUSTER_PORT_2,ES_FLOW_TEXT_HOST, ES_FLOW_TEXT_PORT,\
                           ES_USER_PORTRAIT_HOST, ES_USER_PORTRAIT_PORT,USER_PROFILE_ES_HOST,\
                           REDIS_HOST_46, REDIS_PORT_46,REDIS_HOST_45, REDIS_PORT_45,REDIS_CLUSTER_HOST_FLOW3,REDIS_CLUSTER_PORT_FLOW3,\
                           REDIS_HOST_SENSITIVE,REDIS_PORT_SENSITIVE,REDIS_CLUSTER_HOST_FLOW2,REDIS_CLUSTER_PORT_FLOW2,\
@@ -16,10 +16,11 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, 
 from global_config import RETWEET_REDIS_HOST, RETWEET_REDIS_PORT
 from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
 
-
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
+es_xnr_2 = Elasticsearch(ES_CLUSTER_HOST_2, timeout=600)
 es_intel = Elasticsearch(ES_INTELLIGENT_HOST, timeout=600)
+
 #module1.2:config es table---index_name, doc_type
 
 # week retweet/be_retweet relation es
@@ -277,6 +278,10 @@ weibo_trace_community_index_type = 'trace_warning'
 #use to save community info
 weibo_community_index_name_pre = 'weibo_community_'
 weibo_community_index_type = 'community'
+
+#use to save community_status
+weibo_community_status_index_name = 'weibo_community_status'
+weibo_community_status_index_type = 'community_status'
 
 # xnr_flow_text
 xnr_flow_text_index_name_pre = 'xnr_flow_text_'
@@ -703,6 +708,11 @@ R_OPINION = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
 opinion_expand_task_queue_name = 'opinion_expand_task'
 
 r = _default_redis(host=REDIS_HOST_46, port=REDIS_PORT_46, db=2)
+
+R_WEIBO_COMMUNITY_CREATE = _default_redis_v2(host=REDIS_HOST_46, port=REDIS_PORT_46, db=1)
+weibo_community_find_task_queue_name = 'weibo_community_find_task'
+weibo_community_select_task_queue_name = 'weibo_community_select_task'
+weibo_community_trace_task_queue_name = 'weibo_trace_community_task'
 
 # 记录qq用户每天发言数
 r_qq_speak_num_pre = 'qq_speak_num_'  # qq_speak_num_2018-05-04

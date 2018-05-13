@@ -72,14 +72,14 @@ def get_xnr_keywords(xnr_user_no,datetime_list):
         es_results = es_xnr.search(index = xnr_flow_text_index_name_list,doc_type = xnr_flow_text_index_type,body=query_body)['hits']['hits']
         keywords_list = []
         for item in es_results:
-            keywords_string = item['_source']['keywords_string']
-            if keywords_string:
-                keywords_list.extend(keywords_string.split('&'))
-            else:
-                pass
             sensitive_string = item['_source']['sensitive_words_string']
             if sensitive_string:
                 keywords_list.extend(sensitive_string.split('&'))
+            else:
+                pass
+            keywords_string = item['_source']['keywords_string']
+            if keywords_string and len(keywords_list)<3:
+                keywords_list.extend(keywords_string.split('&'))
             else:
                 pass
     except:
@@ -108,7 +108,8 @@ def get_xnr_sensitive(xnr_user_no):
                     }
                 }
             }
-        }
+        },
+        'sort':{'create_time':{'order':'asc'}}
     }
     if submitter:
         try:
@@ -146,17 +147,19 @@ def get_db_num(timestamp):
 # input：关键词（指虚拟人发布的关键词），任务创建时间
 # output：近期facebook包含上述关键词的用户群体的uid
 def detect_by_keywords(keywords,datetime_list):
+    '''
     keywords_list = []
     model = gensim.models.KeyedVectors.load_word2vec_format(WORD2VEC_PATH,binary=True)
     for word in keywords:
         try:
-            simi_list = model.most_similar(word,topn=6)
+            simi_list = model.most_similar(word,topn=3)
             for simi_word in simi_list:
                 keywords_list.append(simi_word[0])
         except:
             keywords_list.append(word)
     print 'keywords::',keywords
     print 'keywords_list:::',keywords_list
+    '''
     group_uid_list = set()
     if datetime_list == []:
         return []
@@ -170,8 +173,8 @@ def detect_by_keywords(keywords,datetime_list):
     nest_query_list = []
     #文本中可能存在英文或者繁体字，所以都匹配一下
     # en_keywords_list = trans(keywords_list, target_language='en')
-    for i in range(len(keywords_list)):
-        keyword = keywords_list[i]
+    for i in range(len(keywords)):
+        keyword = keywords[i]
         traditional_keyword = simplified2traditional(keyword)
         
         # if len(en_keywords_list) == len(keywords_list): #确保翻译没出错
@@ -358,8 +361,11 @@ def create_xnr_targetuser(xnr_user_no):
     # for xnr_user_no in xnr_user_no_list:
 
     #step3.1：查找虚拟人发布的关键词
-    xnr_keywords = get_xnr_keywords(xnr_user_no,datetime_list)
-
+    xnr_keyword = get_xnr_keywords(xnr_user_no,datetime_list)
+    if len(xnr_keyword) > 10:
+        xnr_keywords = xnr_keyword[:10]
+    else:
+        pass
     #step3.2：查找虚拟人的关注用户或好友
     xnr_relationer = get_xnr_relationer(xnr_user_no)
 

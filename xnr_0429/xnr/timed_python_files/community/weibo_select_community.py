@@ -877,8 +877,11 @@ def get_final_community(xnr_user_no,date_time):
         for new_community in create_communitylist:
             new_community['community_status'] = 1
             result_mark = save_community_detail(new_community,date_time)
-            result_mark_list.append(result_mark)        
-    return result_mark_list
+            result_mark_list.append(result_mark)  
+
+    result_final = True      
+    # return result_mark_list
+    return result_final
 
 
 if __name__ == '__main__':
@@ -897,7 +900,7 @@ if __name__ == '__main__':
     	datetime = datetime2ts(WEIBO_COMMUNITY_DATE)
     	xnr_user_no_list = ['WXNR0004']
     else:
-    	datetime = int(time.time())-DAY
+    	datetime = int(time.time())-4*DAY
     	xnr_user_no_list = get_compelete_wbxnr()
     start_time = int(time.time())
     for xnr_user_no in xnr_user_no_list:

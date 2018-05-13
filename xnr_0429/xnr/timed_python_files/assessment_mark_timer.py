@@ -615,7 +615,7 @@ def get_influ_fans_num(xnr_user_no,current_time):
     r_fans_count = r_fans_count_datetime_xnr_pre + current_date + '_' + xnr_user_no
     #r_fans_uid_list = r_fans_uid_list_datetime_pre + current_date
 
-    datetime_count = r_fans_followers.get(r_fans_count)
+    datetime_count = int(r_fans_followers.get(r_fans_count))
     #fans_uid_list = r_fans_followers.hget(r_fans_uid_list,xnr_user_no)
 
     if not datetime_count:
@@ -1147,7 +1147,7 @@ def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
 
     if sensitive_value == None:
         sensitive_value = 0.0
-    fans_group_sensitive['sensitive_info'] = sensitive_value
+    fans_group_sensitive['sensitive_info'] = round(sensitive_value,4)
 
     return fans_group_sensitive
 
@@ -1194,7 +1194,7 @@ def get_pene_infor_sensitive(xnr_user_no,current_time_old):
 
     if sensitive_value == None:
         sensitive_value = 0.0
-    my_info_sensitive['sensitive_info'] = sensitive_value
+    my_info_sensitive['sensitive_info'] = round(sensitive_value,4)
 
     return my_info_sensitive
 
