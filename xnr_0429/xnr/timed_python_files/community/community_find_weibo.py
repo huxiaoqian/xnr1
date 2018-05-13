@@ -299,7 +299,36 @@ def ExtendQ(G,coms_list):
 
 
 #组织社区生成
-def create_weibo_community():
+def create_weibo_community(xnr_user_no,today_time):
+    
+
+    #给定的nodes可能会因为网络结构或排序被删掉
+    s = time.time()
+    #得到划分的社区
+    G,allG,coms_list = find_from_uid_list(xnr_user_no)
+    print 'group evaluate...'
+
+    all_influence = get_evaluate_max(influence_index,influence_type,'bci_week_ave')
+    all_sensitive = get_evaluate_max(sensitive_index,sensitive_type,'sensitive_week_ave')
+
+    print 'allG nodes:',allG.number_of_nodes()        
+    print 'G nodes:',G.number_of_nodes()
+
+    file_path = './weibo_data/' + xnr_user_no + '_' + ts2datetime(today_time) + '_' +'save_com.json'
+    print 'file_path:',file_path
+    f = open(file_path,'w')
+    for k,v in enumerate(coms_list):
+        #计算评价指标
+        f.write(json.dumps(group_evaluate(xnr_user_no,v,all_influence,all_sensitive,G))+'\n')
+    print 'total time:',time.time()-s
+    print 'eq:',ExtendQ(allG,coms_list)
+    mark = True
+    return mark
+
+
+
+if __name__ == '__main__':
+    start_time = int(time.time())
     
     if S_TYPE == 'test':
         today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
@@ -310,31 +339,9 @@ def create_weibo_community():
 
     # xnr_user_no_list = ['WXNR0004']
     for xnr_user_no in xnr_user_no_list:
-        #给定的nodes可能会因为网络结构或排序被删掉
-        s = time.time()
-        #得到划分的社区
-        G,allG,coms_list = find_from_uid_list(xnr_user_no)
-        print 'group evaluate...'
-
-        all_influence = get_evaluate_max(influence_index,influence_type,'bci_week_ave')
-        all_sensitive = get_evaluate_max(sensitive_index,sensitive_type,'sensitive_week_ave')
-
-        print 'allG nodes:',allG.number_of_nodes()        
-        print 'G nodes:',G.number_of_nodes()
-
-        file_path = './weibo_data/' + xnr_user_no + '_' + ts2datetime(today_time) + '_' +'save_com.json'
-        print 'file_path:',file_path
-        f = open(file_path,'w')
-        for k,v in enumerate(coms_list):
-            #计算评价指标
-            f.write(json.dumps(group_evaluate(xnr_user_no,v,all_influence,all_sensitive,G))+'\n')
-        print 'total time:',time.time()-s
-        print 'eq:',ExtendQ(allG,coms_list)
+        create_weibo_community(xnr_user_no,today_time)
 
 
-if __name__ == '__main__':
-    start_time = int(time.time())
-    create_weibo_community()
     end_time = int(time.time())
     print 'cost_time:::',end_time - start_time
 

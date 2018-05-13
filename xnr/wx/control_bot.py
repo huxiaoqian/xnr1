@@ -296,7 +296,7 @@ def send_command_without_recv(command):
         result = 1
     except Exception,e:
         #print 'send_command_without_recv Exception: ', str(e)
-		pass
+        pass
         result = 0
     finally:
         client.close()
