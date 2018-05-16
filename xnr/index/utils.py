@@ -6,11 +6,8 @@ from xnr.parameter import TRANS_PATH
 #trans_path = os.path.join(os.path.abspath(os.getcwd()), 'xnr/cron/trans/')
 #trans_path = '/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/cron/trans/'
 sys.path.append(TRANS_PATH)
-print 'TRANS_PATH', TRANS_PATH
 from trans import trans as text_trans
-import trans
-print trans.__file__
-# from trans import voice2text
+from trans import voice2text
 
 def utils_text_trans(q):
     q_list = [q]
@@ -23,8 +20,7 @@ def utils_text_trans(q):
 
 def utils_voice_trans(voice_path):
     if os.path.isfile(voice_path):
-    	r = ''
-        # r = voice2text(voice_path)
+        r = voice2text(voice_path)
         if r:
             return r
     return False
