@@ -5,7 +5,7 @@ import socket
 import json
 import subprocess
 from multiprocessing import Process
-from MyBot import MyBot
+from MyWXBot import MyBot
 import sys
 sys.path.append(os.getcwd())
 path1 = os.path.abspath(os.path.join(os.path.dirname(__file__),os.path.pardir))
@@ -445,19 +445,19 @@ def send_qrcode2mail(wxbot_id, qr_path):
         'text': '请管理员及时扫码以登陆微信虚拟人【' + wx_id + '(' + nickname + ')' + '】，以免影响业务，谢谢。',
         'files_path': qr_path,   #支持多个，以逗号隔开
         }
-		
+        
         from_user = {
             'name': u'虚拟人项目（微信）',
             'addr': mail,
             'password': password,   #其实应该是授权码
             'smtp_server': 'smtp.qq.com'   
         }
-		
+        
         to_user = {
             'name': u'管理员',
             'addr': mail  #支持多个，以逗号隔开
         }
-		
+        
         return send_mail(from_user=from_user, to_user=to_user, content=content)
     except Exception,e:
         print 'send_qrcode2mail Exception: ', str(e)
