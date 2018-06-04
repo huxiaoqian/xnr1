@@ -3,7 +3,7 @@
 import sys
 import json
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import twitter_keyword_count_index_name,twitter_keyword_count_index_type,\
                         twitter_xnr_count_info_index_name,twitter_xnr_count_info_index_type
 

@@ -8,7 +8,7 @@ import json
 import time,datetime
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,get_timets_set_indexset_list,\
         ts2datetimestr,get_xnr_flow_text_index_listname,get_xnr_feedback_index_listname
-from xnr.global_utils import es_xnr,facebook_keyword_count_index_name,facebook_keyword_count_index_type,\
+from xnr.global_utils import es_xnr_2 as es_xnr,facebook_keyword_count_index_name,facebook_keyword_count_index_type,\
                              fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
                              facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
                              fb_xnr_index_name,fb_xnr_index_type,\

@@ -13,7 +13,7 @@ from parameter import DAY,MAX_VALUE,WARMING_DAY,USER_XNR_NUM,MAX_WARMING_SIZE,MA
                       FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE
 from global_config import S_TYPE,TWITTER_FLOW_START_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime,get_timets_set_indexset_list
-from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
+from global_utils import es_xnr,es_xnr_2,tw_xnr_index_name,tw_xnr_index_type,weibo_date_remind_index_name,weibo_date_remind_index_type,\
                          tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
                          twitter_flow_text_index_name_pre,twitter_flow_text_index_type,\
                          twitter_speech_warning_index_name_pre,twitter_speech_warning_index_type,\
@@ -28,7 +28,7 @@ from global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,weibo_date_r
 #查询用户昵称
 def get_user_nickname(uid):
     try:
-        result=es_xnr.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)
+        result=es_xnr_2.get(index=twitter_user_index_name,doc_type=twitter_user_index_type,id=uid)
         user_name=result['_source']['username']
     except:
         user_name=''
@@ -52,7 +52,7 @@ def get_user_xnr_list(user_account):
         'size':USER_XNR_NUM
     }
     try:
-        user_result=es_xnr.search(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body=query_body)['hits']['hits']
+        user_result=es_xnr_2.search(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,body=query_body)['hits']['hits']
         xnr_user_no_list=[]
         for item in user_result:
             xnr_user_no_list.append(item['_source']['xnr_user_no'])
@@ -63,7 +63,7 @@ def get_user_xnr_list(user_account):
 #查询虚拟人uid
 def lookup_xnr_uid(xnr_user_no):
     try:
-        xnr_result=es_xnr.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr_2.get(index=tw_xnr_index_name,doc_type=tw_xnr_index_type,id=xnr_user_no)['_source']
         xnr_uid=xnr_result['uid']
     except:
         xnr_uid=''
@@ -73,7 +73,7 @@ def lookup_xnr_uid(xnr_user_no):
 #查询关注者或粉丝列表
 def lookup_xnr_fans_followers(xnr_user_no,lookup_type):
     try:
-        xnr_result=es_xnr.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr_2.get(index=tw_xnr_fans_followers_index_name,doc_type=tw_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         lookup_list=xnr_result[lookup_type]
     except:
         lookup_list=[]
@@ -96,7 +96,7 @@ def lookup_tid_attend_index(tid,today_datetime):
     	'sort':{'update_time':{'order':'desc'}}
     }
     try:
-        result=es_xnr.search(index=twitter_count_index_name,doc_type=twitter_count_index_type,body=query_body)['hits']['hits']
+        result=es_xnr_2.search(index=twitter_count_index_name,doc_type=twitter_count_index_type,body=query_body)['hits']['hits']
         # print result
         tid_result=[]
         for item in result:
@@ -125,7 +125,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
     }
     twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,today_datetime,today_datetime)
     #print twitter_flow_text_index_name
-    results=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
+    results=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
     #print results
     result=[]
     for item in results:
@@ -157,7 +157,7 @@ def create_speech_warning(xnr_user_no,today_datetime):
         today_date=ts2datetime(today_datetime)
         twitter_speech_warning_index_name=twitter_speech_warning_index_name_pre+today_date
         # try:
-        es_xnr.index(index=twitter_speech_warning_index_name,doc_type=twitter_speech_warning_index_type,body=item['_source'],id=task_id)
+        es_xnr_2.index(index=twitter_speech_warning_index_name,doc_type=twitter_speech_warning_index_type,body=item['_source'],id=task_id)
         mark=True
         # except:
         #     mark=False
@@ -200,7 +200,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
     twitter_flow_text_index_name=get_timets_set_indexset_list(twitter_flow_text_index_name_pre,today_datetime,today_datetime)
     
     try:   
-        first_sum_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
+        first_sum_result=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
         body=query_body)['aggregations']['friends_sensitive_num']['buckets']
     except:
         first_sum_result=[]
@@ -250,7 +250,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
         }
 
         try:
-            second_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
+            second_result=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         except:
             second_result=[]
 
@@ -286,7 +286,7 @@ def create_personal_warning(xnr_user_no,today_datetime):
         task_id=xnr_user_no+'_'+user_detail['uid']
         if s_result:
             try:
-                es_xnr.index(index=twitter_user_warning_index_name,doc_type=twitter_user_warning_index_type,body=user_detail,id=task_id)
+                es_xnr_2.index(index=twitter_user_warning_index_name,doc_type=twitter_user_warning_index_type,body=user_detail,id=task_id)
                 mark=True
             except:
                 mark=False
@@ -339,7 +339,7 @@ def create_date_warning(today_datetime):
                     print twitter_timing_warning_index_name
                     try:
 
-                        es_xnr.index(index=twitter_timing_warning_index_name,doc_type=twitter_timing_warning_index_name,body=item['_source'],id=task_id)
+                        es_xnr_2.index(index=twitter_timing_warning_index_name,doc_type=twitter_timing_warning_index_name,body=item['_source'],id=task_id)
                         mark=True
                     except:
                         mark=False
@@ -375,7 +375,7 @@ def lookup_twitter_date_warming(keywords,today_datetime):
         'sort':{'sensitive':{'order':'desc'}}
     }
     try:
-        temp_result=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
+        temp_result=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         print 'temp_result::',temp_result
         for item in temp_result:
@@ -427,7 +427,7 @@ def get_hashtag(today_datetime):
         },
         'size':EVENT_OFFLINE_COUNT
     }
-    twitter_text_exist=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
+    twitter_text_exist=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,\
                 body=query_body)['aggregations']['all_hashtag']['buckets']
     
     hashtag_list = []
@@ -482,7 +482,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
             'size':MAX_WARMING_SIZE,
             'sort':{'sensitive':{'order':'desc'}}
         }       
-        event_results=es_xnr.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
+        event_results=es_xnr_2.search(index=twitter_flow_text_index_name,doc_type=twitter_flow_text_index_type,body=query_body)['hits']['hits']
         if event_results:
             twitter_result=[]
             alluser_num_dict=dict()
@@ -543,7 +543,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark):
 
         #主要参与用户信息
             main_user_info=[]
-            user_es_result=es_xnr.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':main_userid_list})['docs']
+            user_es_result=es_xnr_2.mget(index=twitter_user_index_name,doc_type=twitter_user_index_type,body={'ids':main_userid_list})['docs']
             # print 'user_es_result:',user_es_result
             for item in user_es_result:
 
@@ -605,7 +605,7 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
     twitter_event_warning_index_name=twitter_event_warning_index_name_pre+ts2datetime(today_datetime)
     # print 'facebook_event_warning_index_name:',facebook_event_warning_index_name
     #try:
-    es_xnr.index(index=twitter_event_warning_index_name,doc_type=twitter_event_warning_index_type,body=event_warming_content,id=task_id)
+    es_xnr_2.index(index=twitter_event_warning_index_name,doc_type=twitter_event_warning_index_type,body=event_warming_content,id=task_id)
     mark=True
     #except:
     #    mark=False

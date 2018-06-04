@@ -10,7 +10,7 @@ reload(sys)
 sys.path.append('../../')
 from global_config import S_TYPE
 from time_utils import ts2datetime,datetime2ts
-from global_utils import es_xnr,facebook_keyword_count_index_name,facebook_keyword_count_index_type,\
+from global_utils import es_xnr_2,facebook_keyword_count_index_name,facebook_keyword_count_index_type,\
                              fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
                              facebook_flow_text_index_name_pre,facebook_flow_text_index_type,\
                              fb_xnr_index_name,fb_xnr_index_type
@@ -31,7 +31,7 @@ def extract_keywords(w_text):
 #查询好友列表
 def lookup_xnr_friends(xnr_user_no):
     try:
-        xnr_result=es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr_2.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         lookup_list=xnr_result['fans_list']
     except:
         lookup_list=[]
@@ -69,7 +69,7 @@ def xnr_keywords_compute(xnr_user_no):
             }
         }
         
-        flow_text_exist=es_xnr.search(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,\
+        flow_text_exist=es_xnr_2.search(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,\
                body=query_body)['aggregations']['keywords']['buckets']
 
         # print 'flow_text_exist:',flow_text_exist
@@ -105,7 +105,7 @@ def lookup_xnr_user_list():
         }
     }
     try:
-        es_result=es_xnr.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
+        es_result=es_xnr_2.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
         xnr_user_list=[]
         for item in es_result:
             xnr_user_list.append(item['_id'])
@@ -141,7 +141,7 @@ def compute_keywords_mark():
             keywords_task_detail['date_time']=date_time
             print 'keywords_task_detail:', date_time
         try:
-            es_xnr.index(index=facebook_keyword_count_index_name,doc_type=facebook_keyword_count_index_type,body=keywords_task_detail,id=keywords_task_id)
+            es_xnr_2.index(index=facebook_keyword_count_index_name,doc_type=facebook_keyword_count_index_type,body=keywords_task_detail,id=keywords_task_id)
             mark=True
         except:
             mark=False

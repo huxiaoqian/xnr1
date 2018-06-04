@@ -2,7 +2,7 @@
 import os
 import json
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import facebook_xnr_save_like_index_name,facebook_xnr_save_like_index_type
 
 def facebook_xnr_save_like_mappings():
