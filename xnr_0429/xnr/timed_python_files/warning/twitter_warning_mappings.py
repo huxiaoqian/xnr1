@@ -7,7 +7,7 @@ from time_utils import ts2datetime,datetime2ts,ts2yeartime
 from parameter import MAX_VALUE,DAY,WARMING_DAY
 from global_config import S_TYPE,TWITTER_FLOW_START_DATE
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import twitter_user_warning_index_name_pre,twitter_user_warning_index_type,\
 						twitter_event_warning_index_name_pre,twitter_event_warning_index_type,\
 						twitter_speech_warning_index_name_pre,twitter_speech_warning_index_type,\

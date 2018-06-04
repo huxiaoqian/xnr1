@@ -8,7 +8,7 @@ import json
 import time,datetime
 from xnr.time_utils import ts2datetime,datetime2ts,ts2date,get_timets_set_indexset_list,\
         ts2datetimestr,get_xnr_flow_text_index_listname,get_xnr_feedback_index_listname
-from xnr.global_utils import es_xnr,twitter_keyword_count_index_name,twitter_keyword_count_index_type,\
+from xnr.global_utils import es_xnr_2 as es_xnr,twitter_keyword_count_index_name,twitter_keyword_count_index_type,\
                              tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
                              twitter_flow_text_index_name_pre,twitter_flow_text_index_type,\
                              tw_xnr_index_name,tw_xnr_index_type,\

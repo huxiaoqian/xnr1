@@ -6,7 +6,7 @@ import os
 import json
 import time
 from xnr.time_utils import ts2datetime,datetime2ts,ts2yeartime,get_timets_set_indexset_list
-from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
+from xnr.global_utils import es_xnr,es_xnr_2,fb_xnr_index_name,fb_xnr_index_type,\
                              facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
                              facebook_timing_warning_index_name_pre,facebook_timing_warning_index_type,\
                              fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
@@ -25,7 +25,7 @@ from xnr.facebook_report_management_mappings import facebook_report_management_m
 #查询用户昵称
 def get_user_nickname(uid):
     try:
-        result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)
+        result=es_xnr_2.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)
         user_name=result['_source']['username']
     except:
         user_name=''
@@ -40,7 +40,7 @@ def get_xnr_warming_index_listname(index_name_pre,date_range_start_ts,date_range
         while iter_date_ts >= date_range_start_ts:
             date_range_start_date=ts2datetime(iter_date_ts)
             index_name=index_name_pre+date_range_start_date
-            if es_xnr.indices.exists(index=index_name):
+            if es_xnr_2.indices.exists(index=index_name):
                 index_name_list.append(index_name)
             else:
                 pass
@@ -48,7 +48,7 @@ def get_xnr_warming_index_listname(index_name_pre,date_range_start_ts,date_range
     else:
         date_range_start_date=ts2datetime(date_range_start_ts)
         index_name=index_name_pre+date_range_start_date
-        if es_xnr.indices.exists(index=index_name):
+        if es_xnr_2.indices.exists(index=index_name):
             index_name_list.append(index_name)
         else:
             pass
@@ -71,7 +71,7 @@ def lookup_fid_attend_index(fid,today_datetime):
         'sort':{'update_time':{'order':'desc'}}
     }
     try:
-        result=es_xnr.search(index=facebook_count_index_name,doc_type=facebook_count_index_type,body=query_body)['hits']['hits']
+        result=es_xnr_2.search(index=facebook_count_index_name,doc_type=facebook_count_index_type,body=query_body)['hits']['hits']
         print result
         fid_result=[]
         for item in result:
@@ -111,7 +111,7 @@ def lookup_history_user_warming(xnr_user_no,start_time,end_time):
     user_warming_list=get_xnr_warming_index_listname(facebook_user_warning_index_name_pre,start_time,end_time)
 
     try:
-        temp_results=es_xnr.search(index=user_warming_list,doc_type=facebook_user_warning_index_type,body=query_body)['hits']['hits']
+        temp_results=es_xnr_2.search(index=user_warming_list,doc_type=facebook_user_warning_index_type,body=query_body)['hits']['hits']
         results=[]
         for item in temp_results:
             item['_source']['_id']=item['_id']
@@ -126,7 +126,7 @@ def lookup_history_user_warming(xnr_user_no,start_time,end_time):
 #查询好友列表
 def lookup_xnr_friends(xnr_user_no):
     try:
-        xnr_result=es_xnr.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr_2.get(index=fb_xnr_fans_followers_index_name,doc_type=fb_xnr_fans_followers_index_type,id=xnr_user_no)['_source']
         lookup_list=xnr_result['fans_list']
     except:
         lookup_list=[]
@@ -136,7 +136,7 @@ def lookup_xnr_friends(xnr_user_no):
 #查询虚拟人uid
 def lookup_xnr_uid(xnr_user_no):
     try:
-        xnr_result=es_xnr.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
+        xnr_result=es_xnr_2.get(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,id=xnr_user_no)['_source']
         xnr_uid=xnr_result['uid']
     except:
         xnr_uid=''
@@ -176,7 +176,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
     facebook_flow_text_index_name=get_timets_set_indexset_list(facebook_flow_text_index_name_pre,start_time,end_time)
     
     try:   
-        first_sum_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,\
+        first_sum_result=es_xnr_2.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,\
         body=query_body)['aggregations']['friends_sensitive_num']['buckets']
     except:
         first_sum_result=[]
@@ -221,7 +221,7 @@ def lookup_today_personal_warming(xnr_user_no,start_time,end_time):
         }
 
         try:
-            second_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+            second_result=es_xnr_2.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         except:
             second_result=[]
 
@@ -343,7 +343,7 @@ def lookup_history_speech_warming(xnr_user_no,show_type,start_time,end_time):
     speech_warming_list=get_xnr_warming_index_listname(facebook_speech_warning_index_name_pre,start_time,end_time)
     #print speech_warming_list
     # try:
-    temp_results=es_xnr.search(index=speech_warming_list,doc_type=facebook_speech_warning_index_type,body=query_body)['hits']['hits']
+    temp_results=es_xnr_2.search(index=speech_warming_list,doc_type=facebook_speech_warning_index_type,body=query_body)['hits']['hits']
     print temp_results
     results=[]
     for item in temp_results:
@@ -498,14 +498,14 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
         while iter_year >= start_year_int:
             index_name = facebook_timing_warning_index_name_pre + str(start_year_int) + '-' + date_time
             # print 'index_name:',index_name
-            if es_xnr.indices.exists(index=index_name):
+            if es_xnr_2.indices.exists(index=index_name):
                 facebook_timing_warning_index_name_list.append(index_name)
             else:
                 pass            
             iter_year = iter_year - 1
     else:
         index_name = facebook_timing_warning_index_name_pre + start_year + '-' + date_time
-        if es_xnr.indices.exists(index=index_name):
+        if es_xnr_2.indices.exists(index=index_name):
             facebook_timing_warning_index_name_list.append(index_name)
         else:
             pass 
@@ -526,7 +526,7 @@ def lookup_facebook_date_warming_content(start_year,end_year,date_time,date_name
         'size':MAX_WARMING_SIZE
     }
     if facebook_timing_warning_index_name_list:
-        result=es_xnr.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
+        result=es_xnr_2.search(index=facebook_timing_warning_index_name_list,doc_type=facebook_timing_warning_index_type,body=query_body)['hits']['hits']
         print 'facebook_timing_warning_index_name_list:',facebook_timing_warning_index_name_list
         warming_content=[]
         for item in result:
@@ -562,7 +562,7 @@ def lookup_todayfacebook_date_warming(keywords,today_datetime):
         'size':MAX_WARMING_SIZE
     }
     try:
-        temp_result=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+        temp_result=es_xnr_2.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in temp_result:
             #查询三个指标字段
@@ -634,7 +634,7 @@ def lookup_history_event_warming(xnr_user_no,start_time,end_time):
     event_warming_list=get_xnr_warming_index_listname(facebook_event_warning_index_name_pre,start_time,end_time)
 
     #try:
-    temp_results=es_xnr.search(index=event_warming_list,doc_type=facebook_event_warning_index_type,body=query_body)['hits']['hits']
+    temp_results=es_xnr_2.search(index=event_warming_list,doc_type=facebook_event_warning_index_type,body=query_body)['hits']['hits']
     results=[]
     for item in temp_results:
         item['_source']['_id']=item['_id']
@@ -674,7 +674,7 @@ def get_hashtag(today_datetime):
         },
         'size':5
     }
-    flow_text_exist=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,\
+    flow_text_exist=es_xnr_2.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,\
                 body=query_body)['aggregations']['all_hashtag']['buckets']
     #print 'flow_text_exist:',flow_text_exist
     
@@ -728,7 +728,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark=False):
             'size':MAX_WARMING_SIZE,
             'sort':{'sensitive':{'order':'desc'}}
         }       
-        event_results=es_xnr.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
+        event_results=es_xnr_2.search(index=facebook_flow_text_index_name,doc_type=facebook_flow_text_index_type,body=query_body)['hits']['hits']
         if event_results:
             facebook_result=[]
             friends_num_dict=dict()
@@ -789,7 +789,7 @@ def create_event_warning(xnr_user_no,today_datetime,write_mark=False):
 
         #主要参与用户信息
             main_user_info=[]
-            user_es_result=es_xnr.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':main_userid_list})['docs']
+            user_es_result=es_xnr_2.mget(index=facebook_user_index_name,doc_type=facebook_user_index_type,body={'ids':main_userid_list})['docs']
             # print 'user_es_result:',user_es_result
             for item in user_es_result:
 
@@ -847,7 +847,7 @@ def write_envent_warming(today_datetime,event_warming_content,task_id):
     facebook_event_warning_index_name=facebook_event_warning_index_name_pre+ts2datetime(today_datetime)
     # print 'facebook_event_warning_index_name:',facebook_event_warning_index_name
     #try:
-    es_xnr.index(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,body=event_warming_content,id=task_id)
+    es_xnr_2.index(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,body=event_warming_content,id=task_id)
     mark=True
     #except:
     #    mark=False
@@ -1015,7 +1015,7 @@ def report_warming_content(task_detail):
             facebook_user_warning_index_name = facebook_user_warning_index_name_pre + ts2datetime(item['timestamp'])
             facebook_user_warming_id=task_detail['xnr_user_no']+'_'+task_detail['uid']
             try:
-                facebook_user_result=es_xnr.get(index=facebook_user_warning_index_name,doc_type=facebook_user_warning_index_type,id=facebook_user_warming_id)['_source']
+                facebook_user_result=es_xnr_2.get(index=facebook_user_warning_index_name,doc_type=facebook_user_warning_index_type,id=facebook_user_warming_id)['_source']
                 user_warning_content=json.dumps(facebook_user_result['content'])
                 for content in user_warning_content:
                     if content['fid'] == item['fid']:
@@ -1029,7 +1029,7 @@ def report_warming_content(task_detail):
         elif task_detail['report_type']==u'言论':
             facebook_speech_warning_index_name = facebook_speech_warning_index_name_pre + ts2datetime(item['timestamp'])
             try:
-                facebook_speech_result=es_xnr.get(index=facebook_speech_warning_index_name,doc_type=facebook_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['fid'])['_source']
+                facebook_speech_result=es_xnr_2.get(index=facebook_speech_warning_index_name,doc_type=facebook_speech_warning_index_type,id=task_detail['xnr_user_no']+'_'+item['fid'])['_source']
                 report_dict['uid']=facebook_speech_result['uid']
                 lookup_mark=True
                 fb_list.append(facebook_speech_result)
@@ -1041,7 +1041,7 @@ def report_warming_content(task_detail):
             facebook_event_warning_index_name = facebook_event_warning_index_name_pre + ts2datetime(item['timestamp'])
             event_warning_id = task_detail['xnr_user_no']+'_'+task_detail['event_name']
             try:
-                event_result=es_xnr.get(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,id=event_warning_id)['_source']
+                event_result=es_xnr_2.get(index=facebook_event_warning_index_name,doc_type=facebook_event_warning_index_type,id=event_warning_id)['_source']
                 event_content=json.dumps(event_result['main_facebook_info'])
                 for event in event_content:
                     if event['fid'] == item['fid']:
@@ -1056,7 +1056,7 @@ def report_warming_content(task_detail):
             year = ts2yeartime(item['timestamp'])
             facebook_timing_warning_index_name = facebook_timing_warning_index_name_pre + year +'_' + task_detail['date_time']
             try:
-                time_result=es_xnr.search(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
+                time_result=es_xnr_2.search(index=facebook_timing_warning_index_name,doc_type=facebook_timing_warning_index_type,query_body={'query':{'match_all':{}}})['hits']['hits']
                 time_content=[]
                 for timedata in time_result:
                     for data in timedata['facebook_date_warming_content']:
@@ -1073,7 +1073,7 @@ def report_warming_content(task_detail):
         else:
             flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(item['timestamp'])
             try:
-                fb_result=es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=item['fid'])['_source']
+                fb_result=es_xnr_2.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=item['fid'])['_source']
                 fb_result['nick_name']=get_user_nickname(fb_result['uid'])
                 fid_result=lookup_fid_attend_index(item['fid'],item['timestamp'])
                 if fid_result:
@@ -1094,7 +1094,7 @@ def report_warming_content(task_detail):
         for uid in user_info:
             user=dict()
             try:
-                user_result=es_xnr.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)['_source']
+                user_result=es_xnr_2.get(index=facebook_user_index_name,doc_type=facebook_user_index_type,id=uid)['_source']
                 user_dict['uid']=item['_id']
                 user_dict['username']=user_result['username']
                 if user_result.has_key('talking_about_count'):
@@ -1150,14 +1150,14 @@ def report_warming_content(task_detail):
 
     now_time=int(time.time())
     facebook_report_management_index_name = facebook_report_management_index_name_pre + ts2datetime(now_time)
-    if es_xnr.indices.exists(index=facebook_report_management_index_name):
+    if es_xnr_2.indices.exists(index=facebook_report_management_index_name):
         pass
     else:
         facebook_report_management_mappings() 
 
     if report_id and report_mark:
         try:
-            es_xnr.index(index=facebook_report_management_index_name,doc_type=facebook_report_management_index_type,id=report_id,body=report_dict)
+            es_xnr_2.index(index=facebook_report_management_index_name,doc_type=facebook_report_management_index_type,id=report_id,body=report_dict)
             mark=True
         except:
             mark=False
@@ -1171,7 +1171,7 @@ def report_warming_content(task_detail):
 def addto_warning_corpus(task_detail):
     flow_text_index_name = facebook_flow_text_index_name_pre + ts2datetime(task_detail['timestamp'])
     try:
-        corpus_result = es_xnr.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
+        corpus_result = es_xnr_2.get(index=flow_text_index_name,doc_type=facebook_flow_text_index_type,id=task_detail['fid'])['_source']
         corpus_result['xnr_user_no'] = task_detail['xnr_user_no']
         corpus_result['warning_source'] = task_detail['warning_source']
         corpus_result['create_time'] = task_detail['create_time']
@@ -1196,7 +1196,7 @@ def addto_warning_corpus(task_detail):
         else:
             corpus_result['content_type']='unfriends'
 
-        es_xnr.index(index=facebook_warning_corpus_index_name,doc_type=facebook_warning_corpus_index_type,id=task_detail['fid'],body=corpus_result)
+        es_xnr_2.index(index=facebook_warning_corpus_index_name,doc_type=facebook_warning_corpus_index_type,id=task_detail['fid'],body=corpus_result)
         mark=True
     except:
         mark=False
@@ -1207,7 +1207,7 @@ def addto_warning_corpus(task_detail):
 
 #更新flow text数据用于测试
 def update_fb_flow_text(task_id,sensitive):
-    result=es_xnr.update(index='facebook_flow_text_2017-09-11',doc_type='text',id=task_id,\
+    result=es_xnr_2.update(index='facebook_flow_text_2017-09-11',doc_type='text',id=task_id,\
                 body={"doc":{'sensitive':sensitive}})
 
 

@@ -7,7 +7,7 @@ from time_utils import ts2datetime,datetime2ts,ts2yeartime
 from parameter import MAX_VALUE,DAY,WARMING_DAY
 from global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
 						facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
 						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\

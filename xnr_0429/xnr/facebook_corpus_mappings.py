@@ -2,7 +2,7 @@
 import os
 import json
 
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import facebook_xnr_corpus_index_name,facebook_xnr_corpus_index_type
 
 def facebook_xnr_corpus_mappings():

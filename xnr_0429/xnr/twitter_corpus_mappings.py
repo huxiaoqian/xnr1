@@ -2,7 +2,7 @@
 import os
 import json
 
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import twitter_xnr_corpus_index_name,twitter_xnr_corpus_index_type
 
 def twitter_xnr_corpus_mappings():

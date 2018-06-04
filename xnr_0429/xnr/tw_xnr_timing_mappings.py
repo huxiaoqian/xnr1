@@ -3,7 +3,7 @@
 import sys
 import json
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr as es
+from global_utils import es_xnr_2 as es
 from global_utils import tw_xnr_timing_list_index_name,tw_xnr_timing_list_index_type
 
 def tw_xnr_timing_list_mappings():
