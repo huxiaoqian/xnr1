@@ -15,6 +15,7 @@ from global_config import ES_CLUSTER_HOST, ES_CLUSTER_PORT,ES_INTELLIGENT_HOST, 
 
 from global_config import RETWEET_REDIS_HOST, RETWEET_REDIS_PORT
 from global_config import COMMENT_REDIS_HOST, COMMENT_REDIS_PORT
+from global_config import REDIS_HOST_37, REDIS_PORT_37
 
 #module1.1:init es
 es_xnr = Elasticsearch(ES_CLUSTER_HOST, timeout=600)
@@ -836,3 +837,15 @@ tw_xnr_max_no = 'tw_xnr_max_no'
 wx_xnr_max_no = 'wx_xnr_max_no'
 wb_xnr_max_no = 'wb_xnr_max_no'
 qq_xnr_max_no = 'qq_xnr_max_no'
+
+
+
+#10.128.55.138(192.168.169.37)上的redis
+r_37 = redis.Redis(host=REDIS_HOST_37, port=REDIS_PORT_37)
+twitter_flow_text_trans_task_name = 'twitter_flow_text_trans_task'
+twitter_user_trans_task_name = 'twitter_user_trans_task'
+
+facebook_flow_text_trans_task_name = 'facebook_flow_text_trans_task'
+facebook_user_trans_task_name = 'facebook_user_trans_task'
+
+

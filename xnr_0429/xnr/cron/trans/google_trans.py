@@ -14,5 +14,5 @@ def translate(q, target_language):
         return res
 
 if __name__ == '__main__':
-    q = ['안녕하세요.', 'Hello world']
+    q = ['안녕하세요.', 'Hello world'] 
     print translate(q, 'zh-cn')

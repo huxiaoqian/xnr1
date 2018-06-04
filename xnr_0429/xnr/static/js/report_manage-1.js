@@ -302,13 +302,13 @@ function WXreportDefaul(data) {
                 valign: "middle",//垂直
                 formatter: function (value, row, index) {
                     //var text = row.report_content;
-		    var txt = '';
-	            var keyword=row.sensitive_words_string.split('&');
-	 	    var s=row.text;
-	 	    for (var f=0;f<keyword.length;f++){
-			    s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
-		    }
-		    txt=s;
+		            var txt = '';
+	                var keyword=row.sensitive_words_string.split('&');
+	 	            var s=row.text;
+	 	            for (var f=0;f<keyword.length;f++){
+			            s=s.toString().replace(new RegExp(keyword[f],'g'),'<b style="color:#ef3e3e;">'+keyword[f]+'</b>');
+		            }
+		            txt=s;
                     var str =
                         '<div class="center_rel" style="margin-bottom: 10px;background:#06162d;padding: 5px 10px;">'+
                         '   <span class="center_2">'+txt+'</span>'+
@@ -471,13 +471,13 @@ $('.choosetime .demo-label input').on('click',function () {
        }else if(flagType==2){
             weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
                 '&report_type='+valCH.join(',')+'&start_ts='+getDaysBefore(_val)+'&end_ts='+time2;
-	    public_ajax.call_request('get',weiboUrl,reportDefaul);
+	        public_ajax.call_request('get',weiboUrl,reportDefaul);
         }else if(flagType==3){
             newReport_url='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type='+valCH.join(',')+'&period='+_val;
             public_ajax.call_request('get',newReport_url,WXreportDefaul);
             //return false;
         }
-//        public_ajax.call_request('get',weiboUrl,reportDefaul);
+            //public_ajax.call_request('get',weiboUrl,reportDefaul);
     }
 });
 $('#sure').on('click',function () {
@@ -502,13 +502,13 @@ $('#sure').on('click',function () {
             weiboUrl='/qq_xnr_report_manage/show_report_content/?qq_xnr_no='+ID_Num+
                 '&report_type='+valCH.join(',')+'&start_ts='+(Date.parse(new Date(s))/1000)+
                 '&end_ts='+(Date.parse(new Date(d))/1000);
- 	   public_ajax.call_request('get',weiboUrl,reportDefaul);
+ 	    public_ajax.call_request('get',weiboUrl,reportDefaul);
         }else if(flagType==3){
             //weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=='+valCH.join(',')+'&period='+_val;
-	    //该传时间戳
-	    weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=='+valCH.join(',')+'&startdate='+(Date.parse(new Date(s))/1000)+'&enddate='+(Date.parse(new Date(d))/1000);
+	        //改传时间戳
+	        weiboUrl='/wx_xnr_report_manage/show_report_content/?wxbot_id='+ID_Num+'&report_type=='+valCH.join(',')+'&startdate='+(Date.parse(new Date(s))/1000)+'&enddate='+(Date.parse(new Date(d))/1000);
             public_ajax.call_request('get',weiboUrl,WXreportDefaul);
-           // return false;
+            // return false;
         }
         // public_ajax.call_request('get',weiboUrl,reportDefaul);
     }

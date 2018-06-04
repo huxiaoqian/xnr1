@@ -543,7 +543,7 @@ function chartTable(dataVal){
                 }
             },
             {
-                title: "转发数",//标题
+                title: "交互次数",//标题
                 field: "count",//键名
                 sortable: true,//是否可排序
                 order: "desc",//默认排序方式

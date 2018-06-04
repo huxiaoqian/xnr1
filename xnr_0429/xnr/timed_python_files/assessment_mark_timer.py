@@ -237,28 +237,33 @@ def get_tweets_distribute(xnr_user_no):
     uid = xnr_user_no2uid(xnr_user_no)
 
     if xnr_user_no:
-        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        try:
+            es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
-        followers_list = es_results['followers_list']
+            followers_list = es_results['followers_list']
+        except:
+            followers_list = []
 
     if S_TYPE == 'test':
         uid=PORTRAI_UID
         followers_list=PORTRAIT_UID_LIST
 
     # 关注者topic分布
+    try:
+        results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+            body={'ids':followers_list})['docs']
 
-    results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
-        body={'ids':followers_list})['docs']
+        topic_list_followers = []
 
-    topic_list_followers = []
+        for result in results:
+            if result['found'] == True:
+                result = result['_source']
+                topic_string_first = result['topic_string'].split('&')
+                topic_list_followers.extend(topic_string_first)
 
-    for result in results:
-        if result['found'] == True:
-            result = result['_source']
-            topic_string_first = result['topic_string'].split('&')
-            topic_list_followers.extend(topic_string_first)
-
-    topic_list_followers_count = Counter(topic_list_followers)
+        topic_list_followers_count = Counter(topic_list_followers)
+    except:
+        topic_list_followers_count = {}
 
     # 虚拟人topic分布
     try:
@@ -284,26 +289,29 @@ def get_tweets_distribute(xnr_user_no):
     #         except:
     #             continue
     #         topic_distribute_dict['radar'][topic] = topic_value
-    if topic_xnr_count:
-        for topic, value in topic_list_followers_count.iteritems():
-            try:
-                topic_value = float(topic_xnr_count[topic])/value
-            except:
-                continue
-            topic_distribute_dict['radar'][topic] = topic_value
-            
+    if topic_list_followers_count:
+        if topic_xnr_count:
+            for topic, value in topic_list_followers_count.iteritems():
+                try:
+                    topic_value = float(topic_xnr_count[topic])/value
+                except:
+                    continue
+                topic_distribute_dict['radar'][topic] = topic_value
+    else:
+        topic_distribute_dict['radar'] = {}
+        
     # 整理仪表盘数据
     mark = 0
-    
-    if topic_xnr_count:
-        n_topic = len(topic_list_followers_count.keys())
-        for topic,value in topic_xnr_count.iteritems():
-            try:
-                mark += float(value)/(topic_list_followers_count[topic]*n_topic)
-                print topic 
-                print mark
-            except:
-                continue
+    if topic_list_followers_count:    
+        if topic_xnr_count:
+            n_topic = len(topic_list_followers_count.keys())
+            for topic,value in topic_xnr_count.iteritems():
+                try:
+                    mark += float(value)/(topic_list_followers_count[topic]*n_topic)
+                    print topic 
+                    print mark
+                except:
+                    continue
     topic_distribute_dict['mark'] = mark
 
     return topic_distribute_dict
@@ -318,9 +326,12 @@ def get_follow_group_distribute(xnr_user_no):
         followers_list_today = FOLLOWERS_TODAY
     else:
         # 获取所有关注者
-        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+        try:
+            es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                                 id=xnr_user_no)["_source"]
-        followers_list = es_results['followers_list']
+            followers_list = es_results['followers_list']
+        except:
+            followers_list = []
 
         # 获取今日关注者
         current_time = int(time.time()-DAY)
@@ -333,19 +344,21 @@ def get_follow_group_distribute(xnr_user_no):
 	    followers_list_today = []
 
     # 所有关注者领域分布
-
-    results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
-        body={'ids':followers_list})['docs']
+    try:
+        results = es_user_portrait.mget(index=portrait_index_name,doc_type=portrait_index_type,\
+            body={'ids':followers_list})['docs']
     
-    domain_list_followers = []
+        domain_list_followers = []
 
-    for result in results:
-        if result['found'] == True:
-            result = result['_source']
-            domain_name = result['domain']
-            domain_list_followers.append(domain_name)
+        for result in results:
+            if result['found'] == True:
+                result = result['_source']
+                domain_name = result['domain']
+                domain_list_followers.append(domain_name)
 
-    domain_list_followers_count = Counter(domain_list_followers)
+        domain_list_followers_count = Counter(domain_list_followers)
+    except:
+        domain_list_followers_count = {}
 
     #domain_distribute_dict['domain_follower'] = domain_list_followers_count
     
@@ -390,13 +403,14 @@ def get_follow_group_distribute(xnr_user_no):
     mark = 0
     print 'domain_list_followers_today_count::',domain_list_followers_today_count
     print 'domain_distribute_dict::',domain_distribute_dict
-    if domain_list_followers_today_count:
-        n_domain = len(domain_list_followers_count.keys())
-        for domain,value in domain_list_followers_today_count.iteritems():
-            try:
-                mark += float(value)/(domain_list_followers_count[domain]*n_domain)
-            except:
-                continue
+    if domain_list_followers_count:
+        if domain_list_followers_today_count:
+            n_domain = len(domain_list_followers_count.keys())
+            for domain,value in domain_list_followers_today_count.iteritems():
+                try:
+                    mark += float(value)/(domain_list_followers_count[domain]*n_domain)
+                except:
+                    continue
     domain_distribute_dict['mark'] = mark
 
     return domain_distribute_dict
@@ -614,11 +628,11 @@ def get_influ_fans_num(xnr_user_no,current_time):
         # datetime = ts2datetime(timestamp)
     r_fans_count = r_fans_count_datetime_xnr_pre + current_date + '_' + xnr_user_no
     #r_fans_uid_list = r_fans_uid_list_datetime_pre + current_date
-
-    datetime_count = int(r_fans_followers.get(r_fans_count))
+    if r_fans_followers.get(r_fans_count):
+        datetime_count = int(r_fans_followers.get(r_fans_count))
     #fans_uid_list = r_fans_followers.hget(r_fans_uid_list,xnr_user_no)
 
-    if not datetime_count:
+    else:
         datetime_count = 0
 
 
@@ -631,12 +645,12 @@ def get_influ_fans_num(xnr_user_no,current_time):
     except:
         fans_total_num_last = 0
 
-    if not fans_total_num_last:
-        fans_total_num_last = 1
 
     fans_dict['day_num'] = datetime_count
     fans_dict['total_num'] = fans_total_num_last + datetime_count
 
+    if not fans_total_num_last:
+        fans_total_num_last = 1
     fans_dict['growth_rate'] = round(float(datetime_count)/fans_total_num_last,4)
 
     #total_dict = compute_growth_rate_total(fans_num_day,fans_num_total)
@@ -703,11 +717,11 @@ def get_influ_retweeted_num(xnr_user_no,current_time):
     except:
         retweet_total_num_last = 0
 
-    if not retweet_total_num_last:
-        retweet_total_num_last = 1
 
     retweet_dict['day_num'] = es_day_count
     retweet_dict['total_num'] = retweet_total_num_last + es_day_count
+    if not retweet_total_num_last:
+        retweet_total_num_last = 1
     retweet_dict['growth_rate'] = round(float(es_day_count)/retweet_total_num_last,4)
 
     
@@ -778,12 +792,11 @@ def get_influ_commented_num(xnr_user_no,current_time):
     except:
         comment_total_num_last = 0
 
-    if not comment_total_num_last:
-        comment_total_num_last = 1
-
     comment_dict['day_num'] = es_day_count
     comment_dict['total_num'] = comment_total_num_last + es_day_count
 
+    if not comment_total_num_last:
+        comment_total_num_last = 1
     comment_dict['growth_rate'] = round(float(es_day_count)/comment_total_num_last,4)
 
     return comment_dict
@@ -842,11 +855,11 @@ def get_influ_like_num(xnr_user_no,current_time):
     except:
         like_total_num_last = 0
 
-    if not like_total_num_last:
-        like_total_num_last = 1
 
     like_dict['day_num'] = es_day_count
     like_dict['total_num'] = like_total_num_last + es_day_count
+    if not like_total_num_last:
+        like_total_num_last = 1
     like_dict['growth_rate'] = round(float(es_day_count)/like_total_num_last,4)
 
     return like_dict
@@ -915,11 +928,11 @@ def get_influ_at_num(xnr_user_no,current_time):
     except:
         at_total_num_last = 0
 
-    if not at_total_num_last:
-        at_total_num_last = 1
 
     at_dict['day_num'] = es_day_count
     at_dict['total_num'] = at_total_num_last + es_day_count
+    if not at_total_num_last:
+        at_total_num_last = 1
     at_dict['growth_rate'] = round(float(es_day_count)/at_total_num_last,4)
 
 
@@ -991,11 +1004,11 @@ def get_influ_private_num(xnr_user_no,current_time):
     except:
         private_total_num_last = 0
 
-    if not private_total_num_last:
-        private_total_num_last = 1
 
     private_dict['day_num'] = es_day_count
     private_dict['total_num'] = private_total_num_last + es_day_count
+    if not private_total_num_last:
+        private_total_num_last = 1
     private_dict['growth_rate'] = round(float(es_day_count)/private_total_num_last,4)
 
     return private_dict
@@ -1049,9 +1062,12 @@ def penetration_total(xnr_user_no,current_time):
 def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
 
     #if xnr_user_no:
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    try:
+        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    followers_list = es_results['followers_list']
+        followers_list = es_results['followers_list']
+    except:
+        followers_list = []
 
     
     if S_TYPE == 'test':
@@ -1094,9 +1110,10 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
     }
     es_sensitive_result = es_flow_text.search(index=index_name,doc_type=flow_text_index_type,\
         body=query_body_info)['aggregations']
-    sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],4)
+    if es_sensitive_result['avg_sensitive']['value']:
+        sensitive_value = round(es_sensitive_result['avg_sensitive']['value'],4)
 
-    if sensitive_value == None:
+    else:
         sensitive_value = 0.0
     follow_group_sensitive['sensitive_info'] = sensitive_value
 
@@ -1105,9 +1122,12 @@ def get_pene_follow_group_sensitive(xnr_user_no,current_time_old):
 def get_pene_fans_group_sensitive(xnr_user_no,current_time_old):
 
     #if xnr_user_no:
-    es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
+    try:
+        es_results = es.get(index=weibo_xnr_fans_followers_index_name,doc_type=weibo_xnr_fans_followers_index_type,\
                             id=xnr_user_no)["_source"]
-    fans_list = es_results['fans_list']
+        fans_list = es_results['fans_list']
+    except:
+        fans_list = []
 
     if S_TYPE == 'test':
         current_time = datetime2ts(S_DATE_BCI)
@@ -1423,19 +1443,21 @@ def get_pene_warning_report_sensitive(xnr_user_no,current_time_old):
 def cron_compute_mark(current_time):
 
     xnr_results = es.search(index=weibo_xnr_index_name,doc_type=weibo_xnr_index_type,\
-                body={'query':{'match_all':{}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
+                body={'query':{'term':{'create_status':2}},'_source':['xnr_user_no'],'size':MAX_SEARCH_SIZE})['hits']['hits']
     
     if S_TYPE == 'test':
         xnr_results = [{'_source':{'xnr_user_no':'WXNR0004'}}]
     start_time = int(time.time())
+    print 'len..',len(xnr_results)
     for result in xnr_results:
         xnr_user_no = result['_source']['xnr_user_no']
         #xnr_user_no = 'WXNR0004'
-
         # current_time = int(time.time()-DAY)
         current_date = ts2datetime(current_time)
         current_time_new = datetime2ts(current_date)
 
+        print 'date..',current_date
+        print 'xnr...',xnr_user_no
         print 'start assessment....'
         influence = compute_influence_num(xnr_user_no,current_time)
         penetration = compute_penetration_num(xnr_user_no,current_time)
@@ -1504,7 +1526,7 @@ def cron_compute_mark(current_time):
         except:
             mark = False
 
-        return mark
+        #return mark
 
 
 # def bulk_add():

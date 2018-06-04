@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 
 class Report:
 	def __init__(self, id, username, password):
-		self.ES_HOST = '219.224.134.213'
+		self.ES_HOST = '192.168.169.45'
 		self.ES_PORT = 9205
 		self.INDEX_NAME = 'weibo_report_management'
 		self.TYPE = 'report'

@@ -200,9 +200,12 @@ def group_evaluate(xnr_user_no,nodes,all_influence,all_sensitive,G=None):
     result['max_influence'] = round((max(influence_result)/float(all_influence))*100,4)
     result['mean_influence'] = round(((sum(influence_result)/len(influence_result))/float(all_influence))*100,4)
 
-    result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*100,4)
+    max_sensitive = round((max(sensitive_result)/float(all_sensitive))*100,4)
     result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*100,4)
-    
+    if max_sensitive > 100:
+        result['max_sensitive'] = 100.0000
+    else:
+        result['max_sensitive'] = max_sensitive    
     # result['mean_sensitive'] = 0.4670
     # result['mean_influence'] = 25.9874
     # result['density'] = 0.0068
@@ -334,7 +337,8 @@ if __name__ == '__main__':
         today_time = datetime2ts(WEIBO_COMMUNITY_DATE)
         xnr_user_no_list = ['WXNR0004']
     else:
-        today_time = time.time()-0*DAY
+        today_time = time.time()-1*DAY
+        print ts2datetime(today_time)
         xnr_user_no_list = get_compelete_wbxnr()
 
     # xnr_user_no_list = ['WXNR0004']

@@ -58,17 +58,19 @@ class Screen():
 	def screenShot(self, uid, mid):
 		_mid = self.mid_to_url(mid)
 		url = "http://weibo.com/" + uid + "/" + _mid
+		print(url)
 		self.driver.get(url)
-		time.sleep(5)
-		while True:
-			try:
-				time.sleep(3)
-				self.driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
-				self.driver.quit()
-				self.display.popen.kill()
-				break
-			except:
-				continue
+		time.sleep(10)
+		print(self.driver.page_source)
+		#while True:
+		#	try:
+		time.sleep(3)
+		self.driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
+		self.driver.quit()
+		self.display.popen.kill()
+		#		break
+		#	except:
+		#		continue
 
 
 

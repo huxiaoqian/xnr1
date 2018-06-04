@@ -3,12 +3,8 @@ import os
 import json
 import time
 import sys
-from datetime import datetime,date
 
-from weibo_publicfunc import get_compelete_wbxnr
-from community_find_weibo import create_weibo_community
-from weibo_select_community import get_final_community
-from weibo_trace_community import trace_xnr_community,get_trace_community
+from datetime import datetime,date
 
 sys.path.append('../../')
 from parameter import DAY
@@ -19,6 +15,15 @@ from global_utils import weibo_community_find_task_queue_name,weibo_community_se
                          weibo_community_trace_task_queue_name
 from global_utils import es_xnr,weibo_community_status_index_name,weibo_community_status_index_type
 
+sys.path.append('../../timed_python_files/community/')
+from weibo_publicfunc import get_compelete_wbxnr
+from community_find_weibo import create_weibo_community
+from weibo_select_community import get_final_community
+from weibo_trace_community import trace_xnr_community,get_trace_community
+
+sys.path.append('../../timed_python_files/community/mappings/')
+from weibo_community_discovery_mappings import weibo_community_mappings
+from weibo_trace_community_mappings import weibo_trace_community_mappings
 
 #状态表状态查询,如果没有状态返回-1
 #如果生成了状态是0
@@ -34,9 +39,12 @@ def get_day_status(xnr_user_no,datetime):
 
 
 
+#from datetime import datetime
+#global datetime
 #将生成社区加入队列
-def push_create_community()
+def push_create_community():
     #判断日期，等于0表示是周一
+    from datetime import datetime
     dayOfWeek = datetime.today().weekday()
 
     #生成日期-周日
@@ -46,7 +54,9 @@ def push_create_community()
     xnr_user_no_list = get_compelete_wbxnr()
 
     if dayOfWeek == 0:
+        weibo_community_mappings(ts2datetime(datetime))
         for xnr_user_no in xnr_user_no_list:
+            weibo_trace_community_mappings(xnr_user_no)
             #判断当天状态表情况
             status_mark = get_day_status(xnr_user_no,datetime)
             if status_mark < 0:
@@ -60,8 +70,9 @@ def push_create_community()
 
 
 #将选择社区加入队列
-def push_select_community()
+def push_select_community():
     #判断日期，等于0表示是周一
+    from datetime import datetime
     dayOfWeek = datetime.today().weekday()
 
     #生成日期-周日
@@ -88,8 +99,9 @@ def push_select_community()
 
 
 #将跟踪社区加入队列
-def push_trace_community()
+def push_trace_community():
     #判断日期，等于0表示是周一
+    from datetime import datetime
     dayOfWeek = datetime.today().weekday()
 
     #生成日期-周日
@@ -114,7 +126,7 @@ def push_trace_community()
             status_mark = get_day_status(xnr_user_no,datetime)
             num = num + status_mark
         if num == len(xnr_user_no_list):
-        	for community in community_list:
+            for community in community_list:
                 task_dict = dict()
                 task_dict['community'] = community
                 task_dict['datetime'] = datetime
@@ -206,14 +218,16 @@ def rpop_trace_community():
 if __name__ == '__main__':
 #push
     push_create_community()
-
-    push_select_community()
-
-    push_trace_community()
-
-#pop
     rpop_create_community()
 
+    push_select_community()
     rpop_select_community()
 
+    push_trace_community()
     rpop_trace_community()
+#pop
+    #rpop_create_community()
+
+    #rpop_select_community()
+
+    #rpop_trace_community()

@@ -46,7 +46,7 @@ from parameter import MAX_SEARCH_SIZE, SUB_OPINION_WEIBO_LIMIT, SENTIMENT_POS, S
 sys.path.append('../trans/')
 from trans_v2 import trans, simplified2traditional, traditional2simplified
 
-NEWS_LIMIT = 200
+NEWS_LIMIT = 10000
 default_cluster_eva_min_size = 5
 default_vsm = 'v1'
 LOG_FOLDER = '/home/xnr1/xnr_0429/log'
@@ -67,11 +67,11 @@ def rpop_compute_intelligent_writing():
 
         print '把任务从队列中pop出来......'
 
-        compute_intelligent_recommend(task_detail)
 
         es_xnr.update(index=writing_task_index_name,doc_type=writing_task_index_type,\
             id=task_id, body={'doc':{'compute_status':1}})
 
+        compute_intelligent_recommend(task_detail)
 
 def news_content(task_source,task_id,news_limit = NEWS_LIMIT):
 
@@ -154,7 +154,7 @@ def find_flow_texts(task_source,task_id,event_keywords):
     if len(nest_query_list) == 1:
         SHOULD_PERCENT = 1
     else:
-        SHOULD_PERCENT = 1
+        SHOULD_PERCENT = 1 
 
 
     # 匹配文本
@@ -165,7 +165,8 @@ def find_flow_texts(task_source,task_id,event_keywords):
             current_time = datetime2ts(S_DATE)
         else:
             current_time = int(time.time()+24*3600)
-
+        #test
+	    #current_time = int(datetime2ts("2018-05-13"))
         index_name_list = get_flow_text_index_list(current_time,days=2)
         es_name = es_flow_text
 
