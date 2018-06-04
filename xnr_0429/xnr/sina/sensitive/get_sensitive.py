@@ -10,7 +10,7 @@ import sys
 reload(sys)
 sys.path.append('../')
 
-from global_utils import flow_text_index_name_pre,flow_text_index_type,es_flow_text
+from global_utils import flow_text_index_name_pre,flow_text_index_type,es_flow_text, R_ADMIN as r_sensitive
 from time_utils import ts2datetime
 from parameter import sensitive_score_dict
 

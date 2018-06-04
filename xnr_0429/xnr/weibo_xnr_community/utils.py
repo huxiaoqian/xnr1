@@ -192,7 +192,7 @@ def get_warning_orgnize(result):
     warning_result['community_name'] = result[0]['community_name']
     warning_result['create_time'] = result[0]['create_time']
     warning_result['nodes'] = result[0]['nodes']
-    
+    #print 'community_id::',result[0]['community_id'] 
     trace_time_list = []
     trace_date_list = []
 
@@ -216,10 +216,10 @@ def get_warning_orgnize(result):
     sensitive_content = []
     influence_content = []
     # print "result[0]['num_warning_content']::::",type(result[0]['num_warning_content']),result[0]['num_warning_content']
-    if result[-1]['num_warning_content']:
-        num_content = json.loads(result[-1]['num_warning_content'])
-    else:
-    	num_content = []
+    #if result[-1]['num_warning_content']:
+    #    num_content = json.loads(result[-1]['num_warning_content'])
+    #else:
+    #	num_content = []
 
     #if result[-1]['density_warning_content']:
     #    density_content = json.loads(result[-1]['density_warning_content'])
@@ -227,8 +227,10 @@ def get_warning_orgnize(result):
     #	density_content = []
 
     warning_type = []
-    density_content = [] 
+    density_content = []
+    num_content = [] 
     for trace_result in result:
+        print trace_result['trace_date']
         trace_time_list.append(trace_result['trace_time'])
         trace_date_list.append(trace_result['trace_date'])
         num_list.append(trace_result['num'])
@@ -238,10 +240,14 @@ def get_warning_orgnize(result):
         mean_influence_list.append(trace_result['mean_influence'])
         max_sensitive_list.append(trace_result['max_sensitive'])
         mean_sensitive_list.append(trace_result['mean_sensitive'])
-
+       # if trace_result['num_warning'] > 0:
         num_desp.append(trace_result['num_warning_descrp'])
+       # if trace_result['sensitive_warning']>0:
+            #print 'sensitive::',trace_result['sensitive_warning_descrp']
         sensitive_desp.append(trace_result['sensitive_warning_descrp'])
+        #if trace_result['influence_warning']>0:
         influence_desp.append(trace_result['influence_warning_descrp'])
+      #  if trace_result['density_warning']>0:
         density_desp.append(trace_result['density_warning_descrp'])
 
         num_warning = num_warning + trace_result['num_warning']
@@ -257,6 +263,12 @@ def get_warning_orgnize(result):
             influence_content.extend(json.loads(trace_result['influence_warning_content']))
         else:
             pass
+
+        if trace_result['num_warning_content']:
+            num_content.extend(json.loads(trace_result['num_warning_content']))
+        else:
+            pass
+
 
         if trace_result['density_warning_content']:
             density_content = json.loads(trace_result['density_warning_content'])
@@ -290,6 +302,8 @@ def get_warning_orgnize(result):
     warning_result['influence_warning_descrp'] = influence_desp
     warning_result['density_warning_descrp'] = density_desp
 
+    sensitive_content.sort(key=lambda k:(k.get('sensitive',0)),reverse=True)
+    influence_content.sort(key=lambda k:(k.get('influence',0)),reverse=True)
     warning_result['num_warning_content'] = num_content
     warning_result['sensitive_warning_content'] = sensitive_content
     warning_result['influence_warning_content'] = influence_content
@@ -368,7 +382,7 @@ def get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time):
             if item == u'人物突增预警':
                 num_warning = 1
                 warning_result['warning_rank'] = warning_result['warning_rank'] + 1
-                num_warning_descrp,num_warning_content = get_person_warning(community_id,community_result['nodes'])
+                num_warning_descrp,num_warning_content = get_person_warning(community_id,community_result['nodes'],community_result['xnr_user_no'])
                 num_desp.append(num_warning_descrp)
                 num_content = json.loads(num_warning_content)
             elif item == u'敏感度剧增预警':
@@ -544,6 +558,7 @@ def get_community_warning(xnr_user_no,community_id,start_time,end_time):
 
     if result:
         #对预警内容进行融合
+        result.sort(key=lambda k:(k.get('trace_time',0)),reverse=False)
         warning_result = get_warning_orgnize(result)
     else:
         warning_result = get_newcommunity_warning(xnr_user_no,community_id,start_time,end_time)

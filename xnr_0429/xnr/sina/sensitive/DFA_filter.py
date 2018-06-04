@@ -3,6 +3,7 @@ import sys
 import redis
 import json
 from time import time
+SENSITIVE_PATH = '/home/xnr1/xnr_0429/xnr/sina/sensitive/sensitive_words.txt'
 # reload(sys)
 # sys.path.append('../../')
 # from global_utils import R_ADMIN as r
@@ -16,7 +17,7 @@ wordTree.append(0)
 nodeTree = [wordTree, 0]
 def readInputText():
     txt = ''
-    for line in open('sensitive_words.txt', 'rb'):
+    for line in open(SENSITIVE_PATH, 'rb'):
     # for line in open('sensitive_words.txt', 'rb'):
         txt = txt + line
     return txt
@@ -26,7 +27,7 @@ def createWordTree():
     wordTree.append(0)
     nodeTree = [wordTree, 0]
     awords = []
-    for b in open('sensitive_words.txt', 'rb'):
+    for b in open(SENSITIVE_PATH, 'rb'):
        awords.append(b.strip())
     # awords = r.hkeys('sensitive_words')    
     # print awords

@@ -281,6 +281,34 @@ def login_status(xnr_user_no):
 
     return login_status
 
+def show_qq_xnr_index(MAX_VALUE,submitter):
+    query_body = {
+        'query':{
+            'term':{'submitter':submitter}
+        },
+        'size':MAX_VALUE
+    }
+    results = []
+    result = es_xnr.search(index=qq_xnr_index_name, doc_type=qq_xnr_index_type, body=query_body)['hits']['hits']
+    qq_xnr_list = []
+    for item in result:
+        item_dict = dict()
+        #temp = item['_source'].copy()
+        #item_dict = dict(item_dict, **temp)
+        #step1: identify login status
+        #port = item['_source']['qqbot_port']
+        try:
+            qqnum = item['_source']['qq_number']
+            xnr_user_no = item['_source']['xnr_user_no']
+            nickname = item['_source']['nickname']
+            item_dict['qq_number'] = qqnum
+            item_dict['xnr_user_no'] = xnr_user_no
+            item_dict['nickname'] = nickname
+            results.append(item_dict)
+        except:
+            continue
+    return results
+
 
 def show_qq_xnr(MAX_VALUE,submitter):
     query_body = {

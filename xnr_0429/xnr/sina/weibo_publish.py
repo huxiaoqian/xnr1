@@ -57,14 +57,20 @@ def publish_by_source(text):
     url = source_list[2]
     driver.get(url)
     try:
+        print 'texta1'
         texta = driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[2]/textarea")
+        
     except:
+        print 'texta2'
         texta = driver.find_element_by_xpath("/html/body/section[1]/section/section[1]/div/div[2]/textarea")
     texta.send_keys(text)
     time.sleep(5)
     try:
+        print 'driver1'
         driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div[3]/div[2]/a").click()
+        print '------'
     except:
+	    #print 'driver2'
         driver.find_element_by_xpath("//*[@id=\"pl_publish_publishMobile\"]/section/section[1]/div/div[3]/div/a[3]").click()
 
 def publish_by_source_with_picture(text, file):
@@ -102,10 +108,13 @@ def weibo_publish_with_picture(username,password,text,file):
 def weibo_publish_main(username,password,text,file):
     
     try:
-    
+        #print 'text',text
+        #print 'user,pwd',username,password    
         if file:
+            #print 'file.',file
             weibo_publish_with_picture(username,password,text,file)
         else:
+            #print 'not file!!'
             weibo_publish(username,password,text)
 
         mark = True
@@ -113,7 +122,6 @@ def weibo_publish_main(username,password,text,file):
     except:
 
         mark = False
-
     return mark
 
 

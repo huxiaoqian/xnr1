@@ -69,6 +69,7 @@ class Screen():
 		time.sleep(2)
 		driver.get(url)
 		time.sleep(1)
+		print(driver.page_source)
 		driver.find_element_by_xpath('//div[@node-type="root_child_comment_build"]').screenshot(mid+'.png')
 		time.sleep(1)
 		driver.quit()

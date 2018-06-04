@@ -224,8 +224,8 @@ function sureTrackModal() {
 function SF(data) {
     var s='操作失败';
     if (data){s='操作成功'}
-    $('#errorInfor p').text(s);
-    $('#errorInfor').modal('show');
+    $('#pormpt p').text(s);
+    $('#pormpt').modal('show');
 }
 
 // 跳转社区详情页

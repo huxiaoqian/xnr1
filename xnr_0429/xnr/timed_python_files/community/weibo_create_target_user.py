@@ -365,7 +365,7 @@ def create_xnr_targetuser(xnr_user_no):
     if len(xnr_keyword) > 10:
         xnr_keywords = xnr_keyword[:10]
     else:
-        pass
+        xnr_keywords = xnr_keyword
     #step3.2：查找虚拟人的关注用户或好友
     xnr_relationer = get_xnr_relationer(xnr_user_no)
 

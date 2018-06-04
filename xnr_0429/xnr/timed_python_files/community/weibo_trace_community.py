@@ -241,7 +241,11 @@ def group_evaluate_trace(xnr_user_no,nodes,all_influence,all_sensitive,date_time
     result['max_influence'] = round((max(influence_result)/float(all_influence))*100,4)
     result['mean_influence'] = round(((sum(influence_result)/len(influence_result))/float(all_influence))*100,4)
 
-    result['max_sensitive'] = round((max(sensitive_result)/float(all_sensitive))*1,4)
+    max_sensitive = round((max(sensitive_result)/float(all_sensitive))*1,4)
+    if max_sensitive > 100:
+        result['max_sensitive'] = 100.0000
+    else:
+        result['max_sensitive'] = max_sensitive
     result['mean_sensitive'] = round(((sum(sensitive_result)/len(sensitive_result))/float(all_sensitive))*1,4)
 
 
@@ -355,24 +359,26 @@ def get_user_info(uid_list):
             user_dict['user_location']=''
 
         user_list.append(user_dict)
-    return json.loads(user_list)
+    return json.dumps(user_list)
 
 #人物预警
-def get_person_warning(community_id,new_nodes,xnr_user_no):
+def get_person_warning(community_id,new_nodes,xnr_user_no,trace_datetime):
+    trace_date = ts2datetime(trace_datetime - DAY)
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
                     'bool':{
                         'must':[
-                        {'term':{'community_id':community_id}}
+                        {'term':{'community_id':community_id}},
+                        {'term':{'trace_date':trace_date}}
                         ]
                     }
                 }
             }
         },
         'size':1,
-        'sort':{'trace_time':{'order':'asc'}}
+        'sort':{'trace_time':{'order':'desc'}}
     }   
     try:
         es_community = es_xnr.search(index=weibo_trace_community_index_name_pre+xnr_user_no.lower(),\
@@ -381,26 +387,29 @@ def get_person_warning(community_id,new_nodes,xnr_user_no):
             old_nodes = item['_source']['nodes']
     except:
         old_nodes = []
-
+    print 'old_nodes::',len(old_nodes)
     add_nodes = list(set(new_nodes) - set(new_nodes)&set(old_nodes))
     if add_nodes:
         warning_content = get_user_info(add_nodes)
+        warning_descp = u'人物突增预警：社区人数由'+str(len(old_nodes))+u'人上升至'+str(len(new_nodes)) +u'人！'
     else:
         warning_content = ''
-    warning_descp = u'人物突增预警：社区人数由'+str(len(old_nodes))+u'人上升至'+str(len(new_nodes)) +u'人！'
-
+        warning_descp = ''
+    #print warning_descp
     return warning_descp,warning_content
 
 
 #获取旧社区指标
-def get_index_olddiff(community_id,index_type,index_value,xnr_user_no):
+def get_index_olddiff(community_id,index_type,index_value,xnr_user_no,trace_datetime):
+    trace_date = ts2datetime(trace_datetime - DAY)
     query_body = {
         'query':{
             'filtered':{
                 'filter':{
                     'bool':{
                         'must':[
-                        {'term':{'community_id':community_id}}
+                        {'term':{'community_id':community_id}},
+                        {'term':{'trace_date':trace_date}}
                         ]
                     }
                 }
@@ -461,10 +470,10 @@ def get_warning_content(nodes,content_type,trace_datetime):
 def get_sensitive_warning(community,trace_datetime):
     #step 1:计算敏感度变化值
     max_sensitive_type = 'max_sensitive'
-    old_max_sensitive,max_sensitive_diff = get_index_olddiff(community['community_id'],max_sensitive_type,community['max_sensitive'],community['xnr_user_no'])
+    old_max_sensitive,max_sensitive_diff = get_index_olddiff(community['community_id'],max_sensitive_type,community['max_sensitive'],community['xnr_user_no'],trace_datetime)
 
     mean_sensitive_type = 'mean_sensitive'
-    old_mean_sensitive,mean_sensitive_diff = get_index_olddiff(community['community_id'],mean_sensitive_type,community['mean_sensitive'],community['xnr_user_no'])
+    old_mean_sensitive,mean_sensitive_diff = get_index_olddiff(community['community_id'],mean_sensitive_type,community['mean_sensitive'],community['xnr_user_no'],trace_datetime)
 
     if mean_sensitive_diff > 0:
         mean_sensitive_desp = u'社区平均敏感度上升了' + str(mean_sensitive_diff) + u'，由'+ str(old_mean_sensitive) + u'上升至' + str(community['mean_sensitive']) +u'；'
@@ -491,10 +500,10 @@ def get_sensitive_warning(community,trace_datetime):
 def get_influence_warning(community,trace_datetime):
     #step 1:计算影响力变化值
     max_influence_type = 'max_influence'
-    old_max_influence,max_influence_diff = get_index_olddiff(community['community_id'],max_influence_type,community['max_influence'],community['xnr_user_no'])
+    old_max_influence,max_influence_diff = get_index_olddiff(community['community_id'],max_influence_type,community['max_influence'],community['xnr_user_no'],trace_datetime)
 
     mean_influence_type = 'mean_influence'
-    old_mean_influence,mean_influence_diff = get_index_olddiff(community['community_id'],mean_influence_type,community['mean_influence'],community['xnr_user_no'])
+    old_mean_influence,mean_influence_diff = get_index_olddiff(community['community_id'],mean_influence_type,community['mean_influence'],community['xnr_user_no'],trace_datetime)
 
     if mean_influence_diff > 0:
         mean_influence_desp = u'社区平均影响力上升了' + str(mean_influence_diff) + u'，由'+ str(old_mean_influence) + u'上升至' + str(community['mean_influence']) +u'；'
@@ -519,7 +528,7 @@ def get_influence_warning(community,trace_datetime):
 def get_density_warning(community,trace_datetime):
     #计算聚集系数变化值
     density_type = 'density'
-    old_density,density_diff = get_index_olddiff(community['community_id'],density_type,community['density'],community['xnr_user_no'])
+    old_density,density_diff = get_index_olddiff(community['community_id'],density_type,community['density'],community['xnr_user_no'],trace_datetime)
     if density_diff > 0:
         density_desp = u'社区聚集系数上升了' + str(density_diff) + u',由' + str(old_density) + u'上升至' + str(community['density']) + u'。'
     else:
@@ -546,7 +555,7 @@ def get_warning_reslut(community,trace_datetime):
     warning_result['num_warning'] = get_warning_judge(community['num'],num_lower_bound,num_upper_bound)
     if warning_result['num_warning'] == 1:
         warning_result['num_warning_descrp'],\
-        warning_result['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
+        warning_result['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'],trace_datetime)
         num_warning = '人物突增预警'
         warning_type_list.append(num_warning)
     else:
@@ -664,7 +673,7 @@ def trace_xnr_community(community,trace_datetime): #传的是ts
             if item == '人物突增预警':
                 community_detail['num_warning'] = 1
                 community_detail['num_warning_descrp'],\
-                community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'])
+                community_detail['num_warning_content'] = get_person_warning(community['community_id'],community['nodes'],community['xnr_user_no'],trace_datetime)
             elif item == '影响力剧增预警':
                 community_detail['influence_warning'] = 1
                 community_detail['influence_warning_descrp'],\
@@ -757,8 +766,8 @@ if __name__ == '__main__':
         #     trace_xnr_community(test_time)
         #     i = i+1
     else:
-        now_time = int(time.time())-DAY
-        # now_time = datetime2ts('2018-05-07')
-    community_list = get_trace_community(trace_datetime)
+        #now_time = int(time.time())-DAY
+        now_time = datetime2ts('2018-05-31')
+    community_list = get_trace_community(now_time)
     for community in community_list:
         trace_xnr_community(community,now_time)

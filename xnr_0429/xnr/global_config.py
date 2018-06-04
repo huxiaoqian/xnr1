@@ -97,6 +97,10 @@ REDIS_PORT_NEW = ''
 REDIS_CLUSTER_HOST_FLOW2 = '10.128.55.68' #'219.224.134.213'
 REDIS_CLUSTER_PORT_FLOW2 = '6666'
 
+REDIS_HOST_37 = '192.168.169.37'
+REDIS_PORT_37 = '6379'
+
+
 #redis_path
 REDIS_PATH = '/home/pkgs/redis-3.0.5/6666' #'/home/ubuntu7/huxiaoqian/redis-3.0.5/7392/'
 

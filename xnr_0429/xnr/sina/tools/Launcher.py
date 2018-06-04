@@ -30,17 +30,17 @@ class SinaLauncher():
         try:
             request = urllib2.Request(url)
             response = urllib2.urlopen(request)
-            print 'response..',response
+            # print 'response..',response
             raw_data = response.read().decode('utf-8')
-            print 'raw_data...',raw_data
-            print 'json_pattern.search(raw_data)..',json_pattern.search(raw_data)
+            # print 'raw_data...',raw_data
+            # print 'json_pattern.search(raw_data)..',json_pattern.search(raw_data)
             
             json_data = json_pattern.search(raw_data).group(1)
             data = json.loads(json_data)
             # print data
             return data
         except urllib2.URLError, e:
-            print "%s" % e.reason
+            # print "%s" % e.reason
             return None
 
     def get_encrypted_pw(self, data):
@@ -132,12 +132,13 @@ class SinaLauncher():
             # final = response.read().decode('utf-8')
             # print final
             print "Login success!"
+            return True
         except:
             print 'Login error!'
-            return
+            return False
 
 
 if __name__ == '__main__':
-    test = SinaLauncher('weiboxnr04@126.com', 'xnr1234567')
+    test = SinaLauncher('weiboxnr04@126.com','xnr1234567')
     test.login()
     print test.uid
