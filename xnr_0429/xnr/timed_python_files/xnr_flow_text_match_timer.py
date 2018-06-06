@@ -101,8 +101,8 @@ def match_flow_text():
             if bulk_action:
                 es_xnr.bulk(bulk_action,index=new_xnr_flow_text_index_name,doc_type=xnr_flow_text_index_type,timeout=600)
 
-    #except:
-    #    return 'no tweets to update today'
+    except:
+        return 'no tweets to update today'
 
 
 if __name__ == '__main__':

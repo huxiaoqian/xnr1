@@ -313,10 +313,11 @@ function oneUP(_this,type) {
             //=========
             'date_time':dateTime,
             'event_name':mainNAME,
-            'uid':mainUID,
+           // 'uid':mainUID,
             'user_info':uidList,
             // 'weibo_info':weibo_info,
         }
+		job[mft_id]=mainUID;
         job[reportInfo]=weibo_info;
         $.ajax({
             type:'POST',

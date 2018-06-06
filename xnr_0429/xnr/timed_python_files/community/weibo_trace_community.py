@@ -767,7 +767,7 @@ if __name__ == '__main__':
         #     i = i+1
     else:
         #now_time = int(time.time())-DAY
-        now_time = datetime2ts('2018-05-31')
+        now_time = datetime2ts('2018-06-04')
     community_list = get_trace_community(now_time)
     for community in community_list:
         trace_xnr_community(community,now_time)

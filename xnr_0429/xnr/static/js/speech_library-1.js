@@ -21,7 +21,7 @@ function material(data) {
         });
         var yuliaoUrl='/'+urlTotal+'/show_different_corpus/?corpus_type='+t+'&corpus_status=1'+
             '&request_type=one&theme_type_1=&theme_type_2=&theme_type_3='+c.join(',');
-        public_ajax.call_request('get',yuliaoUrl,day);
+        public_ajax.call_request('get',yuliaoUrl,view);
     });
     themeWord(data['theme_corpus']);
     day(data['daily_corpus']);
@@ -258,7 +258,7 @@ function view(data) {
                         '           <i class="timestamp" style="display: none;">'+row.timestamp+'</i>'+
                         '           <span class="time" style="font-weight: 900;color:blanchedalmond;"><i class="icon icon-time"></i>&nbsp;&nbsp;'+time+'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+
                         '           <span class="centerDel" style="cursor: pointer;" onclick="del(\''+row._id+'\',\''+11+'\',\'true\')"><i title="删除" class="icon icon-trash"></i></span>&nbsp;&nbsp;&nbsp;&nbsp;'+
-                        '           <span class="centerEdit" style="cursor: pointer;" onclick="modify(\''+row.id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+'\')"><i title="修改" class="icon icon-edit"></i></span>'+
+                        '           <span class="centerEdit" style="cursor: pointer;" onclick="modify(\''+row._id+'\',\''+row.corpus_type+'\',\''+row.create_type+'\',\''+row.theme_daily_name+'\',\''+33+'\')"><i title="修改" class="icon icon-edit"></i></span>'+
                         '           <div class="center_2" style="text-align: left;margin: 10px 0;"><b style="color:#f98077;">摘要内容：</b>'+txt+'</div>'+
                         '       </div>'+
                         '   </div>'+

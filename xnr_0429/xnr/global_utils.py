@@ -841,7 +841,9 @@ qq_xnr_max_no = 'qq_xnr_max_no'
 
 
 #10.128.55.138(192.168.169.37)上的redis
-r_37 = redis.Redis(host=REDIS_HOST_37, port=REDIS_PORT_37)
+#r_37 = redis.Redis(host=REDIS_HOST_37, port=REDIS_PORT_37)
+r_37 = redis.StrictRedis(host=REDIS_HOST_37, port=REDIS_PORT_37)
+
 twitter_flow_text_trans_task_name = 'twitter_flow_text_trans_task'
 twitter_user_trans_task_name = 'twitter_user_trans_task'
 

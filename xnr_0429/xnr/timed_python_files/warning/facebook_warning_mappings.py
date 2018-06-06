@@ -3,11 +3,13 @@
 import sys
 import json
 import time
+reload(sys)
+sys.path.append('../../')
 from time_utils import ts2datetime,datetime2ts,ts2yeartime
 from parameter import MAX_VALUE,DAY,WARMING_DAY
 from global_config import S_TYPE,FACEBOOK_FLOW_START_DATE
 from elasticsearch import Elasticsearch
-from global_utils import es_xnr_2 as es
+from global_utils import es_xnr_2 as es,es_xnr
 from global_utils import facebook_user_warning_index_name_pre,facebook_user_warning_index_type,\
 						facebook_event_warning_index_name_pre,facebook_event_warning_index_type,\
 						facebook_speech_warning_index_name_pre,facebook_speech_warning_index_type,\
@@ -15,7 +17,7 @@ from global_utils import facebook_user_warning_index_name_pre,facebook_user_warn
 						weibo_date_remind_index_name,weibo_date_remind_index_type,\
 						facebook_warning_corpus_index_name,facebook_warning_corpus_index_type
 
-NOW_DATE=ts2datetime(int(time.time()))
+NOW_DATE=ts2datetime(int(time.time())-DAY) 
 print 'NOW_DATE:',NOW_DATE
 
 def facebook_user_warning_mappings(TODAY_DATE):
@@ -266,7 +268,7 @@ def lookup_date_info(today_datetime):
         'sort':{'date_time':{'order':'asc'}}
     }
     try:
-        result=es.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+        result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
         date_result=[]
         for item in result:
             #计算距离日期

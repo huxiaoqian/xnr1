@@ -1,5 +1,6 @@
 var end_time=yesterday();
-var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+//var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=today&start_time=0&end_time='+end_time;
+var historyTotal_url='/facebook_xnr_manage/show_history_count/?xnr_user_no='+ID_Num+'&type=&start_time='+getDaysBefore('7')+'&end_time='+end_time;
 public_ajax.call_request('get',historyTotal_url,historyTotal);
 function historyTotal(dataTable) {
     var data=[dataTable[0]];
@@ -180,19 +181,16 @@ function safe_7day(data) {
     $('#near_7_day p').show();
     var nearTime=[],nearData=[];
     if (data.length==0){
-        // nearTime.push($_time);
-        // nearData.push(0);
-        $('#near_7_day h2').remove();
         $('#near_7_day p').slideUp(700);
-        $('#near_7_day').height('40px').append('<h2 style="width:100%;text-align:center;">趋势图暂无数据</h2>');
+        $('#near_7_day').css({textAlign:"center",lineHeight:"400px",fontSize:'24px'}).text('趋势图暂无数据');
         return false;
     }else {
-        $('#near_7_day').height('400px');
         $.each(data,function (index,item) {
             nearTime.push(item['date_time'][0]);
             nearData.push(item['safe'][0]);
-        })
-    };
+         })
+    }
+    echarts.init(document.getElementById('near_7_day')).dispose();
     var myChart = echarts.init(document.getElementById('near_7_day'),'dark');
     var option = {
         backgroundColor:'transparent',
@@ -300,69 +298,72 @@ $('#container .type_page #myTabs li').on('click',function () {
 function safe(data) {
     //total_num、day_num、growth_rate
     $('#active-1 p').show();
+    var time=[],totData=[];
     if (isEmptyObject(data)){
-        $('#active-1').text('暂无数据').css({textAlign:'center',lineHeight:'400px',fontSize:'22px'});
+        $('#active-1 p').slideUp(700);
+        $('#active-1').css({textAlign:"center",lineHeight:"400px",fontSize:'24px'}).text('趋势图暂无数据');
+        return false;
     }else {
-        var time=[],totData=[];
         for (var i in data){
             totData.push(data[i]);
             time.push(getLocalTime(i));
         };
-        var myChart = echarts.init(document.getElementById('active-1'),'dark');
-        var option = {
-            backgroundColor:'transparent',
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['微博发布量']
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                    dataZoom: {
-                        yAxisIndex: 'none'
-                    },
-                    magicType: {type: ['line', 'bar']},
-                    restore: {},
-                    saveAsImage: {
-                        backgroundColor: 'rgba(8,23,44,0.8)',
-                    }
-                }
-            },
-            xAxis:  {
-                type: 'category',
-                boundaryGap: false,
-                data: time
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '{value}'
-                }
-            },
-            series: [
-                {
-                    name:'微博发布量',
-                    type:'line',
-                    data:totData,
-                    markPoint: {
-                        data: [
-                            {type: 'max', name: '最大值'},
-                            {type: 'min', name: '最小值'}
-                        ]
-                    },
-                    markLine: {
-                        data: [
-                            {type: 'average', name: '平均值'}
-                        ]
-                    }
-                },
-            ]
-        };
-        myChart.setOption(option);
     }
-    $('#safeContent p').slideUp(700);
+    echarts.init(document.getElementById('active-1')).dispose();
+    var myChart = echarts.init(document.getElementById('active-1'),'dark');
+    var option = {
+        backgroundColor:'transparent',
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['facebook发帖量']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {
+                    backgroundColor: 'rgba(8,23,44,0.8)',
+                }
+            }
+        },
+        xAxis:  {
+            type: 'category',
+            boundaryGap: false,
+            data: time
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        },
+        series: [
+            {
+                name:'facebook发帖量',
+                type:'line',
+                data:totData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            },
+        ]
+    };
+    myChart.setOption(option);
+    $('#active-1 p').slideUp(700);
 };
 // 雷达图
 function radar(data) {
@@ -580,7 +581,6 @@ function weiboData(data) {
         ],
     });
     $('#postRelease p').slideUp(30);
-    $('.postRelease .search .form-control').attr('placeholder','输入关键词快速搜索相关微博（回车搜索）');
 }
 //操作返回结果
 function postYES(data) {

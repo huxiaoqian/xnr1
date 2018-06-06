@@ -1,0 +1,16 @@
+/home/xnr1/xnr_0429/xnr
+path1:  /home/xnr1/xnr_0429/xnr
+['/home/xnr1/xnr_0429/xnr/wx', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/home/xnr1/xnr_0429/xnr/timed_python_files', '/home/xnr1/xnr_0429/xnr', '/home/xnr1/xnr_0429/xnr/wx']
+/home/xnr1/xnr_0429/xnr/wx
+path1:  /home/xnr1/xnr_0429/xnr
+<function remove_wx_media_old_files at 0x7f001de277d0>
+['/home/xnr1/xnr_0429/xnr/wx', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/home/xnr1/xnr_0429/xnr/timed_python_files', '/home/xnr1/xnr_0429/xnr', '/home/xnr1/xnr_0429/xnr/wx']
+/home/xnr1/xnr_0429/xnr/wx
+path1:  /home/xnr1/xnr_0429/xnr
+<function remove_wx_media_old_files at 0x7f419e7a77d0>
+/home/xnr1/xnr_0429/xnr/wx/MyWXBot.pyc
+['/home/xnr1/xnr_0429/xnr/wx', '/usr/lib/python2.7', '/usr/lib/python2.7/plat-x86_64-linux-gnu', '/usr/lib/python2.7/lib-tk', '/usr/lib/python2.7/lib-old', '/usr/lib/python2.7/lib-dynload', '/usr/local/lib/python2.7/dist-packages', '/usr/lib/python2.7/dist-packages', '/home/xnr1/xnr_0429/xnr/timed_python_files', '/home/xnr1/xnr_0429/xnr', '/home/xnr1/xnr_0429/xnr/wx']
+/home/xnr1/xnr_0429/xnr/wx
+path1:  /home/xnr1/xnr_0429/xnr
+<function remove_wx_media_old_files at 0x7f36cd7c07d0>
+/home/xnr1/xnr_0429/xnr/wx/MyWXBot.pyc

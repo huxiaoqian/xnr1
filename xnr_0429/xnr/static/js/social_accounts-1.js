@@ -14,9 +14,13 @@ $('#go_bind').on('click',function () {
 function bindSF(data) {
     var txt='';
     if (data){
+        console.log(data)
         if (data=='nick_name error'){
             txt='昵称输入错误，请检查昵称。';
-        }else {
+        }if (data=='account_pwd error'){
+            txt='账户名或密码输入错误，请检查后输入！！';
+        }
+        else {
             txt='绑定成功';
             var listURL=WFT_url+'/recommend_follows/?monitor_keywords='+basicData_1.monitorKeywords;
             if (flag==1){listURL+='&daily_interests='+basicData_1.daily}
