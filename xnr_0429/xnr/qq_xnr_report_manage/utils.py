@@ -11,6 +11,8 @@ from xnr.time_utils import ts2yeartime,ts2datetime,datetime2ts
 from xnr.parameter import USER_NUM, MAX_SEARCH_SIZE
 from xnr.global_config import S_TYPE
 
+from xnr.reportManage.qqreport import Report
+
 
 def show_report_content(report_type, start_ts, end_ts, qq_xnr_no):
     result = []
@@ -36,3 +38,16 @@ def show_report_content(report_type, start_ts, end_ts, qq_xnr_no):
 
 
 
+def output_excel_word(id_list,out_type):
+    index_name_list = qq_report_management_index_name
+
+    print(id_list)
+    print(index_name_list)
+    user = ''
+    password = ''
+    report_condition = Report(id_list,user,password,index_name_list)
+    if out_type == 'word':
+        mark=report_condition.save_word()
+    elif out_type == 'excel':
+        mark=report_condition.save_excel()
+    return mark

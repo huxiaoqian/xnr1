@@ -8,6 +8,10 @@ from xnr.parameter import USER_NUM, MAX_SEARCH_SIZE,DAY
 from xnr.wx_xnr_report_management_mappings import wx_report_management_mappings
 from xnr.wx.control_bot import load_wxxnr_redis_data
 
+
+from xnr.reportManage.wxreport import Report
+
+
 def dump_date(period, startdate, enddate):
     if period == '':
         period = -1 #flag
@@ -52,6 +56,7 @@ def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
             for item in es_result:
                 try:
                     data = item['_source']
+                    data['_id'] = item['_id']
                     report_content = eval(item['_source']['report_content'])
                     data['sensitive_value'] = report_content['sensitive_value']
                     data['text'] = report_content['text']
@@ -63,3 +68,19 @@ def utils_show_report_content(wxbot_id, report_type, period, startdate, enddate)
     except Exception,e:
         print 'wx_report_management Exception: ', str(e)
     return result
+
+
+
+def output_excel_word(id_list,out_type):
+    index_name_list = wx_report_management_index_name
+
+    print(id_list)
+    print(index_name_list)
+    user = ''
+    password = ''
+    report_condition = Report(id_list,user,password,index_name_list)
+    if out_type == 'word':
+        mark=report_condition.save_word()
+    elif out_type == 'excel':
+        mark=report_condition.save_excel()
+    return mark

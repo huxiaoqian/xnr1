@@ -7,7 +7,7 @@ from flask import Blueprint,url_for,render_template,request,\
         abort,flash,session,redirect
 
 #from xnr.global_utils import 
-from utils import show_report_content
+from utils import show_report_content,output_excel_word
 
 mod=Blueprint('qq_xnr_report_manage',__name__,url_prefix='/qq_xnr_report_manage')
 
@@ -27,4 +27,10 @@ def ajax_show_report_content():
     result = show_report_content(report_type, start_ts, end_ts, qq_xnr_no)
     return json.dumps(result)
 
-
+@mod.route('/output_excel_word/') 
+def ajax_output_excel_word():
+    id_list=request.args.get('id_list','').split(',')
+    out_type=request.args.get('out_type','')
+    # report_timelist=request.args.get('report_timelist','').split(',')
+    results=output_excel_word(id_list,out_type,report_timelist)
+    return json.dumps(results)
