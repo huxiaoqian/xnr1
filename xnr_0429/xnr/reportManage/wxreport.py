@@ -36,38 +36,18 @@ class Report:
 			report_time = result['report_time']
 			report_type = result['report_type']
 			xnr_user_no = result['xnr_user_no']
-			qq_number = result['qq_number']
-			qq_nickname = result['qq_nickname']
+			xnr_puid = result['xnr_puid']
+			speaker_id = result['speaker_id']
 
 			report_content = json.loads(result['report_content'])
-			if report_type == '人物':
-				for item in report_content:
-					text_list = item['text']['text']
-					text = ''
-					for i in range(0,len(text_list)):
-						text = text + '言论_'+i+'：'+text_list[i]+'\n'
 
-					qq_groups = item['qq_groups'].values()
-					qq_nick = item['qq_nick']
-					timestamp = 0
-
-					dict = {'qq_number':qq_number,'qq_nickname':qq_nickname,'report_time':report_time, 'report_type':report_type,\
-						'xnr_user_no':xnr_user_no, 'text':text, 'qq_groups':qq_groups, 'qq_nick':qq_nick,\
-						'timestamp':timestamp}
-					self.results.append(dict)
-
-			if report_type == '言论':
-				for item in report_content:
-					text = item['text']
-					qq_groups = item['qq_group_nickname']
-					qq_nick = item['speaker_nickname']
-					timestamp = item['timestamp']
+			for item in report_content:
+				text = item['text']
 
 
-					dict = {'qq_number':qq_number,'qq_nickname':qq_nickname,'report_time':report_time, 'report_type':report_type,\
-						'xnr_user_no':xnr_user_no, 'text':text, 'qq_groups':qq_groups, 'qq_nick':qq_nick,\
-						'timestamp':timestamp}
-					self.results.append(dict)
+				dict = {'xnr_puid':xnr_puid,'speaker_id':speaker_id,'report_time':report_time, 'report_type':report_type,\
+					'xnr_user_no':xnr_user_no, 'text':text}
+				self.results.append(dict)
 		return self.results
 
 
@@ -80,7 +60,7 @@ class Report:
 			file = xlsxwriter.Workbook(filename)
 			table = file.add_worksheet()
 			field = [each for each in results[0].keys()]
-			field = '^&*'.join(field).replace('qq_nickname',u'上报名称').replace('report_time',u'上报时间').replace('report_type',u'上报类型').replace('xnr_user_no',u'虚拟人').replace('text',u'文本内容').replace('qq_nickname',u'发贴用户').replace('report_time',u'上报时间')
+			field = '^&*'.join(field).replace('qq_nickname',u'上报名称').replace('report_time',u'上报时间').replace('report_type',u'上报类型').replace('xnr_user_no',u'虚拟人').replace('text',u'文本内容').replace('report_time',u'上报时间')
 			field = field.split('^&*')
 			for a,b in enumerate(field):
 				table.write(letters[a]+str(1),b)
@@ -103,7 +83,7 @@ class Report:
 			#self.screen_shot(results)
 			document = Document()
 			for result in results:
-				result_str = json.dumps(result, ensure_ascii=False).replace('{','').replace('}','').replace('qq_nickname',u'上报名称').replace('report_time',u'上报时间').replace('report_type',u'上报类型').replace('xnr_user_no',u'虚拟人').replace('text',u'文本内容').replace('qq_nickname',u'发帖用户').replace('timestamp',u'发贴时间')
+				result_str = json.dumps(result, ensure_ascii=False).replace('{','').replace('}','').replace('qq_nickname',u'上报名称').replace('report_time',u'上报时间').replace('report_type',u'上报类型').replace('xnr_user_no',u'虚拟人').replace('text',u'文本内容')
 				document.add_paragraph(result_str)
 				#document.add_picture(result['mid']+'.png', width=Inches(1.25))
 			document.add_page_break()
@@ -115,11 +95,11 @@ class Report:
 if __name__ == '__main__':
 	id_list = [u'4235285145137269']
 
-	SCREEN_QQ_USERNAME = '18600123729'
+	SCREEN_WX_USERNAME = '18600123729'
 
-	SCREEN_QQ_PASSWORD = 'abcd1234'
-	index_name = ['qq_report_management']
-	report = Report(id_list, SCREEN_WEIBO_USERNAME, SCREEN_WEIBO_PASSWORD,index_name)
+	SCREEN_WX_PASSWORD = 'abcd1234'
+	index_name = ['wx_report_management']
+	report = Report(id_list, SCREEN_WX_USERNAME, SCREEN_WX_PASSWORD,index_name)
 	report.save_word()
 	#report.save_excel()
 

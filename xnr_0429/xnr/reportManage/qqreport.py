@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
 	SCREEN_QQ_PASSWORD = 'abcd1234'
 	index_name = ['qq_report_management']
-	report = Report(id_list, SCREEN_WEIBO_USERNAME, SCREEN_WEIBO_PASSWORD,index_name)
+	report = Report(id_list, SCREEN_QQ_USERNAME, SCREEN_QQ_PASSWORD,index_name)
 	report.save_word()
 	#report.save_excel()
 
