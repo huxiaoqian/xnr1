@@ -5,7 +5,7 @@ import datetime
 import json
 from flask import Blueprint,url_for,render_template,request,\
         abort,flash,session,redirect
-from utils import utils_show_report_content
+from utils import utils_show_report_content,output_excel_word
 
 mod=Blueprint('wx_xnr_report_manage',__name__,url_prefix='/wx_xnr_report_manage')
 
@@ -24,3 +24,11 @@ def show_report_content():
     return json.dumps({}) 
 
 
+
+@mod.route('/output_excel_word/') 
+def ajax_output_excel_word():
+    id_list=request.args.get('id_list','').split(',')
+    out_type=request.args.get('out_type','')
+    # report_timelist=request.args.get('report_timelist','').split(',')
+    results=output_excel_word(id_list,out_type,report_timelist)
+    return json.dumps(results)
