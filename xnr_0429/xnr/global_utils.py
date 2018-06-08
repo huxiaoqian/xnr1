@@ -267,6 +267,11 @@ weibo_xnr_count_info_index_type='text'
 weibo_keyword_count_index_name='weibo_keyword_count'
 weibo_keyword_count_index_type='text'
 
+
+#use to save weibo full keywords value count info
+weibo_full_keyword_index_name='weibo_full_keyword'
+weibo_full_keyword_index_type='text'
+
 #community discovery
 #use to save weibo community target user info
 weibo_community_target_user_index_name_pre = 'weibo_community_target_user_'

@@ -5,7 +5,8 @@ import json
 from elasticsearch import Elasticsearch
 from global_utils import es_xnr as es
 from global_utils import weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
-                         weibo_keyword_count_index_name,weibo_keyword_count_index_type
+                         weibo_keyword_count_index_name,weibo_keyword_count_index_type,\
+                         weibo_full_keyword_index_name,weibo_full_keyword_index_type
 
 
 def weibo_xnr_count_info_mappings():
@@ -94,10 +95,40 @@ def weibo_keyword_count_mappings():
         es.indices.create(index=weibo_keyword_count_index_name,body=index_info,ignore=400)
 
 
+def weibo_full_keyword_mappings():
+    index_info = {
+        'settings':{
+            'number_of_replicas':0,
+            'number_of_shards':5
+        },
+        'mappings':{
+            weibo_full_keyword_index_type:{
+                'properties':{                    
+                    'date_time':{                #日期，例如：2017-09-07
+                        'type':'string',
+                        'index':'not_analyzed'
+                    },
+                    'keyword_value_string':{                #关键词统计结果
+                        'type':'string',
+                        'index':'no'
+                    },
+                    'timestamp':{ # 时间戳
+                        'type':'long'
+                    }
+                }
+            }
+        }
+    }
+    exist_indice=es.indices.exists(index=weibo_full_keyword_index_name)
+    if not exist_indice:
+        es.indices.create(index=weibo_full_keyword_index_name,body=index_info,ignore=400)
+
+        
 if __name__=='__main__':
     weibo_xnr_count_info_mappings()
     weibo_keyword_count_mappings()
-    
+    weibo_full_keyword_mappings()
+    '''
     es.indices.put_mapping(index=weibo_xnr_count_info_index_name, doc_type=weibo_xnr_count_info_index_type, \
             body={'properties':{'fans_total_num': {'type': 'long'},'fans_day_num': {'type': 'long'},'fans_growth_rate': {'type': 'long'},\
             'retweet_total_num': {'type': 'long'},'retweet_day_num': {'type': 'long'},'retweet_growth_rate': {'type': 'long'},\
@@ -108,3 +139,4 @@ if __name__=='__main__':
             'follow_group_sensitive_info': {'type': 'long'},'fans_group_sensitive_info': {'type': 'long'},'self_info_sensitive_info': {'type': 'long'},\
             'warning_report_total_sensitive_info': {'type': 'long'},'feedback_total_sensitive_info': {'type': 'long'},\
             }}, ignore=400)
+    '''

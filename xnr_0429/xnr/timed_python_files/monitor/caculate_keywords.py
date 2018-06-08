@@ -14,9 +14,11 @@ from global_utils import es_xnr,weibo_keyword_count_index_name,weibo_keyword_cou
                              xnr_flow_text_index_name_pre,xnr_flow_text_index_type,\
                              weibo_xnr_index_name,weibo_xnr_index_type,\
                              es_flow_text,flow_text_index_type, weibo_xnr_fans_followers_index_name,\
-                             weibo_xnr_fans_followers_index_type, flow_text_index_name_pre, flow_text_index_type
-from textrank4zh import TextRank4Keyword, TextRank4Sentence
+                             weibo_xnr_fans_followers_index_type, flow_text_index_name_pre, flow_text_index_type,\
+                             weibo_full_keyword_index_name,weibo_full_keyword_index_type
 
+from textrank4zh import TextRank4Keyword, TextRank4Sentence
+from parameter import DAY
 test_date = '2016-11-27'
 
 
@@ -50,7 +52,7 @@ def xnr_keywords_compute(xnr_user_no):
     if S_TYPE == 'test':
         date_time = test_date
     else:
-        now_time=int(time.time())
+        now_time=int(time.time()) - DAY
         date_time=ts2datetime(now_time)
     flow_text_index_name=flow_text_index_name_pre+date_time
 
@@ -120,7 +122,7 @@ def lookup_xnr_user_list():
 def compute_keywords_mark():
     xnr_user_list=lookup_xnr_user_list()
     print 'xnr_user_list:', xnr_user_list
-    now_time=int(time.time())
+    now_time=int(time.time()) - DAY
     date_time=ts2datetime(now_time)
 
     mark_list=[]
@@ -151,5 +153,64 @@ def compute_keywords_mark():
     return mark_list
 
 
+def compute_full_keywords():
+    now_time=int(time.time()) - DAY
+    date_time=ts2datetime(now_time)
+
+    flow_text_index_name = flow_text_index_name_pre + date_time
+
+    query_body={
+            'aggs':{
+                'keywords':{
+                    'terms':{
+                        'field':'keywords_string',
+                        'size': 1000
+                    }
+                }
+            }
+        }
+        
+    flow_text_exist=es_flow_text.search(index=flow_text_index_name,doc_type=flow_text_index_type,\
+           body=query_body)['aggregations']['keywords']['buckets']
+    word_dict = dict()
+
+    word_dict_new = dict()
+
+    keywords_string = ''
+    for item in flow_text_exist:
+        word = item['key']
+        count = item['doc_count']
+        word_dict[word] = count
+
+        keywords_string += '&'
+        keywords_string += item['key']
+
+    k_dict = extract_keywords(keywords_string)
+
+    for item_item in k_dict:
+        keyword = item_item.word
+        # print 'keyword::',keyword,type(keyword)
+        if word_dict.has_key(keyword):
+            word_dict_new[keyword] = word_dict[keyword]
+        else:
+            word_dict_new[keyword] = 1
+        # print 'count:',word_dict_new[keyword]   
+
+    keywords_task_detail = dict()
+    keywords_task_detail['date_time'] = date_time
+    keywords_task_detail['timestamp'] = datetime2ts(date_time)
+    keywords_task_detail['keyword_value_string'] = json.dumps(word_dict_new)
+    keywords_task_id = date_time
+
+    try:
+        es_xnr.index(index=weibo_full_keyword_index_name,doc_type=weibo_full_keyword_index_type,body=keywords_task_detail,id=keywords_task_id)
+        mark=True
+    except:
+        mark=False
+    return mark
+
+    
+
 if __name__ == '__main__':
     compute_keywords_mark()
+    compute_full_keywords()
