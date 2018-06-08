@@ -9,7 +9,7 @@ import datetime
 import json
 import sys
 sys.path.append('../../')
-from xnr.global_utils import es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
+from xnr.global_utils import es_xnr_2 as es_xnr,tw_xnr_index_name,tw_xnr_index_type,\
                              tw_xnr_fans_followers_index_name,tw_xnr_fans_followers_index_type,\
                              twitter_user_index_name as profile_index_name, twitter_user_index_type as profile_index_type,\
                              tw_xnr_timing_list_index_name,tw_xnr_timing_list_index_type,\
