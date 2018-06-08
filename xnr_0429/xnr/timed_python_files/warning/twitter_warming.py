@@ -662,12 +662,12 @@ def create_twitter_warning():
         end_time=today_datetime          #定时文件启动的0点
         operate_date=ts2datetime(start_time)
 
-    #account_list=get_user_account_list()
-    account_list=['admin@qq.com']
+    account_list=get_user_account_list()
+    #account_list=['admin@qq.com']
     for account in account_list:
-        #xnr_list=get_user_xnr_list(account)
+        xnr_list=get_user_xnr_list(account)
         #print xnr_list
-        xnr_list=['TXNR0001']
+        #xnr_list=['TXNR0001']
         for xnr_user_no in xnr_list:
             # 人物行为预警
             personal_mark=create_personal_warning(xnr_user_no,today_datetime)
@@ -675,7 +675,7 @@ def create_twitter_warning():
             speech_mark=create_speech_warning(xnr_user_no,today_datetime)
             speech_mark=True
             #事件涌现预警
-            # create_event_warning(xnr_user_no,today_datetime,write_mark=True)
+            create_event_warning(xnr_user_no,today_datetime,write_mark=True)
 
     #时间预警
     date_mark=create_date_warning(today_datetime)

@@ -12,7 +12,7 @@ import sqlite3
 sys.path.append('../../')
 # from timed_python_files.system_log_create import get_user_account_list
 from parameter import DAY,MAX_VALUE,WARMING_DAY,UID_TXT_PATH,MAX_SEARCH_SIZE,MAX_WARMING_SIZE,USER_XNR_NUM,\
-                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE,EVENT_OFFLINE_COUNT
+                      FOLLOWER_INFLUENCE_MAX_JUDGE,NOFOLLOWER_INFLUENCE_MIN_JUDGE,EVENT_OFFLINE_COUNT,FLASK_DB_PATH
 from global_config import S_TYPE,S_DATE_BCI,S_DATE_WARMING,S_DATE
 from time_utils import ts2datetime,datetime2ts,get_day_flow_text_index_list,ts2yeartime
 from global_utils import R_CLUSTER_FLOW2 as r_cluster
@@ -29,7 +29,7 @@ from global_utils import es_xnr,weibo_xnr_fans_followers_index_name,weibo_xnr_fa
 
 #连接数据库,获取账户列表
 def get_user_account_list():     
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect(FLASK_DB_PATH)
     #cx = sqlite3.connect("/home/xnr1/xnr_0313/xnr/flask-admin.db") 
     cu=cx.cursor()
     cu.execute("select email from user") 

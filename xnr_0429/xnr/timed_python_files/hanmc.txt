@@ -1,0 +1,7 @@
+translate task details:  facebook_user facebook_user facebook_user_trans_task
+trans start
+100001213218192
+2
+[u'', u'\u6211', u'', u'']
+trans end
+Done.

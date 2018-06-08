@@ -21,7 +21,13 @@ function recommendTwo(data) {
         $('#role_example .role_example_list').html(peo);
     }
     var name,age,sex,location,career,description;
-    if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
+	var nm=JSON.parse(localStorage.getItem(userRelName));
+	if (go_on==1){
+		name=nm;
+	}else {
+		if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
+	}
+    //if (data.nick_name){name=data.nick_name.toString().replace(/&/g,'，')}else {name='无昵称推荐'}
     if (data.age){age=data.age}else {age='无年龄推荐'}
     if (data.sex==1){sex='男'}else if (data.sex==2) {sex='女'}else {sex='未知'}
     if (data.user_location){location=data.user_location}else {location='无地理位置推荐'}
@@ -66,11 +72,13 @@ $('.previous').on('click',function () {
 });
 $('.next').on('click',function () {
     n=1;
-    nameJudgment();
+    //nameJudgment();
+	values();
 });
 $('.save_return').on('click',function () {
     n=2;
-    nameJudgment();
+    //nameJudgment();
+	values();
 });
 function nameJudgment() {
     //判断昵称是否重复

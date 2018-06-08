@@ -842,6 +842,7 @@ def get_final_community(xnr_user_no,date_time):
                 if similarity > similarity_first:
                     similarity_first = similarity
                     similarity_oldid = old_community['community_id']
+                    print 'similarity_oldid::',similarity_oldid
             if similarity_first > COMMUNITY_SIMILARITY:
             	print 'similarity:::',similarity_first
                 newid_list.append(similarity_oldid)
@@ -849,7 +850,7 @@ def get_final_community(xnr_user_no,date_time):
             	similarity_oldid = 'a'
             	newid_list.append(similarity_oldid)
             	
-        print 'similarity_oldid::',similarity_oldid
+           # print 'similarity_oldid::',similarity_oldid
         for idx,new_community in enumerate(create_communitylist):
             old_community_list = [c for c in old_communitylist if c['community_id'] == newid_list[idx]]
             if len(old_community_list) > 0:

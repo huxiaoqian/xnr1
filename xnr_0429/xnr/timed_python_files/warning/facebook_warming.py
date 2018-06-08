@@ -658,12 +658,12 @@ def create_facebook_warning():
         end_time=today_datetime          #定时文件启动的0点
         operate_date=ts2datetime(start_time)
 
-    # account_list=get_user_account_list()
-    account_list = ['admin@qq.com']
+    account_list=get_user_account_list()
+   # account_list = ['admin@qq.com']
     for account in account_list:
-        #xnr_list=get_user_xnr_list(account)
+        xnr_list=get_user_xnr_list(account)
         #print xnr_list
-        xnr_list=['FXNR0005']
+        #xnr_list=['FXNR0005']
         for xnr_user_no in xnr_list:
             print 'xnr_user_no:',xnr_user_no
             #人物行为预警

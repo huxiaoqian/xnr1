@@ -16,7 +16,7 @@ from global_utils import es_xnr_2,twitter_keyword_count_index_name,twitter_keywo
                              tw_xnr_index_name,tw_xnr_index_type
                              
 from textrank4zh import TextRank4Keyword, TextRank4Sentence
-
+from parameter import DAY
 test_date = '2017-10-25'
 
 
@@ -116,10 +116,10 @@ def lookup_xnr_user_list():
 
 #组织查询和存储
 def compute_keywords_mark():
-    # xnr_user_list=lookup_xnr_user_list()
-    xnr_user_list=['TXNR0001']
+    xnr_user_list=lookup_xnr_user_list()
+    #xnr_user_list=['TXNR0001']
     print 'xnr_user_list:', xnr_user_list
-    now_time=int(time.time())
+    now_time=int(time.time()) - DAY
     date_time=ts2datetime(now_time)
 
     mark_list=[]

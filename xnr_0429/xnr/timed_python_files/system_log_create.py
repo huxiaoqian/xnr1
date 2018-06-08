@@ -7,6 +7,7 @@ import json
 import time
 import sys
 reload(sys)
+sys.setdefaultencoding('utf-8') 
 sys.path.append('../')
 # import sqlite
 import sqlite3
@@ -64,8 +65,8 @@ from global_utils import es_xnr_2,tw_xnr_index_name,tw_xnr_index_type,\
 
 #连接数据库,获取账户列表
 def get_user_account_list():     
-    cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
-    # cx = sqlite3.connect("/home/xnr1/xnr_0429/xnr/flask-admin.db") 
+    #cx = sqlite3.connect("/home/ubuntu8/yuanhuiru/xnr/xnr1/xnr/flask-admin.db")
+    cx = sqlite3.connect("/home/xnr1/xnr_0429/xnr/flask-admin.db") 
     cu=cx.cursor()
     cu.execute("select email from user") 
     user_info = cu.fetchall()

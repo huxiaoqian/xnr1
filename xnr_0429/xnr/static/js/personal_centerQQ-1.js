@@ -1,5 +1,6 @@
 function has_table_QQ(has_data_QQ) {
     var sourcePER=eval(has_data_QQ);
+    if(sourcePER.length==0){$('.bootstrap-table .table>thead>tr>th').css({width:'1%'})};
     $('.has_list_QQ #haslistQQ').bootstrapTable('load', sourcePER);
     $('.has_list_QQ #haslistQQ').bootstrapTable({
         data:sourcePER,
@@ -380,6 +381,7 @@ function clearVal() {
     $('.QQoptions .QQgroupbeizhu').val('');
     $('.QQoptions .QQxnrBEIZHU').val('');
 }
+var newADD=0;
 $('.optSureadd').on('click',function () {
     var qnum=$('.QQoptions .QQnumber').val();
     var qgp=$('.QQoptions .QQgroup').val().toString().replace(/,/g,'，');
@@ -388,26 +390,29 @@ $('.optSureadd').on('click',function () {
     var qname=$('.QQoptions .QQname').val();
     var qpower=$('.QQoptions .QQpower').val();
     var qremark=$('.QQoptions .QQxnrBEIZHU').val();
-    if (!(qnum||qgp||qname||qpower)){
+    if (!(qnum||qgp||qname||qpower||qgpName||qgpBEIZHU||qremark)){
         $('#succee_fail #words').text('请检查您填写的内容。（不能为空）');
         $('#succee_fail').modal('show');
     }else {
+	newADD=1;
         var qqAdd_url='/qq_xnr_manage/add_qq_xnr/?qq_number='+qnum+'&group_numbers='+qgp+'&group_names='+qgpName+
             '&mark_names='+qgpBEIZHU+'&qq_nickname='+qname+'&remark='+qremark+'&access_id='+qpower+'&submitter='+admin;
-        public_ajax.call_request('get',qqAdd_url,addOR);
+        public_ajax.call_request('get',qqAdd_url,addOR); 
     }
 });
 function addOR(data) {
     var Iadd='添加失败。';
     if (data[0]){
         Iadd='添加成功。';
-        if (data[1].length!=0){Iadd+='<br/>重复添加的QQ群：'+data[1].join('，')}
-        var a=TTqgp.split('，'),b=TTqgpName.split('，');
-	clearVal()      
-        $.each(a,function (index,item) {
-            $('#modGroup .nowGroup').append('<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+b[index]+'('+item+')'+
-                '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>');
-        });
+        if(newADD==0){
+            if (data[1].length!=0||data[1]!=''){Iadd+='<br/>重复添加的QQ群：'+data[1].join('，')}
+            var a=TTqgp.split('，'),b=TTqgpName.split('，');
+            clearVal();
+            $.each(a,function (index,item) {
+                $('#modGroup .nowGroup').append('<span style="display: inline-block;padding: 3px 6px;background: #176595;margin:10px 10px 0 0;"><b>'+b[index]+'('+item+')'+
+                    '</b>&nbsp;<i class="icon icon-remove" onclick="delThisGroup(this)" style="cursor: pointer;" title="删除"></i></span>');
+            });
+        }else{newADD=0}
         setTimeout(function () {
             public_ajax.call_request('GET',url_QQ,has_table_QQ);
         },1500);
