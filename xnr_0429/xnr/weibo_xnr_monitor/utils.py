@@ -20,6 +20,7 @@ from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tw
 from xnr.parameter import MAX_FLOW_TEXT_DAYS,MAX_VALUE,DAY,MID_VALUE,MAX_SEARCH_SIZE,HOT_WEIBO_NUM,INFLUENCE_MIN
 from xnr.save_weibooperate_utils import save_xnr_like,save_xnr_followers
 from xnr.global_config import S_TYPE, S_DATE,S_DATE_BCI
+import jieba.posseg as pseg
 
 #查询用户昵称
 def get_user_nickname(uid):
@@ -232,11 +233,39 @@ def lookup_hot_posts(from_ts,to_ts,weiboxnr_id,classify_id,order_id):
     except:
         hot_result=[]
     #print 'hot_result:', hot_result
-    return hot_result
+    post_result = remove_repeat(hot_result)
+    return post_result
+
+
+def remove_repeat(post_result):
+    origin_list = []
+    filter_ids = []
+    post_result_2 = post_result
+    for item in post_result:
+        if not item['mid'] in filte_ids:
+            for it2 in post_result_2:
+                re = filterDouble(item, it2)
+                if not re == 'not':
+                    filter_ids.append(re)
+    new_post_results = [d for d in post_result if d['mid'] not in filter_ids]
+    return new_post_results
+
+def filterDouble(doc1, doc2):
+    doc1_text = pseg.cut(doc1['text'])
+    doc2_text = pseg.cut(doc2['text'])
+    simi_A = len(set(doc1_text)&set(doc2_text))/len(doc1_text)
+    simi_B = len(set(doc1_text)&set(doc2_text))/len(doc2_text)
+    if (simi_A > 0.8) or (simi_B > 0.8):
+        if simi_A > simi_B:
+            return doc1['mid']
+        else:
+            return doc2['mid']
+    else:
+        return 'not'
 
 
 
-#################微博操作##########
+#微博操作##########
 #转发微博
 def get_weibohistory_retweet(task_detail):
     text=task_detail['text']
