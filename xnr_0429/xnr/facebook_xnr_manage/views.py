@@ -12,7 +12,10 @@ from utils import show_completed_fbxnr,show_uncompleted_fbxnr,delete_fb_xnr, get
 					 show_history_count, lookup_xnr_assess_info
 
 from utils import show_timing_tasks,wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\
-                  wxnr_list_friends,show_history_posting,show_at_content,show_comment_content,show_like_content
+                  wxnr_list_friends,show_history_posting,show_at_content,show_comment_content,show_like_content,\
+					xnr_today_remind
+
+
 '''
 from utils import xnr_today_remind,change_continue_xnrinfo,show_timing_tasks,\
                   wxnr_timing_tasks_lookup,wxnr_timing_tasks_change,wxnr_timing_tasks_revoked,\

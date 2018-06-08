@@ -7,7 +7,7 @@ import os
 import time
 import datetime
 import json
-from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
+from xnr.global_utils import es_xnr_2 as es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              fb_xnr_fans_followers_index_name,fb_xnr_fans_followers_index_type,\
                              facebook_user_index_name as profile_index_name, facebook_user_index_type as profile_index_type,\
                              fb_xnr_timing_list_index_name,fb_xnr_timing_list_index_type,\
@@ -17,7 +17,7 @@ from xnr.global_utils import es_xnr,fb_xnr_index_name,fb_xnr_index_type,\
                              facebook_feedback_comment_index_name,facebook_feedback_comment_index_name_pre,facebook_feedback_comment_index_type,\
                              facebook_feedback_like_index_name,facebook_feedback_like_index_name_pre,facebook_feedback_like_index_type,\
                              facebook_xnr_count_info_index_name, facebook_xnr_count_info_index_type
-es_user_profile = es_xnr   
+es_user_profile = es_xnr 
 from xnr.global_utils import facebook_feedback_friends_index_name,facebook_feedback_friends_index_type,\
                              fb_portrait_index_name,fb_portrait_index_type,\
                              fb_bci_index_name_pre,fb_bci_index_type              
@@ -39,7 +39,7 @@ from xnr.global_utils import new_fb_xnr_flow_text_index_name_pre,new_fb_xnr_flow
 from xnr.weibo_publish_func import retweet_tweet_func,comment_tweet_func,like_tweet_func,unfollow_tweet_func,follow_tweet_func
 from xnr.save_weibooperate_utils import save_xnr_like,delete_xnr_followers
 from xnr.global_config import S_TYPE,XNR_CENTER_DATE_TIME,S_WEIBO_TEST_DATE
-from xnr.global_utils import weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
+from xnr.global_utils import es_xnr as es_1,weibo_xnr_save_like_index_name,weibo_xnr_save_like_index_type,\
                              portrait_index_name,portrait_index_type,weibo_bci_index_name_pre,weibo_bci_index_type,\
                              weibo_xnr_assessment_index_name,weibo_xnr_assessment_index_type,\
                              weibo_xnr_count_info_index_name,weibo_xnr_count_info_index_type,\
@@ -99,8 +99,10 @@ def show_completed_fbxnr(account_no,now_time):
         'size':MAX_VALUE
     }
     #print 'start_time:',time.time()
+    #print es_xnr
     results=es_xnr.search(index=fb_xnr_index_name,doc_type=fb_xnr_index_type,body=query_body)['hits']['hits']
     result=[]
+    #print results
     #print 'xnr_search_time:',time.time()
     for item in results:
         xnr_list=item['_source']
@@ -348,7 +350,7 @@ def show_date_count(today_time):
         'size':MAX_VALUE,
         'sort':{'date_time':{'order':'asc'}}
     }
-    result=es_xnr.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
+    result=es_1.search(index=weibo_date_remind_index_name,doc_type=weibo_date_remind_index_type,body=query_body)['hits']['hits']
     #取出预警时间进行处理
     date_warming_result=[]
     for item in result:
