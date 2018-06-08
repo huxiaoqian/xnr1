@@ -19,4 +19,6 @@ pkill supervisor
 查看 supervisord 是否在运行：
 ps aux | grep supervisord
 
-
+=============一些配置文件地址==========
+[uwsgi] xnr/config.ini
+[supervisor] xnr/supervisord.config 
