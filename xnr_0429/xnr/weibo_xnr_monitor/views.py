@@ -7,7 +7,7 @@ from flask import Blueprint,url_for,render_template,request,\
         abort,flash,session,redirect
 
 from xnr.global_utils import es_flow_text
-from utils import lookup_weibo_keywordstring,lookup_hot_posts,lookup_active_weibouser,\
+from utils import lookup_weibo_keywordstring,lookup_full_keywordstring,lookup_hot_posts,lookup_active_weibouser,\
                   weibo_user_detail,addto_weibo_corpus,get_weibohistory_retweet,get_weibohistory_comment,\
                   get_weibohistory_like,attach_fans_follow,addto_weibo_corpus,attach_fans_batch,new_addto_weibo_corpus
 
@@ -23,6 +23,16 @@ def ajax_lookup_weibo_keywordstring():
     weiboxnr_id=request.args.get('weiboxnr_id','')
     result=lookup_weibo_keywordstring(float(from_ts),float(to_ts),weiboxnr_id)
     return json.dumps(result)
+
+
+#全网词云
+@mod.route('/lookup_full_keywordstring/')
+def ajax_lookup_full_keywordstring():
+    from_ts=request.args.get('from_ts','')
+    to_ts=request.args.get('to_ts','')
+    result=lookup_full_keywordstring(int(from_ts),int(to_ts))
+    return json.dumps(result)
+
 
 #热门帖子
 #classify_id=全部用户 0，已关注用户 1，未关注用户-1
